@@ -39,9 +39,9 @@ public class EntityListener implements Listener{
 		
 		if(eworld!=null){
 			if(
-					event.getSpawnReason()==SpawnReason.CHUNK_GEN||
-					event.getSpawnReason()==SpawnReason.BREEDING||
-					event.getSpawnReason()==SpawnReason.NATURAL){
+				event.getSpawnReason()==SpawnReason.CHUNK_GEN||
+				event.getSpawnReason()==SpawnReason.BREEDING||
+				event.getSpawnReason()==SpawnReason.NATURAL){
 				event.setCancelled(true);
 			}
 		}
@@ -50,9 +50,9 @@ public class EntityListener implements Listener{
 		
 		if(gworld!=null){
 			if(
-					event.getSpawnReason()==SpawnReason.CHUNK_GEN||
-					event.getSpawnReason()==SpawnReason.BREEDING||
-					event.getSpawnReason()==SpawnReason.NATURAL){
+				event.getSpawnReason()==SpawnReason.CHUNK_GEN||
+				event.getSpawnReason()==SpawnReason.BREEDING||
+				event.getSpawnReason()==SpawnReason.NATURAL){
 				event.setCancelled(true);
 			}
 		}
