@@ -1,0 +1,9 @@
+name: DungeonsXL
+version: 2.8.5
+main: com.dre.dungeonsxl.DungeonsXL
+authors: [Frank Baumann]
+softdepend: [Vault]
+commands:
+  dungeonsxl:
+    description: Reference command for DungeonsXL.
+    aliases: [dxl,dungeon]
