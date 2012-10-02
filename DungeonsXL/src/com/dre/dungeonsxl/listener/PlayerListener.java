@@ -285,7 +285,7 @@ public class PlayerListener implements Listener{
 		if(dplayer!=null){
 			//dplayer.goOffline();
 			dplayer.leave();
-			dplayer.player.kickPlayer("You have left the game!");
+			dplayer.player.kickPlayer("");
 		}
 	}
 	
