@@ -36,24 +36,26 @@ public class MobSpawner {
 		World world=this.block.getWorld();
 		
 		for(Player player:world.getPlayers()){
-			if(player.getLocation().distance(this.block.getLocation())<this.radius){
-				if(this.interval<=0){
-					LivingEntity mob=world.spawnCreature(this.block.getLocation(), this.mob);
-					if(this.live>0){
-						new DMob(mob,live,GameWorld.get(world));
-					}
-					
-					if(ammount!=-1){
-						if(ammount>1){
-							ammount--;
-						}else{
-							mobspawners.remove(this);
+			if(player.getWorld()!=world){
+				if(player.getLocation().distance(this.block.getLocation())<this.radius){
+					if(this.interval<=0){
+						LivingEntity mob=world.spawnCreature(this.block.getLocation(), this.mob);
+						if(this.live>0){
+							new DMob(mob,live,GameWorld.get(world));
 						}
+						
+						if(ammount!=-1){
+							if(ammount>1){
+								ammount--;
+							}else{
+								mobspawners.remove(this);
+							}
+						}
+						this.interval=this.maxinterval;
 					}
-					this.interval=this.maxinterval;
+					this.interval--;
+					return;
 				}
-				this.interval--;
-				return;
 			}
 		}
 		
