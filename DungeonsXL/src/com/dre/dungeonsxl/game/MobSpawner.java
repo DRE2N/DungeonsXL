@@ -36,7 +36,7 @@ public class MobSpawner {
 		World world=this.block.getWorld();
 		
 		for(Player player:world.getPlayers()){
-			if(player.getWorld()!=world){
+			if(player.getWorld()==world){
 				if(player.getLocation().distance(this.block.getLocation())<this.radius){
 					if(this.interval<=0){
 						LivingEntity mob=world.spawnCreature(this.block.getLocation(), this.mob);
