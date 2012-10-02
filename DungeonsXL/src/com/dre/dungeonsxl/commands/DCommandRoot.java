@@ -22,6 +22,8 @@ public class DCommandRoot {
 	public CMDMsg cmdMsg=new CMDMsg();
 	public CMDTest cmdTest=new CMDTest();
 	public CMDHelp cmdHelp=new CMDHelp();
+	public CMDReload cmdReload=new CMDReload();
+	
 	//Methods
 	public DCommandRoot(){
 		root=this;
@@ -40,6 +42,7 @@ public class DCommandRoot {
 		this.commands.add(cmdMsg);
 		this.commands.add(cmdTest);
 		this.commands.add(cmdHelp);
+		this.commands.add(cmdReload);
 	}
 	
 	
