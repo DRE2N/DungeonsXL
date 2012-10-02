@@ -199,15 +199,24 @@ public class PlayerListener implements Listener{
 					DGroup dgroup=DGroup.get(dplayer.player);
 					if(dplayer.checkpoint==null){
 						event.setRespawnLocation(dgroup.gworld.locStart);
+						
+						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
+						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dgroup.gworld.locStart), 20);
+						
 						if(dplayer.wolf!=null){
 							dplayer.wolf.teleport(dgroup.gworld.locStart);
 						}
 					}else{
 						event.setRespawnLocation(dplayer.checkpoint.location);
+						
+						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
+						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dplayer.checkpoint.location), 20);
+						
 						if(dplayer.wolf!=null){
 							dplayer.wolf.teleport(dplayer.checkpoint.location);
 						}
 					}
+					
 					
 					
 					//Respawn Items
@@ -218,13 +227,6 @@ public class PlayerListener implements Listener{
 					}
 					dplayer.respawnInventory.clear();
 					DungeonsXL.p.updateInventory(dplayer.player);
-				
-					/*if(gworld.locLobby==null){
-						event.setRespawnLocation(gworld.world.getSpawnLocation());
-					}else{
-						event.setRespawnLocation(gworld.locLobby);
-					}
-					dplayer.isReady=false;*/
 				}
 			}
 		}
@@ -334,4 +336,26 @@ public class PlayerListener implements Listener{
 	public void onInventoryOpen(InventoryOpenEvent event){
 		GameChest.onOpenInventory(event);
 	}
+	
+	
+	
+	//Etc. ---------------------------------
+	
+	public class RespawnRunnable implements Runnable{
+		private Player player;
+		private Location location;
+		
+		public RespawnRunnable(Player player, Location location){
+			this.location = location;
+			this.player = player;
+		}
+		
+		@Override
+		public void run() {
+			this.player.teleport(this.location);
+		}
+		
+	}
+	
+	
 }
