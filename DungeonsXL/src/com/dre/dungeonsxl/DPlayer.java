@@ -377,11 +377,7 @@ public class DPlayer {
 	}
 	
 	public void addTreasure(){
-		for(ItemStack istack:this.treasureInv.getContents()){
-			if(istack!=null){
-				this.player.getInventory().addItem(istack);
-			}
-		}
+		new DLootInventory(this.player,this.treasureInv.getContents());
 	}
 	//Static
 	public static void remove(DPlayer player){

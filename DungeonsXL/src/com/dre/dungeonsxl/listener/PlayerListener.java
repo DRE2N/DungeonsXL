@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -18,6 +19,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -25,6 +27,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.DGroup;
+import com.dre.dungeonsxl.DLootInventory;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.DPortal;
 import com.dre.dungeonsxl.DungeonsXL;
@@ -330,7 +333,47 @@ public class PlayerListener implements Listener{
 		GameChest.onOpenInventory(event);
 	}
 	
+	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent event){
+		p.log("CLOSE!!!");
+		Player player =(Player) event.getPlayer();
+		for(DLootInventory inventory:DLootInventory.LootInventorys){
+			if(event.getView()==inventory.inventoryView){
+				if(System.currentTimeMillis()-inventory.time>1000){
+					for(ItemStack istack:inventory.inventory.getContents()){
+						if(istack!=null){
+							player.getWorld().dropItem(player.getLocation(), istack);
+						}
+					}
+					
+					DLootInventory.LootInventorys.remove(inventory);
+				}
+			}
+		}
+	}
 	
+	//Player move
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event){
+		Player player=event.getPlayer();
+		DLootInventory inventory=DLootInventory.get(player);
+		
+		if(inventory!=null){
+			if(player.getLocation().getBlock().getType()!=Material.PORTAL){
+				if(
+						player.getLocation().getBlock().getRelative(0, 1, 0).getType()!=Material.PORTAL &&
+						player.getLocation().getBlock().getRelative(0, -1, 0).getType()!=Material.PORTAL &&
+						player.getLocation().getBlock().getRelative(1, 0, 0).getType()!=Material.PORTAL &&
+						player.getLocation().getBlock().getRelative(-1, 0, 0).getType()!=Material.PORTAL &&
+						player.getLocation().getBlock().getRelative(0, 0, 1).getType()!=Material.PORTAL &&
+						player.getLocation().getBlock().getRelative(0, 0, -1).getType()!=Material.PORTAL)
+				{
+					inventory.inventoryView=inventory.player.openInventory(inventory.inventory);
+					inventory.time=System.currentTimeMillis();
+				}
+			}
+		}
+	}
 	
 	//Etc. ---------------------------------
 	
