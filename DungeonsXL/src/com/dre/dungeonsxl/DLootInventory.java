@@ -4,7 +4,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +20,7 @@ public class DLootInventory {
 	public DLootInventory(Player player, ItemStack[] istacks){
 		LootInventorys.add(this);
 		
-		this.inventory = Bukkit.createInventory(player, InventoryType.CHEST);
+		this.inventory = Bukkit.createInventory(player, 54);
 		for(ItemStack istack:istacks){
 			if(istack!=null){
 				this.inventory.addItem(istack);

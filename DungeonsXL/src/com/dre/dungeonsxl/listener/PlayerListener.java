@@ -335,7 +335,6 @@ public class PlayerListener implements Listener{
 	
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
-		p.log("CLOSE!!!");
 		Player player =(Player) event.getPlayer();
 		for(DLootInventory inventory:DLootInventory.LootInventorys){
 			if(event.getView()==inventory.inventoryView){
