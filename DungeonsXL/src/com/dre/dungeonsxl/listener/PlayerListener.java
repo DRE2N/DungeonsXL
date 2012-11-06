@@ -338,7 +338,7 @@ public class PlayerListener implements Listener{
 		Player player =(Player) event.getPlayer();
 		for(DLootInventory inventory:DLootInventory.LootInventorys){
 			if(event.getView()==inventory.inventoryView){
-				if(System.currentTimeMillis()-inventory.time>1000){
+				if(System.currentTimeMillis()-inventory.time>500){
 					for(ItemStack istack:inventory.inventory.getContents()){
 						if(istack!=null){
 							player.getWorld().dropItem(player.getLocation(), istack);
