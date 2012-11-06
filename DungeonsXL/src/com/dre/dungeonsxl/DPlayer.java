@@ -74,6 +74,7 @@ public class DPlayer {
 		this.player.getInventory().clear();
 		this.player.getInventory().setArmorContents(null);
 		this.player.setTotalExperience(0);
+		this.player.setLevel(0);
 		this.player.setHealth(20);
 		this.player.setFoodLevel(20);
 		this.isEditing=isEditing;
@@ -159,24 +160,26 @@ public class DPlayer {
 			}
 			
 			//Give Secure Objects other Players
-			if(!dgroup.isEmpty()){
-				int i=0;
-				Player groupplayer;
-				do{
-					groupplayer=dgroup.players.get(i);
-					if(groupplayer!=null){
-						for(ItemStack istack:this.player.getInventory()){
-							if(istack!=null){
-								if(gworld.secureobjects.contains(istack.getType())){
-									groupplayer.getInventory().addItem(istack);
+			if(dgroup!=null){
+				if(!dgroup.isEmpty()){
+					int i=0;
+					Player groupplayer;
+					do{
+						groupplayer=dgroup.players.get(i);
+						if(groupplayer!=null){
+							for(ItemStack istack:this.player.getInventory()){
+								if(istack!=null){
+									if(gworld.secureobjects.contains(istack.getType())){
+										groupplayer.getInventory().addItem(istack);
+									}
 								}
 							}
+							DungeonsXL.p.updateInventory(groupplayer);
 						}
-						DungeonsXL.p.updateInventory(groupplayer);
-					}
-					i++;
-				}while(groupplayer==null);
-					
+						i++;
+					}while(groupplayer==null);
+						
+				}
 			}
 		}
 		
@@ -234,10 +237,9 @@ public class DPlayer {
 		DungeonsXL.p.msg(this.player, ChatColor.YELLOW+"Du hast den Dungeon erfolgreich beendet!");
 		this.isFinished=true;
 		
-		
 		DGroup dgroup=DGroup.get(this.player);
-		if(dgroup.isPlaying){
-			if(dgroup!=null){
+		if(dgroup!=null){
+			if(dgroup.isPlaying){
 				for(Player player:dgroup.players){
 					DPlayer dplayer=get(player);
 					if(!dplayer.isFinished){
@@ -246,17 +248,12 @@ public class DPlayer {
 					}
 				}
 				
-				
-				
 				for(Player player:dgroup.players){
 					DPlayer dplayer=get(player);
 					dplayer.leave();
 				}
 			}
 		}
-		
-		
-		
 	}
 	
 	public void msg(String msg){
@@ -379,6 +376,7 @@ public class DPlayer {
 	public void addTreasure(){
 		new DLootInventory(this.player,this.treasureInv.getContents());
 	}
+	
 	//Static
 	public static void remove(DPlayer player){
 		players.remove(player);
