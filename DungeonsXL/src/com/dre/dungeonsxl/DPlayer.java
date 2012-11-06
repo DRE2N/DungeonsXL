@@ -293,7 +293,7 @@ public class DPlayer {
 				}
 				
 				if(dclass.hasDog){
-					this.wolf=(Wolf) this.world.spawnCreature(this.player.getLocation(), EntityType.WOLF);
+					this.wolf=(Wolf) this.world.spawnEntity(this.player.getLocation(), EntityType.WOLF);
 					this.wolf.setTamed(true);
 					this.wolf.setOwner(this.player);
 					this.wolf.setHealth(this.wolf.getMaxHealth());
@@ -462,7 +462,7 @@ public class DPlayer {
 				if(dplayer.wolf!=null){
 					if(dplayer.wolf.isDead()){
 						if(dplayer.wolfRespawnTime<=0){
-							dplayer.wolf=(Wolf) dplayer.world.spawnCreature(dplayer.player.getLocation(), EntityType.WOLF);
+							dplayer.wolf=(Wolf) dplayer.world.spawnEntity(dplayer.player.getLocation(), EntityType.WOLF);
 							dplayer.wolf.setTamed(true);
 							dplayer.wolf.setOwner(dplayer.player);
 							dplayer.wolfRespawnTime=30;
