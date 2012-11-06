@@ -14,11 +14,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -265,17 +263,6 @@ public class PlayerListener implements Listener{
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerChat(PlayerChatEvent event){
-		Player player=event.getPlayer();
-		DPlayer dplayer=DPlayer.get(player);
-		if(dplayer!=null){
-			if(dplayer.isInWorldChat){
-				event.setCancelled(true);
-			}
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerQuit(PlayerQuitEvent event){
 		DPlayer dplayer=DPlayer.get(event.getPlayer());
 		if(dplayer!=null){
@@ -283,15 +270,6 @@ public class PlayerListener implements Listener{
 			dplayer.leave();
 			dplayer.player.kickPlayer("");
 		}
-	}
-	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerJoin(PlayerJoinEvent event){
-		
-		
-		
-		
-		//DOfflinePlayer.check(event.getPlayer());
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
