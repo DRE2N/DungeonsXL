@@ -8,26 +8,28 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.dre.dungeonsxl.DMobType;
+
 public class MobSpawner {
 	public static CopyOnWriteArrayList<MobSpawner> mobspawners=new CopyOnWriteArrayList<MobSpawner>();
 	
 	//Variables
-	public EntityType mob;
-	public Block block;
-	public int maxinterval;
-	public int interval=0;
-	public int ammount;
-	public int radius;
+	private String mob;
+	private Block block;
+	private int maxinterval;
+	private int interval=0;
+	private int amount;
+	private int radius;
 	private int live;
 	
 	
-	public MobSpawner(Block block, EntityType mob, int interval, int ammount, int radius, int live){
+	public MobSpawner(Block block, String mob, int interval, int amount, int radius, int live){
 		mobspawners.add(this);
 		
 		this.block=block;
 		this.mob=mob;
 		this.maxinterval=interval;
-		this.ammount=ammount;
+		this.amount=amount;
 		this.radius=radius;
 		this.live=live;
 	}
@@ -39,14 +41,28 @@ public class MobSpawner {
 			if(player.getWorld()==world){
 				if(player.getLocation().distance(this.block.getLocation())<this.radius){
 					if(this.interval<=0){
-						LivingEntity mob=world.spawnCreature(this.block.getLocation(), this.mob);
-						if(this.live>0){
-							new DMob(mob,live,GameWorld.get(world));
+						
+						//Check normal mobs
+						if(EntityType.fromName(this.mob)!=null){
+							if(EntityType.fromName(this.mob).isAlive()){
+								LivingEntity entity=(LivingEntity)world.spawnEntity(this.block.getLocation(), EntityType.fromName(this.mob));
+								if(this.live>0){
+									new DMob(entity,this.live,GameWorld.get(world));
+								}
+							}
 						}
 						
-						if(ammount!=-1){
-							if(ammount>1){
-								ammount--;
+						//Check custom mobs
+						DMobType mobType = DMobType.get(this.mob);
+						
+						if(mobType!=null){
+							mobType.spawn(GameWorld.get(world), this.block.getLocation());
+						}
+						
+						//Set the amount
+						if(amount!=-1){
+							if(amount>1){
+								amount--;
 							}else{
 								mobspawners.remove(this);
 							}

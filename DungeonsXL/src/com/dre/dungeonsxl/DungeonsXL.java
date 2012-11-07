@@ -91,6 +91,9 @@ public class DungeonsXL extends JavaPlugin{
 		//Load Config
 		mainConfig=new ConfigReader(new File(p.getDataFolder(), "config.yml"));
 		
+		//Load MobTypes
+		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
+		
 		// -------------------------------------------- //
 		// Update Sheduler
 		// -------------------------------------------- //

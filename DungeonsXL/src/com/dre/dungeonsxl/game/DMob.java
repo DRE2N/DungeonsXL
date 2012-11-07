@@ -30,6 +30,8 @@ public class DMob {
 					if(dmob.entity==victim){
 						dmob.live=dmob.live-event.getDamage();
 						dmob.entity.damage(1);
+						
+						
 						dmob.entity.setHealth(dmob.entity.getMaxHealth());
 						
 						if(event instanceof EntityDamageByEntityEvent){

@@ -155,7 +155,7 @@ public class GameWorld {
 			}else{
 				if(lines[1].equalsIgnoreCase("mob")){
 					if(lines[2]!=""&&lines[3]!=""){
-						EntityType mob=p.getEntitiyType(lines[2]);
+						String mob=lines[2];
 						if(mob!=null){
 							String[] atributes=lines[3].split(",");
 							if(atributes.length==3){
