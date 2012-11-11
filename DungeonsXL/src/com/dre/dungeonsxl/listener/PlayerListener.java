@@ -45,6 +45,7 @@ public class PlayerListener implements Listener{
 		
 		//Block Enderchests
 		if(clickedBlock!=null){
+			if(GameWorld.get(player.getWorld())!=null || EditWorld.get(player.getWorld())!=null)
 			if(event.getAction()!=Action.LEFT_CLICK_BLOCK){
 				if(clickedBlock.getType()==Material.ENDER_CHEST){
 					p.msg(player, ChatColor.RED+"Du kannst keine Enderchest in einem Dungeon verwenden!");
