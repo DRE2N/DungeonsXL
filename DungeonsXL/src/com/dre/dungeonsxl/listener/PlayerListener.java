@@ -43,6 +43,17 @@ public class PlayerListener implements Listener{
 		Player player = event.getPlayer();
 		Block clickedBlock=event.getClickedBlock();
 		
+		//Block Enderchests
+		if(clickedBlock!=null){
+			if(event.getAction()!=Action.LEFT_CLICK_BLOCK){
+				if(clickedBlock.getType()==Material.ENDER_CHEST){
+					p.msg(player, ChatColor.RED+"Du kannst keine Enderchest in einem Dungeon verwenden!");
+					event.setCancelled(true);
+				}
+			}
+		}
+		
+		
 		//Check Portals
 		if(event.getItem()!=null){
 			if(event.getItem().getType()==Material.WOOD_SWORD){
