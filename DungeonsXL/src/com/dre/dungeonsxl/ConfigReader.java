@@ -25,6 +25,7 @@ public class ConfigReader {
 	
 	public boolean isLobbyDisabled=false;
 	public int timeToNextPlay=0;
+	public int timeToNextLoot=0;
 	
 	public ConfigReader(File file){
 		this.file=file;
@@ -131,6 +132,10 @@ public class ConfigReader {
 		
 		if(configFile.contains("timetonextplay")){
 			timeToNextPlay=configFile.getInt("timetonextplay");
+		}
+		
+		if(configFile.contains("timetonextloot")){
+			timeToNextLoot=configFile.getInt("timetonextloot");
 		}
 		
 	}
