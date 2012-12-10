@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Material;
@@ -91,14 +92,13 @@ public class ConfigReader {
 		}while(configFile.contains(preString));
 		
 		//Read Messages
-		id=0;
-		do{
-			id++;
-			preString="message."+id;
-			if(configFile.contains(preString)){
-				this.msgs.put(id,configFile.getString(preString));
+		Set<String> list=configFile.getKeys(true);
+		for(String messagePath:list){
+			if(messagePath.contains("message.")){
+				int messageId=Integer.parseInt(messagePath.replace("message.",""));
+				this.msgs.put(messageId,configFile.getString(messagePath));
 			}
-		}while(configFile.contains(preString));
+		}
 		
 		//Read Secure Objects
 		if(configFile.contains("secureobjects")){						
