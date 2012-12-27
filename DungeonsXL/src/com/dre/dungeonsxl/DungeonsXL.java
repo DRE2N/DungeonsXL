@@ -39,65 +39,65 @@ import com.dre.dungeonsxl.listener.PlayerListener;
 
 public class DungeonsXL extends JavaPlugin{
 	public static DungeonsXL p;
-	
+
 	//Listener
 	private static Listener entitylistener;
 	private static Listener playerlistener;
 	private static Listener blocklistener;
-	
+
 	//Main Config Reader
 	public ConfigReader mainConfig;
-	
+
 	//Tutorial
 	public String tutorialDungeon;
 	public String tutorialStartGroup;
 	public String tutorialEndGroup;
-	
+
 	//Chatspyer
 	public CopyOnWriteArrayList<Player> chatSpyer=new CopyOnWriteArrayList<Player>();
-	
-	
+
+
 	@Override
 	public void onEnable(){
 		p=this;
-		
+
 		//Commands
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
-		
+
 		//MSG
 		this.log(this.getDescription().getName()+" enabled!");
-		
+
 		//Init Classes
 		new DCommandRoot();
-		
+
 		//InitFolders
 		this.initFolders();
-		
+
 		//Setup Permissions
 		this.setupPermissions();
-		
+
 		//Listener
 		entitylistener=new EntityListener();
 		playerlistener=new PlayerListener();
 		blocklistener=new BlockListener();
-		
+
 		Bukkit.getServer().getPluginManager().registerEvents(entitylistener,this);
 		Bukkit.getServer().getPluginManager().registerEvents(playerlistener,this);
 		Bukkit.getServer().getPluginManager().registerEvents(blocklistener,this);
-		
+
 		//Load All
 		this.loadAll();
-		
+
 		//Load Config
 		mainConfig=new ConfigReader(new File(p.getDataFolder(), "config.yml"));
-		
+
 		//Load MobTypes
 		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
-		
+
 		// -------------------------------------------- //
 		// Update Sheduler
 		// -------------------------------------------- //
-		
+
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 			public void run() {
 				for(GameWorld gworld:GameWorld.gworlds){
@@ -109,13 +109,13 @@ public class DungeonsXL extends JavaPlugin{
 				}
 				for(EditWorld eworld:EditWorld.eworlds){
 					if(eworld.world.getPlayers().isEmpty()){
-						
+
 						eworld.delete();
 					}
 				}
 		    }
 		}, 0L, 1200L);
-		
+
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 		    public void run() {
 		        MobSpawner.updateAll();
@@ -123,7 +123,7 @@ public class DungeonsXL extends JavaPlugin{
 		        GameMessage.updateAll();
 		        GameCheckpoint.update();
 		        DPlayer.update(true);
-		        
+
 		        //Tutorial Mode
 		        for(Player player:p.getServer().getOnlinePlayers()){
 		        	if(DPlayer.get(player)==null){
@@ -151,39 +151,39 @@ public class DungeonsXL extends JavaPlugin{
 		        }
 		    }
 		}, 0L, 20L);
-		
+
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 		    public void run() {
 		        DPlayer.update(false);
 		    }
 		}, 0L, 2L);
 	}
-	
-	
+
+
 	@Override
 	public void onDisable(){
 		//Save
 		this.saveAll();
-		
+
 		//MSG
 		this.log(this.getDescription().getName()+" disabled!");
-		
+
 		//DPlayer leaves World
 		for(DPlayer dplayer:DPlayer.players){
 			dplayer.leave();
 		}
-		
+
 		//Delete all Data
 		DPortal.portals.clear();
 		DGSign.dgsigns.clear();
 		LeaveSign.lsigns.clear();
-		
+
 		//Delete Worlds
 		GameWorld.deleteAll();
 		EditWorld.deleteAll();
 	}
-	
-	
+
+
 	//Init.
 	public void initFolders(){
 		//Check Folder
@@ -191,14 +191,14 @@ public class DungeonsXL extends JavaPlugin{
 		if(!folder.exists()){
 			folder.mkdir();
 		}
-		
+
 		folder = new File(this.getDataFolder()+File.separator+"dungeons");
 		if(!folder.exists()){
 			folder.mkdir();
 		}
 	}
-	
-	
+
+
 	//Permissions
 	public Permission permission = null;
 
@@ -210,28 +210,28 @@ public class DungeonsXL extends JavaPlugin{
         }
         return (permission != null);
     }
-    
+
     public Boolean GroupEnabled(String group){
-    	
+
     	for(String agroup:permission.getGroups()){
     		if(agroup.equalsIgnoreCase(group)){
     			return true;
     		}
     	}
-    	
+
     	return false;
     }
-	
-    
+
+
     //Save and Load
 	public void saveAll(){
 		File file = new File(this.getDataFolder(), "data.yml");
 		FileConfiguration configFile = new YamlConfiguration();
-		
+
 		DPortal.save(configFile);
 		DGSign.save(configFile);
 		LeaveSign.save(configFile);
-		
+
 		try {
 			configFile.save(file);
 		} catch (IOException e) {
@@ -239,18 +239,18 @@ public class DungeonsXL extends JavaPlugin{
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	public void loadAll(){
 		File file = new File(this.getDataFolder(), "data.yml");
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-		
+
 		DPortal.load(configFile);
 		DGSign.load(configFile);
 		LeaveSign.load(configFile);
 	}
-    
-    
+
+
 	//File Control
 	public boolean removeDirectory(File directory) {
 		if (directory.isDirectory()) {
@@ -260,32 +260,34 @@ public class DungeonsXL extends JavaPlugin{
 		}
 		return directory.delete();
 	}
-	
-	public void copyFile(File in, File out) throws IOException { 
-        FileChannel inChannel = new FileInputStream(in).getChannel(); 
-        FileChannel outChannel = new FileOutputStream(out).getChannel(); 
-        try { 
-            inChannel.transferTo(0, inChannel.size(), outChannel); 
-        } catch (IOException e) { 
-            throw e; 
-        } finally { 
-            if (inChannel != null) 
-                inChannel.close(); 
-            if (outChannel != null) 
-                outChannel.close(); 
-        } 
-    } 
-	
+
+	public void copyFile(File in, File out) throws IOException {
+        FileChannel inChannel=null;
+        FileChannel outChannel=null;
+        try {
+        	inChannel = new FileInputStream(in).getChannel();
+            outChannel = new FileOutputStream(out).getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            if (inChannel != null)
+                inChannel.close();
+            if (outChannel != null)
+                outChannel.close();
+        }
+    }
+
 	public String[] excludedFiles={"config.yml"};
-	
+
 	public void copyDirectory(File sourceLocation, File targetLocation) {
-		 
+
         if (sourceLocation.isDirectory()) {
- 
+
             if (!targetLocation.exists()) {
                 targetLocation.mkdir();
             }
- 
+
             String[] children = sourceLocation.list();
             for (int i = 0; i < children.length; i++) {
             	boolean isOk=true;
@@ -299,25 +301,25 @@ public class DungeonsXL extends JavaPlugin{
             		copyDirectory(new File(sourceLocation, children[i]), new File(
                             targetLocation, children[i]));
             	}
-                
+
             }
         } else {
- 
+
             try {
- 
+
                 if (!targetLocation.getParentFile().exists()) {
- 
+
                     createDirectory(targetLocation.getParentFile().getAbsolutePath());
                     targetLocation.createNewFile();
- 
+
                 } else if (!targetLocation.exists()) {
- 
+
                     targetLocation.createNewFile();
                 }
- 
+
                 InputStream in = new FileInputStream(sourceLocation);
                 OutputStream out = new FileOutputStream(targetLocation);
- 
+
                 byte[] buf = new byte[1024];
                 int len;
                 while ((len = in.read(buf)) > 0) {
@@ -325,9 +327,9 @@ public class DungeonsXL extends JavaPlugin{
                 }
                 in.close();
                 out.close();
- 
+
             } catch (Exception e) {
- 
+
                 if (e.getMessage().contains("Zugriff")
                         || e.getMessage().contains("Access"))
                     DungeonsXL.p.log("Error: " + e.getMessage() + " // Access denied");
@@ -336,17 +338,17 @@ public class DungeonsXL extends JavaPlugin{
             }
         }
     }
- 
+
     public void createDirectory(String s) {
- 
+
         if (!new File(s).getParentFile().exists()) {
- 
+
             createDirectory(new File(s).getParent());
         }
- 
+
         new File(s).mkdir();
     }
-	
+
 	public void deletenotusingfiles(File directory){
 		File[] files=directory.listFiles();
 		for(File file:files){
@@ -355,7 +357,7 @@ public class DungeonsXL extends JavaPlugin{
 			}
 		}
 	}
-    
+
 	//Misc
 	public void updateInventory(Player p) {
         CraftPlayer c = (CraftPlayer) p;
@@ -378,34 +380,34 @@ public class DungeonsXL extends JavaPlugin{
             }
         }
     }
-	
+
 	//Msg
-	
+
 	public void msg(Player player,String msg){
 		player.sendMessage(ChatColor.DARK_GREEN+"[DXL] "+ChatColor.WHITE+msg);
 	}
-	
+
 	public void msg(Player player,String msg, boolean zusatz){
 		if(zusatz){
 			player.sendMessage(ChatColor.DARK_GREEN+"[DXL]"+ChatColor.WHITE+msg);
 		}else{
 			player.sendMessage(ChatColor.WHITE+msg);
 		}
-		
+
 	}
-	
+
 	//Misc.
-	
+
 	public EntityType getEntitiyType(String name){
 		for(EntityType type:EntityType.values()){
 			if(name.equalsIgnoreCase(type.getName())){
 				return type;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
     // -------------------------------------------- //
  	// LOGGING
  	// -------------------------------------------- //
@@ -418,5 +420,5 @@ public class DungeonsXL extends JavaPlugin{
  	{
  		Logger.getLogger("Minecraft").log(level, "["+this.getDescription().getFullName()+"] "+msg);
  	}
-	
+
 }

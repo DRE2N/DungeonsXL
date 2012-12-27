@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 public class EditWorld {
 	private static DungeonsXL p=DungeonsXL.p;
 	public static CopyOnWriteArrayList<EditWorld> eworlds=new CopyOnWriteArrayList<EditWorld>();
-	
+
 	//Variables
 	public World world;
 	public String owner;
@@ -30,10 +30,10 @@ public class EditWorld {
 	public Location lobby;
 	public CopyOnWriteArrayList<String> invitedPlayers=new CopyOnWriteArrayList<String>();
 	public CopyOnWriteArrayList<Block> sign=new CopyOnWriteArrayList<Block>();
-	
+
 	public EditWorld(){
 		eworlds.add(this);
-		
+
 		//ID
 		this.id=-1;
 		int i=-1;
@@ -48,7 +48,7 @@ public class EditWorld {
 			}
 			if(!exist) this.id=i;
 		}
-		
+
 		name="DXL_Edit_"+this.id;
 	}
 
@@ -56,7 +56,7 @@ public class EditWorld {
 		WorldCreator creator=WorldCreator.name(name);
 		creator.type(WorldType.FLAT);
 		creator.generateStructures(false);
-		
+
 		this.world=p.getServer().createWorld(creator);
 	}
 
@@ -73,7 +73,7 @@ public class EditWorld {
 				out.writeInt(sign.getZ());
 			}
 			out.close();
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class EditWorld {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//Check Configuration
 		/*File file=new File("plugins/DungeonsXL/dungeons/"+this.dungeonname+"/config.yml");
 		if(!file.exists()){
@@ -100,32 +100,32 @@ public class EditWorld {
 				}
 			}
 		}*/
-		
+
 	}
-	
+
 	public void checkSign(Block block){
 		if((block.getState() instanceof Sign)){
 			Sign sign = (Sign) block.getState();
 			String[] lines=sign.getLines();
-			
+
 			if(lines[1].equalsIgnoreCase("lobby")){
 				this.lobby=block.getLocation();
 			}
 		}
 	}
-	
+
 	public void delete(){
 			eworlds.remove(this);
 			for(Player player:this.world.getPlayers()){
 				DPlayer dplayer=DPlayer.get(player);
 				dplayer.leave();
 			}
-			
+
 			p.getServer().unloadWorld(this.world,true);
 			File dir = new File("DXL_Edit_"+this.id);
 			p.removeDirectory(dir);
 	}
-	
+
 	//Static
 	public static EditWorld get(World world){
 		for(EditWorld eworld:eworlds){
@@ -133,20 +133,20 @@ public class EditWorld {
 				return eworld;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public static EditWorld get(String name){
 		for(EditWorld eworld:eworlds){
 			if(eworld.name.equalsIgnoreCase(name)){
 				return eworld;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public static void deleteAll(){
 		for(EditWorld eworld:eworlds){
 			eworlds.remove(eworld);
@@ -154,31 +154,31 @@ public class EditWorld {
 				DPlayer dplayer=DPlayer.get(player);
 				dplayer.leave();
 			}
-			
+
 			p.getServer().unloadWorld(eworld.world,true);
 			File dir = new File("DXL_Edit_"+eworld.id);
 			p.removeDirectory(dir);
 		}
 	}
-	
+
 	public static EditWorld load(String name){
 		for(EditWorld eworld:eworlds){
-			
+
 			if(eworld.dungeonname.equalsIgnoreCase(name)){
 				return eworld;
 			}
 		}
-		
+
 		File file=new File("plugins/DungeonsXL/dungeons/"+name);
-		
+
 		if(file.exists()){
 			EditWorld eworld = new EditWorld();
 			eworld.dungeonname=name;
 			//World
 			p.copyDirectory(file,new File("DXL_Edit_"+eworld.id));
-			
+
 			eworld.world=p.getServer().createWorld(WorldCreator.name("DXL_Edit_"+eworld.id));
-			
+
 			try {
 				ObjectInputStream os=new ObjectInputStream(new FileInputStream(new File("plugins/DungeonsXL/dungeons/"+eworld.dungeonname+"/DXLData.data")));
 				int length=os.readInt();
@@ -190,7 +190,8 @@ public class EditWorld {
 					eworld.checkSign(block);
 					eworld.sign.add(block);
 				}
-				
+				os.close();
+
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -198,13 +199,13 @@ public class EditWorld {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			return eworld;
 		}
-		
+
 		return null;
 	}
-	
+
 	public static boolean exist(String name){
 		//Cheack Loaded EditWorlds
 		for(EditWorld eworld:eworlds){
@@ -212,14 +213,14 @@ public class EditWorld {
 				return true;
 			}
 		}
-		
+
 		//Cheack Unloaded Worlds
 		File file=new File("plugins/DungeonsXL/dungeons/"+name);
-		
+
 		if(file.exists()){
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -228,14 +229,14 @@ public class EditWorld {
 			p.msg(dplayer.player, msg);
 		}
 	}
-	
+
 	//Invite
 	public static boolean addInvitedPlayer(String eworldname,String player){
-		
+
 		EditWorld eworld=EditWorld.get(eworldname);
-		
-		
-		
+
+
+
 		if(eworld!=null){
 			eworld.invitedPlayers.add(player.toLowerCase());
 		}else{
@@ -246,15 +247,15 @@ public class EditWorld {
 				return true;
 			}
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	public static boolean removeInvitedPlayer(String eworldname,String player){
-		
+
 		EditWorld eworld=EditWorld.get(eworldname);
-		
+
 		if(eworld!=null){
 			eworld.invitedPlayers.remove(player.toLowerCase());
 		}else{
@@ -265,15 +266,15 @@ public class EditWorld {
 				return true;
 			}
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	public static boolean isInvitedPlayer(String eworldname,String player){
 
 		EditWorld eworld=EditWorld.get(eworldname);
-		
+
 		if(eworld!=null){
 			return eworld.invitedPlayers.contains(player.toLowerCase());
 		}else{
@@ -282,8 +283,8 @@ public class EditWorld {
 				return confreader.invitedPlayer.contains(player.toLowerCase());
 			}
 		}
-		
+
 		return false;
-		
+
 	}
 }
