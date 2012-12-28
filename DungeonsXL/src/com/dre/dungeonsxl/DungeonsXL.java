@@ -12,18 +12,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.permission.Permission;
-import net.minecraft.server.Packet103SetSlot;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -359,15 +354,15 @@ public class DungeonsXL extends JavaPlugin{
 	}
 
 	//Misc
-	public void updateInventory(Player p) {
+	/*public void updateInventory(Player p) {
         CraftPlayer c = (CraftPlayer) p;
         for (int i = 0;i < 36;i++) {
             int nativeindex = i;
             if (i < 9) nativeindex = i + 36;
             ItemStack olditem =  c.getInventory().getItem(i);
-            net.minecraft.server.ItemStack item = null;
+            net.minecraft.server.v1_4_6.ItemStack item = null;
             if (olditem != null && olditem.getType() != Material.AIR) {
-                item = new net.minecraft.server.ItemStack(0, 0, 0);
+                item = new net.minecraft.server.v1_4_6.ItemStack(0, 0, 0);
                 item.id = olditem.getTypeId();
                 item.count = olditem.getAmount();
                 item.b = olditem.getDurability();
@@ -379,7 +374,7 @@ public class DungeonsXL extends JavaPlugin{
 	            }
             }
         }
-    }
+    }*/
 
 	//Msg
 

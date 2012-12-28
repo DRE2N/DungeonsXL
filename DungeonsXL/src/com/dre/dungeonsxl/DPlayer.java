@@ -21,16 +21,16 @@ import com.dre.dungeonsxl.game.GameWorld;
 
 public class DPlayer {
 	public DungeonsXL p=DungeonsXL.p;
-	
+
 	public static CopyOnWriteArrayList<DPlayer> players=new CopyOnWriteArrayList<DPlayer>();
-	
+
 	//Variables
 	public Player player;
 	public World world;
-	
+
 	public DPlayer oldDPlayer=null;
 	public int isinTestMode=0;
-	
+
 	public Location oldLocation;
 	public ItemStack[] oldInventory;
 	public ItemStack[] oldArmor;
@@ -39,12 +39,12 @@ public class DPlayer {
 	public int oldHealth;
 	public int oldFoodLevel;
 	public GameMode oldGamemode;
-	
+
 	public boolean isEditing;
 	public boolean isInWorldChat=false;
 	public boolean isReady=false;
 	public boolean isFinished=false;
-	
+
 	public DClass dclass;
 	public GameCheckpoint checkpoint;
 	public CopyOnWriteArrayList<Integer> classItems=new CopyOnWriteArrayList<Integer>();
@@ -53,14 +53,14 @@ public class DPlayer {
 	public int offlineTime;
 	public int invItemInHand;
 	public CopyOnWriteArrayList<ItemStack> respawnInventory=new CopyOnWriteArrayList<ItemStack>();
-	
+
 	public Inventory treasureInv = DungeonsXL.p.getServer().createInventory(player,  45, "Belohnungen");
-	
+
 	public DPlayer(Player player, World world, Location teleport, boolean isEditing){
 		players.add(this);
 		this.player=player;
 		this.world=world;
-		
+
 		this.oldLocation=player.getLocation();
 		this.oldInventory=player.getInventory().getContents();
 		this.oldArmor=player.getInventory().getArmorContents();
@@ -69,7 +69,7 @@ public class DPlayer {
 		this.oldFoodLevel=player.getFoodLevel();
 		this.oldGamemode=player.getGameMode();
 		this.oldLvl=player.getLevel();
-		
+
 		this.player.teleport(teleport);
 		this.player.getInventory().clear();
 		this.player.getInventory().setArmorContents(null);
@@ -79,25 +79,25 @@ public class DPlayer {
 		this.player.setFoodLevel(20);
 		this.isEditing=isEditing;
 		if(isEditing) this.player.setGameMode(GameMode.CREATIVE); else this.player.setGameMode(GameMode.SURVIVAL);
-	
+
 		if(!isEditing){
 			if(GameWorld.get(world).confReader.isLobbyDisabled){
 				this.ready();
 			}
 		}
 	}
-	
+
 	public void goOffline(){
 		offlineTime=1;
 	}
-	
+
 	public void leave(){
 		remove(this);
-		
+
 		if(this.oldDPlayer!=null){
 			this.oldDPlayer.isinTestMode=0;
 		}
-		
+
 		this.player.teleport(this.oldLocation);
 		this.player.getInventory().setContents(this.oldInventory);
 		this.player.getInventory().setArmorContents(this.oldArmor);
@@ -106,8 +106,8 @@ public class DPlayer {
 		this.player.setHealth(oldHealth);
 		this.player.setFoodLevel(oldFoodLevel);
 		this.player.setGameMode(oldGamemode);
-		
-		
+
+
 		if(this.isEditing){
 			EditWorld eworld=EditWorld.get(this.world);
 			if(eworld!=null){
@@ -122,15 +122,15 @@ public class DPlayer {
 					dgroup.remove();
 				}
 			}
-			
+
 			//Belohnung
 			if(this.oldDPlayer==null&&this.isinTestMode!=2){//Nur wenn man nicht am Testen ist
-				if(isFinished){ 
+				if(isFinished){
 					this.addTreasure();
-					
+
 					//Set Time
 					File file=new File(p.getDataFolder()+"/dungeons/"+gworld.dungeonname, "players.yml");
-					
+
 					if(!file.exists()){
 						try {
 							file.createNewFile();
@@ -139,18 +139,18 @@ public class DPlayer {
 							e.printStackTrace();
 						}
 					}
-					
+
 					FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-					
+
 					playerConfig.set(player.getName(), System.currentTimeMillis());
-					
+
 					try {
 						playerConfig.save(file);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 					//Tutorial Permissions
 					if(gworld.isTutorial){
 						p.permission.playerAddGroup(this.player, p.tutorialEndGroup);
@@ -158,7 +158,7 @@ public class DPlayer {
 					}
 				}
 			}
-			
+
 			//Give Secure Objects other Players
 			if(dgroup!=null){
 				if(!dgroup.isEmpty()){
@@ -174,26 +174,26 @@ public class DPlayer {
 									}
 								}
 							}
-							DungeonsXL.p.updateInventory(groupplayer);
+							//DungeonsXL.p.updateInventory(groupplayer);
 						}
 						i++;
 					}while(groupplayer==null);
-						
+
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
-		DungeonsXL.p.updateInventory(this.player);
+
+
+
+
+
+
+		//DungeonsXL.p.updateInventory(this.player);
 	}
-	
+
 	public void ready(){
 		this.isReady=true;
-		
+
 		DGroup dgroup=DGroup.get(this.player);
 		if(!dgroup.isPlaying){
 			if(dgroup!=null){
@@ -204,14 +204,14 @@ public class DPlayer {
 					}
 				}
 			}
-			
-		
+
+
 			dgroup.startGame();
 		}else{
 			this.respawn();
 		}
 	}
-	
+
 	public void respawn(){
 		DGroup dgroup=DGroup.get(this.player);
 		if(this.checkpoint==null){
@@ -222,7 +222,7 @@ public class DPlayer {
 		if(this.wolf!=null){
 			this.wolf.teleport(this.player);
 		}
-		
+
 		//Respawn Items
 		for(ItemStack istack:this.respawnInventory){
 			if(istack!=null){
@@ -230,13 +230,13 @@ public class DPlayer {
 			}
 		}
 		this.respawnInventory.clear();
-		DungeonsXL.p.updateInventory(this.player);
+		//DungeonsXL.p.updateInventory(this.player);
 	}
-	
+
 	public void finish(){
 		DungeonsXL.p.msg(this.player, ChatColor.YELLOW+"Du hast den Dungeon erfolgreich beendet!");
 		this.isFinished=true;
-		
+
 		DGroup dgroup=DGroup.get(this.player);
 		if(dgroup!=null){
 			if(dgroup.isPlaying){
@@ -247,7 +247,7 @@ public class DPlayer {
 						return;
 					}
 				}
-				
+
 				for(Player player:dgroup.players){
 					DPlayer dplayer=get(player);
 					dplayer.leave();
@@ -255,7 +255,7 @@ public class DPlayer {
 			}
 		}
 	}
-	
+
 	public void msg(String msg){
 		if(this.isEditing){
 			EditWorld eworld=EditWorld.get(this.world);
@@ -265,7 +265,7 @@ public class DPlayer {
 					p.msg(player, ChatColor.GREEN+"[Chatspy] "+ChatColor.WHITE+msg);
 				}
 			}
-			
+
 		}else{
 			GameWorld gworld=GameWorld.get(this.world);
 			gworld.msg(msg);
@@ -276,39 +276,39 @@ public class DPlayer {
 			}
 		}
 	}
-	
+
 	public void setClass(String classname) {
 		GameWorld gworld=GameWorld.get(this.player.getWorld());
 		if(gworld==null) return;
-		
+
 		DClass dclass=gworld.confReader.getClass(classname);
 		if(dclass!=null){
 			if(this.dclass!=dclass){
 				this.dclass=dclass;
-				
+
 				//Set Dog
 				if(this.wolf!=null){
 					this.wolf.remove();
 					this.wolf=null;
 				}
-				
+
 				if(dclass.hasDog){
 					this.wolf=(Wolf) this.world.spawnEntity(this.player.getLocation(), EntityType.WOLF);
 					this.wolf.setTamed(true);
 					this.wolf.setOwner(this.player);
 					this.wolf.setHealth(this.wolf.getMaxHealth());
 				}
-				
+
 				//Delete Inventory
 				this.classItems.clear();
 				this.player.getInventory().clear();
 				this.player.getInventory().setArmorContents(null);
 				player.getInventory().setItemInHand(new ItemStack(0));
-				DungeonsXL.p.updateInventory(this.player);
-				
+				//DungeonsXL.p.updateInventory(this.player);
+
 				//Set Inventory
 				for(ItemStack istack:dclass.items){
-					
+
 					//Leggings
 					if(istack.getTypeId()==300||
 							istack.getTypeId()==304||
@@ -345,43 +345,43 @@ public class DPlayer {
 					{
 						this.player.getInventory().setBoots(istack);
 					}
-					
+
 					else{
 						this.player.getInventory().addItem(istack);
 					}
-					
-					
-					
-					DungeonsXL.p.updateInventory(this.player);
+
+
+
+					//DungeonsXL.p.updateInventory(this.player);
 				}
-				
+
 				for(int i=0;i<36;i++){
 					ItemStack istack=this.player.getInventory().getItem(i);
 					if(istack!=null){
 						this.classItems.add(i);
 					}
 				}
-				
 
-				DungeonsXL.p.updateInventory(this.player);
-				
+
+				//DungeonsXL.p.updateInventory(this.player);
+
 			}
 		}
 	}
-	
+
 	public void setCheckpoint(GameCheckpoint checkpoint){
 		this.checkpoint=checkpoint;
 	}
-	
+
 	public void addTreasure(){
 		new DLootInventory(this.player,this.treasureInv.getContents());
 	}
-	
+
 	//Static
 	public static void remove(DPlayer player){
 		players.remove(player);
 	}
-	
+
 	public static DPlayer get(Player player){
 		EditWorld eworld=EditWorld.get(player.getWorld());
 		boolean isEditing=false;
@@ -397,16 +397,16 @@ public class DPlayer {
 		}
 		return null;
 	}
-	
+
 	public static CopyOnWriteArrayList<DPlayer> get(World world){
 		CopyOnWriteArrayList<DPlayer> dplayers=new CopyOnWriteArrayList<DPlayer>();
-		
+
 		for(DPlayer dplayer:players){
 			if(dplayer.world==world){
 				dplayers.add(dplayer);
 			}
 		}
-		
+
 		return dplayers;
 	}
 
@@ -429,7 +429,7 @@ public class DPlayer {
 							GameWorld gworld=GameWorld.get(dplayer.world);
 							if(gworld!=null){
 								if(gworld!=null){
-									
+
 									DGroup dgroup=DGroup.get(dplayer.player);
 									if(dplayer.checkpoint==null){
 										dplayer.player.teleport(dgroup.gworld.locStart);
@@ -442,8 +442,8 @@ public class DPlayer {
 											dplayer.wolf.teleport(dplayer.checkpoint.location);
 										}
 									}
-									
-									
+
+
 									//Respawn Items
 									for(ItemStack istack:dplayer.respawnInventory){
 										if(istack!=null){
@@ -451,7 +451,7 @@ public class DPlayer {
 										}
 									}
 									dplayer.respawnInventory.clear();
-									DungeonsXL.p.updateInventory(dplayer.player);
+									//DungeonsXL.p.updateInventory(dplayer.player);
 								}
 							}
 						}
@@ -484,9 +484,9 @@ public class DPlayer {
 						offplayer.oldFoodLevel=dplayer.oldFoodLevel;
 						offplayer.oldGamemode=dplayer.oldGamemode;
 						offplayer.oldLvl=dplayer.oldLvl;
-						
+
 						remove(dplayer);
-						
+
 						if(dplayer.isEditing){
 							EditWorld eworld=EditWorld.get(dplayer.world);
 							if(eworld!=null){
@@ -505,14 +505,14 @@ public class DPlayer {
 						}
 
 					}
-					
+
 				}
 			}
-			
+
 			//Update ClassItems
 			for(Integer istackplace:dplayer.classItems){
 				ItemStack istack=dplayer.player.getInventory().getItem(istackplace);
-				
+
 				if(istack!=null){
 					if(istack.getTypeId()!=0){
 						if(istack.getTypeId()>255 && istack.getTypeId()<318){

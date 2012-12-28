@@ -36,13 +36,13 @@ import com.dre.dungeonsxl.game.GameWorld;
 
 public class PlayerListener implements Listener{
 	public DungeonsXL p=DungeonsXL.p;
-	
-	
+
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
 		Player player = event.getPlayer();
 		Block clickedBlock=event.getClickedBlock();
-		
+
 		//Block Enderchests
 		if(clickedBlock!=null){
 			if(GameWorld.get(player.getWorld())!=null || EditWorld.get(player.getWorld())!=null){
@@ -54,8 +54,8 @@ public class PlayerListener implements Listener{
 				}
 			}
 		}
-		
-		
+
+
 		//Check Portals
 		if(event.getItem()!=null){
 			if(event.getItem().getType()==Material.WOOD_SWORD){
@@ -77,28 +77,28 @@ public class PlayerListener implements Listener{
 				}
 			}
 		}
-		
+
 		//Check Signs
 		if(clickedBlock!=null){
-			
+
 			if(clickedBlock.getTypeId()==68 || clickedBlock.getTypeId()==63){
 				//Check Group Signs
 				if(DGSign.playerInteract(event.getClickedBlock(), player)){
 					event.setCancelled(true);
 				}
-				
-				
+
+
 				//Leave Sign
-				
+
 				if(LeaveSign.playerInteract(event.getClickedBlock(), player)){
 					event.setCancelled(true);
 				}
-				
+
 				DPlayer dplayer=DPlayer.get(player);
 				if(dplayer!=null){
-					
-				
-				
+
+
+
 					//Check GameWorld Signs
 					GameWorld gworld=GameWorld.get(player.getWorld());
 					if(gworld!=null){
@@ -116,7 +116,7 @@ public class PlayerListener implements Listener{
 								}
 							}
 						}
-						
+
 						//End Sign
 						for(Block blockEnd:gworld.blocksEnd){
 							if(blockEnd.getLocation().distance(clickedBlock.getLocation())<1){
@@ -126,17 +126,17 @@ public class PlayerListener implements Listener{
 								}
 							}
 						}
-						
+
 						//Leave Sign
 						for(Block blockLeave:gworld.blocksLeave){
 							if(blockLeave.getLocation().distance(clickedBlock.getLocation())<1){
 								dplayer.leave();
 							}
 						}
-						
-						
+
+
 						//Class Signs
-						
+
 						for(Sign classSign:gworld.signClass){
 							if(classSign!=null){
 								if(classSign.getLocation().distance(clickedBlock.getLocation())<1){
@@ -153,13 +153,13 @@ public class PlayerListener implements Listener{
 				}
 			}
 		}
-		
+
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerDropItem(PlayerDropItemEvent event){
 		Player player=event.getPlayer();
-		
+
 		//Deny dropping things at the lobby
 		DGroup dgroup=DGroup.get(player);
 		if(dgroup!=null){
@@ -171,7 +171,7 @@ public class PlayerListener implements Listener{
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			DPlayer dplayer=DPlayer.get(player);
 			GameWorld gworld=GameWorld.get(dplayer.world);
 			if(dplayer!=null){
@@ -192,7 +192,7 @@ public class PlayerListener implements Listener{
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerRespawn(PlayerRespawnEvent event){
 		Player player=event.getPlayer();
@@ -213,32 +213,32 @@ public class PlayerListener implements Listener{
 					DGroup dgroup=DGroup.get(dplayer.player);
 					if(dplayer.checkpoint==null){
 						event.setRespawnLocation(dgroup.gworld.locStart);
-						
+
 						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
 						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dgroup.gworld.locStart), 20);
-						
+
 						if(dplayer.wolf!=null){
 							dplayer.wolf.teleport(dgroup.gworld.locStart);
 						}
 					}else{
 						event.setRespawnLocation(dplayer.checkpoint.location);
-						
+
 						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
 						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dplayer.checkpoint.location), 20);
-						
+
 						if(dplayer.wolf!=null){
 							dplayer.wolf.teleport(dplayer.checkpoint.location);
 						}
 					}
-					
-					
-					
-					
+
+
+
+
 				}
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerPortalEvent(PlayerPortalEvent event){
 		Player player=event.getPlayer();
@@ -249,7 +249,7 @@ public class PlayerListener implements Listener{
 			dportal.teleport(player);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		Player player=event.getPlayer();
@@ -262,7 +262,7 @@ public class PlayerListener implements Listener{
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerChat(AsyncPlayerChatEvent event){
 		Player player=event.getPlayer();
@@ -274,7 +274,7 @@ public class PlayerListener implements Listener{
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerQuit(PlayerQuitEvent event){
 		DPlayer dplayer=DPlayer.get(event.getPlayer());
@@ -284,7 +284,7 @@ public class PlayerListener implements Listener{
 			dplayer.player.kickPlayer("");
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerDeath(PlayerDeathEvent event){
 		DPlayer dplayer=DPlayer.get(event.getEntity());
@@ -297,14 +297,14 @@ public class PlayerListener implements Listener{
 			}
 		}
 	}
-	
+
 	//Deny Player Cmds
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event){
 		if(DungeonsXL.p.permission.has(event.getPlayer(), "dungeonsxl.cmd")||event.getPlayer().isOp()){
 			return;
 		}
-		
+
 		DPlayer dplayer=DPlayer.get(event.getPlayer());
 		if(dplayer!=null){
 			if(!dplayer.isEditing){
@@ -316,14 +316,14 @@ public class PlayerListener implements Listener{
 			}
 		}
 	}
-	
-	
+
+
 	//Inventory Events
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onInventoryOpen(InventoryOpenEvent event){
 		GameChest.onOpenInventory(event);
 	}
-	
+
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
 		Player player =(Player) event.getPlayer();
@@ -335,19 +335,19 @@ public class PlayerListener implements Listener{
 							player.getWorld().dropItem(player.getLocation(), istack);
 						}
 					}
-					
+
 					DLootInventory.LootInventorys.remove(inventory);
 				}
 			}
 		}
 	}
-	
+
 	//Player move
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
 		Player player=event.getPlayer();
 		DLootInventory inventory=DLootInventory.get(player);
-		
+
 		if(inventory!=null){
 			if(player.getLocation().getBlock().getType()!=Material.PORTAL){
 				if(
@@ -364,24 +364,24 @@ public class PlayerListener implements Listener{
 			}
 		}
 	}
-	
+
 	//Etc. ---------------------------------
-	
+
 	public class RespawnRunnable implements Runnable{
 		private Player player;
 		private Location location;
-		
+
 		public RespawnRunnable(Player player, Location location){
 			this.location = location;
 			this.player = player;
 		}
-		
+
 		@Override
 		public void run() {
 			this.player.teleport(this.location);
-			
+
 			DPlayer dplayer = DPlayer.get(this.player);
-			
+
 			if(dplayer!=null){
 				//Respawn Items
 				for(ItemStack istack:dplayer.respawnInventory){
@@ -390,11 +390,11 @@ public class PlayerListener implements Listener{
 					}
 				}
 				dplayer.respawnInventory.clear();
-				DungeonsXL.p.updateInventory(this.player);
+				//DungeonsXL.p.updateInventory(this.player);
 			}
 		}
-		
+
 	}
-	
-	
+
+
 }
