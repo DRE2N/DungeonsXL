@@ -1,19 +1,26 @@
 package com.dre.dungeonsxl;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.server.v1_4_6.Item;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_4_6.entity.CraftPigZombie;
 import org.bukkit.craftbukkit.v1_4_6.entity.CraftSkeleton;
 import org.bukkit.craftbukkit.v1_4_6.entity.CraftZombie;
 import org.bukkit.craftbukkit.v1_4_6.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.inventory.ItemStack;
 
 import com.dre.dungeonsxl.game.DMob;
@@ -32,7 +39,14 @@ public class DMobType {
 	private Item ItemChestplate;
 	private Item ItemLeggings;
 	private Item ItemBoots;
-
+	
+	private Map<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
+	
+	/* Extra Values for different Mob Types */
+	private boolean isWitherSkeleton = false;
+	private String ocelotType = null;
+	
+	/* Methods */
 	public DMobType(String name, EntityType type){
 		mobTypes.add(this);
 
@@ -71,7 +85,43 @@ public class DMobType {
 			        if(ItemChestplate!=null) entityMC.setEquipment(3, new net.minecraft.server.v1_4_6.ItemStack(ItemChestplate));
 			        if(ItemHelmet!=null) entityMC.setEquipment(4, new net.minecraft.server.v1_4_6.ItemStack(ItemHelmet));
 				}
+				
+				//Check if it's a Zombie Pigman
+				if(type==EntityType.PIG_ZOMBIE){
+					CraftPigZombie entityC = (CraftPigZombie)entity;
+			        net.minecraft.server.v1_4_6.EntityPigZombie entityMC = entityC.getHandle();
 
+			        if(ItemHand!=null) entityMC.setEquipment(0, new net.minecraft.server.v1_4_6.ItemStack(ItemHand));
+			        if(ItemBoots!=null) entityMC.setEquipment(1, new net.minecraft.server.v1_4_6.ItemStack(ItemBoots));
+			        if(ItemLeggings!=null) entityMC.setEquipment(2, new net.minecraft.server.v1_4_6.ItemStack(ItemLeggings));
+			        if(ItemChestplate!=null) entityMC.setEquipment(3, new net.minecraft.server.v1_4_6.ItemStack(ItemChestplate));
+			        if(ItemHelmet!=null) entityMC.setEquipment(4, new net.minecraft.server.v1_4_6.ItemStack(ItemHelmet));
+				}
+				
+				/* Check mob specified stuff */
+				if(type==EntityType.SKELETON){
+					if(isWitherSkeleton){
+						((Skeleton) entity).setSkeletonType(SkeletonType.WITHER);
+					} else {
+						((Skeleton) entity).setSkeletonType(SkeletonType.NORMAL);
+					}
+				}
+				
+				if(type==EntityType.OCELOT){
+					Ocelot ocelot=(Ocelot) entity;
+					if(ocelotType!=null){
+						if (ocelotType.equalsIgnoreCase("BLACK_CAT")) {
+							ocelot.setCatType(Ocelot.Type.BLACK_CAT);
+						} else if (ocelotType.equalsIgnoreCase("RED_CAT")) {
+							ocelot.setCatType(Ocelot.Type.RED_CAT);
+						} else if (ocelotType.equalsIgnoreCase("SIAMESE_CAT")) {
+							ocelot.setCatType(Ocelot.Type.SIAMESE_CAT);
+						} else if (ocelotType.equalsIgnoreCase("WILD_OCELOT")) {
+							ocelot.setCatType(Ocelot.Type.WILD_OCELOT);
+						}
+					}
+				}
+				
 				/* Spawn Mob */
 				new DMob(entity, maxHealth, gWorld);
 
@@ -82,7 +132,9 @@ public class DMobType {
 	//Load Config
  	public static void load(File file){
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-
+		
+		DungeonsXL.p.log(configFile.getKeys(true));
+		
 		//Read Mobs
 		for(String mobName:configFile.getKeys(true)){
 			if(!mobName.contains(".")){
@@ -117,6 +169,25 @@ public class DMobType {
 				if(configFile.contains(mobName+".ItemHand")){
 					mobType.ItemHand=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemHand"))).getItem();
 				}
+				
+				//Load different Mob options
+				if(configFile.contains(mobName+".isWitherSkeleton")){
+					mobType.isWitherSkeleton = configFile.getBoolean(mobName+".isWitherSkeleton");
+				}
+				
+				if(configFile.contains(mobName+".ocelotType")){
+					mobType.ocelotType = configFile.getString(mobName+".ocelotType");
+				}
+				
+				//Drops
+				Set<String> list=configFile.getKeys(true);
+				for(String dropPath:list){
+					if(dropPath.contains(mobName+"drops.")){
+						//TODO Add Drops funtionality
+						
+					}
+				}
+				
 			}
 		}
 
