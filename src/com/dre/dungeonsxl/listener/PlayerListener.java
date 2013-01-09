@@ -121,8 +121,12 @@ public class PlayerListener implements Listener{
 						for(Block blockEnd:gworld.blocksEnd){
 							if(blockEnd.getLocation().distance(clickedBlock.getLocation())<1){
 								if(!dplayer.isFinished){
-									dplayer.finish();
-									return;
+									if(event.getAction()==Action.LEFT_CLICK_BLOCK){
+										dplayer.finish();
+										return;
+									}else{
+										p.msg(player,ChatColor.RED+"Du musst das Schild mit Links-klick berühren!");
+									}
 								}
 							}
 						}
