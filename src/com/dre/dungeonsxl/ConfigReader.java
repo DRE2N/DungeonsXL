@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -92,11 +93,12 @@ public class ConfigReader {
 		}while(configFile.contains(preString));
 		
 		//Read Messages
-		Set<String> list=configFile.getKeys(true);
-		for(String messagePath:list){
-			if(messagePath.contains("message.")){
-				int messageId=Integer.parseInt(messagePath.replace("message.",""));
-				this.msgs.put(messageId,configFile.getString(messagePath));
+		ConfigurationSection configSetion = configFile.getConfigurationSection("message");
+		if(configSetion!=null){
+			Set<String> list=configSetion.getKeys(false);
+			for(String messagePath:list){
+				int messageId=Integer.parseInt(messagePath);
+				this.msgs.put(messageId,configSetion.getString(messagePath));
 			}
 		}
 		
@@ -169,7 +171,6 @@ public class ConfigReader {
 		configFile.set("invitedplayers", this.invitedPlayer);
 		
 		try {
-			p.log("SAVE"+this.file);
 			configFile.save(this.file);
 		} catch (IOException e) {
 			e.printStackTrace();
