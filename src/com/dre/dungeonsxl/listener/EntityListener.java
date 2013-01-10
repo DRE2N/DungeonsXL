@@ -70,6 +70,7 @@ public class EntityListener implements Listener{
 				if(gworld.isPlaying){
 					if(entity.getType()!=EntityType.PLAYER){
 						event.getDrops().clear();
+						DMob.onDeath(event);
 					}
 				}
 			}

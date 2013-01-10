@@ -10,12 +10,14 @@ import net.minecraft.server.v1_4_6.Item;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_4_6.entity.CraftPigZombie;
 import org.bukkit.craftbukkit.v1_4_6.entity.CraftSkeleton;
 import org.bukkit.craftbukkit.v1_4_6.entity.CraftZombie;
 import org.bukkit.craftbukkit.v1_4_6.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
@@ -41,6 +43,7 @@ public class DMobType {
 	private Item ItemBoots;
 	
 	private Map<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
+	public Map<ItemStack, Integer> getDrops() { return this.drops; }
 	
 	/* Extra Values for different Mob Types */
 	private boolean isWitherSkeleton = false;
@@ -123,76 +126,119 @@ public class DMobType {
 				}
 				
 				/* Spawn Mob */
-				new DMob(entity, maxHealth, gWorld);
+				new DMob(entity, maxHealth, gWorld, this);
 
 			}
 		}
 	}
-
+	
 	//Load Config
  	public static void load(File file){
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
 		
-		DungeonsXL.p.log(configFile.getKeys(true));
-		
 		//Read Mobs
-		for(String mobName:configFile.getKeys(true)){
-			if(!mobName.contains(".")){
-				DungeonsXL.p.log("Test"+mobName);
+		for(String mobName:configFile.getKeys(false)){
+			EntityType type=EntityType.fromName(configFile.getString(mobName+".Type"));
 
-				EntityType type=EntityType.fromName(configFile.getString(mobName+".Type"));
+			DMobType mobType=new DMobType(mobName, type);
 
-				DMobType mobType=new DMobType(mobName, type);
+			//Load MaxHealth
+			if(configFile.contains(mobName+".MaxHealth")){
+				mobType.maxHealth=configFile.getInt(mobName+".MaxHealth");
+			}
 
-				//Load MaxHealth
-				if(configFile.contains(mobName+".MaxHealth")){
-					mobType.maxHealth=configFile.getInt(mobName+".MaxHealth");
-				}
+			//Load Items
+			if(configFile.contains(mobName+".ItemHelmet")){
+				mobType.ItemHelmet=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemHelmet"))).getItem();
+			}
 
-				//Load Items
-				if(configFile.contains(mobName+".ItemHelmet")){
-					mobType.ItemHelmet=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemHelmet"))).getItem();
-				}
+			if(configFile.contains(mobName+".ItemChestplate")){
+				mobType.ItemChestplate=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemChestplate"))).getItem();
+			}
 
-				if(configFile.contains(mobName+".ItemChestplate")){
-					mobType.ItemChestplate=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemChestplate"))).getItem();
-				}
+			if(configFile.contains(mobName+".ItemBoots")){
+				mobType.ItemBoots=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemBoots"))).getItem();
+			}
 
-				if(configFile.contains(mobName+".ItemBoots")){
-					mobType.ItemBoots=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemBoots"))).getItem();
-				}
+			if(configFile.contains(mobName+".ItemLeggings")){
+				mobType.ItemLeggings=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemLeggings"))).getItem();
+			}
 
-				if(configFile.contains(mobName+".ItemLeggings")){
-					mobType.ItemLeggings=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemLeggings"))).getItem();
-				}
-
-				if(configFile.contains(mobName+".ItemHand")){
-					mobType.ItemHand=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemHand"))).getItem();
-				}
-				
-				//Load different Mob options
-				if(configFile.contains(mobName+".isWitherSkeleton")){
-					mobType.isWitherSkeleton = configFile.getBoolean(mobName+".isWitherSkeleton");
-				}
-				
-				if(configFile.contains(mobName+".ocelotType")){
-					mobType.ocelotType = configFile.getString(mobName+".ocelotType");
-				}
-				
-				//Drops
-				Set<String> list=configFile.getKeys(true);
+			if(configFile.contains(mobName+".ItemHand")){
+				mobType.ItemHand=CraftItemStack.asNMSCopy(new ItemStack(configFile.getInt(mobName+".ItemHand"))).getItem();
+			}
+			
+			//Load different Mob options
+			if(configFile.contains(mobName+".isWitherSkeleton")){
+				mobType.isWitherSkeleton = configFile.getBoolean(mobName+".isWitherSkeleton");
+			}
+			
+			if(configFile.contains(mobName+".ocelotType")){
+				mobType.ocelotType = configFile.getString(mobName+".ocelotType");
+			}
+			
+			//Drops
+			ConfigurationSection configSetion = configFile.getConfigurationSection(mobName+".drops");
+			if(configSetion!=null){
+				Set<String> list=configSetion.getKeys(false);
 				for(String dropPath:list){
-					if(dropPath.contains(mobName+"drops.")){
-						//TODO Add Drops funtionality
-						
+					ItemStack item = null;
+					int chance = 100;
+					
+					/* Item Stack */
+					Material mat = Material.getMaterial(configSetion.getInt(dropPath+".id"));
+					int amount = 1;
+					short data = 0;
+					
+					if(configSetion.contains(dropPath+".amount")){
+						amount = configSetion.getInt(dropPath+".amount");
 					}
+					if(configSetion.contains(dropPath+".data")){
+						data = Short.parseShort(configSetion.getString(dropPath+".data"));
+					}
+					
+					item = new ItemStack(mat,amount,data);
+					
+					/* Enchantments */
+					if (configSetion.contains(dropPath+".enchantments")) {
+						for(String enchantment:configSetion.getStringList(dropPath+".enchantments")){
+							String[] splittedEnchantment = enchantment.split(" ");
+							if (splittedEnchantment.length>1) {
+								item.getItemMeta().addEnchant(Enchantment.getByName(splittedEnchantment[0]), Integer.parseInt(splittedEnchantment[1]), true);
+							} else {
+								item.getItemMeta().addEnchant(Enchantment.getByName(splittedEnchantment[0]), 1, true);
+							}
+						}
+					}
+					
+					/* Item Name */
+					if (configSetion.contains(dropPath+".name")) {
+						item.getItemMeta().setDisplayName(configSetion.getString(dropPath+".name"));
+					}
+					
+					/* Item Lore */
+					if (configSetion.contains(dropPath+".lore")) {
+						item.getItemMeta().setDisplayName(configSetion.getString(dropPath+".lore"));
+					}
+					
+					/* Drop chance */
+					if (configSetion.contains(dropPath+".chance")) {
+						chance = configSetion.getInt(dropPath+".chance");
+					}
+					
+					/* Add Item to the drops map */
+					mobType.drops.put(item, chance);
 				}
-				
 			}
 		}
-
 	}
-
+ 	
+ 	//Clear
+ 	public static void clear(){
+ 		mobTypes.clear();
+ 	}
+ 	
+ 	
  	//Get
  	public static DMobType get(String name){
  		for(DMobType mobType:DMobType.mobTypes){

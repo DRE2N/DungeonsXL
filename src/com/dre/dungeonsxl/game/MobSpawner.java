@@ -47,7 +47,7 @@ public class MobSpawner {
 							if(EntityType.fromName(this.mob).isAlive()){
 								LivingEntity entity=(LivingEntity)world.spawnEntity(this.block.getLocation(), EntityType.fromName(this.mob));
 								if(this.live>0){
-									new DMob(entity,this.live,GameWorld.get(world));
+									new DMob(entity,this.live,GameWorld.get(world),null);
 								}
 							}
 						}

@@ -172,6 +172,7 @@ public class DungeonsXL extends JavaPlugin{
 		DPortal.portals.clear();
 		DGSign.dgsigns.clear();
 		LeaveSign.lsigns.clear();
+		DMobType.clear();
 
 		//Delete Worlds
 		GameWorld.deleteAll();
