@@ -2,11 +2,15 @@ package com.dre.dungeonsxl.game;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.inventory.ItemStack;
 
 import com.dre.dungeonsxl.DMobType;
 
@@ -21,7 +25,6 @@ public class MobSpawner {
 	private int amount;
 	private int radius;
 	private int live;
-	
 	
 	public MobSpawner(Block block, String mob, int interval, int amount, int radius, int live){
 		mobspawners.add(this);
@@ -46,9 +49,16 @@ public class MobSpawner {
 						if(EntityType.fromName(this.mob)!=null){
 							if(EntityType.fromName(this.mob).isAlive()){
 								LivingEntity entity=(LivingEntity)world.spawnEntity(this.block.getLocation(), EntityType.fromName(this.mob));
-								if(this.live>0){
-									new DMob(entity,this.live,GameWorld.get(world),null);
+								
+								//Add Bow to normal Skeletons
+								if(entity.getType() == EntityType.SKELETON){
+									Skeleton skeleton = (Skeleton) entity;
+									if(skeleton.getSkeletonType()==SkeletonType.NORMAL){
+										skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW));
+									}
 								}
+								
+								new DMob(entity,this.live,GameWorld.get(world),null);
 							}
 						}
 						
