@@ -6,7 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.dre.dungeonsxl.DungeonsXL;
+import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.commands.DCommand;
 import com.dre.dungeonsxl.commands.DCommandRoot;
 
@@ -31,14 +31,14 @@ public class CommandListener implements CommandExecutor {
 	                		}
                 		}
                 		else{
-                			DungeonsXL.p.msg(player, ChatColor.RED+"Du hast keine Permissions dazu!");
+                			P.p.msg(player, ChatColor.RED+"Du hast keine Permissions dazu!");
                 		}
                 		return true;
                 	}
                 }
                 
-        		DungeonsXL.p.msg(player, ChatColor.RED+"Befehl "+ChatColor.GOLD+cmd+ChatColor.RED+" existiert nicht!");
-        		DungeonsXL.p.msg(player, ChatColor.RED+"Bitte gib "+ChatColor.GOLD+"/dxl help"+ChatColor.RED+" für Hilfe ein!");
+        		P.p.msg(player, ChatColor.RED+"Befehl "+ChatColor.GOLD+cmd+ChatColor.RED+" existiert nicht!");
+        		P.p.msg(player, ChatColor.RED+"Bitte gib "+ChatColor.GOLD+"/dxl help"+ChatColor.RED+" für Hilfe ein!");
 			}else{
 				DCommandRoot.root.cmdHelp.onExecute(args,player);
 			}

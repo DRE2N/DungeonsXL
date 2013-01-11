@@ -244,11 +244,11 @@ public class DGSign {
 				}
 			}
 			else{
-				File file=new File(DungeonsXL.p.getDataFolder()+"/dungeons/"+dgsign.dungeonName, "config.yml");
+				File file=new File(P.p.getDataFolder()+"/dungeons/"+dgsign.dungeonName, "config.yml");
 				if(file!=null){
 					ConfigReader confReader=new ConfigReader(file);
 					if(confReader!=null){
-						DungeonsXL.p.msg(player, ChatColor.RED+"Du kannst den Dungeon nur alle "+ChatColor.GOLD+confReader.timeToNextPlay+ChatColor.RED+" Stunden betreten!");
+						P.p.msg(player, ChatColor.RED+"Du kannst den Dungeon nur alle "+ChatColor.GOLD+confReader.timeToNextPlay+ChatColor.RED+" Stunden betreten!");
 					}
 				}
 			}
@@ -316,7 +316,7 @@ public class DGSign {
 	}
 
 	public static void load(FileConfiguration configFile) {
-		for(World world:DungeonsXL.p.getServer().getWorlds()){
+		for(World world:P.p.getServer().getWorlds()){
 			if(configFile.contains("groupsign."+world.getName())){
 				int id=0;
 				String preString;

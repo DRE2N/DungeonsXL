@@ -14,7 +14,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.DPortal;
-import com.dre.dungeonsxl.DungeonsXL;
+import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.EditWorld;
 import com.dre.dungeonsxl.LeaveSign;
 import com.dre.dungeonsxl.game.GameWorld;
@@ -108,7 +108,7 @@ public class BlockListener implements Listener {
 		
 		//Group Signs
 		if(eworld==null){
-			if(player.isOp() || DungeonsXL.p.permission.has(player, "dxl.sign")){
+			if(player.isOp() || P.p.permission.has(player, "dxl.sign")){
 				
 		
 				if(lines[0].equalsIgnoreCase("[DXL]")){

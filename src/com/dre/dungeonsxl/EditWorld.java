@@ -18,7 +18,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 public class EditWorld {
-	private static DungeonsXL p=DungeonsXL.p;
+	private static P p=P.p;
 	public static CopyOnWriteArrayList<EditWorld> eworlds=new CopyOnWriteArrayList<EditWorld>();
 
 	//Variables
@@ -62,10 +62,10 @@ public class EditWorld {
 
 	public void save(){
 		this.world.save();
-		p.copyDirectory(new File("DXL_Edit_"+this.id),new File("plugins/DungeonsXL/dungeons/"+this.dungeonname));
-		p.deletenotusingfiles(new File("plugins/DungeonsXL/dungeons/"+this.dungeonname));
+		p.copyDirectory(new File("DXL_Edit_"+this.id),new File(p.getDataFolder(),"/dungeons/"+this.dungeonname));
+		p.deletenotusingfiles(new File(p.getDataFolder(),"/dungeons/"+this.dungeonname));
 		try {
-			ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream(new File("plugins/DungeonsXL/dungeons/"+this.dungeonname+"/DXLData.data")));
+			ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream(new File(p.getDataFolder(),"/dungeons/"+this.dungeonname+"/DXLData.data")));
 			out.writeInt(this.sign.size());
 			for(Block sign:this.sign){
 				out.writeInt(sign.getX());
@@ -81,26 +81,6 @@ public class EditWorld {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		//Check Configuration
-		/*File file=new File("plugins/DungeonsXL/dungeons/"+this.dungeonname+"/config.yml");
-		if(!file.exists()){
-			File copyfile=new File("plugins/DungeonsXL/config.yml");
-			if(copyfile.exists()){
-				try {
-					DungeonsXL.p.copyFile(copyfile,file);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}else{
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}*/
-
 	}
 
 	public void checkSign(Block block){
@@ -169,7 +149,7 @@ public class EditWorld {
 			}
 		}
 
-		File file=new File("plugins/DungeonsXL/dungeons/"+name);
+		File file=new File(p.getDataFolder(),"/dungeons/"+name);
 
 		if(file.exists()){
 			EditWorld eworld = new EditWorld();
@@ -180,7 +160,7 @@ public class EditWorld {
 			eworld.world=p.getServer().createWorld(WorldCreator.name("DXL_Edit_"+eworld.id));
 
 			try {
-				ObjectInputStream os=new ObjectInputStream(new FileInputStream(new File("plugins/DungeonsXL/dungeons/"+eworld.dungeonname+"/DXLData.data")));
+				ObjectInputStream os=new ObjectInputStream(new FileInputStream(new File(p.getDataFolder(),"/dungeons/"+eworld.dungeonname+"/DXLData.data")));
 				int length=os.readInt();
 				for(int i=0; i<length; i++){
 					int x=os.readInt();
@@ -215,7 +195,7 @@ public class EditWorld {
 		}
 
 		//Cheack Unloaded Worlds
-		File file=new File("plugins/DungeonsXL/dungeons/"+name);
+		File file=new File(p.getDataFolder(),"/dungeons/"+name);
 
 		if(file.exists()){
 			return true;

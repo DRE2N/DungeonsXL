@@ -28,14 +28,14 @@ import com.dre.dungeonsxl.DGroup;
 import com.dre.dungeonsxl.DLootInventory;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.DPortal;
-import com.dre.dungeonsxl.DungeonsXL;
+import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.EditWorld;
 import com.dre.dungeonsxl.LeaveSign;
 import com.dre.dungeonsxl.game.GameChest;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class PlayerListener implements Listener{
-	public DungeonsXL p=DungeonsXL.p;
+	public P p=P.p;
 
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -305,7 +305,7 @@ public class PlayerListener implements Listener{
 	//Deny Player Cmds
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event){
-		if(DungeonsXL.p.permission.has(event.getPlayer(), "dungeonsxl.cmd")||event.getPlayer().isOp()){
+		if(p.permission.has(event.getPlayer(), "dungeonsxl.cmd")||event.getPlayer().isOp()){
 			return;
 		}
 

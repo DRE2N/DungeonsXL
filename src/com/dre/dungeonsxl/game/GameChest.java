@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.dre.dungeonsxl.DGroup;
 import com.dre.dungeonsxl.DPlayer;
-import com.dre.dungeonsxl.DungeonsXL;
+import com.dre.dungeonsxl.P;
 
 public class GameChest {
 	
@@ -45,7 +45,7 @@ public class GameChest {
 					msg=msg.substring(0,msg.length()-1);
 					msg=msg+" hinzugefügt worden!";
 					
-					DungeonsXL.p.msg(player, msg);
+					P.p.msg(player, msg);
 				}
 			}
 		}
@@ -70,7 +70,7 @@ public class GameChest {
 								event.setCancelled(true);
 							}
 						}else{
-							DungeonsXL.p.msg(DungeonsXL.p.getServer().getPlayer(event.getPlayer().getName()), ChatColor.RED+"Diese Kiste wurde schon geöffnet!");
+							P.p.msg(P.p.getServer().getPlayer(event.getPlayer().getName()), ChatColor.RED+"Diese Kiste wurde schon geöffnet!");
 							event.setCancelled(true);
 						}
 					}

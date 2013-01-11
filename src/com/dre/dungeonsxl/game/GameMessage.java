@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.block.Block;
 
 import com.dre.dungeonsxl.DPlayer;
-import com.dre.dungeonsxl.DungeonsXL;
+import com.dre.dungeonsxl.P;
 
 public class GameMessage {
 	public static CopyOnWriteArrayList<GameMessage> gmessages=new CopyOnWriteArrayList<GameMessage>();
@@ -37,7 +37,7 @@ public class GameMessage {
 			for(DPlayer dplayer:DPlayer.get(gmessage.gworld.world)){
 				if(!gmessage.playerDone.contains(dplayer)){
 					if(dplayer.player.getLocation().distance(gmessage.block.getLocation())<gmessage.radius+1){
-						DungeonsXL.p.msg(dplayer.player, gmessage.msg);
+						P.p.msg(dplayer.player, gmessage.msg);
 						gmessage.playerDone.add(dplayer);
 					}
 				}

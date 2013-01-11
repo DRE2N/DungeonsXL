@@ -20,7 +20,7 @@ import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class DPlayer {
-	public DungeonsXL p=DungeonsXL.p;
+	public P p=P.p;
 
 	public static CopyOnWriteArrayList<DPlayer> players=new CopyOnWriteArrayList<DPlayer>();
 
@@ -54,7 +54,7 @@ public class DPlayer {
 	public int invItemInHand;
 	public CopyOnWriteArrayList<ItemStack> respawnInventory=new CopyOnWriteArrayList<ItemStack>();
 
-	public Inventory treasureInv = DungeonsXL.p.getServer().createInventory(player,  45, "Belohnungen");
+	public Inventory treasureInv = P.p.getServer().createInventory(player,  45, "Belohnungen");
 
 	public DPlayer(Player player, World world, Location teleport, boolean isEditing){
 		players.add(this);
@@ -174,7 +174,7 @@ public class DPlayer {
 									}
 								}
 							}
-							//DungeonsXL.p.updateInventory(groupplayer);
+							//P.p.updateInventory(groupplayer);
 						}
 						i++;
 					}while(groupplayer==null);
@@ -188,7 +188,7 @@ public class DPlayer {
 
 
 
-		//DungeonsXL.p.updateInventory(this.player);
+		//P.p.updateInventory(this.player);
 	}
 
 	public void ready(){
@@ -230,11 +230,11 @@ public class DPlayer {
 			}
 		}
 		this.respawnInventory.clear();
-		//DungeonsXL.p.updateInventory(this.player);
+		//P.p.updateInventory(this.player);
 	}
 
 	public void finish(){
-		DungeonsXL.p.msg(this.player, ChatColor.YELLOW+"Du hast den Dungeon erfolgreich beendet!");
+		P.p.msg(this.player, ChatColor.YELLOW+"Du hast den Dungeon erfolgreich beendet!");
 		this.isFinished=true;
 
 		DGroup dgroup=DGroup.get(this.player);
@@ -243,7 +243,7 @@ public class DPlayer {
 				for(Player player:dgroup.players){
 					DPlayer dplayer=get(player);
 					if(!dplayer.isFinished){
-						DungeonsXL.p.msg(this.player, ChatColor.YELLOW+"Noch auf Mitspieler warten...");
+						P.p.msg(this.player, ChatColor.YELLOW+"Noch auf Mitspieler warten...");
 						return;
 					}
 				}
@@ -304,7 +304,7 @@ public class DPlayer {
 				this.player.getInventory().clear();
 				this.player.getInventory().setArmorContents(null);
 				player.getInventory().setItemInHand(new ItemStack(0));
-				//DungeonsXL.p.updateInventory(this.player);
+				//P.p.updateInventory(this.player);
 
 				//Set Inventory
 				for(ItemStack istack:dclass.items){
@@ -352,7 +352,7 @@ public class DPlayer {
 
 
 
-					//DungeonsXL.p.updateInventory(this.player);
+					//P.p.updateInventory(this.player);
 				}
 
 				for(int i=0;i<36;i++){
@@ -363,7 +363,7 @@ public class DPlayer {
 				}
 
 
-				//DungeonsXL.p.updateInventory(this.player);
+				//P.p.updateInventory(this.player);
 
 			}
 		}
@@ -451,7 +451,6 @@ public class DPlayer {
 										}
 									}
 									dplayer.respawnInventory.clear();
-									//DungeonsXL.p.updateInventory(dplayer.player);
 								}
 							}
 						}

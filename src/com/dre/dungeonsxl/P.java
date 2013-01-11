@@ -33,8 +33,8 @@ import com.dre.dungeonsxl.listener.CommandListener;
 import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 
-public class DungeonsXL extends JavaPlugin{
-	public static DungeonsXL p;
+public class P extends JavaPlugin{
+	public static P p;
 
 	//Listener
 	private static Listener entitylistener;
@@ -341,9 +341,9 @@ public class DungeonsXL extends JavaPlugin{
 
                 if (e.getMessage().contains("Zugriff")
                         || e.getMessage().contains("Access"))
-                    DungeonsXL.p.log("Error: " + e.getMessage() + " // Access denied");
+                    P.p.log("Error: " + e.getMessage() + " // Access denied");
                 else
-                	DungeonsXL.p.log("Error: " + e.getMessage());
+                	P.p.log("Error: " + e.getMessage());
             }
         }
     }

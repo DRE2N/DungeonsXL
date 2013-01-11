@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class DPortal {
-	public static DungeonsXL p=DungeonsXL.p;
+	public static P p=P.p;
 	
 	public static CopyOnWriteArrayList<DPortal> portals = new CopyOnWriteArrayList<DPortal>();
 	

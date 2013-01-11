@@ -42,7 +42,7 @@ public class LeaveSign{
 				DGroup dgroup=DGroup.get(player);
 				if(dgroup!=null){
 					dgroup.removePlayer(player);
-					DungeonsXL.p.msg(player,ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
+					P.p.msg(player,ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
 					return true;
 				}
 			}
@@ -88,7 +88,7 @@ public class LeaveSign{
 	}
 
 	public static void load(FileConfiguration configFile) {
-		for(World world:DungeonsXL.p.getServer().getWorlds()){
+		for(World world:P.p.getServer().getWorlds()){
 			if(configFile.contains("leavesign."+world.getName())){
 				int id=0;
 				String preString;

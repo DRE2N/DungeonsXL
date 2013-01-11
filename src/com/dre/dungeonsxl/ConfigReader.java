@@ -16,7 +16,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 public class ConfigReader {
-	public static DungeonsXL p=DungeonsXL.p;
+	public static P p=P.p;
 	
 	public File file;
 	

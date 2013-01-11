@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import com.dre.dungeonsxl.DPlayer;
-import com.dre.dungeonsxl.DungeonsXL;
+import com.dre.dungeonsxl.P;
 
 
 public class GameCheckpoint {
@@ -38,7 +38,7 @@ public class GameCheckpoint {
 				if(!gpoint.dplayerHasUsed.contains(dplayer)){
 					if(dplayer.player.getLocation().distance(gpoint.location)<=gpoint.radius){
 						dplayer.setCheckpoint(gpoint);
-						DungeonsXL.p.msg(dplayer.player, ChatColor.GOLD+"Checkpoint erreicht!");
+						P.p.msg(dplayer.player, ChatColor.GOLD+"Checkpoint erreicht!");
 						gpoint.dplayerHasUsed.add(dplayer);
 					}
 				}

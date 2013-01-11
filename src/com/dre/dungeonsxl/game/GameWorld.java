@@ -26,10 +26,10 @@ import com.dre.dungeonsxl.ConfigReader;
 import com.dre.dungeonsxl.DClass;
 import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.DPlayer;
-import com.dre.dungeonsxl.DungeonsXL;
+import com.dre.dungeonsxl.P;
 
 public class GameWorld {
-	private static DungeonsXL p=DungeonsXL.p;
+	private static P p=P.p;
 	public static CopyOnWriteArrayList<GameWorld> gworlds=new CopyOnWriteArrayList<GameWorld>();
 
 	//Variables placeable
@@ -322,7 +322,7 @@ public class GameWorld {
 
 	public static GameWorld load(String name){
 
-		File file=new File("plugins/DungeonsXL/dungeons/"+name);
+		File file=new File(p.getDataFolder(),"/dungeons/"+name);
 
 		if(file.exists()){
 			GameWorld gworld = new GameWorld();
