@@ -18,6 +18,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -64,13 +65,13 @@ public class DungeonsXL extends JavaPlugin{
 
 		//Init Classes
 		new DCommandRoot();
-
+		
 		//InitFolders
 		this.initFolders();
-
+		
 		//Setup Permissions
 		this.setupPermissions();
-
+		
 		//Listener
 		entitylistener=new EntityListener();
 		playerlistener=new PlayerListener();
@@ -92,7 +93,6 @@ public class DungeonsXL extends JavaPlugin{
 		// -------------------------------------------- //
 		// Update Sheduler
 		// -------------------------------------------- //
-
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 			public void run() {
 				for(GameWorld gworld:GameWorld.gworlds){
@@ -104,7 +104,6 @@ public class DungeonsXL extends JavaPlugin{
 				}
 				for(EditWorld eworld:EditWorld.eworlds){
 					if(eworld.world.getPlayers().isEmpty()){
-
 						eworld.delete();
 					}
 				}
@@ -169,14 +168,28 @@ public class DungeonsXL extends JavaPlugin{
 		}
 
 		//Delete all Data
-		DPortal.portals.clear();
+		DGroup.dgroups.clear();
 		DGSign.dgsigns.clear();
-		LeaveSign.lsigns.clear();
+		DLootInventory.LootInventorys.clear();
 		DMobType.clear();
-
+		DOfflinePlayer.players.clear();
+		DPlayer.players.clear();
+		DPortal.portals.clear();
+		LeaveSign.lsigns.clear();
+		DCommandRoot.root.commands.clear();
+		GameCheckpoint.gcheckpoints.clear();
+		GameMessage.gmessages.clear();
+		MobSpawner.mobspawners.clear();
+		
 		//Delete Worlds
 		GameWorld.deleteAll();
 		EditWorld.deleteAll();
+		
+		//Disable listeners
+		HandlerList.unregisterAll(p);
+		
+		//Stop shedulers
+		p.getServer().getScheduler().cancelTasks(this);
 	}
 
 

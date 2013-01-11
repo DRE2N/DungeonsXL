@@ -61,14 +61,13 @@ public class EntityListener implements Listener{
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDeathEvent event){
 		World world=event.getEntity().getWorld();
-		//Deny all drops from mobs
-		if (event.getEntity() instanceof LivingEntity)
-        {
+		
+		if (event.getEntity() instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) event.getEntity();
-			GameWorld gworld=GameWorld.get(world);
+			GameWorld gworld = GameWorld.get(world);
 			if(gworld!=null){
 				if(gworld.isPlaying){
-					if(entity.getType()!=EntityType.PLAYER){
+					if(entity.getType() != EntityType.PLAYER){
 						event.getDrops().clear();
 						DMob.onDeath(event);
 					}
@@ -90,9 +89,6 @@ public class EntityListener implements Listener{
 			if (event instanceof EntityDamageByEntityEvent)
 			{
 				EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent)event;
-				
-				DMob.onDamage(sub);
-				
 				Entity entity = sub.getDamager();
 				Entity entity2 = sub.getEntity();
 				
@@ -100,7 +96,7 @@ public class EntityListener implements Listener{
 				{
 					entity = ((Projectile) entity).getShooter();
 				}
-
+				
 				if(entity instanceof Player && entity2 instanceof Player)
 				{
 					event.setCancelled(true);
@@ -138,7 +134,6 @@ public class EntityListener implements Listener{
 							}
 						}
 					}
-					
 				}
 			}
 		}
@@ -159,11 +154,9 @@ public class EntityListener implements Listener{
 	
 	// Zombie/skeleton combustion from the sun.
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityCombust(EntityCombustEvent event)
-	{
+	public void onEntityCombust (EntityCombustEvent event) {
 		GameWorld gworld = GameWorld.get(event.getEntity().getWorld());
-		if(gworld != null)
-		{
+		if (gworld != null) {
 			event.setCancelled(true);
 		}
 	}
@@ -181,9 +174,9 @@ public class EntityListener implements Listener{
 	
 	//Explosions
 	@EventHandler
-	public void onEntityExplode(EntityExplodeEvent event)
-	{
+	public void onEntityExplode (EntityExplodeEvent event) {
 		GameWorld gworld=GameWorld.get(event.getEntity().getWorld());
+		
 		if(gworld!=null){
 			if(event.getEntity() instanceof LivingEntity){
 				//Disable Creeper explosions in gameworlds
@@ -217,6 +210,4 @@ public class EntityListener implements Listener{
 			}
 		}
 	}
-	 
-	
 }
