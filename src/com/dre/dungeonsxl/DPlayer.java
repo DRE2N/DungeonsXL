@@ -38,6 +38,7 @@ public class DPlayer {
 	public int oldExp;
 	public int oldHealth;
 	public int oldFoodLevel;
+	public int oldFireTicks;
 	public GameMode oldGamemode;
 
 	public boolean isEditing;
@@ -56,6 +57,7 @@ public class DPlayer {
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player,  45, "Belohnungen");
 
+
 	public DPlayer(Player player, World world, Location teleport, boolean isEditing){
 		players.add(this);
 		this.player=player;
@@ -69,6 +71,7 @@ public class DPlayer {
 		this.oldFoodLevel=player.getFoodLevel();
 		this.oldGamemode=player.getGameMode();
 		this.oldLvl=player.getLevel();
+		this.oldFireTicks=player.getFireTicks();
 
 		this.player.teleport(teleport);
 		this.player.getInventory().clear();
@@ -106,7 +109,7 @@ public class DPlayer {
 		this.player.setHealth(oldHealth);
 		this.player.setFoodLevel(oldFoodLevel);
 		this.player.setGameMode(oldGamemode);
-
+		this.player.setFireTicks(oldFireTicks);
 
 		if(this.isEditing){
 			EditWorld eworld=EditWorld.get(this.world);
