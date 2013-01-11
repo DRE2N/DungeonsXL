@@ -5,9 +5,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.inventory.ItemStack;
 
 public class DClass {
-	
-	
-	//Variables
 	public CopyOnWriteArrayList<ItemStack> items=new CopyOnWriteArrayList<ItemStack>();
 	public String name;
 	public boolean hasDog;
@@ -17,9 +14,4 @@ public class DClass {
 		this.name=name;
 		this.hasDog=hasDog;
 	}
-	
-	
-	
-	
-	
 }

@@ -42,7 +42,7 @@ public class LeaveSign{
 				DGroup dgroup=DGroup.get(player);
 				if(dgroup!=null){
 					dgroup.removePlayer(player);
-					P.p.msg(player,ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
+					P.p.msg(player,P.p.language.get("player_leavegroup"));//ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
 					return true;
 				}
 			}

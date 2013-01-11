@@ -178,7 +178,7 @@ public class DMobType {
 										itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
 									}
 								} else {
-									P.p.log(Level.WARNING,"Error at loading mob.yml: Enchantmet '"+splittedEnchantment[0]+"' doesn't exist!");
+									P.p.log(Level.WARNING, P.p.language.get("log_error_mobenchantment",splittedEnchantment[0]));
 								}
 							}
 						}
@@ -205,7 +205,7 @@ public class DMobType {
 					}
 				}
 			} else {
-				P.p.log(Level.WARNING,"Error at loading mob.yml: Mob '"+configFile.getString(mobName+".Type")+"' doesn't exist!");
+				P.p.log(Level.WARNING, P.p.language.get("log_error_mobtype",configFile.getString(mobName+".Type")));
 			}
 		}
 	}
@@ -214,7 +214,6 @@ public class DMobType {
  	public static void clear(){
  		mobTypes.clear();
  	}
- 	
  	
  	//Get
  	public static DMobType get(String name){

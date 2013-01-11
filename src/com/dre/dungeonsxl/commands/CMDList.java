@@ -10,7 +10,7 @@ public class CMDList extends DCommand{
 	public CMDList(){
 		this.command="list";
 		this.args=0;
-		this.help="/dxl list - Zeigt alle Dungeons an";
+		this.help=p.language.get("help_cmd_list");//"/dxl list - Zeigt alle Dungeons an";
 	}
 	
 	

@@ -1,6 +1,5 @@
 package com.dre.dungeonsxl.listener;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,14 +30,14 @@ public class CommandListener implements CommandExecutor {
 	                		}
                 		}
                 		else{
-                			P.p.msg(player, ChatColor.RED+"Du hast keine Permissions dazu!");
+                			P.p.msg(player, P.p.language.get("cmd_nopermissions"));//ChatColor.RED+"Du hast keine Permissions dazu!");
                 		}
                 		return true;
                 	}
                 }
                 
-        		P.p.msg(player, ChatColor.RED+"Befehl "+ChatColor.GOLD+cmd+ChatColor.RED+" existiert nicht!");
-        		P.p.msg(player, ChatColor.RED+"Bitte gib "+ChatColor.GOLD+"/dxl help"+ChatColor.RED+" für Hilfe ein!");
+        		P.p.msg(player, P.p.language.get("cmd_notexist1",cmd));//ChatColor.RED+"Befehl "+ChatColor.GOLD+cmd+ChatColor.RED+" existiert nicht!");
+        		P.p.msg(player, P.p.language.get("cmd_notexist2"));//ChatColor.RED+"Bitte gib "+ChatColor.GOLD+"/dxl help"+ChatColor.RED+" für Hilfe ein!");
 			}else{
 				DCommandRoot.root.cmdHelp.onExecute(args,player);
 			}

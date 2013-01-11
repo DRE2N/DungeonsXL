@@ -1,6 +1,5 @@
 package com.dre.dungeonsxl.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DGroup;
@@ -12,7 +11,7 @@ public class CMDEdit extends DCommand{
 	public CMDEdit(){
 		this.command="edit";
 		this.args=1;
-		this.help="/dxl edit <name> - Edit a existing dungeon";
+		this.help=p.language.get("help_cmd_edit");//"/dxl edit <name> - Edit a existing dungeon";
 	}
 	
 	@Override
@@ -29,20 +28,19 @@ public class CMDEdit extends DCommand{
 			if(dplayer==null){
 				if(dgroup==null){
 					if(eworld!=null){
-						
 						if(eworld.lobby==null){
 							new DPlayer(player,eworld.world,eworld.world.getSpawnLocation(), true);
 						}else{
 							new DPlayer(player,eworld.world,eworld.lobby, true);
 						}
 					}else{
-						p.msg(player,ChatColor.RED+"Dungeon existiert nicht!");
+						p.msg(player,p.language.get("cmd_edit_error1",dungeonname));
 					}
 				}else{
-					p.msg(player,ChatColor.RED+"Du musst zuerst deine Gruppe verlassen!");
+					p.msg(player,p.language.get("cmd_edit_error2"));
 				}
 			}else{
-				p.msg(player,ChatColor.RED+"Du musst zuerst den aktuellen Dungeon verlassen!");
+				p.msg(player,p.language.get("cmd_edit_error3"));
 			}
 		}
 		

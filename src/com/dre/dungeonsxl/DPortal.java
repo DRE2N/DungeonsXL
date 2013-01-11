@@ -2,7 +2,6 @@ package com.dre.dungeonsxl;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -111,10 +110,10 @@ public class DPortal {
 						new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
 					}
 				}else{
-					p.msg(player,ChatColor.RED+"Dungeon existiert nicht!");
+					p.msg(player,p.language.get("player_dungeon_error",DGroup.get(player).dungeonname));
 				}
 			}else{
-				p.msg(player,ChatColor.RED+"Du musst zuerst einer Gruppe beitreten!");
+				p.msg(player,p.language.get("player_group_error"));
 			}
 		}
 	}

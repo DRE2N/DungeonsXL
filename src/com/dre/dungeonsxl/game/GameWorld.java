@@ -84,7 +84,7 @@ public class GameWorld {
 				if(lines[1].equalsIgnoreCase("ready")){
 					this.blocksReady.add(block);
 					sign.setLine(0, ChatColor.BLUE+"############");
-					sign.setLine(1, ChatColor.DARK_GREEN+"Bereit");
+					sign.setLine(1, ChatColor.DARK_GREEN+"Ready");
 					sign.setLine(2, "");
 					sign.setLine(3, ChatColor.BLUE+"############");
 					sign.update();
@@ -104,7 +104,7 @@ public class GameWorld {
 				if(lines[1].equalsIgnoreCase("end")){
 					this.blocksEnd.add(block);
 					sign.setLine(0, ChatColor.DARK_BLUE+"############");
-					sign.setLine(1, ChatColor.DARK_GREEN+"Ende");
+					sign.setLine(1, ChatColor.DARK_GREEN+"End");
 					sign.setLine(2, "");
 					sign.setLine(3, ChatColor.DARK_BLUE+"############");
 					sign.update();
@@ -363,11 +363,6 @@ public class GameWorld {
 				e.printStackTrace();
 			}
 
-
-			//if(gworld.confReader.isLobbyDisabled){
-			//	gworld.startGame();
-			//}
-
 			return gworld;
 		}
 
@@ -376,6 +371,7 @@ public class GameWorld {
 
 	public static void update(){
 		for(GameWorld gworld:gworlds){
+			
 			//Update Spiders
 			for(LivingEntity mob:gworld.world.getLivingEntities()){
 				if(mob.getType()==EntityType.SPIDER){

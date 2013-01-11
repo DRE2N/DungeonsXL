@@ -11,15 +11,12 @@ public class CMDPortal extends DCommand{
 	public CMDPortal(){
 		this.command="portal";
 		this.args=0;
-		this.help="/dxl portal - Create a portal that goes in a dungeon or out a dungeon";
+		this.help=p.language.get("help_cmd_portal");//"/dxl portal - Create a portal that goes in a dungeon or out a dungeon";
 		this.permissions="dxl.portal";
 	}
 	
 	@Override
 	public void onExecute(String[] args, Player player) {
-		
-		
-		
 		DPortal dportal=new DPortal(false);
 		dportal.player=player;
 		dportal.world=player.getWorld();
@@ -32,8 +29,6 @@ public class CMDPortal extends DCommand{
 		}else{ //Is player in normal World
 			dportal.type="todungeon";
 		}
-		
-		
 	}
  
 }

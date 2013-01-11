@@ -27,8 +27,6 @@ public class DLootInventory {
 			}
 		}
 		this.player=player;
-
-
 	}
 
 
@@ -38,6 +36,7 @@ public class DLootInventory {
 				return inventory;
 			}
 		}
+		
 		return null;
 	}
 }

@@ -35,7 +35,7 @@ public class GameChest {
 			for(Player player:dgroup.players){
 				DPlayer dplayer=DPlayer.get(player);
 				if(dplayer!=null){
-					String msg=ChatColor.GOLD+"Deinem Belohnungsinventar sind";
+					String msg="";
 					for(ItemStack istack:this.chest.getInventory().getContents()){
 						if(istack!=null){
 							dplayer.treasureInv.addItem(istack);
@@ -43,9 +43,8 @@ public class GameChest {
 						}
 					}
 					msg=msg.substring(0,msg.length()-1);
-					msg=msg+" hinzugefügt worden!";
 					
-					P.p.msg(player, msg);
+					P.p.msg(player, P.p.language.get("player_lootadded",msg));
 				}
 			}
 		}

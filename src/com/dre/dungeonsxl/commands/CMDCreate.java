@@ -1,6 +1,5 @@
 package com.dre.dungeonsxl.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DPlayer;
@@ -11,7 +10,7 @@ public class CMDCreate extends DCommand {
 	public CMDCreate(){
 		this.args=1;
 		this.command="create";
-		this.help="/dxl create <name> - Create a new Dungeon";
+		this.help=p.language.get("help_cmd_create");
 		this.permissions="dxl.create";
 	}
 	
@@ -23,8 +22,8 @@ public class CMDCreate extends DCommand {
 			if(name.length()<=15){
 			
 				//Msg create
-				p.log("New Dungeon: "+name);
-				p.log("Generate new world...");
+				p.log(p.language.get("log_newdungeon"));//"New Dungeon: "+name);
+				p.log(p.language.get("log_generatenewworld"));//"Generate new world...");
 				
 				//Create World
 				EditWorld eworld=new EditWorld();
@@ -32,7 +31,7 @@ public class CMDCreate extends DCommand {
 				eworld.dungeonname=name;
 				
 				//MSG Done
-				p.log("World generation finished!");
+				p.log(p.language.get("log_worldgenerationfinished"));//"World generation finished!"
 				
 				//Tp Player
 				if(eworld.lobby==null){
@@ -41,10 +40,10 @@ public class CMDCreate extends DCommand {
 					new DPlayer(player,eworld.world,eworld.lobby, true);
 				}
 			}else{
-				p.msg(player, ChatColor.RED+"Der Name darf nicht länger sein als 15 Zeichen!");
+				p.msg(player, p.language.get("cmd_create_error1"));//ChatColor.RED+"Der Name darf nicht länger sein als 15 Zeichen!");
 			}
 		}else{
-			p.msg(player, ChatColor.RED+"Du musst zuerst aus dem aktuellen Dungeon raus!");
+			p.msg(player, p.language.get("cmd_create_error2"));//ChatColor.RED+"Du musst zuerst aus dem aktuellen Dungeon raus!");
 		}
 		
 	}

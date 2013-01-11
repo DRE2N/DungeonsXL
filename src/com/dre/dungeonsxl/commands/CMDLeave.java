@@ -1,6 +1,5 @@
 package com.dre.dungeonsxl.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DGroup;
@@ -12,7 +11,7 @@ public class CMDLeave extends DCommand {
 	public CMDLeave(){
 		this.command="leave";
 		this.args=0;
-		this.help="/dxl leave - leaves the current dungeon.";
+		this.help=p.language.get("help_cmd_leave");//"/dxl leave - leaves the current dungeon.";
 	}
 	
 	@Override
@@ -21,7 +20,7 @@ public class CMDLeave extends DCommand {
 		
 		if(GameWorld.get(player.getWorld())!=null){
 			if(GameWorld.get(player.getWorld()).isTutorial){
-				p.msg(player,ChatColor.RED+"Du kannst diesen Befehl nicht in einem Tutorial benutzen!");
+				p.msg(player,p.language.get("cmd_leave_error2"));//ChatColor.RED+"Du kannst diesen Befehl nicht in einem Tutorial benutzen!");
 				return;
 			}
 		}
@@ -33,10 +32,10 @@ public class CMDLeave extends DCommand {
 			DGroup dgroup=DGroup.get(player);
 			if(dgroup!=null){
 				dgroup.removePlayer(player);
-				p.msg(player,ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
+				p.msg(player,p.language.get("cmd_leave_success"));//ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
 				return;
 			}
-			p.msg(player,ChatColor.RED+"You aren't in a dungeon!");
+			p.msg(player,p.language.get("cmd_leave_error1"));//ChatColor.RED+"You aren't in a dungeon!");
 		}
 	}
 }

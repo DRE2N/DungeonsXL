@@ -8,7 +8,7 @@ public class CMDHelp extends DCommand{
 	public CMDHelp(){
 		this.command="help";
 		this.args=-1;
-		this.help="/dxl help - Displays the Help-Page";
+		this.help=p.language.get("help_cmd_help");//"/dxl help - Displays the Help-Page";
 	}
 	
 	@Override
@@ -25,8 +25,6 @@ public class CMDHelp extends DCommand{
 			if(page<1) page=1;
 			if(page>pages) page=pages;
 		}
-		
-		
 		
 		p.msg(player, ChatColor.GREEN+"============[ "+ChatColor.GOLD+"Help DungeonsXL - "+page+"/"+pages+ChatColor.GREEN+" ]============",false);
 		

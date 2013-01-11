@@ -248,7 +248,7 @@ public class DGSign {
 				if(file!=null){
 					ConfigReader confReader=new ConfigReader(file);
 					if(confReader!=null){
-						P.p.msg(player, ChatColor.RED+"Du kannst den Dungeon nur alle "+ChatColor.GOLD+confReader.timeToNextPlay+ChatColor.RED+" Stunden betreten!");
+						P.p.msg(player, P.p.language.get("player_join_error"));
 					}
 				}
 			}

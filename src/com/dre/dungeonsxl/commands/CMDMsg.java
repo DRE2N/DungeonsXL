@@ -12,7 +12,7 @@ public class CMDMsg extends DCommand{
 	public CMDMsg(){
 		this.args=-1;
 		this.command="msg";
-		this.help="/dxl msg <id> '[msg]' - Display the msg or change the msg";
+		this.help=p.language.get("help_cmd_msg");//"/dxl msg <id> '[msg]' - Display the msg or change the msg";
 		this.permissions="dxl.msg";
 	}
 	
@@ -30,9 +30,9 @@ public class CMDMsg extends DCommand{
 					if(args.length==2){
 						String msg=confreader.msgs.get(id);
 						if(msg!=null){
-							p.msg(player, ChatColor.GOLD+"Msg("+id+"):"+ChatColor.WHITE+msg);
+							p.msg(player, ChatColor.WHITE+msg);
 						}else{
-							p.msg(player, ChatColor.RED+"Nachricht mit der Id "+ChatColor.GOLD+id+ChatColor.RED+" existiert nicht!");
+							p.msg(player, p.language.get("cmd_msg_error1",""+id));//ChatColor.RED+"Nachricht mit der Id "+ChatColor.GOLD+id+ChatColor.RED+" existiert nicht!");
 						}
 						
 					}else{
@@ -50,26 +50,26 @@ public class CMDMsg extends DCommand{
 							msg=splitMsg[1];
 							String old=confreader.msgs.get(id);
 							if(old==null){
-								p.msg(player, ChatColor.GREEN+"Neue Nachricht ("+ChatColor.GOLD+id+ChatColor.GREEN+") hinzugefügt!");
+								p.msg(player, p.language.get("cmd_msg_added",""+id));//ChatColor.GREEN+"Neue Nachricht ("+ChatColor.GOLD+id+ChatColor.GREEN+") hinzugefügt!");
 							}else{
-								p.msg(player, ChatColor.GREEN+"Nachricht ("+ChatColor.GOLD+id+ChatColor.GREEN+") aktualisiert!");
+								p.msg(player, p.language.get("cmd_msg_updated",""+id));//ChatColor.GREEN+"Nachricht ("+ChatColor.GOLD+id+ChatColor.GREEN+") aktualisiert!");
 							}
 							
 							confreader.msgs.put(id, msg);
 							confreader.save();
 						}else{
-							p.msg(player, ChatColor.RED+"Du musst die Nachricht zwischen ' einfügen!");
+							p.msg(player, p.language.get("cmd_msg_error2"));//ChatColor.RED+"Du musst die Nachricht zwischen ' einfügen!");
 						}
 					}
 				}catch(NumberFormatException e){
-					p.msg(player, ChatColor.RED+"Parameter <id> muss eine Zahl beinhalten!");
+					p.msg(player, p.language.get("cmd_msg_error3"));//ChatColor.RED+"Parameter <id> muss eine Zahl beinhalten!");
 				}
 				
 			}else{
 				this.displayhelp(player);
 			}
 		}else{
-			p.msg(player, ChatColor.RED+"Du musst einen Dungeon bearbeiten um diesen Befehl zu benutzen!");
+			p.msg(player, p.language.get("cmd_msg_error4"));//ChatColor.RED+"Du musst einen Dungeon bearbeiten um diesen Befehl zu benutzen!");
 		}
 		
 	}

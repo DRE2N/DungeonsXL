@@ -43,6 +43,9 @@ public class P extends JavaPlugin{
 
 	//Main Config Reader
 	public ConfigReader mainConfig;
+	
+	//Language Reader
+	public LanguageReader language;
 
 	//Tutorial
 	public String tutorialDungeon;
@@ -59,9 +62,12 @@ public class P extends JavaPlugin{
 
 		//Commands
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
-
-		//MSG
-		this.log(this.getDescription().getName()+" enabled!");
+		
+		//Load Config
+		mainConfig=new ConfigReader(new File(p.getDataFolder(), "config.yml"));
+		
+		//Load Language
+		language = new LanguageReader(new File(p.getDataFolder(), "languages/de.yml"));
 
 		//Init Classes
 		new DCommandRoot();
@@ -83,9 +89,6 @@ public class P extends JavaPlugin{
 
 		//Load All
 		this.loadAll();
-
-		//Load Config
-		mainConfig=new ConfigReader(new File(p.getDataFolder(), "config.yml"));
 
 		//Load MobTypes
 		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
@@ -136,7 +139,7 @@ public class P extends JavaPlugin{
 			    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
 			    						}
 			    					}else{
-			    						p.msg(player,ChatColor.RED+"Tutorial Dungeon existiert nicht!");
+			    						p.msg(player,p.language.get("error_tutorialnotexist"));//ChatColor.RED+"Tutorial Dungeon existiert nicht!");
 			    					}
 			    				}
 			    			}
@@ -151,14 +154,18 @@ public class P extends JavaPlugin{
 		        DPlayer.update(false);
 		    }
 		}, 0L, 2L);
+		
+		//MSG
+		this.log(this.getDescription().getName()+" enabled!");
 	}
 
 
 	@Override
 	public void onDisable(){
-		//Save
-		this.saveAll();
-
+		//Save 
+		this.saveData();
+		language.save();
+		
 		//MSG
 		this.log(this.getDescription().getName()+" disabled!");
 
@@ -232,7 +239,7 @@ public class P extends JavaPlugin{
 
 
     //Save and Load
-	public void saveAll(){
+	public void saveData(){
 		File file = new File(this.getDataFolder(), "data.yml");
 		FileConfiguration configFile = new YamlConfiguration();
 
@@ -366,53 +373,58 @@ public class P extends JavaPlugin{
 		}
 	}
 
-	//Misc
-	/*public void updateInventory(Player p) {
-        CraftPlayer c = (CraftPlayer) p;
-        for (int i = 0;i < 36;i++) {
-            int nativeindex = i;
-            if (i < 9) nativeindex = i + 36;
-            ItemStack olditem =  c.getInventory().getItem(i);
-            net.minecraft.server.v1_4_6.ItemStack item = null;
-            if (olditem != null && olditem.getType() != Material.AIR) {
-                item = new net.minecraft.server.v1_4_6.ItemStack(0, 0, 0);
-                item.id = olditem.getTypeId();
-                item.count = olditem.getAmount();
-                item.b = olditem.getDurability();
-            }
-            if(olditem != null){
-	            if(olditem.getEnchantments().size()==0) {
-	                Packet103SetSlot pack = new Packet103SetSlot(0, nativeindex, item);
-	                c.getHandle().netServerHandler.sendPacket(pack);
-	            }
-            }
-        }
-    }*/
-
 	//Msg
-
 	public void msg(Player player,String msg){
+		msg = replaceColors(msg);
 		player.sendMessage(ChatColor.DARK_GREEN+"[DXL] "+ChatColor.WHITE+msg);
 	}
 
 	public void msg(Player player,String msg, boolean zusatz){
+		msg = replaceColors(msg);
 		if(zusatz){
 			player.sendMessage(ChatColor.DARK_GREEN+"[DXL]"+ChatColor.WHITE+msg);
 		}else{
 			player.sendMessage(ChatColor.WHITE+msg);
 		}
-
 	}
-
+	
+	private String replaceColors(String msg){
+		if (msg!=null) {
+			msg = msg.replace("&0", ChatColor.getByChar("0").toString());
+			msg = msg.replace("&1", ChatColor.getByChar("1").toString());
+			msg = msg.replace("&2", ChatColor.getByChar("2").toString());
+			msg = msg.replace("&3", ChatColor.getByChar("3").toString());
+			msg = msg.replace("&4", ChatColor.getByChar("4").toString());
+			msg = msg.replace("&5", ChatColor.getByChar("5").toString());
+			msg = msg.replace("&6", ChatColor.getByChar("6").toString());
+			msg = msg.replace("&7", ChatColor.getByChar("7").toString());
+			msg = msg.replace("&8", ChatColor.getByChar("8").toString());
+			msg = msg.replace("&9", ChatColor.getByChar("9").toString());
+			msg = msg.replace("&a", ChatColor.getByChar("a").toString());
+			msg = msg.replace("&b", ChatColor.getByChar("b").toString());
+			msg = msg.replace("&c", ChatColor.getByChar("c").toString());
+			msg = msg.replace("&d", ChatColor.getByChar("d").toString());
+			msg = msg.replace("&e", ChatColor.getByChar("e").toString());
+			msg = msg.replace("&f", ChatColor.getByChar("f").toString());
+			msg = msg.replace("&k", ChatColor.getByChar("k").toString());
+			msg = msg.replace("&l", ChatColor.getByChar("l").toString());
+			msg = msg.replace("&m", ChatColor.getByChar("m").toString());
+			msg = msg.replace("&n", ChatColor.getByChar("n").toString());
+			msg = msg.replace("&o", ChatColor.getByChar("o").toString());
+			msg = msg.replace("&r", ChatColor.getByChar("r").toString());
+		}
+		
+		return msg;
+	}
+	
 	//Misc.
-
 	public EntityType getEntitiyType(String name){
 		for(EntityType type:EntityType.values()){
 			if(name.equalsIgnoreCase(type.getName())){
 				return type;
 			}
 		}
-
+		
 		return null;
 	}
 

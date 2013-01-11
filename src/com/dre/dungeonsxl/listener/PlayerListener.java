@@ -48,7 +48,7 @@ public class PlayerListener implements Listener{
 			if(GameWorld.get(player.getWorld())!=null || EditWorld.get(player.getWorld())!=null){
 				if(event.getAction()!=Action.LEFT_CLICK_BLOCK){
 					if(clickedBlock.getType()==Material.ENDER_CHEST){
-						p.msg(player, ChatColor.RED+"Du kannst keine Enderchest in einem Dungeon verwenden!");
+						p.msg(player, p.language.get("player_enderchest_error"));//ChatColor.RED+"Du kannst keine Enderchest in einem Dungeon verwenden!");
 						event.setCancelled(true);
 					}
 				}
@@ -108,10 +108,10 @@ public class PlayerListener implements Listener{
 								if(!dplayer.isReady){
 									if(gworld.signClass.isEmpty() || dplayer.dclass!=null){
 										dplayer.ready();
-										p.msg(player,ChatColor.GOLD+"Du bist nun bereit für den Dungeon!");
+										p.msg(player,p.language.get("player_ready"));//ChatColor.GOLD+"Du bist nun bereit für den Dungeon!");
 										return;
 									}else{
-										p.msg(player,ChatColor.RED+"Wähle zuerst eine Klasse!");
+										p.msg(player,p.language.get("player_ready_error"));//ChatColor.RED+"Wähle zuerst eine Klasse!");
 									}
 								}
 							}
@@ -125,7 +125,7 @@ public class PlayerListener implements Listener{
 										dplayer.finish();
 										return;
 									}else{
-										p.msg(player,ChatColor.RED+"Du musst das Schild mit Links-klick berühren!");
+										p.msg(player,p.language.get("player_leftklick_error"));//ChatColor.RED+"Du musst das Schild mit Links-klick berühren!");
 									}
 								}
 							}
@@ -147,7 +147,7 @@ public class PlayerListener implements Listener{
 									if(event.getAction()==Action.LEFT_CLICK_BLOCK){
 										dplayer.setClass(ChatColor.stripColor(classSign.getLine(1)));
 									}else{
-										p.msg(player,ChatColor.RED+"Du musst die Klasse mit Links-klick auswählen!");
+										p.msg(player,p.language.get("player_leftklick_error"));//+"Du musst die Klasse mit Links-klick auswählen!");
 									}
 									return;
 								}
@@ -182,7 +182,7 @@ public class PlayerListener implements Listener{
 				for(Material material:gworld.confReader.secureobjects){
 					if(material==event.getItemDrop().getItemStack().getType()){
 						event.setCancelled(true);
-						p.msg(player,ChatColor.RED+"Du kannst keine sicheren Objekte droppen");
+						p.msg(player,p.language.get("player_drop_error"));//ChatColor.RED+"Du kannst keine sicheren Objekte droppen");
 						return;
 					}
 				}
@@ -314,7 +314,7 @@ public class PlayerListener implements Listener{
 			if(!dplayer.isEditing){
 				String[] splittedCmd=event.getMessage().split(" ");
 				if(!splittedCmd[0].equalsIgnoreCase("/dungeon") && !splittedCmd[0].equalsIgnoreCase("/dungeonsxl") && !splittedCmd[0].equalsIgnoreCase("/dxl")){
-					p.msg(event.getPlayer(), ChatColor.RED+"Befehle sind während des Dungeons nicht erlaubt");
+					p.msg(event.getPlayer(), p.language.get("player_cmd_error"));//ChatColor.RED+"Befehle sind während des Dungeons nicht erlaubt");
 					event.setCancelled(true);
 				}
 			}

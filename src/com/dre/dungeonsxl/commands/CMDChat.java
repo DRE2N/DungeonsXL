@@ -1,6 +1,5 @@
 package com.dre.dungeonsxl.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DPlayer;
@@ -10,7 +9,7 @@ public class CMDChat extends DCommand{
 	public CMDChat(){
 		this.command="chat";
 		this.args=0;
-		this.help="/dxl chat - Ändert den Chat-Modus";
+		this.help=p.language.get("help_cmd_chat");//"/dxl chat - Ändert den Chat-Modus";
 	}
 	
 	
@@ -20,13 +19,13 @@ public class CMDChat extends DCommand{
 		if(dplayer!=null){
 			if(dplayer.isInWorldChat) {
 				dplayer.isInWorldChat=false;
-				p.msg(player,ChatColor.YELLOW+"Du bist nun im öffentlichen Chat");
+				p.msg(player,p.language.get("cmd_chat_normalchat"));
 			}else{
 				dplayer.isInWorldChat=true;
-				p.msg(player,ChatColor.YELLOW+"Du bist nun im Dungeon-Chat");
+				p.msg(player,p.language.get("cmd_chat_dungeonchat"));
 			}
 		}else{
-			p.msg(player,ChatColor.RED+"Du bist in keinem Dungeon!");
+			p.msg(player,p.language.get("cmd_chat_error1"));
 		}
 	}
 	

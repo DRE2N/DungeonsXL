@@ -1,6 +1,5 @@
 package com.dre.dungeonsxl.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DGroup;
@@ -13,7 +12,7 @@ public class CMDTest extends DCommand {
 	public CMDTest(){
 		this.command="test";
 		this.args=-1;
-		this.help="/dxl test [dungeon] - Test a Dungeon";
+		this.help=p.language.get("help_cmd_test");//"/dxl test [dungeon] - Test a Dungeon";
 		this.permissions="dxl.test";
 	}
 	
@@ -43,7 +42,7 @@ public class CMDTest extends DCommand {
 						newDPlayer.isinTestMode=2;
 					}
 				}else{
-					p.msg(player, ChatColor.RED+"Dungeon "+ChatColor.GOLD+dungeonname+ChatColor.RED+" existiert nicht!");
+					p.msg(player, p.language.get("cmd_test_error1",dungeonname));
 				}
 			}else{
 				this.displayhelp(player);
@@ -75,7 +74,7 @@ public class CMDTest extends DCommand {
 			}
 			
 		}else{
-			p.msg(player, ChatColor.RED+"Du must zuerst den aktuellen Dungeon verlassen!");
+			p.msg(player, p.language.get("cmd_test_error2"));
 		}
 		
 		

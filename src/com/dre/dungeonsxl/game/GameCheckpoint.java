@@ -2,7 +2,6 @@ package com.dre.dungeonsxl.game;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import com.dre.dungeonsxl.DPlayer;
@@ -38,7 +37,7 @@ public class GameCheckpoint {
 				if(!gpoint.dplayerHasUsed.contains(dplayer)){
 					if(dplayer.player.getLocation().distance(gpoint.location)<=gpoint.radius){
 						dplayer.setCheckpoint(gpoint);
-						P.p.msg(dplayer.player, ChatColor.GOLD+"Checkpoint erreicht!");
+						P.p.msg(dplayer.player, P.p.language.get("player_checkpoint_reached"));//ChatColor.GOLD+"Checkpoint erreicht!");
 						gpoint.dplayerHasUsed.add(dplayer);
 					}
 				}
