@@ -13,14 +13,19 @@ public class DMob {
 	//Variables
 	public LivingEntity entity;
 	public DMobType type;
-	public int live;
 	
 	public DMob(LivingEntity entity, int live, GameWorld gworld, DMobType type){
 		gworld.dmobs.add(this);
 		
 		this.entity = entity;
-		this.live = live;
 		this.type = type;
+		
+		/* Remove DropChance of equipment */
+		this.entity.getEquipment().setHelmetDropChance(0);
+		this.entity.getEquipment().setChestplateDropChance(0);
+		this.entity.getEquipment().setLeggingsDropChance(0);
+		this.entity.getEquipment().setBootsDropChance(0);
+		this.entity.getEquipment().setItemInHandDropChance(0);
 		
 		/* Max Health */
 		if(live>0){
