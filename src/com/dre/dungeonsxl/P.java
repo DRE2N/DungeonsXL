@@ -172,7 +172,6 @@ public class P extends JavaPlugin{
 		DGSign.dgsigns.clear();
 		DLootInventory.LootInventorys.clear();
 		DMobType.clear();
-		DOfflinePlayer.players.clear();
 		DPlayer.players.clear();
 		DPortal.portals.clear();
 		LeaveSign.lsigns.clear();
