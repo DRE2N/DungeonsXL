@@ -9,24 +9,24 @@ public class CMDChat extends DCommand{
 	public CMDChat(){
 		this.command="chat";
 		this.args=0;
-		this.help=p.language.get("help_cmd_chat");//"/dxl chat - Ändert den Chat-Modus";
+		this.help=p.language.get("Help_Cmd_Chat");
 	}
-	
-	
+
+
 	@Override
 	public void onExecute(String[] args, Player player) {
 		DPlayer dplayer=DPlayer.get(player);
 		if(dplayer!=null){
 			if(dplayer.isInWorldChat) {
 				dplayer.isInWorldChat=false;
-				p.msg(player,p.language.get("cmd_chat_normalchat"));
+				p.msg(player,p.language.get("Cmd_Chat_NormalChat"));
 			}else{
 				dplayer.isInWorldChat=true;
-				p.msg(player,p.language.get("cmd_chat_dungeonchat"));
+				p.msg(player,p.language.get("Cmd_Chat_DungeonChat"));
 			}
 		}else{
-			p.msg(player,p.language.get("cmd_chat_error1"));
+			p.msg(player,p.language.get("Error_NotInDungeon"));
 		}
 	}
-	
+
 }

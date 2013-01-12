@@ -248,7 +248,7 @@ public class DGSign {
 				if(file!=null){
 					ConfigReader confReader=new ConfigReader(file);
 					if(confReader!=null){
-						P.p.msg(player, P.p.language.get("player_join_error",""+confReader.timeToNextPlay));
+						P.p.msg(player, P.p.language.get("Error_Cooldown",""+confReader.timeToNextPlay));
 					}
 				}
 			}

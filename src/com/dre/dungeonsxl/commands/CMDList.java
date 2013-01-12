@@ -10,21 +10,21 @@ public class CMDList extends DCommand{
 	public CMDList(){
 		this.command="list";
 		this.args=0;
-		this.help=p.language.get("help_cmd_list");//"/dxl list - Zeigt alle Dungeons an";
+		this.help=p.language.get("Help_Cmd_List");
 	}
-	
-	
+
+
 	@Override
 	public void onExecute(String[] args, Player player) {
-		
+
 		File dungeonsfolder=new File(p.getDataFolder()+"/dungeons");
 		if(dungeonsfolder.exists()){
 			p.msg(player, ChatColor.DARK_GREEN+"-----[ "+ChatColor.GOLD+"Dungeons "+ChatColor.RED+dungeonsfolder.list().length+ChatColor.DARK_GREEN+"]-----");
-			
+
 			for(String dungeon:dungeonsfolder.list()){
 				p.msg(player, dungeon);
 			}
 		}
 	}
-	
+
 }

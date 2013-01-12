@@ -13,13 +13,13 @@ public class CommandListener implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd_notused, String arg, String[] args) {
-		
+
 		//Only Playercommands
 		if(sender instanceof Player){
 			Player player = (Player) sender;
 			if(args.length > 0){
                 String cmd = args[0];
-                
+
                 for(DCommand command:DCommandRoot.root.commands){
                 	if(cmd.equals(command.command)){
                 		if(command.playerHasPermissions(player)){
@@ -30,21 +30,21 @@ public class CommandListener implements CommandExecutor {
 	                		}
                 		}
                 		else{
-                			P.p.msg(player, P.p.language.get("cmd_nopermissions"));//ChatColor.RED+"Du hast keine Permissions dazu!");
+                			P.p.msg(player, P.p.language.get("Error_NoPermissions"));
                 		}
                 		return true;
                 	}
                 }
-                
-        		P.p.msg(player, P.p.language.get("cmd_notexist1",cmd));//ChatColor.RED+"Befehl "+ChatColor.GOLD+cmd+ChatColor.RED+" existiert nicht!");
-        		P.p.msg(player, P.p.language.get("cmd_notexist2"));//ChatColor.RED+"Bitte gib "+ChatColor.GOLD+"/dxl help"+ChatColor.RED+" für Hilfe ein!");
+
+        		P.p.msg(player, P.p.language.get("Error_CmdNotExist1",cmd));
+        		P.p.msg(player, P.p.language.get("Error_CmdNotExist2"));
 			}else{
 				DCommandRoot.root.cmdHelp.onExecute(args,player);
 			}
 		}
 		return false;
 	}
-	
-	
+
+
 
 }

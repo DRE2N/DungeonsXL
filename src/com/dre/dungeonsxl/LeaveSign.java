@@ -11,16 +11,16 @@ import org.bukkit.entity.Player;
 
 public class LeaveSign{
 	public static CopyOnWriteArrayList<LeaveSign> lsigns=new CopyOnWriteArrayList<LeaveSign>();
-	
+
 	public Sign sign;
-	
+
 	public LeaveSign(Sign sign){
 		lsigns.add(this);
-		
+
 		this.sign=sign;
 		this.setText();
 	}
-	
+
 	public void setText(){
 		this.sign.setLine(0, ChatColor.BLUE+"############");
 		this.sign.setLine(1, ChatColor.DARK_GREEN+"Leave");
@@ -30,9 +30,9 @@ public class LeaveSign{
 	}
 
 	public static boolean playerInteract(Block block, Player player) {
-		
+
 		LeaveSign lsign=getSign(block);
-		
+
 		if(lsign!=null){
 			DPlayer dplayer=DPlayer.get(player);
 			if(dplayer!=null){
@@ -42,14 +42,14 @@ public class LeaveSign{
 				DGroup dgroup=DGroup.get(player);
 				if(dgroup!=null){
 					dgroup.removePlayer(player);
-					P.p.msg(player,P.p.language.get("player_leavegroup"));//ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
+					P.p.msg(player,P.p.language.get("Player_LeaveGroup"));//ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	public static boolean isRelativeSign(Block block,int x,int z){
 		LeaveSign lsign=getSign(block.getRelative(x,0,z));
 		if(lsign!=null){
@@ -58,7 +58,7 @@ public class LeaveSign{
 			if(z==-1 && lsign.sign.getData().getData()==2) return true;
 			if(z==1 && lsign.sign.getData().getData()==3) return true;
 		}
-		
+
 		return false;
 	}
 
@@ -74,7 +74,7 @@ public class LeaveSign{
 		}
 		return null;
 	}
-	
+
 	//Save and Load
 	public static void save(FileConfiguration configFile){
 		int id = 0;
@@ -95,7 +95,7 @@ public class LeaveSign{
 				do{
 					id++;
 					preString="leavesign."+world.getName()+"."+id+".";
-					if(configFile.contains(preString)){				
+					if(configFile.contains(preString)){
 						Block block=world.getBlockAt(configFile.getInt(preString+".x"),configFile.getInt(preString+".y"),configFile.getInt(preString+".z"));
 						if(block.getState() instanceof Sign){
 							Sign sign = (Sign) block.getState();
@@ -106,5 +106,5 @@ public class LeaveSign{
 			}
 		}
 	}
-	
+
 }

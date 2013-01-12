@@ -43,7 +43,7 @@ public class P extends JavaPlugin{
 
 	//Main Config Reader
 	public ConfigReader mainConfig;
-	
+
 	//Language Reader
 	public LanguageReader language;
 
@@ -62,22 +62,22 @@ public class P extends JavaPlugin{
 
 		//Commands
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
-		
+
 		//Load Config
 		mainConfig=new ConfigReader(new File(p.getDataFolder(), "config.yml"));
-		
+
 		//Load Language
 		language = new LanguageReader(new File(p.getDataFolder(), "languages/de.yml"));
 
 		//Init Classes
 		new DCommandRoot();
-		
+
 		//InitFolders
 		this.initFolders();
-		
+
 		//Setup Permissions
 		this.setupPermissions();
-		
+
 		//Listener
 		entitylistener=new EntityListener();
 		playerlistener=new PlayerListener();
@@ -139,7 +139,7 @@ public class P extends JavaPlugin{
 			    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
 			    						}
 			    					}else{
-			    						p.msg(player,p.language.get("error_tutorialnotexist"));//ChatColor.RED+"Tutorial Dungeon existiert nicht!");
+			    						p.msg(player,p.language.get("Error_TutorialNotExist"));
 			    					}
 			    				}
 			    			}
@@ -154,7 +154,7 @@ public class P extends JavaPlugin{
 		        DPlayer.update(false);
 		    }
 		}, 0L, 2L);
-		
+
 		//MSG
 		this.log(this.getDescription().getName()+" enabled!");
 	}
@@ -162,10 +162,10 @@ public class P extends JavaPlugin{
 
 	@Override
 	public void onDisable(){
-		//Save 
+		//Save
 		this.saveData();
 		language.save();
-		
+
 		//MSG
 		this.log(this.getDescription().getName()+" disabled!");
 
@@ -186,14 +186,14 @@ public class P extends JavaPlugin{
 		GameCheckpoint.gcheckpoints.clear();
 		GameMessage.gmessages.clear();
 		MobSpawner.mobspawners.clear();
-		
+
 		//Delete Worlds
 		GameWorld.deleteAll();
 		EditWorld.deleteAll();
-		
+
 		//Disable listeners
 		HandlerList.unregisterAll(p);
-		
+
 		//Stop shedulers
 		p.getServer().getScheduler().cancelTasks(this);
 	}
@@ -387,7 +387,7 @@ public class P extends JavaPlugin{
 			player.sendMessage(ChatColor.WHITE+msg);
 		}
 	}
-	
+
 	private String replaceColors(String msg){
 		if (msg!=null) {
 			msg = msg.replace("&0", ChatColor.getByChar("0").toString());
@@ -413,10 +413,10 @@ public class P extends JavaPlugin{
 			msg = msg.replace("&o", ChatColor.getByChar("o").toString());
 			msg = msg.replace("&r", ChatColor.getByChar("r").toString());
 		}
-		
+
 		return msg;
 	}
-	
+
 	//Misc.
 	public EntityType getEntitiyType(String name){
 		for(EntityType type:EntityType.values()){
@@ -424,7 +424,7 @@ public class P extends JavaPlugin{
 				return type;
 			}
 		}
-		
+
 		return null;
 	}
 

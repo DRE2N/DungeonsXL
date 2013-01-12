@@ -237,7 +237,7 @@ public class DPlayer {
 	}
 
 	public void finish(){
-		P.p.msg(this.player, p.language.get("player_finisheddungeon"));//ChatColor.YELLOW+"Du hast den Dungeon erfolgreich beendet!");
+		P.p.msg(this.player, p.language.get("Player_FinishedDungeon"));//ChatColor.YELLOW+"Du hast den Dungeon erfolgreich beendet!");
 		this.isFinished=true;
 
 		DGroup dgroup=DGroup.get(this.player);
@@ -246,7 +246,7 @@ public class DPlayer {
 				for(Player player:dgroup.players){
 					DPlayer dplayer=get(player);
 					if(!dplayer.isFinished){
-						P.p.msg(this.player, p.language.get("player_waitforotherplayers"));//ChatColor.YELLOW+"Noch auf Mitspieler warten...");
+						P.p.msg(this.player, p.language.get("Player_WaitForOtherPlayers"));//ChatColor.YELLOW+"Noch auf Mitspieler warten...");
 						return;
 					}
 				}

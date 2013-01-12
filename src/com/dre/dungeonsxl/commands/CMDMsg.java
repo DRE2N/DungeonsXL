@@ -8,33 +8,33 @@ import com.dre.dungeonsxl.ConfigReader;
 import com.dre.dungeonsxl.EditWorld;
 
 public class CMDMsg extends DCommand{
-	
+
 	public CMDMsg(){
 		this.args=-1;
 		this.command="msg";
-		this.help=p.language.get("help_cmd_msg");//"/dxl msg <id> '[msg]' - Display the msg or change the msg";
+		this.help=p.language.get("Help_Cmd_Msg");
 		this.permissions="dxl.msg";
 	}
-	
+
 	@Override
 	public void onExecute(String[] args, Player player) {
 		EditWorld eworld=EditWorld.get(player.getWorld());
-		
+
 		if(eworld!=null){
 			if(args.length>1){
 				try{
 					int id=Integer.parseInt(args[1]);
-					
+
 					ConfigReader confreader=new ConfigReader(new File(p.getDataFolder()+"/dungeons/"+eworld.dungeonname, "config.yml"));
-					
+
 					if(args.length==2){
 						String msg=confreader.msgs.get(id);
 						if(msg!=null){
 							p.msg(player, ChatColor.WHITE+msg);
 						}else{
-							p.msg(player, p.language.get("cmd_msg_error1",""+id));//ChatColor.RED+"Nachricht mit der Id "+ChatColor.GOLD+id+ChatColor.RED+" existiert nicht!");
+							p.msg(player, p.language.get("Error_MsgIdNotExist",""+id));
 						}
-						
+
 					}else{
 						String msg="";
 						int i=0;
@@ -44,35 +44,35 @@ public class CMDMsg extends DCommand{
 								msg=msg+" "+arg;
 							}
 						}
-						
+
 						String[] splitMsg=msg.split("'");
 						if(splitMsg.length>1){
 							msg=splitMsg[1];
 							String old=confreader.msgs.get(id);
 							if(old==null){
-								p.msg(player, p.language.get("cmd_msg_added",""+id));//ChatColor.GREEN+"Neue Nachricht ("+ChatColor.GOLD+id+ChatColor.GREEN+") hinzugefügt!");
+								p.msg(player, p.language.get("Cmd_Msg_Added",""+id));
 							}else{
-								p.msg(player, p.language.get("cmd_msg_updated",""+id));//ChatColor.GREEN+"Nachricht ("+ChatColor.GOLD+id+ChatColor.GREEN+") aktualisiert!");
+								p.msg(player, p.language.get("Cmd_Msg_Updated",""+id));
 							}
-							
+
 							confreader.msgs.put(id, msg);
 							confreader.save();
 						}else{
-							p.msg(player, p.language.get("cmd_msg_error2"));//ChatColor.RED+"Du musst die Nachricht zwischen ' einfügen!");
+							p.msg(player, p.language.get("Error_MsgFormat"));
 						}
 					}
 				}catch(NumberFormatException e){
-					p.msg(player, p.language.get("cmd_msg_error3"));//ChatColor.RED+"Parameter <id> muss eine Zahl beinhalten!");
+					p.msg(player, p.language.get("Error_MsgNoInt"));
 				}
-				
+
 			}else{
 				this.displayhelp(player);
 			}
 		}else{
-			p.msg(player, p.language.get("cmd_msg_error4"));//ChatColor.RED+"Du musst einen Dungeon bearbeiten um diesen Befehl zu benutzen!");
+			p.msg(player, p.language.get("Error_NotInDungeon"));
 		}
-		
+
 	}
-	
+
 
 }

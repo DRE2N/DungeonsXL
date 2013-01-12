@@ -13,23 +13,23 @@ import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.P;
 
 public class GameChest {
-	
+
 	//Variables
 	public boolean isUsed=false;
 	public Chest chest;
 	public GameWorld gworld;
-	
+
 	public GameChest(Block chest, GameWorld gworld){
 		if(chest.getState() instanceof Chest ){
 			this.chest=(Chest)chest.getState();
-			
+
 			this.gworld=gworld;
-			
+
 			gworld.gchests.add(this);
 		}
 	}
-	
-	
+
+
 	public void addTreasure(DGroup dgroup){
 		if(dgroup!=null){
 			for(Player player:dgroup.players){
@@ -43,23 +43,23 @@ public class GameChest {
 						}
 					}
 					msg=msg.substring(0,msg.length()-1);
-					
-					P.p.msg(player, P.p.language.get("player_lootadded",msg));
+
+					P.p.msg(player, P.p.language.get("Player_LootAdded",msg));
 				}
 			}
 		}
 	}
-	
+
 	//Statics
 	public static void onOpenInventory(InventoryOpenEvent event){
 		InventoryView inventory=event.getView();
-		
+
 		GameWorld gworld=GameWorld.get(event.getPlayer().getWorld());
-		
+
 		if(gworld!=null){
 			if(inventory.getTopInventory().getHolder() instanceof Chest){
 				Chest chest=(Chest) inventory.getTopInventory().getHolder();
-				
+
 				for(GameChest gchest:gworld.gchests){
 					if(gchest.chest.equals(chest)){
 						if(!gchest.isUsed){
@@ -77,5 +77,5 @@ public class GameChest {
 			}
 		}
 	}
-	
+
 }

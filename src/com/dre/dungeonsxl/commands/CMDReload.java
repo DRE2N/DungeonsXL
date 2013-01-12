@@ -8,15 +8,15 @@ public class CMDReload extends DCommand{
 	public CMDReload(){
 		this.command="reload";
 		this.args=0;
-		this.help=p.language.get("help_cmd_reload");//"/dxl reload - Reloadet das Plugin";
+		this.help=p.language.get("Help_Cmd_Reload");
 		this.permissions="dxl.reload";
 	}
-	
+
 	@Override
 	public void onExecute(String[] args, Player player) {
-		p.msg(player, p.language.get("cmd_reload_start"));//ChatColor.GREEN+"DungeonsXL wird neu geladen");
+		p.msg(player, p.language.get("Cmd_Reload_Start"));
 		p.onDisable();
 		p.onEnable();
-		p.msg(player, p.language.get("cmd_reload_done"));//ChatColor.GREEN+"DungeonsXL neuladen erfolgreich!");
+		p.msg(player, p.language.get("Cmd_Reload_Done"));
 	}
 }
