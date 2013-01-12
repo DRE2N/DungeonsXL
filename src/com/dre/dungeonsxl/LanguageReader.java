@@ -22,8 +22,6 @@ public class LanguageReader {
 		/* Load */
 		this.file = file;
 
-		P.p.log("FilePath:"+file.getPath());
-
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
 
 		Set<String> keySet = configFile.getKeys(false);
@@ -68,6 +66,7 @@ public class LanguageReader {
 
 		/* Errors */
 		defaults.put("Error_Enderchest","&4Du kannst keine Enderchest in einem Dungeon verwenden!");
+		defaults.put("Error_Dispenser","&4Du kannst nicht auf diesen Dispenser zugreifen!");
 		defaults.put("Error_Ready","&4Wähle zuerst eine Klasse aus!");
 		defaults.put("Error_Cooldown","&4Du kannst den Dungeon nur alle &6&v1&4 Stunden betreten!");
 		defaults.put("Error_Leftklick","&4Du musst das Schild mit Links-klick berühren!");

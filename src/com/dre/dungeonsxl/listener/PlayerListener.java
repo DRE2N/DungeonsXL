@@ -43,13 +43,28 @@ public class PlayerListener implements Listener{
 		Player player = event.getPlayer();
 		Block clickedBlock=event.getClickedBlock();
 
-		//Block Enderchests
+
 		if(clickedBlock!=null){
+			//Block Enderchests
 			if(GameWorld.get(player.getWorld())!=null || EditWorld.get(player.getWorld())!=null){
 				if(event.getAction()!=Action.LEFT_CLICK_BLOCK){
 					if(clickedBlock.getType()==Material.ENDER_CHEST){
-						p.msg(player, p.language.get("Error_Enderchest"));
-						event.setCancelled(true);
+						if(!player.isOp()){
+							p.msg(player, p.language.get("Error_Enderchest"));
+							event.setCancelled(true);
+						}
+					}
+				}
+			}
+
+			//Block Dispensers
+			if(GameWorld.get(player.getWorld())!=null){
+				if(event.getAction()!=Action.LEFT_CLICK_BLOCK){
+					if(clickedBlock.getType()==Material.DISPENSER){
+						if(!player.isOp()){
+							p.msg(player, p.language.get("Error_Dispenser"));
+							event.setCancelled(true);
+						}
 					}
 				}
 			}
