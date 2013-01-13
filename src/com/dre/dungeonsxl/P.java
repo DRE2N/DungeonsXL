@@ -42,15 +42,10 @@ public class P extends JavaPlugin{
 	private static Listener blocklistener;
 
 	//Main Config Reader
-	public ConfigReader mainConfig;
+	public MainConfig mainConfig;
 
 	//Language Reader
 	public LanguageReader language;
-
-	//Tutorial
-	public String tutorialDungeon;
-	public String tutorialStartGroup;
-	public String tutorialEndGroup;
 
 	//Chatspyer
 	public CopyOnWriteArrayList<Player> chatSpyer=new CopyOnWriteArrayList<Player>();
@@ -58,16 +53,16 @@ public class P extends JavaPlugin{
 
 	@Override
 	public void onEnable(){
-		p=this;
+		p = this;
 
 		//Commands
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
 
 		//Load Config
-		mainConfig=new ConfigReader(new File(p.getDataFolder(), "config.yml"));
+		mainConfig=new MainConfig(new File(p.getDataFolder(), "config.yml"));
 
 		//Load Language
-		language = new LanguageReader(new File(p.getDataFolder(), "languages/de.yml"));
+		language = new LanguageReader(new File(p.getDataFolder(), "languages/"+mainConfig.language+".yml"));
 
 		//Init Classes
 		new DCommandRoot();
@@ -79,9 +74,9 @@ public class P extends JavaPlugin{
 		this.setupPermissions();
 
 		//Listener
-		entitylistener=new EntityListener();
-		playerlistener=new PlayerListener();
-		blocklistener=new BlockListener();
+		entitylistener = new EntityListener();
+		playerlistener = new PlayerListener();
+		blocklistener = new BlockListener();
 
 		Bukkit.getServer().getPluginManager().registerEvents(entitylistener,this);
 		Bukkit.getServer().getPluginManager().registerEvents(playerlistener,this);
@@ -122,29 +117,31 @@ public class P extends JavaPlugin{
 		        DPlayer.update(true);
 
 		        //Tutorial Mode
-		        for(Player player:p.getServer().getOnlinePlayers()){
-		        	if(DPlayer.get(player)==null){
-			    		if(p.tutorialDungeon!=null && p.tutorialStartGroup!=null && p.tutorialEndGroup!=null){
-			    			for(String group:p.permission.getPlayerGroups(player)){
-			    				if(p.tutorialStartGroup.equalsIgnoreCase(group)){
-			    					DGroup dgroup=new DGroup(player, p.tutorialDungeon);
-			    					if(dgroup.gworld==null){
-			    						dgroup.gworld=GameWorld.load(DGroup.get(player).dungeonname);
-			    						dgroup.gworld.isTutorial=true;
-			    					}
-			    					if(dgroup.gworld!=null){
-			    						if(dgroup.gworld.locLobby==null){
-			    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
-			    						}else{
-			    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
-			    						}
-			    					}else{
-			    						p.msg(player,p.language.get("Error_TutorialNotExist"));
-			    					}
-			    				}
-			    			}
-			    		}
-		        	}
+		        if(p.mainConfig.tutorialActivated){
+			        for(Player player:p.getServer().getOnlinePlayers()){
+			        	if(DPlayer.get(player)==null){
+				    		if(p.mainConfig.tutorialDungeon!=null && p.mainConfig.tutorialStartGroup!=null && p.mainConfig.tutorialEndGroup!=null){
+				    			for(String group:p.permission.getPlayerGroups(player)){
+				    				if(p.mainConfig.tutorialStartGroup.equalsIgnoreCase(group)){
+				    					DGroup dgroup=new DGroup(player, p.mainConfig.tutorialDungeon);
+				    					if(dgroup.gworld==null){
+				    						dgroup.gworld=GameWorld.load(DGroup.get(player).dungeonname);
+				    						dgroup.gworld.isTutorial=true;
+				    					}
+				    					if(dgroup.gworld!=null){
+				    						if(dgroup.gworld.locLobby==null){
+				    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
+				    						}else{
+				    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
+				    						}
+				    					}else{
+				    						p.msg(player,p.language.get("Error_TutorialNotExist"));
+				    					}
+				    				}
+				    			}
+				    		}
+			        	}
+			        }
 		        }
 		    }
 		}, 0L, 20L);

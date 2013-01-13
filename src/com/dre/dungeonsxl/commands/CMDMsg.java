@@ -4,7 +4,7 @@ import java.io.File;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.dre.dungeonsxl.ConfigReader;
+import com.dre.dungeonsxl.DConfig;
 import com.dre.dungeonsxl.EditWorld;
 
 public class CMDMsg extends DCommand{
@@ -25,7 +25,7 @@ public class CMDMsg extends DCommand{
 				try{
 					int id=Integer.parseInt(args[1]);
 
-					ConfigReader confreader=new ConfigReader(new File(p.getDataFolder()+"/dungeons/"+eworld.dungeonname, "config.yml"));
+					DConfig confreader = new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworld.dungeonname, "config.yml"));
 
 					if(args.length==2){
 						String msg=confreader.msgs.get(id);

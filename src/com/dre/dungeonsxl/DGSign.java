@@ -246,7 +246,7 @@ public class DGSign {
 			else{
 				File file=new File(P.p.getDataFolder()+"/dungeons/"+dgsign.dungeonName, "config.yml");
 				if(file!=null){
-					ConfigReader confReader=new ConfigReader(file);
+					DConfig confReader=new DConfig(file);
 					if(confReader!=null){
 						P.p.msg(player, P.p.language.get("Error_Cooldown",""+confReader.timeToNextPlay));
 					}

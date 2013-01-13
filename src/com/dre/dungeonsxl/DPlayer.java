@@ -84,7 +84,7 @@ public class DPlayer {
 		if(isEditing) this.player.setGameMode(GameMode.CREATIVE); else this.player.setGameMode(GameMode.SURVIVAL);
 
 		if(!isEditing){
-			if(GameWorld.get(world).confReader.isLobbyDisabled){
+			if(GameWorld.get(world).config.isLobbyDisabled){
 				this.ready();
 			}
 		}
@@ -156,8 +156,8 @@ public class DPlayer {
 
 					//Tutorial Permissions
 					if(gworld.isTutorial){
-						p.permission.playerAddGroup(this.player, p.tutorialEndGroup);
-						p.permission.playerRemoveGroup(this.player, p.tutorialStartGroup);
+						p.permission.playerAddGroup(this.player, p.mainConfig.tutorialEndGroup);
+						p.permission.playerRemoveGroup(this.player, p.mainConfig.tutorialStartGroup);
 					}
 				}
 			}
@@ -284,7 +284,7 @@ public class DPlayer {
 		GameWorld gworld=GameWorld.get(this.player.getWorld());
 		if(gworld==null) return;
 
-		DClass dclass=gworld.confReader.getClass(classname);
+		DClass dclass=gworld.config.getClass(classname);
 		if(dclass!=null){
 			if(this.dclass!=dclass){
 				this.dclass=dclass;

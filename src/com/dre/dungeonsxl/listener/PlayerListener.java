@@ -194,7 +194,7 @@ public class PlayerListener implements Listener{
 			DPlayer dplayer=DPlayer.get(player);
 			GameWorld gworld=GameWorld.get(dplayer.world);
 			if(dplayer!=null){
-				for(Material material:gworld.confReader.secureobjects){
+				for(Material material:gworld.config.secureObjects){
 					if(material==event.getItemDrop().getItemStack().getType()){
 						event.setCancelled(true);
 						p.msg(player,p.language.get("Error_Drop"));

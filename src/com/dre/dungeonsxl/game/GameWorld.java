@@ -22,8 +22,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 
-import com.dre.dungeonsxl.ConfigReader;
 import com.dre.dungeonsxl.DClass;
+import com.dre.dungeonsxl.DConfig;
 import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.P;
@@ -50,7 +50,7 @@ public class GameWorld {
 	public CopyOnWriteArrayList<Sign> signClass=new CopyOnWriteArrayList<Sign>();
 	public CopyOnWriteArrayList<DMob> dmobs = new CopyOnWriteArrayList<DMob>();
 	public CopyOnWriteArrayList<GameChest> gchests = new CopyOnWriteArrayList<GameChest>();
-	public ConfigReader confReader;
+	public DConfig config;
 
 	public GameWorld(){
 		gworlds.add(this);
@@ -110,13 +110,13 @@ public class GameWorld {
 					sign.update();
 				}
 				if(lines[1].equalsIgnoreCase("classes")){
-					if(!confReader.isLobbyDisabled){
+					if(!config.isLobbyDisabled){
 						int[] direction=DGSign.getDirection(block.getData());
 						int directionX=direction[0];
 						int directionZ=direction[1];
 
 						int xx=0,zz=0;
-						for(DClass dclass:this.confReader.getClasses()){
+						for(DClass dclass:this.config.getClasses()){
 
 							//Check existing signs
 							boolean isContinued=true;
@@ -279,9 +279,9 @@ public class GameWorld {
 
 		File dungeonFolder=new File(p.getDataFolder()+"/dungeons/"+dungeon);
 		if(dungeonFolder.isDirectory()){
-			ConfigReader confReader=new ConfigReader(new File(p.getDataFolder()+"/dungeons/"+dungeon, "config.yml"));
+			DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+dungeon, "config.yml"));
 
-			if(confReader.timeToNextPlay!=0){
+			if(config.timeToNextPlay!=0){
 				//read PlayerConfig
 				File file=new File(p.getDataFolder()+"/dungeons/"+dungeon, "players.yml");
 
@@ -298,7 +298,7 @@ public class GameWorld {
 
 				if(playerConfig.contains(player.getName())){
 					Long time=playerConfig.getLong(player.getName());
-					if(time+(confReader.timeToNextPlay*1000*60*60)>System.currentTimeMillis()){
+					if(time+(config.timeToNextPlay*1000*60*60)>System.currentTimeMillis()){
 						return false;
 					}
 				}
@@ -330,10 +330,10 @@ public class GameWorld {
 
 
 			//Config einlesen
-			gworld.confReader=new ConfigReader(new File(p.getDataFolder()+"/dungeons/"+gworld.dungeonname, "config.yml"));
+			gworld.config = new DConfig(new File(p.getDataFolder()+"/dungeons/"+gworld.dungeonname, "config.yml"));
 
 			//Secure Objects
-			gworld.secureobjects=gworld.confReader.secureobjects;
+			gworld.secureobjects=gworld.config.secureObjects;
 
 			//World
 			p.copyDirectory(file,new File("DXL_Game_"+gworld.id));

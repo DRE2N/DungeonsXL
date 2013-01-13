@@ -20,7 +20,7 @@ public class GameMessage {
 	
 	public GameMessage(Block block, int msgid,GameWorld gworld,int radius){
 		this.block=block;
-		this.msg=gworld.confReader.getMsg(msgid);
+		this.msg=gworld.config.getMsg(msgid);
 		this.gworld=gworld;
 		this.radius=radius;
 		

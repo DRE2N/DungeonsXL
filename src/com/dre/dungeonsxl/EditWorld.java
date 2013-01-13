@@ -221,9 +221,9 @@ public class EditWorld {
 			eworld.invitedPlayers.add(player.toLowerCase());
 		}else{
 			if(exist(eworldname)){
-				ConfigReader confreader=new ConfigReader(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
-				confreader.invitedPlayer.add(player.toLowerCase());
-				confreader.save();
+				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
+				config.invitedPlayers.add(player.toLowerCase());
+				config.save();
 				return true;
 			}
 		}
@@ -240,15 +240,14 @@ public class EditWorld {
 			eworld.invitedPlayers.remove(player.toLowerCase());
 		}else{
 			if(exist(eworldname)){
-				ConfigReader confreader=new ConfigReader(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
-				confreader.invitedPlayer.remove(player.toLowerCase());
-				confreader.save();
+				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
+				config.invitedPlayers.remove(player.toLowerCase());
+				config.save();
 				return true;
 			}
 		}
 
 		return false;
-
 	}
 
 	public static boolean isInvitedPlayer(String eworldname,String player){
@@ -259,8 +258,8 @@ public class EditWorld {
 			return eworld.invitedPlayers.contains(player.toLowerCase());
 		}else{
 			if(exist(eworldname)){
-				ConfigReader confreader=new ConfigReader(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
-				return confreader.invitedPlayer.contains(player.toLowerCase());
+				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
+				return config.invitedPlayers.contains(player.toLowerCase());
 			}
 		}
 
