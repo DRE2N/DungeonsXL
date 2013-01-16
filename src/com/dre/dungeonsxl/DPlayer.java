@@ -200,11 +200,12 @@ public class DPlayer {
 				}
 			}
 			
-			//Spout texture
+			//Spout
 			if(p.isSpoutEnabled){
 				SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
 				if(sPlayer!=null){
 					sPlayer.resetTexturePack();
+					sPlayer.resetSkin();
 				}
 			}
 		}
