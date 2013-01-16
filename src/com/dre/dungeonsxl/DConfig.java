@@ -98,7 +98,17 @@ public class DConfig {
 						istacks.add(istack);
 					}
 				}
-				this.dClasses.add(new DClass(name,istacks,hasDog));
+				
+				/* Spout */
+				String spoutSkinURL = null;
+				if(P.p.isSpoutEnabled){
+					if(configSetionClasses.contains(className+".spoutSkinURL")){
+						spoutSkinURL = configSetionClasses.getString(className+".spoutSkinURL");
+					}
+				}
+				
+				/* Create Class */
+				this.dClasses.add(new DClass(name,istacks,hasDog,spoutSkinURL));
 			}
 		}
 		

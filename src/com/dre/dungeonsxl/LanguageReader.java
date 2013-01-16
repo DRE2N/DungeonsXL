@@ -42,7 +42,8 @@ public class LanguageReader {
 		defaults.put("Log_Error_MobEnchantment","Error at loading mob.yml: Enchantmet &v1 doesn't exist!");
 		defaults.put("Log_Error_MobType","Error at loading mob.yml: Mob &v1 doesn't exist!");
 		defaults.put("Log_Error_Spout","Spout wurde nicht gefunden!");
-
+		defaults.put("Log_Error_Spout_Skin","Der Spout Skin von &v1 ist kein png!");
+		
 		/* Player */
 		defaults.put("Player_CheckpointReached","&6Checkpoint erreicht!");
 		defaults.put("Player_LootAdded","&6Deinem Belohnungsinventar sind&4&v1&6 hinzugefügt worden!");

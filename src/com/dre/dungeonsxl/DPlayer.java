@@ -305,7 +305,7 @@ public class DPlayer {
 			if(this.dclass!=dclass){
 				this.dclass=dclass;
 
-				//Set Dog
+				/* Set Dog */
 				if(this.wolf!=null){
 					this.wolf.remove();
 					this.wolf=null;
@@ -318,14 +318,13 @@ public class DPlayer {
 					this.wolf.setHealth(this.wolf.getMaxHealth());
 				}
 
-				//Delete Inventory
+				/* Delete Inventory */
 				this.classItems.clear();
 				this.player.getInventory().clear();
 				this.player.getInventory().setArmorContents(null);
 				player.getInventory().setItemInHand(new ItemStack(0));
-				//P.p.updateInventory(this.player);
-
-				//Set Inventory
+				
+				/* Set Inventory */
 				for(ItemStack istack:dclass.items){
 
 					//Leggings
@@ -368,10 +367,6 @@ public class DPlayer {
 					else{
 						this.player.getInventory().addItem(istack);
 					}
-
-
-
-					//P.p.updateInventory(this.player);
 				}
 
 				for(int i=0;i<36;i++){
@@ -380,10 +375,20 @@ public class DPlayer {
 						this.classItems.add(i);
 					}
 				}
-
-
-				//P.p.updateInventory(this.player);
-
+				
+				/* Spout Skin */
+				if(p.isSpoutEnabled){
+					if(this.dclass.spoutSkinURL!=null){
+						try{
+							Spout.getServer().getPlayer(player.getName()).setSkin(this.dclass.spoutSkinURL);
+						} catch(UnsupportedOperationException exception) {
+							p.log(p.language.get("Log_Error_Spout_Skin", this.dclass.name));
+							Spout.getServer().getPlayer(player.getName()).resetSkin();
+						}
+					} else {
+						Spout.getServer().getPlayer(player.getName()).resetSkin();
+					}
+				}
 			}
 		}
 	}
