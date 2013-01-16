@@ -67,15 +67,15 @@ public class DConfig {
 						
 						//Check Id & Data
 						String[] idAndData=itemsplit[0].split("/");
-						itemId=Integer.parseInt(idAndData[0]);
+						itemId=P.p.parseInt(idAndData[0]);
 						
 						if(idAndData.length>1){
-							itemData=Integer.parseInt(idAndData[1]);
+							itemData=P.p.parseInt(idAndData[1]);
 						}
 						
 						//Size
 						if(itemsplit.length>1){
-							itemSize=Integer.parseInt(itemsplit[1]);
+							itemSize=P.p.parseInt(itemsplit[1]);
 						}
 						
 						//Enchantment
@@ -85,7 +85,7 @@ public class DConfig {
 							itemEnchantment=Enchantment.getByName(enchantmentSplit[0]);
 							
 							if(enchantmentSplit.length>1){
-								itemLvlEnchantment=Integer.parseInt(enchantmentSplit[1]);
+								itemLvlEnchantment=P.p.parseInt(enchantmentSplit[1]);
 							}
 						}
 						
@@ -117,7 +117,7 @@ public class DConfig {
 		if (configSetionMessages != null) {
 			Set<String> list = configSetionMessages.getKeys(false);
 			for (String messagePath:list) {
-				int messageId = Integer.parseInt(messagePath);
+				int messageId = P.p.parseInt(messagePath);
 				this.msgs.put(messageId,configSetionMessages.getString(messagePath));
 			}
 		}

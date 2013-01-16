@@ -117,8 +117,8 @@ public class BlockListener implements Listener {
 						
 						String[] data = lines[3].split("\\,");
 						if(data.length==2){
-							int maxGroups=Integer.parseInt(data[0]);
-							int maxPlayersPerGroup=Integer.parseInt(data[1]);
+							int maxGroups=P.p.parseInt(data[0]);
+							int maxPlayersPerGroup=P.p.parseInt(data[1]);
 							if(maxGroups>0 && maxPlayersPerGroup>0){
 								if(DGSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup)!=null){
 									event.setCancelled(true);

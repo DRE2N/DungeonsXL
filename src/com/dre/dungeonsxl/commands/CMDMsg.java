@@ -23,7 +23,7 @@ public class CMDMsg extends DCommand{
 		if(eworld!=null){
 			if(args.length>1){
 				try{
-					int id=Integer.parseInt(args[1]);
+					int id=p.parseInt(args[1]);
 
 					DConfig confreader = new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworld.dungeonname, "config.yml"));
 

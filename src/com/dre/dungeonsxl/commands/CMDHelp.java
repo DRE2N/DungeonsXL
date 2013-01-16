@@ -18,7 +18,7 @@ public class CMDHelp extends DCommand{
 
 		if(args.length>1){
 			try{
-				page=Integer.parseInt(args[1]);
+				page=p.parseInt(args[1]);
 			}catch(NumberFormatException e){
 				page=1;
 			}

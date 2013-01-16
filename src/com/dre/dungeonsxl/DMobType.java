@@ -184,7 +184,7 @@ public class DMobType {
 								String[] splittedEnchantment = enchantment.split(" ");
 								if(Enchantment.getByName(splittedEnchantment[0].toUpperCase())!=null){
 									if (splittedEnchantment.length>1) {
-										itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), Integer.parseInt(splittedEnchantment[1]), true);
+										itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), P.p.parseInt(splittedEnchantment[1]), true);
 									} else {
 										itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
 									}

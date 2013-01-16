@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.permission.Permission;
+
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,6 +34,7 @@ import com.dre.dungeonsxl.listener.BlockListener;
 import com.dre.dungeonsxl.listener.CommandListener;
 import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
+import com.dre.dungeonsxl.listener.WorldListener;
 
 public class P extends JavaPlugin{
 	public static P p;
@@ -40,6 +43,7 @@ public class P extends JavaPlugin{
 	private static Listener entitylistener;
 	private static Listener playerlistener;
 	private static Listener blocklistener;
+	private static Listener worldlistener;
 
 	//Main Config Reader
 	public MainConfig mainConfig;
@@ -79,10 +83,12 @@ public class P extends JavaPlugin{
 		entitylistener = new EntityListener();
 		playerlistener = new PlayerListener();
 		blocklistener = new BlockListener();
+		worldlistener = new WorldListener();
 
 		Bukkit.getServer().getPluginManager().registerEvents(entitylistener,this);
 		Bukkit.getServer().getPluginManager().registerEvents(playerlistener,this);
 		Bukkit.getServer().getPluginManager().registerEvents(blocklistener,this);
+		Bukkit.getServer().getPluginManager().registerEvents(worldlistener,this);
 
 		//Load All
 		this.loadAll();
@@ -438,7 +444,11 @@ public class P extends JavaPlugin{
 
 		return null;
 	}
-
+	
+	public int parseInt(String string){
+		return NumberUtils.toInt(string, 0);
+	}
+	
     // -------------------------------------------- //
  	// LOGGING
  	// -------------------------------------------- //
