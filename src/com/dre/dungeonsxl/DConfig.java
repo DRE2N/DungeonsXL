@@ -28,6 +28,10 @@ public class DConfig {
 	public int timeToNextPlay = 0;
 	public int timeToNextLoot = 0;
 	
+	//Spout
+	public boolean spoutCraftOnly = false;
+	public String spoutTexturepackURL;
+	
 	public DConfig(File file){
 		this.file=file;
 		
@@ -136,6 +140,15 @@ public class DConfig {
 		
 		if(configFile.contains("timetonextloot")){
 			timeToNextLoot = configFile.getInt("timetonextloot");
+		}
+		
+		/* Spout */
+		if(configFile.contains("spout.spoutCraftOnly")){
+			spoutCraftOnly = configFile.getBoolean("spout.spoutCraftOnly");
+		}
+		
+		if(configFile.contains("spout.spoutTexturepackURL")){
+			spoutTexturepackURL = configFile.getString("spout.spoutTexturepackURL");
 		}
 	}
 

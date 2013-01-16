@@ -9,7 +9,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class MainConfig {
 	
 	public String language = "de";
-	public boolean economyActivated = false;
+	public boolean enableEconomy = false;
+	public boolean enableSpout = false;
 	
 	/* Tutorial */
 	public boolean tutorialActivated = false;
@@ -28,8 +29,12 @@ public class MainConfig {
 			this.language = configFile.getString("language");
 		}
 		
-		if(configFile.contains("economyActivated")){
-			this.economyActivated = configFile.getBoolean("economyActivated");
+		if(configFile.contains("enableSpout")){
+			this.enableSpout = configFile.getBoolean("enableSpout");
+		}
+		
+		if(configFile.contains("enableEconomy")){
+			this.enableEconomy = configFile.getBoolean("enableEconomy");
 		}
 		
 		if(configFile.contains("tutorial.activated")){

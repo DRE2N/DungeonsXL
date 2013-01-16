@@ -41,6 +41,7 @@ public class LanguageReader {
 		defaults.put("Log_WorldGenerationFinished","World generation finished!");
 		defaults.put("Log_Error_MobEnchantment","Error at loading mob.yml: Enchantmet &v1 doesn't exist!");
 		defaults.put("Log_Error_MobType","Error at loading mob.yml: Mob &v1 doesn't exist!");
+		defaults.put("Log_Error_Spout","Spout wurde nicht gefunden!");
 
 		/* Player */
 		defaults.put("Player_CheckpointReached","&6Checkpoint erreicht!");
@@ -86,7 +87,9 @@ public class LanguageReader {
 		defaults.put("Error_MsgFormat","&4Die Nachricht muss zwischen '' liegen!");
 		defaults.put("Error_MsgNoInt","&4Parameter <id> muss eine Zahl beinhalten!");
 		defaults.put("Error_TutorialNotExist","&4Tutorial Dungeon existiert nicht!");
-
+		defaults.put("Error_SpoutCraftOnly","&4Du brauchst SpoutCraft um diesen Dungeon spielen zu können!");
+		
+		
 		/* Help */
 		defaults.put("Help_Cmd_Chat","/dxl chat - Ändert den Chat-Modus");
 		defaults.put("Help_Cmd_Chatspy","/dxl chatspy - De/Aktiviert den Spioniermodus");

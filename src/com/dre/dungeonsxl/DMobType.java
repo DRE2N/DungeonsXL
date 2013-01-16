@@ -21,7 +21,8 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
+import org.getspout.spoutapi.Spout;
+import org.getspout.spoutapi.player.EntitySkinType;
 import com.dre.dungeonsxl.game.DMob;
 import com.dre.dungeonsxl.game.GameWorld;
 
@@ -45,7 +46,10 @@ public class DMobType {
 	/* Extra Values for different Mob Types */
 	private boolean isWitherSkeleton = false;
 	private String ocelotType = null;
-
+	
+	/* Spout */
+	private String spoutSkinURL;
+	
 	/* Methods */
 	public DMobType(String name, EntityType type){
 		mobTypes.add(this);
@@ -89,7 +93,14 @@ public class DMobType {
 						}
 					}
 				}
-
+				
+				/* Set Spout Skin */
+				if(P.p.mainConfig.enableSpout){
+					if(spoutSkinURL!=null){
+						Spout.getServer().setEntitySkin(entity, spoutSkinURL, EntitySkinType.DEFAULT);
+					}
+				}
+				
 				/* Spawn Mob */
 				new DMob(entity, maxHealth, gWorld, this);
 
@@ -142,7 +153,7 @@ public class DMobType {
 				if(configFile.contains(mobName+".ocelotType")){
 					mobType.ocelotType = configFile.getString(mobName+".ocelotType");
 				}
-
+				
 				//Drops
 				ConfigurationSection configSetion = configFile.getConfigurationSection(mobName+".drops");
 				if(configSetion!=null){
@@ -203,6 +214,11 @@ public class DMobType {
 						item.setItemMeta(itemMeta);
 						mobType.drops.put(item, chance);
 					}
+				}
+				
+				//Spout Skin
+				if(configFile.contains(mobName+".spoutSkinURL")){
+					mobType.spoutSkinURL = configFile.getString(mobName+".spoutSkinURL");
 				}
 			} else {
 				P.p.log(Level.WARNING, P.p.language.get("Log_Error_MobType",configFile.getString(mobName+".Type")));

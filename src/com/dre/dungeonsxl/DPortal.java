@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.getspout.spoutapi.Spout;
 
 import com.dre.dungeonsxl.game.GameWorld;
 
@@ -104,10 +105,26 @@ public class DPortal {
 					dgroup.gworld=GameWorld.load(DGroup.get(player).dungeonname);
 				}
 				if(dgroup.gworld!=null){
-					if(dgroup.gworld.locLobby==null){
-						new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
+					
+					/* Check Spout */
+					boolean spoutCheck = true;
+					if(P.p.isSpoutEnabled){
+						if(dgroup.gworld.config.spoutCraftOnly){
+							if(!Spout.getServer().getPlayer(player.getName()).isSpoutCraftEnabled()){
+								spoutCheck = false;
+							}
+						}
+					}
+					
+					/* Teleport Player */
+					if(spoutCheck){	
+						if(dgroup.gworld.locLobby==null){
+							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
+						}else{
+							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
+						}
 					}else{
-						new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
+						p.msg(player,p.language.get("Error_SpoutCraftOnly"));
 					}
 				}else{
 					p.msg(player,p.language.get("Error_DungeonNotExist",DGroup.get(player).dungeonname));

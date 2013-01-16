@@ -49,8 +49,10 @@ public class P extends JavaPlugin{
 
 	//Chatspyer
 	public CopyOnWriteArrayList<Player> chatSpyer=new CopyOnWriteArrayList<Player>();
-
-
+	
+	//Spout
+	public boolean isSpoutEnabled = false;
+	
 	@Override
 	public void onEnable(){
 		p = this;
@@ -60,7 +62,7 @@ public class P extends JavaPlugin{
 
 		//Load Config
 		mainConfig=new MainConfig(new File(p.getDataFolder(), "config.yml"));
-
+		
 		//Load Language
 		language = new LanguageReader(new File(p.getDataFolder(), "languages/"+mainConfig.language+".yml"));
 
@@ -87,7 +89,19 @@ public class P extends JavaPlugin{
 
 		//Load MobTypes
 		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
-
+		
+		//Spout
+		if(mainConfig.enableSpout){
+			if(P.p.getServer().getPluginManager().getPlugin("Spout")!=null){
+				isSpoutEnabled = true;
+			} else {
+				isSpoutEnabled = false;
+				mainConfig.enableSpout = false;
+				P.p.log(P.p.language.get("Log_Error_Spout"));
+			}
+		}
+		
+		
 		// -------------------------------------------- //
 		// Update Sheduler
 		// -------------------------------------------- //

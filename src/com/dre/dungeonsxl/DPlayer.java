@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.getspout.spoutapi.Spout;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
@@ -80,12 +83,26 @@ public class DPlayer {
 		this.player.setLevel(0);
 		this.player.setHealth(20);
 		this.player.setFoodLevel(20);
-		this.isEditing=isEditing;
+		this.isEditing = isEditing;
 		if(isEditing) this.player.setGameMode(GameMode.CREATIVE); else this.player.setGameMode(GameMode.SURVIVAL);
 
 		if(!isEditing){
 			if(GameWorld.get(world).config.isLobbyDisabled){
 				this.ready();
+			}
+		}
+		
+		//Spout set Texturepack
+		if(!isEditing){
+			if(p.isSpoutEnabled){
+				GameWorld gworld = GameWorld.get(world);
+				if(gworld.config.spoutTexturepackURL!=null){
+					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
+					if(sPlayer!=null){
+						sPlayer.sendNotification(ChatColor.GOLD+"DungeonsXL",ChatColor.RED+"Download texturepack!", Material.FIREBALL);
+						sPlayer.setTexturePack(gworld.config.spoutTexturepackURL);
+					}
+				}
 			}
 		}
 	}
@@ -177,21 +194,20 @@ public class DPlayer {
 									}
 								}
 							}
-							//P.p.updateInventory(groupplayer);
 						}
 						i++;
 					}while(groupplayer==null);
-
+				}
+			}
+			
+			//Spout texture
+			if(p.isSpoutEnabled){
+				SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
+				if(sPlayer!=null){
+					sPlayer.resetTexturePack();
 				}
 			}
 		}
-
-
-
-
-
-
-		//P.p.updateInventory(this.player);
 	}
 
 	public void ready(){
