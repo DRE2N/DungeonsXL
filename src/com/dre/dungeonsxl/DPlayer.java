@@ -189,7 +189,7 @@ public class DPlayer {
 						if(groupplayer!=null){
 							for(ItemStack istack:this.player.getInventory()){
 								if(istack!=null){
-									if(gworld.secureobjects.contains(istack.getType())){
+									if(gworld.secureObjects.contains(istack.getType())){
 										groupplayer.getInventory().addItem(istack);
 									}
 								}

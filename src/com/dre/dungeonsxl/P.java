@@ -27,7 +27,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dre.dungeonsxl.commands.DCommandRoot;
 import com.dre.dungeonsxl.game.GameCheckpoint;
-import com.dre.dungeonsxl.game.GameMessage;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.game.MobSpawner;
 import com.dre.dungeonsxl.listener.BlockListener;
@@ -141,7 +140,6 @@ public class P extends JavaPlugin{
 		LeaveSign.lsigns.clear();
 		DCommandRoot.root.commands.clear();
 		GameCheckpoint.gcheckpoints.clear();
-		GameMessage.gmessages.clear();
 		MobSpawner.mobspawners.clear();
 
 		//Delete Worlds
@@ -192,10 +190,9 @@ public class P extends JavaPlugin{
 		    public void run() {
 		        MobSpawner.updateAll();
 		        GameWorld.update();
-		        GameMessage.updateAll();
 		        GameCheckpoint.update();
 		        DPlayer.update(true);
-
+		        
 		        //Tutorial Mode
 		        if(p.mainConfig.tutorialActivated){
 			        for(Player player:p.getServer().getOnlinePlayers()){

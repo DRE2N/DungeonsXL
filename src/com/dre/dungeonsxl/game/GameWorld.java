@@ -46,8 +46,9 @@ public class GameWorld {
 	public CopyOnWriteArrayList<Block> blocksLeave=new CopyOnWriteArrayList<Block>();
 	public boolean isPlaying=false;
 	public int id;
-	public CopyOnWriteArrayList<Material> secureobjects = new CopyOnWriteArrayList<Material>();
+	public CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
 	public CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<Chunk>();
+	public CopyOnWriteArrayList<GameMessage> messages = new CopyOnWriteArrayList<GameMessage>();
 	
 	public CopyOnWriteArrayList<Sign> signClass=new CopyOnWriteArrayList<Sign>();
 	public CopyOnWriteArrayList<DMob> dmobs = new CopyOnWriteArrayList<DMob>();
@@ -187,14 +188,20 @@ public class GameWorld {
 				}
 				if(lines[1].equalsIgnoreCase("msg")){
 					if(lines[2]!=""&&lines[3]!=""){
-						new GameMessage(block,p.parseInt(lines[2]),this,p.parseInt(lines[3]),false);
-						block.setTypeId(0);
+						String msg = config.getMsg(p.parseInt(lines[2]));
+						if(msg!=null){
+							messages.add(new GameMessage(block.getLocation(),msg,p.parseInt(lines[3]),false));
+							block.setTypeId(0);
+						}
 					}
 				}
 				if(lines[1].equalsIgnoreCase("soundmsg")){
 					if(lines[2]!=""&&lines[3]!=""){
-						new GameMessage(block,p.parseInt(lines[2]),this,p.parseInt(lines[3]),true);
-						block.setTypeId(0);
+						String msg = config.getMsg(p.parseInt(lines[2]));
+						if(msg!=null){
+							messages.add(new GameMessage(block.getLocation(),msg,p.parseInt(lines[3]),true));
+							block.setTypeId(0);
+						}
 					}
 				}
 				if(lines[1].equalsIgnoreCase("checkpoint")){
@@ -246,10 +253,8 @@ public class GameWorld {
 				this.checkSign(block);
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -308,7 +313,6 @@ public class GameWorld {
 					try {
 						file.createNewFile();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -352,7 +356,7 @@ public class GameWorld {
 			gworld.config = new DConfig(new File(p.getDataFolder()+"/dungeons/"+gworld.dungeonname, "config.yml"));
 
 			//Secure Objects
-			gworld.secureobjects=gworld.config.secureObjects;
+			gworld.secureObjects=gworld.config.secureObjects;
 
 			//World
 			p.copyDirectory(file,new File("DXL_Game_"+gworld.id));
@@ -375,10 +379,8 @@ public class GameWorld {
 
 				os.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -390,6 +392,8 @@ public class GameWorld {
 
 	public static void update(){
 		for(GameWorld gworld:gworlds){
+			//Update Messages
+			GameMessage.update(gworld);
 			
 			//Update Spiders
 			for(LivingEntity mob:gworld.world.getLivingEntities()){

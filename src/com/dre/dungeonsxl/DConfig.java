@@ -123,8 +123,8 @@ public class DConfig {
 		}
 		
 		/* Secure Objects */
-		if(configFile.contains("secureobjects")){						
-			List<Integer> secureobjectlist = configFile.getIntegerList("secureobjects");
+		if(configFile.contains("secureObjects")){						
+			List<Integer> secureobjectlist = configFile.getIntegerList("secureObjects");
 			for(int i:secureobjectlist){
 				this.secureObjects.add(Material.getMaterial(i));
 			}
@@ -172,13 +172,13 @@ public class DConfig {
 			}
 			
 			//Secure Objects
-			CopyOnWriteArrayList<Integer> secureobjectsids=new CopyOnWriteArrayList<Integer>();
+			CopyOnWriteArrayList<Integer> secureObjectsids=new CopyOnWriteArrayList<Integer>();
 			
 			for(Material mat:this.secureObjects){
-				secureobjectsids.add(mat.getId());
+				secureObjectsids.add(mat.getId());
 			}
 			
-			configFile.set("secureobjects", secureobjectsids);
+			configFile.set("secureObjects", secureObjectsids);
 			
 			//Invited Players
 			configFile.set("invitedplayers", this.invitedPlayers);
