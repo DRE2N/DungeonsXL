@@ -108,9 +108,69 @@ public class P extends JavaPlugin{
 		}
 		
 		
-		// -------------------------------------------- //
-		// Update Sheduler
-		// -------------------------------------------- //
+		//Scheduler
+		this.initSchedulers();
+		
+
+		//MSG
+		this.log(this.getDescription().getName()+" enabled!");
+	}
+
+
+	@Override
+	public void onDisable(){
+		//Save
+		this.saveData();
+		language.save();
+
+		//MSG
+		this.log(this.getDescription().getName()+" disabled!");
+
+		//DPlayer leaves World
+		for(DPlayer dplayer:DPlayer.players){
+			dplayer.leave();
+		}
+
+		//Delete all Data
+		DGroup.dgroups.clear();
+		DGSign.dgsigns.clear();
+		DLootInventory.LootInventorys.clear();
+		DMobType.clear();
+		DPlayer.players.clear();
+		DPortal.portals.clear();
+		LeaveSign.lsigns.clear();
+		DCommandRoot.root.commands.clear();
+		GameCheckpoint.gcheckpoints.clear();
+		GameMessage.gmessages.clear();
+		MobSpawner.mobspawners.clear();
+
+		//Delete Worlds
+		GameWorld.deleteAll();
+		EditWorld.deleteAll();
+
+		//Disable listeners
+		HandlerList.unregisterAll(p);
+
+		//Stop shedulers
+		p.getServer().getScheduler().cancelTasks(this);
+	}
+
+
+	//Init.
+	public void initFolders(){
+		//Check Folder
+		File folder = new File(this.getDataFolder()+"");
+		if(!folder.exists()){
+			folder.mkdir();
+		}
+
+		folder = new File(this.getDataFolder()+File.separator+"dungeons");
+		if(!folder.exists()){
+			folder.mkdir();
+		}
+	}
+	
+	public void initSchedulers(){
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 			public void run() {
 				for(GameWorld gworld:GameWorld.gworlds){
@@ -171,65 +231,7 @@ public class P extends JavaPlugin{
 		        DPlayer.update(false);
 		    }
 		}, 0L, 2L);
-
-		//MSG
-		this.log(this.getDescription().getName()+" enabled!");
 	}
-
-
-	@Override
-	public void onDisable(){
-		//Save
-		this.saveData();
-		language.save();
-
-		//MSG
-		this.log(this.getDescription().getName()+" disabled!");
-
-		//DPlayer leaves World
-		for(DPlayer dplayer:DPlayer.players){
-			dplayer.leave();
-		}
-
-		//Delete all Data
-		DGroup.dgroups.clear();
-		DGSign.dgsigns.clear();
-		DLootInventory.LootInventorys.clear();
-		DMobType.clear();
-		DPlayer.players.clear();
-		DPortal.portals.clear();
-		LeaveSign.lsigns.clear();
-		DCommandRoot.root.commands.clear();
-		GameCheckpoint.gcheckpoints.clear();
-		GameMessage.gmessages.clear();
-		MobSpawner.mobspawners.clear();
-
-		//Delete Worlds
-		GameWorld.deleteAll();
-		EditWorld.deleteAll();
-
-		//Disable listeners
-		HandlerList.unregisterAll(p);
-
-		//Stop shedulers
-		p.getServer().getScheduler().cancelTasks(this);
-	}
-
-
-	//Init.
-	public void initFolders(){
-		//Check Folder
-		File folder = new File(this.getDataFolder()+"");
-		if(!folder.exists()){
-			folder.mkdir();
-		}
-
-		folder = new File(this.getDataFolder()+File.separator+"dungeons");
-		if(!folder.exists()){
-			folder.mkdir();
-		}
-	}
-
 
 	//Permissions
 	public Permission permission = null;
