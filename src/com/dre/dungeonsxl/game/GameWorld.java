@@ -187,7 +187,13 @@ public class GameWorld {
 				}
 				if(lines[1].equalsIgnoreCase("msg")){
 					if(lines[2]!=""&&lines[3]!=""){
-						new GameMessage(block,p.parseInt(lines[2]),this,p.parseInt(lines[3]));
+						new GameMessage(block,p.parseInt(lines[2]),this,p.parseInt(lines[3]),false);
+						block.setTypeId(0);
+					}
+				}
+				if(lines[1].equalsIgnoreCase("soundmsg")){
+					if(lines[2]!=""&&lines[3]!=""){
+						new GameMessage(block,p.parseInt(lines[2]),this,p.parseInt(lines[3]),true);
 						block.setTypeId(0);
 					}
 				}
