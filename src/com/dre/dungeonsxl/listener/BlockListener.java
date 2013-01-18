@@ -17,6 +17,7 @@ import com.dre.dungeonsxl.DPortal;
 import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.EditWorld;
 import com.dre.dungeonsxl.LeaveSign;
+import com.dre.dungeonsxl.game.GamePlaceableBlock;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class BlockListener implements Listener {
@@ -90,10 +91,12 @@ public class BlockListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event){
 		Block block=event.getBlock();
 		
+		
+		
 		//Deny GameWorld Blocks
 		GameWorld gworld=GameWorld.get(block.getWorld());
 		if(gworld!=null){
-			if(!gworld.canBuild(block)){
+			if(!GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gworld)){
 				event.setCancelled(true);
 			}
 		}

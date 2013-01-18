@@ -36,7 +36,7 @@ public class GameWorld {
 	//Variables placeable
 	public boolean isTutorial;
 
-	public CopyOnWriteArrayList<Block> placeableBlocks=new CopyOnWriteArrayList<Block>();
+	public CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks=new CopyOnWriteArrayList<GamePlaceableBlock>();
 	public World world;
 	public String dungeonname;
 	public Location locLobby;
@@ -183,7 +183,7 @@ public class GameWorld {
 					block.setTypeId(0);
 				}
 				if(lines[1].equalsIgnoreCase("place")){
-					placeableBlocks.add(block);
+					placeableBlocks.add(new GamePlaceableBlock(block, lines[2], lines[3]) );
 					block.setTypeId(0);
 				}
 				if(lines[1].equalsIgnoreCase("msg")){
@@ -257,15 +257,6 @@ public class GameWorld {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean canBuild(Block block){
-		for(Block placeableBlock:placeableBlocks){
-			if(placeableBlock.getLocation().distance(block.getLocation())<1){
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public void msg(String msg) {
