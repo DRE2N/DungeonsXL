@@ -9,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -31,8 +32,7 @@ public class DPlayer {
 	public Player player;
 	public World world;
 
-	public DPlayer oldDPlayer=null;
-	public int isinTestMode=0;
+	public boolean isinTestMode=false;
 
 	public Location oldLocation;
 	public ItemStack[] oldInventory;
@@ -114,10 +114,6 @@ public class DPlayer {
 	public void leave(){
 		remove(this);
 
-		if(this.oldDPlayer!=null){
-			this.oldDPlayer.isinTestMode=0;
-		}
-
 		this.player.teleport(this.oldLocation);
 		this.player.getInventory().setContents(this.oldInventory);
 		this.player.getInventory().setArmorContents(this.oldArmor);
@@ -144,7 +140,7 @@ public class DPlayer {
 			}
 
 			//Belohnung
-			if(this.oldDPlayer==null&&this.isinTestMode!=2){//Nur wenn man nicht am Testen ist
+			if(!this.isinTestMode){//Nur wenn man nicht am Testen ist
 				if(isFinished){
 					this.addTreasure();
 
@@ -439,44 +435,42 @@ public class DPlayer {
 		for(DPlayer dplayer:players){
 			if(!updateSecond){
 				//Check in World
-				if(dplayer.isinTestMode!=1){
-					if(!dplayer.player.getWorld().equals(dplayer.world)){
-						if(dplayer.isEditing){
-							EditWorld eworld=EditWorld.get(dplayer.world);
-							if(eworld!=null){
-								if(eworld.lobby==null){
-									dplayer.player.teleport(eworld.world.getSpawnLocation());
-								}else{
-									dplayer.player.teleport(eworld.lobby);
-								}
+				if(!dplayer.player.getWorld().equals(dplayer.world)){
+					if(dplayer.isEditing){
+						EditWorld eworld=EditWorld.get(dplayer.world);
+						if(eworld!=null){
+							if(eworld.lobby==null){
+								dplayer.player.teleport(eworld.world.getSpawnLocation());
+							}else{
+								dplayer.player.teleport(eworld.lobby);
 							}
-						}else{
-							GameWorld gworld=GameWorld.get(dplayer.world);
+						}
+					}else{
+						GameWorld gworld=GameWorld.get(dplayer.world);
+						if(gworld!=null){
 							if(gworld!=null){
-								if(gworld!=null){
 
-									DGroup dgroup=DGroup.get(dplayer.player);
-									if(dplayer.checkpoint==null){
-										dplayer.player.teleport(dgroup.gworld.locStart);
-										if(dplayer.wolf!=null){
-											dplayer.wolf.teleport(dgroup.gworld.locStart);
-										}
-									}else{
-										dplayer.player.teleport(dplayer.checkpoint.location);
-										if(dplayer.wolf!=null){
-											dplayer.wolf.teleport(dplayer.checkpoint.location);
-										}
+								DGroup dgroup=DGroup.get(dplayer.player);
+								if(dplayer.checkpoint==null){
+									dplayer.player.teleport(dgroup.gworld.locStart);
+									if(dplayer.wolf!=null){
+										dplayer.wolf.teleport(dgroup.gworld.locStart);
 									}
-
-
-									//Respawn Items
-									for(ItemStack istack:dplayer.respawnInventory){
-										if(istack!=null){
-											dplayer.player.getInventory().addItem(istack);
-										}
+								}else{
+									dplayer.player.teleport(dplayer.checkpoint.location);
+									if(dplayer.wolf!=null){
+										dplayer.wolf.teleport(dplayer.checkpoint.location);
 									}
-									dplayer.respawnInventory.clear();
 								}
+
+
+								//Respawn Items
+								for(ItemStack istack:dplayer.respawnInventory){
+									if(istack!=null){
+										dplayer.player.getInventory().addItem(istack);
+									}
+								}
+								dplayer.respawnInventory.clear();
 							}
 						}
 					}

@@ -39,7 +39,7 @@ public class CMDTest extends DCommand {
 						}else{
 							newDPlayer=new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
 						}
-						newDPlayer.isinTestMode=2;
+						newDPlayer.isinTestMode=true;
 					}
 				}else{
 					p.msg(player, p.language.get("Error_DungeonNotExist",dungeonname));
@@ -47,32 +47,6 @@ public class CMDTest extends DCommand {
 			}else{
 				this.displayhelp(player);
 			}
-		}else if(dplayer.isEditing){
-
-			if(args.length>1){
-				dungeonname=args[1];
-			}else{
-				dungeonname=EditWorld.get(dplayer.world).dungeonname;
-			}
-
-			DGroup dgroup=new DGroup(player, dungeonname);
-			if(dgroup!=null){
-				if(dgroup.gworld==null){
-					dgroup.gworld=GameWorld.load(DGroup.get(player).dungeonname);
-				}
-
-				DPlayer newDPlayer;
-
-				if(dgroup.gworld.locLobby==null){
-					newDPlayer=new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
-				}else{
-					newDPlayer=new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
-				}
-
-				newDPlayer.oldDPlayer=dplayer;
-				dplayer.isinTestMode=1;
-			}
-
 		}else{
 			p.msg(player, p.language.get("Error_LeaveDungeon"));
 		}
