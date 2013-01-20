@@ -9,7 +9,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -51,11 +50,9 @@ public class DPlayer {
 
 	public DClass dclass;
 	public GameCheckpoint checkpoint;
-	public CopyOnWriteArrayList<Integer> classItems=new CopyOnWriteArrayList<Integer>();
 	public Wolf wolf;
 	public int wolfRespawnTime=30;
 	public int offlineTime;
-	public int invItemInHand;
 	public CopyOnWriteArrayList<ItemStack> respawnInventory=new CopyOnWriteArrayList<ItemStack>();
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player,  45, "Belohnungen");
@@ -316,7 +313,6 @@ public class DPlayer {
 				}
 
 				/* Delete Inventory */
-				this.classItems.clear();
 				this.player.getInventory().clear();
 				this.player.getInventory().setArmorContents(null);
 				player.getInventory().setItemInHand(new ItemStack(0));
@@ -363,13 +359,6 @@ public class DPlayer {
 
 					else{
 						this.player.getInventory().addItem(istack);
-					}
-				}
-
-				for(int i=0;i<36;i++){
-					ItemStack istack=this.player.getInventory().getItem(i);
-					if(istack!=null){
-						this.classItems.add(i);
 					}
 				}
 				
@@ -524,23 +513,6 @@ public class DPlayer {
 
 					}
 
-				}
-			}
-
-			//Update ClassItems
-			for(Integer istackplace:dplayer.classItems){
-				ItemStack istack=dplayer.player.getInventory().getItem(istackplace);
-
-				if(istack!=null){
-					if(istack.getTypeId()!=0){
-						if(istack.getTypeId()>255 && istack.getTypeId()<318){
-							istack.setDurability((short) 0);
-						}
-					}else{
-						dplayer.classItems.remove(istackplace);
-					}
-				}else{
-					dplayer.classItems.remove(istackplace);
 				}
 			}
 		}
