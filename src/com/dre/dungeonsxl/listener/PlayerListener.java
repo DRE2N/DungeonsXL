@@ -280,7 +280,7 @@ public class PlayerListener implements Listener{
 		Player player=event.getPlayer();
 		DPlayer dplayer=DPlayer.get(player);
 		if(dplayer!=null){
-			if(dplayer.isInWorldChat){
+			if(dplayer.isInDungeonChat){
 				dplayer.msg(player.getDisplayName()+": "+event.getMessage());
 				event.setCancelled(true);
 			}

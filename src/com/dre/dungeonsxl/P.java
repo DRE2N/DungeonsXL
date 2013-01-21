@@ -12,12 +12,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.permission.Permission;
-
+import net.minecraft.server.v1_4_6.EntityPlayer;
+import net.minecraft.server.v1_4_6.MinecraftServer;
+import net.minecraft.server.v1_4_6.PlayerInteractManager;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_4_6.CraftServer;
+import org.bukkit.craftbukkit.v1_4_6.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -446,6 +451,67 @@ public class P extends JavaPlugin{
 	
 	public int parseInt(String string){
 		return NumberUtils.toInt(string, 0);
+	}
+	
+	public Player getOfflinePlayer(String player) {
+		Player pplayer = null;
+		try {
+			//See if the player has data files
+
+			// Find the player folder
+			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
+
+			// Find player name
+			for (File playerfile : playerfolder.listFiles()) {
+				String filename = playerfile.getName();
+				String playername = filename.substring(0, filename.length() - 4);
+
+				if(playername.trim().equalsIgnoreCase(player)) {
+					//This player plays on the server!
+					MinecraftServer server = ((CraftServer)Bukkit.getServer()).getServer();
+					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), playername, new PlayerInteractManager(server.getWorldServer(0)));
+					Player target = (entity == null) ? null : (Player) entity.getBukkitEntity();
+					if(target != null) {
+						target.loadData();
+						return target;
+					}
+				}
+			}
+		}
+		catch(Exception e) {
+			return null;
+		}
+		return pplayer;
+	}
+	
+	public boolean setOfflinePlayerPosition(String player, Location location){
+		try {
+			//See if the player has data files
+			
+			// Find the player folder
+			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
+			
+			// Find player name
+			for (File playerfile : playerfolder.listFiles()) {
+				String filename = playerfile.getName();
+				String playername = filename.substring(0, filename.length() - 4);
+
+				if(playername.trim().equalsIgnoreCase(player)) {
+					//This player plays on the server!
+					MinecraftServer server = ((CraftServer)Bukkit.getServer()).getServer();
+					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), playername, new PlayerInteractManager(server.getWorldServer(0)));
+					entity.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+					entity.world = ((CraftWorld) location.getWorld()).getHandle();
+					Player target = (entity == null) ? null : (Player) entity.getBukkitEntity();
+					target.saveData();
+					return true;
+				}
+			}
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return false;
 	}
 	
     // -------------------------------------------- //

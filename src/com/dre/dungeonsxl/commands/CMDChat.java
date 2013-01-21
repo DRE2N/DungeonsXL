@@ -17,11 +17,11 @@ public class CMDChat extends DCommand{
 	public void onExecute(String[] args, Player player) {
 		DPlayer dplayer=DPlayer.get(player);
 		if(dplayer!=null){
-			if(dplayer.isInWorldChat) {
-				dplayer.isInWorldChat=false;
+			if(dplayer.isInDungeonChat) {
+				dplayer.isInDungeonChat=false;
 				p.msg(player,p.language.get("Cmd_Chat_NormalChat"));
 			}else{
-				dplayer.isInWorldChat=true;
+				dplayer.isInDungeonChat=true;
 				p.msg(player,p.language.get("Cmd_Chat_DungeonChat"));
 			}
 		}else{

@@ -9,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -23,7 +24,7 @@ import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class DPlayer {
-	public P p=P.p;
+	public static P p=P.p;
 
 	public static CopyOnWriteArrayList<DPlayer> players=new CopyOnWriteArrayList<DPlayer>();
 
@@ -44,7 +45,7 @@ public class DPlayer {
 	public GameMode oldGamemode;
 
 	public boolean isEditing;
-	public boolean isInWorldChat=false;
+	public boolean isInDungeonChat=false;
 	public boolean isReady=false;
 	public boolean isFinished=false;
 
@@ -388,6 +389,36 @@ public class DPlayer {
 	}
 
 	//Static
+	public static void saveSession(Configuration cFile){
+		int id = 0;
+		for(DPlayer dplayer : players){
+			cFile.set("DPlayer."+id+".name", dplayer.player.getName());
+			if(dplayer.checkpoint!=null){
+				cFile.set("DPlayer."+id+".lastcheckpoint", dplayer.checkpoint.location);
+			}
+			cFile.set("DPlayer."+id+".class", dplayer.dclass.name);
+			cFile.set("DPlayer."+id+".isEditing", dplayer.isEditing);
+			cFile.set("DPlayer."+id+".isFinished", dplayer.isFinished);
+			cFile.set("DPlayer."+id+".isinTestMode", dplayer.isinTestMode);
+			cFile.set("DPlayer."+id+".isInDungeonChat", dplayer.isInDungeonChat);
+			cFile.set("DPlayer."+id+".isReady", dplayer.isReady);
+			cFile.set("DPlayer."+id+".offlineTime", dplayer.offlineTime);
+			cFile.set("DPlayer."+id+".oldArmor", dplayer.oldArmor);
+			cFile.set("DPlayer."+id+".oldExp", dplayer.oldExp);
+			cFile.set("DPlayer."+id+".oldFireTicks", dplayer.oldFireTicks);
+			cFile.set("DPlayer."+id+".oldFoodLevel", dplayer.oldFoodLevel);
+			cFile.set("DPlayer."+id+".oldGamemode", dplayer.oldGamemode);
+			cFile.set("DPlayer."+id+".oldHealth", dplayer.oldHealth);
+			cFile.set("DPlayer."+id+".oldInventory", dplayer.oldInventory);
+			cFile.set("DPlayer."+id+".oldLocation", dplayer.oldLocation);
+			cFile.set("DPlayer."+id+".oldLvl", dplayer.oldLvl);
+			cFile.set("DPlayer."+id+".respawnInventory", dplayer.respawnInventory);
+			cFile.set("DPlayer."+id+".treasureInv", dplayer.treasureInv);
+			cFile.set("DPlayer."+id+".wolfRespawnTime", dplayer.wolfRespawnTime);
+			id++;
+		}
+	}
+	
 	public static void remove(DPlayer player){
 		players.remove(player);
 	}
