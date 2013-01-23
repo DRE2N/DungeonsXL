@@ -194,34 +194,6 @@ public class P extends JavaPlugin{
 		        GameWorld.update();
 		        GameCheckpoint.update();
 		        DPlayer.update(true);
-		        
-		        //Tutorial Mode
-		        if(p.mainConfig.tutorialActivated){
-			        for(Player player:p.getServer().getOnlinePlayers()){
-			        	if(DPlayer.get(player)==null){
-				    		if(p.mainConfig.tutorialDungeon!=null && p.mainConfig.tutorialStartGroup!=null && p.mainConfig.tutorialEndGroup!=null){
-				    			for(String group:p.permission.getPlayerGroups(player)){
-				    				if(p.mainConfig.tutorialStartGroup.equalsIgnoreCase(group)){
-				    					DGroup dgroup=new DGroup(player, p.mainConfig.tutorialDungeon);
-				    					if(dgroup.gworld==null){
-				    						dgroup.gworld=GameWorld.load(DGroup.get(player).dungeonname);
-				    						dgroup.gworld.isTutorial=true;
-				    					}
-				    					if(dgroup.gworld!=null){
-				    						if(dgroup.gworld.locLobby==null){
-				    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
-				    						}else{
-				    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
-				    						}
-				    					}else{
-				    						p.msg(player,p.language.get("Error_TutorialNotExist"));
-				    					}
-				    				}
-				    			}
-				    		}
-			        	}
-			        }
-		        }
 		    }
 		}, 0L, 20L);
 
@@ -255,7 +227,6 @@ public class P extends JavaPlugin{
     	return false;
     }
 
-
     //Save and Load
 	public void saveData(){
 		File file = new File(this.getDataFolder(), "data.yml");
@@ -268,14 +239,11 @@ public class P extends JavaPlugin{
 		try {
 			configFile.save(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-
 	public void loadAll(){
-		
 		//Load world data
 		File file = new File(this.getDataFolder(), "data.yml");
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
@@ -290,7 +258,6 @@ public class P extends JavaPlugin{
 		//Load saved players
 		DSavePlayer.load();
 	}
-
 
 	//File Control
 	public boolean removeDirectory(File directory) {

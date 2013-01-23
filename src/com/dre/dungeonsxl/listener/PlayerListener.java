@@ -288,10 +288,41 @@ public class PlayerListener implements Listener{
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(PlayerJoinEvent event){
-		DPlayer dplayer=DPlayer.get(event.getPlayer().getName());
-		if(dplayer!=null){
+		Player player = event.getPlayer();
+		
+		//Check dplayers
+		DPlayer dplayer = DPlayer.get(event.getPlayer().getName());
+		if(dplayer != null){
 			dplayer.player = event.getPlayer();
 		}
+		
+		//Tutorial Mode
+        if(p.mainConfig.tutorialActivated){
+        	if(DPlayer.get(player) == null){
+	    		if(p.mainConfig.tutorialDungeon != null && p.mainConfig.tutorialStartGroup != null && p.mainConfig.tutorialEndGroup != null){
+	    			for(String group:p.permission.getPlayerGroups(player)){
+	    				if(p.mainConfig.tutorialStartGroup.equalsIgnoreCase(group)){
+	    					DGroup dgroup = new DGroup(player, p.mainConfig.tutorialDungeon);
+	    					
+	    					if(dgroup.gworld == null){
+	    						dgroup.gworld = GameWorld.load(DGroup.get(player).dungeonname);
+	    						dgroup.gworld.isTutorial = true;
+	    					}
+	    					
+	    					if(dgroup.gworld != null){
+	    						if(dgroup.gworld.locLobby == null){
+	    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
+	    						}else{
+	    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
+	    						}
+	    					}else{
+	    						p.msg(player,p.language.get("Error_TutorialNotExist"));
+	    					}
+	    				}
+	    			}
+	    		}
+        	}
+        }
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
