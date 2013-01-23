@@ -17,9 +17,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -205,10 +205,11 @@ public class PlayerListener implements Listener{
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerRespawn(PlayerRespawnEvent event){
 		Player player=event.getPlayer();
 		DPlayer dplayer=DPlayer.get(player);
+		
 		if(dplayer!=null){
 			if(dplayer.isEditing){
 				EditWorld eworld=EditWorld.get(dplayer.world);
@@ -221,8 +222,10 @@ public class PlayerListener implements Listener{
 				}
 			}else{
 				GameWorld gworld=GameWorld.get(dplayer.world);
+				
 				if(gworld!=null){
 					DGroup dgroup=DGroup.get(dplayer.player);
+					
 					if(dplayer.checkpoint==null){
 						event.setRespawnLocation(dgroup.gworld.locStart);
 
@@ -242,10 +245,6 @@ public class PlayerListener implements Listener{
 							dplayer.wolf.teleport(dplayer.checkpoint.location);
 						}
 					}
-
-
-
-
 				}
 			}
 		}
@@ -286,14 +285,12 @@ public class PlayerListener implements Listener{
 			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerQuit(PlayerQuitEvent event){
-		DPlayer dplayer=DPlayer.get(event.getPlayer());
+	public void onPlayerJoin(PlayerJoinEvent event){
+		DPlayer dplayer=DPlayer.get(event.getPlayer().getName());
 		if(dplayer!=null){
-			//dplayer.goOffline();
-			dplayer.leave();
-			dplayer.player.kickPlayer("");
+			dplayer.player = event.getPlayer();
 		}
 	}
 
@@ -329,7 +326,6 @@ public class PlayerListener implements Listener{
 		}
 	}
 
-
 	//Inventory Events
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onInventoryOpen(InventoryOpenEvent event){
@@ -358,7 +354,7 @@ public class PlayerListener implements Listener{
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
 		Player player=event.getPlayer();
-		DLootInventory inventory=DLootInventory.get(player);
+		DLootInventory inventory = DLootInventory.get(player);
 
 		if(inventory!=null){
 			if(player.getLocation().getBlock().getType()!=Material.PORTAL){

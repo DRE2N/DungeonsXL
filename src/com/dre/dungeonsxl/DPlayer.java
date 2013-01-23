@@ -9,7 +9,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -33,16 +32,8 @@ public class DPlayer {
 	public World world;
 
 	public boolean isinTestMode=false;
-
-	public Location oldLocation;
-	public ItemStack[] oldInventory;
-	public ItemStack[] oldArmor;
-	public int oldLvl;
-	public int oldExp;
-	public int oldHealth;
-	public int oldFoodLevel;
-	public int oldFireTicks;
-	public GameMode oldGamemode;
+	
+	public DSavePlayer savePlayer;
 
 	public boolean isEditing;
 	public boolean isInDungeonChat=false;
@@ -61,19 +52,23 @@ public class DPlayer {
 
 	public DPlayer(Player player, World world, Location teleport, boolean isEditing){
 		players.add(this);
+		
 		this.player=player;
 		this.world=world;
-
-		this.oldLocation=player.getLocation();
-		this.oldInventory=player.getInventory().getContents();
-		this.oldArmor=player.getInventory().getArmorContents();
-		this.oldExp=player.getTotalExperience();
-		this.oldHealth=player.getHealth();
-		this.oldFoodLevel=player.getFoodLevel();
-		this.oldGamemode=player.getGameMode();
-		this.oldLvl=player.getLevel();
-		this.oldFireTicks=player.getFireTicks();
-
+		
+		this.savePlayer = new DSavePlayer(
+				player.getName(), 
+				player.getLocation(), 
+				player.getInventory().getContents(), 
+				player.getInventory().getArmorContents(),
+				player.getLevel(),
+				player.getTotalExperience(),
+				player.getHealth(),
+				player.getFoodLevel(),
+				player.getFireTicks(),
+				player.getGameMode()
+				);
+		
 		this.player.teleport(teleport);
 		this.player.getInventory().clear();
 		this.player.getInventory().setArmorContents(null);
@@ -82,6 +77,7 @@ public class DPlayer {
 		this.player.setHealth(20);
 		this.player.setFoodLevel(20);
 		this.isEditing = isEditing;
+		
 		if(isEditing) this.player.setGameMode(GameMode.CREATIVE); else this.player.setGameMode(GameMode.SURVIVAL);
 
 		if(!isEditing){
@@ -112,15 +108,7 @@ public class DPlayer {
 	public void leave(){
 		remove(this);
 
-		this.player.teleport(this.oldLocation);
-		this.player.getInventory().setContents(this.oldInventory);
-		this.player.getInventory().setArmorContents(this.oldArmor);
-		this.player.setTotalExperience(this.oldExp);
-		this.player.setLevel(this.oldLvl);
-		this.player.setHealth(oldHealth);
-		this.player.setFoodLevel(oldFoodLevel);
-		this.player.setGameMode(oldGamemode);
-		this.player.setFireTicks(oldFireTicks);
+		this.savePlayer.reset();
 
 		if(this.isEditing){
 			EditWorld eworld=EditWorld.get(this.world);
@@ -248,7 +236,7 @@ public class DPlayer {
 	}
 
 	public void finish(){
-		P.p.msg(this.player, p.language.get("Player_FinishedDungeon"));//ChatColor.YELLOW+"Du hast den Dungeon erfolgreich beendet!");
+		p.msg(this.player, p.language.get("Player_FinishedDungeon"));
 		this.isFinished=true;
 
 		DGroup dgroup=DGroup.get(this.player);
@@ -257,7 +245,7 @@ public class DPlayer {
 				for(Player player:dgroup.players){
 					DPlayer dplayer=get(player);
 					if(!dplayer.isFinished){
-						P.p.msg(this.player, p.language.get("Player_WaitForOtherPlayers"));//ChatColor.YELLOW+"Noch auf Mitspieler warten...");
+						p.msg(this.player, p.language.get("Player_WaitForOtherPlayers"));
 						return;
 					}
 				}
@@ -279,9 +267,8 @@ public class DPlayer {
 					p.msg(player, ChatColor.GREEN+"[Chatspy] "+ChatColor.WHITE+msg);
 				}
 			}
-
 		}else{
-			GameWorld gworld=GameWorld.get(this.world);
+			GameWorld gworld = GameWorld.get(this.world);
 			gworld.msg(msg);
 			for(Player player:p.chatSpyer){
 				if(!gworld.world.getPlayers().contains(player)){
@@ -388,66 +375,38 @@ public class DPlayer {
 		new DLootInventory(this.player,this.treasureInv.getContents());
 	}
 
-	//Static
-	public static void saveSession(Configuration cFile){
-		int id = 0;
-		for(DPlayer dplayer : players){
-			cFile.set("DPlayer."+id+".name", dplayer.player.getName());
-			if(dplayer.checkpoint!=null){
-				cFile.set("DPlayer."+id+".lastcheckpoint", dplayer.checkpoint.location);
-			}
-			cFile.set("DPlayer."+id+".class", dplayer.dclass.name);
-			cFile.set("DPlayer."+id+".isEditing", dplayer.isEditing);
-			cFile.set("DPlayer."+id+".isFinished", dplayer.isFinished);
-			cFile.set("DPlayer."+id+".isinTestMode", dplayer.isinTestMode);
-			cFile.set("DPlayer."+id+".isInDungeonChat", dplayer.isInDungeonChat);
-			cFile.set("DPlayer."+id+".isReady", dplayer.isReady);
-			cFile.set("DPlayer."+id+".offlineTime", dplayer.offlineTime);
-			cFile.set("DPlayer."+id+".oldArmor", dplayer.oldArmor);
-			cFile.set("DPlayer."+id+".oldExp", dplayer.oldExp);
-			cFile.set("DPlayer."+id+".oldFireTicks", dplayer.oldFireTicks);
-			cFile.set("DPlayer."+id+".oldFoodLevel", dplayer.oldFoodLevel);
-			cFile.set("DPlayer."+id+".oldGamemode", dplayer.oldGamemode);
-			cFile.set("DPlayer."+id+".oldHealth", dplayer.oldHealth);
-			cFile.set("DPlayer."+id+".oldInventory", dplayer.oldInventory);
-			cFile.set("DPlayer."+id+".oldLocation", dplayer.oldLocation);
-			cFile.set("DPlayer."+id+".oldLvl", dplayer.oldLvl);
-			cFile.set("DPlayer."+id+".respawnInventory", dplayer.respawnInventory);
-			cFile.set("DPlayer."+id+".treasureInv", dplayer.treasureInv);
-			cFile.set("DPlayer."+id+".wolfRespawnTime", dplayer.wolfRespawnTime);
-			id++;
-		}
-	}
-	
+	//Static	
 	public static void remove(DPlayer player){
 		players.remove(player);
 	}
 
 	public static DPlayer get(Player player){
-		EditWorld eworld=EditWorld.get(player.getWorld());
-		boolean isEditing=false;
-		if(eworld!=null){
-			isEditing=true;
-		}
 		for(DPlayer dplayer:players){
 			if(dplayer.player.equals(player)){
-				if(dplayer.isEditing==isEditing){
-					return dplayer;
-				}
+				return dplayer;
 			}
 		}
 		return null;
 	}
 
-	public static CopyOnWriteArrayList<DPlayer> get(World world){
-		CopyOnWriteArrayList<DPlayer> dplayers=new CopyOnWriteArrayList<DPlayer>();
-
+	public static DPlayer get(String name) {
 		for(DPlayer dplayer:players){
-			if(dplayer.world==world){
+			if(dplayer.player.getName().equalsIgnoreCase(name)){
+				return dplayer;
+			}
+		}
+		return null;
+	}
+	
+	public static CopyOnWriteArrayList<DPlayer> get(World world){
+		CopyOnWriteArrayList<DPlayer> dplayers = new CopyOnWriteArrayList<DPlayer>();
+		
+		for(DPlayer dplayer : players){
+			if(dplayer.world == world){
 				dplayers.add(dplayer);
 			}
 		}
-
+		
 		return dplayers;
 	}
 
@@ -508,45 +467,7 @@ public class DPlayer {
 						dplayer.wolfRespawnTime--;
 					}
 				}
-				//Update Offline Players
-				if(dplayer.offlineTime>0){
-					dplayer.offlineTime++;
-					if(dplayer.offlineTime>300){
-						DOfflinePlayer offplayer=new DOfflinePlayer();
-						offplayer.name=dplayer.player.getName();
-						offplayer.oldLocation=dplayer.oldLocation;
-						offplayer.oldInventory=dplayer.oldInventory;
-						offplayer.oldArmor=dplayer.oldArmor;
-						offplayer.oldExp=dplayer.oldExp;
-						offplayer.oldHealth=dplayer.oldHealth;
-						offplayer.oldFoodLevel=dplayer.oldFoodLevel;
-						offplayer.oldGamemode=dplayer.oldGamemode;
-						offplayer.oldLvl=dplayer.oldLvl;
-
-						remove(dplayer);
-
-						if(dplayer.isEditing){
-							EditWorld eworld=EditWorld.get(dplayer.world);
-							if(eworld!=null){
-								eworld.save();
-							}
-						}else{
-							GameWorld gworld=GameWorld.get(dplayer.world);
-							DGroup dgroup=DGroup.get(dplayer.player);
-							if(dgroup!=null){
-								dgroup.removePlayer(dplayer.player);
-								if(dgroup.isEmpty()){
-									dgroup.remove();
-									gworld.delete();
-								}
-							}
-						}
-
-					}
-
-				}
 			}
 		}
 	}
-
 }

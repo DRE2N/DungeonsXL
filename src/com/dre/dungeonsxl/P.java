@@ -96,9 +96,6 @@ public class P extends JavaPlugin{
 
 		//Load All
 		this.loadAll();
-
-		//Load MobTypes
-		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
 		
 		//Spout
 		if(mainConfig.enableSpout){
@@ -278,12 +275,20 @@ public class P extends JavaPlugin{
 
 
 	public void loadAll(){
+		
+		//Load world data
 		File file = new File(this.getDataFolder(), "data.yml");
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-
+		
 		DPortal.load(configFile);
 		DGSign.load(configFile);
 		LeaveSign.load(configFile);
+		
+		//Load mob types
+		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
+		
+		//Load saved players
+		DSavePlayer.load();
 	}
 
 
@@ -484,7 +489,8 @@ public class P extends JavaPlugin{
 		return pplayer;
 	}
 	
-	public boolean setOfflinePlayerPosition(String player, Location location){
+	public Player getOfflinePlayer(String player, Location location){
+		Player pplayer = null;
 		try {
 			//See if the player has data files
 			
@@ -503,15 +509,17 @@ public class P extends JavaPlugin{
 					entity.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 					entity.world = ((CraftWorld) location.getWorld()).getHandle();
 					Player target = (entity == null) ? null : (Player) entity.getBukkitEntity();
-					target.saveData();
-					return true;
+					if(target != null) {
+						//target.loadData();
+						return target;
+					}
 				}
 			}
 		}
 		catch(Exception e) {
-			return false;
+			return null;
 		}
-		return false;
+		return pplayer;
 	}
 	
     // -------------------------------------------- //
