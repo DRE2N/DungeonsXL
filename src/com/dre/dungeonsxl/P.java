@@ -74,7 +74,7 @@ public class P extends JavaPlugin{
 		//Load Language
 		language = new LanguageReader(new File(p.getDataFolder(), "languages/"+mainConfig.language+".yml"));
 
-		//Init Classes
+		//Init Commands
 		new DCommandRoot();
 
 		//InitFolders
@@ -117,16 +117,12 @@ public class P extends JavaPlugin{
 		this.log(this.getDescription().getName()+" enabled!");
 	}
 
-
 	@Override
 	public void onDisable(){
 		//Save
 		this.saveData();
 		language.save();
-
-		//MSG
-		this.log(this.getDescription().getName()+" disabled!");
-
+		
 		//DPlayer leaves World
 		for(DPlayer dplayer:DPlayer.players){
 			dplayer.leave();
@@ -153,8 +149,10 @@ public class P extends JavaPlugin{
 
 		//Stop shedulers
 		p.getServer().getScheduler().cancelTasks(this);
+		
+		//MSG
+		this.log(this.getDescription().getName()+" disabled!");
 	}
-
 
 	//Init.
 	public void initFolders(){
