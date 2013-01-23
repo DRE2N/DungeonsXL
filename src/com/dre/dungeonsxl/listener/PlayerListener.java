@@ -230,7 +230,7 @@ public class PlayerListener implements Listener{
 						event.setRespawnLocation(dgroup.gworld.locStart);
 
 						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
-						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dgroup.gworld.locStart), 20);
+						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dgroup.gworld.locStart), 10);
 
 						if(dplayer.wolf!=null){
 							dplayer.wolf.teleport(dgroup.gworld.locStart);
@@ -239,7 +239,7 @@ public class PlayerListener implements Listener{
 						event.setRespawnLocation(dplayer.checkpoint.location);
 
 						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
-						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dplayer.checkpoint.location), 20);
+						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dplayer.checkpoint.location), 10);
 
 						if(dplayer.wolf!=null){
 							dplayer.wolf.teleport(dplayer.checkpoint.location);
@@ -386,7 +386,9 @@ public class PlayerListener implements Listener{
 
 		@Override
 		public void run() {
-			this.player.teleport(this.location);
+			if(this.player.getLocation().distance(this.location)>2){
+				this.player.teleport(this.location);
+			}
 
 			DPlayer dplayer = DPlayer.get(this.player);
 
@@ -401,8 +403,5 @@ public class PlayerListener implements Listener{
 				//DungeonsXL.p.updateInventory(this.player);
 			}
 		}
-
 	}
-
-
 }
