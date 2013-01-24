@@ -187,7 +187,7 @@ public class DConfig {
 			configFile.set("secureObjects", secureObjectsids);
 			
 			//Invited Players
-			configFile.set("invitedplayers", this.invitedPlayers);
+			configFile.set("invitedPlayers", this.invitedPlayers);
 			
 			try {
 				configFile.save(this.file);
