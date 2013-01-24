@@ -78,13 +78,15 @@ public class PlayerListener implements Listener{
 				if(clickedBlock!=null){
 					for(DPortal dportal:DPortal.portals){
 						if(!dportal.isActive){
-							if(dportal.player==player){
-								if(dportal.block1==null){
-									dportal.block1=event.getClickedBlock();
+							if(dportal.player == player){
+								if(dportal.block1 == null){
+									dportal.block1 = event.getClickedBlock();
+									p.msg(player, p.language.get("Player_PortalProgress"));
 								}else if(dportal.block2==null){
-									dportal.block2=event.getClickedBlock();
-									dportal.isActive=true;
-									dportal.fillwithportal();
+									dportal.block2 = event.getClickedBlock();
+									dportal.isActive = true;
+									dportal.create();
+									p.msg(player, p.language.get("Player_PortalCreated"));
 								}
 								event.setCancelled(true);
 							}
@@ -103,9 +105,7 @@ public class PlayerListener implements Listener{
 					event.setCancelled(true);
 				}
 
-
 				//Leave Sign
-
 				if(LeaveSign.playerInteract(event.getClickedBlock(), player)){
 					event.setCancelled(true);
 				}

@@ -14,6 +14,7 @@ public class DCommandRoot {
 	public CMDLeave cmdLeave=new CMDLeave();
 	public CMDEdit cmdEdit=new CMDEdit();
 	public CMDPortal cmdPortal=new CMDPortal();
+	public CMDDeletePortal cmdDeletePortal=new CMDDeletePortal();
 	public CMDChat cmdChat=new CMDChat();
 	public CMDChatSpy cmdChatSpy=new CMDChatSpy();
 	public CMDList cmdList=new CMDList();
@@ -34,6 +35,7 @@ public class DCommandRoot {
 		this.commands.add(cmdLeave);
 		this.commands.add(cmdEdit);
 		this.commands.add(cmdPortal);
+		this.commands.add(cmdDeletePortal);
 		this.commands.add(cmdChat);
 		this.commands.add(cmdChatSpy);
 		this.commands.add(cmdList);

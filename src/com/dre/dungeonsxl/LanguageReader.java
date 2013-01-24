@@ -55,6 +55,11 @@ public class LanguageReader {
 		defaults.put("Player_OfflineNever","&6Spieler &4&v1&6 ging Offline. Er wird &4nicht&6 automatisch aus der Instanz geworfen!");
 		defaults.put("Player_LeftGroup","&6Spieler &4&v1&6 hat die Gruppe verlassen!");
 		defaults.put("Player_JoinGroup","&6Spieler &4&v1&6 hat die Gruppe betreten!");
+		defaults.put("Player_PortalAbort","&6Portal erstellen abgebrochen!");
+		defaults.put("Player_PortalIntroduction","&6Wähle mit dem Holzschwert die zwei Eckpunkte des Portals!");
+		defaults.put("Player_PortalDeleted","&6Portal gelöscht!");
+		defaults.put("Player_PortalProgress","&6Erster Block gewählt, nun der zweite!");
+		defaults.put("Player_PortalCreated","&6Portal erstellt!");
 		
 		/* Cmds */
 		defaults.put("Cmd_Chat_DungeonChat","&6Du bist nun im Dungeon-Chat");
@@ -69,7 +74,7 @@ public class LanguageReader {
 		defaults.put("Cmd_Reload_Done","&6DungeonsXL erfolgreich neu geladen!");
 		defaults.put("Cmd_Save_Success","&6Dungeon erfolgreich gespeichert!");
 		defaults.put("Cmd_Uninvite_Success","&4&v1&6 wurde erfolgreich ausgeladen an &4&v1&6 zu arbeiten!");
-
+		
 		/* Errors */
 		defaults.put("Error_Enderchest","&4Du kannst keine Enderchest in einem Dungeon verwenden!");
 		defaults.put("Error_Dispenser","&4Du kannst nicht auf diesen Dispenser zugreifen!");
@@ -93,7 +98,7 @@ public class LanguageReader {
 		defaults.put("Error_MsgNoInt","&4Parameter <id> muss eine Zahl beinhalten!");
 		defaults.put("Error_TutorialNotExist","&4Tutorial Dungeon existiert nicht!");
 		defaults.put("Error_SpoutCraftOnly","&4Du brauchst SpoutCraft um diesen Dungeon spielen zu können!");
-		
+		defaults.put("Error_NoPortal","&4Du musst ein Portal anschauen!");
 		
 		/* Help */
 		defaults.put("Help_Cmd_Chat","/dxl chat - Ändert den Chat-Modus");
@@ -106,10 +111,12 @@ public class LanguageReader {
 		defaults.put("Help_Cmd_List","/dxl list - Zeigt alle Dungeons an");
 		defaults.put("Help_Cmd_Msg","/dxl msg <id> '[msg]' - Zeigt oder editiert eine Nachricht");
 		defaults.put("Help_Cmd_Portal","/dxl portal - Erstellt ein Portal welches in Dungeons führt");
+		defaults.put("Help_Cmd_DeletePortal","/dxl deleteportal - Löscht das Portal welches du ansiehst");
 		defaults.put("Help_Cmd_Reload","/dxl reload - Ladet das Plugin neu");
 		defaults.put("Help_Cmd_Save","/dxl save - Speichert den aktuellen Dungeon");
 		defaults.put("Help_Cmd_Test","/dxl test [dungeon] - Testet einen Dungeon");
 		defaults.put("Help_Cmd_Uninvite","/dxl uninvite <player> <dungeon> - Lädt einen Spieler aus den Dungeon zu editieren");
+		
 	}
 
 	private void check(){

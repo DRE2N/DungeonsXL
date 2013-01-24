@@ -15,21 +15,20 @@ public class DPortal {
 	public static P p=P.p;
 
 	public static CopyOnWriteArrayList<DPortal> portals = new CopyOnWriteArrayList<DPortal>();
-
-	//Variables
+	
 	public World world;
 	public Block block1,block2;
-	public Player player;
 	public boolean isActive;
-	public String type;
-
+	public Player player;
 
 	public DPortal(boolean active){
 		portals.add(this);
-		this.isActive=active;
+		this.isActive = active;
 	}
 
-	public boolean fillwithportal(){
+	public void create(){
+		this.player = null;
+		
 		if(this.block1!=null && this.block2!=null){
 			int x1=block1.getX(),y1=block1.getY(),z1=block1.getZ();
 			int x2=block2.getX(),y2=block2.getY(),z2=block2.getZ();
@@ -42,36 +41,32 @@ public class DPortal {
 			int xx=x1;
 			do{
 				int yy=y1;
-
 				do{
 					int zz=z1;
-
 					do{
-						int typeid=this.world.getBlockAt(xx, yy, zz).getType().getId();
-
+						int typeId=this.world.getBlockAt(xx, yy, zz).getType().getId();
 						if(
-								typeid==0||
-								typeid==8||
-								typeid==9||
-								typeid==10||
-								typeid==11||
-								typeid==6||
-								typeid==30||
-								typeid==31||
-								typeid==32||
-								typeid==34||
-								typeid==37||
-								typeid==38||
-								typeid==39||
-								typeid==40||
-								typeid==50||
-								typeid==51||
-								typeid==59||
-								typeid==55||
-								typeid==75||
-								typeid==78||
-								typeid==76
-								)
+								typeId==0||
+								typeId==8||
+								typeId==9||
+								typeId==10||
+								typeId==11||
+								typeId==6||
+								typeId==30||
+								typeId==31||
+								typeId==32||
+								typeId==34||
+								typeId==37||
+								typeId==38||
+								typeId==39||
+								typeId==40||
+								typeId==50||
+								typeId==51||
+								typeId==59||
+								typeId==55||
+								typeId==75||
+								typeId==78||
+								typeId==76)
 						{
 							this.world.getBlockAt(xx, yy, zz).setTypeId(90);
 						}
@@ -85,58 +80,84 @@ public class DPortal {
 				xx=xx+xcount;
 			}while(xx!=x2+xcount);
 
+		} else {
+			portals.remove(this);
 		}
-
-		return false;
 	}
 
 	public void teleport(Player player){
-		if(this.type.equals("toworld")){
-			DPlayer dplayer=DPlayer.get(player);
-			if(dplayer!=null){
-				dplayer.leave();
-			}
-		}
 
-		else if(this.type.equals("todungeon")){
-			DGroup dgroup=DGroup.get(player);
-			if(dgroup!=null){
-				if(dgroup.getGworld()==null){
-					dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
-				}
-				if(dgroup.getGworld()!=null){
-					
-					/* Check Spout */
-					boolean spoutCheck = true;
-					if(P.p.isSpoutEnabled){
-						if(dgroup.getGworld().config.spoutCraftOnly){
-							if(!Spout.getServer().getPlayer(player.getName()).isSpoutCraftEnabled()){
-								spoutCheck = false;
-							}
+		DGroup dgroup=DGroup.get(player);
+		if(dgroup!=null){
+			if(dgroup.getGworld()==null){
+				dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
+			}
+			
+			if(dgroup.getGworld()!=null){
+				
+				/* Check Spout */
+				boolean spoutCheck = true;
+				if(P.p.isSpoutEnabled){
+					if(dgroup.getGworld().config.spoutCraftOnly){
+						if(!Spout.getServer().getPlayer(player.getName()).isSpoutCraftEnabled()){
+							spoutCheck = false;
 						}
 					}
-					
-					/* Teleport Player */
-					if(spoutCheck){	
-						if(dgroup.getGworld().locLobby==null){
-							new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().world.getSpawnLocation(), false);
-						}else{
-							new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().locLobby, false);
-						}
+				}
+				
+				/* Teleport Player */
+				if(spoutCheck){	
+					if(dgroup.getGworld().locLobby == null){
+						new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().world.getSpawnLocation(), false);
 					}else{
-						p.msg(player,p.language.get("Error_SpoutCraftOnly"));
+						new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().locLobby, false);
 					}
 				}else{
-					p.msg(player,p.language.get("Error_DungeonNotExist",DGroup.get(player).getDungeonname()));
+					p.msg(player,p.language.get("Error_SpoutCraftOnly"));
 				}
 			}else{
-				p.msg(player,p.language.get("Error_NotInGroup"));
+				p.msg(player,p.language.get("Error_DungeonNotExist",DGroup.get(player).getDungeonname()));
 			}
+		}else{
+			p.msg(player,p.language.get("Error_NotInGroup"));
 		}
 	}
+	
+	public void delete(){
+		portals.remove(this);
+		
+		int x1=block1.getX(),y1=block1.getY(),z1=block1.getZ();
+		int x2=block2.getX(),y2=block2.getY(),z2=block2.getZ();
+		int xcount=0,ycount=0,zcount=0;
 
+		if(x1>x2){xcount=-1;}else if(x1<x2){xcount=1;}
+		if(y1>y2){ycount=-1;}else if(y1<y2){ycount=1;}
+		if(z1>z2){zcount=-1;}else if(z1<z2){zcount=1;}
+
+		int xx=x1;
+		do{
+			int yy=y1;
+			do{
+				int zz=z1;
+				do{
+					int typeId=this.world.getBlockAt(xx, yy, zz).getType().getId();
+
+					if(typeId == 90)
+					{
+						this.world.getBlockAt(xx, yy, zz).setTypeId(0);
+					}
+
+					zz=zz+zcount;
+				}while(zz!=z2+zcount);
+
+				yy=yy+ycount;
+			}while(yy!=y2+ycount);
+
+			xx=xx+xcount;
+		}while(xx!=x2+xcount);
+	}
+	
 	//Statics
-
 	public static DPortal get(Location location) {
 		return  get(location.getBlock());
 	}
@@ -171,8 +192,16 @@ public class DPortal {
 		return null;
 	}
 
+	public static DPortal get(Player player) {
+		for(DPortal portal : portals){
+			if(portal.player == player){
+				return portal;
+			}
+		}
+		return null;
+	}
+	
 	//Save and Load
-
 	public static void save(FileConfiguration configFile){
 		int id = 0;
 		for(DPortal dportal:portals){
@@ -204,13 +233,11 @@ public class DPortal {
 						dportal.world=world;
 						dportal.block1=world.getBlockAt(configFile.getInt(preString+"loc1.x"),configFile.getInt(preString+"loc1.y"),configFile.getInt(preString+"loc1.z"));
 						dportal.block2=world.getBlockAt(configFile.getInt(preString+"loc2.x"),configFile.getInt(preString+"loc2.y"),configFile.getInt(preString+"loc2.z"));
-						dportal.type="todungeon";
-						dportal.fillwithportal();
+						dportal.create();
 					}
 				}while(configFile.contains(preString));
 			}
 		}
-
 	}
 
 }
