@@ -8,28 +8,46 @@ import com.dre.dungeonsxl.game.GameWorld;
 public class DGroup {
 	public static CopyOnWriteArrayList<DGroup> dgroups=new CopyOnWriteArrayList<DGroup>();
 	
-	//Variables
-	public CopyOnWriteArrayList<Player> players=new CopyOnWriteArrayList<Player>();
-	public String dungeonname;
-	public GameWorld gworld;
+	private CopyOnWriteArrayList<Player> players=new CopyOnWriteArrayList<Player>();
+	private String dungeonname;
+	private GameWorld gworld;
 	public boolean isPlaying;
-	
 	
 	public DGroup(Player player, String dungeonname){
 		dgroups.add(this);
 		
-		this.players.add(player);
+		this.getPlayers().add(player);
 		this.isPlaying=false;
-		this.dungeonname=dungeonname;
+		this.setDungeonname(dungeonname);
+	}
+	
+	public void addPlayer(Player player){
+		//Send message
+		for(Player groupPlayer : this.getPlayers()){
+			P.p.msg(groupPlayer,P.p.language.get("Player_JoinGroup", player.getName()));
+		}
+		
+		//Add player
+		this.getPlayers().add(player);
 	}
 	
 	public void removePlayer(Player player) {
-		this.players.remove(player);
+		this.getPlayers().remove(player);
 		DGSign.updatePerGroup(this);
+		
+		//Send message
+		for(Player groupPlayer : this.getPlayers()){
+			P.p.msg(groupPlayer,P.p.language.get("Player_LeftGroup", player.getName()));
+		}
+		
+		//Check group
+		if(this.isEmpty()){
+			this.remove();
+		}
 	}
 
 	public boolean isEmpty() {
-		return this.players.isEmpty();
+		return this.getPlayers().isEmpty();
 	}
 
 	public void remove() {
@@ -39,8 +57,8 @@ public class DGroup {
 	
 	public void startGame(){
 		this.isPlaying=true;
-		gworld.startGame();
-		for(Player player:players){
+		getGworld().startGame();
+		for(Player player:getPlayers()){
 			DPlayer dplayer=DPlayer.get(player);
 			dplayer.respawn();
 		}
@@ -51,7 +69,7 @@ public class DGroup {
 	//Statics
 	public static DGroup get(Player player){
 		for(DGroup dgroup:dgroups){
-			if(dgroup.players.contains(player)){
+			if(dgroup.getPlayers().contains(player)){
 				return dgroup;
 			}
 		}
@@ -60,7 +78,7 @@ public class DGroup {
 	
 	public static DGroup get(GameWorld gworld){
 		for(DGroup dgroup:dgroups){
-			if(dgroup.gworld==gworld){
+			if(dgroup.getGworld()==gworld){
 				return dgroup;
 			}
 		}
@@ -69,10 +87,36 @@ public class DGroup {
 	
 	public static void leaveGroup(Player player){
 		for(DGroup dgroup:dgroups){
-			if(dgroup.players.contains(player)){
-				dgroup.players.remove(player);
+			if(dgroup.getPlayers().contains(player)){
+				dgroup.getPlayers().remove(player);
 			}
 		}
+	}
+
+	//Getters and setters
+	
+	public CopyOnWriteArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(CopyOnWriteArrayList<Player> players) {
+		this.players = players;
+	}
+
+	public GameWorld getGworld() {
+		return gworld;
+	}
+
+	public void setGworld(GameWorld gworld) {
+		this.gworld = gworld;
+	}
+
+	public String getDungeonname() {
+		return dungeonname;
+	}
+
+	public void setDungeonname(String dungeonname) {
+		this.dungeonname = dungeonname;
 	}
 
 }

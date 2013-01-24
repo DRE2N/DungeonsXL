@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -111,12 +112,11 @@ public class PlayerListener implements Listener{
 
 				DPlayer dplayer=DPlayer.get(player);
 				if(dplayer!=null){
-
-
-
+					
 					//Check GameWorld Signs
 					GameWorld gworld=GameWorld.get(player.getWorld());
 					if(gworld!=null){
+						
 						//Ready Sign
 						for(Block blockReady:gworld.blocksReady){
 							if(blockReady.getLocation().distance(clickedBlock.getLocation())<1){
@@ -128,6 +128,8 @@ public class PlayerListener implements Listener{
 									}else{
 										p.msg(player,p.language.get("Error_Ready"));
 									}
+								}else{
+									dplayer.ready();
 								}
 							}
 						}
@@ -135,13 +137,11 @@ public class PlayerListener implements Listener{
 						//End Sign
 						for(Block blockEnd:gworld.blocksEnd){
 							if(blockEnd.getLocation().distance(clickedBlock.getLocation())<1){
-								if(!dplayer.isFinished){
-									if(event.getAction()==Action.LEFT_CLICK_BLOCK){
-										dplayer.finish();
-										return;
-									}else{
-										p.msg(player,p.language.get("Error_Leftklick"));
-									}
+								if(event.getAction()==Action.LEFT_CLICK_BLOCK){
+									dplayer.finish();
+									return;
+								}else{
+									p.msg(player,p.language.get("Error_Leftklick"));
 								}
 							}
 						}
@@ -227,13 +227,13 @@ public class PlayerListener implements Listener{
 					DGroup dgroup=DGroup.get(dplayer.player);
 					
 					if(dplayer.checkpoint==null){
-						event.setRespawnLocation(dgroup.gworld.locStart);
+						event.setRespawnLocation(dgroup.getGworld().locStart);
 
 						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
-						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dgroup.gworld.locStart), 10);
+						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dgroup.getGworld().locStart), 10);
 
 						if(dplayer.wolf!=null){
-							dplayer.wolf.teleport(dgroup.gworld.locStart);
+							dplayer.wolf.teleport(dgroup.getGworld().locStart);
 						}
 					}else{
 						event.setRespawnLocation(dplayer.checkpoint.location);
@@ -287,6 +287,29 @@ public class PlayerListener implements Listener{
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerQuit(PlayerQuitEvent event){
+		Player player = event.getPlayer();
+		DPlayer dPlayer = DPlayer.get(player);
+		
+		if(dPlayer!=null){
+			//Check GameWorld
+			GameWorld gWorld = GameWorld.get(player.getWorld());
+			if(gWorld != null){
+				int timeUntilKickOfflinePlayer = gWorld.config.timeUntilKickOfflinePlayer;
+				
+				if(timeUntilKickOfflinePlayer == 0){
+					dPlayer.leave();
+				} else if(timeUntilKickOfflinePlayer > 0){
+					dPlayer.msg(p.language.get("Player_Offline",dPlayer.player.getName(),""+timeUntilKickOfflinePlayer));
+					dPlayer.offlineTime = System.currentTimeMillis() + timeUntilKickOfflinePlayer*1000;
+				} else {
+					dPlayer.msg(p.language.get("Player_OfflineNeverKick",dPlayer.player.getName()));
+				}
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
 		
@@ -294,7 +317,13 @@ public class PlayerListener implements Listener{
 		DPlayer dplayer = DPlayer.get(event.getPlayer().getName());
 		if(dplayer != null){
 			dplayer.player = event.getPlayer();
+			
+			//Check offlineTime
+			dplayer.offlineTime = 0;
 		}
+		
+		
+		
 		
 		//Tutorial Mode
         if(p.mainConfig.tutorialActivated){
@@ -304,16 +333,16 @@ public class PlayerListener implements Listener{
 	    				if(p.mainConfig.tutorialStartGroup.equalsIgnoreCase(group)){
 	    					DGroup dgroup = new DGroup(player, p.mainConfig.tutorialDungeon);
 	    					
-	    					if(dgroup.gworld == null){
-	    						dgroup.gworld = GameWorld.load(DGroup.get(player).dungeonname);
-	    						dgroup.gworld.isTutorial = true;
+	    					if(dgroup.getGworld() == null){
+	    						dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
+	    						dgroup.getGworld().isTutorial = true;
 	    					}
 	    					
-	    					if(dgroup.gworld != null){
-	    						if(dgroup.gworld.locLobby == null){
-	    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
+	    					if(dgroup.getGworld() != null){
+	    						if(dgroup.getGworld().locLobby == null){
+	    							new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().world.getSpawnLocation(), false);
 	    						}else{
-	    							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
+	    							new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().locLobby, false);
 	    						}
 	    					}else{
 	    						p.msg(player,p.language.get("Error_TutorialNotExist"));

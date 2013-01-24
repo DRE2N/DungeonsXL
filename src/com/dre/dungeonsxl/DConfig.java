@@ -28,6 +28,8 @@ public class DConfig {
 	public int timeToNextPlay = 0;
 	public int timeToNextLoot = 0;
 	
+	public int timeUntilKickOfflinePlayer = -1;
+	
 	//Spout
 	public boolean spoutCraftOnly = false;
 	public String spoutTexturepackURL;
@@ -53,7 +55,7 @@ public class DConfig {
 			Set<String> list = configSetionClasses.getKeys(false);
 			for (String className:list) {
 				String name = className;
-				boolean hasDog = configSetionClasses.getBoolean(className+".hasdog");
+				boolean hasDog = configSetionClasses.getBoolean(className+".dog");
 				
 				/* Items */
 				List<String> items = configSetionClasses.getStringList(className+".items");
@@ -131,25 +133,29 @@ public class DConfig {
 		}
 		
 		/* Invited Players */
-		if(configFile.contains("invitedplayers")){
-			List<String> invitedplayers = configFile.getStringList("invitedplayers");
+		if(configFile.contains("invitedPlayers")){
+			List<String> invitedplayers = configFile.getStringList("invitedPlayers");
 			for(String i:invitedplayers){
 				this.invitedPlayers.add(i);
 			}
 		}
 		
 		/* Lobby */
-		if(configFile.contains("islobbydisabled")){
-			isLobbyDisabled = configFile.getBoolean("islobbydisabled");
+		if(configFile.contains("isLobbyDisabled")){
+			isLobbyDisabled = configFile.getBoolean("isLobbyDisabled");
 		}
 		
 		/* Times */
-		if(configFile.contains("timetonextplay")){
-			timeToNextPlay = configFile.getInt("timetonextplay");
+		if(configFile.contains("timeToNextPlay")){
+			timeToNextPlay = configFile.getInt("timeToNextPlay");
 		}
 		
-		if(configFile.contains("timetonextloot")){
-			timeToNextLoot = configFile.getInt("timetonextloot");
+		if(configFile.contains("timeToNextLoot")){
+			timeToNextLoot = configFile.getInt("timeToNextLoot");
+		}
+		
+		if(configFile.contains("timeUntilKickOfflinePlayer")){
+			timeUntilKickOfflinePlayer = configFile.getInt("timeUntilKickOfflinePlayer");
 		}
 		
 		/* Spout */

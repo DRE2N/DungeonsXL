@@ -32,7 +32,7 @@ public class GameChest {
 
 	public void addTreasure(DGroup dgroup){
 		if(dgroup!=null){
-			for(Player player:dgroup.players){
+			for(Player player:dgroup.getPlayers()){
 				DPlayer dplayer=DPlayer.get(player);
 				if(dplayer!=null){
 					String msg="";

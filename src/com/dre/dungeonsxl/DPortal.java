@@ -101,15 +101,15 @@ public class DPortal {
 		else if(this.type.equals("todungeon")){
 			DGroup dgroup=DGroup.get(player);
 			if(dgroup!=null){
-				if(dgroup.gworld==null){
-					dgroup.gworld=GameWorld.load(DGroup.get(player).dungeonname);
+				if(dgroup.getGworld()==null){
+					dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
 				}
-				if(dgroup.gworld!=null){
+				if(dgroup.getGworld()!=null){
 					
 					/* Check Spout */
 					boolean spoutCheck = true;
 					if(P.p.isSpoutEnabled){
-						if(dgroup.gworld.config.spoutCraftOnly){
+						if(dgroup.getGworld().config.spoutCraftOnly){
 							if(!Spout.getServer().getPlayer(player.getName()).isSpoutCraftEnabled()){
 								spoutCheck = false;
 							}
@@ -118,16 +118,16 @@ public class DPortal {
 					
 					/* Teleport Player */
 					if(spoutCheck){	
-						if(dgroup.gworld.locLobby==null){
-							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
+						if(dgroup.getGworld().locLobby==null){
+							new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().world.getSpawnLocation(), false);
 						}else{
-							new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
+							new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().locLobby, false);
 						}
 					}else{
 						p.msg(player,p.language.get("Error_SpoutCraftOnly"));
 					}
 				}else{
-					p.msg(player,p.language.get("Error_DungeonNotExist",DGroup.get(player).dungeonname));
+					p.msg(player,p.language.get("Error_DungeonNotExist",DGroup.get(player).getDungeonname()));
 				}
 			}else{
 				p.msg(player,p.language.get("Error_NotInGroup"));

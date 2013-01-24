@@ -51,7 +51,11 @@ public class LanguageReader {
 		defaults.put("Player_FinishedDungeon","&6Du hast den Dungeon erfolgreich beendet!");
 		defaults.put("Player_WaitForOtherPlayers","&6Noch auf Mitspieler warten...");
 		defaults.put("Player_LeaveGroup","&6Du hast deine Gruppe erfolgreich verlassen!");
-
+		defaults.put("Player_Offline","&6Spieler &4&v1&6 ging Offline. Er wird in &4&v2&6 Sekunden automatisch aus der Instanz geworfen!");
+		defaults.put("Player_OfflineNever","&6Spieler &4&v1&6 ging Offline. Er wird &4nicht&6 automatisch aus der Instanz geworfen!");
+		defaults.put("Player_LeftGroup","&6Spieler &4&v1&6 hat die Gruppe verlassen!");
+		defaults.put("Player_JoinGroup","&6Spieler &4&v1&6 hat die Gruppe betreten!");
+		
 		/* Cmds */
 		defaults.put("Cmd_Chat_DungeonChat","&6Du bist nun im Dungeon-Chat");
 		defaults.put("Cmd_Chat_NormalChat","&6Du bist nun im öffentlichen Chat");

@@ -44,7 +44,7 @@ public class DPlayer {
 	public GameCheckpoint checkpoint;
 	public Wolf wolf;
 	public int wolfRespawnTime=30;
-	public int offlineTime;
+	public long offlineTime;
 	public CopyOnWriteArrayList<ItemStack> respawnInventory=new CopyOnWriteArrayList<ItemStack>();
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player,  45, "Belohnungen");
@@ -101,10 +101,6 @@ public class DPlayer {
 		}
 	}
 
-	public void goOffline(){
-		offlineTime=1;
-	}
-
 	public void leave(){
 		remove(this);
 
@@ -120,9 +116,6 @@ public class DPlayer {
 			DGroup dgroup=DGroup.get(this.player);
 			if(dgroup!=null){
 				dgroup.removePlayer(this.player);
-				if(dgroup.isEmpty()){
-					dgroup.remove();
-				}
 			}
 
 			//Belohnung
@@ -167,7 +160,7 @@ public class DPlayer {
 					int i=0;
 					Player groupplayer;
 					do{
-						groupplayer=dgroup.players.get(i);
+						groupplayer=dgroup.getPlayers().get(i);
 						if(groupplayer!=null){
 							for(ItemStack istack:this.player.getInventory()){
 								if(istack!=null){
@@ -199,7 +192,7 @@ public class DPlayer {
 		DGroup dgroup=DGroup.get(this.player);
 		if(!dgroup.isPlaying){
 			if(dgroup!=null){
-				for(Player player:dgroup.players){
+				for(Player player:dgroup.getPlayers()){
 					DPlayer dplayer=get(player);
 					if(!dplayer.isReady){
 						return;
@@ -217,7 +210,7 @@ public class DPlayer {
 	public void respawn(){
 		DGroup dgroup=DGroup.get(this.player);
 		if(this.checkpoint==null){
-			this.player.teleport(dgroup.gworld.locStart);
+			this.player.teleport(dgroup.getGworld().locStart);
 		}else{
 			this.player.teleport(this.checkpoint.location);
 		}
@@ -242,7 +235,7 @@ public class DPlayer {
 		DGroup dgroup=DGroup.get(this.player);
 		if(dgroup!=null){
 			if(dgroup.isPlaying){
-				for(Player player:dgroup.players){
+				for(Player player:dgroup.getPlayers()){
 					DPlayer dplayer=get(player);
 					if(!dplayer.isFinished){
 						p.msg(this.player, p.language.get("Player_WaitForOtherPlayers"));
@@ -250,7 +243,7 @@ public class DPlayer {
 					}
 				}
 
-				for(Player player:dgroup.players){
+				for(Player player:dgroup.getPlayers()){
 					DPlayer dplayer=get(player);
 					dplayer.leave();
 				}
@@ -431,9 +424,9 @@ public class DPlayer {
 
 								DGroup dgroup=DGroup.get(dplayer.player);
 								if(dplayer.checkpoint==null){
-									dplayer.player.teleport(dgroup.gworld.locStart);
+									dplayer.player.teleport(dgroup.getGworld().locStart);
 									if(dplayer.wolf!=null){
-										dplayer.wolf.teleport(dgroup.gworld.locStart);
+										dplayer.wolf.teleport(dgroup.getGworld().locStart);
 									}
 								}else{
 									dplayer.player.teleport(dplayer.checkpoint.location);
@@ -465,6 +458,13 @@ public class DPlayer {
 							dplayer.wolfRespawnTime=30;
 						}
 						dplayer.wolfRespawnTime--;
+					}
+				}
+				
+				//Kick offline players
+				if(dplayer.offlineTime > 0){
+					if(dplayer.offlineTime < System.currentTimeMillis()){
+						dplayer.leave();
 					}
 				}
 			}

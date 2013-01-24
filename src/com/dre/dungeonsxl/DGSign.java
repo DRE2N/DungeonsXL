@@ -66,14 +66,14 @@ public class DGSign {
 				if(dgroup!=null){
 					if(dgroup.isPlaying){
 						sign.setLine(0, strIsPlaying);
-					}else if(dgroup.players.size()>=this.maxPlayersPerGroup){
+					}else if(dgroup.getPlayers().size()>=this.maxPlayersPerGroup){
 						sign.setLine(0, strFull);
 					}else{
 						sign.setLine(0, strJoinGrp);
 					}
 					int j=1;
 					Sign rowSign=sign;
-					for(Player player:dgroup.players){
+					for(Player player:dgroup.getPlayers()){
 						if(j>3){
 							j=0;
 							rowSign=(Sign) sign.getBlock().getRelative(0, -1, 0).getState();
@@ -233,11 +233,9 @@ public class DGSign {
 							dgsign.update();
 						}
 					}else if(topSign.getLine(0).equals(strJoinGrp)){
-						if(DGroup.get(player)==null){
-							if(!dgsign.dgroups[column].players.contains(player)){
-								dgsign.dgroups[column].players.add(player);
-								dgsign.update();
-							}
+						if(DGroup.get(player) == null){
+							dgsign.dgroups[column].addPlayer(player);
+							dgsign.update();
 						}
 					}
 

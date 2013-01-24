@@ -28,16 +28,16 @@ public class CMDTest extends DCommand {
 				if(EditWorld.exist(dungeonname)){
 					DGroup dgroup=new DGroup(player, dungeonname);
 					if(dgroup!=null){
-						if(dgroup.gworld==null){
-							dgroup.gworld=GameWorld.load(DGroup.get(player).dungeonname);
+						if(dgroup.getGworld()==null){
+							dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
 						}
 
 						DPlayer newDPlayer;
 
-						if(dgroup.gworld.locLobby==null){
-							newDPlayer=new DPlayer(player,dgroup.gworld.world,dgroup.gworld.world.getSpawnLocation(), false);
+						if(dgroup.getGworld().locLobby==null){
+							newDPlayer=new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().world.getSpawnLocation(), false);
 						}else{
-							newDPlayer=new DPlayer(player,dgroup.gworld.world,dgroup.gworld.locLobby, false);
+							newDPlayer=new DPlayer(player,dgroup.getGworld().world,dgroup.getGworld().locLobby, false);
 						}
 						newDPlayer.isinTestMode=true;
 					}
