@@ -36,13 +36,14 @@ public class LanguageReader {
 	private void setDefaults(){
 
 		/* Log */
-		defaults.put("Log_NewDungeon","New Dungeon: ");
-		defaults.put("Log_GenerateNewWorld","Generate new world...");
-		defaults.put("Log_WorldGenerationFinished","World generation finished!");
-		defaults.put("Log_Error_MobEnchantment","Error at loading mob.yml: Enchantmet &v1 doesn't exist!");
-		defaults.put("Log_Error_MobType","Error at loading mob.yml: Mob &v1 doesn't exist!");
-		defaults.put("Log_Error_Spout","Spout wurde nicht gefunden!");
-		defaults.put("Log_Error_Spout_Skin","Der Spout Skin von &v1 ist kein png!");
+		defaults.put("Log_NewDungeon","&6New Dungeon");
+		defaults.put("Log_GenerateNewWorld","&6Generate new world...");
+		defaults.put("Log_WorldGenerationFinished","&6World generation finished!");
+		defaults.put("Log_Error_MobEnchantment","&4Error at loading mob.yml: Enchantmet &6&v1&4 doesn't exist!");
+		defaults.put("Log_Error_MobType","&4Error at loading mob.yml: Mob &6&v1&4 doesn't exist!");
+		defaults.put("Log_Error_Spout","&4Spout wurde nicht gefunden!");
+		defaults.put("Log_Error_Spout_Skin","&4Der Spout Skin von &6&v1&4 ist kein png!");
+		defaults.put("Log_Error_NoConsoleCommand","&6/dxl &v1&4 kann man nicht als Konsole ausführen!");
 		
 		/* Player */
 		defaults.put("Player_CheckpointReached","&6Checkpoint erreicht!");
@@ -99,6 +100,7 @@ public class LanguageReader {
 		defaults.put("Error_TutorialNotExist","&4Tutorial Dungeon existiert nicht!");
 		defaults.put("Error_SpoutCraftOnly","&4Du brauchst SpoutCraft um diesen Dungeon spielen zu können!");
 		defaults.put("Error_NoPortal","&4Du musst ein Portal anschauen!");
+		defaults.put("Error_NoPlayerCommand","&6/dxl &v1&4 kann man nicht als Spieler ausführen!");
 		
 		/* Help */
 		defaults.put("Help_Cmd_Chat","/dxl chat - Ändert den Chat-Modus");

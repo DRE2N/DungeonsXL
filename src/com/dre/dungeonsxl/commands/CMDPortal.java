@@ -1,5 +1,6 @@
 package com.dre.dungeonsxl.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,10 +14,12 @@ public class CMDPortal extends DCommand{
 		this.args = 0;
 		this.help = p.language.get("Help_Cmd_Portal");
 		this.permissions = "dxl.portal";
+		this.isPlayerCommand = true;
 	}
 
 	@Override
-	public void onExecute(String[] args, Player player) {
+	public void onExecute(String[] args, CommandSender sender) {
+		Player player = (Player) sender;
 		DPlayer dplayer = DPlayer.get(player);
 		if(dplayer == null){
 			DPortal dportal = DPortal.get(player);

@@ -1,5 +1,6 @@
 package com.dre.dungeonsxl.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DGroup;
@@ -14,10 +15,12 @@ public class CMDTest extends DCommand {
 		this.args=-1;
 		this.help=p.language.get("Help_Cmd_Test");
 		this.permissions="dxl.test";
+		this.isPlayerCommand = true;
 	}
 
 	@Override
-	public void onExecute(String[] args, Player player) {
+	public void onExecute(String[] args, CommandSender sender) {
+		Player player = (Player) sender;
 		DPlayer dplayer=DPlayer.get(player);
 		String dungeonname;
 
@@ -45,7 +48,7 @@ public class CMDTest extends DCommand {
 					p.msg(player, p.language.get("Error_DungeonNotExist",dungeonname));
 				}
 			}else{
-				this.displayhelp(player);
+				this.displayHelp(player);
 			}
 		}else{
 			p.msg(player, p.language.get("Error_LeaveDungeon"));

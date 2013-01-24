@@ -1,5 +1,6 @@
 package com.dre.dungeonsxl.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DGroup;
@@ -12,19 +13,19 @@ public class CMDEdit extends DCommand{
 		this.command="edit";
 		this.args=1;
 		this.help=p.language.get("Help_Cmd_Edit");
+		this.isPlayerCommand = true;
 	}
 
 	@Override
-	public void onExecute(String[] args, Player player) {
-		String dungeonname=args[1];
-
-		EditWorld eworld=EditWorld.load(dungeonname);
-
-
+	public void onExecute(String[] args, CommandSender sender) {
+		Player player = (Player) sender;
+		
+		String dungeonName=args[1];
+		EditWorld eworld=EditWorld.load(dungeonName);
 		DGroup dgroup=DGroup.get(player);
 		DPlayer dplayer=DPlayer.get(player);
 
-		if(EditWorld.isInvitedPlayer(dungeonname,player.getName())||p.permission.has(player, "dxl.edit")||player.isOp()){
+		if(EditWorld.isInvitedPlayer(dungeonName,player.getName())||p.permission.has(player, "dxl.edit")||player.isOp()){
 			if(dplayer==null){
 				if(dgroup==null){
 					if(eworld!=null){
@@ -34,7 +35,7 @@ public class CMDEdit extends DCommand{
 							new DPlayer(player,eworld.world,eworld.lobby, true);
 						}
 					}else{
-						p.msg(player,p.language.get("Error_DungeonNotExist",dungeonname));
+						p.msg(player,p.language.get("Error_DungeonNotExist",dungeonName));
 					}
 				}else{
 					p.msg(player,p.language.get("Error_LeaveGroup"));

@@ -8,9 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import net.milkbowl.vault.permission.Permission;
 import net.minecraft.server.v1_4_6.EntityPlayer;
 import net.minecraft.server.v1_4_6.MinecraftServer;
@@ -19,6 +16,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_4_6.CraftServer;
@@ -365,17 +363,17 @@ public class P extends JavaPlugin{
 	}
 
 	//Msg
-	public void msg(Player player,String msg){
+	public void msg(CommandSender sender,String msg){
 		msg = replaceColors(msg);
-		player.sendMessage(ChatColor.DARK_GREEN+"[DXL] "+ChatColor.WHITE+msg);
+		sender.sendMessage(ChatColor.DARK_GREEN+"[DXL] "+ChatColor.WHITE+msg);
 	}
 
-	public void msg(Player player,String msg, boolean zusatz){
+	public void msg(CommandSender sender,String msg, boolean zusatz){
 		msg = replaceColors(msg);
 		if(zusatz){
-			player.sendMessage(ChatColor.DARK_GREEN+"[DXL]"+ChatColor.WHITE+msg);
+			sender.sendMessage(ChatColor.DARK_GREEN+"[DXL]"+ChatColor.WHITE+msg);
 		}else{
-			player.sendMessage(ChatColor.WHITE+msg);
+			sender.sendMessage(ChatColor.WHITE+msg);
 		}
 	}
 
@@ -490,14 +488,8 @@ public class P extends JavaPlugin{
     // -------------------------------------------- //
  	// LOGGING
  	// -------------------------------------------- //
- 	public void log(Object msg)
+ 	public void log(String msg)
  	{
- 		log(Level.INFO, msg);
+ 		this.msg(Bukkit.getConsoleSender(), msg);
  	}
-
- 	public void log(Level level, Object msg)
- 	{
- 		Logger.getLogger("Minecraft").log(level, "["+this.getDescription().getFullName()+"] "+msg);
- 	}
-
 }

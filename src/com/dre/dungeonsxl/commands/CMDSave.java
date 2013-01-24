@@ -1,5 +1,6 @@
 package com.dre.dungeonsxl.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.EditWorld;
@@ -11,11 +12,12 @@ public class CMDSave extends DCommand{
 		this.args=0;
 		this.help=p.language.get("Help_Cmd_Save");
 		this.permissions="dxl.save";
+		this.isPlayerCommand = true;
 	}
 
-
 	@Override
-	public void onExecute(String[] args, Player player) {
+	public void onExecute(String[] args, CommandSender sender) {
+		Player player = (Player) sender;
 		EditWorld eworld=EditWorld.get(player.getWorld());
 		if(eworld!=null){
 			eworld.save();

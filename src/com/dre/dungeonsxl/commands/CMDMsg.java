@@ -2,6 +2,7 @@ package com.dre.dungeonsxl.commands;
 
 import java.io.File;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.DConfig;
@@ -14,10 +15,12 @@ public class CMDMsg extends DCommand{
 		this.command="msg";
 		this.help=p.language.get("Help_Cmd_Msg");
 		this.permissions="dxl.msg";
+		this.isPlayerCommand = true;
 	}
 
 	@Override
-	public void onExecute(String[] args, Player player) {
+	public void onExecute(String[] args, CommandSender sender) {
+		Player player = (Player) sender;
 		EditWorld eworld=EditWorld.get(player.getWorld());
 
 		if(eworld!=null){
@@ -66,7 +69,7 @@ public class CMDMsg extends DCommand{
 				}
 
 			}else{
-				this.displayhelp(player);
+				this.displayHelp(player);
 			}
 		}else{
 			p.msg(player, p.language.get("Error_NotInDungeon"));

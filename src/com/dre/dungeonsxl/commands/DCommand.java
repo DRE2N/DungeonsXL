@@ -1,6 +1,7 @@
 package com.dre.dungeonsxl.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.P;
@@ -8,12 +9,13 @@ import com.dre.dungeonsxl.P;
 public abstract class DCommand {
 	public P p=P.p;
 	
-	public Player player;
 	public boolean costsMoney;
 	public String command;
 	public int args;
 	public String help;
 	public String permissions;
+	public boolean isPlayerCommand = false;
+	public boolean isConsoleCommand = false;
 	
 	// TODO : Add Aliases
 	
@@ -21,8 +23,8 @@ public abstract class DCommand {
 		costsMoney = false;
 	}
 	
-	public void displayhelp(Player player){
-		p.msg(player,ChatColor.RED+this.help);
+	public void displayHelp(CommandSender sender){
+		p.msg(sender,ChatColor.RED+this.help);
 	}
 	
 	public boolean playerHasPermissions(Player player){
@@ -37,7 +39,7 @@ public abstract class DCommand {
 	}
 	
 	//Abstracts
-	public abstract void onExecute(String[] args, Player player);
+	public abstract void onExecute(String[] args, CommandSender sender);
 
 	
 }

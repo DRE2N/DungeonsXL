@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -189,7 +187,7 @@ public class DMobType {
 										itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
 									}
 								} else {
-									P.p.log(Level.WARNING, P.p.language.get("Log_Error_MobEnchantment",splittedEnchantment[0]));
+									P.p.log(P.p.language.get("Log_Error_MobEnchantment",splittedEnchantment[0]));
 								}
 							}
 						}
@@ -221,7 +219,7 @@ public class DMobType {
 					mobType.spoutSkinURL = configFile.getString(mobName+".spoutSkinURL");
 				}
 			} else {
-				P.p.log(Level.WARNING, P.p.language.get("Log_Error_MobType",configFile.getString(mobName+".Type")));
+				P.p.log(P.p.language.get("Log_Error_MobType",configFile.getString(mobName+".Type")));
 			}
 		}
 	}
