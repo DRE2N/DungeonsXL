@@ -48,7 +48,7 @@ public class CMDMsg extends DCommand{
 							}
 						}
 
-						String[] splitMsg=msg.split("'");
+						String[] splitMsg=msg.split("\"");
 						if(splitMsg.length>1){
 							msg=splitMsg[1];
 							String old=confreader.msgs.get(id);

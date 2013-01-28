@@ -95,7 +95,7 @@ public class LanguageReader {
 		defaults.put("Error_LeaveGroup","&4Du musst zuerst deine Gruppe verlassen!");
 		defaults.put("Error_NoLeaveInTutorial","&4Du kannst diesen Befehl nicht in einem Tutorial benutzen!");
 		defaults.put("Error_MsgIdNotExist","&4Nachricht mit der Id &6&v1&4 existiert nicht!");
-		defaults.put("Error_MsgFormat","&4Die Nachricht muss zwischen '' liegen!");
+		defaults.put("Error_MsgFormat","&4Die Nachricht muss zwischen \" liegen!");
 		defaults.put("Error_MsgNoInt","&4Parameter <id> muss eine Zahl beinhalten!");
 		defaults.put("Error_TutorialNotExist","&4Tutorial Dungeon existiert nicht!");
 		defaults.put("Error_SpoutCraftOnly","&4Du brauchst SpoutCraft um diesen Dungeon spielen zu können!");
