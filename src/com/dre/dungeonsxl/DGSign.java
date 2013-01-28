@@ -246,7 +246,7 @@ public class DGSign {
 				if(file!=null){
 					DConfig confReader=new DConfig(file);
 					if(confReader!=null){
-						P.p.msg(player, P.p.language.get("Error_Cooldown",""+confReader.timeToNextPlay));
+						P.p.msg(player, P.p.language.get("Error_Cooldown",""+confReader.getTimeToNextPlay()));
 					}
 				}
 			}

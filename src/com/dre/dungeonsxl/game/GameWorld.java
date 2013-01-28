@@ -108,7 +108,7 @@ public class GameWorld {
 					sign.setLine(3, ChatColor.DARK_BLUE+"############");
 					sign.update();
 				} else if (lines[1].equalsIgnoreCase("classes")){
-					if(!config.isLobbyDisabled){
+					if(!config.isLobbyDisabled()){
 						int[] direction=DGSign.getDirection(block.getData());
 						int directionX=direction[0];
 						int directionZ=direction[1];
@@ -188,7 +188,7 @@ public class GameWorld {
 				}
 				if(lines[1].equalsIgnoreCase("msg")){
 					if(lines[2]!=""&&lines[3]!=""){
-						String msg = config.getMsg(p.parseInt(lines[2]));
+						String msg = config.getMsg(p.parseInt(lines[2]),true);
 						if(msg!=null){
 							messages.add(new GameMessage(block.getLocation(),msg,p.parseInt(lines[3]),false));
 							block.setTypeId(0);
@@ -197,7 +197,7 @@ public class GameWorld {
 				}
 				if(lines[1].equalsIgnoreCase("soundmsg")){
 					if(lines[2]!=""&&lines[3]!=""){
-						String msg = config.getMsg(p.parseInt(lines[2]));
+						String msg = config.getMsg(p.parseInt(lines[2]),true);
 						if(msg!=null){
 							messages.add(new GameMessage(block.getLocation(),msg,p.parseInt(lines[3]),true));
 							block.setTypeId(0);
@@ -296,7 +296,7 @@ public class GameWorld {
 		if(dungeonFolder.isDirectory()){
 			DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+dungeon, "config.yml"));
 
-			if(config.timeToNextPlay!=0){
+			if(config.getTimeToNextPlay()!=0){
 				//read PlayerConfig
 				File file=new File(p.getDataFolder()+"/dungeons/"+dungeon, "players.yml");
 
@@ -312,7 +312,7 @@ public class GameWorld {
 
 				if(playerConfig.contains(player.getName())){
 					Long time=playerConfig.getLong(player.getName());
-					if(time+(config.timeToNextPlay*1000*60*60)>System.currentTimeMillis()){
+					if(time+(config.getTimeToNextPlay()*1000*60*60)>System.currentTimeMillis()){
 						return false;
 					}
 				}
@@ -347,7 +347,7 @@ public class GameWorld {
 			gworld.config = new DConfig(new File(p.getDataFolder()+"/dungeons/"+gworld.dungeonname, "config.yml"));
 
 			//Secure Objects
-			gworld.secureObjects=gworld.config.secureObjects;
+			gworld.secureObjects=gworld.config.getSecureObjects();
 
 			//World
 			p.copyDirectory(file,new File("DXL_Game_"+gworld.id));

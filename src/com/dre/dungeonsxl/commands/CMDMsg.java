@@ -31,7 +31,7 @@ public class CMDMsg extends DCommand{
 					DConfig confreader = new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworld.dungeonname, "config.yml"));
 
 					if(args.length==2){
-						String msg=confreader.msgs.get(id);
+						String msg=confreader.getMsg(id, true);
 						if(msg!=null){
 							p.msg(player, ChatColor.WHITE+msg);
 						}else{
@@ -51,14 +51,14 @@ public class CMDMsg extends DCommand{
 						String[] splitMsg=msg.split("\"");
 						if(splitMsg.length>1){
 							msg=splitMsg[1];
-							String old=confreader.msgs.get(id);
+							String old=confreader.getMsg(id, false);
 							if(old==null){
 								p.msg(player, p.language.get("Cmd_Msg_Added",""+id));
 							}else{
 								p.msg(player, p.language.get("Cmd_Msg_Updated",""+id));
 							}
 
-							confreader.msgs.put(id, msg);
+							confreader.setMsg(msg, id);
 							confreader.save();
 						}else{
 							p.msg(player, p.language.get("Error_MsgFormat"));

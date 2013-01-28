@@ -98,7 +98,7 @@ public class DPortal {
 				/* Check Spout */
 				boolean spoutCheck = true;
 				if(P.p.isSpoutEnabled){
-					if(dgroup.getGworld().config.spoutCraftOnly){
+					if(dgroup.getGworld().config.isSpoutCraftOnly()){
 						if(!Spout.getServer().getPlayer(player.getName()).isSpoutCraftEnabled()){
 							spoutCheck = false;
 						}

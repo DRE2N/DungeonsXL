@@ -194,7 +194,7 @@ public class PlayerListener implements Listener{
 			DPlayer dplayer=DPlayer.get(player);
 			GameWorld gworld=GameWorld.get(dplayer.world);
 			if(dplayer!=null){
-				for(Material material:gworld.config.secureObjects){
+				for(Material material:gworld.config.getSecureObjects()){
 					if(material==event.getItemDrop().getItemStack().getType()){
 						event.setCancelled(true);
 						p.msg(player,p.language.get("Error_Drop"));
@@ -295,7 +295,7 @@ public class PlayerListener implements Listener{
 			//Check GameWorld
 			GameWorld gWorld = GameWorld.get(player.getWorld());
 			if(gWorld != null){
-				int timeUntilKickOfflinePlayer = gWorld.config.timeUntilKickOfflinePlayer;
+				int timeUntilKickOfflinePlayer = gWorld.config.getTimeUntilKickOfflinePlayer();
 				
 				if(timeUntilKickOfflinePlayer == 0){
 					dPlayer.leave();

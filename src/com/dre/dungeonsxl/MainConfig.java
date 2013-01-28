@@ -57,6 +57,7 @@ public class MainConfig {
 		ConfigurationSection configSetion = configFile.getConfigurationSection("default");
 		if(configSetion!=null){
 			defaultDungeon = new DConfig(configSetion);
+			DConfig.mainConfig = defaultDungeon;
 		}
 		
 	}

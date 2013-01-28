@@ -4,7 +4,6 @@ package com.dre.dungeonsxl.commands;
 import java.io.File;
 
 import org.bukkit.command.CommandSender;
-import com.dre.dungeonsxl.DMobType;
 import com.dre.dungeonsxl.LanguageReader;
 import com.dre.dungeonsxl.MainConfig;
 
@@ -32,10 +31,6 @@ public class CMDReload extends DCommand{
 				
 		//Load Language
 		p.language = new LanguageReader(new File(p.getDataFolder(), "languages/"+p.mainConfig.language+".yml"));
-		
-		//Mobtype
-		DMobType.clear();
-		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
 		
 		p.msg(sender, p.language.get("Cmd_Reload_Done"));
 	}

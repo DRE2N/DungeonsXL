@@ -39,52 +39,53 @@ public class MobSpawner {
 	
 	public void update(){
 		World world=this.block.getWorld();
-		
-		for(Player player:world.getPlayers()){
-			if(player.getWorld()==world){
-				if(player.getLocation().distance(this.block.getLocation())<this.radius){
-					if(this.interval<=0){
-						
-						//Check normal mobs
-						if(EntityType.fromName(this.mob)!=null){
-							if(EntityType.fromName(this.mob).isAlive()){
-								LivingEntity entity=(LivingEntity)world.spawnEntity(this.block.getLocation(), EntityType.fromName(this.mob));
-								
-								//Add Bow to normal Skeletons
-								if(entity.getType() == EntityType.SKELETON){
-									Skeleton skeleton = (Skeleton) entity;
-									if(skeleton.getSkeletonType()==SkeletonType.NORMAL){
-										skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW));
+		GameWorld gworld = GameWorld.get(world);
+		if(gworld != null){
+			for(Player player:world.getPlayers()){
+				if(player.getWorld()==world){
+					if(player.getLocation().distance(this.block.getLocation())<this.radius){
+						if(this.interval<=0){
+							
+							//Check normal mobs
+							if(EntityType.fromName(this.mob)!=null){
+								if(EntityType.fromName(this.mob).isAlive()){
+									LivingEntity entity=(LivingEntity)world.spawnEntity(this.block.getLocation(), EntityType.fromName(this.mob));
+									
+									//Add Bow to normal Skeletons
+									if(entity.getType() == EntityType.SKELETON){
+										Skeleton skeleton = (Skeleton) entity;
+										if(skeleton.getSkeletonType()==SkeletonType.NORMAL){
+											skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW));
+										}
 									}
+									
+									new DMob(entity,this.live,GameWorld.get(world),null);
 								}
-								
-								new DMob(entity,this.live,GameWorld.get(world),null);
 							}
-						}
-						
-						//Check custom mobs
-						DMobType mobType = DMobType.get(this.mob);
-						
-						if(mobType!=null){
-							mobType.spawn(GameWorld.get(world), this.block.getLocation());
-						}
-						
-						//Set the amount
-						if(amount!=-1){
-							if(amount>1){
-								amount--;
-							}else{
-								mobspawners.remove(this);
+							
+							//Check custom mobs
+							DMobType mobType = DMobType.get(this.mob, gworld.config.getMobTypes());
+							
+							if(mobType!=null){
+								mobType.spawn(GameWorld.get(world), this.block.getLocation());
 							}
+							
+							//Set the amount
+							if(amount!=-1){
+								if(amount>1){
+									amount--;
+								}else{
+									mobspawners.remove(this);
+								}
+							}
+							this.interval=this.maxinterval;
 						}
-						this.interval=this.maxinterval;
+						this.interval--;
+						return;
 					}
-					this.interval--;
-					return;
 				}
 			}
 		}
-		
 	}
 	
 	//Static

@@ -65,11 +65,14 @@ public class P extends JavaPlugin{
 
 		//Commands
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
-
+		
+		//Load Language
+		language = new LanguageReader(new File(p.getDataFolder(), "languages/en.yml"));
+		
 		//Load Config
 		mainConfig=new MainConfig(new File(p.getDataFolder(), "config.yml"));
 		
-		//Load Language
+		//Load Language 2
 		language = new LanguageReader(new File(p.getDataFolder(), "languages/"+mainConfig.language+".yml"));
 
 		//Init Commands
@@ -130,7 +133,6 @@ public class P extends JavaPlugin{
 		DGroup.dgroups.clear();
 		DGSign.dgsigns.clear();
 		DLootInventory.LootInventorys.clear();
-		DMobType.clear();
 		DPlayer.players.clear();
 		DPortal.portals.clear();
 		LeaveSign.lsigns.clear();
@@ -247,9 +249,6 @@ public class P extends JavaPlugin{
 		DPortal.load(configFile);
 		DGSign.load(configFile);
 		LeaveSign.load(configFile);
-		
-		//Load mob types
-		DMobType.load(new File(p.getDataFolder(), "mobs.yml"));
 		
 		//Load saved players
 		DSavePlayer.load();

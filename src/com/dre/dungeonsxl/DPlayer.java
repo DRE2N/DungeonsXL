@@ -81,7 +81,7 @@ public class DPlayer {
 		if(isEditing) this.player.setGameMode(GameMode.CREATIVE); else this.player.setGameMode(GameMode.SURVIVAL);
 
 		if(!isEditing){
-			if(GameWorld.get(world).config.isLobbyDisabled){
+			if(GameWorld.get(world).config.isLobbyDisabled()){
 				this.ready();
 			}
 		}
@@ -90,11 +90,11 @@ public class DPlayer {
 		if(!isEditing){
 			if(p.isSpoutEnabled){
 				GameWorld gworld = GameWorld.get(world);
-				if(gworld.config.spoutTexturepackURL!=null){
+				if(gworld.config.getSpoutTexturepackURL()!=null){
 					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
 					if(sPlayer!=null){
 						sPlayer.sendNotification(ChatColor.GOLD+"DungeonsXL",ChatColor.RED+"Download texturepack!", Material.FIREBALL);
-						sPlayer.setTexturePack(gworld.config.spoutTexturepackURL);
+						sPlayer.setTexturePack(gworld.config.getSpoutTexturepackURL());
 					}
 				}
 			}

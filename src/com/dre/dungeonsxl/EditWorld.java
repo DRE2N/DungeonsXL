@@ -222,7 +222,7 @@ public class EditWorld {
 		}else{
 			if(exist(eworldname)){
 				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
-				config.invitedPlayers.add(player.toLowerCase());
+				config.addInvitedPlayer(player.toLowerCase());
 				config.save();
 				return true;
 			}
@@ -241,7 +241,7 @@ public class EditWorld {
 		}else{
 			if(exist(eworldname)){
 				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
-				config.invitedPlayers.remove(player.toLowerCase());
+				config.removeInvitedPlayers(player.toLowerCase());
 				config.save();
 				return true;
 			}
@@ -259,7 +259,7 @@ public class EditWorld {
 		}else{
 			if(exist(eworldname)){
 				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
-				return config.invitedPlayers.contains(player.toLowerCase());
+				return config.getInvitedPlayers().contains(player.toLowerCase());
 			}
 		}
 

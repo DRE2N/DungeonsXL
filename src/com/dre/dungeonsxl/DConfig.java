@@ -3,6 +3,7 @@ package com.dre.dungeonsxl;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,23 +17,32 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 public class DConfig {
-	public File file;
+	public static DConfig mainConfig = new DConfig();
+	
+	private File file;
 	
 	private CopyOnWriteArrayList<DClass> dClasses = new CopyOnWriteArrayList<DClass>();
-	public Map<Integer,String> msgs = new HashMap<Integer,String>();
+	private Map<Integer,String> msgs = new HashMap<Integer,String>();
+
+	private CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
+	private CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
 	
-	public CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
-	public CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
+	private boolean isLobbyDisabled = false;
+	private int timeToNextPlay = 0;
+	private int timeToNextLoot = 0;
 	
-	public boolean isLobbyDisabled = false;
-	public int timeToNextPlay = 0;
-	public int timeToNextLoot = 0;
-	
-	public int timeUntilKickOfflinePlayer = -1;
+	private int timeUntilKickOfflinePlayer = -1;
 	
 	//Spout
-	public boolean spoutCraftOnly = false;
-	public String spoutTexturepackURL;
+	private boolean spoutCraftOnly = false;
+	private String spoutTexturepackURL;
+	
+	//MobTypes
+	private Set<DMobType> mobTypes = new HashSet<DMobType>();
+	
+	public DConfig(){
+		
+	}
 	
 	public DConfig(File file){
 		this.file=file;
@@ -143,29 +153,45 @@ public class DConfig {
 		/* Lobby */
 		if(configFile.contains("isLobbyDisabled")){
 			isLobbyDisabled = configFile.getBoolean("isLobbyDisabled");
+		} else {
+			isLobbyDisabled = mainConfig.isLobbyDisabled;
 		}
 		
 		/* Times */
 		if(configFile.contains("timeToNextPlay")){
 			timeToNextPlay = configFile.getInt("timeToNextPlay");
+		} else {
+			timeToNextPlay = mainConfig.timeToNextPlay;
 		}
 		
 		if(configFile.contains("timeToNextLoot")){
 			timeToNextLoot = configFile.getInt("timeToNextLoot");
+		} else {
+			timeToNextLoot = mainConfig.timeToNextLoot;
 		}
 		
 		if(configFile.contains("timeUntilKickOfflinePlayer")){
 			timeUntilKickOfflinePlayer = configFile.getInt("timeUntilKickOfflinePlayer");
+		} else {
+			timeUntilKickOfflinePlayer = mainConfig.timeUntilKickOfflinePlayer;
 		}
 		
 		/* Spout */
 		if(configFile.contains("spout.spoutCraftOnly")){
 			spoutCraftOnly = configFile.getBoolean("spout.spoutCraftOnly");
+		} else {
+			spoutCraftOnly = mainConfig.spoutCraftOnly;
 		}
 		
 		if(configFile.contains("spout.spoutTexturepackURL")){
 			spoutTexturepackURL = configFile.getString("spout.spoutTexturepackURL");
+		} else {
+			spoutTexturepackURL = mainConfig.spoutTexturepackURL;
 		}
+		
+		/* Mobtypes */
+		configSetionMessages = configFile.getConfigurationSection("mobTypes");
+		this.mobTypes = DMobType.load(configSetionMessages);
 	}
 
 	public void save(){
@@ -197,13 +223,25 @@ public class DConfig {
 		}
 	}
 	
-	//Get
+	//Getters and Setters
 	public CopyOnWriteArrayList<DClass> getClasses(){
-		return dClasses;
+		if(this.dClasses != null){
+			if(!this.dClasses.isEmpty()){
+				return this.dClasses;
+			}
+		}
+		
+		return mainConfig.dClasses;
 	}
 	
 	public DClass getClass(String name){
-		for(DClass dClass:dClasses){
+		for(DClass dClass:this.dClasses){
+			if(dClass.name.equals(name)){
+				return dClass;
+			}
+		}
+		
+		for(DClass dClass:mainConfig.dClasses){
 			if(dClass.name.equals(name)){
 				return dClass;
 			}
@@ -211,7 +249,69 @@ public class DConfig {
 		return null;
 	}
 	
-	public String getMsg(int id){
-		return this.msgs.get(id);
+	public String getMsg(int id, boolean returnMainConfig){
+		String msg = this.msgs.get(id);
+		if(msg != null){
+			return this.msgs.get(id);
+		}
+		if(returnMainConfig){
+			return mainConfig.msgs.get(id);
+		}
+		
+		return null;
+	}
+	
+	public void setMsg(String msg, int id) {
+		this.msgs.put(id, msg);
+	}
+	
+	public CopyOnWriteArrayList<String> getInvitedPlayers() {
+		CopyOnWriteArrayList<String> tmpInvitedPlayers = new CopyOnWriteArrayList<String>();
+		tmpInvitedPlayers.addAll(this.invitedPlayers);
+		tmpInvitedPlayers.addAll(mainConfig.invitedPlayers);
+		return tmpInvitedPlayers;
+	}
+	
+	public void addInvitedPlayer(String player) {
+		this.invitedPlayers.add(player);
+	}
+	
+	public void removeInvitedPlayers(String player) {
+		this.invitedPlayers.remove(player);
+	}
+	
+	public CopyOnWriteArrayList<Material> getSecureObjects() {
+		CopyOnWriteArrayList<Material> tmpSecureObjects = new CopyOnWriteArrayList<Material>();
+		tmpSecureObjects.addAll(this.secureObjects);
+		tmpSecureObjects.addAll(mainConfig.secureObjects);
+		return tmpSecureObjects;
+	}
+	
+	public boolean isLobbyDisabled() {
+		return isLobbyDisabled;
+	}
+	
+	public int getTimeToNextPlay() {
+		return timeToNextPlay;
+	}
+	
+	public int getTimeToNextLoot() {
+		return timeToNextLoot;
+	}
+	
+	public int getTimeUntilKickOfflinePlayer() {
+		return timeUntilKickOfflinePlayer;
+	}
+	
+	public boolean isSpoutCraftOnly() {
+		return spoutCraftOnly;
+	}
+	
+	public String getSpoutTexturepackURL() {
+		return spoutTexturepackURL;
+	}
+
+	public Set<DMobType> getMobTypes() {
+		return mobTypes;
 	}
 }
