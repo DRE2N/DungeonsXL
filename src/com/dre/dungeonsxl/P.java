@@ -36,6 +36,7 @@ import com.dre.dungeonsxl.game.MobSpawner;
 import com.dre.dungeonsxl.listener.BlockListener;
 import com.dre.dungeonsxl.listener.CommandListener;
 import com.dre.dungeonsxl.listener.EntityListener;
+import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 import com.dre.dungeonsxl.listener.WorldListener;
 
@@ -43,10 +44,11 @@ public class P extends JavaPlugin{
 	public static P p;
 
 	//Listener
-	private static Listener entitylistener;
-	private static Listener playerlistener;
-	private static Listener blocklistener;
-	private static Listener worldlistener;
+	private static Listener entityListener;
+	private static Listener playerListener;
+	private static Listener blockListener;
+	private static Listener worldListener;
+	private static Listener hangingListener;
 
 	//Main Config Reader
 	public MainConfig mainConfig;
@@ -86,15 +88,17 @@ public class P extends JavaPlugin{
 		this.setupPermissions();
 		
 		//Listener
-		entitylistener = new EntityListener();
-		playerlistener = new PlayerListener();
-		blocklistener = new BlockListener();
-		worldlistener = new WorldListener();
+		entityListener = new EntityListener();
+		playerListener = new PlayerListener();
+		blockListener = new BlockListener();
+		worldListener = new WorldListener();
+		hangingListener = new HangingListener();
 
-		Bukkit.getServer().getPluginManager().registerEvents(entitylistener,this);
-		Bukkit.getServer().getPluginManager().registerEvents(playerlistener,this);
-		Bukkit.getServer().getPluginManager().registerEvents(blocklistener,this);
-		Bukkit.getServer().getPluginManager().registerEvents(worldlistener,this);
+		Bukkit.getServer().getPluginManager().registerEvents(entityListener,this);
+		Bukkit.getServer().getPluginManager().registerEvents(playerListener,this);
+		Bukkit.getServer().getPluginManager().registerEvents(blockListener,this);
+		Bukkit.getServer().getPluginManager().registerEvents(worldListener,this);
+		Bukkit.getServer().getPluginManager().registerEvents(hangingListener,this);
 
 		//Load All
 		this.loadAll();
