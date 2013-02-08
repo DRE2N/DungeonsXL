@@ -179,7 +179,15 @@ public class EditWorld {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			
+			//Id File
+			File idFile = new File("DXL_Edit_"+eworld.id+"/.id_"+name);
+			try {
+				idFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			return eworld;
 		}
 

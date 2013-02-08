@@ -12,6 +12,7 @@ import net.milkbowl.vault.permission.Permission;
 import net.minecraft.server.v1_4_R1.EntityPlayer;
 import net.minecraft.server.v1_4_R1.MinecraftServer;
 import net.minecraft.server.v1_4_R1.PlayerInteractManager;
+
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -83,7 +84,7 @@ public class P extends JavaPlugin{
 
 		//Setup Permissions
 		this.setupPermissions();
-
+		
 		//Listener
 		entitylistener = new EntityListener();
 		playerlistener = new PlayerListener();
@@ -109,11 +110,9 @@ public class P extends JavaPlugin{
 			}
 		}
 		
-		
 		//Scheduler
 		this.initSchedulers();
 		
-
 		//MSG
 		this.log(this.getDescription().getName()+" enabled!");
 	}
@@ -252,8 +251,31 @@ public class P extends JavaPlugin{
 		
 		//Load saved players
 		DSavePlayer.load();
+		
+		//Check Worlds
+		this.checkWorlds();
 	}
-
+	
+	public void checkWorlds(){
+		File serverDir = new File(".");
+		
+		for(File file : serverDir.listFiles()){
+			if(file.getName().contains("DXL_Edit_") && file.isDirectory()){
+				for(File dungeonFile : file.listFiles()){
+					if(dungeonFile.getName().contains(".id_")){
+						String dungeonName = dungeonFile.getName().substring(4);
+						this.copyDirectory(file,new File(p.getDataFolder(),"/dungeons/"+dungeonName));
+						this.deletenotusingfiles(new File(p.getDataFolder(),"/dungeons/"+dungeonName));
+					}
+				}
+				
+				this.removeDirectory(file);
+			} else if (file.getName().contains("DXL_Game_") && file.isDirectory()){
+				this.removeDirectory(file);
+			}
+		}
+	}
+	
 	//File Control
 	public boolean removeDirectory(File directory) {
 		if (directory.isDirectory()) {
@@ -284,9 +306,7 @@ public class P extends JavaPlugin{
 	public String[] excludedFiles={"config.yml"};
 
 	public void copyDirectory(File sourceLocation, File targetLocation) {
-
         if (sourceLocation.isDirectory()) {
-
             if (!targetLocation.exists()) {
                 targetLocation.mkdir();
             }
@@ -301,15 +321,11 @@ public class P extends JavaPlugin{
             		}
             	}
             	if(isOk){
-            		copyDirectory(new File(sourceLocation, children[i]), new File(
-                            targetLocation, children[i]));
+            		copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
             	}
-
             }
         } else {
-
             try {
-
                 if (!targetLocation.getParentFile().exists()) {
 
                     createDirectory(targetLocation.getParentFile().getAbsolutePath());
@@ -328,11 +344,10 @@ public class P extends JavaPlugin{
                 while ((len = in.read(buf)) > 0) {
                     out.write(buf, 0, len);
                 }
+                
                 in.close();
                 out.close();
-
             } catch (Exception e) {
-
                 if (e.getMessage().contains("Zugriff")
                         || e.getMessage().contains("Access"))
                     P.p.log("Error: " + e.getMessage() + " // Access denied");
@@ -355,7 +370,7 @@ public class P extends JavaPlugin{
 	public void deletenotusingfiles(File directory){
 		File[] files=directory.listFiles();
 		for(File file:files){
-			if(file.getName().equalsIgnoreCase("uid.dat")){
+			if(file.getName().equalsIgnoreCase("uid.dat") || file.getName().contains(".id_") ){
 				file.delete();
 			}
 		}
