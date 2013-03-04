@@ -227,10 +227,13 @@ public class DMobType {
  				return mobType;
  			}
  		}
- 		for(DMobType mobType:P.p.mainConfig.defaultDungeon.getMobTypes()){
- 			if(mobType.name.equalsIgnoreCase(name)){
- 				return mobType;
- 			}
+ 		
+ 		if(P.p.mainConfig.defaultDungeon!=null){
+ 			for(DMobType mobType:P.p.mainConfig.defaultDungeon.getMobTypes()){
+ 	 			if(mobType.name.equalsIgnoreCase(name)){
+ 	 				return mobType;
+ 	 			}
+ 	 		}
  		}
  		
  		return null;
