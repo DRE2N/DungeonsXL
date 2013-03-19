@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,11 +22,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 
-import com.dre.dungeonsxl.DClass;
 import com.dre.dungeonsxl.DConfig;
-import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.P;
+import com.dre.dungeonsxl.signs.DSignType;
+import com.dre.dungeonsxl.signs.DSignTypeRoot;
 
 public class GameWorld {
 	private static P p=P.p;
@@ -79,160 +78,9 @@ public class GameWorld {
 			Sign sign = (Sign) block.getState();
 			String[] lines=sign.getLines();
 
-			if(!isPlaying){
-				if (lines[1].equalsIgnoreCase("lobby")) {
-					this.locLobby=block.getLocation();
-					block.setTypeId(0);
-				} else if (lines[1].equalsIgnoreCase("ready")) {
-					this.blocksReady.add(block);
-					sign.setLine(0, ChatColor.BLUE+"############");
-					sign.setLine(1, ChatColor.DARK_GREEN+"Ready");
-					sign.setLine(2, "");
-					sign.setLine(3, ChatColor.BLUE+"############");
-					sign.update();
-				} else if (lines[1].equalsIgnoreCase("leave")){
-					this.blocksLeave.add(block);
-					sign.setLine(0, ChatColor.BLUE+"############");
-					sign.setLine(1, ChatColor.DARK_GREEN+"Leave");
-					sign.setLine(2, "");
-					sign.setLine(3, ChatColor.BLUE+"############");
-					sign.update();
-				} else if (lines[1].equalsIgnoreCase("start")){
-					this.locStart=block.getLocation();
-					block.setTypeId(0);
-				} else if (lines[1].equalsIgnoreCase("end")){
-					this.blocksEnd.add(block);
-					sign.setLine(0, ChatColor.DARK_BLUE+"############");
-					sign.setLine(1, ChatColor.DARK_GREEN+"End");
-					sign.setLine(2, "");
-					sign.setLine(3, ChatColor.DARK_BLUE+"############");
-					sign.update();
-				} else if (lines[1].equalsIgnoreCase("classes")){
-					if(!config.isLobbyDisabled()){
-						int[] direction=DGSign.getDirection(block.getData());
-						int directionX=direction[0];
-						int directionZ=direction[1];
-
-						int xx=0,zz=0;
-						for(DClass dclass:this.config.getClasses()){
-
-							//Check existing signs
-							boolean isContinued=true;
-							for(Sign isusedsign:this.signClass){
-								if(dclass.name.equalsIgnoreCase(ChatColor.stripColor(isusedsign.getLine(1)))){
-									isContinued=false;
-								}
-							}
-
-							if(isContinued){
-								Block classBlock=block.getRelative(xx,0,zz);
-
-								if(classBlock.getData()==sign.getData().getData()&&classBlock.getTypeId()==68&&(classBlock.getState() instanceof Sign)){
-									Sign classSign = (Sign) classBlock.getState();
-
-									classSign.setLine(0, ChatColor.DARK_BLUE+"############");
-									classSign.setLine(1, ChatColor.DARK_GREEN+dclass.name);
-									classSign.setLine(2, "");
-									classSign.setLine(3, ChatColor.DARK_BLUE+"############");
-									classSign.update();
-									this.signClass.add(classSign);
-								}else{
-									break;
-								}
-								xx=xx+directionX;
-								zz=zz+directionZ;
-							}
-						}
-					}
-					else{
-						block.setTypeId(0);
-					}
-
-				} else if (lines[1].equalsIgnoreCase("chunkupdater")){
-					Chunk chunk = this.world.getChunkAt(block);
-					if(!lines[2].equals("")){
-						Integer radius = p.parseInt(lines[2]);
-						for(int x = -radius; x<radius; x++){
-							for(int z = -radius; z<radius; z++){
-								Chunk chunk1 = this.world.getChunkAt(chunk.getX()-x,chunk.getZ()-z);
-								chunk1.load();
-								this.loadedChunks.add(chunk1);
-							}
-						}
-					} else {
-						chunk.load();
-						this.loadedChunks.add(chunk);
-					}
-					block.setTypeId(0);
-				}
-
-			}else{
-				if(lines[1].equalsIgnoreCase("mob")){
-					if(lines[2]!=""&&lines[3]!=""){
-						String mob=lines[2];
-						if(mob!=null){
-							String[] atributes=lines[3].split(",");
-							if(atributes.length==3){
-								new MobSpawner(block, mob, p.parseInt(atributes[0]), p.parseInt(atributes[1]), p.parseInt(atributes[2]),0);
-							}
-							if(atributes.length==4){
-								new MobSpawner(block, mob, p.parseInt(atributes[0]), p.parseInt(atributes[1]), p.parseInt(atributes[2]),p.parseInt(atributes[3]));
-							}
-						}
-					}
-					block.setTypeId(0);
-				}
-				if(lines[1].equalsIgnoreCase("place")){
-					placeableBlocks.add(new GamePlaceableBlock(block, lines[2], lines[3]) );
-					block.setTypeId(0);
-				}
-				if(lines[1].equalsIgnoreCase("msg")){
-					if(lines[2]!=""&&lines[3]!=""){
-						String msg = config.getMsg(p.parseInt(lines[2]),true);
-						if(msg!=null){
-							messages.add(new GameMessage(block.getLocation(),msg,p.parseInt(lines[3]),false));
-							block.setTypeId(0);
-						}
-					}
-				}
-				if(lines[1].equalsIgnoreCase("soundmsg")){
-					if(lines[2]!=""&&lines[3]!=""){
-						String msg = config.getMsg(p.parseInt(lines[2]),true);
-						if(msg!=null){
-							messages.add(new GameMessage(block.getLocation(),msg,p.parseInt(lines[3]),true));
-							block.setTypeId(0);
-						}
-					}
-				}
-				if(lines[1].equalsIgnoreCase("checkpoint")){
-					int radius=0;
-
-
-					if(lines[2]!=null ){
-						if(lines[2].length()>0){
-							radius=p.parseInt(lines[2]);
-						}
-					}
-
-					new GameCheckpoint(this,block.getLocation(),radius);
-					block.setTypeId(0);
-				}
-				if(lines[1].equalsIgnoreCase("chest")){
-					if(sign.getTypeId()==63){
-						for(int x=-1;x<=1;x++){
-							if(sign.getBlock().getRelative(x, 0, 0).getTypeId()==54){
-								new GameChest(sign.getBlock().getRelative(x, 0, 0),this);
-							}
-						}
-						for(int z=-1;z<=1;z++){
-							if(sign.getBlock().getRelative(0, 0, z).getTypeId()==54){
-								if(sign.getBlock().getRelative(0, 0, z)!=null){
-									new GameChest(sign.getBlock().getRelative(0, 0, z),this);
-								}
-							}
-						}
-					}
-					block.setTypeId(0);
+			for(DSignType signType : DSignTypeRoot.get()){
+				if(lines[0].equalsIgnoreCase("["+signType.name+"]")){
+					signType.onDungeonInit(sign, this);
 				}
 			}
 		}

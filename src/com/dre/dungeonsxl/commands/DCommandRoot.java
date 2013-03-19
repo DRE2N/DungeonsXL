@@ -46,6 +46,4 @@ public class DCommandRoot {
 		this.commands.add(cmdHelp);
 		this.commands.add(cmdReload);
 	}
-	
-	
 }
