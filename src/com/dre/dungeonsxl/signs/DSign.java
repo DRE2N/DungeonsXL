@@ -5,7 +5,7 @@ import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public abstract class DSignType {
+public abstract class DSign {
 	public static P p = P.p;
 	
 	public String name;	

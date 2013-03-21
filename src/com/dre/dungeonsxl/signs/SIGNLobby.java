@@ -3,7 +3,7 @@ package com.dre.dungeonsxl.signs;
 import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNLobby extends DSignType{
+public class SIGNLobby extends DSign{
 
 	@Override
 	public boolean check(Sign sign) {

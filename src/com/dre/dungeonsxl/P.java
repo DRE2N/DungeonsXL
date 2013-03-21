@@ -39,7 +39,7 @@ import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 import com.dre.dungeonsxl.listener.WorldListener;
-import com.dre.dungeonsxl.signs.DSignTypeRoot;
+import com.dre.dungeonsxl.signs.DSignRoot;
 
 public class P extends JavaPlugin{
 	public static P p;
@@ -83,7 +83,7 @@ public class P extends JavaPlugin{
 		new DCommandRoot();
 		
 		//Init Signtypes
-		DSignTypeRoot.init();;
+		DSignRoot.init();;
 
 		//InitFolders
 		this.initFolders();

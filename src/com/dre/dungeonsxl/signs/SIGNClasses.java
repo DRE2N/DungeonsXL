@@ -8,7 +8,7 @@ import com.dre.dungeonsxl.DClass;
 import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNClasses extends DSignType{
+public class SIGNClasses extends DSign{
 
 	@Override
 	public boolean check(Sign sign) {

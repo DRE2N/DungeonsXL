@@ -4,7 +4,7 @@ import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.game.MobSpawner;
 
-public class SIGNMob extends DSignType{
+public class SIGNMob extends DSign{
 
 	@Override
 	public boolean check(Sign sign) {

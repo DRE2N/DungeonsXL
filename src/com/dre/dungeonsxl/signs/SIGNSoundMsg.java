@@ -5,7 +5,7 @@ import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameMessage;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNSoundMsg extends DSignType{
+public class SIGNSoundMsg extends DSign{
 
 	@Override
 	public boolean check(Sign sign) {

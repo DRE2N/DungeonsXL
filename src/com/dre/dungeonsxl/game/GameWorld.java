@@ -25,8 +25,8 @@ import org.bukkit.entity.Spider;
 import com.dre.dungeonsxl.DConfig;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.P;
-import com.dre.dungeonsxl.signs.DSignType;
-import com.dre.dungeonsxl.signs.DSignTypeRoot;
+import com.dre.dungeonsxl.signs.DSign;
+import com.dre.dungeonsxl.signs.DSignRoot;
 
 public class GameWorld {
 	private static P p=P.p;
@@ -78,7 +78,7 @@ public class GameWorld {
 			Sign sign = (Sign) block.getState();
 			String[] lines=sign.getLines();
 
-			for(DSignType signType : DSignTypeRoot.get()){
+			for(DSign signType : DSignRoot.get()){
 				if(lines[0].equalsIgnoreCase("["+signType.name+"]")){
 					signType.onDungeonInit(sign, this);
 				}

@@ -4,7 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNChunkUpdater extends DSignType{
+public class SIGNChunkUpdater extends DSign{
 
 	@Override
 	public boolean check(Sign sign) {

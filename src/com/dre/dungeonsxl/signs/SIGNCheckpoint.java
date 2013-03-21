@@ -5,7 +5,7 @@ import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNCheckpoint extends DSignType{
+public class SIGNCheckpoint extends DSign{
 
 	@Override
 	public boolean check(Sign sign) {

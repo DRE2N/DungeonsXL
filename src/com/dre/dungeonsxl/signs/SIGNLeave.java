@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNLeave extends DSignType{
+public class SIGNLeave extends DSign{
 
 	@Override
 	public boolean check(Sign sign) {

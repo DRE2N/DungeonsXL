@@ -2,8 +2,8 @@ package com.dre.dungeonsxl.signs;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class DSignTypeRoot {
-	private static CopyOnWriteArrayList<DSignType> signTypes = new CopyOnWriteArrayList<DSignType>();
+public class DSignRoot {
+	private static CopyOnWriteArrayList<DSign> signTypes = new CopyOnWriteArrayList<DSign>();
 	
 	//SignTypes
 	private static SIGNCheckpoint signCheckpoint = new SIGNCheckpoint();
@@ -37,7 +37,7 @@ public class DSignTypeRoot {
 		signTypes.add(signStart);
 	}
 	
-	public static CopyOnWriteArrayList<DSignType> get(){
+	public static CopyOnWriteArrayList<DSign> get(){
 		return signTypes;
 	}
 }
