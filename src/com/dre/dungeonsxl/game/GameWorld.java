@@ -46,7 +46,6 @@ public class GameWorld {
 	public int id;
 	public CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
 	public CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<Chunk>();
-	public CopyOnWriteArrayList<GameMessage> messages = new CopyOnWriteArrayList<GameMessage>();
 	
 	public CopyOnWriteArrayList<Sign> signClass=new CopyOnWriteArrayList<Sign>();
 	public CopyOnWriteArrayList<DMob> dmobs = new CopyOnWriteArrayList<DMob>();
@@ -224,9 +223,6 @@ public class GameWorld {
 
 	public static void update(){
 		for(GameWorld gworld:gworlds){
-			//Update Messages
-			GameMessage.update(gworld);
-			
 			//Update Spiders
 			for(LivingEntity mob:gworld.world.getLivingEntities()){
 				if(mob.getType()==EntityType.SPIDER){

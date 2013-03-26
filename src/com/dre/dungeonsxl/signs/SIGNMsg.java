@@ -1,8 +1,7 @@
 package com.dre.dungeonsxl.signs;
 
 import org.bukkit.block.Sign;
-
-import com.dre.dungeonsxl.game.GameMessage;
+import org.bukkit.entity.Player;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNMsg extends DSign{
@@ -10,6 +9,9 @@ public class SIGNMsg extends DSign{
 	public static String name = "Msg";
 	public static String buildPermissions = "dxl.sign.msg";
 	public static boolean onDungeonInit = false;
+	
+	//Variables
+	private String msg;
 	
 	public SIGNMsg(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -29,7 +31,7 @@ public class SIGNMsg extends DSign{
 		if(lines[1]!=""&&lines[2]!=""){
 			String msg = gworld.config.getMsg(p.parseInt(lines[1]),true);
 			if(msg!=null){
-				gworld.messages.add(new GameMessage(sign.getBlock().getLocation(), msg,p.parseInt(lines[2]), false));
+				this.msg = msg;
 				sign.setTypeId(0);
 			}
 		}
@@ -37,7 +39,8 @@ public class SIGNMsg extends DSign{
 
 	@Override
 	public void onTrigger() {
-		// TODO Auto-generated method stub
-		
+		for(Player player : gworld.world.getPlayers()){
+			p.msg(player, msg);
+		}
 	}
 }
