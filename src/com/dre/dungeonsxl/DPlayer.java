@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.getspout.spoutapi.Spout;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
-import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class DPlayer {
@@ -41,7 +40,7 @@ public class DPlayer {
 	public boolean isFinished=false;
 
 	public DClass dclass;
-	public GameCheckpoint checkpoint;
+	public Location checkpoint;
 	public Wolf wolf;
 	public int wolfRespawnTime=30;
 	public long offlineTime;
@@ -130,7 +129,6 @@ public class DPlayer {
 						try {
 							file.createNewFile();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -142,7 +140,6 @@ public class DPlayer {
 					try {
 						playerConfig.save(file);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -212,7 +209,7 @@ public class DPlayer {
 		if(this.checkpoint==null){
 			this.player.teleport(dgroup.getGworld().locStart);
 		}else{
-			this.player.teleport(this.checkpoint.location);
+			this.player.teleport(this.checkpoint);
 		}
 		if(this.wolf!=null){
 			this.wolf.teleport(this.player);
@@ -360,7 +357,7 @@ public class DPlayer {
 		}
 	}
 
-	public void setCheckpoint(GameCheckpoint checkpoint){
+	public void setCheckpoint(Location checkpoint){
 		this.checkpoint=checkpoint;
 	}
 
@@ -429,9 +426,9 @@ public class DPlayer {
 										dplayer.wolf.teleport(dgroup.getGworld().locStart);
 									}
 								}else{
-									dplayer.player.teleport(dplayer.checkpoint.location);
+									dplayer.player.teleport(dplayer.checkpoint);
 									if(dplayer.wolf!=null){
-										dplayer.wolf.teleport(dplayer.checkpoint.location);
+										dplayer.wolf.teleport(dplayer.checkpoint);
 									}
 								}
 

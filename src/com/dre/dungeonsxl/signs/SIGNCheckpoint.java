@@ -2,7 +2,8 @@ package com.dre.dungeonsxl.signs;
 
 import org.bukkit.block.Sign;
 
-import com.dre.dungeonsxl.game.GameCheckpoint;
+import com.dre.dungeonsxl.DPlayer;
+import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNCheckpoint extends DSign{
@@ -13,7 +14,6 @@ public class SIGNCheckpoint extends DSign{
 	
 	public SIGNCheckpoint(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -25,22 +25,14 @@ public class SIGNCheckpoint extends DSign{
 
 	@Override
 	public void onInit() {
-		String lines[] = sign.getLines();
-		int radius = 0;
-		
-		if(lines[1] != null ){
-			if(lines[1].length() > 0){
-				radius = p.parseInt(lines[1]);
-			}
-		}
-
-		new GameCheckpoint(gworld, sign.getLocation(), radius);
 		sign.setTypeId(0);
 	}
 
 	@Override
 	public void onTrigger() {
-		// TODO Auto-generated method stub
-		
+		for(DPlayer dplayer:DPlayer.get(this.gworld.world)){
+			dplayer.setCheckpoint(this.sign.getLocation());
+			P.p.msg(dplayer.player, P.p.language.get("Player_CheckpointReached"));
+		}
 	}
 }

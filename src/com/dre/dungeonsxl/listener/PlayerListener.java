@@ -236,13 +236,13 @@ public class PlayerListener implements Listener{
 							dplayer.wolf.teleport(dgroup.getGworld().locStart);
 						}
 					}else{
-						event.setRespawnLocation(dplayer.checkpoint.location);
+						event.setRespawnLocation(dplayer.checkpoint);
 
 						//Da einige Plugins einen anderen Respawn setzen wird ein Scheduler gestartet der den Player nach einer Sekunde teleportiert.
-						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dplayer.checkpoint.location), 10);
+						p.getServer().getScheduler().scheduleSyncDelayedTask(p, new RespawnRunnable(player,dplayer.checkpoint), 10);
 
 						if(dplayer.wolf!=null){
-							dplayer.wolf.teleport(dplayer.checkpoint.location);
+							dplayer.wolf.teleport(dplayer.checkpoint);
 						}
 					}
 				}

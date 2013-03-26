@@ -30,7 +30,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dre.dungeonsxl.commands.DCommandRoot;
-import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.listener.BlockListener;
 import com.dre.dungeonsxl.listener.CommandListener;
@@ -139,7 +138,6 @@ public class P extends JavaPlugin{
 		DPortal.portals.clear();
 		LeaveSign.lsigns.clear();
 		DCommandRoot.root.commands.clear();
-		GameCheckpoint.gcheckpoints.clear();
 
 		//Delete Worlds
 		GameWorld.deleteAll();
@@ -190,7 +188,6 @@ public class P extends JavaPlugin{
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 		    public void run() {
 		        GameWorld.update();
-		        GameCheckpoint.update();
 		        DPlayer.update(true);
 		    }
 		}, 0L, 20L);
