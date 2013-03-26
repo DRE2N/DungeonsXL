@@ -6,7 +6,16 @@ import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNCheckpoint extends DSign{
-
+	
+	public static String name = "Checkpoint";
+	public static String buildPermissions = "dxl.sign.checkpoint";
+	public static boolean onDungeonInit = false;
+	
+	public SIGNCheckpoint(Sign sign, GameWorld gworld) {
+		super(sign, gworld);
+		// TODO Auto-generated constructor stub
+	}
+	
 	@Override
 	public boolean check(Sign sign) {
 		// TODO Auto-generated method stub
@@ -15,13 +24,13 @@ public class SIGNCheckpoint extends DSign{
 	}
 
 	@Override
-	public void onDungeonInit(Sign sign, GameWorld gworld) {
+	public void onInit() {
 		String lines[] = sign.getLines();
 		int radius = 0;
 		
-		if(lines[2] != null ){
-			if(lines[2].length() > 0){
-				radius = p.parseInt(lines[2]);
+		if(lines[1] != null ){
+			if(lines[1].length() > 0){
+				radius = p.parseInt(lines[1]);
 			}
 		}
 
@@ -30,7 +39,7 @@ public class SIGNCheckpoint extends DSign{
 	}
 
 	@Override
-	public void onTrigger(Sign sign, GameWorld gworld) {
+	public void onTrigger() {
 		// TODO Auto-generated method stub
 		
 	}

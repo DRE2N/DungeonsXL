@@ -92,8 +92,14 @@ public class DMobType {
 					}
 				}
 				
+				/* Set Health */
+				if(maxHealth > 0){
+					entity.setMaxHealth(maxHealth);
+					entity.setHealth(maxHealth);
+				}
+				
 				/* Spawn Mob */
-				new DMob(entity, maxHealth, gWorld, this);
+				new DMob(entity, gWorld, this);
 
 			}
 		}

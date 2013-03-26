@@ -9,7 +9,16 @@ import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNClasses extends DSign{
-
+	
+	public static String name = "Classes";
+	public static String buildPermissions = "dxl.sign.classes";
+	public static boolean onDungeonInit = true;
+	
+	public SIGNClasses(Sign sign, GameWorld gworld) {
+		super(sign, gworld);
+		// TODO Auto-generated constructor stub
+	}
+	
 	@Override
 	public boolean check(Sign sign) {
 		// TODO Auto-generated method stub
@@ -18,7 +27,7 @@ public class SIGNClasses extends DSign{
 	}
 
 	@Override
-	public void onDungeonInit(Sign sign, GameWorld gworld) {
+	public void onInit() {
 		if(!gworld.config.isLobbyDisabled()){
 			int[] direction=DGSign.getDirection(sign.getBlock().getData());
 			int directionX=direction[0];
@@ -57,11 +66,5 @@ public class SIGNClasses extends DSign{
 		} else {
 			sign.setTypeId(0);
 		}
-	}
-
-	@Override
-	public void onTrigger(Sign sign, GameWorld gworld) {
-		// TODO Auto-generated method stub
-		
 	}
 }

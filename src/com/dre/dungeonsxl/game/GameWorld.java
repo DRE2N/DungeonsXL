@@ -26,7 +26,6 @@ import com.dre.dungeonsxl.DConfig;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.signs.DSign;
-import com.dre.dungeonsxl.signs.DSignRoot;
 
 public class GameWorld {
 	private static P p=P.p;
@@ -76,13 +75,7 @@ public class GameWorld {
 	public void checkSign(Block block){
 		if((block.getState() instanceof Sign)){
 			Sign sign = (Sign) block.getState();
-			String[] lines=sign.getLines();
-
-			for(DSign signType : DSignRoot.get()){
-				if(lines[0].equalsIgnoreCase("["+signType.name+"]")){
-					signType.onDungeonInit(sign, this);
-				}
-			}
+			DSign.create(sign, this);
 		}
 	}
 

@@ -5,7 +5,16 @@ import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNChunkUpdater extends DSign{
-
+	
+	public static String name = "ChunkUpdater";
+	public static String buildPermissions = "dxl.sign.chunkupdater";
+	public static boolean onDungeonInit = true;
+	
+	public SIGNChunkUpdater(Sign sign, GameWorld gworld) {
+		super(sign, gworld);
+		// TODO Auto-generated constructor stub
+	}
+	
 	@Override
 	public boolean check(Sign sign) {
 		// TODO Auto-generated method stub
@@ -14,11 +23,11 @@ public class SIGNChunkUpdater extends DSign{
 	}
 
 	@Override
-	public void onDungeonInit(Sign sign, GameWorld gworld) {
+	public void onInit() {
 		String lines[] = sign.getLines();
 		Chunk chunk = gworld.world.getChunkAt(sign.getBlock());
-		if(!lines[2].equals("")){
-			Integer radius = p.parseInt(lines[2]);
+		if(!lines[1].equals("")){
+			Integer radius = p.parseInt(lines[1]);
 			for(int x = -radius; x<radius; x++){
 				for(int z = -radius; z<radius; z++){
 					Chunk chunk1 = gworld.world.getChunkAt(chunk.getX()-x,chunk.getZ()-z);
@@ -31,11 +40,5 @@ public class SIGNChunkUpdater extends DSign{
 			gworld.loadedChunks.add(chunk);
 		}
 		sign.setTypeId(0);
-	}
-
-	@Override
-	public void onTrigger(Sign sign, GameWorld gworld) {
-		// TODO Auto-generated method stub
-		
 	}
 }

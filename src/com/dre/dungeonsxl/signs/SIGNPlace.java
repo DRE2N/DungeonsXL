@@ -6,7 +6,15 @@ import com.dre.dungeonsxl.game.GamePlaceableBlock;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNPlace extends DSign{
-
+	
+	public static String name = "Place";
+	public static String buildPermissions = "dxl.sign.place";
+	public static boolean onDungeonInit = false;
+	
+	public SIGNPlace(Sign sign, GameWorld gworld) {
+		super(sign, gworld);
+	}
+	
 	@Override
 	public boolean check(Sign sign) {
 		// TODO Auto-generated method stub
@@ -15,15 +23,9 @@ public class SIGNPlace extends DSign{
 	}
 
 	@Override
-	public void onDungeonInit(Sign sign, GameWorld gworld) {
+	public void onInit() {
 		String lines[] = sign.getLines();
-		gworld.placeableBlocks.add(new GamePlaceableBlock(sign.getBlock(), lines[2], lines[3]) );
+		gworld.placeableBlocks.add(new GamePlaceableBlock(sign.getBlock(), lines[1], lines[2]) );
 		sign.setTypeId(0);
-	}
-
-	@Override
-	public void onTrigger(Sign sign, GameWorld gworld) {
-		// TODO Auto-generated method stub
-		
 	}
 }

@@ -1,11 +1,35 @@
 package com.dre.dungeonsxl.signs;
 
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.inventory.ItemStack;
+
+import com.dre.dungeonsxl.DMobType;
+import com.dre.dungeonsxl.game.DMob;
 import com.dre.dungeonsxl.game.GameWorld;
-import com.dre.dungeonsxl.game.MobSpawner;
 
 public class SIGNMob extends DSign{
-
+	
+	public static String name = "Mob";
+	public static String buildPermissions = "dxl.sign.mob";
+	public static boolean onDungeonInit = false;
+	
+	
+	//Variables
+	private String mob;
+	private int maxinterval = 1;
+	private int interval = 0;
+	private int amount = 1;
+	
+	public SIGNMob(Sign sign, GameWorld gworld) {
+		super(sign, gworld);
+	}
+	
 	@Override
 	public boolean check(Sign sign) {
 		// TODO Auto-generated method stub
@@ -14,17 +38,16 @@ public class SIGNMob extends DSign{
 	}
 
 	@Override
-	public void onDungeonInit(Sign sign, GameWorld gworld) {
+	public void onInit() {
 		String lines[] = sign.getLines();
-		if(lines[2]!=""&&lines[3]!=""){
-			String mob=lines[2];
-			if(mob!=null){
-				String[] atributes=lines[3].split(",");
-				if(atributes.length==3){
-					new MobSpawner(sign.getBlock(), mob, p.parseInt(atributes[0]), p.parseInt(atributes[1]), p.parseInt(atributes[2]),0);
-				}
-				if(atributes.length==4){
-					new MobSpawner(sign.getBlock(), mob, p.parseInt(atributes[0]), p.parseInt(atributes[1]), p.parseInt(atributes[2]),p.parseInt(atributes[3]));
+		if(lines[1] != "" && lines[2] != ""){
+			String mob=lines[1];
+			if(mob != null){
+				String[] atributes = lines[2].split(",");
+				if(atributes.length == 2){
+					this.mob = mob;
+					this.maxinterval = p.parseInt(atributes[0]);
+					this.amount = p.parseInt(atributes[1]);
 				}
 			}
 		}
@@ -32,8 +55,62 @@ public class SIGNMob extends DSign{
 	}
 
 	@Override
-	public void onTrigger(Sign sign, GameWorld gworld) {
-		// TODO Auto-generated method stub
+	public void onTrigger() {
+		MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
 		
+		int id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
+		scheduler.id = id;
+	}
+	
+	public class MobSpawnScheduler implements Runnable{
+		private SIGNMob sign;
+		public int id;
+		
+		public MobSpawnScheduler(SIGNMob sign){
+			this.sign = sign;
+		}
+		
+		@Override
+		public void run() {
+			if(sign.interval<=0){
+				World world = sign.sign.getWorld();
+				
+				//Check normal mobs
+				if(EntityType.fromName(sign.mob)!=null){
+					if(EntityType.fromName(sign.mob).isAlive()){
+						LivingEntity entity=(LivingEntity)world.spawnEntity(sign.sign.getLocation(), EntityType.fromName(sign.mob));
+						
+						//Add Bow to normal Skeletons
+						if(entity.getType() == EntityType.SKELETON){
+							Skeleton skeleton = (Skeleton) entity;
+							if(skeleton.getSkeletonType()==SkeletonType.NORMAL){
+								skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW));
+							}
+						}
+						
+						new DMob(entity, sign.gworld, null);
+					}
+				}
+				
+				//Check custom mobs
+				DMobType mobType = DMobType.get(sign.mob, gworld.config.getMobTypes());
+				
+				if(mobType!=null){
+					mobType.spawn(GameWorld.get(world), sign.sign.getLocation());
+				}
+				
+				//Set the amount
+				if(amount!=-1){
+					if(amount>1){
+						amount--;
+					}else{
+						p.getServer().getScheduler().cancelTask(this.id);
+					}
+				}
+				
+				sign.interval = sign.maxinterval;
+			}
+			sign.interval--;
+		}
 	}
 }

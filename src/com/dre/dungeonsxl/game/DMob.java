@@ -14,7 +14,7 @@ public class DMob {
 	public LivingEntity entity;
 	public DMobType type;
 	
-	public DMob(LivingEntity entity, int live, GameWorld gworld, DMobType type){
+	public DMob(LivingEntity entity, GameWorld gworld, DMobType type){
 		gworld.dmobs.add(this);
 		
 		this.entity = entity;
@@ -26,12 +26,6 @@ public class DMob {
 		this.entity.getEquipment().setLeggingsDropChance(0);
 		this.entity.getEquipment().setBootsDropChance(0);
 		this.entity.getEquipment().setItemInHandDropChance(0);
-		
-		/* Max Health */
-		if(live>0){
-			this.entity.setMaxHealth(live);
-			this.entity.setHealth(live);
-		}
 	}
 	
 	//Statics

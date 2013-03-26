@@ -6,7 +6,15 @@ import com.dre.dungeonsxl.game.GameChest;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNChest extends DSign{
-
+	
+	public static String name = "Chest";
+	public static String buildPermissions = "dxl.sign.chest";
+	public static boolean onDungeonInit = false;
+	
+	public SIGNChest(Sign sign, GameWorld gworld) {
+		super(sign, gworld);
+	}
+	
 	@Override
 	public boolean check(Sign sign) {
 		// TODO Auto-generated method stub
@@ -15,7 +23,7 @@ public class SIGNChest extends DSign{
 	}
 
 	@Override
-	public void onDungeonInit(Sign sign, GameWorld gworld) {
+	public void onInit() {
 		if(sign.getTypeId()==63){
 			for(int x=-1;x<=1;x++){
 				if(sign.getBlock().getRelative(x, 0, 0).getTypeId()==54){
@@ -33,11 +41,5 @@ public class SIGNChest extends DSign{
 		}
 		
 		sign.setTypeId(0);
-	}
-
-	@Override
-	public void onTrigger(Sign sign, GameWorld gworld) {
-		// TODO Auto-generated method stub
-		
 	}
 }

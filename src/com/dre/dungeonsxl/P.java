@@ -32,14 +32,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.dre.dungeonsxl.commands.DCommandRoot;
 import com.dre.dungeonsxl.game.GameCheckpoint;
 import com.dre.dungeonsxl.game.GameWorld;
-import com.dre.dungeonsxl.game.MobSpawner;
 import com.dre.dungeonsxl.listener.BlockListener;
 import com.dre.dungeonsxl.listener.CommandListener;
 import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 import com.dre.dungeonsxl.listener.WorldListener;
-import com.dre.dungeonsxl.signs.DSignRoot;
 
 public class P extends JavaPlugin{
 	public static P p;
@@ -81,9 +79,6 @@ public class P extends JavaPlugin{
 
 		//Init Commands
 		new DCommandRoot();
-		
-		//Init Signtypes
-		DSignRoot.init();;
 
 		//InitFolders
 		this.initFolders();
@@ -145,7 +140,6 @@ public class P extends JavaPlugin{
 		LeaveSign.lsigns.clear();
 		DCommandRoot.root.commands.clear();
 		GameCheckpoint.gcheckpoints.clear();
-		MobSpawner.mobspawners.clear();
 
 		//Delete Worlds
 		GameWorld.deleteAll();
@@ -195,7 +189,6 @@ public class P extends JavaPlugin{
 
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 		    public void run() {
-		        MobSpawner.updateAll();
 		        GameWorld.update();
 		        GameCheckpoint.update();
 		        DPlayer.update(true);
