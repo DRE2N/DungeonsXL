@@ -16,7 +16,6 @@ public class SIGNClasses extends DSign{
 	
 	public SIGNClasses(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

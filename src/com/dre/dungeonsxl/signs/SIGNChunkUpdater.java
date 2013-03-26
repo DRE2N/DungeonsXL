@@ -12,7 +12,6 @@ public class SIGNChunkUpdater extends DSign{
 	
 	public SIGNChunkUpdater(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
