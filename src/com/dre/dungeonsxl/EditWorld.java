@@ -75,10 +75,8 @@ public class EditWorld {
 			out.close();
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -88,7 +86,7 @@ public class EditWorld {
 			Sign sign = (Sign) block.getState();
 			String[] lines=sign.getLines();
 
-			if(lines[1].equalsIgnoreCase("lobby")){
+			if(lines[0].equalsIgnoreCase("[lobby]")){
 				this.lobby=block.getLocation();
 			}
 		}
@@ -173,10 +171,8 @@ public class EditWorld {
 				os.close();
 
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

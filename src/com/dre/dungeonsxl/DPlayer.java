@@ -20,6 +20,7 @@ import org.getspout.spoutapi.Spout;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import com.dre.dungeonsxl.game.GameWorld;
+import com.dre.dungeonsxl.signs.DSign;
 
 public class DPlayer {
 	public static P p=P.p;
@@ -403,65 +404,73 @@ public class DPlayer {
 	public static void update(boolean updateSecond){
 		for(DPlayer dplayer:players){
 			if(!updateSecond){
-				//Check in World
 				if(!dplayer.player.getWorld().equals(dplayer.world)){
 					if(dplayer.isEditing){
 						EditWorld eworld=EditWorld.get(dplayer.world);
-						if(eworld!=null){
-							if(eworld.lobby==null){
+						if(eworld != null){
+							if(eworld.lobby == null){
 								dplayer.player.teleport(eworld.world.getSpawnLocation());
 							}else{
 								dplayer.player.teleport(eworld.lobby);
 							}
 						}
-					}else{
-						GameWorld gworld=GameWorld.get(dplayer.world);
-						if(gworld!=null){
-							if(gworld!=null){
-
-								DGroup dgroup=DGroup.get(dplayer.player);
-								if(dplayer.checkpoint==null){
-									dplayer.player.teleport(dgroup.getGworld().locStart);
-									if(dplayer.wolf!=null){
-										dplayer.wolf.teleport(dgroup.getGworld().locStart);
-									}
-								}else{
-									dplayer.player.teleport(dplayer.checkpoint);
-									if(dplayer.wolf!=null){
-										dplayer.wolf.teleport(dplayer.checkpoint);
-									}
+					} else {
+						GameWorld gworld = GameWorld.get(dplayer.world);
+						if(gworld != null){
+							DGroup dgroup=DGroup.get(dplayer.player);
+							if(dplayer.checkpoint == null){
+								dplayer.player.teleport(dgroup.getGworld().locStart);
+								if(dplayer.wolf != null){
+									dplayer.wolf.teleport(dgroup.getGworld().locStart);
 								}
-
-
-								//Respawn Items
-								for(ItemStack istack:dplayer.respawnInventory){
-									if(istack!=null){
-										dplayer.player.getInventory().addItem(istack);
-									}
+							}else{
+								dplayer.player.teleport(dplayer.checkpoint);
+								if(dplayer.wolf != null){
+									dplayer.wolf.teleport(dplayer.checkpoint);
 								}
-								dplayer.respawnInventory.clear();
+							}
+							
+							//Respawn Items
+							for(ItemStack istack : dplayer.respawnInventory){
+								if(istack != null){
+									dplayer.player.getInventory().addItem(istack);
+								}
+							}
+							dplayer.respawnInventory.clear();
+						}
+					}
+				}
+			} else {
+				GameWorld gworld = GameWorld.get(dplayer.world);
+				
+				if(gworld != null){
+					//Update Wolf
+					if(dplayer.wolf!=null){
+						if(dplayer.wolf.isDead()){
+							if(dplayer.wolfRespawnTime<=0){
+								dplayer.wolf=(Wolf) dplayer.world.spawnEntity(dplayer.player.getLocation(), EntityType.WOLF);
+								dplayer.wolf.setTamed(true);
+								dplayer.wolf.setOwner(dplayer.player);
+								dplayer.wolfRespawnTime=30;
+							}
+							dplayer.wolfRespawnTime--;
+						}
+					}
+					
+					//Kick offline players
+					if(dplayer.offlineTime > 0){
+						if(dplayer.offlineTime < System.currentTimeMillis()){
+							dplayer.leave();
+						}
+					}
+					
+					//Check Distance Trigger Signs
+					for(DSign sign : gworld.dSigns){
+						if(sign.isDistanceTrigger()){
+							if(dplayer.player.getLocation().distance(sign.getSign().getLocation()) < sign.getDtDistance()){
+								sign.onTrigger();
 							}
 						}
-					}
-				}
-			}else{
-				//Update Wolf
-				if(dplayer.wolf!=null){
-					if(dplayer.wolf.isDead()){
-						if(dplayer.wolfRespawnTime<=0){
-							dplayer.wolf=(Wolf) dplayer.world.spawnEntity(dplayer.player.getLocation(), EntityType.WOLF);
-							dplayer.wolf.setTamed(true);
-							dplayer.wolf.setOwner(dplayer.player);
-							dplayer.wolfRespawnTime=30;
-						}
-						dplayer.wolfRespawnTime--;
-					}
-				}
-				
-				//Kick offline players
-				if(dplayer.offlineTime > 0){
-					if(dplayer.offlineTime < System.currentTimeMillis()){
-						dplayer.leave();
 					}
 				}
 			}

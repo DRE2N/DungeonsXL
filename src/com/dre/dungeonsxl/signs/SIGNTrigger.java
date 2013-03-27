@@ -2,49 +2,47 @@ package com.dre.dungeonsxl.signs;
 
 import org.bukkit.block.Sign;
 
-import com.dre.dungeonsxl.DPlayer;
-import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNCheckpoint extends DSign{
-	
-	public static String name = "Checkpoint";
-	private String buildPermissions = "dxl.sign.checkpoint";
-	private boolean onDungeonInit = false;
+public class SIGNTrigger extends DSign{
+	public static String name = "Trigger";
+	public String buildPermissions = "dxl.sign.trigger";
+	public boolean onDungeonInit = false;
 	
 	//Variables
+	private int triggerId;
 	private boolean initialized;
 	
-	public SIGNCheckpoint(Sign sign, GameWorld gworld) {
+	public SIGNTrigger(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
-	}
-	
-	@Override
-	public boolean check() {
-		// TODO Auto-generated method stub
-		
-		return true;
 	}
 
 	@Override
+	public boolean check() {
+		return true;
+	}
+	
+	@Override
 	public void onInit() {
+		triggerId = p.parseInt(sign.getLine(1));
 		sign.getBlock().setTypeId(0);
 		
 		initialized = true;
 	}
-
+	
 	@Override
 	public void onTrigger() {
 		if(initialized){
-			for(DPlayer dplayer:DPlayer.get(this.gworld.world)){
-				dplayer.setCheckpoint(this.sign.getLocation());
-				P.p.msg(dplayer.player, P.p.language.get("Player_CheckpointReached"));
+			for(DSign dsign : this.gworld.dSigns){
+				if(dsign.isSignTrigger()){
+					if(triggerId == dsign.getStId()){
+						dsign.onTrigger();
+					}
+				}
 			}
-			
-			this.gworld.dSigns.remove(this);
 		}
 	}
-
+	
 	@Override
 	public String getPermissions() {
 		return buildPermissions;

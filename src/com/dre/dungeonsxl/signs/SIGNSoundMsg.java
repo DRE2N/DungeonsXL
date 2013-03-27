@@ -12,10 +12,11 @@ import com.dre.dungeonsxl.game.GameWorld;
 public class SIGNSoundMsg extends DSign{
 	
 	public static String name = "SoundMsg";
-	public static String buildPermissions = "dxl.sign.soundmsg";
-	public static boolean onDungeonInit = false;
+	public String buildPermissions = "dxl.sign.soundmsg";
+	public boolean onDungeonInit = false;
 	
 	//Variables
+	private boolean initialized;
 	private String msg;
 	
 	public SIGNSoundMsg(Sign sign, GameWorld gworld) {
@@ -23,10 +24,10 @@ public class SIGNSoundMsg extends DSign{
 	}
 	
 	@Override
-	public boolean check(Sign sign) {
+	public boolean check() {
 		// TODO Auto-generated method stub
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -37,20 +38,36 @@ public class SIGNSoundMsg extends DSign{
 			String msg = gworld.config.getMsg(p.parseInt(lines[1]),true);
 			if(msg!=null){
 				this.msg = msg;
-				sign.setTypeId(0);
+				sign.getBlock().setTypeId(0);
 			}
 		}
+		
+		initialized = true;
 	}
 
 	@Override
 	public void onTrigger() {
-		if(P.p.isSpoutEnabled){
-			for(Player player : gworld.world.getPlayers()){
-				SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
-				if(sPlayer.isSpoutCraftEnabled()){
-					SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
+		if(initialized){
+			if(P.p.isSpoutEnabled){
+				for(Player player : gworld.world.getPlayers()){
+					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
+					if(sPlayer.isSpoutCraftEnabled()){
+						SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
+					}
 				}
 			}
+			
+			this.gworld.dSigns.remove(this);
 		}
+	}
+	
+	@Override
+	public String getPermissions() {
+		return buildPermissions;
+	}
+
+	@Override
+	public boolean isOnDungeonInit() {
+		return onDungeonInit;
 	}
 }

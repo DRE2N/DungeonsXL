@@ -61,6 +61,7 @@ public class LanguageReader {
 		defaults.put("Player_PortalDeleted","&6Portal gelöscht!");
 		defaults.put("Player_PortalProgress","&6Erster Block gewählt, nun der zweite!");
 		defaults.put("Player_PortalCreated","&6Portal erstellt!");
+		defaults.put("Player_SignCreated","&6Schild erstellt!");
 		
 		/* Cmds */
 		defaults.put("Cmd_Chat_DungeonChat","&6Du bist nun im Dungeon-Chat");
@@ -101,6 +102,7 @@ public class LanguageReader {
 		defaults.put("Error_SpoutCraftOnly","&4Du brauchst SpoutCraft um diesen Dungeon spielen zu können!");
 		defaults.put("Error_NoPortal","&4Du musst ein Portal anschauen!");
 		defaults.put("Error_NoPlayerCommand","&6/dxl &v1&4 kann man nicht als Spieler ausführen!");
+		defaults.put("Error_SignWrongFormat","&4 Das Schild ist nicht im richtigen Format!");
 		
 		/* Help */
 		defaults.put("Help_Cmd_Chat","/dxl chat - Ändert den Chat-Modus");

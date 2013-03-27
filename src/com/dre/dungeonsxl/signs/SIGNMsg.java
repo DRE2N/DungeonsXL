@@ -7,21 +7,22 @@ import com.dre.dungeonsxl.game.GameWorld;
 public class SIGNMsg extends DSign{
 	
 	public static String name = "Msg";
-	public static String buildPermissions = "dxl.sign.msg";
-	public static boolean onDungeonInit = false;
+	public String buildPermissions = "dxl.sign.msg";
+	public boolean onDungeonInit = false;
 	
 	//Variables
 	private String msg;
+	private boolean initialized;
 	
 	public SIGNMsg(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
 	}
 	
 	@Override
-	public boolean check(Sign sign) {
+	public boolean check() {
 		// TODO Auto-generated method stub
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -32,15 +33,31 @@ public class SIGNMsg extends DSign{
 			String msg = gworld.config.getMsg(p.parseInt(lines[1]),true);
 			if(msg!=null){
 				this.msg = msg;
-				sign.setTypeId(0);
+				sign.getBlock().setTypeId(0);
 			}
 		}
+		
+		initialized = true;
 	}
 
 	@Override
 	public void onTrigger() {
-		for(Player player : gworld.world.getPlayers()){
-			p.msg(player, msg);
+		if(initialized){
+			for(Player player : gworld.world.getPlayers()){
+				p.msg(player, msg);
+			}
+			
+			this.gworld.dSigns.remove(this);
 		}
+	}
+	
+	@Override
+	public String getPermissions() {
+		return buildPermissions;
+	}
+
+	@Override
+	public boolean isOnDungeonInit() {
+		return onDungeonInit;
 	}
 }

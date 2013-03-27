@@ -7,18 +7,18 @@ import com.dre.dungeonsxl.game.GameWorld;
 public class SIGNLeave extends DSign{
 	
 	public static String name = "Leave";
-	public static String buildPermissions = "dxl.sign.leave";
-	public static boolean onDungeonInit = true;
+	public String buildPermissions = "dxl.sign.leave";
+	public boolean onDungeonInit = true;
 	
 	public SIGNLeave(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
 	}
 	
 	@Override
-	public boolean check(Sign sign) {
+	public boolean check() {
 		// TODO Auto-generated method stub
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -29,5 +29,15 @@ public class SIGNLeave extends DSign{
 		sign.setLine(2, "");
 		sign.setLine(3, ChatColor.BLUE+"############");
 		sign.update();
+	}
+	
+	@Override
+	public String getPermissions() {
+		return buildPermissions;
+	}
+
+	@Override
+	public boolean isOnDungeonInit() {
+		return onDungeonInit;
 	}
 }

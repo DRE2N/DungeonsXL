@@ -16,8 +16,8 @@ import com.dre.dungeonsxl.game.GameWorld;
 public class SIGNMob extends DSign{
 	
 	public static String name = "Mob";
-	public static String buildPermissions = "dxl.sign.mob";
-	public static boolean onDungeonInit = false;
+	public String buildPermissions = "dxl.sign.mob";
+	public boolean onDungeonInit = false;
 	
 	
 	//Variables
@@ -25,16 +25,17 @@ public class SIGNMob extends DSign{
 	private int maxinterval = 1;
 	private int interval = 0;
 	private int amount = 1;
+	private boolean initialized;
 	
 	public SIGNMob(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
 	}
 	
 	@Override
-	public boolean check(Sign sign) {
+	public boolean check() {
 		// TODO Auto-generated method stub
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -51,15 +52,21 @@ public class SIGNMob extends DSign{
 				}
 			}
 		}
-		sign.setTypeId(0);
+		sign.getBlock().setTypeId(0);
+		
+		initialized = true;
 	}
 
 	@Override
 	public void onTrigger() {
-		MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
-		
-		int id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
-		scheduler.id = id;
+		if(initialized){
+			MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
+			
+			int id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
+			scheduler.id = id;
+			
+			initialized = false;
+		}
 	}
 	
 	public class MobSpawnScheduler implements Runnable{
@@ -105,6 +112,7 @@ public class SIGNMob extends DSign{
 						amount--;
 					}else{
 						p.getServer().getScheduler().cancelTask(this.id);
+						sign.gworld.dSigns.remove(this);
 					}
 				}
 				
@@ -112,5 +120,15 @@ public class SIGNMob extends DSign{
 			}
 			sign.interval--;
 		}
+	}
+	
+	@Override
+	public String getPermissions() {
+		return buildPermissions;
+	}
+
+	@Override
+	public boolean isOnDungeonInit() {
+		return onDungeonInit;
 	}
 }

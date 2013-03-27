@@ -9,8 +9,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.DPortal;
@@ -19,6 +21,7 @@ import com.dre.dungeonsxl.EditWorld;
 import com.dre.dungeonsxl.LeaveSign;
 import com.dre.dungeonsxl.game.GamePlaceableBlock;
 import com.dre.dungeonsxl.game.GameWorld;
+import com.dre.dungeonsxl.signs.DSign;
 
 public class BlockListener implements Listener {
 	
@@ -74,8 +77,8 @@ public class BlockListener implements Listener {
 		}
 		
 		//Editworld Signs
-		EditWorld eworld=EditWorld.get(block.getWorld());
-		if(eworld!=null){
+		EditWorld eworld = EditWorld.get(block.getWorld());
+		if(eworld != null){
 			eworld.sign.remove(event.getBlock());
 		}
 		
@@ -104,33 +107,30 @@ public class BlockListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onSignChange(SignChangeEvent event){
-		Player player=event.getPlayer();
-		Block block=event.getBlock();
-		String[] lines=event.getLines();
-		EditWorld eworld=EditWorld.get(player.getWorld());
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
+		String[] lines = event.getLines();
+		EditWorld eworld = EditWorld.get(player.getWorld());
 		
 		//Group Signs
-		if(eworld==null){
-			if(player.isOp() || P.p.permission.has(player, "dxl.sign")){
-				
-		
-				if(lines[0].equalsIgnoreCase("[DXL]")){
-					if(lines[1].equalsIgnoreCase("Group")){
-						String dungeonName=lines[2];
+		if (eworld == null) {
+			if (player.isOp() || P.p.permission.has(player, "dxl.sign")) {
+				if (lines[0].equalsIgnoreCase("[DXL]")) {
+					if (lines[1].equalsIgnoreCase("Group")) {
+						String dungeonName = lines[2];
 						
 						String[] data = lines[3].split("\\,");
-						if(data.length==2){
-							int maxGroups=P.p.parseInt(data[0]);
-							int maxPlayersPerGroup=P.p.parseInt(data[1]);
-							if(maxGroups>0 && maxPlayersPerGroup>0){
-								if(DGSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup)!=null){
+						if (data.length == 2) {
+							int maxGroups = P.p.parseInt(data[0]);
+							int maxPlayersPerGroup = P.p.parseInt(data[1]);
+							if (maxGroups > 0 && maxPlayersPerGroup > 0) {
+								if (DGSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup) != null) {
 									event.setCancelled(true);
 								}
 							}
 						}
-					}
-					if(lines[1].equalsIgnoreCase("Leave")){
-						if(block.getState() instanceof Sign){
+					} else if(lines[1].equalsIgnoreCase("Leave")) {
+						if (block.getState() instanceof Sign) {
 							Sign sign = (Sign) block.getState();
 							new LeaveSign(sign);
 						}
@@ -138,20 +138,31 @@ public class BlockListener implements Listener {
 					}
 				}
 			}
-		}
-		
-		//Editworld Signs
-		
-		else{
-			if(lines[0].equalsIgnoreCase("[DXL]")){
-				eworld.checkSign(event.getBlock());
-				eworld.sign.add(event.getBlock());
-			}else{
-				eworld.sign.remove(event.getBlock());
+		} else { //Editworld Signs
+			Sign sign = (Sign) block.getState();
+			if(sign != null){
+				sign.setLine(0, lines[0]);
+				sign.setLine(1, lines[1]);
+				sign.setLine(2, lines[2]);
+				sign.setLine(3, lines[3]);
+				
+				DSign dsign = DSign.create(sign, null);
+				
+				if (dsign != null) {
+					if (player.isOp() || P.p.permission.has(player, dsign.getPermissions())) {
+						if (dsign.check()) {
+							eworld.checkSign(block);
+							eworld.sign.add(block);
+							P.p.msg(player, P.p.language.get("Player_SignCreated"));
+						} else {
+							P.p.msg(player, P.p.language.get("Error_SignWrongFormat"));
+						}
+					} else {
+						P.p.msg(player, P.p.language.get("Error_NoPermissions"));
+					}
+				}
 			}
 		}
-		
-		
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -174,4 +185,33 @@ public class BlockListener implements Listener {
 		
 	}
 	 
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onBlockRedstoneEvent(BlockRedstoneEvent event){
+		new RedstoneEventTask(event).runTaskLater(P.p, 1);
+	}
+	
+	public class RedstoneEventTask extends BukkitRunnable  {
+	    private final BlockRedstoneEvent event;
+	 
+	    public RedstoneEventTask(BlockRedstoneEvent event) {
+	        this.event = event;
+	    }
+	 
+	    public void run() {
+	    	for(GameWorld gworld : GameWorld.gworlds){
+				if(event.getBlock().getWorld() == gworld.world){
+					for(DSign sign : gworld.dSigns){
+						if(sign.isRedstoneTrigger()){
+							if(sign.getRtBlock().isBlockPowered()){
+								sign.onTrigger();
+							}
+						}
+					}
+				}
+			}
+	    }
+	 
+	}
+	
+	
 }

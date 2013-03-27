@@ -50,7 +50,9 @@ public class GameWorld {
 	public CopyOnWriteArrayList<Sign> signClass=new CopyOnWriteArrayList<Sign>();
 	public CopyOnWriteArrayList<DMob> dmobs = new CopyOnWriteArrayList<DMob>();
 	public CopyOnWriteArrayList<GameChest> gchests = new CopyOnWriteArrayList<GameChest>();
+	public CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<DSign>();
 	public DConfig config;
+	
 
 	public GameWorld(){
 		gworlds.add(this);
@@ -74,28 +76,17 @@ public class GameWorld {
 	public void checkSign(Block block){
 		if((block.getState() instanceof Sign)){
 			Sign sign = (Sign) block.getState();
-			DSign.create(sign, this);
+			dSigns.add(DSign.create(sign, this));
 		}
 	}
 
 	public void startGame() {
 		this.isPlaying=true;
-		ObjectInputStream os;
-		try {
-			os = new ObjectInputStream(new FileInputStream(new File("DXL_Game_"+this.id+"/DXLData.data")));
 
-			int length=os.readInt();
-			for(int i=0; i<length; i++){
-				int x=os.readInt();
-				int y=os.readInt();
-				int z=os.readInt();
-				Block block=this.world.getBlockAt(x, y, z);
-				this.checkSign(block);
+		for(DSign dSign : this.dSigns){
+			if(!dSign.isOnDungeonInit()){
+				dSign.onInit();
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -165,13 +156,11 @@ public class GameWorld {
 	}
 
 	public void delete(){
-		//for(GameWorld gworld:gworlds){
-			gworlds.remove(this);
+		gworlds.remove(this);
 
-			p.getServer().unloadWorld(this.world,true);
-			File dir = new File("DXL_Game_"+this.id);
-			p.removeDirectory(dir);
-		//}
+		p.getServer().unloadWorld(this.world,true);
+		File dir = new File("DXL_Game_"+this.id);
+		p.removeDirectory(dir);
 	}
 
 	public static GameWorld load(String name){

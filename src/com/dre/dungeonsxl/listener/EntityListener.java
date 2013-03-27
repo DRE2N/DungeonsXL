@@ -35,24 +35,16 @@ public class EntityListener implements Listener{
 	public void onCreatureSpawn(CreatureSpawnEvent event){
 		World world=event.getLocation().getWorld();
 		
-		EditWorld eworld=EditWorld.get(world);
+		EditWorld eworld = EditWorld.get(world);
+		GameWorld gworld = GameWorld.get(world);
 		
-		if(eworld!=null){
+		if(eworld != null || gworld!=null){
 			if(
-				event.getSpawnReason()==SpawnReason.CHUNK_GEN||
-				event.getSpawnReason()==SpawnReason.BREEDING||
-				event.getSpawnReason()==SpawnReason.NATURAL){
-				event.setCancelled(true);
-			}
-		}
-		
-		GameWorld gworld=GameWorld.get(world);
-		
-		if(gworld!=null){
-			if(
-				event.getSpawnReason()==SpawnReason.CHUNK_GEN||
-				event.getSpawnReason()==SpawnReason.BREEDING||
-				event.getSpawnReason()==SpawnReason.NATURAL){
+				event.getSpawnReason() == SpawnReason.CHUNK_GEN ||
+				event.getSpawnReason() == SpawnReason.BREEDING ||
+				event.getSpawnReason() == SpawnReason.NATURAL ||
+				event.getSpawnReason() == SpawnReason.DEFAULT)
+			{
 				event.setCancelled(true);
 			}
 		}
