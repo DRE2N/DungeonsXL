@@ -84,8 +84,10 @@ public class GameWorld {
 		this.isPlaying=true;
 
 		for(DSign dSign : this.dSigns){
-			if(!dSign.isOnDungeonInit()){
-				dSign.onInit();
+			if(dSign != null){
+				if(!dSign.isOnDungeonInit()){
+					dSign.onInit();
+				}
 			}
 		}
 	}

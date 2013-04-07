@@ -466,9 +466,11 @@ public class DPlayer {
 					
 					//Check Distance Trigger Signs
 					for(DSign sign : gworld.dSigns){
-						if(sign.isDistanceTrigger()){
-							if(dplayer.player.getLocation().distance(sign.getSign().getLocation()) < sign.getDtDistance()){
-								sign.onTrigger();
+						if(sign != null){
+							if(sign.isDistanceTrigger()){
+								if(dplayer.player.getLocation().distance(sign.getSign().getLocation()) < sign.getDtDistance()){
+									sign.onTrigger();
+								}
 							}
 						}
 					}
