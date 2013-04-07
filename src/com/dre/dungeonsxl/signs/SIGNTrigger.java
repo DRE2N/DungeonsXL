@@ -34,9 +34,11 @@ public class SIGNTrigger extends DSign{
 	public void onTrigger() {
 		if(initialized){
 			for(DSign dsign : this.gworld.dSigns){
-				if(dsign.isSignTrigger()){
-					if(triggerId == dsign.getStId()){
-						dsign.onTrigger();
+				if(dsign != null){
+					if(dsign.isSignTrigger()){
+						if(triggerId == dsign.getStId()){
+							dsign.onTrigger();
+						}
 					}
 				}
 			}
