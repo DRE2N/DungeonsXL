@@ -37,7 +37,6 @@ import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 import com.dre.dungeonsxl.listener.WorldListener;
-import com.dre.dungeonsxl.util.DUtility;
 
 public class P extends JavaPlugin{
 	public static P p;
@@ -64,8 +63,6 @@ public class P extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		p = this;
-		
-		DUtility.convertOldSigns();
 		
 		//Commands
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
