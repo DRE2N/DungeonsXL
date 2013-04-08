@@ -301,7 +301,7 @@ public class P extends JavaPlugin{
         }
     }
 
-	public String[] excludedFiles={"config.yml"};
+	public String[] excludedFiles={"config.yml", "uid.dat"};
 
 	public void copyDirectory(File sourceLocation, File targetLocation) {
         if (sourceLocation.isDirectory()) {
