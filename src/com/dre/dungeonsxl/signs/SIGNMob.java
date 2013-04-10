@@ -58,6 +58,18 @@ public class SIGNMob extends DSign{
 	}
 
 	@Override
+	public void onUpdate(int type,boolean powered) {
+		if(initialized){
+			setPowered(type,powered);
+			if(!isDistanceTrigger()){
+				if(isPowered()){
+					onTrigger();
+				}
+			}
+		}
+	}
+
+	@Override
 	public void onTrigger() {
 		if(initialized){
 			MobSpawnScheduler scheduler = new MobSpawnScheduler(this);

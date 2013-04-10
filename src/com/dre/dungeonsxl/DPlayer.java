@@ -468,8 +468,10 @@ public class DPlayer {
 					for(DSign sign : gworld.dSigns){
 						if(sign != null){
 							if(sign.isDistanceTrigger()){
-								if(dplayer.player.getLocation().distance(sign.getSign().getLocation()) < sign.getDtDistance()){
-									sign.onTrigger();
+								if((sign.isRedstoneTrigger() == false && sign.isSignTrigger() == false) || sign.isPowered()){
+									if(dplayer.player.getLocation().distance(sign.getSign().getLocation()) < sign.getDtDistance()){
+										sign.onTrigger();
+									}
 								}
 							}
 						}

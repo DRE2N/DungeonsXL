@@ -204,7 +204,9 @@ public class BlockListener implements Listener {
 						if(sign!=null){
 							if(sign.isRedstoneTrigger()){
 								if(sign.getRtBlock().isBlockPowered()){
-									sign.onTrigger();
+									sign.onUpdate(0,true);
+								}else{
+									sign.onUpdate(0,false);
 								}
 							}
 						}

@@ -41,6 +41,18 @@ public class SIGNMsg extends DSign{
 	}
 
 	@Override
+	public void onUpdate(int type,boolean powered) {
+		if(initialized){
+			setPowered(type,powered);
+			if(!isDistanceTrigger()){
+				if(isPowered()){
+					onTrigger();
+				}
+			}
+		}
+	}
+
+	@Override
 	public void onTrigger() {
 		if(initialized){
 			for(Player player : gworld.world.getPlayers()){
