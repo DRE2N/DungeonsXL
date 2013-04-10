@@ -90,6 +90,17 @@ public class GameWorld {
 				}
 			}
 		}
+		for(DSign dSign : this.dSigns){
+			if(dSign != null){
+				if(dSign.isRedstoneTrigger()){
+					if(dSign.getRtBlock().isBlockPowered()){
+						dSign.onUpdate(0,true);
+					}else{
+						dSign.onUpdate(0,false);
+					}
+				}
+			}
+		}
 	}
 
 	public void msg(String msg) {

@@ -26,7 +26,7 @@ public class CMDHelp extends DCommand{
 		}
 		
 		int page=1;
-		int pages=(int)(DCommandRoot.root.commands.size()/6);
+		int pages=(int)Math.ceil(DCommandRoot.root.commands.size()/6.0);
 
 		if(args.length>1){
 			try{
@@ -40,12 +40,12 @@ public class CMDHelp extends DCommand{
 
 		p.msg(sender, ChatColor.GREEN+"============[ "+ChatColor.GOLD+"Help DungeonsXL - "+page+"/"+pages+ChatColor.GREEN+" ]============",false);
 
-		int i=0;
+		int i=-1;
 		int ipage=1;
 		for(DCommand command:DCommandRoot.root.commands){
 			if((command.isConsoleCommand && isConsole) || (command.isPlayerCommand && isPlayer)){
 				i++;
-				if(i>6){
+				if(i>5){
 					i=0;
 					ipage++;
 				}
