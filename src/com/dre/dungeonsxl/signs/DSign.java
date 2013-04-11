@@ -91,9 +91,18 @@ public abstract class DSign {
 		
 	}
 
+	public void onDiscover(){
+		
+	}
+
 	public void onUpdate(int type,boolean powered){
 		
 	}
+
+	public void killTask(){
+		
+	}
+
 	
 	public static DSign create(Sign sign, GameWorld gworld){
 		String[] lines = sign.getLines();
@@ -127,6 +136,10 @@ public abstract class DSign {
 			dSign = new SIGNStart(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("["+SIGNTrigger.name+"]")) {
 			dSign = new SIGNTrigger(sign, gworld);
+		} else if (lines[0].equalsIgnoreCase("["+SIGNRedstone.name+"]")) {
+			dSign = new SIGNRedstone(sign, gworld);
+		} else if (lines[0].equalsIgnoreCase("["+SIGNBlock.name+"]")) {
+			dSign = new SIGNBlock(sign, gworld);
 		}
 		
 		if (dSign != null && gworld != null) {
