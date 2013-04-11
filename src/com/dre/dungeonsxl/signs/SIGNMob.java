@@ -26,6 +26,7 @@ public class SIGNMob extends DSign{
 	private int interval = 0;
 	private int amount = 1;
 	private boolean initialized;
+	private int id = -1;
 	
 	public SIGNMob(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -74,11 +75,20 @@ public class SIGNMob extends DSign{
 		if(initialized){
 			MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
 			
-			int id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
+			id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
 			scheduler.id = id;
 			
 			initialized = false;
 		}
+	}
+
+	@Override
+	public void killTask(){
+		//if(initialized){
+			if(id != -1){
+				p.getServer().getScheduler().cancelTask(id);
+			}
+		//}
 	}
 	
 	public class MobSpawnScheduler implements Runnable{
