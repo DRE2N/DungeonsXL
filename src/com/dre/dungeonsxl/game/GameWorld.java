@@ -170,12 +170,6 @@ public class GameWorld {
 
 	public void delete(){
 		gworlds.remove(this);
-
-		for(DSign sign:dSigns){
-			if(sign != null){
-				sign.killTask();
-			}
-		}
 		p.getServer().unloadWorld(this.world,true);
 		File dir = new File("DXL_Game_"+this.id);
 		p.removeDirectory(dir);

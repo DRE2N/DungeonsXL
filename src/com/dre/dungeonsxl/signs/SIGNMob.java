@@ -27,7 +27,7 @@ public class SIGNMob extends DSign{
 	private int amount = 1;
 	private boolean initialized;
 	private boolean active;
-	private int id = -1;
+	private int taskId = -1;
 	
 	public SIGNMob(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -81,19 +81,18 @@ public class SIGNMob extends DSign{
 			if(!active){
 				MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
 				
-				id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
+				taskId = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
 				
 				active = true;
 			}
 		}
 	}
-
-	@Override
+	
 	public void killTask(){
 		if(initialized && active){
-			if(id != -1){
-				p.getServer().getScheduler().cancelTask(id);
-				id = -1;
+			if(taskId != -1){
+				p.getServer().getScheduler().cancelTask(taskId);
+				taskId = -1;
 			}
 		}
 	}
@@ -109,42 +108,48 @@ public class SIGNMob extends DSign{
 		public void run() {
 			if(sign.interval<=0){
 				World world = sign.sign.getWorld();
+				GameWorld gworld = GameWorld.get(world);
 				
-				//Check normal mobs
-				if(EntityType.fromName(sign.mob)!=null){
-					if(EntityType.fromName(sign.mob).isAlive()){
-						LivingEntity entity=(LivingEntity)world.spawnEntity(sign.sign.getLocation(), EntityType.fromName(sign.mob));
-						
-						//Add Bow to normal Skeletons
-						if(entity.getType() == EntityType.SKELETON){
-							Skeleton skeleton = (Skeleton) entity;
-							if(skeleton.getSkeletonType()==SkeletonType.NORMAL){
-								skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW));
+				if(gworld != null){
+					
+					//Check normal mobs
+					if(EntityType.fromName(sign.mob)!=null){
+						if(EntityType.fromName(sign.mob).isAlive()){
+							LivingEntity entity=(LivingEntity)world.spawnEntity(sign.sign.getLocation(), EntityType.fromName(sign.mob));
+							
+							//Add Bow to normal Skeletons
+							if(entity.getType() == EntityType.SKELETON){
+								Skeleton skeleton = (Skeleton) entity;
+								if(skeleton.getSkeletonType()==SkeletonType.NORMAL){
+									skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW));
+								}
 							}
+							
+							new DMob(entity, sign.gworld, null);
 						}
-						
-						new DMob(entity, sign.gworld, null);
 					}
-				}
-				
-				//Check custom mobs
-				DMobType mobType = DMobType.get(sign.mob, gworld.config.getMobTypes());
-				
-				if(mobType!=null){
-					mobType.spawn(GameWorld.get(world), sign.sign.getLocation());
-				}
-				
-				//Set the amount
-				if(amount!=-1){
-					if(amount>1){
-						amount--;
-					}else{
-						killTask();
-						sign.gworld.dSigns.remove(sign);
+					
+					//Check custom mobs
+					DMobType mobType = DMobType.get(sign.mob, gworld.config.getMobTypes());
+					
+					if(mobType!=null){
+						mobType.spawn(GameWorld.get(world), sign.sign.getLocation());
 					}
+					
+					//Set the amount
+					if(amount!=-1){
+						if(amount>1){
+							amount--;
+						}else{
+							killTask();
+							sign.gworld.dSigns.remove(sign);
+						}
+					}
+					
+					sign.interval = sign.maxinterval;
+				} else {
+					sign.killTask();
 				}
-				
-				sign.interval = sign.maxinterval;
 			}
 			sign.interval--;
 		}

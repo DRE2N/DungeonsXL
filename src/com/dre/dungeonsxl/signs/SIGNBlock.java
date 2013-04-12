@@ -1,8 +1,6 @@
 package com.dre.dungeonsxl.signs;
 
 import org.bukkit.block.Sign;
-import org.bukkit.block.Block;
-
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNBlock extends DSign{
@@ -14,11 +12,9 @@ public class SIGNBlock extends DSign{
 	//Variables
 	private boolean initialized;
 	private boolean active;
-	private byte side;
 	private int offBlock = 0;
 	private int onBlock = 0;
 
-	
 	public SIGNBlock(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
 	}
@@ -53,7 +49,6 @@ public class SIGNBlock extends DSign{
 			}
 		}
 	}
-
 
 	@Override
 	public void onTrigger() {

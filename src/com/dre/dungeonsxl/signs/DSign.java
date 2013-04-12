@@ -91,18 +91,9 @@ public abstract class DSign {
 		
 	}
 
-	public void onDiscover(){
-		
-	}
-
 	public void onUpdate(int type,boolean powered){
 		
 	}
-
-	public void killTask(){
-		
-	}
-
 	
 	public static DSign create(Sign sign, GameWorld gworld){
 		String[] lines = sign.getLines();
@@ -152,12 +143,12 @@ public abstract class DSign {
 	}
 
 	
-	//Getter anb Setter
-	public void setPowered(int type,boolean powered) {
+	//Getter and Setter
+	public void setPowered(int type, boolean powered) {
 		isPowered[type] = powered;
 	}
 
-	public boolean isPowered() {	//0=Redstone 1=Sign
+	public boolean isPowered() {//0=Redstone 1=Sign
 		if( (isPowered[0]||!isRedstoneTrigger()) && (isPowered[1]||!isSignTrigger()) ){
 			return true;
 		} else {

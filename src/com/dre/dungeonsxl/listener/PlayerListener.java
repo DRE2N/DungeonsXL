@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import com.dre.dungeonsxl.DGSign;
-import com.dre.dungeonsxl.signs.DSign;
 import com.dre.dungeonsxl.DGroup;
 import com.dre.dungeonsxl.DLootInventory;
 import com.dre.dungeonsxl.DPlayer;
@@ -44,8 +43,7 @@ public class PlayerListener implements Listener{
 	public void onPlayerInteract(PlayerInteractEvent event){
 		Player player = event.getPlayer();
 		Block clickedBlock=event.getClickedBlock();
-
-
+		
 		if(clickedBlock!=null){
 			//Block Enderchests
 			if(GameWorld.get(player.getWorld())!=null || EditWorld.get(player.getWorld())!=null){
@@ -66,20 +64,6 @@ public class PlayerListener implements Listener{
 						if(!player.isOp()){
 							p.msg(player, p.language.get("Error_Dispenser"));
 							event.setCancelled(true);
-						}
-					}
-				}
-
-			//Block invisible Redstone signs
-				GameWorld gworld = GameWorld.get(player.getWorld());
-				if(!gworld.untouchable.isEmpty()){
-					if(event.getAction()==Action.RIGHT_CLICK_BLOCK){
-						if(gworld.untouchable.contains(clickedBlock)){
-							for(DSign sign:gworld.dSigns){
-								if(sign!=null){
-									sign.onDiscover();
-								}
-							}
 						}
 					}
 				}
