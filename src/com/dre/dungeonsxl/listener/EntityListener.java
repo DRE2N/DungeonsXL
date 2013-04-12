@@ -14,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -30,6 +31,16 @@ import com.dre.dungeonsxl.game.DMob;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class EntityListener implements Listener{
+
+	//Remove drops from breaking Signs
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onItemSpawn(ItemSpawnEvent event){
+		if(GameWorld.get(event.getLocation().getWorld()) != null){
+			if(event.getEntity().getItemStack().getTypeId()==323){
+				event.setCancelled(true);
+			}
+		}
+	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onCreatureSpawn(CreatureSpawnEvent event){

@@ -69,10 +69,8 @@ public class PlayerListener implements Listener{
 						}
 					}
 				}
-			}
 
 			//Block invisible Redstone signs
-			if(GameWorld.get(player.getWorld())!=null){
 				GameWorld gworld = GameWorld.get(player.getWorld());
 				if(!gworld.untouchable.isEmpty()){
 					if(event.getAction()==Action.RIGHT_CLICK_BLOCK){

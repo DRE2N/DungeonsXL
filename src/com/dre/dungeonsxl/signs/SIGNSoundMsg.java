@@ -1,5 +1,7 @@
 package com.dre.dungeonsxl.signs;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.Spout;
@@ -18,6 +20,7 @@ public class SIGNSoundMsg extends DSign{
 	//Variables
 	private boolean initialized;
 	private String msg;
+	private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<Player>();
 	
 	public SIGNSoundMsg(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -62,14 +65,21 @@ public class SIGNSoundMsg extends DSign{
 		if(initialized){
 			if(P.p.isSpoutEnabled){
 				for(Player player : gworld.world.getPlayers()){
-					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
-					if(sPlayer.isSpoutCraftEnabled()){
-						SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
+					if(!done.contains(player)){
+						if(!isDistanceTrigger() || player.getLocation().distance(sign.getLocation()) < getDtDistance()){
+							done.add(player);
+							SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
+							if(sPlayer.isSpoutCraftEnabled()){
+								SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
+							}
+						}
 					}
 				}
 			}
 			
-			this.gworld.dSigns.remove(this);
+			if(done.size() >= gworld.world.getPlayers().size()){
+				this.gworld.dSigns.remove(this);
+			}
 		}
 	}
 	

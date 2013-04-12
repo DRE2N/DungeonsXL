@@ -29,9 +29,7 @@ public class SIGNRedstone extends DSign{
 	@Override
 	public boolean check() {
 		if(isRedstoneTrigger()){
-			if(sign.getBlock().getType() != Material.WALL_SIGN){
-				return false;
-			}
+			return false;
 		}
 		
 		return true;
@@ -87,6 +85,7 @@ public class SIGNRedstone extends DSign{
 	public void onDiscover(){
 		if(initialized && active){
 			P.p.getServer().getScheduler().scheduleSyncDelayedTask(p, new DiscoveryTask(), 1);
+			P.p.getServer().getScheduler().scheduleSyncDelayedTask(p, new DiscoveryTask(), 5);
 		}
 	}
 
@@ -110,6 +109,7 @@ public class SIGNRedstone extends DSign{
 				active = true;
 				if(task == null){
 					task = P.p.getServer().getScheduler().runTaskTimer(p, new DiscoveryTask(), 1, 60);
+					P.p.getServer().getScheduler().scheduleSyncDelayedTask(p, new DiscoveryTask(), 5);
 				}
 			}
 		}
@@ -134,7 +134,9 @@ public class SIGNRedstone extends DSign{
 	    public void run() {
 	    	if(initialized && active){
 				for(DPlayer dplayer:DPlayer.players){
-					dplayer.player.sendBlockChange(sign.getBlock().getLocation(),0,(byte)0);
+					if(!dplayer.isEditing){
+						dplayer.player.sendBlockChange(sign.getBlock().getLocation(),0,(byte)0);
+					}
 				}
 			}
 		}

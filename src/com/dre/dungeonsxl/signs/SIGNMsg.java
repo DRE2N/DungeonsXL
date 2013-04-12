@@ -1,5 +1,7 @@
 package com.dre.dungeonsxl.signs;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import com.dre.dungeonsxl.game.GameWorld;
@@ -13,6 +15,7 @@ public class SIGNMsg extends DSign{
 	//Variables
 	private String msg;
 	private boolean initialized;
+	private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<Player>();
 	
 	public SIGNMsg(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -56,10 +59,17 @@ public class SIGNMsg extends DSign{
 	public void onTrigger() {
 		if(initialized){
 			for(Player player : gworld.world.getPlayers()){
-				p.msg(player, msg);
+				if(!done.contains(player)){
+					if(!isDistanceTrigger() || player.getLocation().distance(sign.getLocation()) < getDtDistance()){
+						p.msg(player, msg);
+						done.add(player);
+					}
+				}
 			}
 			
-			this.gworld.dSigns.remove(this);
+			if(done.size() >= gworld.world.getPlayers().size()){
+				this.gworld.dSigns.remove(this);
+			}
 		}
 	}
 	
