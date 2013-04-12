@@ -51,6 +51,7 @@ public class GameWorld {
 	public CopyOnWriteArrayList<DMob> dmobs = new CopyOnWriteArrayList<DMob>();
 	public CopyOnWriteArrayList<GameChest> gchests = new CopyOnWriteArrayList<GameChest>();
 	public CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<DSign>();
+	public CopyOnWriteArrayList<Block> untouchable = new CopyOnWriteArrayList<Block>();
 	public DConfig config;
 	
 
@@ -99,6 +100,9 @@ public class GameWorld {
 						dSign.onUpdate(0,false);
 					}
 				}
+				if(!dSign.isRedstoneTrigger() && !dSign.isDistanceTrigger() && !dSign.isSignTrigger()){
+					dSign.onTrigger();
+				}
 			}
 		}
 	}
@@ -122,11 +126,7 @@ public class GameWorld {
 
 	public static void deleteAll(){
 		for(GameWorld gworld:gworlds){
-			gworlds.remove(gworld);
-
-			p.getServer().unloadWorld(gworld.world,true);
-			File dir = new File("DXL_Game_"+gworld.id);
-			p.removeDirectory(dir);
+			gworld.delete();
 		}
 	}
 
@@ -171,6 +171,11 @@ public class GameWorld {
 	public void delete(){
 		gworlds.remove(this);
 
+		for(DSign sign:dSigns){
+			if(sign != null){
+				sign.killTask();
+			}
+		}
 		p.getServer().unloadWorld(this.world,true);
 		File dir = new File("DXL_Game_"+this.id);
 		p.removeDirectory(dir);

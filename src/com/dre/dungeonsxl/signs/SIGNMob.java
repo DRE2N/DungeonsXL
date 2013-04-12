@@ -26,6 +26,8 @@ public class SIGNMob extends DSign{
 	private int interval = 0;
 	private int amount = 1;
 	private boolean initialized;
+	private boolean active;
+	private int id = -1;
 	
 	public SIGNMob(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -61,10 +63,14 @@ public class SIGNMob extends DSign{
 	public void onUpdate(int type,boolean powered) {
 		if(initialized){
 			setPowered(type,powered);
-			if(!isDistanceTrigger()){
-				if(isPowered()){
+			if(isPowered()){
+				if(!isDistanceTrigger()){
 					onTrigger();
 				}
+			} else {
+				killTask();
+				interval = 0;
+				active = false;
 			}
 		}
 	}
@@ -72,18 +78,28 @@ public class SIGNMob extends DSign{
 	@Override
 	public void onTrigger() {
 		if(initialized){
-			MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
-			
-			int id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
-			scheduler.id = id;
-			
-			initialized = false;
+			if(!active){
+				MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
+				
+				id = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
+				
+				active = true;
+			}
+		}
+	}
+
+	@Override
+	public void killTask(){
+		if(initialized && active){
+			if(id != -1){
+				p.getServer().getScheduler().cancelTask(id);
+				id = -1;
+			}
 		}
 	}
 	
 	public class MobSpawnScheduler implements Runnable{
 		private SIGNMob sign;
-		public int id;
 		
 		public MobSpawnScheduler(SIGNMob sign){
 			this.sign = sign;
@@ -123,8 +139,8 @@ public class SIGNMob extends DSign{
 					if(amount>1){
 						amount--;
 					}else{
-						p.getServer().getScheduler().cancelTask(this.id);
-						sign.gworld.dSigns.remove(this);
+						killTask();
+						sign.gworld.dSigns.remove(sign);
 					}
 				}
 				
