@@ -91,7 +91,19 @@ public abstract class DSign {
 		
 	}
 
+	public void onDisable(){
+		
+	}
+
 	public void onUpdate(int type,boolean powered){
+		setPowered(type, powered);
+		if(isPowered()){
+			if(!isDistanceTrigger){
+				onTrigger();
+			}
+		} else {
+			onDisable();
+		}
 		
 	}
 	

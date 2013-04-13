@@ -67,24 +67,6 @@ public class SIGNTrigger extends DSign{
 	}
 
 	@Override
-	public void onUpdate(int type,boolean powered) {
-		if(initialized){
-			setPowered(type,powered);
-			if(!isDistanceTrigger() || !isPowered()){
-				for(DSign dsign : this.gworld.dSigns){
-					if(dsign != null){
-						if(dsign.isSignTrigger()){
-							if(triggerId == dsign.getStId()){
-								dsign.onUpdate(1,isPowered());
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@Override
 	public void onTrigger() {
 		if(initialized){
 			for(DSign dsign : this.gworld.dSigns){
@@ -98,7 +80,22 @@ public class SIGNTrigger extends DSign{
 			}
 		}
 	}
-	
+
+	@Override
+	public void onDisable() {
+		if(initialized){
+			for(DSign dsign : this.gworld.dSigns){
+				if(dsign != null){
+					if(dsign.isSignTrigger()){
+						if(triggerId == dsign.getStId()){
+							dsign.onUpdate(1,false);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	@Override
 	public String getPermissions() {
 		return buildPermissions;

@@ -60,35 +60,26 @@ public class SIGNMob extends DSign{
 	}
 
 	@Override
-	public void onUpdate(int type,boolean powered) {
-		if(initialized){
-			setPowered(type,powered);
-			if(isPowered()){
-				if(!isDistanceTrigger()){
-					onTrigger();
-				}
-			} else {
-				killTask();
-				interval = 0;
-				active = false;
-			}
+	public void onTrigger() {
+		if(initialized && !active){
+			MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
+				
+			taskId = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
+				
+			active = true;
 		}
 	}
 
 	@Override
-	public void onTrigger() {
-		if(initialized){
-			if(!active){
-				MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
-				
-				taskId = p.getServer().getScheduler().scheduleSyncRepeatingTask(p, scheduler, 0L, 20L);
-				
-				active = true;
-			}
+	public void onDisable() {
+		if(initialized && active){
+			killTask();
+			interval = 0;
+			active = false;
 		}
 	}
 	
-	public void killTask(){
+	public void killTask() {
 		if(initialized && active){
 			if(taskId != -1){
 				p.getServer().getScheduler().cancelTask(taskId);

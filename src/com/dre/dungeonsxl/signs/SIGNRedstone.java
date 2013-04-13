@@ -22,9 +22,6 @@ public class SIGNRedstone extends DSign{
 	
 	@Override
 	public boolean check() {
-		if(isRedstoneTrigger()){
-			return false;
-		}
 		
 		return true;
 	}
@@ -38,27 +35,18 @@ public class SIGNRedstone extends DSign{
 	}
 
 	@Override
-	public void onUpdate(int type, boolean powered) {
-		if(initialized){
-			setPowered(type, powered);
-			if(isPowered()){
-				if(!isDistanceTrigger()){
-					onTrigger();
-				}
-			} else {
-				active = false;
-				block.setTypeId(0);
-			}
+	public void onTrigger() {
+		if(initialized && !active){
+			block.setTypeId(152);
+			active = true;
 		}
 	}
-	
+
 	@Override
-	public void onTrigger() {
-		if(initialized){
-			if(!active){
-				block.setTypeId(152);
-				active = true;
-			}
+	public void onDisable() {
+		if(initialized && active){
+			block.setTypeId(0);
+			active = false;
 		}
 	}
 	

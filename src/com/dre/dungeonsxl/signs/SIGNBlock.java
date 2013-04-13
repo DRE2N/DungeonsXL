@@ -12,8 +12,8 @@ public class SIGNBlock extends DSign{
 	//Variables
 	private boolean initialized;
 	private boolean active;
-	private int offBlock = 0;
-	private int onBlock = 0;
+	private int offBlockId = 0;
+	private int onBlockId = 0;
 
 	public SIGNBlock(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -29,34 +29,25 @@ public class SIGNBlock extends DSign{
 	@Override
 	public void onInit() {
 		String lines[] = sign.getLines();
-		offBlock = p.parseInt(lines[1]);
-		onBlock = p.parseInt(lines[2]);
-		sign.getBlock().setTypeId(offBlock);
+		offBlockId = p.parseInt(lines[1]);
+		onBlockId = p.parseInt(lines[2]);
+		sign.getBlock().setTypeId(offBlockId);
 		initialized = true;
 	}
 
 	@Override
-	public void onUpdate(int type,boolean powered) {
-		if(initialized){
-			setPowered(type,powered);
-			if(isPowered()){
-				if(!isDistanceTrigger()){
-					onTrigger();
-				}
-			} else {
-				active = false;
-				sign.getBlock().setTypeId(offBlock);
-			}
+	public void onTrigger() {
+		if(initialized && !active){
+			sign.getBlock().setTypeId(onBlockId);
+			active = true;
 		}
 	}
 
 	@Override
-	public void onTrigger() {
-		if(initialized){
-			if(!active){
-				sign.getBlock().setTypeId(onBlock);
-				active = true;
-			}
+	public void onDisable() {
+		if(initialized && active){
+			sign.getBlock().setTypeId(offBlockId);
+			active = false;
 		}
 	}
 	
