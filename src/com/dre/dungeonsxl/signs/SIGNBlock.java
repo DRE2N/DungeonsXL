@@ -3,13 +3,13 @@ package com.dre.dungeonsxl.signs;
 import org.bukkit.block.Sign;
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class SIGNBlock extends DSign{
-	
+public class SIGNBlock extends DSign {
+
 	public static String name = "Block";
 	public String buildPermissions = "dxl.sign.block";
 	public boolean onDungeonInit = false;
-	
-	//Variables
+
+	// Variables
 	private boolean initialized;
 	private boolean active;
 	private int offBlockId = 0;
@@ -18,11 +18,11 @@ public class SIGNBlock extends DSign{
 	public SIGNBlock(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
 	}
-	
+
 	@Override
 	public boolean check() {
 		// TODO Auto-generated method stub
-		
+
 		return true;
 	}
 
@@ -37,7 +37,7 @@ public class SIGNBlock extends DSign{
 
 	@Override
 	public void onTrigger() {
-		if(initialized && !active){
+		if (initialized && !active) {
 			sign.getBlock().setTypeId(onBlockId);
 			active = true;
 		}
@@ -45,12 +45,12 @@ public class SIGNBlock extends DSign{
 
 	@Override
 	public void onDisable() {
-		if(initialized && active){
+		if (initialized && active) {
 			sign.getBlock().setTypeId(offBlockId);
 			active = false;
 		}
 	}
-	
+
 	@Override
 	public String getPermissions() {
 		return buildPermissions;

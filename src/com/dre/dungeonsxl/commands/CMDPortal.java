@@ -7,9 +7,9 @@ import org.bukkit.inventory.ItemStack;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.DPortal;
 
-public class CMDPortal extends DCommand{
+public class CMDPortal extends DCommand {
 
-	public CMDPortal(){
+	public CMDPortal() {
 		this.command = "portal";
 		this.args = 0;
 		this.help = p.language.get("Help_Cmd_Portal");
@@ -21,9 +21,9 @@ public class CMDPortal extends DCommand{
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
 		DPlayer dplayer = DPlayer.get(player);
-		if(dplayer == null){
+		if (dplayer == null) {
 			DPortal dportal = DPortal.get(player);
-			if(dportal == null){
+			if (dportal == null) {
 				dportal = new DPortal(false);
 				dportal.player = player;
 				dportal.world = player.getWorld();

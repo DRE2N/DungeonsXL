@@ -18,203 +18,203 @@ import org.bukkit.inventory.ItemStack;
 
 public class DConfig {
 	public static DConfig mainConfig = new DConfig();
-	
+
 	private File file;
-	
+
 	private CopyOnWriteArrayList<DClass> dClasses = new CopyOnWriteArrayList<DClass>();
-	private Map<Integer,String> msgs = new HashMap<Integer,String>();
+	private Map<Integer, String> msgs = new HashMap<Integer, String>();
 
 	private CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
 	private CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
-	
+
 	private boolean isLobbyDisabled = false;
 	private int timeToNextPlay = 0;
 	private int timeToNextLoot = 0;
-	
+
 	private int timeUntilKickOfflinePlayer = -1;
-	
-	//Spout
+
+	// Spout
 	private boolean spoutCraftOnly = false;
 	private String spoutTexturepackURL;
-	
-	//MobTypes
+
+	// MobTypes
 	private Set<DMobType> mobTypes = new HashSet<DMobType>();
-	
-	public DConfig(){
-		
+
+	public DConfig() {
+
 	}
-	
-	public DConfig(File file){
-		this.file=file;
-		
+
+	public DConfig(File file) {
+		this.file = file;
+
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-		
+
 		load(configFile);
 	}
-	
-	public DConfig(ConfigurationSection configFile){
+
+	public DConfig(ConfigurationSection configFile) {
 		load(configFile);
 	}
-	
-	//Load & Save
-	public void load(ConfigurationSection configFile){
-		
+
+	// Load & Save
+	public void load(ConfigurationSection configFile) {
+
 		/* Classes */
 		ConfigurationSection configSetionClasses = configFile.getConfigurationSection("classes");
-		if(configSetionClasses!=null){
+		if (configSetionClasses != null) {
 			Set<String> list = configSetionClasses.getKeys(false);
-			for (String className:list) {
+			for (String className : list) {
 				String name = className;
-				boolean hasDog = configSetionClasses.getBoolean(className+".dog");
-				
+				boolean hasDog = configSetionClasses.getBoolean(className + ".dog");
+
 				/* Items */
-				List<String> items = configSetionClasses.getStringList(className+".items");
-				CopyOnWriteArrayList<ItemStack> istacks=new CopyOnWriteArrayList<ItemStack>();
-				
-				for(String item:items){
-					String[] itemsplit=item.split(",");
-					if(itemsplit.length>0){
-						int itemId=0,itemData=0,itemSize=1,itemLvlEnchantment=1;
-						Enchantment itemEnchantment=null;
-						
-						//Check Id & Data
-						String[] idAndData=itemsplit[0].split("/");
-						itemId=P.p.parseInt(idAndData[0]);
-						
-						if(idAndData.length>1){
-							itemData=P.p.parseInt(idAndData[1]);
+				List<String> items = configSetionClasses.getStringList(className + ".items");
+				CopyOnWriteArrayList<ItemStack> istacks = new CopyOnWriteArrayList<ItemStack>();
+
+				for (String item : items) {
+					String[] itemsplit = item.split(",");
+					if (itemsplit.length > 0) {
+						int itemId = 0, itemData = 0, itemSize = 1, itemLvlEnchantment = 1;
+						Enchantment itemEnchantment = null;
+
+						// Check Id & Data
+						String[] idAndData = itemsplit[0].split("/");
+						itemId = P.p.parseInt(idAndData[0]);
+
+						if (idAndData.length > 1) {
+							itemData = P.p.parseInt(idAndData[1]);
 						}
-						
-						//Size
-						if(itemsplit.length>1){
-							itemSize=P.p.parseInt(itemsplit[1]);
+
+						// Size
+						if (itemsplit.length > 1) {
+							itemSize = P.p.parseInt(itemsplit[1]);
 						}
-						
-						//Enchantment
-						if(itemsplit.length>2){
-							String[] enchantmentSplit=itemsplit[2].split("/");
-							
-							itemEnchantment=Enchantment.getByName(enchantmentSplit[0]);
-							
-							if(enchantmentSplit.length>1){
-								itemLvlEnchantment=P.p.parseInt(enchantmentSplit[1]);
+
+						// Enchantment
+						if (itemsplit.length > 2) {
+							String[] enchantmentSplit = itemsplit[2].split("/");
+
+							itemEnchantment = Enchantment.getByName(enchantmentSplit[0]);
+
+							if (enchantmentSplit.length > 1) {
+								itemLvlEnchantment = P.p.parseInt(enchantmentSplit[1]);
 							}
 						}
-						
-						//Add Item to Stacks
-						ItemStack istack=new ItemStack(itemId,itemSize,(short) itemData);
-						if(itemEnchantment!=null){
+
+						// Add Item to Stacks
+						ItemStack istack = new ItemStack(itemId, itemSize, (short) itemData);
+						if (itemEnchantment != null) {
 							istack.addEnchantment(itemEnchantment, itemLvlEnchantment);
 						}
-						
+
 						istacks.add(istack);
 					}
 				}
-				
+
 				/* Spout */
 				String spoutSkinURL = null;
-				if(P.p.isSpoutEnabled){
-					if(configSetionClasses.contains(className+".spoutSkinURL")){
-						spoutSkinURL = configSetionClasses.getString(className+".spoutSkinURL");
+				if (P.p.isSpoutEnabled) {
+					if (configSetionClasses.contains(className + ".spoutSkinURL")) {
+						spoutSkinURL = configSetionClasses.getString(className + ".spoutSkinURL");
 					}
 				}
-				
+
 				/* Create Class */
-				this.dClasses.add(new DClass(name,istacks,hasDog,spoutSkinURL));
+				this.dClasses.add(new DClass(name, istacks, hasDog, spoutSkinURL));
 			}
 		}
-		
+
 		/* Messages */
 		ConfigurationSection configSetionMessages = configFile.getConfigurationSection("message");
 		if (configSetionMessages != null) {
 			Set<String> list = configSetionMessages.getKeys(false);
-			for (String messagePath:list) {
+			for (String messagePath : list) {
 				int messageId = P.p.parseInt(messagePath);
-				this.msgs.put(messageId,configSetionMessages.getString(messagePath));
+				this.msgs.put(messageId, configSetionMessages.getString(messagePath));
 			}
 		}
-		
+
 		/* Secure Objects */
-		if(configFile.contains("secureObjects")){						
+		if (configFile.contains("secureObjects")) {
 			List<Integer> secureobjectlist = configFile.getIntegerList("secureObjects");
-			for(int i:secureobjectlist){
+			for (int i : secureobjectlist) {
 				this.secureObjects.add(Material.getMaterial(i));
 			}
 		}
-		
+
 		/* Invited Players */
-		if(configFile.contains("invitedPlayers")){
+		if (configFile.contains("invitedPlayers")) {
 			List<String> invitedplayers = configFile.getStringList("invitedPlayers");
-			for(String i:invitedplayers){
+			for (String i : invitedplayers) {
 				this.invitedPlayers.add(i);
 			}
 		}
-		
+
 		/* Lobby */
-		if(configFile.contains("isLobbyDisabled")){
+		if (configFile.contains("isLobbyDisabled")) {
 			isLobbyDisabled = configFile.getBoolean("isLobbyDisabled");
 		} else {
 			isLobbyDisabled = mainConfig.isLobbyDisabled;
 		}
-		
+
 		/* Times */
-		if(configFile.contains("timeToNextPlay")){
+		if (configFile.contains("timeToNextPlay")) {
 			timeToNextPlay = configFile.getInt("timeToNextPlay");
 		} else {
 			timeToNextPlay = mainConfig.timeToNextPlay;
 		}
-		
-		if(configFile.contains("timeToNextLoot")){
+
+		if (configFile.contains("timeToNextLoot")) {
 			timeToNextLoot = configFile.getInt("timeToNextLoot");
 		} else {
 			timeToNextLoot = mainConfig.timeToNextLoot;
 		}
-		
-		if(configFile.contains("timeUntilKickOfflinePlayer")){
+
+		if (configFile.contains("timeUntilKickOfflinePlayer")) {
 			timeUntilKickOfflinePlayer = configFile.getInt("timeUntilKickOfflinePlayer");
 		} else {
 			timeUntilKickOfflinePlayer = mainConfig.timeUntilKickOfflinePlayer;
 		}
-		
+
 		/* Spout */
-		if(configFile.contains("spout.spoutCraftOnly")){
+		if (configFile.contains("spout.spoutCraftOnly")) {
 			spoutCraftOnly = configFile.getBoolean("spout.spoutCraftOnly");
 		} else {
 			spoutCraftOnly = mainConfig.spoutCraftOnly;
 		}
-		
-		if(configFile.contains("spout.spoutTexturepackURL")){
+
+		if (configFile.contains("spout.spoutTexturepackURL")) {
 			spoutTexturepackURL = configFile.getString("spout.spoutTexturepackURL");
 		} else {
 			spoutTexturepackURL = mainConfig.spoutTexturepackURL;
 		}
-		
+
 		/* Mobtypes */
 		configSetionMessages = configFile.getConfigurationSection("mobTypes");
 		this.mobTypes = DMobType.load(configSetionMessages);
 	}
 
-	public void save(){
-		if(this.file!=null){
+	public void save() {
+		if (this.file != null) {
 			FileConfiguration configFile = YamlConfiguration.loadConfiguration(this.file);
-			
-			//Messages
-			for(Integer msgs:this.msgs.keySet()){
-				configFile.set("message."+msgs, this.msgs.get(msgs));
+
+			// Messages
+			for (Integer msgs : this.msgs.keySet()) {
+				configFile.set("message." + msgs, this.msgs.get(msgs));
 			}
-			
-			//Secure Objects
-			CopyOnWriteArrayList<Integer> secureObjectsids=new CopyOnWriteArrayList<Integer>();
-			
-			for(Material mat:this.secureObjects){
+
+			// Secure Objects
+			CopyOnWriteArrayList<Integer> secureObjectsids = new CopyOnWriteArrayList<Integer>();
+
+			for (Material mat : this.secureObjects) {
 				secureObjectsids.add(mat.getId());
 			}
-			
+
 			configFile.set("secureObjects", secureObjectsids);
-			
-			//Invited Players
+
+			// Invited Players
 			configFile.set("invitedPlayers", this.invitedPlayers);
-			
+
 			try {
 				configFile.save(this.file);
 			} catch (IOException e) {
@@ -222,91 +222,91 @@ public class DConfig {
 			}
 		}
 	}
-	
-	//Getters and Setters
-	public CopyOnWriteArrayList<DClass> getClasses(){
-		if(this.dClasses != null){
-			if(!this.dClasses.isEmpty()){
+
+	// Getters and Setters
+	public CopyOnWriteArrayList<DClass> getClasses() {
+		if (this.dClasses != null) {
+			if (!this.dClasses.isEmpty()) {
 				return this.dClasses;
 			}
 		}
-		
+
 		return mainConfig.dClasses;
 	}
-	
-	public DClass getClass(String name){
-		for(DClass dClass:this.dClasses){
-			if(dClass.name.equals(name)){
+
+	public DClass getClass(String name) {
+		for (DClass dClass : this.dClasses) {
+			if (dClass.name.equals(name)) {
 				return dClass;
 			}
 		}
-		
-		for(DClass dClass:mainConfig.dClasses){
-			if(dClass.name.equals(name)){
+
+		for (DClass dClass : mainConfig.dClasses) {
+			if (dClass.name.equals(name)) {
 				return dClass;
 			}
 		}
 		return null;
 	}
-	
-	public String getMsg(int id, boolean returnMainConfig){
+
+	public String getMsg(int id, boolean returnMainConfig) {
 		String msg = this.msgs.get(id);
-		if(msg != null){
+		if (msg != null) {
 			return this.msgs.get(id);
 		}
-		if(returnMainConfig){
+		if (returnMainConfig) {
 			return mainConfig.msgs.get(id);
 		}
-		
+
 		return null;
 	}
-	
+
 	public void setMsg(String msg, int id) {
 		this.msgs.put(id, msg);
 	}
-	
+
 	public CopyOnWriteArrayList<String> getInvitedPlayers() {
 		CopyOnWriteArrayList<String> tmpInvitedPlayers = new CopyOnWriteArrayList<String>();
 		tmpInvitedPlayers.addAll(this.invitedPlayers);
 		tmpInvitedPlayers.addAll(mainConfig.invitedPlayers);
 		return tmpInvitedPlayers;
 	}
-	
+
 	public void addInvitedPlayer(String player) {
 		this.invitedPlayers.add(player);
 	}
-	
+
 	public void removeInvitedPlayers(String player) {
 		this.invitedPlayers.remove(player);
 	}
-	
+
 	public CopyOnWriteArrayList<Material> getSecureObjects() {
 		CopyOnWriteArrayList<Material> tmpSecureObjects = new CopyOnWriteArrayList<Material>();
 		tmpSecureObjects.addAll(this.secureObjects);
 		tmpSecureObjects.addAll(mainConfig.secureObjects);
 		return tmpSecureObjects;
 	}
-	
+
 	public boolean isLobbyDisabled() {
 		return isLobbyDisabled;
 	}
-	
+
 	public int getTimeToNextPlay() {
 		return timeToNextPlay;
 	}
-	
+
 	public int getTimeToNextLoot() {
 		return timeToNextLoot;
 	}
-	
+
 	public int getTimeUntilKickOfflinePlayer() {
 		return timeUntilKickOfflinePlayer;
 	}
-	
+
 	public boolean isSpoutCraftOnly() {
 		return spoutCraftOnly;
 	}
-	
+
 	public String getSpoutTexturepackURL() {
 		return spoutTexturepackURL;
 	}

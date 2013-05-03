@@ -3,33 +3,33 @@ package com.dre.dungeonsxl.commands;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DCommandRoot {
-	//Variables
+	// Variables
 	public static DCommandRoot root;
-	
-	public CopyOnWriteArrayList<DCommand> commands=new CopyOnWriteArrayList<DCommand>();
-	
-	//Commands
-	public CMDCreate cmdCreate=new CMDCreate();
-	public CMDSave cmdSave=new CMDSave();
-	public CMDLeave cmdLeave=new CMDLeave();
-	public CMDEdit cmdEdit=new CMDEdit();
-	public CMDPortal cmdPortal=new CMDPortal();
-	public CMDDeletePortal cmdDeletePortal=new CMDDeletePortal();
-	public CMDChat cmdChat=new CMDChat();
-	public CMDChatSpy cmdChatSpy=new CMDChatSpy();
-	public CMDList cmdList=new CMDList();
-	public CMDUninvite cmdUninvite=new CMDUninvite();
-	public CMDInvite cmdInvite=new CMDInvite();
-	public CMDMsg cmdMsg=new CMDMsg();
-	public CMDTest cmdTest=new CMDTest();
-	public CMDHelp cmdHelp=new CMDHelp();
-	public CMDReload cmdReload=new CMDReload();
-	
-	//Methods
-	public DCommandRoot(){
-		root=this;
-		
-		//Add Commands
+
+	public CopyOnWriteArrayList<DCommand> commands = new CopyOnWriteArrayList<DCommand>();
+
+	// Commands
+	public CMDCreate cmdCreate = new CMDCreate();
+	public CMDSave cmdSave = new CMDSave();
+	public CMDLeave cmdLeave = new CMDLeave();
+	public CMDEdit cmdEdit = new CMDEdit();
+	public CMDPortal cmdPortal = new CMDPortal();
+	public CMDDeletePortal cmdDeletePortal = new CMDDeletePortal();
+	public CMDChat cmdChat = new CMDChat();
+	public CMDChatSpy cmdChatSpy = new CMDChatSpy();
+	public CMDList cmdList = new CMDList();
+	public CMDUninvite cmdUninvite = new CMDUninvite();
+	public CMDInvite cmdInvite = new CMDInvite();
+	public CMDMsg cmdMsg = new CMDMsg();
+	public CMDTest cmdTest = new CMDTest();
+	public CMDHelp cmdHelp = new CMDHelp();
+	public CMDReload cmdReload = new CMDReload();
+
+	// Methods
+	public DCommandRoot() {
+		root = this;
+
+		// Add Commands
 		this.commands.add(cmdCreate);
 		this.commands.add(cmdSave);
 		this.commands.add(cmdLeave);

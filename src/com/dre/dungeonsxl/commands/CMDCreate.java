@@ -9,68 +9,67 @@ import com.dre.dungeonsxl.EditWorld;
 
 public class CMDCreate extends DCommand {
 
-	public CMDCreate(){
-		this.args=1;
-		this.command="create";
-		this.help=p.language.get("Help_Cmd_Create");
-		this.permissions="dxl.create";
+	public CMDCreate() {
+		this.args = 1;
+		this.command = "create";
+		this.help = p.language.get("Help_Cmd_Create");
+		this.permissions = "dxl.create";
 		this.isPlayerCommand = true;
 		this.isConsoleCommand = true;
 	}
 
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
-		String name=args[1];
+		String name = args[1];
 
-		if(sender instanceof ConsoleCommandSender){
-			if(name.length()<=15){
-				//Msg create
+		if (sender instanceof ConsoleCommandSender) {
+			if (name.length() <= 15) {
+				// Msg create
 				p.log(p.language.get("Log_NewDungeon"));
 				p.log(p.language.get("Log_GenerateNewWorld"));
 
-				//Create World
-				EditWorld eworld=new EditWorld();
+				// Create World
+				EditWorld eworld = new EditWorld();
 				eworld.generate();
-				eworld.dungeonname=name;
+				eworld.dungeonname = name;
 				eworld.save();
 				eworld.delete();
 
-				//MSG Done
+				// MSG Done
 				p.log(p.language.get("Log_WorldGenerationFinished"));
-			}else{
+			} else {
 				p.msg(sender, p.language.get("Error_NameToLong"));
 			}
-		} else if(sender instanceof Player){
+		} else if (sender instanceof Player) {
 			Player player = (Player) sender;
-			
-			if(DPlayer.get(player)==null){
-				if(name.length()<=15){
-					//Msg create
+
+			if (DPlayer.get(player) == null) {
+				if (name.length() <= 15) {
+					// Msg create
 					p.log(p.language.get("Log_NewDungeon"));
 					p.log(p.language.get("Log_GenerateNewWorld"));
 
-					//Create World
-					EditWorld eworld=new EditWorld();
+					// Create World
+					EditWorld eworld = new EditWorld();
 					eworld.generate();
-					eworld.dungeonname=name;
+					eworld.dungeonname = name;
 
-					//MSG Done
+					// MSG Done
 					p.log(p.language.get("Log_WorldGenerationFinished"));
 
-					//Tp Player
-					if(eworld.lobby==null){
-						new DPlayer(player,eworld.world,eworld.world.getSpawnLocation(), true);
-					}else{
-						new DPlayer(player,eworld.world,eworld.lobby, true);
+					// Tp Player
+					if (eworld.lobby == null) {
+						new DPlayer(player, eworld.world, eworld.world.getSpawnLocation(), true);
+					} else {
+						new DPlayer(player, eworld.world, eworld.lobby, true);
 					}
-				}else{
+				} else {
 					p.msg(player, p.language.get("Error_NameToLong"));
 				}
-			}else{
+			} else {
 				p.msg(player, p.language.get("Error_LeaveDungeon"));
 			}
 		}
 	}
-
 
 }

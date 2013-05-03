@@ -6,42 +6,42 @@ import org.bukkit.entity.Player;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class DGroup {
-	public static CopyOnWriteArrayList<DGroup> dgroups=new CopyOnWriteArrayList<DGroup>();
-	
-	private CopyOnWriteArrayList<Player> players=new CopyOnWriteArrayList<Player>();
+	public static CopyOnWriteArrayList<DGroup> dgroups = new CopyOnWriteArrayList<DGroup>();
+
+	private CopyOnWriteArrayList<Player> players = new CopyOnWriteArrayList<Player>();
 	private String dungeonname;
 	private GameWorld gworld;
 	public boolean isPlaying;
-	
-	public DGroup(Player player, String dungeonname){
+
+	public DGroup(Player player, String dungeonname) {
 		dgroups.add(this);
-		
+
 		this.getPlayers().add(player);
-		this.isPlaying=false;
+		this.isPlaying = false;
 		this.setDungeonname(dungeonname);
 	}
-	
-	public void addPlayer(Player player){
-		//Send message
-		for(Player groupPlayer : this.getPlayers()){
-			P.p.msg(groupPlayer,P.p.language.get("Player_JoinGroup", player.getName()));
+
+	public void addPlayer(Player player) {
+		// Send message
+		for (Player groupPlayer : this.getPlayers()) {
+			P.p.msg(groupPlayer, P.p.language.get("Player_JoinGroup", player.getName()));
 		}
-		
-		//Add player
+
+		// Add player
 		this.getPlayers().add(player);
 	}
-	
+
 	public void removePlayer(Player player) {
 		this.getPlayers().remove(player);
 		DGSign.updatePerGroup(this);
-		
-		//Send message
-		for(Player groupPlayer : this.getPlayers()){
-			P.p.msg(groupPlayer,P.p.language.get("Player_LeftGroup", player.getName()));
+
+		// Send message
+		for (Player groupPlayer : this.getPlayers()) {
+			P.p.msg(groupPlayer, P.p.language.get("Player_LeftGroup", player.getName()));
 		}
-		
-		//Check group
-		if(this.isEmpty()){
+
+		// Check group
+		if (this.isEmpty()) {
 			this.remove();
 		}
 	}
@@ -54,47 +54,47 @@ public class DGroup {
 		dgroups.remove(this);
 		DGSign.updatePerGroup(this);
 	}
-	
-	public void startGame(){
-		this.isPlaying=true;
+
+	public void startGame() {
+		this.isPlaying = true;
 		getGworld().startGame();
-		for(Player player:getPlayers()){
-			DPlayer dplayer=DPlayer.get(player);
+		for (Player player : getPlayers()) {
+			DPlayer dplayer = DPlayer.get(player);
 			dplayer.respawn();
 		}
 		DGSign.updatePerGroup(this);
-		
+
 	}
-	
-	//Statics
-	public static DGroup get(Player player){
-		for(DGroup dgroup:dgroups){
-			if(dgroup.getPlayers().contains(player)){
+
+	// Statics
+	public static DGroup get(Player player) {
+		for (DGroup dgroup : dgroups) {
+			if (dgroup.getPlayers().contains(player)) {
 				return dgroup;
 			}
 		}
 		return null;
 	}
-	
-	public static DGroup get(GameWorld gworld){
-		for(DGroup dgroup:dgroups){
-			if(dgroup.getGworld()==gworld){
+
+	public static DGroup get(GameWorld gworld) {
+		for (DGroup dgroup : dgroups) {
+			if (dgroup.getGworld() == gworld) {
 				return dgroup;
 			}
 		}
 		return null;
 	}
-	
-	public static void leaveGroup(Player player){
-		for(DGroup dgroup:dgroups){
-			if(dgroup.getPlayers().contains(player)){
+
+	public static void leaveGroup(Player player) {
+		for (DGroup dgroup : dgroups) {
+			if (dgroup.getPlayers().contains(player)) {
 				dgroup.getPlayers().remove(player);
 			}
 		}
 	}
 
-	//Getters and setters
-	
+	// Getters and setters
+
 	public CopyOnWriteArrayList<Player> getPlayers() {
 		return players;
 	}

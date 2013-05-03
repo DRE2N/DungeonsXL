@@ -38,72 +38,72 @@ import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 import com.dre.dungeonsxl.listener.WorldListener;
 
-public class P extends JavaPlugin{
+public class P extends JavaPlugin {
 	public static P p;
 
-	//Listener
+	// Listener
 	private static Listener entityListener;
 	private static Listener playerListener;
 	private static Listener blockListener;
 	private static Listener worldListener;
 	private static Listener hangingListener;
 
-	//Main Config Reader
+	// Main Config Reader
 	public MainConfig mainConfig;
 
-	//Language Reader
+	// Language Reader
 	public LanguageReader language;
 
-	//Chatspyer
-	public CopyOnWriteArrayList<Player> chatSpyer=new CopyOnWriteArrayList<Player>();
-	
-	//Spout
-	public boolean isSpoutEnabled = false;
-	
-	@Override
-	public void onEnable(){
-		p = this;
-		
-		//Commands
-		getCommand("dungeonsxl").setExecutor(new CommandListener());
-		
-		//Load Language
-		language = new LanguageReader(new File(p.getDataFolder(), "languages/en.yml"));
-		
-		//Load Config
-		mainConfig=new MainConfig(new File(p.getDataFolder(), "config.yml"));
-		
-		//Load Language 2
-		language = new LanguageReader(new File(p.getDataFolder(), "languages/"+mainConfig.language+".yml"));
+	// Chatspyer
+	public CopyOnWriteArrayList<Player> chatSpyer = new CopyOnWriteArrayList<Player>();
 
-		//Init Commands
+	// Spout
+	public boolean isSpoutEnabled = false;
+
+	@Override
+	public void onEnable() {
+		p = this;
+
+		// Commands
+		getCommand("dungeonsxl").setExecutor(new CommandListener());
+
+		// Load Language
+		language = new LanguageReader(new File(p.getDataFolder(), "languages/en.yml"));
+
+		// Load Config
+		mainConfig = new MainConfig(new File(p.getDataFolder(), "config.yml"));
+
+		// Load Language 2
+		language = new LanguageReader(new File(p.getDataFolder(), "languages/" + mainConfig.language + ".yml"));
+
+		// Init Commands
 		new DCommandRoot();
 
-		//InitFolders
+		// InitFolders
 		this.initFolders();
 
-		//Setup Permissions
+		// Setup Permissions
 		this.setupPermissions();
-		
-		//Listener
+
+		// Listener
 		entityListener = new EntityListener();
 		playerListener = new PlayerListener();
 		blockListener = new BlockListener();
 		worldListener = new WorldListener();
 		hangingListener = new HangingListener();
 
-		Bukkit.getServer().getPluginManager().registerEvents(entityListener,this);
-		Bukkit.getServer().getPluginManager().registerEvents(playerListener,this);
-		Bukkit.getServer().getPluginManager().registerEvents(blockListener,this);
-		Bukkit.getServer().getPluginManager().registerEvents(worldListener,this);
-		Bukkit.getServer().getPluginManager().registerEvents(hangingListener,this);
+		Bukkit.getServer().getPluginManager().registerEvents(entityListener, this);
+		Bukkit.getServer().getPluginManager().registerEvents(playerListener, this);
+		Bukkit.getServer().getPluginManager().registerEvents(blockListener, this);
+		Bukkit.getServer().getPluginManager().registerEvents(worldListener, this);
+		Bukkit.getServer().getPluginManager().registerEvents(hangingListener, this);
 
-		//Load All
+		// Load All
 		this.loadAll();
-		
-		//Spout
-		if(mainConfig.enableSpout){
-			if(P.p.getServer().getPluginManager().getPlugin("Spout")!=null){
+
+		// Spout
+		if (mainConfig.enableSpout) {
+			if (P.p.getServer().getPluginManager().getPlugin("Spout") != null) {
 				isSpoutEnabled = true;
 			} else {
 				isSpoutEnabled = false;
@@ -111,26 +111,26 @@ public class P extends JavaPlugin{
 				P.p.log(P.p.language.get("Log_Error_Spout"));
 			}
 		}
-		
-		//Scheduler
+
+		// Scheduler
 		this.initSchedulers();
-		
-		//MSG
-		this.log(this.getDescription().getName()+" enabled!");
+
+		// MSG
+		this.log(this.getDescription().getName() + " enabled!");
 	}
 
 	@Override
-	public void onDisable(){
-		//Save
+	public void onDisable() {
+		// Save
 		this.saveData();
 		language.save();
-		
-		//DPlayer leaves World
-		for(DPlayer dplayer:DPlayer.players){
+
+		// DPlayer leaves World
+		for (DPlayer dplayer : DPlayer.players) {
 			dplayer.leave();
 		}
 
-		//Delete all Data
+		// Delete all Data
 		DGroup.dgroups.clear();
 		DGSign.dgsigns.clear();
 		DLootInventory.LootInventorys.clear();
@@ -139,91 +139,90 @@ public class P extends JavaPlugin{
 		LeaveSign.lsigns.clear();
 		DCommandRoot.root.commands.clear();
 
-		//Delete Worlds
+		// Delete Worlds
 		GameWorld.deleteAll();
 		EditWorld.deleteAll();
 
-		//Disable listeners
+		// Disable listeners
 		HandlerList.unregisterAll(p);
 
-		//Stop shedulers
+		// Stop shedulers
 		p.getServer().getScheduler().cancelTasks(this);
-		
-		//MSG
-		this.log(this.getDescription().getName()+" disabled!");
+
+		// MSG
+		this.log(this.getDescription().getName() + " disabled!");
 	}
 
-	//Init.
-	public void initFolders(){
-		//Check Folder
-		File folder = new File(this.getDataFolder()+"");
-		if(!folder.exists()){
+	// Init.
+	public void initFolders() {
+		// Check Folder
+		File folder = new File(this.getDataFolder() + "");
+		if (!folder.exists()) {
 			folder.mkdir();
 		}
 
-		folder = new File(this.getDataFolder()+File.separator+"dungeons");
-		if(!folder.exists()){
+		folder = new File(this.getDataFolder() + File.separator + "dungeons");
+		if (!folder.exists()) {
 			folder.mkdir();
 		}
 	}
-	
-	public void initSchedulers(){
+
+	public void initSchedulers() {
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
 			public void run() {
-				for(GameWorld gworld:GameWorld.gworlds){
-					if(gworld.world.getPlayers().isEmpty()){
-						if(DPlayer.get(gworld.world).isEmpty()){
+				for (GameWorld gworld : GameWorld.gworlds) {
+					if (gworld.world.getPlayers().isEmpty()) {
+						if (DPlayer.get(gworld.world).isEmpty()) {
 							gworld.delete();
 						}
 					}
 				}
-				for(EditWorld eworld:EditWorld.eworlds){
-					if(eworld.world.getPlayers().isEmpty()){
+				for (EditWorld eworld : EditWorld.eworlds) {
+					if (eworld.world.getPlayers().isEmpty()) {
 						eworld.delete();
 					}
 				}
-		    }
+			}
 		}, 0L, 1200L);
 
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
-		    public void run() {
-		        GameWorld.update();
-		        DPlayer.update(true);
-		    }
+			public void run() {
+				GameWorld.update();
+				DPlayer.update(true);
+			}
 		}, 0L, 20L);
 
 		p.getServer().getScheduler().scheduleSyncRepeatingTask(p, new Runnable() {
-		    public void run() {
-		        DPlayer.update(false);
-		    }
+			public void run() {
+				DPlayer.update(false);
+			}
 		}, 0L, 2L);
 	}
 
-	//Permissions
+	// Permissions
 	public Permission permission = null;
 
-    private Boolean setupPermissions()
-    {
-        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (permissionProvider != null) {
-            permission = permissionProvider.getProvider();
-        }
-        return (permission != null);
-    }
+	private Boolean setupPermissions() {
+		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		if (permissionProvider != null) {
+			permission = permissionProvider.getProvider();
+		}
+		return (permission != null);
+	}
 
-    public Boolean GroupEnabled(String group){
+	public Boolean GroupEnabled(String group) {
 
-    	for(String agroup:permission.getGroups()){
-    		if(agroup.equalsIgnoreCase(group)){
-    			return true;
-    		}
-    	}
+		for (String agroup : permission.getGroups()) {
+			if (agroup.equalsIgnoreCase(group)) {
+				return true;
+			}
+		}
 
-    	return false;
-    }
+		return false;
+	}
 
-    //Save and Load
-	public void saveData(){
+	// Save and Load
+	public void saveData() {
 		File file = new File(this.getDataFolder(), "data.yml");
 		FileConfiguration configFile = new YamlConfiguration();
 
@@ -238,159 +237,159 @@ public class P extends JavaPlugin{
 		}
 	}
 
-	public void loadAll(){
-		//Load world data
+	public void loadAll() {
+		// Load world data
 		File file = new File(this.getDataFolder(), "data.yml");
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-		
+
 		DPortal.load(configFile);
 		DGSign.load(configFile);
 		LeaveSign.load(configFile);
-		
-		//Load saved players
+
+		// Load saved players
 		DSavePlayer.load();
-		
-		//Check Worlds
+
+		// Check Worlds
 		this.checkWorlds();
 	}
-	
-	public void checkWorlds(){
+
+	public void checkWorlds() {
 		File serverDir = new File(".");
-		
-		for(File file : serverDir.listFiles()){
-			if(file.getName().contains("DXL_Edit_") && file.isDirectory()){
-				for(File dungeonFile : file.listFiles()){
-					if(dungeonFile.getName().contains(".id_")){
+
+		for (File file : serverDir.listFiles()) {
+			if (file.getName().contains("DXL_Edit_") && file.isDirectory()) {
+				for (File dungeonFile : file.listFiles()) {
+					if (dungeonFile.getName().contains(".id_")) {
 						String dungeonName = dungeonFile.getName().substring(4);
-						this.copyDirectory(file,new File(p.getDataFolder(),"/dungeons/"+dungeonName));
-						this.deletenotusingfiles(new File(p.getDataFolder(),"/dungeons/"+dungeonName));
+						this.copyDirectory(file, new File(p.getDataFolder(), "/dungeons/" + dungeonName));
+						this.deletenotusingfiles(new File(p.getDataFolder(), "/dungeons/" + dungeonName));
 					}
 				}
-				
+
 				this.removeDirectory(file);
-			} else if (file.getName().contains("DXL_Game_") && file.isDirectory()){
+			} else if (file.getName().contains("DXL_Game_") && file.isDirectory()) {
 				this.removeDirectory(file);
 			}
 		}
 	}
-	
-	//File Control
+
+	// File Control
 	public boolean removeDirectory(File directory) {
 		if (directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
-				if (!removeDirectory(f)) return false;
+				if (!removeDirectory(f))
+					return false;
 			}
 		}
 		return directory.delete();
 	}
 
 	public void copyFile(File in, File out) throws IOException {
-        FileChannel inChannel=null;
-        FileChannel outChannel=null;
-        try {
-        	inChannel = new FileInputStream(in).getChannel();
-            outChannel = new FileOutputStream(out).getChannel();
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-        } catch (IOException e) {
-            throw e;
-        } finally {
-            if (inChannel != null)
-                inChannel.close();
-            if (outChannel != null)
-                outChannel.close();
-        }
-    }
+		FileChannel inChannel = null;
+		FileChannel outChannel = null;
+		try {
+			inChannel = new FileInputStream(in).getChannel();
+			outChannel = new FileOutputStream(out).getChannel();
+			inChannel.transferTo(0, inChannel.size(), outChannel);
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			if (inChannel != null)
+				inChannel.close();
+			if (outChannel != null)
+				outChannel.close();
+		}
+	}
 
-	public String[] excludedFiles={"config.yml", "uid.dat"};
+	public String[] excludedFiles = { "config.yml", "uid.dat" };
 
 	public void copyDirectory(File sourceLocation, File targetLocation) {
-        if (sourceLocation.isDirectory()) {
-            if (!targetLocation.exists()) {
-                targetLocation.mkdir();
-            }
+		if (sourceLocation.isDirectory()) {
+			if (!targetLocation.exists()) {
+				targetLocation.mkdir();
+			}
 
-            String[] children = sourceLocation.list();
-            for (int i = 0; i < children.length; i++) {
-            	boolean isOk=true;
-            	for (String excluded:excludedFiles){
-            		if(children[i].contains(excluded)){
-            			isOk=false;
-            			break;
-            		}
-            	}
-            	if(isOk){
-            		copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
-            	}
-            }
-        } else {
-            try {
-                if (!targetLocation.getParentFile().exists()) {
+			String[] children = sourceLocation.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean isOk = true;
+				for (String excluded : excludedFiles) {
+					if (children[i].contains(excluded)) {
+						isOk = false;
+						break;
+					}
+				}
+				if (isOk) {
+					copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
+				}
+			}
+		} else {
+			try {
+				if (!targetLocation.getParentFile().exists()) {
 
-                    createDirectory(targetLocation.getParentFile().getAbsolutePath());
-                    targetLocation.createNewFile();
+					createDirectory(targetLocation.getParentFile().getAbsolutePath());
+					targetLocation.createNewFile();
 
-                } else if (!targetLocation.exists()) {
+				} else if (!targetLocation.exists()) {
 
-                    targetLocation.createNewFile();
-                }
+					targetLocation.createNewFile();
+				}
 
-                InputStream in = new FileInputStream(sourceLocation);
-                OutputStream out = new FileOutputStream(targetLocation);
+				InputStream in = new FileInputStream(sourceLocation);
+				OutputStream out = new FileOutputStream(targetLocation);
 
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-                
-                in.close();
-                out.close();
-            } catch (Exception e) {
-                if (e.getMessage().contains("Zugriff")
-                        || e.getMessage().contains("Access"))
-                    P.p.log("Error: " + e.getMessage() + " // Access denied");
-                else
-                	P.p.log("Error: " + e.getMessage());
-            }
-        }
-    }
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
 
-    public void createDirectory(String s) {
+				in.close();
+				out.close();
+			} catch (Exception e) {
+				if (e.getMessage().contains("Zugriff") || e.getMessage().contains("Access"))
+					P.p.log("Error: " + e.getMessage() + " // Access denied");
+				else
+					P.p.log("Error: " + e.getMessage());
+			}
+		}
+	}
 
-        if (!new File(s).getParentFile().exists()) {
+	public void createDirectory(String s) {
 
-            createDirectory(new File(s).getParent());
-        }
+		if (!new File(s).getParentFile().exists()) {
 
-        new File(s).mkdir();
-    }
+			createDirectory(new File(s).getParent());
+		}
 
-	public void deletenotusingfiles(File directory){
-		File[] files=directory.listFiles();
-		for(File file:files){
-			if(file.getName().equalsIgnoreCase("uid.dat") || file.getName().contains(".id_") ){
+		new File(s).mkdir();
+	}
+
+	public void deletenotusingfiles(File directory) {
+		File[] files = directory.listFiles();
+		for (File file : files) {
+			if (file.getName().equalsIgnoreCase("uid.dat") || file.getName().contains(".id_")) {
 				file.delete();
 			}
 		}
 	}
 
-	//Msg
-	public void msg(CommandSender sender,String msg){
+	// Msg
+	public void msg(CommandSender sender, String msg) {
 		msg = replaceColors(msg);
-		sender.sendMessage(ChatColor.DARK_GREEN+"[DXL] "+ChatColor.WHITE+msg);
+		sender.sendMessage(ChatColor.DARK_GREEN + "[DXL] " + ChatColor.WHITE + msg);
 	}
 
-	public void msg(CommandSender sender,String msg, boolean zusatz){
+	public void msg(CommandSender sender, String msg, boolean zusatz) {
 		msg = replaceColors(msg);
-		if(zusatz){
-			sender.sendMessage(ChatColor.DARK_GREEN+"[DXL]"+ChatColor.WHITE+msg);
-		}else{
-			sender.sendMessage(ChatColor.WHITE+msg);
+		if (zusatz) {
+			sender.sendMessage(ChatColor.DARK_GREEN + "[DXL]" + ChatColor.WHITE + msg);
+		} else {
+			sender.sendMessage(ChatColor.WHITE + msg);
 		}
 	}
 
-	private String replaceColors(String msg){
-		if (msg!=null) {
+	private String replaceColors(String msg) {
+		if (msg != null) {
 			msg = msg.replace("&0", ChatColor.getByChar("0").toString());
 			msg = msg.replace("&1", ChatColor.getByChar("1").toString());
 			msg = msg.replace("&2", ChatColor.getByChar("2").toString());
@@ -418,25 +417,25 @@ public class P extends JavaPlugin{
 		return msg;
 	}
 
-	//Misc.
-	public EntityType getEntitiyType(String name){
-		for(EntityType type:EntityType.values()){
-			if(name.equalsIgnoreCase(type.getName())){
+	// Misc.
+	public EntityType getEntitiyType(String name) {
+		for (EntityType type : EntityType.values()) {
+			if (name.equalsIgnoreCase(type.getName())) {
 				return type;
 			}
 		}
 
 		return null;
 	}
-	
-	public int parseInt(String string){
+
+	public int parseInt(String string) {
 		return NumberUtils.toInt(string, 0);
 	}
-	
+
 	public Player getOfflinePlayer(String player) {
 		Player pplayer = null;
 		try {
-			//See if the player has data files
+			// See if the player has data files
 
 			// Find the player folder
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
@@ -446,62 +445,59 @@ public class P extends JavaPlugin{
 				String filename = playerfile.getName();
 				String playername = filename.substring(0, filename.length() - 4);
 
-				if(playername.trim().equalsIgnoreCase(player)) {
-					//This player plays on the server!
-					MinecraftServer server = ((CraftServer)Bukkit.getServer()).getServer();
+				if (playername.trim().equalsIgnoreCase(player)) {
+					// This player plays on the server!
+					MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
 					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), playername, new PlayerInteractManager(server.getWorldServer(0)));
 					Player target = (entity == null) ? null : (Player) entity.getBukkitEntity();
-					if(target != null) {
+					if (target != null) {
 						target.loadData();
 						return target;
 					}
 				}
 			}
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 		return pplayer;
 	}
-	
-	public Player getOfflinePlayer(String player, Location location){
+
+	public Player getOfflinePlayer(String player, Location location) {
 		Player pplayer = null;
 		try {
-			//See if the player has data files
-			
+			// See if the player has data files
+
 			// Find the player folder
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
-			
+
 			// Find player name
 			for (File playerfile : playerfolder.listFiles()) {
 				String filename = playerfile.getName();
 				String playername = filename.substring(0, filename.length() - 4);
 
-				if(playername.trim().equalsIgnoreCase(player)) {
-					//This player plays on the server!
-					MinecraftServer server = ((CraftServer)Bukkit.getServer()).getServer();
+				if (playername.trim().equalsIgnoreCase(player)) {
+					// This player plays on the server!
+					MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
 					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), playername, new PlayerInteractManager(server.getWorldServer(0)));
 					entity.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 					entity.world = ((CraftWorld) location.getWorld()).getHandle();
 					Player target = (entity == null) ? null : (Player) entity.getBukkitEntity();
-					if(target != null) {
-						//target.loadData();
+					if (target != null) {
+						// target.loadData();
 						return target;
 					}
 				}
 			}
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 		return pplayer;
 	}
-	
-    // -------------------------------------------- //
- 	// LOGGING
- 	// -------------------------------------------- //
- 	public void log(String msg)
- 	{
- 		this.msg(Bukkit.getConsoleSender(), msg);
- 	}
+
+	// -------------------------------------------- //
+	// LOGGING
+	// -------------------------------------------- //
+	public void log(String msg) {
+		this.msg(Bukkit.getConsoleSender(), msg);
+	}
 }

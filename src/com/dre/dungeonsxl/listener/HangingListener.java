@@ -6,12 +6,12 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
 import com.dre.dungeonsxl.game.GameWorld;
 
-public class HangingListener implements Listener{
-	
+public class HangingListener implements Listener {
+
 	@EventHandler
-	public void onHangingBreakByEntity(HangingBreakByEntityEvent event){
+	public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
 		GameWorld gworld = GameWorld.get(event.getEntity().getWorld());
-		if(gworld!=null){
+		if (gworld != null) {
 			event.setCancelled(true);
 		}
 	}

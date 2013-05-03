@@ -9,7 +9,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 public class DLootInventory {
-	public static CopyOnWriteArrayList<DLootInventory> LootInventorys=new CopyOnWriteArrayList<DLootInventory>();
+	public static CopyOnWriteArrayList<DLootInventory> LootInventorys = new CopyOnWriteArrayList<DLootInventory>();
 
 	public Inventory inventory;
 	public InventoryView inventoryView;
@@ -17,26 +17,25 @@ public class DLootInventory {
 
 	public long time;
 
-	public DLootInventory(Player player, ItemStack[] istacks){
+	public DLootInventory(Player player, ItemStack[] istacks) {
 		LootInventorys.add(this);
 
 		this.inventory = Bukkit.createInventory(player, 54, "Belohnungen");
-		for(ItemStack istack:istacks){
-			if(istack!=null){
+		for (ItemStack istack : istacks) {
+			if (istack != null) {
 				this.inventory.addItem(istack);
 			}
 		}
-		this.player=player;
+		this.player = player;
 	}
 
-
 	public static DLootInventory get(Player player) {
-		for(DLootInventory inventory:LootInventorys){
-			if(inventory.player==player){
+		for (DLootInventory inventory : LootInventorys) {
+			if (inventory.player == player) {
 				return inventory;
 			}
 		}
-		
+
 		return null;
 	}
 }

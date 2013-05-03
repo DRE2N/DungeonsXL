@@ -18,56 +18,57 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 public class EditWorld {
-	private static P p=P.p;
-	public static CopyOnWriteArrayList<EditWorld> eworlds=new CopyOnWriteArrayList<EditWorld>();
+	private static P p = P.p;
+	public static CopyOnWriteArrayList<EditWorld> eworlds = new CopyOnWriteArrayList<EditWorld>();
 
-	//Variables
+	// Variables
 	public World world;
 	public String owner;
 	public String name;
 	public String dungeonname;
 	public int id;
 	public Location lobby;
-	public CopyOnWriteArrayList<String> invitedPlayers=new CopyOnWriteArrayList<String>();
-	public CopyOnWriteArrayList<Block> sign=new CopyOnWriteArrayList<Block>();
+	public CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
+	public CopyOnWriteArrayList<Block> sign = new CopyOnWriteArrayList<Block>();
 
-	public EditWorld(){
+	public EditWorld() {
 		eworlds.add(this);
 
-		//ID
-		this.id=-1;
-		int i=-1;
-		while(this.id==-1){
+		// ID
+		this.id = -1;
+		int i = -1;
+		while (this.id == -1) {
 			i++;
-			boolean exist=false;
-			for(EditWorld eworld:eworlds){
-				if(eworld.id==i){
-					exist=true;
+			boolean exist = false;
+			for (EditWorld eworld : eworlds) {
+				if (eworld.id == i) {
+					exist = true;
 					break;
 				}
 			}
-			if(!exist) this.id=i;
+			if (!exist)
+				this.id = i;
 		}
 
-		name="DXL_Edit_"+this.id;
+		name = "DXL_Edit_" + this.id;
 	}
 
-	public void generate(){
-		WorldCreator creator=WorldCreator.name(name);
+	public void generate() {
+		WorldCreator creator = WorldCreator.name(name);
 		creator.type(WorldType.FLAT);
 		creator.generateStructures(false);
 
-		this.world=p.getServer().createWorld(creator);
+		this.world = p.getServer().createWorld(creator);
 	}
 
-	public void save(){
+	public void save() {
 		this.world.save();
-		p.copyDirectory(new File("DXL_Edit_"+this.id),new File(p.getDataFolder(),"/dungeons/"+this.dungeonname));
-		p.deletenotusingfiles(new File(p.getDataFolder(),"/dungeons/"+this.dungeonname));
+		p.copyDirectory(new File("DXL_Edit_" + this.id), new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
+		p.deletenotusingfiles(new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
 		try {
-			ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream(new File(p.getDataFolder(),"/dungeons/"+this.dungeonname+"/DXLData.data")));
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(p.getDataFolder(), "/dungeons/" + this.dungeonname + "/DXLData.data")));
 			out.writeInt(this.sign.size());
-			for(Block sign:this.sign){
+			for (Block sign : this.sign) {
 				out.writeInt(sign.getX());
 				out.writeInt(sign.getY());
 				out.writeInt(sign.getZ());
@@ -81,33 +82,33 @@ public class EditWorld {
 		}
 	}
 
-	public void checkSign(Block block){
-		if((block.getState() instanceof Sign)){
+	public void checkSign(Block block) {
+		if ((block.getState() instanceof Sign)) {
 			Sign sign = (Sign) block.getState();
-			String[] lines=sign.getLines();
+			String[] lines = sign.getLines();
 
-			if(lines[0].equalsIgnoreCase("[lobby]")){
-				this.lobby=block.getLocation();
+			if (lines[0].equalsIgnoreCase("[lobby]")) {
+				this.lobby = block.getLocation();
 			}
 		}
 	}
 
-	public void delete(){
-			eworlds.remove(this);
-			for(Player player:this.world.getPlayers()){
-				DPlayer dplayer=DPlayer.get(player);
-				dplayer.leave();
-			}
+	public void delete() {
+		eworlds.remove(this);
+		for (Player player : this.world.getPlayers()) {
+			DPlayer dplayer = DPlayer.get(player);
+			dplayer.leave();
+		}
 
-			p.getServer().unloadWorld(this.world,true);
-			File dir = new File("DXL_Edit_"+this.id);
-			p.removeDirectory(dir);
+		p.getServer().unloadWorld(this.world, true);
+		File dir = new File("DXL_Edit_" + this.id);
+		p.removeDirectory(dir);
 	}
 
-	//Static
-	public static EditWorld get(World world){
-		for(EditWorld eworld:eworlds){
-			if(eworld.world.equals(world)){
+	// Static
+	public static EditWorld get(World world) {
+		for (EditWorld eworld : eworlds) {
+			if (eworld.world.equals(world)) {
 				return eworld;
 			}
 		}
@@ -115,9 +116,9 @@ public class EditWorld {
 		return null;
 	}
 
-	public static EditWorld get(String name){
-		for(EditWorld eworld:eworlds){
-			if(eworld.name.equalsIgnoreCase(name)){
+	public static EditWorld get(String name) {
+		for (EditWorld eworld : eworlds) {
+			if (eworld.name.equalsIgnoreCase(name)) {
 				return eworld;
 			}
 		}
@@ -125,46 +126,46 @@ public class EditWorld {
 		return null;
 	}
 
-	public static void deleteAll(){
-		for(EditWorld eworld:eworlds){
+	public static void deleteAll() {
+		for (EditWorld eworld : eworlds) {
 			eworlds.remove(eworld);
-			for(Player player:eworld.world.getPlayers()){
-				DPlayer dplayer=DPlayer.get(player);
+			for (Player player : eworld.world.getPlayers()) {
+				DPlayer dplayer = DPlayer.get(player);
 				dplayer.leave();
 			}
 
-			p.getServer().unloadWorld(eworld.world,true);
-			File dir = new File("DXL_Edit_"+eworld.id);
+			p.getServer().unloadWorld(eworld.world, true);
+			File dir = new File("DXL_Edit_" + eworld.id);
 			p.removeDirectory(dir);
 		}
 	}
 
-	public static EditWorld load(String name){
-		for(EditWorld eworld:eworlds){
+	public static EditWorld load(String name) {
+		for (EditWorld eworld : eworlds) {
 
-			if(eworld.dungeonname.equalsIgnoreCase(name)){
+			if (eworld.dungeonname.equalsIgnoreCase(name)) {
 				return eworld;
 			}
 		}
 
-		File file=new File(p.getDataFolder(),"/dungeons/"+name);
+		File file = new File(p.getDataFolder(), "/dungeons/" + name);
 
-		if(file.exists()){
+		if (file.exists()) {
 			EditWorld eworld = new EditWorld();
-			eworld.dungeonname=name;
-			//World
-			p.copyDirectory(file,new File("DXL_Edit_"+eworld.id));
+			eworld.dungeonname = name;
+			// World
+			p.copyDirectory(file, new File("DXL_Edit_" + eworld.id));
 
-			eworld.world=p.getServer().createWorld(WorldCreator.name("DXL_Edit_"+eworld.id));
+			eworld.world = p.getServer().createWorld(WorldCreator.name("DXL_Edit_" + eworld.id));
 
 			try {
-				ObjectInputStream os=new ObjectInputStream(new FileInputStream(new File(p.getDataFolder(),"/dungeons/"+eworld.dungeonname+"/DXLData.data")));
-				int length=os.readInt();
-				for(int i=0; i<length; i++){
-					int x=os.readInt();
-					int y=os.readInt();
-					int z=os.readInt();
-					Block block=eworld.world.getBlockAt(x, y, z);
+				ObjectInputStream os = new ObjectInputStream(new FileInputStream(new File(p.getDataFolder(), "/dungeons/" + eworld.dungeonname + "/DXLData.data")));
+				int length = os.readInt();
+				for (int i = 0; i < length; i++) {
+					int x = os.readInt();
+					int y = os.readInt();
+					int z = os.readInt();
+					Block block = eworld.world.getBlockAt(x, y, z);
 					eworld.checkSign(block);
 					eworld.sign.add(block);
 				}
@@ -175,33 +176,33 @@ public class EditWorld {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			//Id File
-			File idFile = new File("DXL_Edit_"+eworld.id+"/.id_"+name);
+
+			// Id File
+			File idFile = new File("DXL_Edit_" + eworld.id + "/.id_" + name);
 			try {
 				idFile.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			return eworld;
 		}
 
 		return null;
 	}
 
-	public static boolean exist(String name){
-		//Cheack Loaded EditWorlds
-		for(EditWorld eworld:eworlds){
-			if(eworld.dungeonname.equalsIgnoreCase(name)){
+	public static boolean exist(String name) {
+		// Cheack Loaded EditWorlds
+		for (EditWorld eworld : eworlds) {
+			if (eworld.dungeonname.equalsIgnoreCase(name)) {
 				return true;
 			}
 		}
 
-		//Cheack Unloaded Worlds
-		File file=new File(p.getDataFolder(),"/dungeons/"+name);
+		// Cheack Unloaded Worlds
+		File file = new File(p.getDataFolder(), "/dungeons/" + name);
 
-		if(file.exists()){
+		if (file.exists()) {
 			return true;
 		}
 
@@ -209,23 +210,21 @@ public class EditWorld {
 	}
 
 	public void msg(String msg) {
-		for(DPlayer dplayer:DPlayer.get(this.world)){
+		for (DPlayer dplayer : DPlayer.get(this.world)) {
 			p.msg(dplayer.player, msg);
 		}
 	}
 
-	//Invite
-	public static boolean addInvitedPlayer(String eworldname,String player){
+	// Invite
+	public static boolean addInvitedPlayer(String eworldname, String player) {
 
-		EditWorld eworld=EditWorld.get(eworldname);
+		EditWorld eworld = EditWorld.get(eworldname);
 
-
-
-		if(eworld!=null){
+		if (eworld != null) {
 			eworld.invitedPlayers.add(player.toLowerCase());
-		}else{
-			if(exist(eworldname)){
-				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
+		} else {
+			if (exist(eworldname)) {
+				DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
 				config.addInvitedPlayer(player.toLowerCase());
 				config.save();
 				return true;
@@ -236,15 +235,15 @@ public class EditWorld {
 
 	}
 
-	public static boolean removeInvitedPlayer(String eworldname,String player){
+	public static boolean removeInvitedPlayer(String eworldname, String player) {
 
-		EditWorld eworld=EditWorld.get(eworldname);
+		EditWorld eworld = EditWorld.get(eworldname);
 
-		if(eworld!=null){
+		if (eworld != null) {
 			eworld.invitedPlayers.remove(player.toLowerCase());
-		}else{
-			if(exist(eworldname)){
-				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
+		} else {
+			if (exist(eworldname)) {
+				DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
 				config.removeInvitedPlayers(player.toLowerCase());
 				config.save();
 				return true;
@@ -254,15 +253,15 @@ public class EditWorld {
 		return false;
 	}
 
-	public static boolean isInvitedPlayer(String eworldname,String player){
+	public static boolean isInvitedPlayer(String eworldname, String player) {
 
-		EditWorld eworld=EditWorld.get(eworldname);
+		EditWorld eworld = EditWorld.get(eworldname);
 
-		if(eworld!=null){
+		if (eworld != null) {
 			return eworld.invitedPlayers.contains(player.toLowerCase());
-		}else{
-			if(exist(eworldname)){
-				DConfig config=new DConfig(new File(p.getDataFolder()+"/dungeons/"+eworldname, "config.yml"));
+		} else {
+			if (exist(eworldname)) {
+				DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
 				return config.getInvitedPlayers().contains(player.toLowerCase());
 			}
 		}
