@@ -225,7 +225,7 @@ public class GameWorld {
 		for (GameWorld gworld : gworlds) {
 			// Update Spiders
 			for (LivingEntity mob : gworld.world.getLivingEntities()) {
-				if (mob.getType() == EntityType.SPIDER) {
+				if (mob.getType() == EntityType.SPIDER || mob.getType() == EntityType.CAVE_SPIDER) {
 					Spider spider = (Spider) mob;
 					if (spider.getTarget() != null) {
 						if (spider.getTarget().getType() == EntityType.PLAYER) {
