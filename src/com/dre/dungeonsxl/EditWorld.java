@@ -239,12 +239,8 @@ public class EditWorld {
 			if (eworld != null) {
 				DPlayer player = DPlayer.get(name);
 
-				P.p.log("ASD");
-
 				if (player != null) {
-					P.p.log("ASD2");
 					if (eworld.world.getPlayers().contains(player.player)) {
-						P.p.log("ASDs");
 						player.leave();
 					}
 				}
