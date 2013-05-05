@@ -118,7 +118,7 @@ public class EditWorld {
 
 	public static EditWorld get(String name) {
 		for (EditWorld eworld : eworlds) {
-			if (eworld.name.equalsIgnoreCase(name)) {
+			if (eworld.dungeonname.equalsIgnoreCase(name)) {
 				return eworld;
 			}
 		}
@@ -217,53 +217,49 @@ public class EditWorld {
 
 	// Invite
 	public static boolean addInvitedPlayer(String eworldname, String player) {
-
-		EditWorld eworld = EditWorld.get(eworldname);
-
-		if (eworld != null) {
-			eworld.invitedPlayers.add(player.toLowerCase());
-		} else {
-			if (exist(eworldname)) {
-				DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
-				config.addInvitedPlayer(player.toLowerCase());
-				config.save();
-				return true;
-			}
+		if (exist(eworldname)) {
+			DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
+			config.addInvitedPlayer(player.toLowerCase());
+			config.save();
+			return true;
 		}
 
 		return false;
-
 	}
 
-	public static boolean removeInvitedPlayer(String eworldname, String player) {
+	public static boolean removeInvitedPlayer(String eworldname, String name) {
 
-		EditWorld eworld = EditWorld.get(eworldname);
+		if (exist(eworldname)) {
+			DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
+			config.removeInvitedPlayers(name.toLowerCase());
+			config.save();
 
-		if (eworld != null) {
-			eworld.invitedPlayers.remove(player.toLowerCase());
-		} else {
-			if (exist(eworldname)) {
-				DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
-				config.removeInvitedPlayers(player.toLowerCase());
-				config.save();
-				return true;
+			// Kick Player
+			EditWorld eworld = EditWorld.get(eworldname);
+			if (eworld != null) {
+				DPlayer player = DPlayer.get(name);
+
+				P.p.log("ASD");
+
+				if (player != null) {
+					P.p.log("ASD2");
+					if (eworld.world.getPlayers().contains(player.player)) {
+						P.p.log("ASDs");
+						player.leave();
+					}
+				}
 			}
+
+			return true;
 		}
 
 		return false;
 	}
 
 	public static boolean isInvitedPlayer(String eworldname, String player) {
-
-		EditWorld eworld = EditWorld.get(eworldname);
-
-		if (eworld != null) {
-			return eworld.invitedPlayers.contains(player.toLowerCase());
-		} else {
-			if (exist(eworldname)) {
-				DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
-				return config.getInvitedPlayers().contains(player.toLowerCase());
-			}
+		if (exist(eworldname)) {
+			DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
+			return config.getInvitedPlayers().contains(player.toLowerCase());
 		}
 
 		return false;

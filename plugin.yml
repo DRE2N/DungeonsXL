@@ -1,5 +1,5 @@
 name: DungeonsXL
-version: 0.8
+version: 0.8.1
 main: com.dre.dungeonsxl.P
 authors: [Frank Baumann]
 softdepend: [Vault]
