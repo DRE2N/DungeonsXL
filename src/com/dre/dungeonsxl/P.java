@@ -179,6 +179,7 @@ public class P extends JavaPlugin {
 				}
 				for (EditWorld eworld : EditWorld.eworlds) {
 					if (eworld.world.getPlayers().isEmpty()) {
+						eworld.save();
 						eworld.delete();
 					}
 				}
