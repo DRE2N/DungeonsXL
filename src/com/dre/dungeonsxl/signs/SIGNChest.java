@@ -24,17 +24,15 @@ public class SIGNChest extends DSign {
 
 	@Override
 	public void onInit() {
-		if (sign.getTypeId() == 63) {
-			for (int i = -1; i <= 1; i++) {
-				if (sign.getBlock().getRelative(i, 0, 0).getTypeId() == 54) {
-					new GameChest(sign.getBlock().getRelative(i, 0, 0), gworld);
-				}
-				if (sign.getBlock().getRelative(0, 0, i).getTypeId() == 54) {
-					new GameChest(sign.getBlock().getRelative(0, 0, i), gworld);
-				}
-				if (sign.getBlock().getRelative(0, i, 0).getTypeId() == 54) {
-					new GameChest(sign.getBlock().getRelative(0, i, 0), gworld);
-				}
+		for (int i = -1; i <= 1; i++) {
+			if (sign.getBlock().getRelative(i, 0, 0).getTypeId() == 54) {
+				new GameChest(sign.getBlock().getRelative(i, 0, 0), gworld);
+			}
+			if (sign.getBlock().getRelative(0, 0, i).getTypeId() == 54) {
+				new GameChest(sign.getBlock().getRelative(0, 0, i), gworld);
+			}
+			if (sign.getBlock().getRelative(0, i, 0).getTypeId() == 54) {
+				new GameChest(sign.getBlock().getRelative(0, i, 0), gworld);
 			}
 		}
 

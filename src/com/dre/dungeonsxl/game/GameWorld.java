@@ -205,7 +205,6 @@ public class GameWorld {
 					int z = os.readInt();
 					Block block = gworld.world.getBlockAt(x, y, z);
 					gworld.checkSign(block);
-
 				}
 
 				os.close();
