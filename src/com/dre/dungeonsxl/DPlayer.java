@@ -45,7 +45,8 @@ public class DPlayer {
 	public Wolf wolf;
 	public int wolfRespawnTime = 30;
 	public long offlineTime;
-	public CopyOnWriteArrayList<ItemStack> respawnInventory = new CopyOnWriteArrayList<ItemStack>();
+	public ItemStack[] respawnInventory;
+	public ItemStack[] respawnArmor;
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player, 45, "Belohnungen");
 
@@ -208,12 +209,12 @@ public class DPlayer {
 		}
 
 		// Respawn Items
-		for (ItemStack istack : this.respawnInventory) {
-			if (istack != null) {
-				this.player.getInventory().addItem(istack);
-			}
+		if (this.respawnInventory != null || this.respawnArmor != null) {
+			this.player.getInventory().setContents(this.respawnInventory);
+			this.player.getInventory().setArmorContents(this.respawnArmor);
+			this.respawnInventory = null;
+			this.respawnArmor = null;
 		}
-		this.respawnInventory.clear();
 		// P.p.updateInventory(this.player);
 	}
 
@@ -403,12 +404,12 @@ public class DPlayer {
 							}
 
 							// Respawn Items
-							for (ItemStack istack : dplayer.respawnInventory) {
-								if (istack != null) {
-									dplayer.player.getInventory().addItem(istack);
-								}
+							if (dplayer.respawnInventory != null || dplayer.respawnArmor != null) {
+								dplayer.player.getInventory().setContents(dplayer.respawnInventory);
+								dplayer.player.getInventory().setArmorContents(dplayer.respawnArmor);
+								dplayer.respawnInventory = null;
+								dplayer.respawnArmor = null;
 							}
-							dplayer.respawnInventory.clear();
 						}
 					}
 				}

@@ -355,10 +355,10 @@ public class PlayerListener implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		DPlayer dplayer = DPlayer.get(event.getEntity());
 		if (dplayer != null) {
+			dplayer.respawnInventory = event.getEntity().getInventory().getContents();
+			dplayer.respawnArmor = event.getEntity().getInventory().getArmorContents();
 			// Delete all drops
 			for (ItemStack istack : event.getDrops()) {
-				ItemStack copy = istack.clone();
-				dplayer.respawnInventory.add(copy);
 				istack.setTypeId(0);
 			}
 		}
@@ -446,12 +446,12 @@ public class PlayerListener implements Listener {
 
 			if (dplayer != null) {
 				// Respawn Items
-				for (ItemStack istack : dplayer.respawnInventory) {
-					if (istack != null) {
-						this.player.getInventory().addItem(istack);
-					}
+				if (dplayer.respawnInventory != null || dplayer.respawnArmor != null) {
+					this.player.getInventory().setContents(dplayer.respawnInventory);
+					this.player.getInventory().setArmorContents(dplayer.respawnArmor);
+					dplayer.respawnInventory = null;
+					dplayer.respawnArmor = null;
 				}
-				dplayer.respawnInventory.clear();
 				// DungeonsXL.p.updateInventory(this.player);
 			}
 		}
