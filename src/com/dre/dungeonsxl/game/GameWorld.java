@@ -136,26 +136,13 @@ public class GameWorld {
 			return true;
 		}
 
-		File dungeonFolder = new File(p.getDataFolder() + "/dungeons/" + dungeon);
-		if (dungeonFolder.isDirectory()) {
+		if (new File(p.getDataFolder() + "/dungeons/" + dungeon).isDirectory()) {
 			DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + dungeon, "config.yml"));
 
 			if (config.getTimeToNextPlay() != 0) {
 				// read PlayerConfig
-				File file = new File(p.getDataFolder() + "/dungeons/" + dungeon, "players.yml");
-
-				if (!file.exists()) {
-					try {
-						file.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-
-				FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-
-				if (playerConfig.contains(player.getName())) {
-					Long time = playerConfig.getLong(player.getName());
+				Long time = getPlayerTime(dungeon, player.getName());
+				if (time != -1) {
 					if (time + (config.getTimeToNextPlay() * 1000 * 60 * 60) > System.currentTimeMillis()) {
 						return false;
 					}
@@ -166,6 +153,87 @@ public class GameWorld {
 		}
 
 		return true;
+	}
+
+	public static boolean checkRequirements(String dungeon, Player player) {
+		/*if (p.permission.has(player, "dungeonsxl.ignoreRequirements") || player.isOp()) {
+			return true;
+		}*/
+
+		if (new File(p.getDataFolder() + "/dungeons/" + dungeon).isDirectory() == false) {
+			return false;
+		}
+
+		DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + dungeon, "config.yml"));
+		if (config.getFinished() != null && config.getFinishedAll() != null) {
+			if (!config.getFinished().isEmpty()) {
+
+				long bestTime = 0;
+				int numOfNeeded = 0;
+				boolean doneTheOne = false;
+
+				if (config.getFinished().size() == config.getFinishedAll().size()) {
+					doneTheOne = true;
+				}
+
+				for (String played : config.getFinished()) {
+					for (String dungeonName : new File(p.getDataFolder() + "/dungeons").list()) {
+						if (new File(p.getDataFolder() + "/dungeons/" + dungeonName).isDirectory()) {
+							if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
+
+								Long time = getPlayerTime(dungeonName, player.getName());
+								if (time != -1) {
+									if (config.getFinishedAll().contains(played)) {
+										numOfNeeded++;
+									} else {
+										doneTheOne = true;
+									}
+									if (bestTime < time) {
+										bestTime = time;
+									}
+								}
+								break;
+
+							}
+						}
+					}
+				}
+
+				if (bestTime == 0) {
+					return false;
+				} else {
+					if (config.getTimeLastPlayed() != 0) {
+						if (System.currentTimeMillis() - bestTime > config.getTimeLastPlayed() * (long) 3600000) {
+							return false;
+						}
+					}
+				}
+
+				if (numOfNeeded < config.getFinishedAll().size() || !doneTheOne) {
+					return false;
+				}
+
+			}
+		}
+		return true;
+	}
+
+	public static long getPlayerTime(String dungeon, String name) {
+		File file = new File(p.getDataFolder() + "/dungeons/" + dungeon, "players.yml");
+
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
+		if (playerConfig.contains(name)) {
+			return playerConfig.getLong(name);
+		}
+		return -1;
 	}
 
 	public void delete() {

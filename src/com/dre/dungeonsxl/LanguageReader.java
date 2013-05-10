@@ -82,6 +82,7 @@ public class LanguageReader {
 		defaults.put("Error_Dispenser", "&4Du kannst nicht auf diesen Dispenser zugreifen!");
 		defaults.put("Error_Ready", "&4Wähle zuerst eine Klasse aus!");
 		defaults.put("Error_Cooldown", "&4Du kannst den Dungeon nur alle &6&v1&4 Stunden betreten!");
+		defaults.put("Error_Requirements", "&4Du erfüllst nicht die Anforderungen für diesen Dungeon!");
 		defaults.put("Error_Leftklick", "&4Du musst das Schild mit Links-klick berühren!");
 		defaults.put("Error_Drop", "&4Du kannst keine sicheren Objekte droppen");
 		defaults.put("Error_Cmd", "&4Befehle sind während des Dungeons nicht erlaubt!");

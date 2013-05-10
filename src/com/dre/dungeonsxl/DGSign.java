@@ -247,31 +247,35 @@ public class DGSign {
 		DGSign dgsign = getSign(block);
 		if (dgsign != null) {
 			if (GameWorld.canPlayDungeon(dgsign.dungeonName, player)) {
-				int sx1 = dgsign.startSign.getX(), sy1 = dgsign.startSign.getY(), sz1 = dgsign.startSign.getZ();
+				if (GameWorld.checkRequirements(dgsign.dungeonName, player)) {
+					int sx1 = dgsign.startSign.getX(), sy1 = dgsign.startSign.getY(), sz1 = dgsign.startSign.getZ();
 
-				Block topBlock = block.getRelative(0, sy1 - y, 0);
+					Block topBlock = block.getRelative(0, sy1 - y, 0);
 
-				int column;
-				if (dgsign.directionX != 0) {
-					column = Math.abs(x - sx1);
-				} else {
-					column = Math.abs(z - sz1);
-				}
-
-				if ((topBlock.getState() instanceof Sign)) {
-					Sign topSign = (Sign) topBlock.getState();
-					if (topSign.getLine(0).equals(strNewGrp)) {
-						if (DGroup.get(player) == null) {
-							dgsign.dgroups[column] = new DGroup(player, dgsign.dungeonName);
-							dgsign.update();
-						}
-					} else if (topSign.getLine(0).equals(strJoinGrp)) {
-						if (DGroup.get(player) == null) {
-							dgsign.dgroups[column].addPlayer(player);
-							dgsign.update();
-						}
+					int column;
+					if (dgsign.directionX != 0) {
+						column = Math.abs(x - sx1);
+					} else {
+						column = Math.abs(z - sz1);
 					}
 
+					if ((topBlock.getState() instanceof Sign)) {
+						Sign topSign = (Sign) topBlock.getState();
+						if (topSign.getLine(0).equals(strNewGrp)) {
+							if (DGroup.get(player) == null) {
+								dgsign.dgroups[column] = new DGroup(player, dgsign.dungeonName);
+								dgsign.update();
+							}
+						} else if (topSign.getLine(0).equals(strJoinGrp)) {
+							if (DGroup.get(player) == null) {
+								dgsign.dgroups[column].addPlayer(player);
+								dgsign.update();
+							}
+						}
+
+					}
+				} else {
+					P.p.msg(player, P.p.language.get("Error_Requirements"));
 				}
 			} else {
 				File file = new File(P.p.getDataFolder() + "/dungeons/" + dgsign.dungeonName, "config.yml");

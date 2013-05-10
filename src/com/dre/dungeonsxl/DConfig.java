@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -32,6 +33,10 @@ public class DConfig {
 	private int timeToNextLoot = 0;
 
 	private int timeUntilKickOfflinePlayer = -1;
+
+	private List<String> finishedOne;
+	private List<String> finishedAll;
+	private int timeLastPlayed = 0;
 
 	// Spout
 	private boolean spoutCraftOnly = false;
@@ -176,6 +181,23 @@ public class DConfig {
 			timeUntilKickOfflinePlayer = mainConfig.timeUntilKickOfflinePlayer;
 		}
 
+		/* Dungeon Requirements */
+		if (configFile.contains("mustFinishOne")) {
+			finishedOne = configFile.getStringList("mustFinishOne");
+		} else {
+			finishedOne = new ArrayList<String>();
+		}
+
+		if (configFile.contains("mustFinishAll")) {
+			finishedAll = configFile.getStringList("mustFinishAll");
+		} else {
+			finishedAll = new ArrayList<String>();
+		}
+
+		if (configFile.contains("timeLastPlayed")) {
+				timeLastPlayed = configFile.getInt("timeLastPlayed");
+		}
+
 		/* Spout */
 		if (configFile.contains("spout.spoutCraftOnly")) {
 			spoutCraftOnly = configFile.getBoolean("spout.spoutCraftOnly");
@@ -301,6 +323,21 @@ public class DConfig {
 
 	public int getTimeUntilKickOfflinePlayer() {
 		return timeUntilKickOfflinePlayer;
+	}
+
+	public int getTimeLastPlayed() {
+		return timeLastPlayed;
+	}
+
+	public List<String> getFinishedAll() {
+		return finishedAll;
+	}
+
+	public List<String> getFinished() {
+		List<String> merge = new ArrayList<String>();
+		merge.addAll(finishedAll);
+		merge.addAll(finishedOne);
+		return merge;
 	}
 
 	public boolean isSpoutCraftOnly() {
