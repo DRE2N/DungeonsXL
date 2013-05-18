@@ -314,9 +314,14 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 
 		// Check dplayers
-		DPlayer dplayer = DPlayer.get(event.getPlayer().getName());
+		DPlayer dplayer = DPlayer.get(player.getName());
 		if (dplayer != null) {
-			dplayer.player = event.getPlayer();
+			DGroup dgroup = DGroup.get(dplayer.player);
+			if (dgroup != null) {
+				dgroup.getPlayers().remove(dplayer.player);
+				dgroup.getPlayers().add(player);
+			}
+			dplayer.player = player;
 
 			// Check offlineTime
 			dplayer.offlineTime = 0;
