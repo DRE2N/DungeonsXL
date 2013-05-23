@@ -3,6 +3,7 @@ package com.dre.dungeonsxl.listener;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -88,6 +89,19 @@ public class BlockListener implements Listener {
 		GameWorld gworld = GameWorld.get(block.getWorld());
 		if (gworld != null) {
 			if (!GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gworld)) {
+
+				// Workaround for a bug that would allow 3-Block-high jumping
+				Location loc = event.getPlayer().getLocation();
+				if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
+					if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
+						if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
+							loc.setX(block.getX() + 0.5);
+							loc.setY(block.getY());
+							loc.setZ(block.getZ() + 0.5);
+							event.getPlayer().teleport(loc);
+						}
+					}
+				}
 				event.setCancelled(true);
 			}
 		}
