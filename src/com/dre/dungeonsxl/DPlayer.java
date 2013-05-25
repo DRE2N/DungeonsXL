@@ -9,6 +9,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Sign;
+import org.bukkit.block.Block;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -48,6 +51,7 @@ public class DPlayer {
 	public long offlineTime;
 	public ItemStack[] respawnInventory;
 	public ItemStack[] respawnArmor;
+	public String[] linesCopy;
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player, 45, "Belohnungen");
 
@@ -262,6 +266,35 @@ public class DPlayer {
 					p.msg(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + msg);
 				}
 			}
+		}
+	}
+
+	public void poke(Block block) {
+		if (block.getState() instanceof Sign) {
+			Sign sign = (Sign) block.getState();
+			String[] lines = sign.getLines();
+			if (lines[0].equals("") && lines[1].equals("") && lines[2].equals("") && lines[3].equals("")) {
+				if (linesCopy != null) {
+					SignChangeEvent event = new SignChangeEvent(block, player, linesCopy);
+					p.getServer().getPluginManager().callEvent(event);
+					if (!event.isCancelled()) {
+						sign.setLine(0, event.getLine(0));
+						sign.setLine(1, event.getLine(1));
+						sign.setLine(2, event.getLine(2));
+						sign.setLine(3, event.getLine(3));
+						sign.update();
+					}
+				}
+			} else {
+				linesCopy = lines;
+				p.msg(player, p.language.get("Player_SignCopied"));
+			}
+		} else {
+			String info = "" + block.getTypeId();
+			if (block.getData() != 0) {
+				info = info + "," + block.getData();
+			}
+			p.msg(player, p.language.get("Player_BlockInfo", info));
 		}
 	}
 

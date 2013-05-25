@@ -91,6 +91,19 @@ public class PlayerListener implements Listener {
 					}
 				}
 			}
+
+			// Copy/Paste a Sign and Block-info
+			if (EditWorld.get(player.getWorld()) != null) {
+				if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+					if (event.getItem().getType() == Material.STICK) {
+						DPlayer dplayer = DPlayer.get(player);
+						if (dplayer != null) {
+							dplayer.poke(clickedBlock);
+							event.setCancelled(true);
+						}
+					}
+				}
+			}
 		}
 
 		// Check Signs

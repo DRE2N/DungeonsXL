@@ -62,6 +62,8 @@ public class LanguageReader {
 		defaults.put("Player_PortalProgress", "&6Erster Block gewählt, nun der zweite!");
 		defaults.put("Player_PortalCreated", "&6Portal erstellt!");
 		defaults.put("Player_SignCreated", "&6Schild erstellt!");
+		defaults.put("Player_SignCopied", "&6Kopiert!");
+		defaults.put("Player_BlockInfo", "&6Block-ID: &2&v1");
 
 		/* Cmds */
 		defaults.put("Cmd_Chat_DungeonChat", "&6Du bist nun im Dungeon-Chat");
