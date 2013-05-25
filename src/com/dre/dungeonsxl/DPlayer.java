@@ -298,6 +298,10 @@ public class DPlayer {
 					this.player.removePotionEffect(effect.getType());
 				}
 
+				// Reset lvl
+				this.player.setTotalExperience(0);
+				this.player.setLevel(0);
+
 				/* Set Inventory */
 				for (ItemStack istack : dclass.items) {
 
