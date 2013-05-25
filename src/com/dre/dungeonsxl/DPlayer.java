@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.getspout.spoutapi.Spout;
@@ -57,7 +58,7 @@ public class DPlayer {
 		this.world = world;
 
 		this.savePlayer = new DSavePlayer(player.getName(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
-				player.getTotalExperience(), player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode());
+				player.getTotalExperience(), player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
 		this.player.teleport(teleport);
 		this.player.getInventory().clear();
@@ -66,6 +67,9 @@ public class DPlayer {
 		this.player.setLevel(0);
 		this.player.setHealth(20);
 		this.player.setFoodLevel(20);
+		for (PotionEffect effect : this.player.getActivePotionEffects()) {
+			this.player.removePotionEffect(effect.getType());
+		}
 		this.isEditing = isEditing;
 
 		if (isEditing)

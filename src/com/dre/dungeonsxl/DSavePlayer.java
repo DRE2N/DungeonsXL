@@ -3,6 +3,7 @@ package com.dre.dungeonsxl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.GameMode;
@@ -11,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.inventory.ItemStack;
 
 public class DSavePlayer {
@@ -30,9 +32,10 @@ public class DSavePlayer {
 	private int oldFoodLevel;
 	private int oldFireTicks;
 	private GameMode oldGamemode;
+	private Collection<PotionEffect> oldPotionEffects;
 
 	public DSavePlayer(String playerName, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
-			GameMode oldGamemode) {
+			GameMode oldGamemode, Collection<PotionEffect> oldPotionEffects) {
 		savePlayers.add(this);
 
 		this.playerName = playerName;
@@ -46,6 +49,7 @@ public class DSavePlayer {
 		this.oldGamemode = oldGamemode;
 		this.oldLvl = oldLvl;
 		this.oldFireTicks = oldFireTicks;
+		this.oldPotionEffects = oldPotionEffects;
 
 		save();
 	}
@@ -63,6 +67,10 @@ public class DSavePlayer {
 			onlinePlayer.setFoodLevel(this.oldFoodLevel);
 			onlinePlayer.setGameMode(this.oldGamemode);
 			onlinePlayer.setFireTicks(this.oldFireTicks);
+			for (PotionEffect effect : onlinePlayer.getActivePotionEffects()) {
+				onlinePlayer.removePotionEffect(effect.getType());
+			}
+			onlinePlayer.addPotionEffects(this.oldPotionEffects);
 		} else {
 			/* Player is offline */
 			Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.oldLocation);
@@ -75,6 +83,11 @@ public class DSavePlayer {
 				offlinePlayer.setFoodLevel(this.oldFoodLevel);
 				offlinePlayer.setGameMode(this.oldGamemode);
 				offlinePlayer.setFireTicks(this.oldFireTicks);
+				for (PotionEffect effect : offlinePlayer.getActivePotionEffects()) {
+					offlinePlayer.removePotionEffect(effect.getType());
+				}
+				//causes NP
+				//offlinePlayer.addPotionEffects(this.oldPotionEffects);
 
 				offlinePlayer.saveData();
 			}
@@ -102,6 +115,7 @@ public class DSavePlayer {
 			configFile.set(savePlayer.playerName + ".oldLocation.yaw", savePlayer.oldLocation.getYaw());
 			configFile.set(savePlayer.playerName + ".oldLocation.pitch", savePlayer.oldLocation.getPitch());
 			configFile.set(savePlayer.playerName + ".oldLocation.world", savePlayer.oldLocation.getWorld().getName());
+			configFile.set(savePlayer.playerName + ".oldPotionEffects", savePlayer.oldPotionEffects);
 		}
 
 		try {
@@ -131,6 +145,7 @@ public class DSavePlayer {
 			int oldFoodLevel = configFile.getInt(playerName + ".oldFoodLevel");
 			int oldFireTicks = configFile.getInt(playerName + ".oldFireTicks");
 			GameMode oldGamemode = GameMode.getByValue(configFile.getInt(playerName + ".oldGamemode"));
+			Collection<PotionEffect> oldPotionEffects = (Collection<PotionEffect>) configFile.get(playerName + ".oldPotionEffects");
 
 			// Location
 			World world = p.getServer().getWorld(configFile.getString(playerName + ".oldLocation.world"));
@@ -142,7 +157,7 @@ public class DSavePlayer {
 					+ ".oldLocation.z"), configFile.getInt(playerName + ".oldLocation.yaw"), configFile.getInt(playerName + ".oldLocation.pitch"));
 
 			// Create Player
-			DSavePlayer savePlayer = new DSavePlayer(playerName, oldLocation, oldInventory, oldArmor, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGamemode);
+			DSavePlayer savePlayer = new DSavePlayer(playerName, oldLocation, oldInventory, oldArmor, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGamemode, oldPotionEffects);
 			savePlayer.reset();
 		}
 	}
