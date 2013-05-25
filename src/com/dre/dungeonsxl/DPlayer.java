@@ -293,6 +293,11 @@ public class DPlayer {
 				this.player.getInventory().setArmorContents(null);
 				player.getInventory().setItemInHand(new ItemStack(0));
 
+				// Remove Potion Effects
+				for (PotionEffect effect : this.player.getActivePotionEffects()) {
+					this.player.removePotionEffect(effect.getType());
+				}
+
 				/* Set Inventory */
 				for (ItemStack istack : dclass.items) {
 
