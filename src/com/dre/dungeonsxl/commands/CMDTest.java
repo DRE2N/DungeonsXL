@@ -29,20 +29,24 @@ public class CMDTest extends DCommand {
 				dungeonname = args[1];
 
 				if (EditWorld.exist(dungeonname)) {
-					DGroup dgroup = new DGroup(player, dungeonname);
-					if (dgroup != null) {
-						if (dgroup.getGworld() == null) {
-							dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
-						}
+					if (DGroup.get(player) == null) {
+						DGroup dgroup = new DGroup(player, dungeonname);
+						if (dgroup != null) {
+							if (dgroup.getGworld() == null) {
+								dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
+							}
 
-						DPlayer newDPlayer;
+							DPlayer newDPlayer;
 
-						if (dgroup.getGworld().locLobby == null) {
-							newDPlayer = new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
-						} else {
-							newDPlayer = new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+							if (dgroup.getGworld().locLobby == null) {
+								newDPlayer = new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
+							} else {
+								newDPlayer = new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+							}
+							newDPlayer.isinTestMode = true;
 						}
-						newDPlayer.isinTestMode = true;
+					} else {
+						p.msg(player, p.language.get("Error_LeaveGroup"));
 					}
 				} else {
 					p.msg(player, p.language.get("Error_DungeonNotExist", dungeonname));
