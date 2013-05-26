@@ -149,7 +149,7 @@ public class EntityListener implements Listener {
 	}
 
 	// Zombie/skeleton combustion from the sun.
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEntityCombust(EntityCombustEvent event) {
 		GameWorld gworld = GameWorld.get(event.getEntity().getWorld());
 		if (gworld != null) {
