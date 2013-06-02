@@ -43,6 +43,8 @@ public class CMDEdit extends DCommand {
 			} else {
 				p.msg(player, p.language.get("Error_LeaveDungeon"));
 			}
+		} else {
+			p.msg(player, p.language.get("Error_NoPermission"));
 		}
 
 	}

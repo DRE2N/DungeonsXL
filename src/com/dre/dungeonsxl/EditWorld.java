@@ -63,8 +63,6 @@ public class EditWorld {
 
 	public void save() {
 		this.world.save();
-		p.copyDirectory(new File("DXL_Edit_" + this.id), new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
-		p.deletenotusingfiles(new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(p.getDataFolder(), "/dungeons/" + this.dungeonname + "/DXLData.data")));
 			out.writeInt(this.sign.size());
@@ -102,6 +100,8 @@ public class EditWorld {
 
 		p.getServer().unloadWorld(this.world, true);
 		File dir = new File("DXL_Edit_" + this.id);
+		p.copyDirectory(dir, new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
+		p.deletenotusingfiles(new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
 		p.removeDirectory(dir);
 	}
 
@@ -128,15 +128,7 @@ public class EditWorld {
 
 	public static void deleteAll() {
 		for (EditWorld eworld : eworlds) {
-			eworlds.remove(eworld);
-			for (Player player : eworld.world.getPlayers()) {
-				DPlayer dplayer = DPlayer.get(player);
-				dplayer.leave();
-			}
-
-			p.getServer().unloadWorld(eworld.world, true);
-			File dir = new File("DXL_Edit_" + eworld.id);
-			p.removeDirectory(dir);
+			eworld.delete();
 		}
 	}
 

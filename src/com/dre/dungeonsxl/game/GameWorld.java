@@ -26,6 +26,7 @@ import com.dre.dungeonsxl.DConfig;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.signs.DSign;
+import com.dre.dungeonsxl.EditWorld;
 
 public class GameWorld {
 	private static P p = P.p;
@@ -251,6 +252,13 @@ public class GameWorld {
 			GameWorld gworld = new GameWorld();
 			gworld.dungeonname = name;
 
+			// Unload empty eworlds
+			for (EditWorld eworld : EditWorld.eworlds) {
+				if (eworld.world.getPlayers().isEmpty()) {
+					eworld.delete();
+				}
+			}
+
 			// Config einlesen
 			gworld.config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + gworld.dungeonname, "config.yml"));
 
@@ -264,7 +272,7 @@ public class GameWorld {
 
 			ObjectInputStream os;
 			try {
-				os = new ObjectInputStream(new FileInputStream(new File("DXL_Game_" + gworld.id + "/DXLData.data")));
+				os = new ObjectInputStream(new FileInputStream(new File(p.getDataFolder() + "/dungeons/" + gworld.dungeonname + "/DXLData.data")));
 
 				int length = os.readInt();
 				for (int i = 0; i < length; i++) {

@@ -179,7 +179,6 @@ public class P extends JavaPlugin {
 				}
 				for (EditWorld eworld : EditWorld.eworlds) {
 					if (eworld.world.getPlayers().isEmpty()) {
-						eworld.save();
 						eworld.delete();
 					}
 				}
@@ -302,7 +301,7 @@ public class P extends JavaPlugin {
 		}
 	}
 
-	public String[] excludedFiles = { "config.yml", "uid.dat" };
+	public String[] excludedFiles = { "config.yml", "uid.dat", "DXLData.data" };
 
 	public void copyDirectory(File sourceLocation, File targetLocation) {
 		if (sourceLocation.isDirectory()) {
