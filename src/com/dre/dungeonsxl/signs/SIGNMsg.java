@@ -23,7 +23,9 @@ public class SIGNMsg extends DSign {
 
 	@Override
 	public boolean check() {
-		// TODO Auto-generated method stub
+		if (sign.getLine(1).equals("")) {
+			return false;
+		}
 
 		return true;
 	}
@@ -32,7 +34,7 @@ public class SIGNMsg extends DSign {
 	public void onInit() {
 		String lines[] = sign.getLines();
 
-		if (lines[1] != "" && lines[2] != "") {
+		if (!lines[1].equals("")) {
 			String msg = gworld.config.getMsg(p.parseInt(lines[1]), true);
 			if (msg != null) {
 				this.msg = msg;

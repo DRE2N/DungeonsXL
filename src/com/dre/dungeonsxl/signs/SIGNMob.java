@@ -34,15 +34,23 @@ public class SIGNMob extends DSign {
 
 	@Override
 	public boolean check() {
-		// TODO Auto-generated method stub
+		String lines[] = sign.getLines();
+		if (!lines[1].equals("") && !lines[2].equals("")) {
+			if (lines[1] != null) {
+				String[] atributes = lines[2].split(",");
+				if (atributes.length == 2) {
+					return true;
+				}
+			}
+		}
 
-		return true;
+		return false;
 	}
 
 	@Override
 	public void onInit() {
 		String lines[] = sign.getLines();
-		if (lines[1] != "" && lines[2] != "") {
+		if (!lines[1].equals("") && !lines[2].equals("")) {
 			String mob = lines[1];
 			if (mob != null) {
 				String[] atributes = lines[2].split(",");
