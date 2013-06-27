@@ -318,6 +318,8 @@ public class PlayerListener implements Listener {
 				} else {
 					dPlayer.msg(p.language.get("Player_OfflineNeverKick", dPlayer.player.getName()));
 				}
+			} else if (dPlayer.isEditing) {
+				dPlayer.leave();
 			}
 		}
 	}
