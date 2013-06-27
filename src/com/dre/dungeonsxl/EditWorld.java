@@ -105,6 +105,20 @@ public class EditWorld {
 		p.removeDirectory(dir);
 	}
 
+	public void deleteNoSave() {
+		eworlds.remove(this);
+		for (Player player : this.world.getPlayers()) {
+			DPlayer dplayer = DPlayer.get(player);
+			dplayer.leave();
+		}
+
+		File dir = new File("DXL_Edit_" + this.id);
+		p.copyDirectory(dir, new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
+		p.deletenotusingfiles(new File(p.getDataFolder(), "/dungeons/" + this.dungeonname));
+		p.getServer().unloadWorld(this.world, true);
+		p.removeDirectory(dir);
+	}
+
 	// Static
 	public static EditWorld get(World world) {
 		for (EditWorld eworld : eworlds) {

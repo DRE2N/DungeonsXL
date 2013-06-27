@@ -12,6 +12,7 @@ public class DCommandRoot {
 	public CMDCreate cmdCreate = new CMDCreate();
 	public CMDSave cmdSave = new CMDSave();
 	public CMDLeave cmdLeave = new CMDLeave();
+	public CMDEscape cmdEscape = new CMDEscape();
 	public CMDEdit cmdEdit = new CMDEdit();
 	public CMDPortal cmdPortal = new CMDPortal();
 	public CMDDeletePortal cmdDeletePortal = new CMDDeletePortal();
@@ -33,6 +34,7 @@ public class DCommandRoot {
 		this.commands.add(cmdCreate);
 		this.commands.add(cmdSave);
 		this.commands.add(cmdLeave);
+		this.commands.add(cmdEscape);
 		this.commands.add(cmdEdit);
 		this.commands.add(cmdPortal);
 		this.commands.add(cmdDeletePortal);

@@ -115,6 +115,7 @@ public class LanguageReader {
 		defaults.put("Help_Cmd_Help", "/dxl help - Zeigt die Hilfeseite an");
 		defaults.put("Help_Cmd_Invite", "/dxl invite <player> <dungeon> - Ladet einen Spieler dazu ein den Dungeon zu editieren");
 		defaults.put("Help_Cmd_Leave", "/dxl leave - Verlässt den aktuellen Dungeon");
+		defaults.put("Help_Cmd_Escape", "/dxl escape - Verlässt den Dungeon, ohne ihn zu speichern");
 		defaults.put("Help_Cmd_List", "/dxl list - Zeigt alle Dungeons an");
 		defaults.put("Help_Cmd_Msg", "/dxl msg <id> '[msg]' - Zeigt oder editiert eine Nachricht");
 		defaults.put("Help_Cmd_Portal", "/dxl portal - Erstellt ein Portal welches in Dungeons führt");

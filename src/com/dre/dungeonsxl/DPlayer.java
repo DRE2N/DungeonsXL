@@ -102,6 +102,11 @@ public class DPlayer {
 		}
 	}
 
+	public void escape() {
+		remove(this);
+		this.savePlayer.reset();
+	}
+
 	public void leave() {
 		remove(this);
 
