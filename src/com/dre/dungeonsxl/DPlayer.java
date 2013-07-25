@@ -62,7 +62,7 @@ public class DPlayer {
 		this.world = world;
 
 		this.savePlayer = new DSavePlayer(player.getName(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
-				player.getTotalExperience(), player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
+				player.getTotalExperience(), (int) player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
 		this.player.teleport(teleport);
 		this.player.getInventory().clear();
