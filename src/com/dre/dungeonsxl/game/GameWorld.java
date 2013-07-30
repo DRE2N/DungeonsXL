@@ -268,6 +268,14 @@ public class GameWorld {
 			// World
 			p.copyDirectory(file, new File("DXL_Game_" + gworld.id));
 
+			// Id File
+			File idFile = new File("DXL_Game_" + gworld.id + "/.id_" + name);
+			try {
+				idFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			gworld.world = p.getServer().createWorld(WorldCreator.name("DXL_Game_" + gworld.id));
 
 			ObjectInputStream os;

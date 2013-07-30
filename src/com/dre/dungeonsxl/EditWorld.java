@@ -162,6 +162,14 @@ public class EditWorld {
 			// World
 			p.copyDirectory(file, new File("DXL_Edit_" + eworld.id));
 
+			// Id File
+			File idFile = new File("DXL_Edit_" + eworld.id + "/.id_" + name);
+			try {
+				idFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			eworld.world = p.getServer().createWorld(WorldCreator.name("DXL_Edit_" + eworld.id));
 
 			try {
@@ -179,14 +187,6 @@ public class EditWorld {
 
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			// Id File
-			File idFile = new File("DXL_Edit_" + eworld.id + "/.id_" + name);
-			try {
-				idFile.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
