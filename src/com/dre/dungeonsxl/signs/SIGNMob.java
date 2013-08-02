@@ -140,7 +140,7 @@ public class SIGNMob extends DSign {
 							amount--;
 						} else {
 							killTask();
-							sign.gworld.dSigns.remove(sign);
+							sign.remove();
 						}
 					}
 

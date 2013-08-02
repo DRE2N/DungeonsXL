@@ -46,20 +46,26 @@ public class SIGNMsg extends DSign {
 	}
 
 	@Override
+	public boolean onPlayerTrigger(Player player) {
+		if (initialized) {
+			if (!done.contains(player)) {
+				p.msg(player, msg);
+				done.add(player);
+			}
+			if (done.size() >= gworld.world.getPlayers().size()) {
+				remove();
+			}
+		}
+		return true;
+	}
+
+	@Override
 	public void onTrigger() {
 		if (initialized) {
 			for (Player player : gworld.world.getPlayers()) {
-				if (!done.contains(player)) {
-					if (!isDistanceTrigger() || player.getLocation().distance(sign.getLocation()) < getDtDistance()) {
-						p.msg(player, msg);
-						done.add(player);
-					}
-				}
+				p.msg(player, msg);
 			}
-
-			if (done.size() >= gworld.world.getPlayers().size()) {
-				this.gworld.dSigns.remove(this);
-			}
+			remove();
 		}
 	}
 

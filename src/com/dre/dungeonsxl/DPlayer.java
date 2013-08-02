@@ -24,7 +24,7 @@ import org.getspout.spoutapi.Spout;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import com.dre.dungeonsxl.game.GameWorld;
-import com.dre.dungeonsxl.signs.DSign;
+import com.dre.dungeonsxl.trigger.DistanceTrigger;
 
 public class DPlayer {
 	public static P p = P.p;
@@ -489,17 +489,7 @@ public class DPlayer {
 					}
 
 					// Check Distance Trigger Signs
-					for (DSign sign : gworld.dSigns) {
-						if (sign != null) {
-							if (sign.isDistanceTrigger()) {
-								if ((sign.isRedstoneTrigger() == false && sign.isSignTrigger() == false) || sign.isPowered()) {
-									if (dplayer.player.getLocation().distance(sign.getSign().getLocation()) < sign.getDtDistance()) {
-										sign.onTrigger();
-									}
-								}
-							}
-						}
-					}
+					DistanceTrigger.triggerAllInDistance(dplayer.player, gworld);
 				}
 			}
 		}

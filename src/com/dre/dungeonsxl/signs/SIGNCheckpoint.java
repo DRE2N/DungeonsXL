@@ -41,7 +41,7 @@ public class SIGNCheckpoint extends DSign {
 				P.p.msg(dplayer.player, P.p.language.get("Player_CheckpointReached"));
 			}
 
-			this.gworld.dSigns.remove(this);
+			remove();
 		}
 	}
 
