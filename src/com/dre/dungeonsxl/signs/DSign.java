@@ -17,7 +17,7 @@ public abstract class DSign {
 	protected GameWorld gworld;
 
 	// List of Triggers
-	private Set<Trigger> triggers = new HashSet<Trigger>();
+	protected Set<Trigger> triggers = new HashSet<Trigger>();
 
 	public abstract boolean check();
 
@@ -30,13 +30,15 @@ public abstract class DSign {
 		this.gworld = gworld;
 
 		// Check Trigger
-		String[] typeSplit = sign.getLine(3).split(",");
-		for (String typeSplitPart : typeSplit) {
-			String[] splitted = typeSplitPart.split(" ");
-			Trigger trigger = Trigger.getOrCreate(splitted, this);
-			if (trigger != null) {
-				trigger.addListener(this);
-				this.triggers.add(trigger);
+		if (gworld != null) {
+			String[] typeSplit = sign.getLine(3).split(",");
+			for (String typeSplitPart : typeSplit) {
+				String[] splitted = typeSplitPart.split(" ");
+				Trigger trigger = Trigger.getOrCreate(splitted, this);
+				if (trigger != null) {
+					trigger.addListener(this);
+					this.triggers.add(trigger);
+				}
 			}
 		}
 	}
@@ -118,6 +120,8 @@ public abstract class DSign {
 			dSign = new SIGNStart(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("[" + SIGNTrigger.name + "]")) {
 			dSign = new SIGNTrigger(sign, gworld);
+		} else if (lines[0].equalsIgnoreCase("[" + SIGNInteract.name + "]")) {
+			dSign = new SIGNInteract(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("[" + SIGNRedstone.name + "]")) {
 			dSign = new SIGNRedstone(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("[" + SIGNBlock.name + "]")) {

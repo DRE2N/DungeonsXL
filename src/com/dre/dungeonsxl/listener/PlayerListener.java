@@ -34,6 +34,7 @@ import com.dre.dungeonsxl.EditWorld;
 import com.dre.dungeonsxl.LeaveSign;
 import com.dre.dungeonsxl.game.GameChest;
 import com.dre.dungeonsxl.game.GameWorld;
+import com.dre.dungeonsxl.trigger.InteractTrigger;
 
 public class PlayerListener implements Listener {
 	public P p = P.p;
@@ -126,6 +127,12 @@ public class PlayerListener implements Listener {
 					// Check GameWorld Signs
 					GameWorld gworld = GameWorld.get(player.getWorld());
 					if (gworld != null) {
+
+						// Trigger InteractTrigger
+						InteractTrigger trigger = InteractTrigger.get(clickedBlock, gworld);
+						if (trigger != null) {
+							trigger.onTrigger(player);
+						}
 
 						// Ready Sign
 						for (Block blockReady : gworld.blocksReady) {

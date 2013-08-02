@@ -45,6 +45,12 @@ public abstract class Trigger {
 					trigger = SignTrigger.getOrCreate(P.p.parseInt(splitted[1]), dsign.getGameWorld());
 				}
 
+			} else if (splitted[0].equalsIgnoreCase("I")) {
+
+				if (splitted.length > 1) {
+					trigger = InteractTrigger.getOrCreate(P.p.parseInt(splitted[1]), dsign.getGameWorld());
+				}
+
 			}
 		}
 		return trigger;
