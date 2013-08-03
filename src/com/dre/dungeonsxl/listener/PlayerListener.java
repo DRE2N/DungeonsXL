@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import com.dre.dungeonsxl.DGSign;
 import com.dre.dungeonsxl.DGroup;
 import com.dre.dungeonsxl.DLootInventory;
@@ -35,6 +36,7 @@ import com.dre.dungeonsxl.LeaveSign;
 import com.dre.dungeonsxl.game.GameChest;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.trigger.InteractTrigger;
+import com.dre.dungeonsxl.trigger.UseItemTrigger;
 
 public class PlayerListener implements Listener {
 	public P p = P.p;
@@ -72,7 +74,8 @@ public class PlayerListener implements Listener {
 
 		// Check Portals
 		if (event.getItem() != null) {
-			if (event.getItem().getType() == Material.WOOD_SWORD) {
+			ItemStack item = event.getItem();
+			if (item.getType() == Material.WOOD_SWORD) {
 				if (clickedBlock != null) {
 					for (DPortal dportal : DPortal.portals) {
 						if (!dportal.isActive) {
@@ -96,11 +99,40 @@ public class PlayerListener implements Listener {
 			// Copy/Paste a Sign and Block-info
 			if (EditWorld.get(player.getWorld()) != null) {
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-					if (event.getItem().getType() == Material.STICK) {
+					if (item.getType() == Material.STICK) {
 						DPlayer dplayer = DPlayer.get(player);
 						if (dplayer != null) {
 							dplayer.poke(clickedBlock);
 							event.setCancelled(true);
+						}
+					}
+				}
+			}
+
+			// Trigger UseItem Signs
+			GameWorld gworld = GameWorld.get(player.getWorld());
+			if (gworld != null) {
+				if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+					if (UseItemTrigger.hasTriggers(gworld)) {
+						String name = null;
+						if (item.hasItemMeta()) {
+							if (item.getItemMeta().hasDisplayName()) {
+								name = item.getItemMeta().getDisplayName();
+							} else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.BOOK_AND_QUILL) {
+								if (item.getItemMeta() instanceof BookMeta) {
+									BookMeta meta = (BookMeta) item.getItemMeta();
+									if (meta.hasTitle()) {
+										name = meta.getTitle();
+									}
+								}
+							}
+						}
+						if (name == null) {
+							name = item.getType().toString();
+						}
+						UseItemTrigger trigger = UseItemTrigger.get(name, gworld);
+						if (trigger != null) {
+							trigger.onTrigger(player);
 						}
 					}
 				}
