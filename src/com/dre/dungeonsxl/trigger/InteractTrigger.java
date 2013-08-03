@@ -44,6 +44,9 @@ public class InteractTrigger extends Trigger {
 	}
 
 	public static InteractTrigger getOrCreate(int id, GameWorld gworld) {
+		if (id == 0) {
+			return null;
+		}
 		InteractTrigger trigger = get(id, gworld);
 		if (trigger != null) {
 			return trigger;

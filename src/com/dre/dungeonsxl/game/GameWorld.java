@@ -41,9 +41,6 @@ public class GameWorld {
 	public String dungeonname;
 	public Location locLobby;
 	public Location locStart;
-	public CopyOnWriteArrayList<Block> blocksEnd = new CopyOnWriteArrayList<Block>();
-	public CopyOnWriteArrayList<Block> blocksReady = new CopyOnWriteArrayList<Block>();
-	public CopyOnWriteArrayList<Block> blocksLeave = new CopyOnWriteArrayList<Block>();
 	public boolean isPlaying = false;
 	public int id;
 	public CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();

@@ -13,7 +13,7 @@ import com.dre.dungeonsxl.trigger.SignTrigger;
 public class SIGNTrigger extends DSign {
 	public static String name = "Trigger";
 	public String buildPermissions = "dxl.sign.trigger";
-	public boolean onDungeonInit = false;
+	public boolean onDungeonInit = true;
 
 	// Variables
 	private int triggerId;

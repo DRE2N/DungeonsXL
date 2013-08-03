@@ -134,44 +134,7 @@ public class PlayerListener implements Listener {
 							trigger.onTrigger(player);
 						}
 
-						// Ready Sign
-						for (Block blockReady : gworld.blocksReady) {
-							if (blockReady.getLocation().distance(clickedBlock.getLocation()) < 1) {
-								if (!dplayer.isReady) {
-									if (gworld.signClass.isEmpty() || dplayer.dclass != null) {
-										dplayer.ready();
-										p.msg(player, p.language.get("Player_Ready"));
-										return;
-									} else {
-										p.msg(player, p.language.get("Error_Ready"));
-									}
-								} else {
-									dplayer.ready();
-								}
-							}
-						}
-
-						// End Sign
-						for (Block blockEnd : gworld.blocksEnd) {
-							if (blockEnd.getLocation().distance(clickedBlock.getLocation()) < 1) {
-								if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-									dplayer.finish();
-									return;
-								} else {
-									p.msg(player, p.language.get("Error_Leftklick"));
-								}
-							}
-						}
-
-						// Leave Sign
-						for (Block blockLeave : gworld.blocksLeave) {
-							if (blockLeave.getLocation().distance(clickedBlock.getLocation()) < 1) {
-								dplayer.leave();
-							}
-						}
-
 						// Class Signs
-
 						for (Sign classSign : gworld.signClass) {
 							if (classSign != null) {
 								if (classSign.getLocation().distance(clickedBlock.getLocation()) < 1) {

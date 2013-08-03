@@ -15,7 +15,7 @@ import com.dre.dungeonsxl.trigger.InteractTrigger;
 public class SIGNInteract extends DSign {
 	public static String name = "Interact";
 	public String buildPermissions = "dxl.sign.trigger";
-	public boolean onDungeonInit = false;
+	public boolean onDungeonInit = true;
 
 	public SIGNInteract(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -47,7 +47,7 @@ public class SIGNInteract extends DSign {
 			}
 		} else {
 			id = p.parseInt(sign.getLine(1));
-			if (used.contains(id)) {
+			if (id == 0 || used.contains(id)) {
 				return false;
 			} else {
 				return true;
