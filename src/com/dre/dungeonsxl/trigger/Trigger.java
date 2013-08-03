@@ -51,6 +51,12 @@ public abstract class Trigger {
 					trigger = InteractTrigger.getOrCreate(P.p.parseInt(splitted[1]), dsign.getGameWorld());
 				}
 
+			} else if (splitted[0].equalsIgnoreCase("M")) {
+
+				if (splitted.length > 1) {
+					trigger = MobTrigger.getOrCreate(splitted[1], dsign.getGameWorld());
+				}
+
 			}
 		}
 		return trigger;
