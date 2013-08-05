@@ -31,13 +31,23 @@ public abstract class DSign {
 
 		// Check Trigger
 		if (gworld != null) {
-			String[] typeSplit = sign.getLine(3).split(",");
-			for (String typeSplitPart : typeSplit) {
-				String[] splitted = typeSplitPart.split(" ");
-				Trigger trigger = Trigger.getOrCreate(splitted, this);
-				if (trigger != null) {
-					trigger.addListener(this);
-					this.triggers.add(trigger);
+			String line3 = sign.getLine(3).replaceAll("\\s", "");
+			String[] triggerTypes = line3.split(",");
+
+			for (String triggerString : triggerTypes) {
+				if (!triggerString.equals("")) {
+
+					String type = triggerString.substring(0, 1);
+					String value = null;
+					if (triggerString.length() > 1) {
+						value = triggerString.substring(1);
+					}
+					
+					Trigger trigger = Trigger.getOrCreate(type, value, this);
+					if (trigger != null) {
+						trigger.addListener(this);
+						this.triggers.add(trigger);
+					}
 				}
 			}
 		}

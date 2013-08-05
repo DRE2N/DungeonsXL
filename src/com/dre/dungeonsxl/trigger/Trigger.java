@@ -23,47 +23,45 @@ public abstract class Trigger {
 
 	public abstract void unregister(GameWorld gworld);
 
-	public static Trigger getOrCreate(String[] splitted, DSign dsign) {
+	public static Trigger getOrCreate(String type, String value, DSign dsign) {
 		Trigger trigger = null;
 
-		if (splitted.length > 0) {
-			if (splitted[0].equalsIgnoreCase("R")) {
+		if (type.equalsIgnoreCase("R")) {
 
-				trigger = RedstoneTrigger.getOrCreate(dsign.getSign(), dsign.getGameWorld());
+			trigger = RedstoneTrigger.getOrCreate(dsign.getSign(), dsign.getGameWorld());
 
-			} else if (splitted[0].equalsIgnoreCase("D")) {
+		} else if (type.equalsIgnoreCase("D")) {
 
-				if (splitted.length > 1) {
-					trigger = new DistanceTrigger(P.p.parseInt(splitted[1]), dsign.getSign().getLocation());
-				} else {
-					trigger = new DistanceTrigger(dsign.getSign().getLocation());
-				}
-
-			} else if (splitted[0].equalsIgnoreCase("T")) {
-
-				if (splitted.length > 1) {
-					trigger = SignTrigger.getOrCreate(P.p.parseInt(splitted[1]), dsign.getGameWorld());
-				}
-
-			} else if (splitted[0].equalsIgnoreCase("I")) {
-
-				if (splitted.length > 1) {
-					trigger = InteractTrigger.getOrCreate(P.p.parseInt(splitted[1]), dsign.getGameWorld());
-				}
-
-			} else if (splitted[0].equalsIgnoreCase("M")) {
-
-				if (splitted.length > 1) {
-					trigger = MobTrigger.getOrCreate(splitted[1], dsign.getGameWorld());
-				}
-
-			} else if (splitted[0].equalsIgnoreCase("U")) {
-
-				if (splitted.length > 1) {
-					trigger = UseItemTrigger.getOrCreate(splitted[1], dsign.getGameWorld());
-				}
-
+			if (value != null) {
+				trigger = new DistanceTrigger(P.p.parseInt(value), dsign.getSign().getLocation());
+			} else {
+				trigger = new DistanceTrigger(dsign.getSign().getLocation());
 			}
+
+		} else if (type.equalsIgnoreCase("T")) {
+
+			if (value != null) {
+				trigger = SignTrigger.getOrCreate(P.p.parseInt(value), dsign.getGameWorld());
+			}
+
+		} else if (type.equalsIgnoreCase("I")) {
+
+			if (value != null) {
+				trigger = InteractTrigger.getOrCreate(P.p.parseInt(value), dsign.getGameWorld());
+			}
+
+		} else if (type.equalsIgnoreCase("M")) {
+
+			if (value != null) {
+				trigger = MobTrigger.getOrCreate(value, dsign.getGameWorld());
+			}
+
+		} else if (type.equalsIgnoreCase("U")) {
+
+			if (value != null) {
+				trigger = UseItemTrigger.getOrCreate(value, dsign.getGameWorld());
+			}
+
 		}
 		return trigger;
 	}
