@@ -132,6 +132,11 @@ public class SIGNRedstone extends DSign {
 
 		@Override
 		public void run() {
+			if (GameWorld.get(block.getWorld()) == null) {
+				disableTask(enableTaskId);
+				disableTask(disableTaskId);
+				return;
+			}
 			if (enable) {
 				power();
 				if (repeatsToDo == 1) {
