@@ -17,10 +17,6 @@ public class SIGNPlace extends DSign {
 
 	@Override
 	public boolean check() {
-		if (sign.getLine(1).equals("")) {
-			return false;
-		}
-
 		return true;
 	}
 
