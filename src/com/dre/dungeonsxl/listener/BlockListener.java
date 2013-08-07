@@ -23,6 +23,7 @@ import com.dre.dungeonsxl.LeaveSign;
 import com.dre.dungeonsxl.game.GamePlaceableBlock;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.signs.DSign;
+import com.dre.dungeonsxl.trigger.RedstoneTrigger;
 
 public class BlockListener implements Listener {
 
@@ -189,30 +190,20 @@ public class BlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onBlockRedstoneEvent(BlockRedstoneEvent event) {
-		new RedstoneEventTask(event).runTaskLater(P.p, 1);
+		new RedstoneEventTask(event.getBlock()).runTaskLater(P.p, 1);
 	}
 
 	public class RedstoneEventTask extends BukkitRunnable {
-		private final BlockRedstoneEvent event;
+		private final Block block;
 
-		public RedstoneEventTask(BlockRedstoneEvent event) {
-			this.event = event;
+		public RedstoneEventTask(final Block block) {
+			this.block = block;
 		}
 
 		public void run() {
 			for (GameWorld gworld : GameWorld.gworlds) {
-				if (event.getBlock().getWorld() == gworld.world) {
-					for (DSign sign : gworld.dSigns) {
-						if (sign != null) {
-							if (sign.isRedstoneTrigger()) {
-								if (sign.getRtBlock().isBlockPowered()) {
-									sign.onUpdate(0, true);
-								} else {
-									sign.onUpdate(0, false);
-								}
-							}
-						}
-					}
+				if (block.getWorld() == gworld.world) {
+					RedstoneTrigger.updateAll(gworld);
 				}
 			}
 		}

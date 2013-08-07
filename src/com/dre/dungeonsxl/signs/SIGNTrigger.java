@@ -8,12 +8,12 @@ import org.bukkit.block.Block;
 
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.EditWorld;
+import com.dre.dungeonsxl.trigger.SignTrigger;
 
 public class SIGNTrigger extends DSign {
 	public static String name = "Trigger";
 	public String buildPermissions = "dxl.sign.trigger";
-	public boolean onDungeonInit = false;
-	public static Set<Integer> used = new HashSet<Integer>();
+	public boolean onDungeonInit = true;
 
 	// Variables
 	private int triggerId;
@@ -25,11 +25,14 @@ public class SIGNTrigger extends DSign {
 
 	@Override
 	public boolean check() {
-		used.clear();
+		Set<Integer> used = new HashSet<Integer>();
 		for (Block block : EditWorld.get(sign.getLocation().getWorld()).sign) {
-			if (block.getState() instanceof Sign) {
-				Sign rsign = (Sign) block.getState();
-				if (rsign != null) {
+			if (block != null) {
+				if (!block.getChunk().isLoaded()) {
+					block.getChunk().load();
+				}
+				if (block.getState() instanceof Sign) {
+					Sign rsign = (Sign) block.getState();
 					if (rsign.getLine(0).equalsIgnoreCase("[" + name + "]")) {
 						used.add(p.parseInt(rsign.getLine(1)));
 					}
@@ -69,14 +72,9 @@ public class SIGNTrigger extends DSign {
 	@Override
 	public void onTrigger() {
 		if (initialized) {
-			for (DSign dsign : this.gworld.dSigns) {
-				if (dsign != null) {
-					if (dsign.isSignTrigger()) {
-						if (triggerId == dsign.getStId()) {
-							dsign.onUpdate(1, true);
-						}
-					}
-				}
+			SignTrigger trigger = SignTrigger.get(triggerId, gworld);
+			if (trigger != null) {
+				trigger.onTrigger(true);
 			}
 		}
 	}
@@ -84,14 +82,9 @@ public class SIGNTrigger extends DSign {
 	@Override
 	public void onDisable() {
 		if (initialized) {
-			for (DSign dsign : this.gworld.dSigns) {
-				if (dsign != null) {
-					if (dsign.isSignTrigger()) {
-						if (triggerId == dsign.getStId()) {
-							dsign.onUpdate(1, false);
-						}
-					}
-				}
+			SignTrigger trigger = SignTrigger.get(triggerId, gworld);
+			if (trigger != null) {
+				trigger.onTrigger(false);
 			}
 		}
 	}

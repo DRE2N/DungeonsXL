@@ -252,4 +252,8 @@ public class DMobType {
 
 		return null;
 	}
+
+	public String getName() {
+		return name;
+	}
 }

@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.dre.dungeonsxl.DMobType;
+import com.dre.dungeonsxl.trigger.MobTrigger;
 
 public class DMob {
 
@@ -33,6 +34,7 @@ public class DMob {
 		if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity victim = (LivingEntity) event.getEntity();
 			GameWorld gworld = GameWorld.get(victim.getWorld());
+			String name = null;
 
 			if (gworld != null) {
 				for (DMob dmob : gworld.dmobs) {
@@ -46,6 +48,14 @@ public class DMob {
 									event.getDrops().add(item);
 								}
 							}
+							name = dmob.type.getName();
+						} else {
+							name = victim.getType().getName();
+						}
+
+						MobTrigger trigger = MobTrigger.get(name, gworld);
+						if (trigger != null) {
+							trigger.onTrigger();
 						}
 
 						gworld.dmobs.remove(dmob);

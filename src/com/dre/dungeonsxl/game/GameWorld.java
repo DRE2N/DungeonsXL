@@ -27,6 +27,7 @@ import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.signs.DSign;
 import com.dre.dungeonsxl.EditWorld;
+import com.dre.dungeonsxl.trigger.RedstoneTrigger;
 
 public class GameWorld {
 	private static P p = P.p;
@@ -40,9 +41,6 @@ public class GameWorld {
 	public String dungeonname;
 	public Location locLobby;
 	public Location locStart;
-	public CopyOnWriteArrayList<Block> blocksEnd = new CopyOnWriteArrayList<Block>();
-	public CopyOnWriteArrayList<Block> blocksReady = new CopyOnWriteArrayList<Block>();
-	public CopyOnWriteArrayList<Block> blocksLeave = new CopyOnWriteArrayList<Block>();
 	public boolean isPlaying = false;
 	public int id;
 	public CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
@@ -52,7 +50,6 @@ public class GameWorld {
 	public CopyOnWriteArrayList<DMob> dmobs = new CopyOnWriteArrayList<DMob>();
 	public CopyOnWriteArrayList<GameChest> gchests = new CopyOnWriteArrayList<GameChest>();
 	public CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<DSign>();
-	public CopyOnWriteArrayList<Block> untouchable = new CopyOnWriteArrayList<Block>();
 	public DConfig config;
 
 	public GameWorld() {
@@ -92,16 +89,14 @@ public class GameWorld {
 				}
 			}
 		}
+		if (RedstoneTrigger.hasTriggers(this)) {
+			for (RedstoneTrigger trigger : RedstoneTrigger.getTriggersArray(this)) {
+				trigger.onTrigger();
+			}
+		}
 		for (DSign dSign : this.dSigns) {
 			if (dSign != null) {
-				if (dSign.isRedstoneTrigger()) {
-					if (dSign.getRtBlock().isBlockPowered()) {
-						dSign.onUpdate(0, true);
-					} else {
-						dSign.onUpdate(0, false);
-					}
-				}
-				if (!dSign.isRedstoneTrigger() && !dSign.isDistanceTrigger() && !dSign.isSignTrigger()) {
+				if (!dSign.hasTriggers()) {
 					dSign.onTrigger();
 				}
 			}

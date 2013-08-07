@@ -1,12 +1,14 @@
 package com.dre.dungeonsxl.signs;
 
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.game.GameWorld;
+import com.dre.dungeonsxl.trigger.Trigger;
 
 public abstract class DSign {
 	protected static P p = P.p;
@@ -14,19 +16,8 @@ public abstract class DSign {
 	protected Sign sign;
 	protected GameWorld gworld;
 
-	// Distance Trigger
-	private boolean isDistanceTrigger = false;
-	private int dtDistance = 5;
-
-	// Redstone Trigger
-	private boolean isRedstoneTrigger = false;
-	private Block rtBlock;
-
-	// Sign Trigger
-	private boolean isSignTrigger = false;
-	private int stId;
-
-	private boolean[] isPowered = new boolean[2];
+	// List of Triggers
+	protected Set<Trigger> triggers = new HashSet<Trigger>();
 
 	public abstract boolean check();
 
@@ -39,44 +30,23 @@ public abstract class DSign {
 		this.gworld = gworld;
 
 		// Check Trigger
-		String[] typeSplit = sign.getLine(3).split(",");
-		for (String typeSplitPart : typeSplit) {
-			String[] splitted = typeSplitPart.split(" ");
-			if (splitted.length > 0) {
-				if (splitted[0].equalsIgnoreCase("R")) {
-					if (sign.getBlock().getType() == Material.WALL_SIGN) {
-						switch (sign.getData().getData()) {
-						case 5:
-							rtBlock = sign.getBlock().getRelative(BlockFace.WEST);
-							break;
-						case 4:
-							rtBlock = sign.getBlock().getRelative(BlockFace.EAST);
-							break;
-						case 3:
-							rtBlock = sign.getBlock().getRelative(BlockFace.NORTH);
-							break;
-						case 2:
-							rtBlock = sign.getBlock().getRelative(BlockFace.SOUTH);
-							break;
-						}
-					} else {
-						rtBlock = sign.getBlock().getRelative(BlockFace.DOWN);
-					}
+		if (gworld != null) {
+			String line3 = sign.getLine(3).replaceAll("\\s", "");
+			String[] triggerTypes = line3.split(",");
 
-					if (rtBlock != null) {
-						this.isRedstoneTrigger = true;
-					}
-				} else if (splitted[0].equalsIgnoreCase("D")) {
-					this.isDistanceTrigger = true;
+			for (String triggerString : triggerTypes) {
+				if (!triggerString.equals("")) {
 
-					if (splitted.length > 1) {
-						dtDistance = p.parseInt(splitted[1]);
+					String type = triggerString.substring(0, 1);
+					String value = null;
+					if (triggerString.length() > 1) {
+						value = triggerString.substring(1);
 					}
-				} else if (splitted[0].equalsIgnoreCase("T")) {
-					this.isSignTrigger = true;
-
-					if (splitted.length > 1) {
-						stId = p.parseInt(splitted[1]);
+					
+					Trigger trigger = Trigger.getOrCreate(type, value, this);
+					if (trigger != null) {
+						trigger.addListener(this);
+						this.triggers.add(trigger);
 					}
 				}
 			}
@@ -91,20 +61,41 @@ public abstract class DSign {
 
 	}
 
+	public boolean onPlayerTrigger(Player player) {
+		return false;
+	}
+
 	public void onDisable() {
 
 	}
 
-	public void onUpdate(int type, boolean powered) {
-		setPowered(type, powered);
-		if (isPowered()) {
-			if (!isDistanceTrigger) {
-				onTrigger();
+	public void onUpdate() {
+		for (Trigger trigger : triggers) {
+			if (!trigger.triggered) {
+				onDisable();
+				return;
 			}
-		} else {
-			onDisable();
+			if (triggers.size() == 1) {
+				if (trigger.player != null) {
+					if (onPlayerTrigger(trigger.player)) {
+						return;
+					}
+				}
+			}
 		}
 
+		onTrigger();
+	}
+
+	public void remove() {
+		for (Trigger trigger : triggers) {
+			trigger.removeListener(this);
+		}
+		gworld.dSigns.remove(this);
+	}
+
+	public boolean hasTriggers() {
+		return !triggers.isEmpty();
 	}
 
 	public static DSign create(Sign sign, GameWorld gworld) {
@@ -139,6 +130,8 @@ public abstract class DSign {
 			dSign = new SIGNStart(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("[" + SIGNTrigger.name + "]")) {
 			dSign = new SIGNTrigger(sign, gworld);
+		} else if (lines[0].equalsIgnoreCase("[" + SIGNInteract.name + "]")) {
+			dSign = new SIGNInteract(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("[" + SIGNRedstone.name + "]")) {
 			dSign = new SIGNRedstone(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("[" + SIGNBlock.name + "]")) {
@@ -155,40 +148,8 @@ public abstract class DSign {
 	}
 
 	// Getter and Setter
-	public void setPowered(int type, boolean powered) {
-		isPowered[type] = powered;
-	}
-
-	public boolean isPowered() {// 0=Redstone 1=Sign
-		if ((isPowered[0] || !isRedstoneTrigger()) && (isPowered[1] || !isSignTrigger())) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isRedstoneTrigger() {
-		return isRedstoneTrigger;
-	}
-
-	public boolean isDistanceTrigger() {
-		return isDistanceTrigger;
-	}
-
-	public Block getRtBlock() {
-		return rtBlock;
-	}
-
-	public int getDtDistance() {
-		return dtDistance;
-	}
-
-	public boolean isSignTrigger() {
-		return isSignTrigger;
-	}
-
-	public int getStId() {
-		return stId;
+	public GameWorld getGameWorld() {
+		return gworld;
 	}
 
 	public Sign getSign() {

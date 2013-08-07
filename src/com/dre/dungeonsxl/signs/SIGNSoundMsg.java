@@ -55,22 +55,36 @@ public class SIGNSoundMsg extends DSign {
 		if (initialized) {
 			if (P.p.isSpoutEnabled) {
 				for (Player player : gworld.world.getPlayers()) {
-					if (!done.contains(player)) {
-						if (!isDistanceTrigger() || player.getLocation().distance(sign.getLocation()) < getDtDistance()) {
-							done.add(player);
-							SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
-							if (sPlayer.isSpoutCraftEnabled()) {
-								SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
-							}
-						}
+					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
+					if (sPlayer.isSpoutCraftEnabled()) {
+						SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
 					}
 				}
 			}
+			remove();
+		}
+	}
+
+	@Override
+	public boolean onPlayerTrigger(Player player) {
+		if (initialized) {
+			if (P.p.isSpoutEnabled) {
+				if (!done.contains(player)) {
+					done.add(player);
+					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
+					if (sPlayer.isSpoutCraftEnabled()) {
+						SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
+					}
+				}
+			} else {
+				remove();
+			}
 
 			if (done.size() >= gworld.world.getPlayers().size()) {
-				this.gworld.dSigns.remove(this);
+				remove();
 			}
 		}
+		return true;
 	}
 
 	@Override
