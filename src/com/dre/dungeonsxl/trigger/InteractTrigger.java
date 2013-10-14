@@ -77,10 +77,12 @@ public class InteractTrigger extends Trigger {
 	}
 
 	public static InteractTrigger get(int id, GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			for (InteractTrigger trigger : triggers.get(gworld)) {
-				if (trigger.interactId == id) {
-					return trigger;
+		if (id != 0) {
+			if (hasTriggers(gworld)) {
+				for (InteractTrigger trigger : triggers.get(gworld)) {
+					if (trigger.interactId == id) {
+						return trigger;
+					}
 				}
 			}
 		}
