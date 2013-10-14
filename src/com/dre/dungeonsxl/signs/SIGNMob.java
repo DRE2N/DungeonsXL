@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Location;
 
 import com.dre.dungeonsxl.DMobType;
 import com.dre.dungeonsxl.game.DMob;
@@ -109,11 +110,12 @@ public class SIGNMob extends DSign {
 				GameWorld gworld = GameWorld.get(world);
 
 				if (gworld != null) {
+					Location spawnLoc = sign.sign.getLocation().add(0.5, 0, 0.5);
 
 					// Check normal mobs
 					if (EntityType.fromName(sign.mob) != null) {
 						if (EntityType.fromName(sign.mob).isAlive()) {
-							LivingEntity entity = (LivingEntity) world.spawnEntity(sign.sign.getLocation(), EntityType.fromName(sign.mob));
+							LivingEntity entity = (LivingEntity) world.spawnEntity(spawnLoc, EntityType.fromName(sign.mob));
 
 							// Add Bow to normal Skeletons
 							if (entity.getType() == EntityType.SKELETON) {
@@ -131,7 +133,7 @@ public class SIGNMob extends DSign {
 					DMobType mobType = DMobType.get(sign.mob, gworld.config.getMobTypes());
 
 					if (mobType != null) {
-						mobType.spawn(GameWorld.get(world), sign.sign.getLocation());
+						mobType.spawn(GameWorld.get(world), spawnLoc);
 					}
 
 					// Set the amount
