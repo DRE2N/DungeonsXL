@@ -101,6 +101,9 @@ public class DMobType {
 					entity.setHealth(maxHealth);
 				}
 
+				/* Disable Despawning */
+				entity.setRemoveWhenFarAway(false);
+
 				/* Spawn Mob */
 				new DMob(entity, gWorld, this);
 
