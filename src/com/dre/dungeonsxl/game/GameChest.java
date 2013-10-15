@@ -1,5 +1,7 @@
 package com.dre.dungeonsxl.game;
 
+import net.milkbowl.vault.item.Items;
+import net.milkbowl.vault.item.ItemInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -38,7 +40,18 @@ public class GameChest {
 					for (ItemStack istack : this.chest.getInventory().getContents()) {
 						if (istack != null) {
 							dplayer.treasureInv.addItem(istack);
-							msg = msg + ChatColor.RED + " " + istack.getAmount() + " " + istack.getType().name() + ChatColor.GOLD + ",";
+							String name;
+							if (istack.hasItemMeta() && istack.getItemMeta().hasDisplayName()) {
+								name = istack.getItemMeta().getDisplayName();
+							} else {
+								ItemInfo itemInfo = Items.itemByStack(istack);
+								if (itemInfo != null) {
+									name = itemInfo.getName();
+								} else {
+									name = istack.getType().name();
+								}
+							}
+							msg = msg + ChatColor.RED + " " + istack.getAmount() + " " + name + ChatColor.GOLD + ",";
 						}
 					}
 					msg = msg.substring(0, msg.length() - 1);
