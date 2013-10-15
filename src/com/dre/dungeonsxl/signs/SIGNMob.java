@@ -125,6 +125,9 @@ public class SIGNMob extends DSign {
 								}
 							}
 
+							// Disable Despawning
+							entity.setRemoveWhenFarAway(false);
+
 							new DMob(entity, sign.gworld, null);
 						}
 					}
