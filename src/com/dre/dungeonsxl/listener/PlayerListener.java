@@ -163,7 +163,11 @@ public class PlayerListener implements Listener {
 						// Trigger InteractTrigger
 						InteractTrigger trigger = InteractTrigger.get(clickedBlock, gworld);
 						if (trigger != null) {
-							trigger.onTrigger(player);
+							if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+								trigger.onTrigger(player);
+							} else {
+								p.msg(player, p.language.get("Error_Leftklick"));
+							}
 						}
 
 						// Class Signs
