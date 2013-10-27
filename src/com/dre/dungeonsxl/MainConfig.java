@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class MainConfig {
 
-	public String language = "de";
+	public String language = "en";
 	public boolean enableEconomy = false;
 	public boolean enableSpout = false;
 
