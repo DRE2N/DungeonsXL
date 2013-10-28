@@ -58,7 +58,6 @@ public class DSavePlayer {
 		Player onlinePlayer = p.getServer().getPlayer(this.playerName);
 		if (onlinePlayer != null) {
 			/* Player is online */
-			onlinePlayer.teleport(this.oldLocation);
 			onlinePlayer.getInventory().setContents(this.oldInventory);
 			onlinePlayer.getInventory().setArmorContents(this.oldArmor);
 			onlinePlayer.setTotalExperience(this.oldExp);
@@ -71,6 +70,8 @@ public class DSavePlayer {
 				onlinePlayer.removePotionEffect(effect.getType());
 			}
 			onlinePlayer.addPotionEffects(this.oldPotionEffects);
+			
+			onlinePlayer.teleport(this.oldLocation);
 		} else {
 			/* Player is offline */
 			Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.oldLocation);
