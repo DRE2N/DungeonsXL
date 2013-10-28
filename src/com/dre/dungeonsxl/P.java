@@ -9,9 +9,9 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.milkbowl.vault.permission.Permission;
-import net.minecraft.server.v1_6_R2.EntityPlayer;
-import net.minecraft.server.v1_6_R2.MinecraftServer;
-import net.minecraft.server.v1_6_R2.PlayerInteractManager;
+import net.minecraft.server.v1_6_R3.EntityPlayer;
+import net.minecraft.server.v1_6_R3.MinecraftServer;
+import net.minecraft.server.v1_6_R3.PlayerInteractManager;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
@@ -20,8 +20,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_6_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_6_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_6_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -420,7 +420,7 @@ public class P extends JavaPlugin {
 	// Misc.
 	public EntityType getEntitiyType(String name) {
 		for (EntityType type : EntityType.values()) {
-			if (name.equalsIgnoreCase(type.getName())) {
+			if (name.equalsIgnoreCase(type.name())) {
 				return type;
 			}
 		}
