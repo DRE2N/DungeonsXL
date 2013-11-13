@@ -397,15 +397,17 @@ public class PlayerListener implements Listener {
 		if (p.permission.has(event.getPlayer(), "dungeonsxl.cmd") || event.getPlayer().isOp()) {
 			return;
 		}
-
+		
 		DPlayer dplayer = DPlayer.get(event.getPlayer());
 		if (dplayer != null) {
-			if (!dplayer.isEditing) {
-				String[] splittedCmd = event.getMessage().split(" ");
-				if (!splittedCmd[0].equalsIgnoreCase("/dungeon") && !splittedCmd[0].equalsIgnoreCase("/dungeonsxl") && !splittedCmd[0].equalsIgnoreCase("/dxl")) {
-					p.msg(event.getPlayer(), p.language.get("Error_Cmd"));
-					event.setCancelled(true);
-				}
+			if (dplayer.isEditing && p.permission.has(event.getPlayer(), "dungeonsxl.cmdedit") || event.getPlayer().isOp()){
+				return;
+			}
+		
+			String[] splittedCmd = event.getMessage().split(" ");
+			if (!splittedCmd[0].equalsIgnoreCase("/dungeon") && !splittedCmd[0].equalsIgnoreCase("/dungeonsxl") && !splittedCmd[0].equalsIgnoreCase("/dxl")) {
+				p.msg(event.getPlayer(), p.language.get("Error_Cmd"));
+				event.setCancelled(true);
 			}
 		}
 	}
