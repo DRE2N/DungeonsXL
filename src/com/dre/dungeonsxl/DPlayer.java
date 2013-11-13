@@ -25,6 +25,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.trigger.DistanceTrigger;
+import com.dre.dungeonsxl.util.DUtility;
 
 public class DPlayer {
 	public static P p = P.p;
@@ -100,7 +101,7 @@ public class DPlayer {
 			}
 		}
 		
-		this.player.teleport(teleport);
+		DUtility.secureTeleport(this.player, teleport);
 	}
 
 	public void escape() {
@@ -214,9 +215,9 @@ public class DPlayer {
 	public void respawn() {
 		DGroup dgroup = DGroup.get(this.player);
 		if (this.checkpoint == null) {
-			this.player.teleport(dgroup.getGworld().locStart);
+			DUtility.secureTeleport(this.player, dgroup.getGworld().locStart);
 		} else {
-			this.player.teleport(this.checkpoint);
+			DUtility.secureTeleport(this.player, this.checkpoint);
 		}
 		if (this.wolf != null) {
 			this.wolf.teleport(this.player);
@@ -434,9 +435,9 @@ public class DPlayer {
 						EditWorld eworld = EditWorld.get(dplayer.world);
 						if (eworld != null) {
 							if (eworld.lobby == null) {
-								dplayer.player.teleport(eworld.world.getSpawnLocation());
+								DUtility.secureTeleport(dplayer.player, eworld.world.getSpawnLocation());
 							} else {
-								dplayer.player.teleport(eworld.lobby);
+								DUtility.secureTeleport(dplayer.player, eworld.lobby);
 							}
 						}
 					} else {
@@ -444,12 +445,12 @@ public class DPlayer {
 						if (gworld != null) {
 							DGroup dgroup = DGroup.get(dplayer.player);
 							if (dplayer.checkpoint == null) {
-								dplayer.player.teleport(dgroup.getGworld().locStart);
+								DUtility.secureTeleport(dplayer.player, dgroup.getGworld().locStart);
 								if (dplayer.wolf != null) {
 									dplayer.wolf.teleport(dgroup.getGworld().locStart);
 								}
 							} else {
-								dplayer.player.teleport(dplayer.checkpoint);
+								DUtility.secureTeleport(dplayer.player, dplayer.checkpoint);
 								if (dplayer.wolf != null) {
 									dplayer.wolf.teleport(dplayer.checkpoint);
 								}

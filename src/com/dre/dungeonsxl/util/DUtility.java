@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import com.dre.dungeonsxl.P;
 
@@ -80,5 +82,13 @@ public class DUtility {
 				}
 			}
 		}
+	}
+
+	public static void secureTeleport(Player player, Location location){
+		if(player.isInsideVehicle()){
+			player.leaveVehicle();
+		}
+		
+		player.teleport(location);
 	}
 }

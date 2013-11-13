@@ -37,6 +37,7 @@ import com.dre.dungeonsxl.game.GameChest;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.trigger.InteractTrigger;
 import com.dre.dungeonsxl.trigger.UseItemTrigger;
+import com.dre.dungeonsxl.util.DUtility;
 
 public class PlayerListener implements Listener {
 	public P p = P.p;
@@ -465,7 +466,7 @@ public class PlayerListener implements Listener {
 		@Override
 		public void run() {
 			if (this.player.getLocation().distance(this.location) > 2) {
-				this.player.teleport(this.location);
+				DUtility.secureTeleport(this.player, this.location);
 			}
 
 			DPlayer dplayer = DPlayer.get(this.player);

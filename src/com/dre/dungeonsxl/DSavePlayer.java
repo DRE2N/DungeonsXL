@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.inventory.ItemStack;
 
+import com.dre.dungeonsxl.util.DUtility;
+
 public class DSavePlayer {
 	private static P p = P.p;
 
@@ -71,7 +73,7 @@ public class DSavePlayer {
 			}
 			onlinePlayer.addPotionEffects(this.oldPotionEffects);
 			
-			onlinePlayer.teleport(this.oldLocation);
+			DUtility.secureTeleport(onlinePlayer, this.oldLocation);
 		} else {
 			/* Player is offline */
 			Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.oldLocation);
