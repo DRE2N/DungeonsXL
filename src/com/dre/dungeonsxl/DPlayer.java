@@ -61,8 +61,8 @@ public class DPlayer {
 
 		this.player = player;
 		this.world = world;
-
-		this.savePlayer = new DSavePlayer(player.getName(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
+		
+		this.savePlayer = new DSavePlayer(player.getName(), player.getUniqueId().toString(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
 				player.getTotalExperience(), (int) player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
 		this.player.getInventory().clear();

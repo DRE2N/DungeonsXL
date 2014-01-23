@@ -106,7 +106,7 @@ public class DConfig {
 							}
 						}
 
-						// Add Item to Stacks
+						// Add Item to Stacks						
 						ItemStack istack = new ItemStack(itemId, itemSize, (short) itemData);
 						if (itemEnchantment != null) {
 							istack.addEnchantment(itemEnchantment, itemLvlEnchantment);

@@ -24,6 +24,7 @@ public class DSavePlayer {
 
 	// Variables
 	private String playerName;
+	private String uuid;
 
 	private Location oldLocation;
 	private ItemStack[] oldInventory;
@@ -36,11 +37,12 @@ public class DSavePlayer {
 	private GameMode oldGamemode;
 	private Collection<PotionEffect> oldPotionEffects;
 
-	public DSavePlayer(String playerName, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
+	public DSavePlayer(String playerName, String uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
 			GameMode oldGamemode, Collection<PotionEffect> oldPotionEffects) {
 		savePlayers.add(this);
 
 		this.playerName = playerName;
+		this.uuid = uuid;
 
 		this.oldLocation = oldLocation;
 		this.oldInventory = oldInventory;
@@ -76,7 +78,7 @@ public class DSavePlayer {
 			DUtility.secureTeleport(onlinePlayer, this.oldLocation);
 		} else {
 			/* Player is offline */
-			Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.oldLocation);
+			Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.uuid, this.oldLocation);
 			if (offlinePlayer != null) {
 				offlinePlayer.getInventory().setContents(this.oldInventory);
 				offlinePlayer.getInventory().setArmorContents(this.oldArmor);
@@ -104,6 +106,7 @@ public class DSavePlayer {
 		FileConfiguration configFile = new YamlConfiguration();
 
 		for (DSavePlayer savePlayer : savePlayers) {
+			configFile.set(savePlayer.playerName + ".uuid", savePlayer.uuid);
 			configFile.set(savePlayer.playerName + ".oldGamemode", savePlayer.oldGamemode.getValue());
 			configFile.set(savePlayer.playerName + ".oldFireTicks", savePlayer.oldFireTicks);
 			configFile.set(savePlayer.playerName + ".oldFoodLevel", savePlayer.oldFoodLevel);
@@ -133,7 +136,9 @@ public class DSavePlayer {
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(new File(p.getDataFolder(), "savePlayers.yml"));
 
 		for (String playerName : configFile.getKeys(false)) {
-
+			// Load uuid
+			String uuid = configFile.getString(playerName + ".uuid");
+			
 			// Load inventory data
 			ArrayList<ItemStack> oldInventoryList = (ArrayList<ItemStack>) configFile.get(playerName + ".oldInventory");
 			ArrayList<ItemStack> oldArmorList = (ArrayList<ItemStack>) configFile.get(playerName + ".oldArmor");
@@ -160,7 +165,7 @@ public class DSavePlayer {
 					+ ".oldLocation.z"), configFile.getInt(playerName + ".oldLocation.yaw"), configFile.getInt(playerName + ".oldLocation.pitch"));
 
 			// Create Player
-			DSavePlayer savePlayer = new DSavePlayer(playerName, oldLocation, oldInventory, oldArmor, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGamemode, oldPotionEffects);
+			DSavePlayer savePlayer = new DSavePlayer(playerName, uuid, oldLocation, oldInventory, oldArmor, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGamemode, oldPotionEffects);
 			savePlayer.reset();
 		}
 	}
