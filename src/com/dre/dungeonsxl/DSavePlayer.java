@@ -60,45 +60,52 @@ public class DSavePlayer {
 
 	public void reset() {
 		Player onlinePlayer = p.getServer().getPlayer(this.playerName);
-		if (onlinePlayer != null) {
-			/* Player is online */
-			onlinePlayer.getInventory().setContents(this.oldInventory);
-			onlinePlayer.getInventory().setArmorContents(this.oldArmor);
-			onlinePlayer.setTotalExperience(this.oldExp);
-			onlinePlayer.setLevel(this.oldLvl);
-			onlinePlayer.setHealth(this.oldHealth);
-			onlinePlayer.setFoodLevel(this.oldFoodLevel);
-			onlinePlayer.setGameMode(this.oldGamemode);
-			onlinePlayer.setFireTicks(this.oldFireTicks);
-			for (PotionEffect effect : onlinePlayer.getActivePotionEffects()) {
-				onlinePlayer.removePotionEffect(effect.getType());
-			}
-			onlinePlayer.addPotionEffects(this.oldPotionEffects);
-			
-			DUtility.secureTeleport(onlinePlayer, this.oldLocation);
-		} else {
-			/* Player is offline */
-			Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.uuid, this.oldLocation);
-			if (offlinePlayer != null) {
-				offlinePlayer.getInventory().setContents(this.oldInventory);
-				offlinePlayer.getInventory().setArmorContents(this.oldArmor);
-				offlinePlayer.setTotalExperience(this.oldExp);
-				offlinePlayer.setLevel(this.oldLvl);
-				offlinePlayer.setHealth(this.oldHealth);
-				offlinePlayer.setFoodLevel(this.oldFoodLevel);
-				offlinePlayer.setGameMode(this.oldGamemode);
-				offlinePlayer.setFireTicks(this.oldFireTicks);
-				for (PotionEffect effect : offlinePlayer.getActivePotionEffects()) {
-					offlinePlayer.removePotionEffect(effect.getType());
+		
+		try{
+			if (onlinePlayer != null) {
+				/* Player is online */
+				onlinePlayer.getInventory().setContents(this.oldInventory);
+				onlinePlayer.getInventory().setArmorContents(this.oldArmor);
+				onlinePlayer.setTotalExperience(this.oldExp);
+				onlinePlayer.setLevel(this.oldLvl);
+				onlinePlayer.setHealth(this.oldHealth);
+				onlinePlayer.setFoodLevel(this.oldFoodLevel);
+				onlinePlayer.setGameMode(this.oldGamemode);
+				onlinePlayer.setFireTicks(this.oldFireTicks);
+				for (PotionEffect effect : onlinePlayer.getActivePotionEffects()) {
+					onlinePlayer.removePotionEffect(effect.getType());
 				}
-				//causes NP
-				//offlinePlayer.addPotionEffects(this.oldPotionEffects);
-
-				offlinePlayer.saveData();
+				onlinePlayer.addPotionEffects(this.oldPotionEffects);
+				
+				DUtility.secureTeleport(onlinePlayer, this.oldLocation);
+			} else {
+				/* Player is offline */
+				Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.uuid, this.oldLocation);
+				if (offlinePlayer != null) {
+					offlinePlayer.getInventory().setContents(this.oldInventory);
+					offlinePlayer.getInventory().setArmorContents(this.oldArmor);
+					offlinePlayer.setTotalExperience(this.oldExp);
+					offlinePlayer.setLevel(this.oldLvl);
+					offlinePlayer.setHealth(this.oldHealth);
+					offlinePlayer.setFoodLevel(this.oldFoodLevel);
+					offlinePlayer.setGameMode(this.oldGamemode);
+					offlinePlayer.setFireTicks(this.oldFireTicks);
+					for (PotionEffect effect : offlinePlayer.getActivePotionEffects()) {
+						offlinePlayer.removePotionEffect(effect.getType());
+					}
+					//causes NP
+					//offlinePlayer.addPotionEffects(this.oldPotionEffects);
+	
+					offlinePlayer.saveData();
+				}
 			}
+		} catch (NullPointerException exception) {
+			P.p.log("Corrupt playerdata detected and removed!");
 		}
+		
 		savePlayers.remove(this);
 		save();
+		
 	}
 
 	// Static
