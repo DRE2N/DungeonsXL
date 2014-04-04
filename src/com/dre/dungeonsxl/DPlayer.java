@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -62,8 +63,10 @@ public class DPlayer {
 		this.player = player;
 		this.world = world;
 		
+		double health = ((Damageable) player).getHealth();
+		
 		this.savePlayer = new DSavePlayer(player.getName(), player.getUniqueId().toString(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
-				player.getTotalExperience(), (int) player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
+				player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
 		this.player.getInventory().clear();
 		this.player.getInventory().setArmorContents(null);
@@ -325,7 +328,9 @@ public class DPlayer {
 					this.wolf = (Wolf) this.world.spawnEntity(this.player.getLocation(), EntityType.WOLF);
 					this.wolf.setTamed(true);
 					this.wolf.setOwner(this.player);
-					this.wolf.setHealth(this.wolf.getMaxHealth());
+					
+					double maxHealth = ((Damageable) wolf).getMaxHealth();
+					this.wolf.setHealth(maxHealth);
 				}
 
 				/* Delete Inventory */
