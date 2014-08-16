@@ -91,7 +91,7 @@ public class EntityListener implements Listener {
 				Entity entity2 = sub.getEntity();
 
 				if (entity instanceof Projectile) {
-					entity = ((Projectile) entity).getShooter();
+					entity = (Entity) ((Projectile) entity).getShooter();
 				}
 
 				if (entity instanceof Player && entity2 instanceof Player) {

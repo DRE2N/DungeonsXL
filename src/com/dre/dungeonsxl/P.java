@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.milkbowl.vault.permission.Permission;
-import net.minecraft.server.v1_7_R2.EntityPlayer;
-import net.minecraft.server.v1_7_R2.MinecraftServer;
-import net.minecraft.server.v1_7_R2.PlayerInteractManager;
+import net.minecraft.server.v1_7_R3.EntityPlayer;
+import net.minecraft.server.v1_7_R3.MinecraftServer;
+import net.minecraft.server.v1_7_R3.PlayerInteractManager;
 import net.minecraft.util.com.mojang.authlib.GameProfile;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -22,8 +23,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_7_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -434,7 +435,7 @@ public class P extends JavaPlugin {
 		return NumberUtils.toInt(string, 0);
 	}
 
-	public Player getOfflinePlayer(String player, String uuid) {
+	public Player getOfflinePlayer(String player, UUID uuid) {
 		Player pplayer = null;
 		try {
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
@@ -461,7 +462,7 @@ public class P extends JavaPlugin {
 		return pplayer;
 	}
 
-	public Player getOfflinePlayer(String player, String uuid, Location location) {
+	public Player getOfflinePlayer(String player, UUID uuid, Location location) {
 		Player pplayer = null;
 		try {
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");

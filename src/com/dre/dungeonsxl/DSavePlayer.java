@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.GameMode;
@@ -24,7 +25,7 @@ public class DSavePlayer {
 
 	// Variables
 	private String playerName;
-	private String uuid;
+	private UUID uuid;
 
 	private Location oldLocation;
 	private ItemStack[] oldInventory;
@@ -37,7 +38,7 @@ public class DSavePlayer {
 	private GameMode oldGamemode;
 	private Collection<PotionEffect> oldPotionEffects;
 
-	public DSavePlayer(String playerName, String uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
+	public DSavePlayer(String playerName, UUID uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
 			GameMode oldGamemode, Collection<PotionEffect> oldPotionEffects) {
 		savePlayers.add(this);
 
@@ -144,7 +145,7 @@ public class DSavePlayer {
 
 		for (String playerName : configFile.getKeys(false)) {
 			// Load uuid
-			String uuid = configFile.getString(playerName + ".uuid");
+			UUID uuid = UUID.fromString(configFile.getString(playerName + ".uuid"));
 			
 			// Load inventory data
 			ArrayList<ItemStack> oldInventoryList = (ArrayList<ItemStack>) configFile.get(playerName + ".oldInventory");

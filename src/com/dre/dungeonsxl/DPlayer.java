@@ -65,7 +65,7 @@ public class DPlayer {
 		
 		double health = ((Damageable) player).getHealth();
 		
-		this.savePlayer = new DSavePlayer(player.getName(), player.getUniqueId().toString(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
+		this.savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
 				player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
 		this.player.getInventory().clear();
@@ -159,6 +159,7 @@ public class DPlayer {
 					if (gworld.isTutorial) {
 						p.permission.playerAddGroup(this.player, p.mainConfig.tutorialEndGroup);
 						p.permission.playerRemoveGroup(this.player, p.mainConfig.tutorialStartGroup);
+						p.getServer().dispatchCommand(p.getServer().getConsoleSender(), "pex user "+player.getName()+" group set "+p.mainConfig.tutorialEndGroup);
 					}
 				}
 			}
