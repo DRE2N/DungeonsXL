@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -37,6 +38,7 @@ import com.dre.dungeonsxl.commands.DCommandRoot;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.listener.BlockListener;
 import com.dre.dungeonsxl.listener.CommandListener;
+import com.dre.dungeonsxl.listener.DeathListener;
 import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
@@ -45,12 +47,16 @@ import com.dre.dungeonsxl.listener.WorldListener;
 public class P extends JavaPlugin {
 	public static P p;
 
+	// Lives
+	public static HashMap<Player, Integer> lives;
+
 	// Listener
 	private static Listener entityListener;
 	private static Listener playerListener;
 	private static Listener blockListener;
 	private static Listener worldListener;
 	private static Listener hangingListener;
+	private static Listener deathListener;
 
 	// Main Config Reader
 	public MainConfig mainConfig;
@@ -64,6 +70,9 @@ public class P extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		p = this;
+
+		// Lives
+		lives = new HashMap<Player, Integer>();
 
 		// Commands
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
@@ -92,12 +101,14 @@ public class P extends JavaPlugin {
 		blockListener = new BlockListener();
 		worldListener = new WorldListener();
 		hangingListener = new HangingListener();
+		deathListener = new DeathListener();
 
 		Bukkit.getServer().getPluginManager().registerEvents(entityListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(playerListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(blockListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(worldListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(hangingListener, this);
+		Bukkit.getServer().getPluginManager().registerEvents(deathListener, this);
 
 		// Load All
 		this.loadAll();

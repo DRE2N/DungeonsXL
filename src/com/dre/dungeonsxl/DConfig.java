@@ -30,6 +30,8 @@ public class DConfig {
 	private CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
 	private CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
 
+	private int initialLives = 3;
+	
 	private boolean isLobbyDisabled = false;
 	private int timeToNextPlay = 0;
 	private int timeToNextLoot = 0;
@@ -150,6 +152,13 @@ public class DConfig {
 			keepInventory = configFile.getBoolean("keepInventory");
 		} else {
 			keepInventory = mainConfig.keepInventory;
+		}
+
+		/* keep Inventory */
+		if (configFile.contains("initialLives")) {
+			initialLives = configFile.getInt("initialLives");
+		} else {
+			initialLives = mainConfig.getInitialLives();
 		}
 
 		/* Lobby */
@@ -297,6 +306,10 @@ public class DConfig {
 		return keepInventory;
 	}
 
+	public int getInitialLives() {
+		return initialLives;
+	}
+
 	public boolean isLobbyDisabled() {
 		return isLobbyDisabled;
 	}
@@ -331,4 +344,5 @@ public class DConfig {
 	public Set<DMobType> getMobTypes() {
 		return mobTypes;
 	}
+
 }

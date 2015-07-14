@@ -62,6 +62,8 @@ public class LanguageReader {
 		defaults.put("Player_SignCreated", "&6Sign created!");
 		defaults.put("Player_SignCopied", "&6Copied!");
 		defaults.put("Player_BlockInfo", "&6Block-ID: &2&v1");
+		defaults.put("Player_Death", "&6You died, lives left: &2v1");
+		defaults.put("Player_DeathKick", "&2v1&6 died and lost his last life.");
 
 		/* Cmds */
 		defaults.put("Cmd_Chat_DungeonChat", "&6You have entered the Dungeon-chat");
@@ -76,6 +78,7 @@ public class LanguageReader {
 		defaults.put("Cmd_Reload_Done", "&6DungeonsXL was successfully reloaded!");
 		defaults.put("Cmd_Save_Success", "&6Dungeon saved!");
 		defaults.put("Cmd_Uninvite_Success", "&4&v1&6 was successfully uninvited to edit the Dungeon &4&v1&6!");
+		defaults.put("Cmd_Lives", "&4v1&6 has &4v2 &6lives left.");
 
 		/* Errors */
 		defaults.put("Error_Enderchest", "&4You cannot use an enderchest while in a Dungeon!");
@@ -121,6 +124,7 @@ public class LanguageReader {
 		defaults.put("Help_Cmd_Save", "/dxl save - Saves the current dungeon");
 		defaults.put("Help_Cmd_Test", "/dxl test [dungeon] - Tests a dungeon");
 		defaults.put("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon");
+		defaults.put("Help_Cmd_Lives", "/dxl lives <player> - show the lives a player has left");
 
 	}
 

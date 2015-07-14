@@ -25,6 +25,7 @@ public class DCommandRoot {
 	public CMDTest cmdTest = new CMDTest();
 	public CMDHelp cmdHelp = new CMDHelp();
 	public CMDReload cmdReload = new CMDReload();
+	public CMDLives cmdLives = new CMDLives();
 
 	// Methods
 	public DCommandRoot() {
@@ -47,5 +48,6 @@ public class DCommandRoot {
 		this.commands.add(cmdTest);
 		this.commands.add(cmdHelp);
 		this.commands.add(cmdReload);
+		this.commands.add(cmdLives);
 	}
 }

@@ -1,6 +1,6 @@
 name: DungeonsXL
 main: com.dre.dungeonsxl.P
-version: 0.9-SNAPSHOT
+version: 0.9
 author: Frank Baumann
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 website: http://www.dre2n.ml

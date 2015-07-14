@@ -66,6 +66,7 @@ public class DPlayer {
 		this.savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
 				player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
+		if (!(GameWorld.get(world).config.getKeepInventory())) {
 			this.player.getInventory().clear();
 			this.player.getInventory().setArmorContents(null);
 			this.player.setTotalExperience(0);
@@ -75,6 +76,10 @@ public class DPlayer {
 			for (PotionEffect effect : this.player.getActivePotionEffects()) {
 				this.player.removePotionEffect(effect.getType());
 			}
+		}
+
+		// Lives
+		P.lives.put(this.player, GameWorld.get(world).config.getInitialLives());
 		
 		this.isEditing = isEditing;
 
@@ -99,6 +104,9 @@ public class DPlayer {
 
 	public void leave() {
 		remove(this);
+
+		// Lives
+		P.lives.remove(player);
 
 		this.savePlayer.reset();
 
@@ -204,13 +212,15 @@ public class DPlayer {
 		}
 
 		// Respawn Items
-		if (this.respawnInventory != null || this.respawnArmor != null) {
-			this.player.getInventory().setContents(this.respawnInventory);
-			this.player.getInventory().setArmorContents(this.respawnArmor);
-			this.respawnInventory = null;
-			this.respawnArmor = null;
-		}
+		if (!(GameWorld.get(world).config.getKeepInventory())) {
+			if (this.respawnInventory != null || this.respawnArmor != null) {
+				this.player.getInventory().setContents(this.respawnInventory);
+				this.player.getInventory().setArmorContents(this.respawnArmor);
+				this.respawnInventory = null;
+				this.respawnArmor = null;
+			}
 		// P.p.updateInventory(this.player);
+		}
 	}
 
 	public void finish() {
