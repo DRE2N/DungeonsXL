@@ -54,6 +54,8 @@ public class DPlayer {
 	public String[] linesCopy;
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player, 45, "Belohnungen");
+	
+	public int initialLives = -1;
 
 	public DPlayer(Player player, World world, Location teleport, boolean isEditing) {
 		players.add(this);
@@ -66,35 +68,37 @@ public class DPlayer {
 		this.savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
 				player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
-		if (!(GameWorld.get(world).config.getKeepInventory())) {
-			this.player.getInventory().clear();
-			this.player.getInventory().setArmorContents(null);
-			this.player.setTotalExperience(0);
-			this.player.setLevel(0);
-			this.player.setHealth(20);
-			this.player.setFoodLevel(20);
-			for (PotionEffect effect : this.player.getActivePotionEffects()) {
-				this.player.removePotionEffect(effect.getType());
-			}
-		}
-
-		// Lives
-		P.lives.put(this.player, GameWorld.get(world).config.getInitialLives());
-		
 		this.isEditing = isEditing;
 
-		if (isEditing)
-			this.player.setGameMode(GameMode.CREATIVE);
-		else
+		if (this.isEditing) {
+			this.clearPlayerData();
+		} else {
 			this.player.setGameMode(GameMode.SURVIVAL);
-
-		if (!isEditing) {
+			if (!(GameWorld.get(world).config.getKeepInventory())) {
+				this.clearPlayerData();
+			}
 			if (GameWorld.get(world).config.isLobbyDisabled()) {
 				this.ready();
 			}
+			initialLives = GameWorld.get(world).config.getInitialLives();
 		}
-		
+
+		// Lives
+		P.lives.put(this.player, initialLives);
+
 		DUtility.secureTeleport(this.player, teleport);
+	}
+
+	public void clearPlayerData() {
+		this.player.getInventory().clear();
+		this.player.getInventory().setArmorContents(null);
+		this.player.setTotalExperience(0);
+		this.player.setLevel(0);
+		this.player.setHealth(20);
+		this.player.setFoodLevel(20);
+		for (PotionEffect effect : this.player.getActivePotionEffects()) {
+			this.player.removePotionEffect(effect.getType());
+		}
 	}
 
 	public void escape() {
