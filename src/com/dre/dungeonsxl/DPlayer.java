@@ -21,8 +21,6 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.getspout.spoutapi.Spout;
-import org.getspout.spoutapi.player.SpoutPlayer;
 
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.trigger.DistanceTrigger;
@@ -68,15 +66,16 @@ public class DPlayer {
 		this.savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
 				player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
-		this.player.getInventory().clear();
-		this.player.getInventory().setArmorContents(null);
-		this.player.setTotalExperience(0);
-		this.player.setLevel(0);
-		this.player.setHealth(20);
-		this.player.setFoodLevel(20);
-		for (PotionEffect effect : this.player.getActivePotionEffects()) {
-			this.player.removePotionEffect(effect.getType());
-		}
+			this.player.getInventory().clear();
+			this.player.getInventory().setArmorContents(null);
+			this.player.setTotalExperience(0);
+			this.player.setLevel(0);
+			this.player.setHealth(20);
+			this.player.setFoodLevel(20);
+			for (PotionEffect effect : this.player.getActivePotionEffects()) {
+				this.player.removePotionEffect(effect.getType());
+			}
+		
 		this.isEditing = isEditing;
 
 		if (isEditing)
@@ -87,20 +86,6 @@ public class DPlayer {
 		if (!isEditing) {
 			if (GameWorld.get(world).config.isLobbyDisabled()) {
 				this.ready();
-			}
-		}
-
-		// Spout set Texturepack
-		if (!isEditing) {
-			if (p.isSpoutEnabled) {
-				GameWorld gworld = GameWorld.get(world);
-				if (gworld.config.getSpoutTexturepackURL() != null) {
-					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
-					if (sPlayer != null) {
-						sPlayer.sendNotification(ChatColor.GOLD + "DungeonsXL", ChatColor.RED + "Download texturepack!", Material.FIREBALL);
-						sPlayer.setTexturePack(gworld.config.getSpoutTexturepackURL());
-					}
-				}
 			}
 		}
 		
@@ -182,15 +167,6 @@ public class DPlayer {
 						}
 						i++;
 					} while (groupplayer == null);
-				}
-			}
-
-			// Spout
-			if (p.isSpoutEnabled) {
-				SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
-				if (sPlayer != null) {
-					sPlayer.resetTexturePack();
-					sPlayer.resetSkin();
 				}
 			}
 		}
@@ -370,20 +346,6 @@ public class DPlayer {
 
 					else {
 						this.player.getInventory().addItem(istack);
-					}
-				}
-
-				/* Spout Skin */
-				if (p.isSpoutEnabled) {
-					if (this.dclass.spoutSkinURL != null) {
-						try {
-							Spout.getServer().getPlayer(player.getName()).setSkin(this.dclass.spoutSkinURL);
-						} catch (UnsupportedOperationException exception) {
-							p.log(p.language.get("Log_Error_Spout_Skin", this.dclass.name));
-							Spout.getServer().getPlayer(player.getName()).resetSkin();
-						}
-					} else {
-						Spout.getServer().getPlayer(player.getName()).resetSkin();
 					}
 				}
 			}

@@ -10,7 +10,6 @@ public class MainConfig {
 
 	public String language = "en";
 	public boolean enableEconomy = false;
-	public boolean enableSpout = false;
 
 	/* Tutorial */
 	public boolean tutorialActivated = false;
@@ -27,10 +26,6 @@ public class MainConfig {
 		/* Main Config */
 		if (configFile.contains("language")) {
 			this.language = configFile.getString("language");
-		}
-
-		if (configFile.contains("enableSpout")) {
-			this.enableSpout = configFile.getBoolean("enableSpout");
 		}
 
 		if (configFile.contains("enableEconomy")) {

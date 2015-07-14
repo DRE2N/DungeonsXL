@@ -16,8 +16,6 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.getspout.spoutapi.Spout;
-import org.getspout.spoutapi.player.EntitySkinType;
 import com.dre.dungeonsxl.game.DMob;
 import com.dre.dungeonsxl.game.GameWorld;
 
@@ -42,9 +40,6 @@ public class DMobType {
 	/* Extra Values for different Mob Types */
 	private boolean isWitherSkeleton = false;
 	private String ocelotType = null;
-
-	/* Spout */
-	private String spoutSkinURL;
 
 	/* Methods */
 	public DMobType(String name, EntityType type) {
@@ -85,13 +80,6 @@ public class DMobType {
 						} else if (ocelotType.equalsIgnoreCase("WILD_OCELOT")) {
 							ocelot.setCatType(Ocelot.Type.WILD_OCELOT);
 						}
-					}
-				}
-
-				/* Set Spout Skin */
-				if (P.p.mainConfig.enableSpout) {
-					if (spoutSkinURL != null) {
-						Spout.getServer().setEntitySkin(entity, spoutSkinURL, EntitySkinType.DEFAULT);
 					}
 				}
 
@@ -225,10 +213,6 @@ public class DMobType {
 						}
 					}
 
-					// Spout Skin
-					if (configFile.contains(mobName + ".spoutSkinURL")) {
-						mobType.spoutSkinURL = configFile.getString(mobName + ".spoutSkinURL");
-					}
 				} else {
 					P.p.log(P.p.language.get("Log_Error_MobType", configFile.getString(mobName + ".Type")));
 				}

@@ -22,6 +22,8 @@ public class DConfig {
 
 	private File file;
 
+	private boolean keepInventory = false;
+
 	private CopyOnWriteArrayList<DClass> dClasses = new CopyOnWriteArrayList<DClass>();
 	private Map<Integer, String> msgs = new HashMap<Integer, String>();
 
@@ -37,10 +39,6 @@ public class DConfig {
 	private List<String> finishedOne;
 	private List<String> finishedAll;
 	private int timeLastPlayed = 0;
-
-	// Spout
-	private boolean spoutCraftOnly = false;
-	private String spoutTexturepackURL;
 
 	// MobTypes
 	private Set<DMobType> mobTypes = new HashSet<DMobType>();
@@ -116,16 +114,8 @@ public class DConfig {
 					}
 				}
 
-				/* Spout */
-				String spoutSkinURL = null;
-				if (P.p.isSpoutEnabled) {
-					if (configSetionClasses.contains(className + ".spoutSkinURL")) {
-						spoutSkinURL = configSetionClasses.getString(className + ".spoutSkinURL");
-					}
-				}
-
 				/* Create Class */
-				this.dClasses.add(new DClass(name, istacks, hasDog, spoutSkinURL));
+				this.dClasses.add(new DClass(name, istacks, hasDog));
 			}
 		}
 
@@ -153,6 +143,13 @@ public class DConfig {
 			for (String i : invitedplayers) {
 				this.invitedPlayers.add(i);
 			}
+		}
+
+		/* keep Inventory */
+		if (configFile.contains("keepInventory")) {
+			keepInventory = configFile.getBoolean("keepInventory");
+		} else {
+			keepInventory = mainConfig.keepInventory;
 		}
 
 		/* Lobby */
@@ -196,19 +193,6 @@ public class DConfig {
 
 		if (configFile.contains("timeLastPlayed")) {
 				timeLastPlayed = configFile.getInt("timeLastPlayed");
-		}
-
-		/* Spout */
-		if (configFile.contains("spout.spoutCraftOnly")) {
-			spoutCraftOnly = configFile.getBoolean("spout.spoutCraftOnly");
-		} else {
-			spoutCraftOnly = mainConfig.spoutCraftOnly;
-		}
-
-		if (configFile.contains("spout.spoutTexturepackURL")) {
-			spoutTexturepackURL = configFile.getString("spout.spoutTexturepackURL");
-		} else {
-			spoutTexturepackURL = mainConfig.spoutTexturepackURL;
 		}
 
 		/* Mobtypes */
@@ -309,6 +293,10 @@ public class DConfig {
 		return tmpSecureObjects;
 	}
 
+	public boolean getKeepInventory() {
+		return keepInventory;
+	}
+
 	public boolean isLobbyDisabled() {
 		return isLobbyDisabled;
 	}
@@ -338,14 +326,6 @@ public class DConfig {
 		merge.addAll(finishedAll);
 		merge.addAll(finishedOne);
 		return merge;
-	}
-
-	public boolean isSpoutCraftOnly() {
-		return spoutCraftOnly;
-	}
-
-	public String getSpoutTexturepackURL() {
-		return spoutTexturepackURL;
 	}
 
 	public Set<DMobType> getMobTypes() {

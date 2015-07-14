@@ -41,8 +41,6 @@ public class LanguageReader {
 		defaults.put("Log_WorldGenerationFinished", "&6World generation finished!");
 		defaults.put("Log_Error_MobEnchantment", "&4Error at loading mob.yml: Enchantment &6&v1&4 doesn't exist!");
 		defaults.put("Log_Error_MobType", "&4Error at loading mob.yml: Mob &6&v1&4 doesn't exist!");
-		defaults.put("Log_Error_Spout", "&4Could not find Spout!");
-		defaults.put("Log_Error_Spout_Skin", "&4The Spout Skin of &6&v1&4 is not a png!");
 		defaults.put("Log_Error_NoConsoleCommand", "&6/dxl &v1&4 can not be executed as Console!");
 
 		/* Player */
@@ -102,7 +100,6 @@ public class LanguageReader {
 		defaults.put("Error_MsgFormat", "&4The Message has to be between \"!");
 		defaults.put("Error_MsgNoInt", "&4Argument <id> has to include a number!");
 		defaults.put("Error_TutorialNotExist", "&4Tutorial dungeon does not exist!");
-		defaults.put("Error_SpoutCraftOnly", "&4You need SpoutCraft to play this dungeon!");
 		defaults.put("Error_NoPortal", "&4You have to look at a portal!");
 		defaults.put("Error_NoPlayerCommand", "&6/dxl &v1&4 can not be executed as player!");
 		defaults.put("Error_SignWrongFormat", "&4The sign is not written correctly!");

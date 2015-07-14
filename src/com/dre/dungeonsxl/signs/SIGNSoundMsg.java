@@ -4,9 +4,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.getspout.spoutapi.Spout;
-import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.player.SpoutPlayer;
 
 import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.game.GameWorld;
@@ -53,14 +50,6 @@ public class SIGNSoundMsg extends DSign {
 	@Override
 	public void onTrigger() {
 		if (initialized) {
-			if (P.p.isSpoutEnabled) {
-				for (Player player : gworld.world.getPlayers()) {
-					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
-					if (sPlayer.isSpoutCraftEnabled()) {
-						SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
-					}
-				}
-			}
 			remove();
 		}
 	}
@@ -68,18 +57,7 @@ public class SIGNSoundMsg extends DSign {
 	@Override
 	public boolean onPlayerTrigger(Player player) {
 		if (initialized) {
-			if (P.p.isSpoutEnabled) {
-				if (!done.contains(player)) {
-					done.add(player);
-					SpoutPlayer sPlayer = Spout.getServer().getPlayer(player.getName());
-					if (sPlayer.isSpoutCraftEnabled()) {
-						SpoutManager.getSoundManager().playCustomMusic(P.p, sPlayer, this.msg, false, this.sign.getLocation());
-					}
-				}
-			} else {
-				remove();
-			}
-
+			remove();
 			if (done.size() >= gworld.world.getPlayers().size()) {
 				remove();
 			}

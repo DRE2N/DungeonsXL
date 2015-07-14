@@ -61,9 +61,6 @@ public class P extends JavaPlugin {
 	// Chatspyer
 	public CopyOnWriteArrayList<Player> chatSpyer = new CopyOnWriteArrayList<Player>();
 
-	// Spout
-	public boolean isSpoutEnabled = false;
-
 	@Override
 	public void onEnable() {
 		p = this;
@@ -104,17 +101,6 @@ public class P extends JavaPlugin {
 
 		// Load All
 		this.loadAll();
-
-		// Spout
-		if (mainConfig.enableSpout) {
-			if (P.p.getServer().getPluginManager().getPlugin("Spout") != null) {
-				isSpoutEnabled = true;
-			} else {
-				isSpoutEnabled = false;
-				mainConfig.enableSpout = false;
-				P.p.log(P.p.language.get("Log_Error_Spout"));
-			}
-		}
 
 		// Scheduler
 		this.initSchedulers();

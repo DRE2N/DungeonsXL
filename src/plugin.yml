@@ -1,10 +1,10 @@
 name: DungeonsXL
 main: com.dre.dungeonsxl.P
-version: 0.8.3
+version: 0.9-SNAPSHOT
 author: Frank Baumann
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 website: http://www.dre2n.ml
-softdepend: [Vault, SpoutcraftPlugin]
+softdepend: [Vault]
 commands:
   dungeonsxl:
     description: Reference command for DungeonsXL.

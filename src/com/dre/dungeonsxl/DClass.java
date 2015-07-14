@@ -9,13 +9,9 @@ public class DClass {
 	public String name;
 	public boolean hasDog;
 
-	// Spout
-	public String spoutSkinURL;
-
-	public DClass(String name, CopyOnWriteArrayList<ItemStack> items, boolean hasDog, String spoutSkinURL) {
+	public DClass(String name, CopyOnWriteArrayList<ItemStack> items, boolean hasDog) {
 		this.items = items;
 		this.name = name;
 		this.hasDog = hasDog;
-		this.spoutSkinURL = spoutSkinURL;
 	}
 }
