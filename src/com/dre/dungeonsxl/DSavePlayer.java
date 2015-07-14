@@ -25,7 +25,7 @@ public class DSavePlayer {
 
 	// Variables
 	private String playerName;
-	private UUID uuid;
+	private String uuid;
 
 	private Location oldLocation;
 	private ItemStack[] oldInventory;
@@ -43,7 +43,7 @@ public class DSavePlayer {
 		savePlayers.add(this);
 
 		this.playerName = playerName;
-		this.uuid = uuid;
+		this.uuid = uuid.toString();
 
 		this.oldLocation = oldLocation;
 		this.oldInventory = oldInventory;
@@ -81,7 +81,7 @@ public class DSavePlayer {
 				DUtility.secureTeleport(onlinePlayer, this.oldLocation);
 			} else {
 				/* Player is offline */
-				Player offlinePlayer = p.getOfflinePlayer(this.playerName, this.uuid, this.oldLocation);
+				Player offlinePlayer = p.getOfflinePlayer(this.playerName, UUID.fromString(uuid), this.oldLocation);
 				if (offlinePlayer != null) {
 					offlinePlayer.getInventory().setContents(this.oldInventory);
 					offlinePlayer.getInventory().setArmorContents(this.oldArmor);
