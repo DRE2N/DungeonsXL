@@ -11,11 +11,11 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.milkbowl.vault.permission.Permission;
-import net.minecraft.server.v1_8_R1.EntityPlayer;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
-import net.minecraft.server.v1_8_R1.PlayerInteractManager;
-import com.mojang.authlib.GameProfile;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 
+import com.mojang.authlib.GameProfile;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
@@ -24,8 +24,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_8_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;

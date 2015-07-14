@@ -1,7 +1,11 @@
 package com.dre.dungeonsxl.commands;
 
+import java.util.Set;
+
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import com.dre.dungeonsxl.DPortal;
 
 public class CMDDeletePortal extends DCommand {
@@ -17,7 +21,7 @@ public class CMDDeletePortal extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		DPortal dPortal = DPortal.get(player.getTargetBlock(null, 20).getLocation());
+		DPortal dPortal = DPortal.get(player.getTargetBlock((Set<Material>) null, 20).getLocation());
 
 		if (dPortal != null) {
 			dPortal.delete();
