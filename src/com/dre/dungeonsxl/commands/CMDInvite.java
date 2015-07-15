@@ -1,7 +1,9 @@
 package com.dre.dungeonsxl.commands;
 
 import org.bukkit.command.CommandSender;
+
 import com.dre.dungeonsxl.EditWorld;
+import com.dre.dungeonsxl.util.OfflinePlayerUtil;
 
 public class CMDInvite extends DCommand {
 
@@ -16,7 +18,7 @@ public class CMDInvite extends DCommand {
 
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
-		if (EditWorld.addInvitedPlayer(args[2], args[1])) {
+		if (EditWorld.addInvitedPlayer(args[2], OfflinePlayerUtil.getUniqueIdFromName(args[1]))) {
 			p.msg(sender, p.language.get("Cmd_Invite_Success", args[1], args[2]));
 		} else {
 			p.msg(sender, p.language.get("Error_DungeonNotExist", args[2]));

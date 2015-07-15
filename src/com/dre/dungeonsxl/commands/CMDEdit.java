@@ -25,7 +25,7 @@ public class CMDEdit extends DCommand {
 		DGroup dgroup = DGroup.get(player);
 		DPlayer dplayer = DPlayer.get(player);
 
-		if (EditWorld.isInvitedPlayer(dungeonName, player.getName()) || p.permission.has(player, "dxl.edit") || player.isOp()) {
+		if (EditWorld.isInvitedPlayer(dungeonName, player.getUniqueId(), player.getName()) || p.permission.has(player, "dxl.edit") || player.isOp()) {
 			if (dplayer == null) {
 				if (dgroup == null) {
 					if (eworld != null) {
