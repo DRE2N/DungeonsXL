@@ -1,6 +1,8 @@
 package com.dre.dungeonsxl.signs;
 
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
+
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNStart extends DSign {
@@ -23,7 +25,7 @@ public class SIGNStart extends DSign {
 	@Override
 	public void onInit() {
 		gworld.locStart = sign.getLocation();
-		sign.getBlock().setTypeId(0);
+		sign.getBlock().setType(Material.AIR);
 	}
 
 	@Override

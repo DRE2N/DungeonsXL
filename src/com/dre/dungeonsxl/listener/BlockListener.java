@@ -4,6 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,7 +30,7 @@ public class BlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		if (event.getBlock().getTypeId() == 90) {
+		if (event.getBlock().getType() == Material.PORTAL) {
 			if (DPortal.get(event.getBlock()) != null) {
 				event.setCancelled(true);
 			}
@@ -41,7 +42,7 @@ public class BlockListener implements Listener {
 		Block block = event.getBlock();
 
 		// Deny DPortal destroying
-		if (block.getTypeId() == 90) {
+		if (block.getType() == Material.PORTAL) {
 			if (DPortal.get(event.getBlock()) != null) {
 				event.setCancelled(true);
 			}
@@ -172,7 +173,7 @@ public class BlockListener implements Listener {
 	public void onBlockSpread(BlockSpreadEvent event) {
 		Block block = event.getBlock();
 		// Block the Spread off Vines
-		if (block.getTypeId() == 106) {
+		if (block.getType() == Material.VINE) {
 			// Check GameWorlds
 			GameWorld gworld = GameWorld.get(event.getBlock().getWorld());
 			if (gworld != null) {

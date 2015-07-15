@@ -3,6 +3,7 @@ package com.dre.dungeonsxl.signs;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.block.Block;
 
@@ -64,7 +65,7 @@ public class SIGNTrigger extends DSign {
 	@Override
 	public void onInit() {
 		triggerId = p.parseInt(sign.getLine(1));
-		sign.getBlock().setTypeId(0);
+		sign.getBlock().setType(Material.AIR);
 
 		initialized = true;
 	}

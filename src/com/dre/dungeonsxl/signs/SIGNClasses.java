@@ -1,6 +1,7 @@
 package com.dre.dungeonsxl.signs;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -47,7 +48,7 @@ public class SIGNClasses extends DSign {
 				if (isContinued) {
 					Block classBlock = sign.getBlock().getRelative(xx, 0, zz);
 
-					if (classBlock.getData() == sign.getData().getData() && classBlock.getTypeId() == 68 && (classBlock.getState() instanceof Sign)) {
+					if (classBlock.getData() == sign.getData().getData() && classBlock.getType() == Material.WALL_SIGN && (classBlock.getState() instanceof Sign)) {
 						Sign classSign = (Sign) classBlock.getState();
 
 						classSign.setLine(0, ChatColor.DARK_BLUE + "############");
@@ -66,7 +67,7 @@ public class SIGNClasses extends DSign {
 				}
 			}
 		} else {
-			sign.getBlock().setTypeId(0);
+			sign.getBlock().setType(Material.AIR);
 		}
 	}
 

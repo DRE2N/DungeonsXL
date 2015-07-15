@@ -2,6 +2,7 @@ package com.dre.dungeonsxl.listener;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -36,7 +37,7 @@ public class EntityListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onItemSpawn(ItemSpawnEvent event) {
 		if (GameWorld.get(event.getLocation().getWorld()) != null) {
-			if (event.getEntity().getItemStack().getTypeId() == 323) {
+			if (event.getEntity().getItemStack().getType() == Material.SIGN) {
 				event.setCancelled(true);
 			}
 		}
@@ -189,7 +190,7 @@ public class EntityListener implements Listener {
 		List<Block> blocklist = event.blockList();
 		for (Block block : blocklist) {
 			// Portals
-			if (block.getTypeId() == 90) {
+			if (block.getType() == Material.PORTAL) {
 				if (DPortal.get(block) != null) {
 					event.setCancelled(true);
 					return;
@@ -197,7 +198,7 @@ public class EntityListener implements Listener {
 			}
 
 			// Signs
-			if (block.getTypeId() == 68 || block.getTypeId() == 63) {
+			if (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) {
 				if (DGSign.getSign(block) != null) {
 					event.setCancelled(true);
 					return;

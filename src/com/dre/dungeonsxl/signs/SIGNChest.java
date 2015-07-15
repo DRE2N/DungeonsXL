@@ -1,5 +1,6 @@
 package com.dre.dungeonsxl.signs;
 
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 import com.dre.dungeonsxl.game.GameChest;
@@ -25,18 +26,18 @@ public class SIGNChest extends DSign {
 	@Override
 	public void onInit() {
 		for (int i = -1; i <= 1; i++) {
-			if (sign.getBlock().getRelative(i, 0, 0).getTypeId() == 54) {
+			if (sign.getBlock().getRelative(i, 0, 0).getType() == Material.CHEST) {
 				new GameChest(sign.getBlock().getRelative(i, 0, 0), gworld);
 			}
-			if (sign.getBlock().getRelative(0, 0, i).getTypeId() == 54) {
+			if (sign.getBlock().getRelative(0, 0, i).getType() == Material.CHEST) {
 				new GameChest(sign.getBlock().getRelative(0, 0, i), gworld);
 			}
-			if (sign.getBlock().getRelative(0, i, 0).getTypeId() == 54) {
+			if (sign.getBlock().getRelative(0, i, 0).getType() == Material.CHEST) {
 				new GameChest(sign.getBlock().getRelative(0, i, 0), gworld);
 			}
 		}
 
-		sign.getBlock().setTypeId(0);
+		sign.getBlock().setType(Material.AIR);
 	}
 
 	@Override

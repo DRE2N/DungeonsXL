@@ -1,5 +1,6 @@
 package com.dre.dungeonsxl.commands;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +28,7 @@ public class CMDPortal extends DCommand {
 				dportal = new DPortal(false);
 				dportal.player = player;
 				dportal.world = player.getWorld();
-				player.getInventory().setItemInHand(new ItemStack(268));
+				player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
 				p.msg(player, p.language.get("Player_PortalIntroduction"));
 			} else {
 				DPortal.portals.remove(dportal);

@@ -2,8 +2,10 @@ package com.dre.dungeonsxl.signs;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNMsg extends DSign {
@@ -38,7 +40,7 @@ public class SIGNMsg extends DSign {
 			String msg = gworld.config.getMsg(p.parseInt(lines[1]), true);
 			if (msg != null) {
 				this.msg = msg;
-				sign.getBlock().setTypeId(0);
+				sign.getBlock().setType(Material.AIR);
 			}
 		}
 

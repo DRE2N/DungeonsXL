@@ -1,5 +1,6 @@
 package com.dre.dungeonsxl.signs;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -62,7 +63,7 @@ public class SIGNRedstone extends DSign {
 		}
 
 		this.block = sign.getBlock();
-		this.block.setTypeId(0);
+		this.block.setType(Material.AIR);
 
 		initialized = true;
 	}
@@ -98,11 +99,11 @@ public class SIGNRedstone extends DSign {
 	}
 
 	public void power() {
-		block.setTypeId(152);
+		block.setType(Material.REDSTONE_BLOCK);
 	}
 
 	public void unpower() {
-		block.setTypeId(0);
+		block.setType(Material.AIR);
 	}
 
 	public void disableTask(int taskId) {

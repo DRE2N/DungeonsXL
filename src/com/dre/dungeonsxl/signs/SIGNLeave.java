@@ -1,6 +1,7 @@
 package com.dre.dungeonsxl.signs;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,7 @@ public class SIGNLeave extends DSign {
 			sign.setLine(3, ChatColor.DARK_BLUE + "############");
 			sign.update();
 		} else {
-			sign.getBlock().setTypeId(0);
+			sign.getBlock().setType(Material.AIR);
 		}
 	}
 

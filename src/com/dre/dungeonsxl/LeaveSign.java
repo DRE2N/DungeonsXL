@@ -3,6 +3,7 @@ package com.dre.dungeonsxl;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -67,7 +68,7 @@ public class LeaveSign {
 	}
 
 	public static LeaveSign getSign(Block block) {
-		if (block.getTypeId() == 68 || block.getTypeId() == 63) {
+		if (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) {
 			for (LeaveSign leavesign : lsigns) {
 				if (block.getWorld() == leavesign.sign.getWorld()) {
 					if (block.getLocation().distance(leavesign.sign.getBlock().getLocation()) < 1) {
