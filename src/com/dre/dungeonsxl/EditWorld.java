@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Location;
@@ -222,10 +223,10 @@ public class EditWorld {
 	}
 
 	// Invite
-	public static boolean addInvitedPlayer(String eworldname, String player) {
+	public static boolean addInvitedPlayer(String eworldname, UUID uuid) {
 		if (exist(eworldname)) {
 			DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
-			config.addInvitedPlayer(player.toLowerCase());
+			config.addInvitedPlayer(uuid.toString());
 			config.save();
 			return true;
 		}
@@ -233,11 +234,11 @@ public class EditWorld {
 		return false;
 	}
 
-	public static boolean removeInvitedPlayer(String eworldname, String name) {
+	public static boolean removeInvitedPlayer(String eworldname, UUID uuid, String name) {
 
 		if (exist(eworldname)) {
 			DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
-			config.removeInvitedPlayers(name.toLowerCase());
+			config.removeInvitedPlayers(uuid.toString(), name.toLowerCase());
 			config.save();
 
 			// Kick Player
@@ -258,10 +259,12 @@ public class EditWorld {
 		return false;
 	}
 
-	public static boolean isInvitedPlayer(String eworldname, String player) {
+	public static boolean isInvitedPlayer(String eworldname, UUID uuid, String name) {
 		if (exist(eworldname)) {
 			DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + eworldname, "config.yml"));
-			return config.getInvitedPlayers().contains(player.toLowerCase());
+			// get player from both a 0.9.1 and lower and 0.9.2 and higher file
+			if (config.getInvitedPlayers().contains(name.toLowerCase()) || config.getInvitedPlayers().contains(uuid.toString()))
+			return true;
 		}
 
 		return false;

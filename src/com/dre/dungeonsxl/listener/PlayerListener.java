@@ -143,7 +143,7 @@ public class PlayerListener implements Listener {
 		// Check Signs
 		if (clickedBlock != null) {
 
-			if (clickedBlock.getTypeId() == 68 || clickedBlock.getTypeId() == 63) {
+			if (clickedBlock.getType() == Material.WALL_SIGN || clickedBlock.getType() == Material.SIGN_POST) {
 				// Check Group Signs
 				if (DGSign.playerInteract(event.getClickedBlock(), player)) {
 					event.setCancelled(true);
@@ -386,7 +386,7 @@ public class PlayerListener implements Listener {
 			dplayer.respawnArmor = event.getEntity().getInventory().getArmorContents();
 			// Delete all drops
 			for (ItemStack istack : event.getDrops()) {
-				istack.setTypeId(0);
+				istack.setType(Material.AIR);
 			}
 		}
 	}

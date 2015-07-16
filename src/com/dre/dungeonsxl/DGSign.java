@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -117,10 +118,10 @@ public class DGSign {
 			for (yy = y; yy > y - verticalSigns; yy--) {
 				for (xx = x; xx > x - maxGroups; xx--) {
 					Block block = world.getBlockAt(xx, yy, zz);
-					if (block.getTypeId() != 0 && block.getTypeId() != 68) {
+					if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
 						return null;
 					}
-					if (block.getRelative(0, 0, 1).getTypeId() == 0) {
+					if (block.getRelative(0, 0, 1).getType() == Material.AIR) {
 						return null;
 					}
 					changeBlocks.add(block);
@@ -133,10 +134,10 @@ public class DGSign {
 				for (xx = x; xx < x + maxGroups; xx++) {
 
 					Block block = world.getBlockAt(xx, yy, zz);
-					if (block.getTypeId() != 0 && block.getTypeId() != 68) {
+					if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
 						return null;
 					}
-					if (block.getRelative(0, 0, -1).getTypeId() == 0) {
+					if (block.getRelative(0, 0, -1).getType() == Material.AIR) {
 						return null;
 					}
 					changeBlocks.add(block);
@@ -148,10 +149,10 @@ public class DGSign {
 			for (yy = y; yy > y - verticalSigns; yy--) {
 				for (zz = z; zz < z + maxGroups; zz++) {
 					Block block = world.getBlockAt(xx, yy, zz);
-					if (block.getTypeId() != 0 && block.getTypeId() != 68) {
+					if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
 						return null;
 					}
-					if (block.getRelative(1, 0, 0).getTypeId() == 0) {
+					if (block.getRelative(1, 0, 0).getType() == Material.AIR) {
 						return null;
 					}
 					changeBlocks.add(block);
@@ -163,10 +164,10 @@ public class DGSign {
 			for (yy = y; yy > y - verticalSigns; yy--) {
 				for (zz = z; zz > z - maxGroups; zz--) {
 					Block block = world.getBlockAt(xx, yy, zz);
-					if (block.getTypeId() != 0 && block.getTypeId() != 68) {
+					if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
 						return null;
 					}
-					if (block.getRelative(-1, 0, 0).getTypeId() == 0) {
+					if (block.getRelative(-1, 0, 0).getType() == Material.AIR) {
 						return null;
 					}
 					changeBlocks.add(block);
@@ -200,7 +201,7 @@ public class DGSign {
 	}
 
 	public static DGSign getSign(Block block) {
-		if (block.getTypeId() == 68) {
+		if (block.getType() == Material.WALL_SIGN) {
 			int x = block.getX(), y = block.getY(), z = block.getZ();
 			for (DGSign dgsign : dgsigns) {
 				int sx1 = dgsign.startSign.getX(), sy1 = dgsign.startSign.getY(), sz1 = dgsign.startSign.getZ();

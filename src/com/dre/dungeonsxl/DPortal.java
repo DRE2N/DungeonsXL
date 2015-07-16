@@ -2,6 +2,7 @@ package com.dre.dungeonsxl;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.bukkit.Material;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -55,10 +56,12 @@ public class DPortal {
 				do {
 					int zz = z1;
 					do {
-						int typeId = this.world.getBlockAt(xx, yy, zz).getType().getId();
-						if (typeId == 0 || typeId == 8 || typeId == 9 || typeId == 10 || typeId == 11 || typeId == 6 || typeId == 30 || typeId == 31 || typeId == 32 || typeId == 34 || typeId == 37
-								|| typeId == 38 || typeId == 39 || typeId == 40 || typeId == 50 || typeId == 51 || typeId == 59 || typeId == 55 || typeId == 75 || typeId == 78 || typeId == 76) {
-							this.world.getBlockAt(xx, yy, zz).setTypeId(90);
+						Material type = this.world.getBlockAt(xx, yy, zz).getType();
+						if (type == Material.AIR || type == Material.WATER || type == Material.STATIONARY_WATER || type == Material.LAVA || type == Material.STATIONARY_LAVA || type == Material.SAPLING
+								|| type == Material.WEB || type == Material.LONG_GRASS || type == Material.DEAD_BUSH || type == Material.PISTON_EXTENSION || type == Material.YELLOW_FLOWER
+								|| type == Material.RED_ROSE || type == Material.BROWN_MUSHROOM || type == Material.RED_MUSHROOM || type == Material.TORCH || type == Material.FIRE
+								|| type == Material.CROPS || type == Material.REDSTONE_WIRE || type == Material.REDSTONE_TORCH_OFF || type == Material.SNOW || type == Material.REDSTONE_TORCH_ON) {
+							this.world.getBlockAt(xx, yy, zz).setType(Material.PORTAL);
 						}
 
 						zz = zz + zcount;
@@ -117,10 +120,10 @@ public class DPortal {
 			do {
 				int zz = z1;
 				do {
-					int typeId = this.world.getBlockAt(xx, yy, zz).getType().getId();
+					Material type = this.world.getBlockAt(xx, yy, zz).getType();
 
-					if (typeId == 90) {
-						this.world.getBlockAt(xx, yy, zz).setTypeId(0);
+					if (type == Material.PORTAL) {
+						this.world.getBlockAt(xx, yy, zz).setType(Material.AIR);
 					}
 
 					zz = zz + zcount;

@@ -156,7 +156,7 @@ public class DPlayer {
 					if (gworld.isTutorial) {
 						p.permission.playerAddGroup(this.player, p.mainConfig.tutorialEndGroup);
 						p.permission.playerRemoveGroup(this.player, p.mainConfig.tutorialStartGroup);
-						p.getServer().dispatchCommand(p.getServer().getConsoleSender(), "pex user "+player.getName()+" group set "+p.mainConfig.tutorialEndGroup);
+						p.getServer().dispatchCommand(p.getServer().getConsoleSender(), "pex user "+player.getName()+" group set "+p.mainConfig.tutorialEndGroup);//TODO: Use Vault for this!
 					}
 				}
 			}
@@ -291,7 +291,7 @@ public class DPlayer {
 				p.msg(player, p.language.get("Player_SignCopied"));
 			}
 		} else {
-			String info = "" + block.getTypeId();
+			String info = "" + block.getType();
 			if (block.getData() != 0) {
 				info = info + "," + block.getData();
 			}
@@ -327,7 +327,7 @@ public class DPlayer {
 				/* Delete Inventory */
 				this.player.getInventory().clear();
 				this.player.getInventory().setArmorContents(null);
-				player.getInventory().setItemInHand(new ItemStack(0));
+				player.getInventory().setItemInHand(new ItemStack(Material.AIR));
 
 				// Remove Potion Effects
 				for (PotionEffect effect : this.player.getActivePotionEffects()) {
@@ -342,19 +342,23 @@ public class DPlayer {
 				for (ItemStack istack : dclass.items) {
 
 					// Leggings
-					if (istack.getTypeId() == 300 || istack.getTypeId() == 304 || istack.getTypeId() == 308 || istack.getTypeId() == 312 || istack.getTypeId() == 316) {
+					if (istack.getType() == Material.LEATHER_LEGGINGS || istack.getType() == Material.CHAINMAIL_LEGGINGS || istack.getType() == Material.IRON_LEGGINGS
+							|| istack.getType() == Material.DIAMOND_LEGGINGS || istack.getType() == Material.GOLD_LEGGINGS) {
 						this.player.getInventory().setLeggings(istack);
 					}
 					// Helmet
-					else if (istack.getTypeId() == 298 || istack.getTypeId() == 302 || istack.getTypeId() == 306 || istack.getTypeId() == 310 || istack.getTypeId() == 314) {
+					else if (istack.getType() == Material.LEATHER_HELMET || istack.getType() == Material.CHAINMAIL_HELMET || istack.getType() == Material.IRON_HELMET
+							|| istack.getType() == Material.DIAMOND_HELMET || istack.getType() == Material.GOLD_HELMET) {
 						this.player.getInventory().setHelmet(istack);
 					}
 					// Chestplate
-					else if (istack.getTypeId() == 299 || istack.getTypeId() == 303 || istack.getTypeId() == 307 || istack.getTypeId() == 311 || istack.getTypeId() == 315) {
+					else if (istack.getType() == Material.LEATHER_CHESTPLATE || istack.getType() == Material.CHAINMAIL_CHESTPLATE || istack.getType() == Material.IRON_CHESTPLATE
+							|| istack.getType() == Material.DIAMOND_CHESTPLATE || istack.getType() == Material.GOLD_CHESTPLATE) {
 						this.player.getInventory().setChestplate(istack);
 					}
 					// Boots
-					else if (istack.getTypeId() == 301 || istack.getTypeId() == 305 || istack.getTypeId() == 309 || istack.getTypeId() == 313 || istack.getTypeId() == 317) {
+					else if (istack.getType() == Material.LEATHER_BOOTS || istack.getType() == Material.CHAINMAIL_BOOTS || istack.getType() == Material.IRON_BOOTS
+							|| istack.getType() == Material.DIAMOND_BOOTS || istack.getType() == Material.GOLD_BOOTS) {
 						this.player.getInventory().setBoots(istack);
 					}
 

@@ -62,7 +62,7 @@ public class SIGNMob extends DSign {
 				}
 			}
 		}
-		sign.getBlock().setTypeId(0);
+		sign.getBlock().setType(Material.AIR);
 
 		initialized = true;
 	}

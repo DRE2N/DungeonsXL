@@ -287,12 +287,14 @@ public class DConfig {
 		return tmpInvitedPlayers;
 	}
 
-	public void addInvitedPlayer(String player) {
-		this.invitedPlayers.add(player);
+	public void addInvitedPlayer(String uuid) {
+		this.invitedPlayers.add(uuid);
 	}
 
-	public void removeInvitedPlayers(String player) {
-		this.invitedPlayers.remove(player);
+	public void removeInvitedPlayers(String uuid, String name) {
+		this.invitedPlayers.remove(uuid);
+		// remove player from a 0.9.1 and lower file
+		this.invitedPlayers.remove(name);
 	}
 
 	public CopyOnWriteArrayList<Material> getSecureObjects() {

@@ -1,7 +1,9 @@
 package com.dre.dungeonsxl.signs;
 
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
+
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNChunkUpdater extends DSign {
@@ -38,7 +40,7 @@ public class SIGNChunkUpdater extends DSign {
 			chunk.load();
 			gworld.loadedChunks.add(chunk);
 		}
-		sign.getBlock().setTypeId(0);
+		sign.getBlock().setType(Material.AIR);
 	}
 
 	@Override

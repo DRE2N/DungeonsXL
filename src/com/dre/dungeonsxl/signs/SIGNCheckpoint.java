@@ -1,6 +1,8 @@
 package com.dre.dungeonsxl.signs;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -31,7 +33,7 @@ public class SIGNCheckpoint extends DSign {
 
 	@Override
 	public void onInit() {
-		sign.getBlock().setTypeId(0);
+		sign.getBlock().setType(Material.AIR);
 
 		initialized = true;
 	}

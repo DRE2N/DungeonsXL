@@ -12,11 +12,6 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.milkbowl.vault.permission.Permission;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PlayerInteractManager;
-
-import com.mojang.authlib.GameProfile;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
@@ -25,8 +20,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -43,6 +36,7 @@ import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 import com.dre.dungeonsxl.listener.WorldListener;
+import com.dre.dungeonsxl.multiversionhandler.MultiVersionHandler;
 
 public class P extends JavaPlugin {
 	public static P p;
@@ -118,6 +112,9 @@ public class P extends JavaPlugin {
 
 		// MSG
 		this.log(this.getDescription().getName() + " enabled!");
+		if (!(MultiVersionHandler.supported.contains(MultiVersionHandler.getInternals()))) {
+			this.log("Warning: Your CraftBukkit version is deprecated. DungeonsXL does not support it.");
+		}
 	}
 
 	@Override
@@ -434,59 +431,11 @@ public class P extends JavaPlugin {
 	}
 
 	public Player getOfflinePlayer(String player, UUID uuid) {
-		Player pplayer = null;
-		try {
-			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
-			
-			for (File playerfile : playerfolder.listFiles()) {
-				String filename = playerfile.getName();
-				String playername = filename.substring(0, filename.length() - 4);
-				
-				GameProfile profile = new GameProfile(uuid, playername);
-
-				if (playername.trim().equalsIgnoreCase(player)) {
-					MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
-					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), profile, new PlayerInteractManager(server.getWorldServer(0)));
-					Player target = (entity == null) ? null : (Player) entity.getBukkitEntity();
-					if (target != null) {
-						target.loadData();
-						return target;
-					}
-				}
-			}
-		} catch (Exception e) {
-			return null;
-		}
-		return pplayer;
+		return MultiVersionHandler.getOfflinePlayer(player, uuid);
 	}
 
 	public Player getOfflinePlayer(String player, UUID uuid, Location location) {
-		Player pplayer = null;
-		try {
-			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
-			
-			for (File playerfile : playerfolder.listFiles()) {
-				String filename = playerfile.getName();
-				String playername = filename.substring(0, filename.length() - 4);
-				
-				GameProfile profile = new GameProfile(uuid, playername);
-				
-				if (playername.trim().equalsIgnoreCase(player)) {
-					MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
-					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), profile, new PlayerInteractManager(server.getWorldServer(0)));
-					entity.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-					entity.world = ((CraftWorld) location.getWorld()).getHandle();
-					Player target = (entity == null) ? null : (Player) entity.getBukkitEntity();
-					if (target != null) {
-						// target.loadData();
-						return target;
-					}
-				}
-			}
-		} catch (Exception e) {
-			return null;
-		}
-		return pplayer;
+		return MultiVersionHandler.getOfflinePlayer(player, uuid, location);
 	}
 
 	// -------------------------------------------- //
