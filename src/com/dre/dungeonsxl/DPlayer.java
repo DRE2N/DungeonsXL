@@ -144,7 +144,7 @@ public class DPlayer {
 
 					FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
 
-					playerConfig.set(player.getName(), System.currentTimeMillis());
+					playerConfig.set(player.getUniqueId().toString(), System.currentTimeMillis());
 
 					try {
 						playerConfig.save(file);

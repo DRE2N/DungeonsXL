@@ -137,7 +137,7 @@ public class GameWorld {
 
 			if (config.getTimeToNextPlay() != 0) {
 				// read PlayerConfig
-				Long time = getPlayerTime(dungeon, player.getName());
+				Long time = getPlayerTime(dungeon, player);
 				if (time != -1) {
 					if (time + (config.getTimeToNextPlay() * 1000 * 60 * 60) > System.currentTimeMillis()) {
 						return false;
@@ -177,7 +177,7 @@ public class GameWorld {
 						if (new File(p.getDataFolder() + "/dungeons/" + dungeonName).isDirectory()) {
 							if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
 
-								Long time = getPlayerTime(dungeonName, player.getName());
+								Long time = getPlayerTime(dungeonName, player);
 								if (time != -1) {
 									if (config.getFinishedAll().contains(played)) {
 										numOfNeeded++;
@@ -214,7 +214,7 @@ public class GameWorld {
 		return true;
 	}
 
-	public static long getPlayerTime(String dungeon, String name) {
+	public static long getPlayerTime(String dungeon, Player player) {
 		File file = new File(p.getDataFolder() + "/dungeons/" + dungeon, "players.yml");
 
 		if (!file.exists()) {
@@ -226,8 +226,11 @@ public class GameWorld {
 		}
 
 		FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-		if (playerConfig.contains(name)) {
-			return playerConfig.getLong(name);
+		if (playerConfig.contains(player.getUniqueId().toString())) {
+			return playerConfig.getLong(player.getUniqueId().toString());
+		}
+		if (playerConfig.contains(player.getName())) {
+			return playerConfig.getLong(player.getName());
 		}
 		return -1;
 	}
