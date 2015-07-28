@@ -71,6 +71,7 @@ public class DPlayer {
 		this.isEditing = isEditing;
 
 		if (this.isEditing) {
+			this.player.setGameMode(GameMode.CREATIVE);
 			this.clearPlayerData();
 		} else {
 			this.player.setGameMode(GameMode.SURVIVAL);
