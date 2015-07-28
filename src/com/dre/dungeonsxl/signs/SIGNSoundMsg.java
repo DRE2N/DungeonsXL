@@ -16,6 +16,7 @@ public class SIGNSoundMsg extends DSign {
 
 	// Variables
 	private boolean initialized;
+	@SuppressWarnings("unused")
 	private String msg;
 	private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<Player>();
 

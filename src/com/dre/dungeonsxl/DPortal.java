@@ -85,10 +85,23 @@ public class DPortal {
 			if (dgroup.getGworld() == null) {
 				dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
 			}
-			p.msg(player, p.language.get("Error_DungeonNotExist", DGroup.get(player).getDungeonname()));
+
+			if (dgroup.getGworld() != null) {
+
+				if (dgroup.getGworld().locLobby == null) {
+					new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
+				} else {
+					new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+				}
+
+			} else {
+				p.msg(player, p.language.get("Error_DungeonNotExist", DGroup.get(player).getDungeonname()));
+			}
+
 		} else {
 			p.msg(player, p.language.get("Error_NotInGroup"));
 		}
+
 	}
 
 	public void delete() {
