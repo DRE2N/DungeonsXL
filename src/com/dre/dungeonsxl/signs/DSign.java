@@ -136,6 +136,8 @@ public abstract class DSign {
 			dSign = new SIGNRedstone(sign, gworld);
 		} else if (lines[0].equalsIgnoreCase("[" + SIGNBlock.name + "]")) {
 			dSign = new SIGNBlock(sign, gworld);
+		} else if (lines[0].equalsIgnoreCase("[" + SIGNMythicMobs.name + "]")) {
+			dSign = new SIGNMythicMobs(sign, gworld);
 		}
 
 		if (dSign != null && gworld != null) {

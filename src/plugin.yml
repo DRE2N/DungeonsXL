@@ -1,10 +1,11 @@
 name: DungeonsXL
 main: com.dre.dungeonsxl.P
-version: 0.9.4
+version: 0.9.5-SNAPSHOT
 author: Frank Baumann
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 website: http://www.dre2n.ml
-softdepend: [Vault]
+depend: [Vault]
+softdepend: [Citizens, HolographicDisplays, HolographicMenus, InfernalMobs, MythicMobs]
 commands:
   dungeonsxl:
     description: Reference command for DungeonsXL.
