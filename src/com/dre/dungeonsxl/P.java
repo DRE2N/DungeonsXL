@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -88,6 +89,9 @@ public class P extends JavaPlugin {
 
 		// Setup Permissions
 		this.setupPermissions();
+		
+		// Setup Economy
+		this.setupEconomy();
 
 		// Listener
 		entityListener = new EntityListener();
@@ -217,6 +221,17 @@ public class P extends JavaPlugin {
 		}
 
 		return false;
+	}
+
+	// Economy
+	public Economy economy = null;
+
+	private Boolean setupEconomy() {
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+		return (economy != null);
 	}
 
 	// Save and Load

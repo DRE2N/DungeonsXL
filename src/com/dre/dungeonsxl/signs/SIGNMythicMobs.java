@@ -6,7 +6,6 @@ import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.Location;
 
-import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNMythicMobs extends DSign {

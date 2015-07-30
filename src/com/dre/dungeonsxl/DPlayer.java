@@ -54,6 +54,7 @@ public class DPlayer {
 	public String[] linesCopy;
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player, 45, "Belohnungen");
+	public double treasureMoney = 0;
 	
 	public int initialLives = -1;
 
@@ -131,6 +132,7 @@ public class DPlayer {
 			if (!this.isinTestMode) {// Nur wenn man nicht am Testen ist
 				if (isFinished) {
 					this.addTreasure();
+					p.economy.depositPlayer(this.player, treasureMoney);
 
 					// Set Time
 					File file = new File(p.getDataFolder() + "/dungeons/" + gworld.dungeonname, "players.yml");
@@ -157,7 +159,6 @@ public class DPlayer {
 					if (gworld.isTutorial) {
 						p.permission.playerAddGroup(this.player, p.mainConfig.tutorialEndGroup);
 						p.permission.playerRemoveGroup(this.player, p.mainConfig.tutorialStartGroup);
-						p.getServer().dispatchCommand(p.getServer().getConsoleSender(), "pex user "+player.getName()+" group set "+p.mainConfig.tutorialEndGroup);//TODO: Use Vault for this!
 					}
 				}
 			}

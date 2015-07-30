@@ -20,12 +20,15 @@ public class GameChest {
 	public boolean isUsed = false;
 	public Chest chest;
 	public GameWorld gworld;
+	public double moneyReward;
 
-	public GameChest(Block chest, GameWorld gworld) {
+	public GameChest(Block chest, GameWorld gworld, double moneyReward) {
 		if (chest.getState() instanceof Chest) {
 			this.chest = (Chest) chest.getState();
 
 			this.gworld = gworld;
+			
+			this.moneyReward = moneyReward;
 
 			gworld.gchests.add(this);
 		}
@@ -36,6 +39,7 @@ public class GameChest {
 			for (Player player : dgroup.getPlayers()) {
 				DPlayer dplayer = DPlayer.get(player);
 				if (dplayer != null) {
+					dplayer.treasureMoney = dplayer.treasureMoney + moneyReward;
 					String msg = "";
 					for (ItemStack istack : this.chest.getInventory().getContents()) {
 						if (istack != null) {
