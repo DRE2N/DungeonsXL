@@ -15,7 +15,7 @@ public class MultiVersionHandler {
 	
 	public static String getInternals() {
 		String internals = "v1_8_R3";
-		if (version.contains("1.8.4") || version.contains("1.8.5") || version.contains("1.8.6") || version.contains("1.8.7")) {
+		if (version.contains("1.8.4") || version.contains("1.8.5") || version.contains("1.8.6") || version.contains("1.8.7") || version.contains("1.8.8")) {
 			internals = "v1_8_R3";
 		} else if (version.contains("1.8.3")) {
 			internals = "v1_8_R2";
