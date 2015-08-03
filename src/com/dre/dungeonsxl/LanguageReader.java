@@ -122,10 +122,10 @@ public class LanguageReader {
 		defaults.put("Help_Cmd_DeletePortal", "/dxl deleteportal - Deletes the portal you are looking at");
 		defaults.put("Help_Cmd_Reload", "/dxl reload - Reloads the plugin");
 		defaults.put("Help_Cmd_Save", "/dxl save - Saves the current dungeon");
+		defaults.put("Help_Cmd_Play", "/dxl play [dungeon]");
 		defaults.put("Help_Cmd_Test", "/dxl test [dungeon] - Tests a dungeon");
+		defaults.put("Help_Cmd_Lives", "/dxl lives <player> - Shows the lives a player has left");
 		defaults.put("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon");
-		defaults.put("Help_Cmd_Lives", "/dxl lives <player> - show the lives a player has left");
-
 	}
 
 	private void check() {

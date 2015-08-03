@@ -18,14 +18,15 @@ public class DCommandRoot {
 	public CMDDeletePortal cmdDeletePortal = new CMDDeletePortal();
 	public CMDChat cmdChat = new CMDChat();
 	public CMDChatSpy cmdChatSpy = new CMDChatSpy();
+	public CMDLives cmdLives = new CMDLives();
 	public CMDList cmdList = new CMDList();
 	public CMDUninvite cmdUninvite = new CMDUninvite();
 	public CMDInvite cmdInvite = new CMDInvite();
 	public CMDMsg cmdMsg = new CMDMsg();
+	public CMDPlay cmdPlay = new CMDPlay();
 	public CMDTest cmdTest = new CMDTest();
 	public CMDHelp cmdHelp = new CMDHelp();
 	public CMDReload cmdReload = new CMDReload();
-	public CMDLives cmdLives = new CMDLives();
 
 	// Methods
 	public DCommandRoot() {
@@ -41,13 +42,14 @@ public class DCommandRoot {
 		this.commands.add(cmdDeletePortal);
 		this.commands.add(cmdChat);
 		this.commands.add(cmdChatSpy);
+		this.commands.add(cmdLives);
 		this.commands.add(cmdList);
 		this.commands.add(cmdUninvite);
 		this.commands.add(cmdInvite);
 		this.commands.add(cmdMsg);
+		this.commands.add(cmdPlay);
 		this.commands.add(cmdTest);
 		this.commands.add(cmdHelp);
 		this.commands.add(cmdReload);
-		this.commands.add(cmdLives);
 	}
 }
