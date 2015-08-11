@@ -224,14 +224,18 @@ public class P extends JavaPlugin {
 	}
 
 	// Economy
-	public Economy economy = null;
+	public static Economy economy = null;
 
 	private Boolean setupEconomy() {
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-		if (economyProvider != null) {
-			economy = economyProvider.getProvider();
+		if (mainConfig.enableEconomy) {
+			RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+			if (economyProvider != null) {
+				economy = economyProvider.getProvider();
+			}
+			return (economy != null);
+		} else {
+			return false;
 		}
-		return (economy != null);
 	}
 
 	// Save and Load

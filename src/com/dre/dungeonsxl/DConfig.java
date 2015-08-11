@@ -38,6 +38,8 @@ public class DConfig {
 
 	private int timeUntilKickOfflinePlayer = -1;
 
+	private double fee = 0;
+
 	private List<String> finishedOne;
 	private List<String> finishedAll;
 	private int timeLastPlayed = 0;
@@ -188,6 +190,12 @@ public class DConfig {
 		}
 
 		/* Dungeon Requirements */
+		if (configFile.contains("fee")) {
+			fee = configFile.getDouble("fee");
+		} else {
+			fee = mainConfig.fee;
+		}
+		
 		if (configFile.contains("mustFinishOne")) {
 			finishedOne = configFile.getStringList("mustFinishOne");
 		} else {
@@ -330,6 +338,10 @@ public class DConfig {
 
 	public int getTimeLastPlayed() {
 		return timeLastPlayed;
+	}
+
+	public double getFee() {
+		return fee;
 	}
 
 	public List<String> getFinishedAll() {

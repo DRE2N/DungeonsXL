@@ -161,6 +161,13 @@ public class GameWorld {
 		}
 
 		DConfig config = new DConfig(new File(p.getDataFolder() + "/dungeons/" + dungeon, "config.yml"));
+		
+		if (p.mainConfig.enableEconomy) {
+			if (!(P.economy.getBalance(player) >= config.getFee())) {
+				return false;
+			}
+		}
+		
 		if (config.getFinished() != null && config.getFinishedAll() != null) {
 			if (!config.getFinished().isEmpty()) {
 

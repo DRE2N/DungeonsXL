@@ -1,8 +1,10 @@
 package com.dre.dungeonsxl;
 
+import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Player;
+
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class DGroup {
@@ -61,6 +63,15 @@ public class DGroup {
 		for (Player player : getPlayers()) {
 			DPlayer dplayer = DPlayer.get(player);
 			dplayer.respawn();
+			if (P.p.mainConfig.enableEconomy) {
+				File file = new File(P.p.getDataFolder() + "/dungeons/" + dungeonname + "/config.yml");
+				if (file != null) {
+					DConfig confReader = new DConfig(file);
+					if (confReader != null) {
+						P.economy.withdrawPlayer(player, confReader.getFee());
+					}
+				}
+			}
 		}
 		DGSign.updatePerGroup(this);
 
