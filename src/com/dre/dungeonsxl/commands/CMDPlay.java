@@ -1,11 +1,15 @@
 package com.dre.dungeonsxl.commands;
 
+import java.io.File;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.dre.dungeonsxl.DConfig;
 import com.dre.dungeonsxl.DGroup;
 import com.dre.dungeonsxl.DPlayer;
 import com.dre.dungeonsxl.EditWorld;
+import com.dre.dungeonsxl.P;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class CMDPlay extends DCommand {
@@ -29,20 +33,34 @@ public class CMDPlay extends DCommand {
 				dungeonname = args[1];
 
 				if (EditWorld.exist(dungeonname)) {
-					if (DGroup.get(player) == null) {
-						DGroup dgroup = new DGroup(player, dungeonname);
-						if (dgroup != null) {
-							if (dgroup.getGworld() == null) {
-								dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
-							}
-							if (dgroup.getGworld().locLobby == null) {
-								new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
+					if (GameWorld.canPlayDungeon(dungeonname, player)) {
+						if (GameWorld.checkRequirements(dungeonname, player)) {
+							if (DGroup.get(player) == null) {
+								DGroup dgroup = new DGroup(player, dungeonname);
+								if (dgroup != null) {
+									if (dgroup.getGworld() == null) {
+										dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
+									}
+									if (dgroup.getGworld().locLobby == null) {
+										new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
+									} else {
+										new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+									}
+								}
 							} else {
-								new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+								p.msg(player, p.language.get("Error_LeaveGroup"));
 							}
+						} else {
+							P.p.msg(player, P.p.language.get("Error_Requirements"));
 						}
 					} else {
-						p.msg(player, p.language.get("Error_LeaveGroup"));
+						File file = new File(p.getDataFolder() + "/dungeons/" + dungeonname + "/config.yml");
+						if (file != null) {
+							DConfig confReader = new DConfig(file);
+							if (confReader != null) {
+								P.p.msg(player, P.p.language.get("Error_Cooldown", "" + confReader.getTimeToNextPlay()));
+							}
+						}
 					}
 				} else {
 					p.msg(player, p.language.get("Error_DungeonNotExist", dungeonname));
