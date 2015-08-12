@@ -76,7 +76,7 @@ public class DPlayer {
 			this.clearPlayerData();
 		} else {
 			this.player.setGameMode(GameMode.SURVIVAL);
-			if (!(GameWorld.get(world).config.getKeepInventory())) {
+			if (!(GameWorld.get(world).config.getKeepInventoryOnEnter())) {
 				this.clearPlayerData();
 			}
 			if (GameWorld.get(world).config.isLobbyDisabled()) {
@@ -218,7 +218,7 @@ public class DPlayer {
 		}
 
 		// Respawn Items
-		if (!(GameWorld.get(world).config.getKeepInventory())) {
+		if (!(GameWorld.get(world).config.getKeepInventoryOnDeath())) {
 			if (this.respawnInventory != null || this.respawnArmor != null) {
 				this.player.getInventory().setContents(this.respawnInventory);
 				this.player.getInventory().setArmorContents(this.respawnArmor);

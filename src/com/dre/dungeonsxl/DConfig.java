@@ -23,6 +23,10 @@ public class DConfig {
 	private File file;
 
 	private boolean keepInventory = false;
+	private boolean keepInventoryOnEnter = false;
+	private boolean keepInventoryOnEscape = false;
+	private boolean keepInventoryOnFinish = false;
+	private boolean keepInventoryOnDeath = true;
 
 	private CopyOnWriteArrayList<DClass> dClasses = new CopyOnWriteArrayList<DClass>();
 	private Map<Integer, String> msgs = new HashMap<Integer, String>();
@@ -149,14 +153,40 @@ public class DConfig {
 			}
 		}
 
-		/* keep Inventory */
+		/* Keep Inventory */
 		if (configFile.contains("keepInventory")) {
-			keepInventory = configFile.getBoolean("keepInventory");
+			keepInventoryOnEnter = configFile.getBoolean("keepInventory");
+			keepInventoryOnEscape = configFile.getBoolean("keepInventory");
+			keepInventoryOnFinish = configFile.getBoolean("keepInventory");
 		} else {
 			keepInventory = mainConfig.keepInventory;
 		}
 
-		/* keep Inventory */
+		if (configFile.contains("keepInventoryOnEnter")) {
+			keepInventoryOnEnter = configFile.getBoolean("keepInventoryOnEnter");
+		} else {
+			keepInventoryOnEnter = mainConfig.keepInventoryOnEnter;
+		}
+
+		if (configFile.contains("keepInventoryOnEscape")) {
+			keepInventoryOnEscape = configFile.getBoolean("keepInventoryOnEscape");
+		} else {
+			keepInventoryOnEscape = mainConfig.keepInventoryOnEscape;
+		}
+
+		if (configFile.contains("keepInventoryOnFinish")) {
+			keepInventoryOnFinish = configFile.getBoolean("keepInventoryOnFinish");
+		} else {
+			keepInventoryOnFinish = mainConfig.keepInventoryOnFinish;
+		}
+
+		if (configFile.contains("keepInventoryOnDeath")) {
+			keepInventoryOnDeath = configFile.getBoolean("keepInventoryOnDeath");
+		} else {
+			keepInventoryOnDeath = mainConfig.keepInventoryOnDeath;
+		}
+
+		/* Lives */
 		if (configFile.contains("initialLives")) {
 			initialLives = configFile.getInt("initialLives");
 		} else {
@@ -314,6 +344,22 @@ public class DConfig {
 
 	public boolean getKeepInventory() {
 		return keepInventory;
+	}
+
+	public boolean getKeepInventoryOnEnter() {
+		return keepInventoryOnEnter;
+	}
+
+	public boolean getKeepInventoryOnEscape() {
+		return keepInventoryOnEscape;
+	}
+
+	public boolean getKeepInventoryOnFinish() {
+		return keepInventoryOnFinish;
+	}
+
+	public boolean getKeepInventoryOnDeath() {
+		return keepInventoryOnDeath;
 	}
 
 	public int getInitialLives() {

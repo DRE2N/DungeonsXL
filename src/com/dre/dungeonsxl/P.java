@@ -32,11 +32,11 @@ import com.dre.dungeonsxl.commands.DCommandRoot;
 import com.dre.dungeonsxl.game.GameWorld;
 import com.dre.dungeonsxl.listener.BlockListener;
 import com.dre.dungeonsxl.listener.CommandListener;
-import com.dre.dungeonsxl.listener.DeathListener;
 import com.dre.dungeonsxl.listener.EntityListener;
 import com.dre.dungeonsxl.listener.HangingListener;
 import com.dre.dungeonsxl.listener.PlayerListener;
 import com.dre.dungeonsxl.listener.WorldListener;
+import com.dre.dungeonsxl.listener.player.PlayerDeathListener;
 import com.dre.dungeonsxl.multiversionhandler.MultiVersionHandler;
 
 public class P extends JavaPlugin {
@@ -51,7 +51,7 @@ public class P extends JavaPlugin {
 	private static Listener blockListener;
 	private static Listener worldListener;
 	private static Listener hangingListener;
-	private static Listener deathListener;
+	private static Listener playerDeathListener;
 
 	// Main Config Reader
 	public MainConfig mainConfig;
@@ -99,14 +99,14 @@ public class P extends JavaPlugin {
 		blockListener = new BlockListener();
 		worldListener = new WorldListener();
 		hangingListener = new HangingListener();
-		deathListener = new DeathListener();
+		playerDeathListener = new PlayerDeathListener();
 
 		Bukkit.getServer().getPluginManager().registerEvents(entityListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(playerListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(blockListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(worldListener, this);
 		Bukkit.getServer().getPluginManager().registerEvents(hangingListener, this);
-		Bukkit.getServer().getPluginManager().registerEvents(deathListener, this);
+		Bukkit.getServer().getPluginManager().registerEvents(playerDeathListener, this);
 
 		// Load All
 		this.loadAll();
