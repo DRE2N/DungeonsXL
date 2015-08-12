@@ -43,7 +43,7 @@ public class P extends JavaPlugin {
 	public static P p;
 
 	// Lives
-	public static HashMap<Player, Integer> lives;
+	public HashMap<Player, Integer> lives;
 
 	// Listener
 	private static Listener entityListener;

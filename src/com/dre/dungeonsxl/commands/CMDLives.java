@@ -18,8 +18,8 @@ public class CMDLives extends DCommand {
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
 		String lives = "";
-		if (P.lives.containsKey(player)) {
-			lives = String.valueOf(P.lives.get(player));
+		if (P.p.lives.containsKey(player)) {
+			lives = String.valueOf(P.p.lives.get(player));
 			p.msg(player, p.language.get("Cmd_Lives").replaceAll("v1", player.getName()).replaceAll("v2", lives));
 		} else {
 			p.msg(player, p.language.get("Error_NotInDungeon"));

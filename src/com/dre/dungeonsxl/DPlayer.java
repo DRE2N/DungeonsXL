@@ -86,7 +86,7 @@ public class DPlayer {
 		}
 
 		// Lives
-		P.lives.put(this.player, initialLives);
+		p.lives.put(this.player, initialLives);
 
 		DUtility.secureTeleport(this.player, teleport);
 	}
@@ -112,7 +112,7 @@ public class DPlayer {
 		remove(this);
 
 		// Lives
-		P.lives.remove(player);
+		p.lives.remove(player);
 
 		this.savePlayer.reset();
 
