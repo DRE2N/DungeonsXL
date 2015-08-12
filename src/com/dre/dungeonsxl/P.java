@@ -224,7 +224,7 @@ public class P extends JavaPlugin {
 	}
 
 	// Economy
-	public static Economy economy = null;
+	public Economy economy = null;
 
 	private Boolean setupEconomy() {
 		if (mainConfig.enableEconomy) {

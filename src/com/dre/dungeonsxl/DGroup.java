@@ -68,7 +68,7 @@ public class DGroup {
 				if (file != null) {
 					DConfig confReader = new DConfig(file);
 					if (confReader != null) {
-						P.economy.withdrawPlayer(player, confReader.getFee());
+						P.p.economy.withdrawPlayer(player, confReader.getFee());
 					}
 				}
 			}
