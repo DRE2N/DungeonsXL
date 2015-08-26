@@ -76,10 +76,11 @@ public class DPlayer {
 			this.clearPlayerData();
 		} else {
 			this.player.setGameMode(GameMode.SURVIVAL);
-			if (!(GameWorld.get(world).config.getKeepInventoryOnEnter())) {
+			DConfig dConfig = GameWorld.get(world).config;
+			if (!(dConfig.getKeepInventoryOnEnter())) {
 				this.clearPlayerData();
 			}
-			if (GameWorld.get(world).config.isLobbyDisabled()) {
+			if (dConfig.isLobbyDisabled()) {
 				this.ready();
 			}
 			initialLives = GameWorld.get(world).config.getInitialLives();
@@ -105,7 +106,7 @@ public class DPlayer {
 
 	public void escape() {
 		remove(this);
-		this.savePlayer.reset();
+		this.savePlayer.reset(false);
 	}
 
 	public void leave() {
@@ -114,7 +115,13 @@ public class DPlayer {
 		// Lives
 		p.lives.remove(player);
 
-		this.savePlayer.reset();
+		DConfig dConfig = GameWorld.get(world).config;
+		if (this.isFinished) {
+			this.savePlayer.reset(dConfig.getKeepInventoryOnFinish());
+		}
+		else {
+			this.savePlayer.reset(dConfig.getKeepInventoryOnEscape());
+		}
 
 		if (this.isEditing) {
 			EditWorld eworld = EditWorld.get(this.world);
@@ -218,7 +225,7 @@ public class DPlayer {
 		}
 
 		// Respawn Items
-		if (!(GameWorld.get(world).config.getKeepInventoryOnDeath())) {
+		if (GameWorld.get(world).config.getKeepInventoryOnDeath()) {
 			if (this.respawnInventory != null || this.respawnArmor != null) {
 				this.player.getInventory().setContents(this.respawnInventory);
 				this.player.getInventory().setArmorContents(this.respawnArmor);

@@ -155,11 +155,21 @@ public class DConfig {
 
 		/* Keep Inventory */
 		if (configFile.contains("keepInventory")) {
-			keepInventoryOnEnter = configFile.getBoolean("keepInventory");
-			keepInventoryOnEscape = configFile.getBoolean("keepInventory");
-			keepInventoryOnFinish = configFile.getBoolean("keepInventory");
+			if (!configFile.contains("keepInventoryOnEnter")) {
+				keepInventoryOnEnter = configFile.getBoolean("keepInventory");
+			}
+			if (!configFile.contains("keepInventoryOnEscape")) {
+				keepInventoryOnEscape = configFile.getBoolean("keepInventory");
+			}
+			if (!configFile.contains("keepInventoryOnFinish")) {
+				keepInventoryOnFinish = configFile.getBoolean("keepInventory");
+			}
 		} else {
-			keepInventory = mainConfig.keepInventory;
+			if (mainConfig.keepInventory) {
+				keepInventoryOnEnter = mainConfig.keepInventory;
+				keepInventoryOnEscape = mainConfig.keepInventory;
+				keepInventoryOnFinish = mainConfig.keepInventory;
+			}
 		}
 
 		if (configFile.contains("keepInventoryOnEnter")) {
@@ -340,10 +350,6 @@ public class DConfig {
 		tmpSecureObjects.addAll(this.secureObjects);
 		tmpSecureObjects.addAll(mainConfig.secureObjects);
 		return tmpSecureObjects;
-	}
-
-	public boolean getKeepInventory() {
-		return keepInventory;
 	}
 
 	public boolean getKeepInventoryOnEnter() {

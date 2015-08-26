@@ -59,30 +59,31 @@ public class DSavePlayer {
 		save();
 	}
 
-	public void reset() {
+	public void reset(boolean keepInventory) {
 		Player onlinePlayer = p.getServer().getPlayer(this.playerName);
 		
 		try{
 			if (onlinePlayer != null) {
 				/* Player is online */
-				onlinePlayer.getInventory().setContents(this.oldInventory);
-				onlinePlayer.getInventory().setArmorContents(this.oldArmor);
-				onlinePlayer.setTotalExperience(this.oldExp);
-				onlinePlayer.setLevel(this.oldLvl);
-				onlinePlayer.setHealth(this.oldHealth);
-				onlinePlayer.setFoodLevel(this.oldFoodLevel);
-				onlinePlayer.setGameMode(this.oldGamemode);
-				onlinePlayer.setFireTicks(this.oldFireTicks);
-				for (PotionEffect effect : onlinePlayer.getActivePotionEffects()) {
-					onlinePlayer.removePotionEffect(effect.getType());
+				if (!keepInventory) {
+					onlinePlayer.getInventory().setContents(this.oldInventory);
+					onlinePlayer.getInventory().setArmorContents(this.oldArmor);
+					onlinePlayer.setTotalExperience(this.oldExp);
+					onlinePlayer.setLevel(this.oldLvl);
+					onlinePlayer.setHealth(this.oldHealth);
+					onlinePlayer.setFoodLevel(this.oldFoodLevel);
+					onlinePlayer.setGameMode(this.oldGamemode);
+					onlinePlayer.setFireTicks(this.oldFireTicks);
+					for (PotionEffect effect : onlinePlayer.getActivePotionEffects()) {
+						onlinePlayer.removePotionEffect(effect.getType());
+					}
+					onlinePlayer.addPotionEffects(this.oldPotionEffects);
 				}
-				onlinePlayer.addPotionEffects(this.oldPotionEffects);
-				
 				DUtility.secureTeleport(onlinePlayer, this.oldLocation);
 			} else {
 				/* Player is offline */
 				Player offlinePlayer = p.getOfflinePlayer(this.playerName, UUID.fromString(uuid), this.oldLocation);
-				if (offlinePlayer != null) {
+				if (offlinePlayer != null && !keepInventory) {
 					offlinePlayer.getInventory().setContents(this.oldInventory);
 					offlinePlayer.getInventory().setArmorContents(this.oldArmor);
 					offlinePlayer.setTotalExperience(this.oldExp);
@@ -174,7 +175,7 @@ public class DSavePlayer {
 
 			// Create Player
 			DSavePlayer savePlayer = new DSavePlayer(playerName, uuid, oldLocation, oldInventory, oldArmor, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGamemode, oldPotionEffects);
-			savePlayer.reset();
+			savePlayer.reset(false);
 		}
 	}
 
