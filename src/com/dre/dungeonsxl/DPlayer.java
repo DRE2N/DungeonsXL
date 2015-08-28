@@ -113,7 +113,9 @@ public class DPlayer {
 		remove(this);
 
 		// Lives
-		p.lives.remove(player);
+		if (p.lives.containsKey(player)) {
+			p.lives.remove(player);
+		}
 
 		DConfig dConfig = GameWorld.get(world).config;
 		if (this.isFinished) {
