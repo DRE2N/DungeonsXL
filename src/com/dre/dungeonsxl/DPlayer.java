@@ -54,6 +54,7 @@ public class DPlayer {
 	public String[] linesCopy;
 
 	public Inventory treasureInv = P.p.getServer().createInventory(player, 45, "Belohnungen");
+	public double treasureMoney = 0;
 	
 	public int initialLives = -1;
 
@@ -75,17 +76,18 @@ public class DPlayer {
 			this.clearPlayerData();
 		} else {
 			this.player.setGameMode(GameMode.SURVIVAL);
-			if (!(GameWorld.get(world).config.getKeepInventory())) {
+			DConfig dConfig = GameWorld.get(world).config;
+			if (!(dConfig.getKeepInventoryOnEnter())) {
 				this.clearPlayerData();
 			}
-			if (GameWorld.get(world).config.isLobbyDisabled()) {
+			if (dConfig.isLobbyDisabled()) {
 				this.ready();
 			}
 			initialLives = GameWorld.get(world).config.getInitialLives();
 		}
 
 		// Lives
-		P.lives.put(this.player, initialLives);
+		p.lives.put(this.player, initialLives);
 
 		DUtility.secureTeleport(this.player, teleport);
 	}
@@ -104,16 +106,28 @@ public class DPlayer {
 
 	public void escape() {
 		remove(this);
-		this.savePlayer.reset();
+		this.savePlayer.reset(false);
 	}
 
 	public void leave() {
 		remove(this);
 
 		// Lives
-		P.lives.remove(player);
+		if (p.lives.containsKey(player)) {
+			p.lives.remove(player);
+		}
 
-		this.savePlayer.reset();
+		if (!this.isEditing) {
+			DConfig dConfig = GameWorld.get(world).config;
+			if (this.isFinished) {
+				this.savePlayer.reset(dConfig.getKeepInventoryOnFinish());
+			}
+			else {
+				this.savePlayer.reset(dConfig.getKeepInventoryOnEscape());
+			}
+		} else {
+			this.savePlayer.reset(false);
+		}
 
 		if (this.isEditing) {
 			EditWorld eworld = EditWorld.get(this.world);
@@ -131,6 +145,7 @@ public class DPlayer {
 			if (!this.isinTestMode) {// Nur wenn man nicht am Testen ist
 				if (isFinished) {
 					this.addTreasure();
+					p.economy.depositPlayer(this.player, treasureMoney);
 
 					// Set Time
 					File file = new File(p.getDataFolder() + "/dungeons/" + gworld.dungeonname, "players.yml");
@@ -157,7 +172,6 @@ public class DPlayer {
 					if (gworld.isTutorial) {
 						p.permission.playerAddGroup(this.player, p.mainConfig.tutorialEndGroup);
 						p.permission.playerRemoveGroup(this.player, p.mainConfig.tutorialStartGroup);
-						p.getServer().dispatchCommand(p.getServer().getConsoleSender(), "pex user "+player.getName()+" group set "+p.mainConfig.tutorialEndGroup);//TODO: Use Vault for this!
 					}
 				}
 			}
@@ -217,7 +231,7 @@ public class DPlayer {
 		}
 
 		// Respawn Items
-		if (!(GameWorld.get(world).config.getKeepInventory())) {
+		if (GameWorld.get(world).config.getKeepInventoryOnDeath()) {
 			if (this.respawnInventory != null || this.respawnArmor != null) {
 				this.player.getInventory().setContents(this.respawnInventory);
 				this.player.getInventory().setArmorContents(this.respawnArmor);

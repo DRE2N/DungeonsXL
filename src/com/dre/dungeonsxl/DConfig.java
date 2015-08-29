@@ -23,6 +23,10 @@ public class DConfig {
 	private File file;
 
 	private boolean keepInventory = false;
+	private boolean keepInventoryOnEnter = false;
+	private boolean keepInventoryOnEscape = false;
+	private boolean keepInventoryOnFinish = false;
+	private boolean keepInventoryOnDeath = true;
 
 	private CopyOnWriteArrayList<DClass> dClasses = new CopyOnWriteArrayList<DClass>();
 	private Map<Integer, String> msgs = new HashMap<Integer, String>();
@@ -37,6 +41,8 @@ public class DConfig {
 	private int timeToNextLoot = 0;
 
 	private int timeUntilKickOfflinePlayer = -1;
+
+	private double fee = 0;
 
 	private List<String> finishedOne;
 	private List<String> finishedAll;
@@ -147,14 +153,50 @@ public class DConfig {
 			}
 		}
 
-		/* keep Inventory */
+		/* Keep Inventory */
 		if (configFile.contains("keepInventory")) {
-			keepInventory = configFile.getBoolean("keepInventory");
+			if (!configFile.contains("keepInventoryOnEnter")) {
+				keepInventoryOnEnter = configFile.getBoolean("keepInventory");
+			}
+			if (!configFile.contains("keepInventoryOnEscape")) {
+				keepInventoryOnEscape = configFile.getBoolean("keepInventory");
+			}
+			if (!configFile.contains("keepInventoryOnFinish")) {
+				keepInventoryOnFinish = configFile.getBoolean("keepInventory");
+			}
 		} else {
-			keepInventory = mainConfig.keepInventory;
+			if (mainConfig.keepInventory) {
+				keepInventoryOnEnter = mainConfig.keepInventory;
+				keepInventoryOnEscape = mainConfig.keepInventory;
+				keepInventoryOnFinish = mainConfig.keepInventory;
+			}
 		}
 
-		/* keep Inventory */
+		if (configFile.contains("keepInventoryOnEnter")) {
+			keepInventoryOnEnter = configFile.getBoolean("keepInventoryOnEnter");
+		} else {
+			keepInventoryOnEnter = mainConfig.keepInventoryOnEnter;
+		}
+
+		if (configFile.contains("keepInventoryOnEscape")) {
+			keepInventoryOnEscape = configFile.getBoolean("keepInventoryOnEscape");
+		} else {
+			keepInventoryOnEscape = mainConfig.keepInventoryOnEscape;
+		}
+
+		if (configFile.contains("keepInventoryOnFinish")) {
+			keepInventoryOnFinish = configFile.getBoolean("keepInventoryOnFinish");
+		} else {
+			keepInventoryOnFinish = mainConfig.keepInventoryOnFinish;
+		}
+
+		if (configFile.contains("keepInventoryOnDeath")) {
+			keepInventoryOnDeath = configFile.getBoolean("keepInventoryOnDeath");
+		} else {
+			keepInventoryOnDeath = mainConfig.keepInventoryOnDeath;
+		}
+
+		/* Lives */
 		if (configFile.contains("initialLives")) {
 			initialLives = configFile.getInt("initialLives");
 		} else {
@@ -188,6 +230,12 @@ public class DConfig {
 		}
 
 		/* Dungeon Requirements */
+		if (configFile.contains("fee")) {
+			fee = configFile.getDouble("fee");
+		} else {
+			fee = mainConfig.fee;
+		}
+		
 		if (configFile.contains("mustFinishOne")) {
 			finishedOne = configFile.getStringList("mustFinishOne");
 		} else {
@@ -304,8 +352,20 @@ public class DConfig {
 		return tmpSecureObjects;
 	}
 
-	public boolean getKeepInventory() {
-		return keepInventory;
+	public boolean getKeepInventoryOnEnter() {
+		return keepInventoryOnEnter;
+	}
+
+	public boolean getKeepInventoryOnEscape() {
+		return keepInventoryOnEscape;
+	}
+
+	public boolean getKeepInventoryOnFinish() {
+		return keepInventoryOnFinish;
+	}
+
+	public boolean getKeepInventoryOnDeath() {
+		return keepInventoryOnDeath;
 	}
 
 	public int getInitialLives() {
@@ -330,6 +390,10 @@ public class DConfig {
 
 	public int getTimeLastPlayed() {
 		return timeLastPlayed;
+	}
+
+	public double getFee() {
+		return fee;
 	}
 
 	public List<String> getFinishedAll() {

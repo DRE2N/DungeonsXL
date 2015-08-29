@@ -20,12 +20,15 @@ public class GameChest {
 	public boolean isUsed = false;
 	public Chest chest;
 	public GameWorld gworld;
+	public double moneyReward;
 
-	public GameChest(Block chest, GameWorld gworld) {
+	public GameChest(Block chest, GameWorld gworld, double moneyReward) {
 		if (chest.getState() instanceof Chest) {
 			this.chest = (Chest) chest.getState();
 
 			this.gworld = gworld;
+			
+			this.moneyReward = moneyReward;
 
 			gworld.gchests.add(this);
 		}
@@ -36,6 +39,7 @@ public class GameChest {
 			for (Player player : dgroup.getPlayers()) {
 				DPlayer dplayer = DPlayer.get(player);
 				if (dplayer != null) {
+					dplayer.treasureMoney = dplayer.treasureMoney + moneyReward;
 					String msg = "";
 					for (ItemStack istack : this.chest.getInventory().getContents()) {
 						if (istack != null) {
@@ -57,6 +61,9 @@ public class GameChest {
 					msg = msg.substring(0, msg.length() - 1);
 
 					P.p.msg(player, P.p.language.get("Player_LootAdded", msg));
+					if (moneyReward != 0) {
+						P.p.msg(player, P.p.language.get("Player_LootAdded", String.valueOf(moneyReward)));
+					}
 				}
 			}
 		}
@@ -81,7 +88,7 @@ public class GameChest {
 								event.setCancelled(true);
 							}
 						} else {
-							P.p.msg(P.p.getServer().getPlayer(event.getPlayer().getName()), ChatColor.RED + "Diese Kiste wurde schon geöffnet!");
+							P.p.msg(P.p.getServer().getPlayer(event.getPlayer().getUniqueId()), ChatColor.RED + "Diese Kiste wurde schon geöffnet!");
 							event.setCancelled(true);
 						}
 					}

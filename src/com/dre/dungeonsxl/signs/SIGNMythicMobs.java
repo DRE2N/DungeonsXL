@@ -1,12 +1,16 @@
 package com.dre.dungeonsxl.signs;
 
+import java.util.ArrayList;
+
+import org.bukkit.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.Location;
 
-import com.dre.dungeonsxl.P;
+import com.dre.dungeonsxl.game.DMob;
 import com.dre.dungeonsxl.game.GameWorld;
 
 public class SIGNMythicMobs extends DSign {
@@ -23,6 +27,9 @@ public class SIGNMythicMobs extends DSign {
 	private boolean initialized;
 	private boolean active;
 	private int taskId = -1;
+	private Location spawnLoc;
+	private LivingEntity mythicMob;
+	private ArrayList<Entity> mythicMobs = new ArrayList<Entity>();
 
 	public SIGNMythicMobs(Sign sign, GameWorld gworld) {
 		super(sign, gworld);
@@ -105,14 +112,18 @@ public class SIGNMythicMobs extends DSign {
 				GameWorld gworld = GameWorld.get(world);
 
 				if (gworld != null) {
-					Location spawnLoc = sign.sign.getLocation().add(0.5, 0, 0.5);
+					spawnLoc = sign.sign.getLocation().add(0.5, 0, 0.5);
 					double x = spawnLoc.getX();
 					double y = spawnLoc.getY();
 					double z = spawnLoc.getZ();
 
 					String command = "mm mobs spawn " + mob + " " + amount + " DXL_Game_" + gworld.id + ","+ x + "," + y + "," + z;
-					
 					Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+
+					setMythicMobs();
+					if (mythicMob != null) {
+						new DMob(mythicMob, sign.gworld, null, mob);
+					}
 
 					// Set the amount
 					if (amount != -1) {
@@ -141,5 +152,21 @@ public class SIGNMythicMobs extends DSign {
 	@Override
 	public boolean isOnDungeonInit() {
 		return onDungeonInit;
+	}
+
+	private void setMythicMobs() {
+		for (Entity entity : spawnLoc.getChunk().getEntities()) {
+			if (entity.getLocation().getX() >= spawnLoc.getX()-1
+					&& entity.getLocation().getX() <= spawnLoc.getX()+1
+					&& entity.getLocation().getY() >= spawnLoc.getY()-1
+					&& entity.getLocation().getY() <= spawnLoc.getY()+1
+					&& entity.getLocation().getZ() >= spawnLoc.getZ()-1
+					&& entity.getLocation().getZ() <= spawnLoc.getZ()+1
+					&& !mythicMobs.contains(entity)) {
+				mythicMob = (LivingEntity) entity;
+				mythicMobs.add(entity);
+				return;
+			}
+		}
 	}
 }

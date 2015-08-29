@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -374,19 +373,6 @@ public class PlayerListener implements Listener {
 						}
 					}
 				}
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerDeath(PlayerDeathEvent event) {
-		DPlayer dplayer = DPlayer.get(event.getEntity());
-		if (dplayer != null) {
-			dplayer.respawnInventory = event.getEntity().getInventory().getContents();
-			dplayer.respawnArmor = event.getEntity().getInventory().getArmorContents();
-			// Delete all drops
-			for (ItemStack istack : event.getDrops()) {
-				istack.setType(Material.AIR);
 			}
 		}
 	}
