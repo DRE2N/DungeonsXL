@@ -117,12 +117,16 @@ public class DPlayer {
 			p.lives.remove(player);
 		}
 
-		DConfig dConfig = GameWorld.get(world).config;
-		if (this.isFinished) {
-			this.savePlayer.reset(dConfig.getKeepInventoryOnFinish());
-		}
-		else {
-			this.savePlayer.reset(dConfig.getKeepInventoryOnEscape());
+		if (!this.isEditing) {
+			DConfig dConfig = GameWorld.get(world).config;
+			if (this.isFinished) {
+				this.savePlayer.reset(dConfig.getKeepInventoryOnFinish());
+			}
+			else {
+				this.savePlayer.reset(dConfig.getKeepInventoryOnEscape());
+			}
+		} else {
+			this.savePlayer.reset(false);
 		}
 
 		if (this.isEditing) {

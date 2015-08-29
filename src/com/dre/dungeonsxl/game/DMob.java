@@ -2,7 +2,6 @@ package com.dre.dungeonsxl.game;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;

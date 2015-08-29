@@ -61,6 +61,9 @@ public class GameChest {
 					msg = msg.substring(0, msg.length() - 1);
 
 					P.p.msg(player, P.p.language.get("Player_LootAdded", msg));
+					if (moneyReward != 0) {
+						P.p.msg(player, P.p.language.get("Player_LootAdded", String.valueOf(moneyReward)));
+					}
 				}
 			}
 		}
@@ -85,7 +88,7 @@ public class GameChest {
 								event.setCancelled(true);
 							}
 						} else {
-							P.p.msg(P.p.getServer().getPlayer(event.getPlayer().getName()), ChatColor.RED + "Diese Kiste wurde schon geöffnet!");
+							P.p.msg(P.p.getServer().getPlayer(event.getPlayer().getUniqueId()), ChatColor.RED + "Diese Kiste wurde schon geöffnet!");
 							event.setCancelled(true);
 						}
 					}
