@@ -3,6 +3,7 @@ package com.dre.dungeonsxl.signs;
 import java.util.ArrayList;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -162,7 +163,9 @@ public class SIGNMythicMobs extends DSign {
 					&& entity.getLocation().getY() <= spawnLoc.getY()+1
 					&& entity.getLocation().getZ() >= spawnLoc.getZ()-1
 					&& entity.getLocation().getZ() <= spawnLoc.getZ()+1
-					&& !mythicMobs.contains(entity)) {
+					&& !mythicMobs.contains(entity)
+					&& entity.isCustomNameVisible()
+					&& !(entity instanceof Player)) {
 				mythicMob = (LivingEntity) entity;
 				mythicMobs.add(entity);
 				return;
