@@ -82,6 +82,7 @@ public class LanguageReader {
 
 		/* Errors */
 		defaults.put("Error_Enderchest", "&4You cannot use an enderchest while in a Dungeon!");
+		defaults.put("Error_Bed", "&4You cannot use a bed while in a Dungeon!");
 		defaults.put("Error_Dispenser", "&4You cannot access this dispenser!");
 		defaults.put("Error_Ready", "&4Choose your class first!");
 		defaults.put("Error_Cooldown", "&4You can only enter this Dungeon every &6&v1&4 hours!");

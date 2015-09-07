@@ -51,8 +51,13 @@ public class PlayerListener implements Listener {
 			if (GameWorld.get(player.getWorld()) != null || EditWorld.get(player.getWorld()) != null) {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.ENDER_CHEST) {
-						if (!player.isOp()) {
+						if (!player.isOp()) {//TODO: Permission
 							p.msg(player, p.language.get("Error_Enderchest"));
+							event.setCancelled(true);
+						}
+					} else if (clickedBlock.getType() == Material.BED_BLOCK) {
+						if (!player.isOp()) {//TODO: Permission
+							p.msg(player, p.language.get("Error_Bed"));
 							event.setCancelled(true);
 						}
 					}
