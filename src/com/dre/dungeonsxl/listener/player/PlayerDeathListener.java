@@ -26,8 +26,8 @@ public class PlayerDeathListener implements Listener {
 
 		DConfig dConfig = GameWorld.get(player.getLocation().getWorld()).config;
 
-		if (dConfig.getKeepInventoryOnDeath()) {
-			if (dPlayer != null) {
+		if (dPlayer != null) {
+			if (dConfig.getKeepInventoryOnDeath()) {
 				dPlayer.respawnInventory = event.getEntity().getInventory().getContents();
 				dPlayer.respawnArmor = event.getEntity().getInventory().getArmorContents();
 				// Delete all drops
@@ -35,18 +35,18 @@ public class PlayerDeathListener implements Listener {
 					istack.setType(Material.AIR);
 				}
 			}
-		}
-
-		if (p.lives.containsKey(player)) {
-			lives = p.lives.get(player) - 1;
-			p.lives.put(player, lives);
-		}
-
-		if (lives == 0 && dPlayer.isReady) {
-			Bukkit.broadcastMessage(p.language.get("Player_DeathKick").replaceAll("v1", player.getName()).replaceAll("&", "\u00a7"));
-			player.performCommand("dxl leave");
-		} else if (!(lives == -1)) {
-			p.msg(player, p.language.get("Player_Death").replaceAll("v1", String.valueOf(lives)));
+	
+			if (p.lives.containsKey(player)) {
+				lives = p.lives.get(player) - 1;
+				p.lives.put(player, lives);
+			}
+	
+			if (lives == 0 && dPlayer.isReady) {
+				Bukkit.broadcastMessage(p.language.get("Player_DeathKick").replaceAll("v1", player.getName()).replaceAll("&", "\u00a7"));
+				player.performCommand("dxl leave");
+			} else if (!(lives == -1)) {
+				p.msg(player, p.language.get("Player_Death").replaceAll("v1", String.valueOf(lives)));
+			}
 		}
 
 	}
