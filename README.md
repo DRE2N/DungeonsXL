@@ -1,1 +1,1 @@
-![Doge](https://imgflip.com/i/vtpyi.png)
+![Doge](https://i.imgflip.com/vtpyi.jpg)
