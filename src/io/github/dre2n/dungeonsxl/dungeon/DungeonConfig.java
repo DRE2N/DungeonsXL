@@ -49,7 +49,6 @@ public class DungeonConfig extends WorldConfig {
 		if (configFile.contains("removeWhenPlayed")) {
 			removeWhenPlayed = configFile.getBoolean("removeWhenPlayed");
 		}
-		System.out.println("DungeonConfig " + floors);
 	}
 	
 	/**
