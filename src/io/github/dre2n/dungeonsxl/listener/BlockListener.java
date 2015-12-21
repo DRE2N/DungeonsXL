@@ -126,11 +126,17 @@ public class BlockListener implements Listener {
 						String dungeonName = lines[2];
 						
 						String[] data = lines[3].split("\\,");
-						if (data.length == 2) {
+						if (data.length >= 2 && data.length <= 3) {
 							int maxGroups = IntegerUtil.parseInt(data[0]);
 							int maxPlayersPerGroup = IntegerUtil.parseInt(data[1]);
+							boolean multiFloor = false;
+							if (data.length == 3) {
+								if (data[2].equals("+")) {
+									multiFloor = true;
+								}
+							}
 							if (maxGroups > 0 && maxPlayersPerGroup > 0) {
-								if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup) != null) {
+								if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup, multiFloor) != null) {
 									event.setCancelled(true);
 								}
 							}

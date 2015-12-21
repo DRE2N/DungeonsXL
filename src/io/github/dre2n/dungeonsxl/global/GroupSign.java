@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -29,18 +30,31 @@ public class GroupSign {
 	
 	// Variables
 	private DGroup[] dgroups;
+	private boolean multiFloor;
 	private String dungeonName;
+	private String mapName;
 	private int maxPlayersPerGroup;
 	private Block startSign;
 	private int directionX = 0, directionZ = 0;
 	private int verticalSigns;
 	
-	public GroupSign(Block startSign, String dungeonName, int maxGroups, int maxPlayersPerGroup) {
+	public GroupSign(Block startSign, String identifier, int maxGroups, int maxPlayersPerGroup, boolean multiFloor) {
 		plugin.getGroupSigns().add(this);
 		
 		this.startSign = startSign;
-		this.dungeonName = dungeonName;
 		dgroups = new DGroup[maxGroups];
+		this.multiFloor = multiFloor;
+		if (multiFloor) {
+			dungeonName = identifier;
+			Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+			if (dungeon != null) {
+				mapName = dungeon.getConfig().getStartFloor();
+			} else {
+				mapName = "invalid";
+			}
+		} else {
+			mapName = identifier;
+		}
 		this.maxPlayersPerGroup = maxPlayersPerGroup;
 		verticalSigns = (int) Math.ceil((float) (1 + maxPlayersPerGroup) / 4);
 		
@@ -50,6 +64,21 @@ public class GroupSign {
 		directionZ = direction[1];
 		
 		update();
+	}
+	
+	/**
+	 * @return the dungeonName
+	 */
+	public String getDungeonName() {
+		return dungeonName;
+	}
+	
+	/**
+	 * @param dungeonName
+	 * the dungeonName to set
+	 */
+	public void setDungeonName(String dungeonName) {
+		this.dungeonName = dungeonName;
 	}
 	
 	public void update() {
@@ -109,7 +138,7 @@ public class GroupSign {
 	// Static
 	
 	@SuppressWarnings("deprecation")
-	public static GroupSign tryToCreate(Block startSign, String dungeonName, int maxGroups, int maxPlayersPerGroup) {
+	public static GroupSign tryToCreate(Block startSign, String mapName, int maxGroups, int maxPlayersPerGroup, boolean multiFloor) {
 		World world = startSign.getWorld();
 		int direction = startSign.getData();
 		int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
@@ -186,7 +215,7 @@ public class GroupSign {
 		for (Block block : changeBlocks) {
 			block.setTypeIdAndData(68, startSign.getData(), true);
 		}
-		GroupSign sign = new GroupSign(startSign, dungeonName, maxGroups, maxPlayersPerGroup);
+		GroupSign sign = new GroupSign(startSign, mapName, maxGroups, maxPlayersPerGroup, multiFloor);
 		
 		return sign;
 	}
@@ -267,8 +296,8 @@ public class GroupSign {
 		int x = block.getX(), y = block.getY(), z = block.getZ();
 		GroupSign dgsign = getSign(block);
 		if (dgsign != null) {
-			if (GameWorld.canPlayDungeon(dgsign.dungeonName, player)) {
-				if (GameWorld.checkRequirements(dgsign.dungeonName, player)) {
+			if (GameWorld.canPlayDungeon(dgsign.mapName, player)) {
+				if (GameWorld.checkRequirements(dgsign.mapName, player)) {
 					int sx1 = dgsign.startSign.getX(), sy1 = dgsign.startSign.getY(), sz1 = dgsign.startSign.getZ();
 					
 					Block topBlock = block.getRelative(0, sy1 - y, 0);
@@ -284,7 +313,7 @@ public class GroupSign {
 						Sign topSign = (Sign) topBlock.getState();
 						if (topSign.getLine(0).equals(strNewGrp)) {
 							if (DGroup.get(player) == null) {
-								dgsign.dgroups[column] = new DGroup(player, dgsign.dungeonName);
+								dgsign.dgroups[column] = new DGroup(player, dgsign.mapName, dgsign.multiFloor);
 								dgsign.update();
 							}
 							
@@ -302,7 +331,7 @@ public class GroupSign {
 				}
 				
 			} else {
-				File file = new File(DungeonsXL.getPlugin().getDataFolder() + "/maps/" + dgsign.dungeonName, "config.yml");
+				File file = new File(DungeonsXL.getPlugin().getDataFolder() + "/maps/" + dgsign.mapName, "config.yml");
 				if (file != null) {
 					WorldConfig confReader = new WorldConfig(file);
 					if (confReader != null) {
@@ -367,10 +396,14 @@ public class GroupSign {
 			configFile.set(preString + ".z", dgsign.startSign.getZ());
 			
 			// Etc.
-			configFile.set(preString + ".dungeon", dgsign.dungeonName);
+			if (dgsign.multiFloor) {
+				configFile.set(preString + ".dungeon", dgsign.dungeonName);
+			} else {
+				configFile.set(preString + ".dungeon", dgsign.mapName);
+			}
 			configFile.set(preString + ".maxGroups", dgsign.dgroups.length);
 			configFile.set(preString + ".maxPlayersPerGroup", dgsign.maxPlayersPerGroup);
-			
+			configFile.set(preString + ".multiFloor", dgsign.multiFloor);
 		}
 	}
 	
@@ -383,12 +416,16 @@ public class GroupSign {
 					id++;
 					preString = "groupsign." + world.getName() + "." + id + ".";
 					if (configFile.contains(preString)) {
-						String dungeonName = configFile.getString(preString + ".dungeon");
+						String mapName = configFile.getString(preString + ".dungeon");
 						int maxGroups = configFile.getInt(preString + ".maxGroups");
 						int maxPlayersPerGroup = configFile.getInt(preString + ".maxPlayersPerGroup");
+						boolean multiFloor = false;
+						if (configFile.contains("multiFloor")) {
+							multiFloor = configFile.getBoolean("multiFloor");
+						}
 						Block startSign = world.getBlockAt(configFile.getInt(preString + ".x"), configFile.getInt(preString + ".y"), configFile.getInt(preString + ".z"));
 						
-						new GroupSign(startSign, dungeonName, maxGroups, maxPlayersPerGroup);
+						new GroupSign(startSign, mapName, maxGroups, maxPlayersPerGroup, multiFloor);
 					}
 				} while (configFile.contains(preString));
 			}

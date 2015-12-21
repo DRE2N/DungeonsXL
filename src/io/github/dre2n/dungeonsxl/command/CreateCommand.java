@@ -27,8 +27,8 @@ public class CreateCommand extends DCommand {
 		if (sender instanceof ConsoleCommandSender) {
 			if (name.length() <= 15) {
 				// Msg create
-				plugin.log(plugin.getDMessages().get("Log_NewDungeon"));
-				plugin.log(plugin.getDMessages().get("Log_GenerateNewWorld"));
+				plugin.getLogger().info(plugin.getDMessages().get("Log_NewDungeon"));
+				plugin.getLogger().info(plugin.getDMessages().get("Log_GenerateNewWorld"));
 				
 				// Create World
 				EditWorld eworld = new EditWorld();
@@ -38,7 +38,7 @@ public class CreateCommand extends DCommand {
 				eworld.delete();
 				
 				// MSG Done
-				plugin.log(plugin.getDMessages().get("Log_WorldGenerationFinished"));
+				plugin.getLogger().info(plugin.getDMessages().get("Log_WorldGenerationFinished"));
 				
 			} else {
 				MessageUtil.sendMessage(sender, plugin.getDMessages().get("Error_NameToLong"));
@@ -50,8 +50,8 @@ public class CreateCommand extends DCommand {
 			if (DPlayer.get(player) == null) {
 				if (name.length() <= 15) {
 					// Msg create
-					plugin.log(plugin.getDMessages().get("Log_NewDungeon"));
-					plugin.log(plugin.getDMessages().get("Log_GenerateNewWorld"));
+					plugin.getLogger().info(plugin.getDMessages().get("Log_NewDungeon"));
+					plugin.getLogger().info(plugin.getDMessages().get("Log_GenerateNewWorld"));
 					
 					// Create World
 					EditWorld eworld = new EditWorld();
@@ -59,7 +59,7 @@ public class CreateCommand extends DCommand {
 					eworld.dungeonname = name;
 					
 					// MSG Done
-					plugin.log(plugin.getDMessages().get("Log_WorldGenerationFinished"));
+					plugin.getLogger().info(plugin.getDMessages().get("Log_WorldGenerationFinished"));
 					
 					// Tp Player
 					if (eworld.lobby == null) {

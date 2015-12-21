@@ -82,7 +82,7 @@ public abstract class DSign {
 	 * the trigger to add
 	 */
 	public void addTrigger(Trigger trigger) {
-		addTrigger(trigger);
+		triggers.add(trigger);
 	}
 	
 	/**
@@ -138,11 +138,15 @@ public abstract class DSign {
 		return !triggers.isEmpty();
 	}
 	
+	// TODO: API to add custom signs
 	public static DSign create(Sign sign, GameWorld gWorld) {
 		String[] lines = sign.getLines();
 		DSign dSign = null;
 		
-		if (lines[0].equalsIgnoreCase("[" + CheckpointSign.name + "]")) {
+		if (lines[0].equalsIgnoreCase("[" + BlockSign.name + "]")) {
+			dSign = new BlockSign(sign, gWorld);
+			
+		} else if (lines[0].equalsIgnoreCase("[" + CheckpointSign.name + "]")) {
 			dSign = new CheckpointSign(sign, gWorld);
 			
 		} else if (lines[0].equalsIgnoreCase("[" + ChestSign.name + "]")) {
@@ -159,6 +163,12 @@ public abstract class DSign {
 			
 		} else if (lines[0].equalsIgnoreCase("[" + EndSign.name + "]")) {
 			dSign = new EndSign(sign, gWorld);
+			
+		} else if (lines[0].equalsIgnoreCase("[" + FloorSign.name + "]")) {
+			dSign = new FloorSign(sign, gWorld);
+			
+		} else if (lines[0].equalsIgnoreCase("[" + InteractSign.name + "]")) {
+			dSign = new InteractSign(sign, gWorld);
 			
 		} else if (lines[0].equalsIgnoreCase("[" + LeaveSign.name + "]")) {
 			dSign = new LeaveSign(sign, gWorld);
@@ -181,6 +191,9 @@ public abstract class DSign {
 		} else if (lines[0].equalsIgnoreCase("[" + ReadySign.name + "]")) {
 			dSign = new ReadySign(sign, gWorld);
 			
+		} else if (lines[0].equalsIgnoreCase("[" + RedstoneSign.name + "]")) {
+			dSign = new RedstoneSign(sign, gWorld);
+			
 		} else if (lines[0].equalsIgnoreCase("[" + SoundMsgSign.name + "]")) {
 			dSign = new SoundMsgSign(sign, gWorld);
 			
@@ -189,15 +202,6 @@ public abstract class DSign {
 			
 		} else if (lines[0].equalsIgnoreCase("[" + TriggerSign.name + "]")) {
 			dSign = new TriggerSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + InteractSign.name + "]")) {
-			dSign = new InteractSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + RedstoneSign.name + "]")) {
-			dSign = new RedstoneSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + BlockSign.name + "]")) {
-			dSign = new BlockSign(sign, gWorld);
 		}
 		
 		if (dSign != null && gWorld != null) {

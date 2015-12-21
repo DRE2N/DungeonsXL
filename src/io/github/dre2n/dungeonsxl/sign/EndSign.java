@@ -22,8 +22,6 @@ public class EndSign extends DSign {
 	
 	@Override
 	public boolean check() {
-		// TODO Auto-generated method stub
-		
 		return true;
 	}
 	

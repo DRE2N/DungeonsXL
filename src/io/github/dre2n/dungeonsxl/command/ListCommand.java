@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
@@ -17,7 +18,7 @@ public class ListCommand extends DCommand {
 	public ListCommand() {
 		setCommand("list");
 		setMinArgs(0);
-		setMaxArgs(2);
+		setMaxArgs(3);
 		setHelp(plugin.getDMessages().get("Help_Cmd_List"));
 		setPlayerCommand(true);
 		setConsoleCommand(true);
@@ -27,30 +28,43 @@ public class ListCommand extends DCommand {
 	public void onExecute(String[] args, CommandSender sender) {
 		File dungeonFolder = new File(plugin.getDataFolder() + "/dungeons");
 		File mapFolder = new File(plugin.getDataFolder() + "/maps");
-		ArrayList<File> dungeonList = new ArrayList<File>();
-		for (File file : dungeonFolder.listFiles()) {
-			dungeonList.add(file);
+		ArrayList<String> dungeonList = new ArrayList<String>();
+		for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
+			dungeonList.add(dungeon.getName());
 		}
-		ArrayList<File> mapList = new ArrayList<File>();
+		ArrayList<String> mapList = new ArrayList<String>();
 		for (File file : mapFolder.listFiles()) {
-			mapList.add(file);
+			mapList.add(file.getName());
 		}
-		ArrayList<File> loadedList = new ArrayList<File>();
+		ArrayList<String> loadedList = new ArrayList<String>();
 		for (EditWorld editWorld : plugin.getEditWorlds()) {
-			loadedList.add(editWorld.world.getWorldFolder());
+			loadedList.add(editWorld.world.getWorldFolder().getName());
 		}
 		for (GameWorld gameWorld : plugin.getGameWorlds()) {
-			loadedList.add(gameWorld.world.getWorldFolder());
+			loadedList.add(gameWorld.world.getWorldFolder().getName());
 		}
 		ArrayList<String> toSend = new ArrayList<String>();
 		
-		ArrayList<File> fileList = mapList;
+		ArrayList<String> stringList = mapList;
 		boolean specified = false;
 		byte listType = 0;
 		if (args.length >= 2) {
 			if (args[1].equalsIgnoreCase("dungeons") || args[1].equalsIgnoreCase("d")) {
+				if (args.length >= 3) {
+					Dungeon dungeon = plugin.getDungeons().getDungeon(args[2]);
+					if (dungeon != null) {
+						MessageUtil.sendPluginTag(sender, plugin);
+						MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dungeon.getName() + " &4&l]");
+						MessageUtil.sendMessage(sender, "&eFloors: &o" + dungeon.getConfig().getFloors());
+						MessageUtil.sendMessage(sender, "&estartFloor: &o[" + dungeon.getConfig().getStartFloor() + "]");
+						MessageUtil.sendMessage(sender, "&eendFloor: &o[" + dungeon.getConfig().getEndFloor() + "]");
+						MessageUtil.sendMessage(sender, "&efloorCount: &o[" + dungeon.getConfig().getFloorCount() + "]");
+						MessageUtil.sendMessage(sender, "&eremoveWhenPlayed: &o[" + dungeon.getConfig().isRemoveWhenPlayed() + "]");
+						return;
+					}
+				}
 				specified = true;
-				fileList = dungeonList;
+				stringList = dungeonList;
 				listType = 1;
 				
 			} else if (args[1].equalsIgnoreCase("maps") || args[1].equalsIgnoreCase("m")) {
@@ -58,7 +72,7 @@ public class ListCommand extends DCommand {
 				
 			} else if (args[1].equalsIgnoreCase("loaded") || args[1].equalsIgnoreCase("l")) {
 				specified = true;
-				fileList = loadedList;
+				stringList = loadedList;
 				listType = 2;
 			}
 		}
@@ -74,12 +88,12 @@ public class ListCommand extends DCommand {
 		int send = 0;
 		int max = 0;
 		int min = 0;
-		for (File file : fileList) {
+		for (String string : stringList) {
 			send++;
 			if (send >= page * 5 - 4 && send <= page * 5) {
 				min = page * 5 - 4;
 				max = page * 5;
-				toSend.add(file.getName());
+				toSend.add(string);
 			}
 		}
 		
@@ -110,4 +124,5 @@ public class ListCommand extends DCommand {
 			}
 		}
 	}
+	
 }

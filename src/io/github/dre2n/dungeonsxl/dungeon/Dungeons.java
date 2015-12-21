@@ -1,11 +1,21 @@
 package io.github.dre2n.dungeonsxl.dungeon;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Dungeons {
 	
 	private List<Dungeon> dungeons = new ArrayList<Dungeon>();
+	
+	public Dungeons() {
+		File folder = new File(DungeonsXL.getPlugin().getDataFolder() + "/dungeons");
+		for (File file : folder.listFiles()) {
+			dungeons.add(new Dungeon(file));
+		}
+	}
 	
 	/**
 	 * @return the dungeons

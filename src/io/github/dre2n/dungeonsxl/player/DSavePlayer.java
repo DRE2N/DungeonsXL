@@ -101,7 +101,7 @@ public class DSavePlayer {
 			}
 			
 		} catch (NullPointerException exception) {
-			plugin.log("Corrupted playerdata detected and removed!");
+			plugin.getLogger().info("Corrupted playerdata detected and removed!");
 		}
 		
 		savePlayers.remove(this);

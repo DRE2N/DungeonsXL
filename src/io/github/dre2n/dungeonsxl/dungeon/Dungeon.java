@@ -17,6 +17,7 @@ public class Dungeon {
 	public Dungeon(String name) {
 		this.name = name;
 		this.config = new DungeonConfig(new File(DungeonsXL.getPlugin().getDataFolder() + "/dungeons", name + ".yml"));
+		System.out.println("Dungeon" + config.getFloors());
 	}
 	
 	/**

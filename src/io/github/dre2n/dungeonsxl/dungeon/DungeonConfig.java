@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class DungeonConfig extends WorldConfig {
 	
@@ -16,10 +17,12 @@ public class DungeonConfig extends WorldConfig {
 	
 	public DungeonConfig(File file) {
 		super(file);
+		load(YamlConfiguration.loadConfiguration(file));
 	}
 	
 	public DungeonConfig(ConfigurationSection configFile) {
 		super(configFile);
+		load(configFile);
 	}
 	
 	@Override
@@ -36,7 +39,7 @@ public class DungeonConfig extends WorldConfig {
 		}
 		
 		if (configFile.contains("endFloor")) {
-			startFloor = configFile.getString("endFloor");
+			endFloor = configFile.getString("endFloor");
 		}
 		
 		if (configFile.contains("floorCount")) {
@@ -46,6 +49,7 @@ public class DungeonConfig extends WorldConfig {
 		if (configFile.contains("removeWhenPlayed")) {
 			removeWhenPlayed = configFile.getBoolean("removeWhenPlayed");
 		}
+		System.out.println("DungeonConfig " + floors);
 	}
 	
 	/**

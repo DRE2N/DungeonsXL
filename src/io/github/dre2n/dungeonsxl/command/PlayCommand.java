@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
@@ -34,20 +35,40 @@ public class PlayCommand extends DCommand {
 			return;
 		}
 		
-		if (args.length != 2) {
+		if ( !(args.length >= 2 && args.length <= 3)) {
 			displayHelp(player);
 			return;
 		}
 		
-		String dungeonname = args[1];
+		String identifier = args[1];
+		String mapName = identifier;
 		
-		if ( !EditWorld.exist(dungeonname)) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", dungeonname));
+		boolean multiFloor = false;
+		if (args.length == 3) {
+			identifier = args[2];
+			mapName = identifier;
+			if (args[1].equalsIgnoreCase("dungeon") || args[1].equalsIgnoreCase("d")) {
+				Dungeon dungeon = plugin.getDungeons().getDungeon(args[2]);
+				if (dungeon != null) {
+					multiFloor = true;
+					mapName = dungeon.getConfig().getStartFloor();
+				} else {
+					displayHelp(player);
+					return;
+				}
+				
+			} else if (args[1].equalsIgnoreCase("map") || args[1].equalsIgnoreCase("m")) {
+				identifier = args[2];
+			}
+		}
+		
+		if ( !multiFloor && !EditWorld.exist(identifier)) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", identifier));
 			return;
 		}
 		
-		if ( !GameWorld.canPlayDungeon(dungeonname, player)) {
-			File file = new File(plugin.getDataFolder() + "/maps/" + dungeonname + "/config.yml");
+		if ( !GameWorld.canPlayDungeon(identifier, player)) {
+			File file = new File(plugin.getDataFolder() + "/maps/" + identifier + "/config.yml");
 			
 			if (file != null) {
 				WorldConfig confReader = new WorldConfig(file);
@@ -59,8 +80,9 @@ public class PlayCommand extends DCommand {
 			return;
 		}
 		
-		if ( !GameWorld.checkRequirements(dungeonname, player)) {
+		if ( !GameWorld.checkRequirements(mapName, player)) {
 			MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_Requirements"));
+			return;
 		}
 		
 		if (DGroup.get(player) != null) {
@@ -68,19 +90,17 @@ public class PlayCommand extends DCommand {
 			return;
 		}
 		
-		DGroup dgroup = new DGroup(player, dungeonname);
+		DGroup dgroup = new DGroup(player, identifier, multiFloor);
 		
-		if (dgroup != null) {
-			if (dgroup.getGworld() == null) {
-				dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
-			}
+		if (dgroup.getGWorld() == null) {
+			dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
+		}
+		
+		if (dgroup.getGWorld().locLobby == null) {
+			new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().world.getSpawnLocation(), false);
 			
-			if (dgroup.getGworld().locLobby == null) {
-				new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
-				
-			} else {
-				new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
-			}
+		} else {
+			new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
 		}
 	}
 	

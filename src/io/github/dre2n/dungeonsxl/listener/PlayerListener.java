@@ -297,15 +297,15 @@ public class PlayerListener implements Listener {
 					DGroup dgroup = DGroup.get(dplayer.player);
 					
 					if (dplayer.checkpoint == null) {
-						event.setRespawnLocation(dgroup.getGworld().locStart);
+						event.setRespawnLocation(dgroup.getGWorld().locStart);
 						
 						// Da einige Plugins einen anderen Respawn setzen wird
 						// ein Scheduler gestartet der den Player nach einer
 						// Sekunde teleportiert.
-						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dgroup.getGworld().locStart), 10);
+						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dgroup.getGWorld().locStart), 10);
 						
 						if (dplayer.wolf != null) {
-							dplayer.wolf.teleport(dgroup.getGworld().locStart);
+							dplayer.wolf.teleport(dgroup.getGWorld().locStart);
 						}
 						
 					} else {
@@ -415,18 +415,18 @@ public class PlayerListener implements Listener {
 				if (plugin.getMainConfig().getTutorialDungeon() != null && plugin.getMainConfig().getTutorialStartGroup() != null && plugin.getMainConfig().getTutorialEndGroup() != null) {
 					for (String group : plugin.permission.getPlayerGroups(player)) {
 						if (plugin.getMainConfig().getTutorialStartGroup().equalsIgnoreCase(group)) {
-							DGroup dgroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon());
+							DGroup dgroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
 							
-							if (dgroup.getGworld() == null) {
-								dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
-								dgroup.getGworld().isTutorial = true;
+							if (dgroup.getGWorld() == null) {
+								dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
+								dgroup.getGWorld().isTutorial = true;
 							}
 							
-							if (dgroup.getGworld() != null) {
-								if (dgroup.getGworld().locLobby == null) {
+							if (dgroup.getGWorld() != null) {
+								if (dgroup.getGWorld().locLobby == null) {
 									
 								} else {
-									new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+									new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
 								}
 								
 							} else {

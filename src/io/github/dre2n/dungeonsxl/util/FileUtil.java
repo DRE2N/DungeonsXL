@@ -77,9 +77,9 @@ public class FileUtil {
 				
 			} catch (Exception e) {
 				if (e.getMessage().contains("Zugriff") || e.getMessage().contains("Access")) {
-					DungeonsXL.getPlugin().log("Error: " + e.getMessage() + " // Access denied");
+					DungeonsXL.getPlugin().getLogger().info("Error: " + e.getMessage() + " // Access denied");
 				} else {
-					DungeonsXL.getPlugin().log("Error: " + e.getMessage());
+					DungeonsXL.getPlugin().getLogger().info("Error: " + e.getMessage());
 				}
 			}
 		}

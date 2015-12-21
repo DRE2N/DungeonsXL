@@ -85,20 +85,20 @@ public class DPortal {
 		
 		DGroup dgroup = DGroup.get(player);
 		if (dgroup != null) {
-			if (dgroup.getGworld() == null) {
-				dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
+			if (dgroup.getGWorld() == null) {
+				dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
 			}
 			
-			if (dgroup.getGworld() != null) {
+			if (dgroup.getGWorld() != null) {
 				
-				if (dgroup.getGworld().locLobby == null) {
-					new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
+				if (dgroup.getGWorld().locLobby == null) {
+					new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().world.getSpawnLocation(), false);
 				} else {
-					new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+					new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
 				}
 				
 			} else {
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", DGroup.get(player).getDungeonname()));
+				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", DGroup.get(player).getMapName()));
 			}
 			
 		} else {

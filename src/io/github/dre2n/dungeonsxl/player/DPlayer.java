@@ -1,11 +1,13 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
+import io.github.dre2n.dungeonsxl.util.IntegerUtil;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.MiscUtil;
 
@@ -115,7 +117,6 @@ public class DPlayer {
 	
 	public void leave() {
 		remove(this);
-		
 		if ( !isEditing) {
 			WorldConfig dConfig = GameWorld.get(world).getConfig();
 			if (isFinished) {
@@ -132,21 +133,24 @@ public class DPlayer {
 			if (eworld != null) {
 				eworld.save();
 			}
+			
 		} else {
-			GameWorld gworld = GameWorld.get(world);
-			DGroup dgroup = DGroup.get(player);
-			if (dgroup != null) {
-				dgroup.removePlayer(player);
+			GameWorld gWorld = GameWorld.get(world);
+			DGroup dGroup = DGroup.get(player);
+			if (dGroup != null) {
+				dGroup.removePlayer(player);
 			}
 			
 			// Belohnung
 			if ( !isinTestMode) {// Nur wenn man nicht am Testen ist
 				if (isFinished) {
 					addTreasure();
-					plugin.economy.depositPlayer(player, treasureMoney);
+					if (plugin.economy != null) {
+						plugin.economy.depositPlayer(player, treasureMoney);
+					}
 					
 					// Set Time
-					File file = new File(plugin.getDataFolder() + "/maps/" + gworld.dungeonname, "players.yml");
+					File file = new File(plugin.getDataFolder() + "/maps/" + gWorld.dungeonname, "players.yml");
 					
 					if ( !file.exists()) {
 						try {
@@ -167,7 +171,7 @@ public class DPlayer {
 					}
 					
 					// Tutorial Permissions
-					if (gworld.isTutorial) {
+					if (gWorld.isTutorial) {
 						plugin.permission.playerAddGroup(player, plugin.getMainConfig().getTutorialEndGroup());
 						plugin.permission.playerRemoveGroup(player, plugin.getMainConfig().getTutorialStartGroup());
 					}
@@ -175,16 +179,17 @@ public class DPlayer {
 			}
 			
 			// Give Secure Objects other Players
-			if (dgroup != null) {
-				if ( !dgroup.isEmpty()) {
+			if (dGroup != null) {
+				if ( !dGroup.isEmpty()) {
 					int i = 0;
 					Player groupplayer;
 					do {
-						groupplayer = dgroup.getPlayers().get(i);
+						groupplayer = dGroup.getPlayers().get(i);
 						if (groupplayer != null) {
+							org.bukkit.Bukkit.broadcastMessage("14");
 							for (ItemStack istack : player.getInventory()) {
 								if (istack != null) {
-									if (gworld.secureObjects.contains(istack.getType())) {
+									if (gWorld.secureObjects.contains(istack.getType())) {
 										groupplayer.getInventory().addItem(istack);
 									}
 								}
@@ -200,10 +205,10 @@ public class DPlayer {
 	public void ready() {
 		isReady = true;
 		
-		DGroup dgroup = DGroup.get(player);
-		if ( !dgroup.isPlaying()) {
-			if (dgroup != null) {
-				for (Player player : dgroup.getPlayers()) {
+		DGroup dGroup = DGroup.get(player);
+		if ( !dGroup.isPlaying()) {
+			if (dGroup != null) {
+				for (Player player : dGroup.getPlayers()) {
 					DPlayer dplayer = get(player);
 					if ( !dplayer.isReady) {
 						return;
@@ -211,16 +216,16 @@ public class DPlayer {
 				}
 			}
 			
-			dgroup.startGame();
+			dGroup.startGame();
 		} else {
 			respawn();
 		}
 	}
 	
 	public void respawn() {
-		DGroup dgroup = DGroup.get(player);
+		DGroup dGroup = DGroup.get(player);
 		if (checkpoint == null) {
-			MiscUtil.secureTeleport(player, dgroup.getGworld().locStart);
+			MiscUtil.secureTeleport(player, dGroup.getGWorld().locStart);
 		} else {
 			MiscUtil.secureTeleport(player, checkpoint);
 		}
@@ -241,20 +246,20 @@ public class DPlayer {
 		}
 	}
 	
-	public void finishFloor() {
+	public void finishFloor(String specifiedFloor) {
 		MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_FinishedDungeon"));
 		isFinished = true;
 		
-		DGroup dgroup = DGroup.get(player);
-		if (dgroup == null) {
+		DGroup dGroup = DGroup.get(player);
+		if (dGroup == null) {
 			return;
 		}
 		
-		if ( !dgroup.isPlaying()) {
+		if ( !dGroup.isPlaying()) {
 			return;
 		}
 		
-		for (Player player : dgroup.getPlayers()) {
+		for (Player player : dGroup.getPlayers()) {
 			DPlayer dplayer = get(player);
 			if ( !dplayer.isFinished) {
 				MessageUtil.sendMessage(this.player, plugin.getDMessages().get("Player_WaitForOtherPlayers"));
@@ -262,34 +267,66 @@ public class DPlayer {
 			}
 		}
 		
-		for (Player player : dgroup.getPlayers()) {
-			DPlayer dPlayer = get(player);
-			dPlayer.isFinished = false;
+		boolean invalid = false;
+		
+		if (dGroup.getDungeon() == null) {
+			invalid = true;
 		}
 		
-		dgroup.isPlaying();
+		for (Player player : dGroup.getPlayers()) {
+			DPlayer dPlayer = get(player);
+			
+			if (invalid) {
+				dPlayer.leave();
+				
+			} else {
+				dPlayer.isFinished = false;
+			}
+		}
+		
+		if (invalid) {
+			return;
+		}
+		
+		DungeonConfig dConfig = dGroup.getDungeon().getConfig();
+		int random = IntegerUtil.generateRandomInt(0, dConfig.getFloors().size());
+		String newFloor = dGroup.getUnplayedFloors().get(random);
+		if (dConfig.getFloorCount() == dGroup.getFloorCount() - 1) {
+			newFloor = dConfig.getEndFloor();
+			
+		} else if (specifiedFloor != null) {
+			newFloor = specifiedFloor;
+		}
+		dGroup.removeUnplayedFloor(dGroup.getMapName());
+		dGroup.setMapName(newFloor);
+		dGroup.setGWorld(GameWorld.load(newFloor));
+		dGroup.startGame();
 	}
 	
 	public void finish() {
 		MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_FinishedDungeon"));
 		isFinished = true;
 		
-		DGroup dgroup = DGroup.get(player);
-		if (dgroup != null) {
-			if (dgroup.isPlaying()) {
-				for (Player player : dgroup.getPlayers()) {
-					DPlayer dplayer = get(player);
-					if ( !dplayer.isFinished) {
-						MessageUtil.sendMessage(this.player, plugin.getDMessages().get("Player_WaitForOtherPlayers"));
-						return;
-					}
-				}
-				
-				for (Player player : dgroup.getPlayers()) {
-					DPlayer dplayer = get(player);
-					dplayer.leave();
-				}
+		DGroup dGroup = DGroup.get(player);
+		if (dGroup == null) {
+			return;
+		}
+		
+		if ( !dGroup.isPlaying()) {
+			return;
+		}
+		
+		for (Player player : dGroup.getPlayers()) {
+			DPlayer dplayer = get(player);
+			if ( !dplayer.isFinished) {
+				MessageUtil.sendMessage(this.player, plugin.getDMessages().get("Player_WaitForOtherPlayers"));
+				return;
 			}
+		}
+		
+		for (Player player : dGroup.getPlayers()) {
+			DPlayer dPlayer = get(player);
+			dPlayer.leave();
 		}
 	}
 	
@@ -303,10 +340,10 @@ public class DPlayer {
 				}
 			}
 		} else {
-			GameWorld gworld = GameWorld.get(world);
-			gworld.msg(msg);
+			GameWorld gWorld = GameWorld.get(world);
+			gWorld.msg(msg);
 			for (Player player : plugin.getChatSpyers()) {
-				if ( !gworld.world.getPlayers().contains(player)) {
+				if ( !gWorld.world.getPlayers().contains(player)) {
 					MessageUtil.sendMessage(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + msg);
 				}
 			}
@@ -344,12 +381,12 @@ public class DPlayer {
 	}
 	
 	public void setClass(String classname) {
-		GameWorld gworld = GameWorld.get(player.getWorld());
-		if (gworld == null) {
+		GameWorld gWorld = GameWorld.get(player.getWorld());
+		if (gWorld == null) {
 			return;
 		}
 		
-		DClass dclass = gworld.getConfig().getClass(classname);
+		DClass dclass = gWorld.getConfig().getClass(classname);
 		if (dclass != null) {
 			if (this.dclass != dclass) {
 				this.dclass = dclass;
@@ -472,13 +509,13 @@ public class DPlayer {
 							}
 						}
 					} else {
-						GameWorld gworld = GameWorld.get(dplayer.world);
-						if (gworld != null) {
-							DGroup dgroup = DGroup.get(dplayer.player);
+						GameWorld gWorld = GameWorld.get(dplayer.world);
+						if (gWorld != null) {
+							DGroup dGroup = DGroup.get(dplayer.player);
 							if (dplayer.checkpoint == null) {
-								MiscUtil.secureTeleport(dplayer.player, dgroup.getGworld().locStart);
+								MiscUtil.secureTeleport(dplayer.player, dGroup.getGWorld().locStart);
 								if (dplayer.wolf != null) {
-									dplayer.wolf.teleport(dgroup.getGworld().locStart);
+									dplayer.wolf.teleport(dGroup.getGWorld().locStart);
 								}
 							} else {
 								MiscUtil.secureTeleport(dplayer.player, dplayer.checkpoint);
@@ -498,9 +535,9 @@ public class DPlayer {
 					}
 				}
 			} else {
-				GameWorld gworld = GameWorld.get(dplayer.world);
+				GameWorld gWorld = GameWorld.get(dplayer.world);
 				
-				if (gworld != null) {
+				if (gWorld != null) {
 					// Update Wolf
 					if (dplayer.wolf != null) {
 						if (dplayer.wolf.isDead()) {
@@ -522,7 +559,7 @@ public class DPlayer {
 					}
 					
 					// Check Distance Trigger Signs
-					DistanceTrigger.triggerAllInDistance(dplayer.player, gworld);
+					DistanceTrigger.triggerAllInDistance(dplayer.player, gWorld);
 				}
 			}
 		}

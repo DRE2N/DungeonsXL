@@ -187,7 +187,7 @@ public class DMobType {
 											itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
 										}
 									} else {
-										DungeonsXL.getPlugin().log(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobEnchantment", splittedEnchantment[0]));
+										DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobEnchantment", splittedEnchantment[0]));
 									}
 								}
 							}
@@ -215,7 +215,7 @@ public class DMobType {
 					}
 					
 				} else {
-					DungeonsXL.getPlugin().log(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobType", configFile.getString(mobName + ".Type")));
+					DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobType", configFile.getString(mobName + ".Type")));
 				}
 			}
 		}

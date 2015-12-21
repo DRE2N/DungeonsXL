@@ -124,15 +124,15 @@ public class DMessages {
 		defaults.put("Help_Cmd_Invite", "/dxl invite <player> <dungeon> - Invite a player to edit a dungeon");
 		defaults.put("Help_Cmd_Leave", "/dxl leave - Leaves the current dungeon");
 		defaults.put("Help_Cmd_Escape", "/dxl escape - Leaves the current dungeon, without saving!");
-		defaults.put("Help_Cmd_List", "/dxl list <page> - Lists all dungeons");
+		defaults.put("Help_Cmd_List", "/dxl list ([dungeon|map|loaded]) ([dungeon]) - Lists all dungeons");
 		defaults.put("Help_Cmd_Main", "/dxl - General status information");
 		defaults.put("Help_Cmd_Msg", "/dxl msg <id> '[msg]' - Show or edit a message");
 		defaults.put("Help_Cmd_Portal", "/dxl portal - Creates a portal that leads into a dungeon");
 		defaults.put("Help_Cmd_DeletePortal", "/dxl deleteportal - Deletes the portal you are looking at");
 		defaults.put("Help_Cmd_Reload", "/dxl reload - Reloads the plugin");
 		defaults.put("Help_Cmd_Save", "/dxl save - Saves the current dungeon");
-		defaults.put("Help_Cmd_Play", "/dxl play [dungeon]");
-		defaults.put("Help_Cmd_Test", "/dxl test [dungeon] - Tests a dungeon");
+		defaults.put("Help_Cmd_Play", "/dxl play ([dungeon|map]) [name] - Allows the player to join a game without a portal");
+		defaults.put("Help_Cmd_Test", "/dxl test ([dungeon|map]) [name] - Tests a dungeon");
 		defaults.put("Help_Cmd_Lives", "/dxl lives <player> - Shows the lives a player has left");
 		defaults.put("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon");
 	}

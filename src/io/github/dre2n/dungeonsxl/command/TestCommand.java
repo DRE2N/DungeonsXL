@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -30,15 +31,32 @@ public class TestCommand extends DCommand {
 			return;
 		}
 		
-		if (args.length != 2) {
+		if ( !(args.length >= 2 && args.length <= 3)) {
 			displayHelp(player);
 			return;
 		}
 		
-		String dungeonname = args[1];
+		String identifier = args[1];
 		
-		if ( !EditWorld.exist(dungeonname)) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", dungeonname));
+		boolean multiFloor = false;
+		if (args.length == 3) {
+			identifier = args[2];
+			if (args[1].equalsIgnoreCase("dungeon") || args[1].equalsIgnoreCase("d")) {
+				Dungeon dungeon = plugin.getDungeons().getDungeon(args[2]);
+				if (dungeon != null) {
+					multiFloor = true;
+				} else {
+					displayHelp(player);
+					return;
+				}
+				
+			} else if (args[1].equalsIgnoreCase("map") || args[1].equalsIgnoreCase("m")) {
+				identifier = args[2];
+			}
+		}
+		
+		if ( !multiFloor && !EditWorld.exist(identifier)) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", identifier));
 			return;
 		}
 		
@@ -47,24 +65,19 @@ public class TestCommand extends DCommand {
 			return;
 		}
 		
-		if (DGroup.get(player) != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveGroup"));
-			return;
-		}
+		DGroup dgroup = new DGroup(player, identifier, multiFloor);
 		
-		DGroup dgroup = new DGroup(player, dungeonname);
-		
-		if (dgroup.getGworld() == null) {
-			dgroup.setGworld(GameWorld.load(DGroup.get(player).getDungeonname()));
+		if (dgroup.getGWorld() == null) {
+			dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
 		}
 		
 		DPlayer newDPlayer;
 		
-		if (dgroup.getGworld().locLobby == null) {
-			newDPlayer = new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().world.getSpawnLocation(), false);
+		if (dgroup.getGWorld().locLobby == null) {
+			newDPlayer = new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().world.getSpawnLocation(), false);
 			
 		} else {
-			newDPlayer = new DPlayer(player, dgroup.getGworld().world, dgroup.getGworld().locLobby, false);
+			newDPlayer = new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
 		}
 		
 		newDPlayer.isinTestMode = true;

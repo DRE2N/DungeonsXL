@@ -21,7 +21,6 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil.Internals;
 
@@ -100,9 +99,9 @@ public class DungeonsXL extends JavaPlugin {
 		initSchedulers();
 		
 		// MSG
-		log("ItemsXL " + getDescription().getVersion() + " for Spigot 1.8.9 loaded succesfully!");
+		getLogger().info("DungeonsXL " + getDescription().getVersion() + " for Spigot 1.8.8 loaded succesfully!");
 		if (versionUtil.getInternals() == Internals.OUTDATED) {
-			log("Warning: Your CraftBukkit version is deprecated. DungeonsXL does not support it.");
+			getLogger().info("Warning: Your CraftBukkit version is deprecated. DungeonsXL does not support it.");
 		}
 	}
 	
@@ -118,17 +117,19 @@ public class DungeonsXL extends JavaPlugin {
 		}
 		
 		// Delete all Data
-		dGroups.clear();
-		groupSigns.clear();
+		chatSpyers.clear();
 		dLootInventories.clear();
-		dPlayers.clear();
-		dPortals.clear();
+		groupSigns.clear();
 		leaveSigns.clear();
-		dCommands.getDCommands().clear();
+		dPortals.clear();
+		dGroups.clear();
+		dPlayers.clear();
 		
 		// Delete Worlds
 		GameWorld.deleteAll();
+		gameWorlds.clear();
 		EditWorld.deleteAll();
+		editWorlds.clear();
 		
 		// Disable listeners
 		HandlerList.unregisterAll(plugin);
@@ -281,13 +282,6 @@ public class DungeonsXL extends JavaPlugin {
 				FileUtil.removeDirectory(file);
 			}
 		}
-	}
-	
-	// -------------------------------------------- //
-	// LOGGING
-	// -------------------------------------------- //
-	public void log(String msg) {
-		MessageUtil.sendMessage(Bukkit.getConsoleSender(), msg);
 	}
 	
 	// Getters & loaders
