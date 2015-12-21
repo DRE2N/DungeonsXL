@@ -1,7 +1,9 @@
 package io.github.dre2n.dungeonsxl.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class MessageUtil {
@@ -100,6 +102,26 @@ public class MessageUtil {
 	
 	public static void sendPluginTag(CommandSender sender, Plugin plugin) {
 		sendCenteredMessage(sender, "&4&l[ &6" + plugin.getDescription().getName() + " &4&l]");
+	}
+	
+	public static void sendScreenMessage(Player player, String title, String subtitle, long fadeIn, long show, long fadeOut) {
+		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
+		title = ChatColor.translateAlternateColorCodes('&', title);
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " time " + fadeIn + " " + show + " " + fadeOut);
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " subtitle " + subtitle);
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title " + title);
+	}
+	
+	public static void sendScreenMessage(Player player, String title, String subtitle) {
+		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
+		title = ChatColor.translateAlternateColorCodes('&', title);
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " subtitle \"" + subtitle + "\"");
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title \"" + title + "\"");
+	}
+	
+	public static void sendScreenMessage(Player player, String title) {
+		title = ChatColor.translateAlternateColorCodes('&', title);
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title \"" + title + "\"");
 	}
 	
 	public static final String[] BIG_A =  {

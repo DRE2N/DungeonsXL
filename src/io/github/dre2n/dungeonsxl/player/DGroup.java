@@ -222,6 +222,13 @@ public class DGroup {
 		for (Player player : getPlayers()) {
 			DPlayer dplayer = DPlayer.get(player);
 			dplayer.respawn();
+			if (dungeonName != null) {
+				MessageUtil.sendScreenMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", ""));
+				
+			} else {
+				MessageUtil.sendScreenMessage(player, "&4&l" + mapName.replaceAll("_", ""));
+			}
+			
 			if ( !DungeonsXL.getPlugin().getMainConfig().enableEconomy()) {
 				continue;
 			}
