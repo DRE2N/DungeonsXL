@@ -3,6 +3,7 @@ package io.github.dre2n.dungeonsxl.dungeon;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -21,7 +22,7 @@ public class DLootInventory {
 	public DLootInventory(Player player, ItemStack[] istacks) {
 		plugin.getDLootInventories().add(this);
 		
-		inventory = Bukkit.createInventory(player, 54, DungeonsXL.getPlugin().getDMessages().get("Player_Treasures"));
+		inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', DungeonsXL.getPlugin().getDMessages().get("Player_Treasures")));
 		for (ItemStack istack : istacks) {
 			if (istack != null) {
 				inventory.addItem(istack);
