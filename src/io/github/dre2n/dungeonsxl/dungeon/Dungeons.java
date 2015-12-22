@@ -12,6 +12,11 @@ public class Dungeons {
 	
 	public Dungeons() {
 		File folder = new File(DungeonsXL.getPlugin().getDataFolder() + "/dungeons");
+		
+		if ( !folder.exists()) {
+			folder.mkdir();
+		}
+		
 		for (File file : folder.listFiles()) {
 			dungeons.add(new Dungeon(file));
 		}
