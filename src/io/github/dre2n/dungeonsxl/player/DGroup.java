@@ -233,8 +233,8 @@ public class DGroup {
 				continue;
 			}
 			
-			if (plugin.economy != null) {
-				DungeonsXL.getPlugin().economy.withdrawPlayer(player, fee);
+			if (plugin.getEconomyProvider() != null) {
+				plugin.getEconomyProvider().withdrawPlayer(player, fee);
 			}
 		}
 		
@@ -249,6 +249,7 @@ public class DGroup {
 				return dgroup;
 			}
 		}
+		
 		return null;
 	}
 	
@@ -258,6 +259,7 @@ public class DGroup {
 				return dgroup;
 			}
 		}
+		
 		return null;
 	}
 	

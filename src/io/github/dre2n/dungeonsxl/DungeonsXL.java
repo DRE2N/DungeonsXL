@@ -42,6 +42,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DungeonsXL extends JavaPlugin {
 	
 	private static DungeonsXL plugin;
+	private Economy economyProvider;
+	private Permission permissionProvider;
 	
 	private MainConfig mainConfig;
 	private DMessages dMessages;
@@ -80,10 +82,10 @@ public class DungeonsXL extends JavaPlugin {
 		initFolders();
 		
 		// Setup Permissions
-		setupPermissions();
+		loadPermissionProvider();
 		
 		// Setup Economy
-		setupEconomy();
+		loadEconomyProvider();
 		
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
 		Bukkit.getServer().getPluginManager().registerEvents(new EntityListener(), this);
@@ -195,43 +197,6 @@ public class DungeonsXL extends JavaPlugin {
 		}, 0L, 2L);
 	}
 	
-	// Permissions
-	public Permission permission = null;
-	
-	private Boolean setupPermissions() {
-		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-		if (permissionProvider != null) {
-			permission = permissionProvider.getProvider();
-		}
-		return permission != null;
-	}
-	
-	public Boolean GroupEnabled(String group) {
-		
-		for (String agroup : permission.getGroups()) {
-			if (agroup.equalsIgnoreCase(group)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	// Economy
-	public Economy economy = null;
-	
-	private Boolean setupEconomy() {
-		if (mainConfig.enableEconomy()) {
-			RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-			if (economyProvider != null) {
-				economy = economyProvider.getProvider();
-			}
-			return economy != null;
-		} else {
-			return false;
-		}
-	}
-	
 	// Save and Load
 	public void saveData() {
 		File file = new File(getDataFolder(), "data.yml");
@@ -291,6 +256,64 @@ public class DungeonsXL extends JavaPlugin {
 	 */
 	public static DungeonsXL getPlugin() {
 		return plugin;
+	}
+	
+	/**
+	 * @return the loaded instance of Economy
+	 */
+	public Economy getEconomyProvider() {
+		return economyProvider;
+	}
+	
+	/**
+	 * load / reload a new instance of Permission
+	 */
+	public void loadEconomyProvider() {
+		try {
+			if (mainConfig.enableEconomy()) {
+				RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+				if (economyProvider != null) {
+					this.economyProvider = economyProvider.getProvider();
+				}
+			}
+		} catch (NoClassDefFoundError error) {
+			getLogger().info("Could not hook into Vault to register an economy provider!");
+		}
+	}
+	
+	/**
+	 * @return the loaded instance of Permission
+	 */
+	public Permission getPermissionProvider() {
+		return permissionProvider;
+	}
+	
+	/**
+	 * load / reload a new instance of Permission
+	 */
+	public void loadPermissionProvider() {
+		try {
+			RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
+			if (permissionProvider != null) {
+				this.permissionProvider = permissionProvider.getProvider();
+			}
+		} catch (NoClassDefFoundError error) {
+			getLogger().info("Could not hook into Vault to register a permission provider!");
+		}
+	}
+	
+	/**
+	 * @param group
+	 * the group to be checked
+	 */
+	public boolean isGroupEnabled(String group) {
+		for (String agroup : permissionProvider.getGroups()) {
+			if (agroup.equalsIgnoreCase(group)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**

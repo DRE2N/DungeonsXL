@@ -198,7 +198,7 @@ public class GameWorld {
 		WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + dungeon, "config.yml"));
 		
 		if (plugin.getMainConfig().enableEconomy()) {
-			if ( !(DungeonsXL.getPlugin().economy.getBalance(player) >= worldConfig.getFee())) {
+			if ( !(DungeonsXL.getPlugin().getEconomyProvider().getBalance(player) >= worldConfig.getFee())) {
 				return false;
 			}
 		}

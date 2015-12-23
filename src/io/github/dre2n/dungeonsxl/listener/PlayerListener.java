@@ -413,7 +413,7 @@ public class PlayerListener implements Listener {
 		if (plugin.getMainConfig().isTutorialActivated()) {
 			if (DPlayer.get(player) == null) {
 				if (plugin.getMainConfig().getTutorialDungeon() != null && plugin.getMainConfig().getTutorialStartGroup() != null && plugin.getMainConfig().getTutorialEndGroup() != null) {
-					for (String group : plugin.permission.getPlayerGroups(player)) {
+					for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
 						if (plugin.getMainConfig().getTutorialStartGroup().equalsIgnoreCase(group)) {
 							DGroup dgroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
 							

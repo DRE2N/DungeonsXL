@@ -145,8 +145,8 @@ public class DPlayer {
 			if ( !isinTestMode) {// Nur wenn man nicht am Testen ist
 				if (isFinished) {
 					addTreasure();
-					if (plugin.economy != null) {
-						plugin.economy.depositPlayer(player, treasureMoney);
+					if (plugin.getEconomyProvider() != null) {
+						plugin.getEconomyProvider().depositPlayer(player, treasureMoney);
 					}
 					
 					// Set Time
@@ -172,8 +172,15 @@ public class DPlayer {
 					
 					// Tutorial Permissions
 					if (gWorld.isTutorial) {
-						plugin.permission.playerAddGroup(player, plugin.getMainConfig().getTutorialEndGroup());
-						plugin.permission.playerRemoveGroup(player, plugin.getMainConfig().getTutorialStartGroup());
+						String endGroup = plugin.getMainConfig().getTutorialEndGroup();
+						if (plugin.isGroupEnabled(endGroup)) {
+							plugin.getPermissionProvider().playerAddGroup(player, endGroup);
+						}
+						
+						String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+						if (plugin.isGroupEnabled(startGroup)) {
+							plugin.getPermissionProvider().playerRemoveGroup(player, startGroup);
+						}
 					}
 				}
 			}
@@ -235,7 +242,6 @@ public class DPlayer {
 		
 		// Respawn Items
 		if (GameWorld.get(world).getConfig().getKeepInventoryOnDeath()) {
-			org.bukkit.Bukkit.broadcastMessage("deactivated code triggered");
 			if (respawnInventory != null || respawnArmor != null) {
 				player.getInventory().setContents(respawnInventory);
 				player.getInventory().setArmorContents(respawnArmor);
@@ -300,6 +306,10 @@ public class DPlayer {
 		dGroup.removeUnplayedFloor(dGroup.getMapName());
 		dGroup.setMapName(newFloor);
 		dGroup.setGWorld(GameWorld.load(newFloor));
+		for (Player player : dGroup.getPlayers()) {
+			DPlayer dPlayer = get(player);
+			dPlayer.checkpoint = dGroup.getGWorld().locStart;
+		}
 		dGroup.startGame();
 	}
 	
