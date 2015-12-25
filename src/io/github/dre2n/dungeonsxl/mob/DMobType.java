@@ -48,177 +48,184 @@ public class DMobType {
 	}
 	
 	public void spawn(GameWorld gWorld, Location loc) {
-		if (type != null) {
-			if (type.isAlive()) {
-				LivingEntity entity = (LivingEntity) gWorld.world.spawnEntity(loc, type);
-				
-				/* Set the Items */
-				entity.getEquipment().setItemInHand(ItemHand);
-				entity.getEquipment().setHelmet(ItemHelmet);
-				entity.getEquipment().setChestplate(ItemChestplate);
-				entity.getEquipment().setLeggings(ItemLeggings);
-				entity.getEquipment().setBoots(ItemBoots);
-				
-				/* Check mob specified stuff */
-				if (type == EntityType.SKELETON) {
-					if (isWitherSkeleton) {
-						((Skeleton) entity).setSkeletonType(SkeletonType.WITHER);
-					} else {
-						((Skeleton) entity).setSkeletonType(SkeletonType.NORMAL);
-					}
-				}
-				
-				if (type == EntityType.OCELOT) {
-					Ocelot ocelot = (Ocelot) entity;
-					if (ocelotType != null) {
-						if (ocelotType.equalsIgnoreCase("BLACK_CAT")) {
-							ocelot.setCatType(Ocelot.Type.BLACK_CAT);
-						} else if (ocelotType.equalsIgnoreCase("RED_CAT")) {
-							ocelot.setCatType(Ocelot.Type.RED_CAT);
-						} else if (ocelotType.equalsIgnoreCase("SIAMESE_CAT")) {
-							ocelot.setCatType(Ocelot.Type.SIAMESE_CAT);
-						} else if (ocelotType.equalsIgnoreCase("WILD_OCELOT")) {
-							ocelot.setCatType(Ocelot.Type.WILD_OCELOT);
-						}
-					}
-				}
-				
-				/* Set Health */
-				if (maxHealth > 0) {
-					entity.setMaxHealth(maxHealth);
-					entity.setHealth(maxHealth);
-				}
-				
-				/* Disable Despawning */
-				entity.setRemoveWhenFarAway(false);
-				
-				/* Spawn Mob */
-				new DMob(entity, gWorld, this);
-				
+		if (type == null) {
+			return;
+		}
+		
+		if ( !type.isAlive()) {
+			return;
+		}
+		
+		LivingEntity entity = (LivingEntity) gWorld.getWorld().spawnEntity(loc, type);
+		
+		/* Set the Items */
+		entity.getEquipment().setItemInHand(ItemHand);
+		entity.getEquipment().setHelmet(ItemHelmet);
+		entity.getEquipment().setChestplate(ItemChestplate);
+		entity.getEquipment().setLeggings(ItemLeggings);
+		entity.getEquipment().setBoots(ItemBoots);
+		
+		/* Check mob specified stuff */
+		if (type == EntityType.SKELETON) {
+			if (isWitherSkeleton) {
+				((Skeleton) entity).setSkeletonType(SkeletonType.WITHER);
+			} else {
+				((Skeleton) entity).setSkeletonType(SkeletonType.NORMAL);
 			}
 		}
+		
+		if (type == EntityType.OCELOT) {
+			Ocelot ocelot = (Ocelot) entity;
+			if (ocelotType != null) {
+				if (ocelotType.equalsIgnoreCase("BLACK_CAT")) {
+					ocelot.setCatType(Ocelot.Type.BLACK_CAT);
+				} else if (ocelotType.equalsIgnoreCase("RED_CAT")) {
+					ocelot.setCatType(Ocelot.Type.RED_CAT);
+				} else if (ocelotType.equalsIgnoreCase("SIAMESE_CAT")) {
+					ocelot.setCatType(Ocelot.Type.SIAMESE_CAT);
+				} else if (ocelotType.equalsIgnoreCase("WILD_OCELOT")) {
+					ocelot.setCatType(Ocelot.Type.WILD_OCELOT);
+				}
+			}
+		}
+		
+		/* Set Health */
+		if (maxHealth > 0) {
+			entity.setMaxHealth(maxHealth);
+			entity.setHealth(maxHealth);
+		}
+		
+		/* Disable Despawning */
+		entity.setRemoveWhenFarAway(false);
+		
+		/* Spawn Mob */
+		new DMob(entity, gWorld, this);
 	}
 	
 	// Load Config
 	@SuppressWarnings("deprecation")
 	public static Set<DMobType> load(ConfigurationSection configFile) {
 		Set<DMobType> set = new HashSet<DMobType>();
-		if (configFile != null) {
-			// Read Mobs
-			for (String mobName : configFile.getKeys(false)) {
-				EntityType type = EntityType.fromName(configFile.getString(mobName + ".Type"));
-				
-				if (type != null) {
-					DMobType mobType = new DMobType(mobName, type);
-					set.add(mobType);
+		
+		if (configFile == null) {
+			return null;
+		}
+		
+		// Read Mobs
+		for (String mobName : configFile.getKeys(false)) {
+			EntityType type = EntityType.fromName(configFile.getString(mobName + ".Type"));
+			
+			if (type == null) {
+				DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobType", configFile.getString(mobName + ".Type")));
+				continue;
+			}
+			
+			DMobType mobType = new DMobType(mobName, type);
+			set.add(mobType);
+			
+			// Load MaxHealth
+			if (configFile.contains(mobName + ".MaxHealth")) {
+				mobType.maxHealth = configFile.getInt(mobName + ".MaxHealth");
+			}
+			
+			// Load Items
+			if (configFile.contains(mobName + ".ItemHelmet")) {
+				mobType.ItemHelmet = new ItemStack(configFile.getInt(mobName + ".ItemHelmet"));// CraftItemStack.asNMSCopy(new
+				                                                                               // ItemStack(configFile.getInt(mobName+".ItemHelmet"))).getItem();
+			}
+			
+			if (configFile.contains(mobName + ".ItemChestplate")) {
+				mobType.ItemChestplate = new ItemStack(configFile.getInt(mobName + ".ItemChestplate"));// CraftItemStack.asNMSCopy(new
+				                                                                                       // ItemStack(configFile.getInt(mobName+".ItemChestplate"))).getItem();
+			}
+			
+			if (configFile.contains(mobName + ".ItemBoots")) {
+				mobType.ItemBoots = new ItemStack(configFile.getInt(mobName + ".ItemBoots"));// CraftItemStack.asNMSCopy(new
+				                                                                             // ItemStack(configFile.getInt(mobName+".ItemBoots"))).getItem();
+			}
+			
+			if (configFile.contains(mobName + ".ItemLeggings")) {
+				mobType.ItemLeggings = new ItemStack(configFile.getInt(mobName + ".ItemLeggings"));// CraftItemStack.asNMSCopy(new
+				                                                                                   // ItemStack(configFile.getInt(mobName+".ItemLeggings"))).getItem();
+			}
+			
+			if (configFile.contains(mobName + ".ItemHand")) {
+				mobType.ItemHand = new ItemStack(configFile.getInt(mobName + ".ItemHand"));// CraftItemStack.asNMSCopy(new
+				                                                                           // ItemStack(configFile.getInt(mobName+".ItemHand"))).getItem();
+			}
+			
+			// Load different Mob options
+			if (configFile.contains(mobName + ".isWitherSkeleton")) {
+				mobType.isWitherSkeleton = configFile.getBoolean(mobName + ".isWitherSkeleton");
+			}
+			
+			if (configFile.contains(mobName + ".ocelotType")) {
+				mobType.ocelotType = configFile.getString(mobName + ".ocelotType");
+			}
+			
+			// Drops
+			ConfigurationSection configSetion = configFile.getConfigurationSection(mobName + ".drops");
+			if (configSetion != null) {
+				Set<String> list = configSetion.getKeys(false);
+				for (String dropPath : list) {
+					ItemStack item = null;
+					ItemMeta itemMeta = null;
+					int chance = 100;
 					
-					// Load MaxHealth
-					if (configFile.contains(mobName + ".MaxHealth")) {
-						mobType.maxHealth = configFile.getInt(mobName + ".MaxHealth");
+					/* Item Stack */
+					Material mat = Material.getMaterial(configSetion.getInt(dropPath + ".id"));
+					int amount = 1;
+					short data = 0;
+					
+					if (configSetion.contains(dropPath + ".amount")) {
+						amount = configSetion.getInt(dropPath + ".amount");
+					}
+					if (configSetion.contains(dropPath + ".data")) {
+						data = Short.parseShort(configSetion.getString(dropPath + ".data"));
 					}
 					
-					// Load Items
-					if (configFile.contains(mobName + ".ItemHelmet")) {
-						mobType.ItemHelmet = new ItemStack(configFile.getInt(mobName + ".ItemHelmet"));// CraftItemStack.asNMSCopy(new
-						                                                                               // ItemStack(configFile.getInt(mobName+".ItemHelmet"))).getItem();
-					}
+					item = new ItemStack(mat, amount, data);
+					itemMeta = item.getItemMeta();
 					
-					if (configFile.contains(mobName + ".ItemChestplate")) {
-						mobType.ItemChestplate = new ItemStack(configFile.getInt(mobName + ".ItemChestplate"));// CraftItemStack.asNMSCopy(new
-						                                                                                       // ItemStack(configFile.getInt(mobName+".ItemChestplate"))).getItem();
-					}
-					
-					if (configFile.contains(mobName + ".ItemBoots")) {
-						mobType.ItemBoots = new ItemStack(configFile.getInt(mobName + ".ItemBoots"));// CraftItemStack.asNMSCopy(new
-						                                                                             // ItemStack(configFile.getInt(mobName+".ItemBoots"))).getItem();
-					}
-					
-					if (configFile.contains(mobName + ".ItemLeggings")) {
-						mobType.ItemLeggings = new ItemStack(configFile.getInt(mobName + ".ItemLeggings"));// CraftItemStack.asNMSCopy(new
-						                                                                                   // ItemStack(configFile.getInt(mobName+".ItemLeggings"))).getItem();
-					}
-					
-					if (configFile.contains(mobName + ".ItemHand")) {
-						mobType.ItemHand = new ItemStack(configFile.getInt(mobName + ".ItemHand"));// CraftItemStack.asNMSCopy(new
-						                                                                           // ItemStack(configFile.getInt(mobName+".ItemHand"))).getItem();
-					}
-					
-					// Load different Mob options
-					if (configFile.contains(mobName + ".isWitherSkeleton")) {
-						mobType.isWitherSkeleton = configFile.getBoolean(mobName + ".isWitherSkeleton");
-					}
-					
-					if (configFile.contains(mobName + ".ocelotType")) {
-						mobType.ocelotType = configFile.getString(mobName + ".ocelotType");
-					}
-					
-					// Drops
-					ConfigurationSection configSetion = configFile.getConfigurationSection(mobName + ".drops");
-					if (configSetion != null) {
-						Set<String> list = configSetion.getKeys(false);
-						for (String dropPath : list) {
-							ItemStack item = null;
-							ItemMeta itemMeta = null;
-							int chance = 100;
-							
-							/* Item Stack */
-							Material mat = Material.getMaterial(configSetion.getInt(dropPath + ".id"));
-							int amount = 1;
-							short data = 0;
-							
-							if (configSetion.contains(dropPath + ".amount")) {
-								amount = configSetion.getInt(dropPath + ".amount");
-							}
-							if (configSetion.contains(dropPath + ".data")) {
-								data = Short.parseShort(configSetion.getString(dropPath + ".data"));
-							}
-							
-							item = new ItemStack(mat, amount, data);
-							itemMeta = item.getItemMeta();
-							
-							/* Enchantments */
-							if (configSetion.contains(dropPath + ".enchantments")) {
-								for (String enchantment : configSetion.getStringList(dropPath + ".enchantments")) {
-									String[] splittedEnchantment = enchantment.split(" ");
-									if (Enchantment.getByName(splittedEnchantment[0].toUpperCase()) != null) {
-										if (splittedEnchantment.length > 1) {
-											itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), IntegerUtil.parseInt(splittedEnchantment[1]), true);
-										} else {
-											itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
-										}
-									} else {
-										DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobEnchantment", splittedEnchantment[0]));
-									}
+					/* Enchantments */
+					if (configSetion.contains(dropPath + ".enchantments")) {
+						for (String enchantment : configSetion.getStringList(dropPath + ".enchantments")) {
+							String[] splittedEnchantment = enchantment.split(" ");
+							if (Enchantment.getByName(splittedEnchantment[0].toUpperCase()) != null) {
+								if (splittedEnchantment.length > 1) {
+									itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), IntegerUtil.parseInt(splittedEnchantment[1]), true);
+								} else {
+									itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
 								}
+							} else {
+								DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobEnchantment", splittedEnchantment[0]));
 							}
-							
-							/* Item Name */
-							if (configSetion.contains(dropPath + ".name")) {
-								itemMeta.setDisplayName(configSetion.getString(dropPath + ".name"));
-							}
-							
-							/* Item Lore */
-							if (configSetion.contains(dropPath + ".lore")) {
-								String[] lore = configSetion.getString(dropPath + ".lore").split("//");
-								itemMeta.setLore(Arrays.asList(lore));
-							}
-							
-							/* Drop chance */
-							if (configSetion.contains(dropPath + ".chance")) {
-								chance = configSetion.getInt(dropPath + ".chance");
-							}
-							
-							/* Add Item to the drops map */
-							item.setItemMeta(itemMeta);
-							mobType.getDrops().put(item, chance);
 						}
 					}
 					
-				} else {
-					DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobType", configFile.getString(mobName + ".Type")));
+					/* Item Name */
+					if (configSetion.contains(dropPath + ".name")) {
+						itemMeta.setDisplayName(configSetion.getString(dropPath + ".name"));
+					}
+					
+					/* Item Lore */
+					if (configSetion.contains(dropPath + ".lore")) {
+						String[] lore = configSetion.getString(dropPath + ".lore").split("//");
+						itemMeta.setLore(Arrays.asList(lore));
+					}
+					
+					/* Drop chance */
+					if (configSetion.contains(dropPath + ".chance")) {
+						chance = configSetion.getInt(dropPath + ".chance");
+					}
+					
+					/* Add Item to the drops map */
+					item.setItemMeta(itemMeta);
+					mobType.getDrops().put(item, chance);
 				}
 			}
 		}
+		
 		return set;
 	}
 	

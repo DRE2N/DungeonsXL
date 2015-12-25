@@ -14,27 +14,29 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 public class InteractSign extends DSign {
-	public static String name = "Interact";
-	public String buildPermissions = "dxl.sign.trigger";
-	public boolean onDungeonInit = true;
 	
-	public InteractSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	private DSignType type = DSignTypeDefault.INTERACT;
+	
+	public InteractSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
 		Set<Integer> used = new HashSet<Integer>();
-		for (Block block : EditWorld.get(getSign().getLocation().getWorld()).sign) {
-			if (block != null) {
-				if ( !block.getChunk().isLoaded()) {
-					block.getChunk().load();
-				}
-				if (block.getState() instanceof Sign) {
-					Sign rsign = (Sign) block.getState();
-					if (rsign.getLine(0).equalsIgnoreCase("[" + name + "]")) {
-						used.add(IntegerUtil.parseInt(rsign.getLine(1)));
-					}
+		for (Block block : EditWorld.get(getSign().getLocation().getWorld()).getSign()) {
+			if (block == null) {
+				continue;
+			}
+			
+			if ( !block.getChunk().isLoaded()) {
+				block.getChunk().load();
+			}
+			
+			if (block.getState() instanceof Sign) {
+				Sign rsign = (Sign) block.getState();
+				if (rsign.getLine(0).equalsIgnoreCase("[" + type.getName() + "]")) {
+					used.add(IntegerUtil.parseInt(rsign.getLine(1)));
 				}
 			}
 		}
@@ -46,10 +48,12 @@ public class InteractSign extends DSign {
 					id++;
 				}
 			}
+			
 		} else {
 			id = IntegerUtil.parseInt(getSign().getLine(1));
 			if (id == 0 || used.contains(id)) {
 				return false;
+				
 			} else {
 				return true;
 			}
@@ -62,7 +66,7 @@ public class InteractSign extends DSign {
 	
 	@Override
 	public void onInit() {
-		InteractTrigger trigger = InteractTrigger.getOrCreate(IntegerUtil.parseInt(getSign().getLine(1)), getSign().getBlock(), getGWorld());
+		InteractTrigger trigger = InteractTrigger.getOrCreate(IntegerUtil.parseInt(getSign().getLine(1)), getSign().getBlock(), getGameWorld());
 		if (trigger != null) {
 			trigger.addListener(this);
 			addTrigger(trigger);
@@ -81,13 +85,8 @@ public class InteractSign extends DSign {
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
-	}
-	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
+	public DSignType getType() {
+		return type;
 	}
 	
 	public class UpdateTask implements Runnable {
@@ -100,4 +99,5 @@ public class InteractSign extends DSign {
 			getSign().update();
 		}
 	}
+	
 }

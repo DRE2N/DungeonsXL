@@ -22,7 +22,7 @@ public class DGroup {
 	private String dungeonName;
 	private String mapName;
 	private List<String> unplayedFloors = new ArrayList<String>();
-	private GameWorld gWorld;
+	private GameWorld gameWorld;
 	private boolean playing;
 	private int floorCount;
 	
@@ -34,6 +34,7 @@ public class DGroup {
 			this.dungeonName = identifier;
 			this.mapName = plugin.getDungeons().getDungeon(dungeonName).getConfig().getStartFloor();
 			this.unplayedFloors = plugin.getDungeons().getDungeon(dungeonName).getConfig().getFloors();
+			
 		} else {
 			this.mapName = identifier;
 		}
@@ -84,18 +85,18 @@ public class DGroup {
 	}
 	
 	/**
-	 * @return the gWorld
+	 * @return the gameWorld
 	 */
 	public GameWorld getGWorld() {
-		return gWorld;
+		return gameWorld;
 	}
 	
 	/**
-	 * @param gWorld
-	 * the gWorld to set
+	 * @param gameWorld
+	 * the gameWorld to set
 	 */
-	public void setGWorld(GameWorld gWorld) {
-		this.gWorld = gWorld;
+	public void setGWorld(GameWorld gameWorld) {
+		this.gameWorld = gameWorld;
 	}
 	
 	/**
@@ -212,7 +213,7 @@ public class DGroup {
 	
 	public void startGame() {
 		playing = true;
-		gWorld.startGame();
+		gameWorld.startGame();
 		floorCount++;
 		
 		double fee;
@@ -244,19 +245,19 @@ public class DGroup {
 	// Statics
 	
 	public static DGroup get(Player player) {
-		for (DGroup dgroup : plugin.getDGroups()) {
-			if (dgroup.getPlayers().contains(player)) {
-				return dgroup;
+		for (DGroup dGroup : plugin.getDGroups()) {
+			if (dGroup.getPlayers().contains(player)) {
+				return dGroup;
 			}
 		}
 		
 		return null;
 	}
 	
-	public static DGroup get(GameWorld gWorld) {
-		for (DGroup dgroup : plugin.getDGroups()) {
-			if (dgroup.getGWorld() == gWorld) {
-				return dgroup;
+	public static DGroup get(GameWorld gameWorld) {
+		for (DGroup dGroup : plugin.getDGroups()) {
+			if (dGroup.getGWorld() == gameWorld) {
+				return dGroup;
 			}
 		}
 		
@@ -264,9 +265,9 @@ public class DGroup {
 	}
 	
 	public static void leaveGroup(Player player) {
-		for (DGroup dgroup : plugin.getDGroups()) {
-			if (dgroup.getPlayers().contains(player)) {
-				dgroup.getPlayers().remove(player);
+		for (DGroup dGroup : plugin.getDGroups()) {
+			if (dGroup.getPlayers().contains(player)) {
+				dGroup.getPlayers().remove(player);
 			}
 		}
 	}

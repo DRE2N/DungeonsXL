@@ -90,17 +90,17 @@ public class PlayCommand extends DCommand {
 			return;
 		}
 		
-		DGroup dgroup = new DGroup(player, identifier, multiFloor);
+		DGroup dGroup = new DGroup(player, identifier, multiFloor);
 		
-		if (dgroup.getGWorld() == null) {
-			dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
+		if (dGroup.getGWorld() == null) {
+			dGroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
 		}
 		
-		if (dgroup.getGWorld().locLobby == null) {
-			new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().world.getSpawnLocation(), false);
+		if (dGroup.getGWorld().getLocLobby() == null) {
+			new DPlayer(player, dGroup.getGWorld().getWorld(), dGroup.getGWorld().getWorld().getSpawnLocation(), false);
 			
 		} else {
-			new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
+			new DPlayer(player, dGroup.getGWorld().getWorld(), dGroup.getGWorld().getLocLobby(), false);
 		}
 	}
 	

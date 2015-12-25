@@ -1,3 +1,6 @@
+/* TODO: Cleanup - Overhaul DPlayer, GameWorld, GameChest & Listeners - MiscUtil - FileUtil -
+ * Variable names - Triggers */
+
 package io.github.dre2n.dungeonsxl;
 
 import io.github.dre2n.dungeonsxl.command.DCommands;
@@ -20,6 +23,7 @@ import io.github.dre2n.dungeonsxl.listener.WorldListener;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
+import io.github.dre2n.dungeonsxl.sign.DSigns;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil.Internals;
@@ -31,7 +35,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -49,6 +52,7 @@ public class DungeonsXL extends JavaPlugin {
 	private DMessages dMessages;
 	private VersionUtil versionUtil;
 	private DCommands dCommands;
+	private DSigns dSigns;
 	private Dungeons dungeons;
 	
 	private CopyOnWriteArrayList<Player> chatSpyers = new CopyOnWriteArrayList<Player>();
@@ -67,15 +71,14 @@ public class DungeonsXL extends JavaPlugin {
 		getDataFolder().mkdir();
 		
 		// Load Language
-		dMessages = new DMessages(new File(plugin.getDataFolder(), "languages/en.yml"));
-		
+		loadDMessages(new File(plugin.getDataFolder(), "languages/en.yml"));
 		// Load Config
-		mainConfig = new MainConfig(new File(plugin.getDataFolder(), "config.yml"));
-		
+		loadMainConfig(new File(plugin.getDataFolder(), "config.yml"));
 		// Load Language 2
 		loadDMessages(new File(plugin.getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
 		loadVersionUtil();
 		loadDCommands();
+		loadDSigns();
 		loadDungeons();
 		
 		// InitFolders
@@ -88,11 +91,11 @@ public class DungeonsXL extends JavaPlugin {
 		loadEconomyProvider();
 		
 		getCommand("dungeonsxl").setExecutor(new CommandListener());
-		Bukkit.getServer().getPluginManager().registerEvents(new EntityListener(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new BlockListener(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new WorldListener(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new HangingListener(), this);
+		getServer().getPluginManager().registerEvents(new EntityListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+		getServer().getPluginManager().registerEvents(new BlockListener(), this);
+		getServer().getPluginManager().registerEvents(new WorldListener(), this);
+		getServer().getPluginManager().registerEvents(new HangingListener(), this);
 		
 		// Load All
 		loadAll();
@@ -167,14 +170,14 @@ public class DungeonsXL extends JavaPlugin {
 			@Override
 			public void run() {
 				for (GameWorld gworld : gameWorlds) {
-					if (gworld.world.getPlayers().isEmpty()) {
-						if (DPlayer.get(gworld.world).isEmpty()) {
+					if (gworld.getWorld().getPlayers().isEmpty()) {
+						if (DPlayer.get(gworld.getWorld()).isEmpty()) {
 							gworld.delete();
 						}
 					}
 				}
 				for (EditWorld eworld : editWorlds) {
-					if (eworld.world.getPlayers().isEmpty()) {
+					if (eworld.getWorld().getPlayers().isEmpty()) {
 						eworld.delete();
 					}
 				}
@@ -208,6 +211,7 @@ public class DungeonsXL extends JavaPlugin {
 		
 		try {
 			configFile.save(file);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -243,6 +247,7 @@ public class DungeonsXL extends JavaPlugin {
 				}
 				
 				FileUtil.removeDirectory(file);
+				
 			} else if (file.getName().contains("DXL_Game_") && file.isDirectory()) {
 				FileUtil.removeDirectory(file);
 			}
@@ -276,6 +281,7 @@ public class DungeonsXL extends JavaPlugin {
 					this.economyProvider = economyProvider.getProvider();
 				}
 			}
+			
 		} catch (NoClassDefFoundError error) {
 			getLogger().info("Could not hook into Vault to register an economy provider!");
 		}
@@ -297,6 +303,7 @@ public class DungeonsXL extends JavaPlugin {
 			if (permissionProvider != null) {
 				this.permissionProvider = permissionProvider.getProvider();
 			}
+			
 		} catch (NoClassDefFoundError error) {
 			getLogger().info("Could not hook into Vault to register a permission provider!");
 		}
@@ -370,6 +377,20 @@ public class DungeonsXL extends JavaPlugin {
 	 */
 	public void loadDCommands() {
 		dCommands = new DCommands();
+	}
+	
+	/**
+	 * @return the dSigns
+	 */
+	public DSigns getDSigns() {
+		return dSigns;
+	}
+	
+	/**
+	 * load / reload a new instance of Dungeons
+	 */
+	public void loadDSigns() {
+		dSigns = new DSigns();
 	}
 	
 	/**

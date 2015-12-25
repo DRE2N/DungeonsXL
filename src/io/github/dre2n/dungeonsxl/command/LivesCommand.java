@@ -39,7 +39,7 @@ public class LivesCommand extends DCommand {
 		
 		DPlayer dPlayer = DPlayer.get(player);
 		if (dPlayer != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Lives").replaceAll("v1", player.getName()).replaceAll("v2", String.valueOf(dPlayer.lives)));
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Lives").replaceAll("v1", player.getName()).replaceAll("v2", String.valueOf(dPlayer.getLives())));
 			
 		} else {
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));

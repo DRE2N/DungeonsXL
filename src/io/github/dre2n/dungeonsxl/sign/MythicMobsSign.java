@@ -17,9 +17,7 @@ import org.bukkit.entity.Player;
 
 public class MythicMobsSign extends DSign {
 	
-	public static String name = "MythicMobs";
-	public String buildPermissions = "dxl.sign.mob";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.MYTHIC_MOBS;
 	
 	// Variables
 	private String mob;
@@ -33,23 +31,28 @@ public class MythicMobsSign extends DSign {
 	private LivingEntity mythicMob;
 	private ArrayList<Entity> mythicMobs = new ArrayList<Entity>();
 	
-	public MythicMobsSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public MythicMobsSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
 		String lines[] = getSign().getLines();
-		if ( !lines[1].equals("") && !lines[2].equals("")) {
-			if (lines[1] != null) {
-				String[] atributes = lines[2].split(",");
-				if (atributes.length == 2) {
-					return true;
-				}
-			}
+		if (lines[1].equals("") || lines[2].equals("")) {
+			return false;
 		}
 		
-		return false;
+		if (lines[1] == null) {
+			return false;
+		}
+		
+		String[] atributes = lines[2].split(",");
+		if (atributes.length == 2) {
+			return true;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
@@ -58,11 +61,11 @@ public class MythicMobsSign extends DSign {
 		if ( !lines[1].equals("") && !lines[2].equals("")) {
 			String mob = lines[1];
 			if (mob != null) {
-				String[] atributes = lines[2].split(",");
-				if (atributes.length == 2) {
+				String[] attributes = lines[2].split(",");
+				if (attributes.length == 2) {
 					this.mob = mob;
-					maxinterval = IntegerUtil.parseInt(atributes[0]);
-					amount = IntegerUtil.parseInt(atributes[1]);
+					maxinterval = IntegerUtil.parseInt(attributes[0]);
+					amount = IntegerUtil.parseInt(attributes[1]);
 				}
 			}
 		}
@@ -73,30 +76,36 @@ public class MythicMobsSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		if (initialized && !active) {
-			MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
-			
-			taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, scheduler, 0L, 20L);
-			
-			active = true;
+		if ( !initialized || active) {
+			return;
 		}
+		
+		MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
+		
+		taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, scheduler, 0L, 20L);
+		
+		active = true;
 	}
 	
 	@Override
 	public void onDisable() {
-		if (initialized && active) {
-			killTask();
-			interval = 0;
-			active = false;
+		if ( !initialized || !active) {
+			return;
 		}
+		
+		killTask();
+		interval = 0;
+		active = false;
 	}
 	
 	public void killTask() {
-		if (initialized && active) {
-			if (taskId != -1) {
-				plugin.getServer().getScheduler().cancelTask(taskId);
-				taskId = -1;
-			}
+		if ( !initialized || !active) {
+			return;
+		}
+		
+		if (taskId != -1) {
+			plugin.getServer().getScheduler().cancelTask(taskId);
+			taskId = -1;
 		}
 	}
 	
@@ -111,20 +120,20 @@ public class MythicMobsSign extends DSign {
 		public void run() {
 			if (sign.interval <= 0) {
 				World world = sign.getSign().getWorld();
-				GameWorld gWorld = GameWorld.get(world);
+				GameWorld gameWorld = GameWorld.get(world);
 				
-				if (gWorld != null) {
+				if (gameWorld != null) {
 					spawnLoc = sign.getSign().getLocation().add(0.5, 0, 0.5);
 					double x = spawnLoc.getX();
 					double y = spawnLoc.getY();
 					double z = spawnLoc.getZ();
 					
-					String command = "mm mobs spawn " + mob + " " + amount + " DXL_Game_" + gWorld.id + "," + x + "," + y + "," + z;
+					String command = "mm mobs spawn " + mob + " " + amount + " DXL_Game_" + gameWorld.getId() + "," + x + "," + y + "," + z;
 					Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
 					
 					setMythicMobs();
 					if (mythicMob != null) {
-						new DMob(mythicMob, sign.getGWorld(), null, mob);
+						new DMob(mythicMob, sign.getGameWorld(), null, mob);
 					}
 					
 					// Set the amount
@@ -146,16 +155,6 @@ public class MythicMobsSign extends DSign {
 		}
 	}
 	
-	@Override
-	public String getPermissions() {
-		return buildPermissions;
-	}
-	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
-	
 	private void setMythicMobs() {
 		for (Entity entity : spawnLoc.getChunk().getEntities()) {
 			if (entity.getLocation().getX() >= spawnLoc.getX() - 1 && entity.getLocation().getX() <= spawnLoc.getX() + 1 && entity.getLocation().getY() >= spawnLoc.getY() - 1
@@ -163,9 +162,14 @@ public class MythicMobsSign extends DSign {
 			        && !mythicMobs.contains(entity) && entity.isCustomNameVisible() && !(entity instanceof Player)) {
 				mythicMob = (LivingEntity) entity;
 				mythicMobs.add(entity);
-				org.bukkit.Bukkit.broadcastMessage("[DXL Debug] MythicMob counter: " + mythicMobs.size());
 				return;
 			}
 		}
 	}
+	
+	@Override
+	public DSignType getType() {
+		return type;
+	}
+	
 }

@@ -8,12 +8,10 @@ import org.bukkit.block.Sign;
 
 public class PlaceSign extends DSign {
 	
-	public static String name = "Place";
-	public String buildPermissions = "dxl.sign.place";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.PLACE;
 	
-	public PlaceSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public PlaceSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
@@ -24,17 +22,13 @@ public class PlaceSign extends DSign {
 	@Override
 	public void onInit() {
 		String lines[] = getSign().getLines();
-		getGWorld().placeableBlocks.add(new GamePlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
+		getGameWorld().getPlaceableBlocks().add(new GamePlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
 		getSign().getBlock().setType(Material.AIR);
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

@@ -39,22 +39,22 @@ public class GameWorld {
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Variables placeable
-	public boolean isTutorial;
+	private boolean isTutorial;
 	
-	public CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks = new CopyOnWriteArrayList<GamePlaceableBlock>();
-	public World world;
-	public String dungeonname;
-	public Location locLobby;
-	public Location locStart;
-	public boolean isPlaying = false;
-	public int id;
-	public CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
-	public CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<Chunk>();
+	private CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks = new CopyOnWriteArrayList<GamePlaceableBlock>();
+	private World world;
+	private String mapName;
+	private Location locLobby;
+	private Location locStart;
+	private boolean isPlaying = false;
+	private int id;
+	private CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
+	private CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<Chunk>();
 	
-	public CopyOnWriteArrayList<Sign> signClass = new CopyOnWriteArrayList<Sign>();
-	public CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<DMob>();
-	public CopyOnWriteArrayList<GameChest> gameChests = new CopyOnWriteArrayList<GameChest>();
-	public CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<DSign>();
+	private CopyOnWriteArrayList<Sign> signClass = new CopyOnWriteArrayList<Sign>();
+	private CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<DMob>();
+	private CopyOnWriteArrayList<GameChest> gameChests = new CopyOnWriteArrayList<GameChest>();
+	private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<DSign>();
 	private WorldConfig worldConfig;
 	
 	public GameWorld() {
@@ -66,8 +66,8 @@ public class GameWorld {
 		while (id == -1) {
 			i++;
 			boolean exist = false;
-			for (GameWorld gWorld : plugin.getGameWorlds()) {
-				if (gWorld.id == i) {
+			for (GameWorld gameWorld : plugin.getGameWorlds()) {
+				if (gameWorld.id == i) {
 					exist = true;
 					break;
 				}
@@ -90,7 +90,7 @@ public class GameWorld {
 		
 		for (DSign dSign : dSigns) {
 			if (dSign != null) {
-				if ( !dSign.isOnDungeonInit()) {
+				if ( !dSign.getType().isOnDungeonInit()) {
 					dSign.onInit();
 				}
 			}
@@ -111,8 +111,218 @@ public class GameWorld {
 	
 	public void msg(String msg) {
 		for (DPlayer dplayer : DPlayer.get(world)) {
-			MessageUtil.sendMessage(dplayer.player, msg);
+			MessageUtil.sendMessage(dplayer.getPlayer(), msg);
 		}
+	}
+	
+	/**
+	 * @return the isTutorial
+	 */
+	public boolean isTutorial() {
+		return isTutorial;
+	}
+	
+	/**
+	 * @param isTutorial
+	 * the isTutorial to set
+	 */
+	public void setTutorial(boolean isTutorial) {
+		this.isTutorial = isTutorial;
+	}
+	
+	/**
+	 * @return the placeableBlocks
+	 */
+	public CopyOnWriteArrayList<GamePlaceableBlock> getPlaceableBlocks() {
+		return placeableBlocks;
+	}
+	
+	/**
+	 * @param placeableBlocks
+	 * the placeableBlocks to set
+	 */
+	public void setPlaceableBlocks(CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks) {
+		this.placeableBlocks = placeableBlocks;
+	}
+	
+	/**
+	 * @return the world
+	 */
+	public World getWorld() {
+		return world;
+	}
+	
+	/**
+	 * @param world
+	 * the world to set
+	 */
+	public void setWorld(World world) {
+		this.world = world;
+	}
+	
+	/**
+	 * @return the mapName
+	 */
+	public String getMapName() {
+		return mapName;
+	}
+	
+	/**
+	 * @param mapName
+	 * the mapName to set
+	 */
+	public void setMapName(String mapName) {
+		this.mapName = mapName;
+	}
+	
+	/**
+	 * @return the locLobby
+	 */
+	public Location getLocLobby() {
+		return locLobby;
+	}
+	
+	/**
+	 * @param locLobby
+	 * the locLobby to set
+	 */
+	public void setLocLobby(Location locLobby) {
+		this.locLobby = locLobby;
+	}
+	
+	/**
+	 * @return the locStart
+	 */
+	public Location getLocStart() {
+		return locStart;
+	}
+	
+	/**
+	 * @param locStart
+	 * the locStart to set
+	 */
+	public void setLocStart(Location locStart) {
+		this.locStart = locStart;
+	}
+	
+	/**
+	 * @return the isPlaying
+	 */
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+	
+	/**
+	 * @param isPlaying
+	 * the isPlaying to set
+	 */
+	public void setPlaying(boolean isPlaying) {
+		this.isPlaying = isPlaying;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * @param id
+	 * the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * @return the secureObjects
+	 */
+	public CopyOnWriteArrayList<Material> getSecureObjects() {
+		return secureObjects;
+	}
+	
+	/**
+	 * @param secureObjects
+	 * the secureObjects to set
+	 */
+	public void setSecureObjects(CopyOnWriteArrayList<Material> secureObjects) {
+		this.secureObjects = secureObjects;
+	}
+	
+	/**
+	 * @return the loadedChunks
+	 */
+	public CopyOnWriteArrayList<Chunk> getLoadedChunks() {
+		return loadedChunks;
+	}
+	
+	/**
+	 * @param loadedChunks
+	 * the loadedChunks to set
+	 */
+	public void setLoadedChunks(CopyOnWriteArrayList<Chunk> loadedChunks) {
+		this.loadedChunks = loadedChunks;
+	}
+	
+	/**
+	 * @return the signClass
+	 */
+	public CopyOnWriteArrayList<Sign> getSignClass() {
+		return signClass;
+	}
+	
+	/**
+	 * @param signClass
+	 * the signClass to set
+	 */
+	public void setSignClass(CopyOnWriteArrayList<Sign> signClass) {
+		this.signClass = signClass;
+	}
+	
+	/**
+	 * @return the dMobs
+	 */
+	public CopyOnWriteArrayList<DMob> getdMobs() {
+		return dMobs;
+	}
+	
+	/**
+	 * @param dMobs
+	 * the dMobs to set
+	 */
+	public void setdMobs(CopyOnWriteArrayList<DMob> dMobs) {
+		this.dMobs = dMobs;
+	}
+	
+	/**
+	 * @return the gameChests
+	 */
+	public CopyOnWriteArrayList<GameChest> getGameChests() {
+		return gameChests;
+	}
+	
+	/**
+	 * @param gameChests
+	 * the gameChests to set
+	 */
+	public void setGameChests(CopyOnWriteArrayList<GameChest> gameChests) {
+		this.gameChests = gameChests;
+	}
+	
+	/**
+	 * @return the dSigns
+	 */
+	public CopyOnWriteArrayList<DSign> getdSigns() {
+		return dSigns;
+	}
+	
+	/**
+	 * @param dSigns
+	 * the dSigns to set
+	 */
+	public void setdSigns(CopyOnWriteArrayList<DSign> dSigns) {
+		this.dSigns = dSigns;
 	}
 	
 	/**
@@ -147,9 +357,9 @@ public class GameWorld {
 	// Statics
 	
 	public static GameWorld get(World world) {
-		for (GameWorld gWorld : plugin.getGameWorlds()) {
-			if (gWorld.world.equals(world)) {
-				return gWorld;
+		for (GameWorld gameWorld : plugin.getGameWorlds()) {
+			if (gameWorld.world.equals(world)) {
+				return gameWorld;
 			}
 		}
 		
@@ -157,8 +367,8 @@ public class GameWorld {
 	}
 	
 	public static void deleteAll() {
-		for (GameWorld gWorld : plugin.getGameWorlds()) {
-			gWorld.delete();
+		for (GameWorld gameWorld : plugin.getGameWorlds()) {
+			gameWorld.delete();
 		}
 	}
 	
@@ -197,7 +407,7 @@ public class GameWorld {
 		
 		WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + dungeon, "config.yml"));
 		
-		if (plugin.getMainConfig().enableEconomy()) {
+		if (plugin.getEconomyProvider() != null) {
 			if ( !(DungeonsXL.getPlugin().getEconomyProvider().getBalance(player) >= worldConfig.getFee())) {
 				return false;
 			}
@@ -289,46 +499,46 @@ public class GameWorld {
 		File file = new File(plugin.getDataFolder(), "/maps/" + name);
 		
 		if (file.exists()) {
-			GameWorld gWorld = new GameWorld();
-			gWorld.dungeonname = name;
+			GameWorld gameWorld = new GameWorld();
+			gameWorld.mapName = name;
 			
 			// Unload empty eworlds
 			for (EditWorld eworld : plugin.getEditWorlds()) {
-				if (eworld.world.getPlayers().isEmpty()) {
+				if (eworld.getWorld().getPlayers().isEmpty()) {
 					eworld.delete();
 				}
 			}
 			
 			// Config einlesen
-			gWorld.worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + gWorld.dungeonname, "config.yml"));
+			gameWorld.worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName, "config.yml"));
 			
 			// Secure Objects
-			gWorld.secureObjects = gWorld.worldConfig.getSecureObjects();
+			gameWorld.secureObjects = gameWorld.worldConfig.getSecureObjects();
 			
 			// World
-			FileUtil.copyDirectory(file, new File("DXL_Game_" + gWorld.id));
+			FileUtil.copyDirectory(file, new File("DXL_Game_" + gameWorld.id));
 			
 			// Id File
-			File idFile = new File("DXL_Game_" + gWorld.id + "/.id_" + name);
+			File idFile = new File("DXL_Game_" + gameWorld.id + "/.id_" + name);
 			try {
 				idFile.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
-			gWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + gWorld.id));
+			gameWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + gameWorld.id));
 			
 			ObjectInputStream os;
 			try {
-				os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + gWorld.dungeonname + "/DXLData.data")));
+				os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName + "/DXLData.data")));
 				
 				int length = os.readInt();
 				for (int i = 0; i < length; i++) {
 					int x = os.readInt();
 					int y = os.readInt();
 					int z = os.readInt();
-					Block block = gWorld.world.getBlockAt(x, y, z);
-					gWorld.checkSign(block);
+					Block block = gameWorld.world.getBlockAt(x, y, z);
+					gameWorld.checkSign(block);
 				}
 				
 				os.close();
@@ -338,16 +548,16 @@ public class GameWorld {
 				e.printStackTrace();
 			}
 			
-			return gWorld;
+			return gameWorld;
 		}
 		
 		return null;
 	}
 	
 	public static void update() {
-		for (GameWorld gWorld : plugin.getGameWorlds()) {
+		for (GameWorld gameWorld : plugin.getGameWorlds()) {
 			// Update Spiders
-			for (LivingEntity mob : gWorld.world.getLivingEntities()) {
+			for (LivingEntity mob : gameWorld.world.getLivingEntities()) {
 				if (mob.getType() == EntityType.SPIDER || mob.getType() == EntityType.CAVE_SPIDER) {
 					Spider spider = (Spider) mob;
 					if (spider.getTarget() != null) {

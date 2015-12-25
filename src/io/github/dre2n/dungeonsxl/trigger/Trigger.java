@@ -28,7 +28,7 @@ public abstract class Trigger {
 		
 		if (type.equalsIgnoreCase("R")) {
 			
-			trigger = RedstoneTrigger.getOrCreate(dsign.getSign(), dsign.getGWorld());
+			trigger = RedstoneTrigger.getOrCreate(dsign.getSign(), dsign.getGameWorld());
 			
 		} else if (type.equalsIgnoreCase("D")) {
 			
@@ -41,25 +41,25 @@ public abstract class Trigger {
 		} else if (type.equalsIgnoreCase("T")) {
 			
 			if (value != null) {
-				trigger = SignTrigger.getOrCreate(IntegerUtil.parseInt(value), dsign.getGWorld());
+				trigger = SignTrigger.getOrCreate(IntegerUtil.parseInt(value), dsign.getGameWorld());
 			}
 			
 		} else if (type.equalsIgnoreCase("I")) {
 			
 			if (value != null) {
-				trigger = InteractTrigger.getOrCreate(IntegerUtil.parseInt(value), dsign.getGWorld());
+				trigger = InteractTrigger.getOrCreate(IntegerUtil.parseInt(value), dsign.getGameWorld());
 			}
 			
 		} else if (type.equalsIgnoreCase("M")) {
 			
 			if (value != null) {
-				trigger = MobTrigger.getOrCreate(value, dsign.getGWorld());
+				trigger = MobTrigger.getOrCreate(value, dsign.getGameWorld());
 			}
 			
 		} else if (type.equalsIgnoreCase("U")) {
 			
 			if (value != null) {
-				trigger = UseItemTrigger.getOrCreate(value, dsign.getGWorld());
+				trigger = UseItemTrigger.getOrCreate(value, dsign.getGameWorld());
 			}
 			
 		}
@@ -68,7 +68,7 @@ public abstract class Trigger {
 	
 	public void addListener(DSign dsign) {
 		if (dsigns.isEmpty()) {
-			register(dsign.getGWorld());
+			register(dsign.getGameWorld());
 		}
 		dsigns.add(dsign);
 	}
@@ -76,7 +76,7 @@ public abstract class Trigger {
 	public void removeListener(DSign dsign) {
 		dsigns.remove(dsign);
 		if (dsigns.isEmpty()) {
-			unregister(dsign.getGWorld());
+			unregister(dsign.getGameWorld());
 		}
 	}
 	

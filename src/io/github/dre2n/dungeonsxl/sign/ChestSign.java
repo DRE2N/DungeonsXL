@@ -8,9 +8,7 @@ import org.bukkit.block.Sign;
 
 public class ChestSign extends DSign {
 	
-	public static String name = "Chest";
-	public String buildPermissions = "dxl.sign.chest";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.CHEST;
 	
 	// Variables
 	private double moneyReward;
@@ -25,6 +23,7 @@ public class ChestSign extends DSign {
 		if (lines[1].equals("")) {
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -34,15 +33,18 @@ public class ChestSign extends DSign {
 		if ( !lines[1].equals("")) {
 			moneyReward = Double.parseDouble(lines[1]);
 		}
+		
 		for (int i = -1; i <= 1; i++) {
 			if (getSign().getBlock().getRelative(i, 0, 0).getType() == Material.CHEST) {
-				new GameChest(getSign().getBlock().getRelative(i, 0, 0), getGWorld(), moneyReward);
+				new GameChest(getSign().getBlock().getRelative(i, 0, 0), getGameWorld(), moneyReward);
 			}
+			
 			if (getSign().getBlock().getRelative(0, 0, i).getType() == Material.CHEST) {
-				new GameChest(getSign().getBlock().getRelative(0, 0, i), getGWorld(), moneyReward);
+				new GameChest(getSign().getBlock().getRelative(0, 0, i), getGameWorld(), moneyReward);
 			}
+			
 			if (getSign().getBlock().getRelative(0, i, 0).getType() == Material.CHEST) {
-				new GameChest(getSign().getBlock().getRelative(0, i, 0), getGWorld(), moneyReward);
+				new GameChest(getSign().getBlock().getRelative(0, i, 0), getGameWorld(), moneyReward);
 			}
 		}
 		
@@ -50,12 +52,8 @@ public class ChestSign extends DSign {
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

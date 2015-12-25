@@ -4,6 +4,8 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,35 +17,38 @@ public abstract class DSign {
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private Sign sign;
-	private GameWorld gWorld;
+	private GameWorld gameWorld;
 	
 	// List of Triggers
 	private Set<Trigger> triggers = new HashSet<Trigger>();
 	
-	public DSign(Sign sign, GameWorld gWorld) {
+	public DSign(Sign sign, GameWorld gameWorld) {
 		this.setSign(sign);
-		this.gWorld = gWorld;
+		this.gameWorld = gameWorld;
 		
 		// Check Trigger
-		if (gWorld != null) {
-			String line3 = sign.getLine(3).replaceAll("\\s", "");
-			String[] triggerTypes = line3.split(",");
+		if (gameWorld == null) {
+			return;
+		}
+		
+		String line3 = sign.getLine(3).replaceAll("\\s", "");
+		String[] triggerTypes = line3.split(",");
+		
+		for (String triggerString : triggerTypes) {
+			if (triggerString.equals("")) {
+				continue;
+			}
 			
-			for (String triggerString : triggerTypes) {
-				if ( !triggerString.equals("")) {
-					
-					String type = triggerString.substring(0, 1);
-					String value = null;
-					if (triggerString.length() > 1) {
-						value = triggerString.substring(1);
-					}
-					
-					Trigger trigger = Trigger.getOrCreate(type, value, this);
-					if (trigger != null) {
-						trigger.addListener(this);
-						addTrigger(trigger);
-					}
-				}
+			String type = triggerString.substring(0, 1);
+			String value = null;
+			if (triggerString.length() > 1) {
+				value = triggerString.substring(1);
+			}
+			
+			Trigger trigger = Trigger.getOrCreate(type, value, this);
+			if (trigger != null) {
+				trigger.addListener(this);
+				addTrigger(trigger);
 			}
 		}
 	}
@@ -64,10 +69,10 @@ public abstract class DSign {
 	}
 	
 	/**
-	 * @return the gWorld
+	 * @return the gameWorld
 	 */
-	public GameWorld getGWorld() {
-		return gWorld;
+	public GameWorld getGameWorld() {
+		return gameWorld;
 	}
 	
 	/**
@@ -94,11 +99,9 @@ public abstract class DSign {
 	}
 	
 	public void onInit() {
-		
 	}
 	
 	public void onTrigger() {
-		
 	}
 	
 	public boolean onPlayerTrigger(Player player) {
@@ -106,7 +109,6 @@ public abstract class DSign {
 	}
 	
 	public void onDisable() {
-		
 	}
 	
 	public void onUpdate() {
@@ -115,12 +117,17 @@ public abstract class DSign {
 				onDisable();
 				return;
 			}
-			if (triggers.size() == 1) {
-				if (trigger.player != null) {
-					if (onPlayerTrigger(trigger.player)) {
-						return;
-					}
-				}
+			
+			if (triggers.size() != 1) {
+				continue;
+			}
+			
+			if (trigger.player == null) {
+				continue;
+			}
+			
+			if (onPlayerTrigger(trigger.player)) {
+				return;
 			}
 		}
 		
@@ -131,83 +138,40 @@ public abstract class DSign {
 		for (Trigger trigger : triggers) {
 			trigger.removeListener(this);
 		}
-		gWorld.dSigns.remove(this);
+		gameWorld.getdSigns().remove(this);
 	}
 	
 	public boolean hasTriggers() {
 		return !triggers.isEmpty();
 	}
 	
-	// TODO: API to add custom signs
-	public static DSign create(Sign sign, GameWorld gWorld) {
+	public static DSign create(Sign sign, GameWorld gameWorld) {
 		String[] lines = sign.getLines();
 		DSign dSign = null;
 		
-		if (lines[0].equalsIgnoreCase("[" + BlockSign.name + "]")) {
-			dSign = new BlockSign(sign, gWorld);
+		for (DSignType type : plugin.getDSigns().getDSigns()) {
+			if ( !lines[0].equalsIgnoreCase("[" + type.getName() + "]")) {
+				continue;
+			}
 			
-		} else if (lines[0].equalsIgnoreCase("[" + CheckpointSign.name + "]")) {
-			dSign = new CheckpointSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + ChestSign.name + "]")) {
-			dSign = new ChestSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + ChunkUpdaterSign.name + "]")) {
-			dSign = new ChunkUpdaterSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + ClassesSign.name + "]")) {
-			dSign = new ClassesSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + CommandSign.name + "]")) {
-			dSign = new CommandSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + EndSign.name + "]")) {
-			dSign = new EndSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + FloorSign.name + "]")) {
-			dSign = new FloorSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + InteractSign.name + "]")) {
-			dSign = new InteractSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + LeaveSign.name + "]")) {
-			dSign = new LeaveSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + LobbySign.name + "]")) {
-			dSign = new LobbySign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + MobSign.name + "]")) {
-			dSign = new MobSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + MsgSign.name + "]")) {
-			dSign = new MsgSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + MythicMobsSign.name + "]")) {
-			dSign = new MythicMobsSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + PlaceSign.name + "]")) {
-			dSign = new PlaceSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + ReadySign.name + "]")) {
-			dSign = new ReadySign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + RedstoneSign.name + "]")) {
-			dSign = new RedstoneSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + SoundMsgSign.name + "]")) {
-			dSign = new SoundMsgSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + StartSign.name + "]")) {
-			dSign = new StartSign(sign, gWorld);
-			
-		} else if (lines[0].equalsIgnoreCase("[" + TriggerSign.name + "]")) {
-			dSign = new TriggerSign(sign, gWorld);
+			try {
+				Constructor<? extends DSign> constructor = type.getHandler().getConstructor(Sign.class, GameWorld.class);
+				dSign = constructor.newInstance(sign, gameWorld);
+				
+			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
+				plugin.getLogger().info("DungeonsXL could not find the handler class of the sign " + type.getName() + ".");
+				if ( !(type instanceof DSignTypeDefault)) {
+					plugin.getLogger().info("Please note that this sign is an unsupported feature added by an addon!");
+				}
+			}
 		}
 		
-		if (dSign != null && gWorld != null) {
-			if (dSign.isOnDungeonInit()) {
-				dSign.onInit();
-			}
+		if ( !(dSign != null && gameWorld != null)) {
+			return dSign;
+		}
+		
+		if (dSign.getType().isOnDungeonInit()) {
+			dSign.onInit();
 		}
 		
 		return dSign;
@@ -217,8 +181,6 @@ public abstract class DSign {
 	
 	public abstract boolean check();
 	
-	public abstract String getPermissions();
-	
-	public abstract boolean isOnDungeonInit();
+	public abstract DSignType getType();
 	
 }

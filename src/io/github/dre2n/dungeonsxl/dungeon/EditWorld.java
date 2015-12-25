@@ -28,14 +28,14 @@ public class EditWorld {
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Variables
-	public World world;
-	public String owner;
-	public String name;
-	public String dungeonname;
-	public int id;
-	public Location lobby;
-	public CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
-	public CopyOnWriteArrayList<Block> sign = new CopyOnWriteArrayList<Block>();
+	private World world;
+	private String owner;
+	private String name;
+	private String mapName;
+	private int id;
+	private Location lobby;
+	private CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
+	private CopyOnWriteArrayList<Block> sign = new CopyOnWriteArrayList<Block>();
 	
 	public EditWorld() {
 		plugin.getEditWorlds().add(this);
@@ -46,8 +46,8 @@ public class EditWorld {
 		while (id == -1) {
 			i++;
 			boolean exist = false;
-			for (EditWorld eworld : plugin.getEditWorlds()) {
-				if (eworld.id == i) {
+			for (EditWorld editWorld : plugin.getEditWorlds()) {
+				if (editWorld.id == i) {
 					exist = true;
 					break;
 				}
@@ -72,7 +72,7 @@ public class EditWorld {
 		world.save();
 		
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(plugin.getDataFolder(), "/maps/" + dungeonname + "/DXLData.data")));
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(plugin.getDataFolder(), "/maps/" + mapName + "/DXLData.data")));
 			out.writeInt(sign.size());
 			for (Block sign : this.sign) {
 				out.writeInt(sign.getX());
@@ -104,8 +104,8 @@ public class EditWorld {
 		
 		plugin.getServer().unloadWorld(world, true);
 		File dir = new File("DXL_Edit_" + id);
-		FileUtil.copyDirectory(dir, new File(plugin.getDataFolder(), "/maps/" + dungeonname));
-		FileUtil.deletenotusingfiles(new File(plugin.getDataFolder(), "/maps/" + dungeonname));
+		FileUtil.copyDirectory(dir, new File(plugin.getDataFolder(), "/maps/" + mapName));
+		FileUtil.deletenotusingfiles(new File(plugin.getDataFolder(), "/maps/" + mapName));
 		FileUtil.removeDirectory(dir);
 	}
 	
@@ -117,17 +117,17 @@ public class EditWorld {
 		}
 		
 		File dir = new File("DXL_Edit_" + id);
-		FileUtil.copyDirectory(dir, new File(plugin.getDataFolder(), "/maps/" + dungeonname));
-		FileUtil.deletenotusingfiles(new File(plugin.getDataFolder(), "/maps/" + dungeonname));
+		FileUtil.copyDirectory(dir, new File(plugin.getDataFolder(), "/maps/" + mapName));
+		FileUtil.deletenotusingfiles(new File(plugin.getDataFolder(), "/maps/" + mapName));
 		plugin.getServer().unloadWorld(world, true);
 		FileUtil.removeDirectory(dir);
 	}
 	
 	// Static
 	public static EditWorld get(World world) {
-		for (EditWorld eworld : plugin.getEditWorlds()) {
-			if (eworld.world.equals(world)) {
-				return eworld;
+		for (EditWorld editWorld : plugin.getEditWorlds()) {
+			if (editWorld.world.equals(world)) {
+				return editWorld;
 			}
 		}
 		
@@ -135,9 +135,9 @@ public class EditWorld {
 	}
 	
 	public static EditWorld get(String name) {
-		for (EditWorld eworld : plugin.getEditWorlds()) {
-			if (eworld.dungeonname.equalsIgnoreCase(name)) {
-				return eworld;
+		for (EditWorld editWorld : plugin.getEditWorlds()) {
+			if (editWorld.mapName.equalsIgnoreCase(name)) {
+				return editWorld;
 			}
 		}
 		
@@ -145,47 +145,47 @@ public class EditWorld {
 	}
 	
 	public static void deleteAll() {
-		for (EditWorld eworld : plugin.getEditWorlds()) {
-			eworld.delete();
+		for (EditWorld editWorld : plugin.getEditWorlds()) {
+			editWorld.delete();
 		}
 	}
 	
 	public static EditWorld load(String name) {
-		for (EditWorld eworld : plugin.getEditWorlds()) {
+		for (EditWorld editWorld : plugin.getEditWorlds()) {
 			
-			if (eworld.dungeonname.equalsIgnoreCase(name)) {
-				return eworld;
+			if (editWorld.mapName.equalsIgnoreCase(name)) {
+				return editWorld;
 			}
 		}
 		
 		File file = new File(plugin.getDataFolder(), "/maps/" + name);
 		
 		if (file.exists()) {
-			EditWorld eworld = new EditWorld();
-			eworld.dungeonname = name;
+			EditWorld editWorld = new EditWorld();
+			editWorld.mapName = name;
 			// World
-			FileUtil.copyDirectory(file, new File("DXL_Edit_" + eworld.id));
+			FileUtil.copyDirectory(file, new File("DXL_Edit_" + editWorld.id));
 			
 			// Id File
-			File idFile = new File("DXL_Edit_" + eworld.id + "/.id_" + name);
+			File idFile = new File("DXL_Edit_" + editWorld.id + "/.id_" + name);
 			try {
 				idFile.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
-			eworld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Edit_" + eworld.id));
+			editWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Edit_" + editWorld.id));
 			
 			try {
-				ObjectInputStream os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder(), "/maps/" + eworld.dungeonname + "/DXLData.data")));
+				ObjectInputStream os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder(), "/maps/" + editWorld.mapName + "/DXLData.data")));
 				int length = os.readInt();
 				for (int i = 0; i < length; i++) {
 					int x = os.readInt();
 					int y = os.readInt();
 					int z = os.readInt();
-					Block block = eworld.world.getBlockAt(x, y, z);
-					eworld.checkSign(block);
-					eworld.sign.add(block);
+					Block block = editWorld.world.getBlockAt(x, y, z);
+					editWorld.checkSign(block);
+					editWorld.sign.add(block);
 				}
 				os.close();
 				
@@ -195,7 +195,7 @@ public class EditWorld {
 				e.printStackTrace();
 			}
 			
-			return eworld;
+			return editWorld;
 		}
 		
 		return null;
@@ -203,8 +203,8 @@ public class EditWorld {
 	
 	public static boolean exist(String name) {
 		// Cheack Loaded EditWorlds
-		for (EditWorld eworld : plugin.getEditWorlds()) {
-			if (eworld.dungeonname.equalsIgnoreCase(name)) {
+		for (EditWorld editWorld : plugin.getEditWorlds()) {
+			if (editWorld.mapName.equalsIgnoreCase(name)) {
 				return true;
 			}
 		}
@@ -221,14 +221,14 @@ public class EditWorld {
 	
 	public void msg(String msg) {
 		for (DPlayer dplayer : DPlayer.get(world)) {
-			MessageUtil.sendMessage(dplayer.player, msg);
+			MessageUtil.sendMessage(dplayer.getPlayer(), msg);
 		}
 	}
 	
 	// Invite
-	public static boolean addInvitedPlayer(String eworldname, UUID uuid) {
-		if (exist(eworldname)) {
-			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + eworldname, "config.yml"));
+	public static boolean addInvitedPlayer(String editWorldname, UUID uuid) {
+		if (exist(editWorldname)) {
+			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldname, "config.yml"));
 			config.addInvitedPlayer(uuid.toString());
 			config.save();
 			return true;
@@ -237,20 +237,19 @@ public class EditWorld {
 		return false;
 	}
 	
-	public static boolean removeInvitedPlayer(String eworldname, UUID uuid, String name) {
-		
-		if (exist(eworldname)) {
-			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + eworldname, "config.yml"));
+	public static boolean removeInvitedPlayer(String editWorldName, UUID uuid, String name) {
+		if (exist(editWorldName)) {
+			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml"));
 			config.removeInvitedPlayers(uuid.toString(), name.toLowerCase());
 			config.save();
 			
 			// Kick Player
-			EditWorld eworld = EditWorld.get(eworldname);
-			if (eworld != null) {
+			EditWorld editWorld = EditWorld.get(editWorldName);
+			if (editWorld != null) {
 				DPlayer player = DPlayer.get(name);
 				
 				if (player != null) {
-					if (eworld.world.getPlayers().contains(player.player)) {
+					if (editWorld.world.getPlayers().contains(player.getPlayer())) {
 						player.leave();
 					}
 				}
@@ -262,16 +261,139 @@ public class EditWorld {
 		return false;
 	}
 	
-	public static boolean isInvitedPlayer(String eworldname, UUID uuid, String name) {
-		if (exist(eworldname)) {
-			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + eworldname, "config.yml"));
-			// get player from both a 0.9.1 and lower and 0.9.2 and higher file
-			if (config.getInvitedPlayers().contains(name.toLowerCase()) || config.getInvitedPlayers().contains(uuid.toString())) {
-				return true;
-			}
+	public static boolean isInvitedPlayer(String editWorldname, UUID uuid, String name) {
+		if ( !exist(editWorldname)) {
+			return false;
 		}
 		
-		return false;
+		WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldname, "config.yml"));
+		// get player from both a 0.9.1 and lower and 0.9.2 and higher file
+		if (config.getInvitedPlayers().contains(name.toLowerCase()) || config.getInvitedPlayers().contains(uuid.toString())) {
+			return true;
+			
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * @return the world
+	 */
+	public World getWorld() {
+		return world;
+	}
+	
+	/**
+	 * @param world
+	 * the world to set
+	 */
+	public void setWorld(World world) {
+		this.world = world;
+	}
+	
+	/**
+	 * @return the owner
+	 */
+	public String getOwner() {
+		return owner;
+	}
+	
+	/**
+	 * @param owner
+	 * the owner to set
+	 */
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @param name
+	 * the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * @return the mapName
+	 */
+	public String getMapName() {
+		return mapName;
+	}
+	
+	/**
+	 * @param mapName
+	 * the mapName to set
+	 */
+	public void setMapName(String mapName) {
+		this.mapName = mapName;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * @param id
+	 * the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * @return the lobby
+	 */
+	public Location getLobby() {
+		return lobby;
+	}
+	
+	/**
+	 * @param lobby
+	 * the lobby to set
+	 */
+	public void setLobby(Location lobby) {
+		this.lobby = lobby;
+	}
+	
+	/**
+	 * @return the invitedPlayers
+	 */
+	public CopyOnWriteArrayList<String> getInvitedPlayers() {
+		return invitedPlayers;
+	}
+	
+	/**
+	 * @param invitedPlayers
+	 * the invitedPlayers to set
+	 */
+	public void setInvitedPlayers(CopyOnWriteArrayList<String> invitedPlayers) {
+		this.invitedPlayers = invitedPlayers;
+	}
+	
+	/**
+	 * @return the sign
+	 */
+	public CopyOnWriteArrayList<Block> getSign() {
+		return sign;
+	}
+	
+	/**
+	 * @param sign
+	 * the sign to set
+	 */
+	public void setSign(CopyOnWriteArrayList<Block> sign) {
+		this.sign = sign;
 	}
 	
 }

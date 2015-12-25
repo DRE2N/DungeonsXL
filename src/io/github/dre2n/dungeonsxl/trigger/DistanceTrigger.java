@@ -31,7 +31,6 @@ public class DistanceTrigger extends Trigger {
 		triggered = true;
 		this.player = player;
 		updateDSigns();
-		
 	}
 	
 	@Override
@@ -53,12 +52,18 @@ public class DistanceTrigger extends Trigger {
 		}
 	}
 	
-	public static void triggerAllInDistance(Player player, GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			for (DistanceTrigger trigger : getTriggersArray(gworld)) {
-				if (player.getLocation().distance(trigger.loc) < trigger.distance) {
-					trigger.onTrigger(player);
-				}
+	public static void triggerAllInDistance(Player player, GameWorld gWorld) {
+		if ( !hasTriggers(gWorld)) {
+			return;
+		}
+		
+		if ( !player.getLocation().getWorld().equals(gWorld.getWorld())) {
+			return;
+		}
+		
+		for (DistanceTrigger trigger : getTriggersArray(gWorld)) {
+			if (player.getLocation().distance(trigger.loc) < trigger.distance) {
+				trigger.onTrigger(player);
 			}
 		}
 	}

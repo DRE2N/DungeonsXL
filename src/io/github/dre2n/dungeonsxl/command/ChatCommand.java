@@ -21,18 +21,18 @@ public class ChatCommand extends DCommand {
 		Player player = (Player) sender;
 		DPlayer dplayer = DPlayer.get(player);
 		
-		if (dplayer != null) {
-			if (dplayer.isInDungeonChat) {
-				dplayer.isInDungeonChat = false;
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chat_NormalChat"));
-				
-			} else {
-				dplayer.isInDungeonChat = true;
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chat_DungeonChat"));
-			}
+		if (dplayer == null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+			return;
+		}
+		
+		if (dplayer.isInDungeonChat()) {
+			dplayer.setInDungeonChat(false);
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chat_NormalChat"));
 			
 		} else {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+			dplayer.setInDungeonChat(true);
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chat_DungeonChat"));
 		}
 	}
 	

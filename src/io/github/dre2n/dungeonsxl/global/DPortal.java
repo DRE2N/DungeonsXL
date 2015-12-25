@@ -31,84 +31,10 @@ public class DPortal {
 	public void create() {
 		player = null;
 		
-		if (block1 != null && block2 != null) {
-			int x1 = block1.getX(), y1 = block1.getY(), z1 = block1.getZ();
-			int x2 = block2.getX(), y2 = block2.getY(), z2 = block2.getZ();
-			int xcount = 0, ycount = 0, zcount = 0;
-			
-			if (x1 > x2) {
-				xcount = -1;
-			} else if (x1 < x2) {
-				xcount = 1;
-			}
-			if (y1 > y2) {
-				ycount = -1;
-			} else if (y1 < y2) {
-				ycount = 1;
-			}
-			if (z1 > z2) {
-				zcount = -1;
-			} else if (z1 < z2) {
-				zcount = 1;
-			}
-			
-			int xx = x1;
-			do {
-				int yy = y1;
-				do {
-					int zz = z1;
-					do {
-						Material type = world.getBlockAt(xx, yy, zz).getType();
-						if (type == Material.AIR || type == Material.WATER || type == Material.STATIONARY_WATER || type == Material.LAVA || type == Material.STATIONARY_LAVA
-						        || type == Material.SAPLING || type == Material.WEB || type == Material.LONG_GRASS || type == Material.DEAD_BUSH || type == Material.PISTON_EXTENSION
-						        || type == Material.YELLOW_FLOWER || type == Material.RED_ROSE || type == Material.BROWN_MUSHROOM || type == Material.RED_MUSHROOM || type == Material.TORCH
-						        || type == Material.FIRE || type == Material.CROPS || type == Material.REDSTONE_WIRE || type == Material.REDSTONE_TORCH_OFF || type == Material.SNOW
-						        || type == Material.REDSTONE_TORCH_ON) {
-							world.getBlockAt(xx, yy, zz).setType(Material.PORTAL);
-						}
-						
-						zz = zz + zcount;
-					} while (zz != z2 + zcount);
-					
-					yy = yy + ycount;
-				} while (yy != y2 + ycount);
-				
-				xx = xx + xcount;
-			} while (xx != x2 + xcount);
-			
-		} else {
+		if (block1 == null || block2 == null) {
 			plugin.getDPortals().remove(this);
+			return;
 		}
-	}
-	
-	public void teleport(Player player) {
-		
-		DGroup dgroup = DGroup.get(player);
-		if (dgroup != null) {
-			if (dgroup.getGWorld() == null) {
-				dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
-			}
-			
-			if (dgroup.getGWorld() != null) {
-				
-				if (dgroup.getGWorld().locLobby == null) {
-					new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().world.getSpawnLocation(), false);
-				} else {
-					new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
-				}
-				
-			} else {
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", DGroup.get(player).getMapName()));
-			}
-			
-		} else {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInGroup"));
-		}
-		
-	}
-	
-	public void delete() {
-		plugin.getDPortals().remove(this);
 		
 		int x1 = block1.getX(), y1 = block1.getY(), z1 = block1.getZ();
 		int x2 = block2.getX(), y2 = block2.getY(), z2 = block2.getZ();
@@ -124,6 +50,80 @@ public class DPortal {
 		} else if (y1 < y2) {
 			ycount = 1;
 		}
+		if (z1 > z2) {
+			zcount = -1;
+		} else if (z1 < z2) {
+			zcount = 1;
+		}
+		
+		int xx = x1;
+		do {
+			int yy = y1;
+			
+			do {
+				int zz = z1;
+				
+				do {
+					Material type = world.getBlockAt(xx, yy, zz).getType();
+					if (type == Material.AIR || type == Material.WATER || type == Material.STATIONARY_WATER || type == Material.LAVA || type == Material.STATIONARY_LAVA || type == Material.SAPLING
+					        || type == Material.WEB || type == Material.LONG_GRASS || type == Material.DEAD_BUSH || type == Material.PISTON_EXTENSION || type == Material.YELLOW_FLOWER
+					        || type == Material.RED_ROSE || type == Material.BROWN_MUSHROOM || type == Material.RED_MUSHROOM || type == Material.TORCH || type == Material.FIRE
+					        || type == Material.CROPS || type == Material.REDSTONE_WIRE || type == Material.REDSTONE_TORCH_OFF || type == Material.SNOW || type == Material.REDSTONE_TORCH_ON) {
+						world.getBlockAt(xx, yy, zz).setType(Material.PORTAL);
+					}
+					
+					zz = zz + zcount;
+				} while (zz != z2 + zcount);
+				
+				yy = yy + ycount;
+			} while (yy != y2 + ycount);
+			
+			xx = xx + xcount;
+		} while (xx != x2 + xcount);
+	}
+	
+	public void teleport(Player player) {
+		DGroup dgroup = DGroup.get(player);
+		
+		if (dgroup == null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInGroup"));
+		}
+		
+		if (dgroup.getGWorld() == null) {
+			dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
+		}
+		
+		if (dgroup.getGWorld() == null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", DGroup.get(player).getMapName()));
+		}
+		
+		if (dgroup.getGWorld().getLocLobby() == null) {
+			new DPlayer(player, dgroup.getGWorld().getWorld(), dgroup.getGWorld().getWorld().getSpawnLocation(), false);
+			
+		} else {
+			new DPlayer(player, dgroup.getGWorld().getWorld(), dgroup.getGWorld().getLocLobby(), false);
+		}
+	}
+	
+	public void delete() {
+		plugin.getDPortals().remove(this);
+		
+		int x1 = block1.getX(), y1 = block1.getY(), z1 = block1.getZ();
+		int x2 = block2.getX(), y2 = block2.getY(), z2 = block2.getZ();
+		int xcount = 0, ycount = 0, zcount = 0;
+		
+		if (x1 > x2) {
+			xcount = -1;
+		} else if (x1 < x2) {
+			xcount = 1;
+		}
+		
+		if (y1 > y2) {
+			ycount = -1;
+		} else if (y1 < y2) {
+			ycount = 1;
+		}
+		
 		if (z1 > z2) {
 			zcount = -1;
 		} else if (z1 < z2) {
@@ -167,6 +167,7 @@ public class DPortal {
 				if (x3 < x2 || x3 > x1) {
 					continue;
 				}
+				
 			} else {
 				if (x3 > x2 || x3 < x1) {
 					continue;
@@ -177,6 +178,7 @@ public class DPortal {
 				if (y3 < y2 || y3 > y1) {
 					continue;
 				}
+				
 			} else {
 				if (y3 > y2 || y3 < y1) {
 					continue;
@@ -205,6 +207,7 @@ public class DPortal {
 				return portal;
 			}
 		}
+		
 		return null;
 	}
 	
@@ -213,37 +216,44 @@ public class DPortal {
 		int id = 0;
 		for (DPortal dportal : plugin.getDPortals()) {
 			id++;
-			if (dportal.isActive) {
-				String preString = "portal." + dportal.world.getName() + "." + id;
-				// Location1
-				configFile.set(preString + ".loc1.x", dportal.block1.getX());
-				configFile.set(preString + ".loc1.y", dportal.block1.getY());
-				configFile.set(preString + ".loc1.z", dportal.block1.getZ());
-				// Location1
-				configFile.set(preString + ".loc2.x", dportal.block2.getX());
-				configFile.set(preString + ".loc2.y", dportal.block2.getY());
-				configFile.set(preString + ".loc2.z", dportal.block2.getZ());
+			
+			if ( !dportal.isActive) {
+				continue;
 			}
+			
+			String preString = "portal." + dportal.world.getName() + "." + id;
+			// Location1
+			configFile.set(preString + ".loc1.x", dportal.block1.getX());
+			configFile.set(preString + ".loc1.y", dportal.block1.getY());
+			configFile.set(preString + ".loc1.z", dportal.block1.getZ());
+			// Location1
+			configFile.set(preString + ".loc2.x", dportal.block2.getX());
+			configFile.set(preString + ".loc2.y", dportal.block2.getY());
+			configFile.set(preString + ".loc2.z", dportal.block2.getZ());
 		}
 	}
 	
 	public static void load(FileConfiguration configFile) {
 		for (World world : plugin.getServer().getWorlds()) {
-			if (configFile.contains("portal." + world.getName())) {
-				int id = 0;
-				String preString;
-				do {
-					id++;
-					preString = "portal." + world.getName() + "." + id + ".";
-					if (configFile.contains(preString)) {
-						DPortal dportal = new DPortal(true);
-						dportal.world = world;
-						dportal.block1 = world.getBlockAt(configFile.getInt(preString + "loc1.x"), configFile.getInt(preString + "loc1.y"), configFile.getInt(preString + "loc1.z"));
-						dportal.block2 = world.getBlockAt(configFile.getInt(preString + "loc2.x"), configFile.getInt(preString + "loc2.y"), configFile.getInt(preString + "loc2.z"));
-						dportal.create();
-					}
-				} while (configFile.contains(preString));
+			if ( !configFile.contains("portal." + world.getName())) {
+				return;
 			}
+			
+			int id = 0;
+			String preString;
+			do {
+				id++;
+				preString = "portal." + world.getName() + "." + id + ".";
+				
+				if (configFile.contains(preString)) {
+					DPortal dportal = new DPortal(true);
+					dportal.world = world;
+					dportal.block1 = world.getBlockAt(configFile.getInt(preString + "loc1.x"), configFile.getInt(preString + "loc1.y"), configFile.getInt(preString + "loc1.z"));
+					dportal.block2 = world.getBlockAt(configFile.getInt(preString + "loc2.x"), configFile.getInt(preString + "loc2.y"), configFile.getInt(preString + "loc2.z"));
+					dportal.create();
+				}
+				
+			} while (configFile.contains(preString));
 		}
 	}
 	

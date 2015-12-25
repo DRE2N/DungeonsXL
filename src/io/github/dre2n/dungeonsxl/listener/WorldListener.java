@@ -13,7 +13,7 @@ public class WorldListener implements Listener {
 	public void onChunkUnload(ChunkUnloadEvent event) {
 		GameWorld gWorld = GameWorld.get(event.getWorld());
 		if (gWorld != null) {
-			if (gWorld.loadedChunks.contains(event.getChunk())) {
+			if (gWorld.getLoadedChunks().contains(event.getChunk())) {
 				event.setCancelled(true);
 			}
 		}

@@ -7,34 +7,26 @@ import org.bukkit.block.Sign;
 
 public class LobbySign extends DSign {
 	
-	public static String name = "Lobby";
-	public String buildPermissions = "dxl.sign.lobby";
-	public boolean onDungeonInit = true;
+	private DSignType type = DSignTypeDefault.LOBBY;
 	
-	public LobbySign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public LobbySign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
-		// TODO Auto-generated method stub
-		
 		return true;
 	}
 	
 	@Override
 	public void onInit() {
-		getGWorld().locLobby = getSign().getLocation();
+		getGameWorld().setLocLobby(getSign().getLocation());
 		getSign().getBlock().setType(Material.AIR);
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

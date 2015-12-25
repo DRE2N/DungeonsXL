@@ -24,21 +24,21 @@ public class EscapeCommand extends DCommand {
 		DPlayer dplayer = DPlayer.get(player);
 		if (dplayer != null) {
 			
-			if (dplayer.isEditing) {
-				dplayer.escape();
-				
-				EditWorld eworld = EditWorld.get(dplayer.world);
-				if (eworld != null) {
-					if (eworld.world.getPlayers().isEmpty()) {
-						eworld.deleteNoSave();
-					}
-				}
-				
-			} else {
+			if ( !dplayer.isEditing()) {
 				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+				return;
 			}
 			
-			return;
+			dplayer.escape();
+			
+			EditWorld eworld = EditWorld.get(dplayer.getWorld());
+			if (eworld == null) {
+				return;
+			}
+			
+			if (eworld.getWorld().getPlayers().isEmpty()) {
+				eworld.deleteNoSave();
+			}
 			
 		} else {
 			DGroup dgroup = DGroup.get(player);

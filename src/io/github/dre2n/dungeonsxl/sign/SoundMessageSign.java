@@ -9,11 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
-public class SoundMsgSign extends DSign {
+public class SoundMessageSign extends DSign {
 	
-	public static String name = "SoundMsg";
-	public String buildPermissions = "dxl.sign.soundmsg";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.SOUND_MESSAGE;
 	
 	// Variables
 	private boolean initialized;
@@ -21,8 +19,8 @@ public class SoundMsgSign extends DSign {
 	private String msg;
 	private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<Player>();
 	
-	public SoundMsgSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public SoundMessageSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
@@ -39,7 +37,7 @@ public class SoundMsgSign extends DSign {
 		String lines[] = getSign().getLines();
 		
 		if ( !lines[1].equals("")) {
-			String msg = getGWorld().getConfig().getMsg(IntegerUtil.parseInt(lines[1]), true);
+			String msg = getGameWorld().getConfig().getMsg(IntegerUtil.parseInt(lines[1]), true);
 			if (msg != null) {
 				this.msg = msg;
 				getSign().getBlock().setType(Material.AIR);
@@ -60,20 +58,17 @@ public class SoundMsgSign extends DSign {
 	public boolean onPlayerTrigger(Player player) {
 		if (initialized) {
 			remove();
-			if (done.size() >= getGWorld().world.getPlayers().size()) {
+			if (done.size() >= getGameWorld().getWorld().getPlayers().size()) {
 				remove();
 			}
 		}
+		
 		return true;
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

@@ -22,6 +22,7 @@ public class InviteCommand extends DCommand {
 	public void onExecute(String[] args, CommandSender sender) {
 		if (EditWorld.addInvitedPlayer(args[2], UUIDUtil.getUniqueIdFromName(args[1]))) {
 			MessageUtil.sendMessage(sender, plugin.getDMessages().get("Cmd_Invite_Success", args[1], args[2]));
+			
 		} else {
 			MessageUtil.sendMessage(sender, plugin.getDMessages().get("Error_DungeonNotExist", args[2]));
 		}

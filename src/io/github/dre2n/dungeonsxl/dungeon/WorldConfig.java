@@ -263,31 +263,33 @@ public class WorldConfig {
 	
 	@SuppressWarnings("deprecation")
 	public void save() {
-		if (file != null) {
-			FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
+		if (file == null) {
+			return;
+		}
+		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
+		
+		// Messages
+		for (Integer msgs : this.msgs.keySet()) {
+			configFile.set("message." + msgs, this.msgs.get(msgs));
+		}
+		
+		// Secure Objects
+		CopyOnWriteArrayList<Integer> secureObjectsids = new CopyOnWriteArrayList<Integer>();
+		
+		for (Material mat : secureObjects) {
+			secureObjectsids.add(mat.getId());
+		}
+		
+		configFile.set("secureObjects", secureObjectsids);
+		
+		// Invited Players
+		configFile.set("invitedPlayers", invitedPlayers);
+		
+		try {
+			configFile.save(file);
 			
-			// Messages
-			for (Integer msgs : this.msgs.keySet()) {
-				configFile.set("message." + msgs, this.msgs.get(msgs));
-			}
-			
-			// Secure Objects
-			CopyOnWriteArrayList<Integer> secureObjectsids = new CopyOnWriteArrayList<Integer>();
-			
-			for (Material mat : secureObjects) {
-				secureObjectsids.add(mat.getId());
-			}
-			
-			configFile.set("secureObjects", secureObjectsids);
-			
-			// Invited Players
-			configFile.set("invitedPlayers", invitedPlayers);
-			
-			try {
-				configFile.save(file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

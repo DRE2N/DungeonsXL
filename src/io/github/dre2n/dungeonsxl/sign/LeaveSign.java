@@ -12,37 +12,34 @@ import org.bukkit.entity.Player;
 
 public class LeaveSign extends DSign {
 	
-	public static String name = "Leave";
-	public String buildPermissions = "dxl.sign.leave";
-	public boolean onDungeonInit = true;
+	private DSignType type = DSignTypeDefault.LEAVE;
 	
-	public LeaveSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public LeaveSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
-		// TODO Auto-generated method stub
-		
 		return true;
 	}
 	
 	@Override
 	public void onInit() {
-		if (getTriggers().isEmpty()) {
-			InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGWorld());
-			if (trigger != null) {
-				trigger.addListener(this);
-				addTrigger(trigger);
-			}
-			getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-			getSign().setLine(1, ChatColor.DARK_GREEN + "Leave");
-			getSign().setLine(2, "");
-			getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-			getSign().update();
-		} else {
+		if ( !getTriggers().isEmpty()) {
 			getSign().getBlock().setType(Material.AIR);
+			return;
 		}
+		
+		InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGameWorld());
+		if (trigger != null) {
+			trigger.addListener(this);
+			addTrigger(trigger);
+		}
+		getSign().setLine(0, ChatColor.DARK_BLUE + "############");
+		getSign().setLine(1, ChatColor.DARK_GREEN + "Leave");
+		getSign().setLine(2, "");
+		getSign().setLine(3, ChatColor.DARK_BLUE + "############");
+		getSign().update();
 	}
 	
 	@Override
@@ -51,6 +48,7 @@ public class LeaveSign extends DSign {
 		if (dplayer != null) {
 			dplayer.leave();
 		}
+		
 		return true;
 	}
 	
@@ -62,12 +60,8 @@ public class LeaveSign extends DSign {
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

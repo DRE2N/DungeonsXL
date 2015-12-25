@@ -13,31 +13,33 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 public class TriggerSign extends DSign {
-	public static String name = "Trigger";
-	public String buildPermissions = "dxl.sign.trigger";
-	public boolean onDungeonInit = true;
+	
+	private DSignType type = DSignTypeDefault.TRIGGER;
 	
 	// Variables
 	private int triggerId;
 	private boolean initialized;
 	
-	public TriggerSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public TriggerSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
 		Set<Integer> used = new HashSet<Integer>();
-		for (Block block : EditWorld.get(getSign().getLocation().getWorld()).sign) {
-			if (block != null) {
-				if ( !block.getChunk().isLoaded()) {
-					block.getChunk().load();
-				}
-				if (block.getState() instanceof Sign) {
-					Sign rsign = (Sign) block.getState();
-					if (rsign.getLine(0).equalsIgnoreCase("[" + name + "]")) {
-						used.add(IntegerUtil.parseInt(rsign.getLine(1)));
-					}
+		for (Block block : EditWorld.get(getSign().getLocation().getWorld()).getSign()) {
+			if (block == null) {
+				continue;
+			}
+			
+			if ( !block.getChunk().isLoaded()) {
+				block.getChunk().load();
+			}
+			
+			if (block.getState() instanceof Sign) {
+				Sign rsign = (Sign) block.getState();
+				if (rsign.getLine(0).equalsIgnoreCase("[" + type.getName() + "]")) {
+					used.add(IntegerUtil.parseInt(rsign.getLine(1)));
 				}
 			}
 		}
@@ -49,6 +51,7 @@ public class TriggerSign extends DSign {
 					id++;
 				}
 			}
+			
 		} else {
 			id = IntegerUtil.parseInt(getSign().getLine(1));
 			if (used.contains(id)) {
@@ -73,32 +76,31 @@ public class TriggerSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		if (initialized) {
-			SignTrigger trigger = SignTrigger.get(triggerId, getGWorld());
-			if (trigger != null) {
-				trigger.onTrigger(true);
-			}
+		if ( !initialized) {
+			return;
+		}
+		
+		SignTrigger trigger = SignTrigger.get(triggerId, getGameWorld());
+		if (trigger != null) {
+			trigger.onTrigger(true);
 		}
 	}
 	
 	@Override
 	public void onDisable() {
-		if (initialized) {
-			SignTrigger trigger = SignTrigger.get(triggerId, getGWorld());
-			if (trigger != null) {
-				trigger.onTrigger(false);
-			}
+		if ( !initialized) {
+			return;
+		}
+		
+		SignTrigger trigger = SignTrigger.get(triggerId, getGameWorld());
+		if (trigger != null) {
+			trigger.onTrigger(false);
 		}
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
-	}
-	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
+	public DSignType getType() {
+		return type;
 	}
 	
 	public class UpdateTask implements Runnable {

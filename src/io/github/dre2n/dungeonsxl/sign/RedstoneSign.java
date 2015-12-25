@@ -10,9 +10,7 @@ import org.bukkit.block.Sign;
 
 public class RedstoneSign extends DSign {
 	
-	public static String name = "Redstone";
-	public String buildPermissions = "dxl.sign.redstone";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.REDSTONE;
 	
 	// Variables
 	private boolean initialized;
@@ -71,32 +69,39 @@ public class RedstoneSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		if (initialized && !active) {
-			if (delay > 0) {
-				enableTaskId = DungeonsXL.getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(DungeonsXL.getPlugin(), new DelayedPower(true), delay, delay + offDelay);
-				if (repeat != 1) {
-					repeatsToDo = repeat;
-					disableTaskId = DungeonsXL.getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(DungeonsXL.getPlugin(), new DelayedPower(false), delay + offDelay, delay + offDelay);
-				}
-			} else {
-				power();
-			}
-			active = true;
+		if ( !initialized || active) {
+			return;
 		}
+		
+		if (delay > 0) {
+			enableTaskId = DungeonsXL.getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(DungeonsXL.getPlugin(), new DelayedPower(true), delay, delay + offDelay);
+			
+			if (repeat != 1) {
+				repeatsToDo = repeat;
+				disableTaskId = DungeonsXL.getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(DungeonsXL.getPlugin(), new DelayedPower(false), delay + offDelay, delay + offDelay);
+			}
+			
+		} else {
+			power();
+		}
+		
+		active = true;
 	}
 	
 	@Override
 	public void onDisable() {
-		if (initialized && active) {
-			unpower();
-			
-			disableTask(enableTaskId);
-			disableTask(disableTaskId);
-			enableTaskId = -1;
-			disableTaskId = -1;
-			
-			active = false;
+		if ( !initialized || !active) {
+			return;
 		}
+		
+		unpower();
+		
+		disableTask(enableTaskId);
+		disableTask(disableTaskId);
+		enableTaskId = -1;
+		disableTaskId = -1;
+		
+		active = false;
 	}
 	
 	public void power() {
@@ -108,21 +113,18 @@ public class RedstoneSign extends DSign {
 	}
 	
 	public void disableTask(int taskId) {
-		if (taskId != -1) {
-			if (DungeonsXL.getPlugin().getServer().getScheduler().isCurrentlyRunning(taskId) || DungeonsXL.getPlugin().getServer().getScheduler().isQueued(taskId)) {
-				DungeonsXL.getPlugin().getServer().getScheduler().cancelTask(taskId);
-			}
+		if (taskId == -1) {
+			return;
+		}
+		
+		if (DungeonsXL.getPlugin().getServer().getScheduler().isCurrentlyRunning(taskId) || DungeonsXL.getPlugin().getServer().getScheduler().isQueued(taskId)) {
+			DungeonsXL.getPlugin().getServer().getScheduler().cancelTask(taskId);
 		}
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
-	}
-	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
+	public DSignType getType() {
+		return type;
 	}
 	
 	public class DelayedPower implements Runnable {
@@ -155,4 +157,5 @@ public class RedstoneSign extends DSign {
 			}
 		}
 	}
+	
 }

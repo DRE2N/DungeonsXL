@@ -66,7 +66,7 @@ public class EntityListener implements Listener {
 			LivingEntity entity = event.getEntity();
 			GameWorld gworld = GameWorld.get(world);
 			if (gworld != null) {
-				if (gworld.isPlaying) {
+				if (gworld.isPlaying()) {
 					if (entity.getType() != EntityType.PLAYER) {
 						event.getDrops().clear();
 						DMob.onDeath(event);
@@ -82,7 +82,7 @@ public class EntityListener implements Listener {
 		GameWorld gworld = GameWorld.get(world);
 		if (gworld != null) {
 			// Deny all Damage in Lobby
-			if ( !gworld.isPlaying) {
+			if ( !gworld.isPlaying()) {
 				event.setCancelled(true);
 			}
 			// Deny all Damage from Players to Players
@@ -106,9 +106,9 @@ public class EntityListener implements Listener {
 					
 					// Check Dogs
 					if (entity instanceof Player || entity2 instanceof Player) {
-						for (DPlayer dplayer : DPlayer.get(gworld.world)) {
-							if (dplayer.wolf != null) {
-								if (entity == dplayer.wolf || entity2 == dplayer.wolf) {
+						for (DPlayer dplayer : DPlayer.get(gworld.getWorld())) {
+							if (dplayer.getWolf() != null) {
+								if (entity == dplayer.getWolf() || entity2 == dplayer.getWolf()) {
 									event.setCancelled(true);
 									return;
 								}
@@ -116,16 +116,16 @@ public class EntityListener implements Listener {
 						}
 					}
 					
-					for (DPlayer dplayer : DPlayer.get(gworld.world)) {
-						if (dplayer.wolf != null) {
+					for (DPlayer dplayer : DPlayer.get(gworld.getWorld())) {
+						if (dplayer.getWolf() != null) {
 							if (entity instanceof Player || entity2 instanceof Player) {
-								if (entity == dplayer.wolf || entity2 == dplayer.wolf) {
+								if (entity == dplayer.getWolf() || entity2 == dplayer.getWolf()) {
 									event.setCancelled(true);
 									return;
 								}
 								
 							} else {
-								if (entity == dplayer.wolf || entity2 == dplayer.wolf) {
+								if (entity == dplayer.getWolf() || entity2 == dplayer.getWolf()) {
 									event.setCancelled(false);
 									return;
 								}
@@ -144,7 +144,7 @@ public class EntityListener implements Listener {
 		
 		GameWorld gworld = GameWorld.get(world);
 		if (gworld != null) {
-			if ( !gworld.isPlaying) {
+			if ( !gworld.isPlaying()) {
 				event.setCancelled(true);
 			}
 		}

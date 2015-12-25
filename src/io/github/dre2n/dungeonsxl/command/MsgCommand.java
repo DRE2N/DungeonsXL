@@ -25,65 +25,65 @@ public class MsgCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		EditWorld eworld = EditWorld.get(player.getWorld());
+		EditWorld editWorld = EditWorld.get(player.getWorld());
 		
-		if (eworld != null) {
-			if (args.length > 1) {
-				try {
-					int id = IntegerUtil.parseInt(args[1]);
+		if (editWorld == null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+			return;
+		}
+		
+		if (args.length <= 1) {
+			displayHelp(player);
+			return;
+		}
+		
+		try {
+			int id = IntegerUtil.parseInt(args[1]);
+			
+			WorldConfig confreader = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorld.getMapName(), "config.yml"));
+			
+			if (args.length == 2) {
+				String msg = confreader.getMsg(id, true);
+				
+				if (msg != null) {
+					MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
 					
-					WorldConfig confreader = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + eworld.dungeonname, "config.yml"));
-					
-					if (args.length == 2) {
-						String msg = confreader.getMsg(id, true);
-						
-						if (msg != null) {
-							MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
-							
-						} else {
-							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgIdNotExist", "" + id));
-						}
-						
-					} else {
-						String msg = "";
-						int i = 0;
-						for (String arg : args) {
-							i++;
-							if (i > 2) {
-								msg = msg + " " + arg;
-							}
-						}
-						
-						String[] splitMsg = msg.split("\"");
-						
-						if (splitMsg.length > 1) {
-							msg = splitMsg[1];
-							String old = confreader.getMsg(id, false);
-							if (old == null) {
-								MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Msg_Added", "" + id));
-								
-							} else {
-								MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Msg_Updated", "" + id));
-							}
-							
-							confreader.setMsg(msg, id);
-							confreader.save();
-							
-						} else {
-							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgFormat"));
-						}
-					}
-					
-				} catch (NumberFormatException e) {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgNoInt"));
+				} else {
+					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgIdNotExist", "" + id));
 				}
 				
 			} else {
-				displayHelp(player);
+				String msg = "";
+				int i = 0;
+				for (String arg : args) {
+					i++;
+					if (i > 2) {
+						msg = msg + " " + arg;
+					}
+				}
+				
+				String[] splitMsg = msg.split("\"");
+				
+				if (splitMsg.length > 1) {
+					msg = splitMsg[1];
+					String old = confreader.getMsg(id, false);
+					if (old == null) {
+						MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Msg_Added", "" + id));
+						
+					} else {
+						MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Msg_Updated", "" + id));
+					}
+					
+					confreader.setMsg(msg, id);
+					confreader.save();
+					
+				} else {
+					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgFormat"));
+				}
 			}
 			
-		} else {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+		} catch (NumberFormatException e) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgNoInt"));
 		}
 		
 	}

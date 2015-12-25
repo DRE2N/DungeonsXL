@@ -28,6 +28,7 @@ public class DeletePortalCommand extends DCommand {
 		if (dPortal != null) {
 			dPortal.delete();
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalDeleted"));
+			
 		} else {
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NoPortal"));
 		}

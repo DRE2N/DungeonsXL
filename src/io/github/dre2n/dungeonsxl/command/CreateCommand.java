@@ -31,11 +31,11 @@ public class CreateCommand extends DCommand {
 				plugin.getLogger().info(plugin.getDMessages().get("Log_GenerateNewWorld"));
 				
 				// Create World
-				EditWorld eworld = new EditWorld();
-				eworld.generate();
-				eworld.dungeonname = name;
-				eworld.save();
-				eworld.delete();
+				EditWorld editWorld = new EditWorld();
+				editWorld.generate();
+				editWorld.setMapName(name);
+				editWorld.save();
+				editWorld.delete();
 				
 				// MSG Done
 				plugin.getLogger().info(plugin.getDMessages().get("Log_WorldGenerationFinished"));
@@ -47,34 +47,34 @@ public class CreateCommand extends DCommand {
 		} else if (sender instanceof Player) {
 			Player player = (Player) sender;
 			
-			if (DPlayer.get(player) == null) {
-				if (name.length() <= 15) {
-					// Msg create
-					plugin.getLogger().info(plugin.getDMessages().get("Log_NewDungeon"));
-					plugin.getLogger().info(plugin.getDMessages().get("Log_GenerateNewWorld"));
-					
-					// Create World
-					EditWorld eworld = new EditWorld();
-					eworld.generate();
-					eworld.dungeonname = name;
-					
-					// MSG Done
-					plugin.getLogger().info(plugin.getDMessages().get("Log_WorldGenerationFinished"));
-					
-					// Tp Player
-					if (eworld.lobby == null) {
-						new DPlayer(player, eworld.world, eworld.world.getSpawnLocation(), true);
-						
-					} else {
-						new DPlayer(player, eworld.world, eworld.lobby, true);
-					}
+			if (DPlayer.get(player) != null) {
+				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+				return;
+			}
+			
+			if (name.length() <= 15) {
+				// Msg create
+				plugin.getLogger().info(plugin.getDMessages().get("Log_NewDungeon"));
+				plugin.getLogger().info(plugin.getDMessages().get("Log_GenerateNewWorld"));
+				
+				// Create World
+				EditWorld editWorld = new EditWorld();
+				editWorld.generate();
+				editWorld.setMapName(name);
+				
+				// MSG Done
+				plugin.getLogger().info(plugin.getDMessages().get("Log_WorldGenerationFinished"));
+				
+				// Tp Player
+				if (editWorld.getLobby() == null) {
+					new DPlayer(player, editWorld.getWorld(), editWorld.getWorld().getSpawnLocation(), true);
 					
 				} else {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NameToLong"));
+					new DPlayer(player, editWorld.getWorld(), editWorld.getLobby(), true);
 				}
 				
 			} else {
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NameToLong"));
 			}
 		}
 	}

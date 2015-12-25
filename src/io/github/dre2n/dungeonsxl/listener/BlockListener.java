@@ -74,7 +74,7 @@ public class BlockListener implements Listener {
 		// Editworld Signs
 		EditWorld eworld = EditWorld.get(block.getWorld());
 		if (eworld != null) {
-			eworld.sign.remove(event.getBlock());
+			eworld.getSign().remove(event.getBlock());
 		}
 		
 		// Deny GameWorld Blocks
@@ -161,10 +161,10 @@ public class BlockListener implements Listener {
 				DSign dsign = DSign.create(sign, null);
 				
 				if (dsign != null) {
-					if (player.isOp() || player.hasPermission(dsign.getPermissions())) {
+					if (player.isOp() || player.hasPermission(dsign.getType().getBuildPermission())) {
 						if (dsign.check()) {
 							eworld.checkSign(block);
-							eworld.sign.add(block);
+							eworld.getSign().add(block);
 							MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_SignCreated"));
 							
 						} else {
@@ -214,7 +214,7 @@ public class BlockListener implements Listener {
 		@Override
 		public void run() {
 			for (GameWorld gworld : DungeonsXL.getPlugin().getGameWorlds()) {
-				if (block.getWorld() == gworld.world) {
+				if (block.getWorld() == gworld.getWorld()) {
 					RedstoneTrigger.updateAll(gworld);
 				}
 			}

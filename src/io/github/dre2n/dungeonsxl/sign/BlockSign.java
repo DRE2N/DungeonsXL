@@ -8,9 +8,7 @@ import org.bukkit.block.Sign;
 
 public class BlockSign extends DSign {
 	
-	public static String name = "Block";
-	public String buildPermissions = "dxl.sign.block";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.BLOCK;
 	
 	// Variables
 	private boolean initialized;
@@ -49,11 +47,14 @@ public class BlockSign extends DSign {
 		if ( !lines[2].equals("")) {
 			String line2[] = lines[2].split(",");
 			Material onBlock = Material.matchMaterial(line2[0]);
+			
 			if (onBlock != null) {
 				onBlockId = onBlock.getId();
+				
 			} else {
 				onBlockId = IntegerUtil.parseInt(line2[0]);
 			}
+			
 			if (line2.length > 1) {
 				onBlockData = (byte) IntegerUtil.parseInt(line2[1]);
 			}
@@ -82,13 +83,8 @@ public class BlockSign extends DSign {
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
-	}
-	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
+	public DSignType getType() {
+		return type;
 	}
 	
 }

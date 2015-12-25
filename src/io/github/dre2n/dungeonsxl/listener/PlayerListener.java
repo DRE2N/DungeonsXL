@@ -58,9 +58,9 @@ public class PlayerListener implements Listener {
 			WorldConfig dConfig = gameWorld.getConfig();
 			
 			if (dPlayer != null) {
-				dPlayer.lives = dPlayer.lives - 1;
+				dPlayer.setLives(dPlayer.getLives() - 1);
 				
-				if (dPlayer.lives == 0 && dPlayer.isReady) {
+				if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
 					Bukkit.broadcastMessage(plugin.getDMessages().get("Player_DeathKick").replaceAll("v1", player.getName()).replaceAll("&", "\u00a7"));
 					// TODO: This Runnable is a workaround for a bug I couldn't find, yet...
 					new BukkitRunnable() {
@@ -69,13 +69,13 @@ public class PlayerListener implements Listener {
 						}
 					}.runTaskLater(plugin, 1L);
 					
-				} else if ( !(dPlayer.lives == -1)) {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_Death").replaceAll("v1", String.valueOf(dPlayer.lives)));
+				} else if ( !(dPlayer.getLives() == -1)) {
+					MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_Death").replaceAll("v1", String.valueOf(dPlayer.getLives())));
 					
 				} else if (dConfig != null) {
 					if (dConfig.getKeepInventoryOnDeath()) {
-						dPlayer.respawnInventory = event.getEntity().getInventory().getContents();
-						dPlayer.respawnArmor = event.getEntity().getInventory().getArmorContents();
+						dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
+						dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
 						// Delete all drops
 						for (ItemStack istack : event.getDrops()) {
 							istack.setType(Material.AIR);
@@ -224,11 +224,11 @@ public class PlayerListener implements Listener {
 						}
 						
 						// Class Signs
-						for (Sign classSign : gworld.signClass) {
+						for (Sign classSign : gworld.getSignClass()) {
 							if (classSign != null) {
 								if (classSign.getLocation().distance(clickedBlock.getLocation()) < 1) {
 									if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-										dplayer.setClass(ChatColor.stripColor(classSign.getLine(1)));
+										dplayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
 									} else {
 										MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Leftklick"));
 									}
@@ -254,13 +254,13 @@ public class PlayerListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			if ( !DPlayer.get(player).isReady) {
+			if ( !DPlayer.get(player).isReady()) {
 				event.setCancelled(true);
 				return;
 			}
 			
 			DPlayer dplayer = DPlayer.get(player);
-			GameWorld gworld = GameWorld.get(dplayer.world);
+			GameWorld gworld = GameWorld.get(dplayer.getWorld());
 			if (dplayer != null) {
 				for (Material material : gworld.getConfig().getSecureObjects()) {
 					if (material == event.getItemDrop().getItemStack().getType()) {
@@ -279,45 +279,45 @@ public class PlayerListener implements Listener {
 		DPlayer dplayer = DPlayer.get(player);
 		
 		if (dplayer != null) {
-			if (dplayer.isEditing) {
-				EditWorld eworld = EditWorld.get(dplayer.world);
+			if (dplayer.isEditing()) {
+				EditWorld eworld = EditWorld.get(dplayer.getWorld());
 				if (eworld != null) {
-					if (eworld.lobby == null) {
-						event.setRespawnLocation(eworld.world.getSpawnLocation());
+					if (eworld.getLobby() == null) {
+						event.setRespawnLocation(eworld.getWorld().getSpawnLocation());
 						
 					} else {
-						event.setRespawnLocation(eworld.lobby);
+						event.setRespawnLocation(eworld.getLobby());
 					}
 				}
 				
 			} else {
-				GameWorld gworld = GameWorld.get(dplayer.world);
+				GameWorld gworld = GameWorld.get(dplayer.getWorld());
 				
 				if (gworld != null) {
-					DGroup dgroup = DGroup.get(dplayer.player);
+					DGroup dgroup = DGroup.get(dplayer.getPlayer());
 					
-					if (dplayer.checkpoint == null) {
-						event.setRespawnLocation(dgroup.getGWorld().locStart);
+					if (dplayer.getCheckpoint() == null) {
+						event.setRespawnLocation(dgroup.getGWorld().getLocStart());
 						
 						// Da einige Plugins einen anderen Respawn setzen wird
 						// ein Scheduler gestartet der den Player nach einer
 						// Sekunde teleportiert.
-						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dgroup.getGWorld().locStart), 10);
+						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dgroup.getGWorld().getLocStart()), 10);
 						
-						if (dplayer.wolf != null) {
-							dplayer.wolf.teleport(dgroup.getGWorld().locStart);
+						if (dplayer.getWolf() != null) {
+							dplayer.getWolf().teleport(dgroup.getGWorld().getLocStart());
 						}
 						
 					} else {
-						event.setRespawnLocation(dplayer.checkpoint);
+						event.setRespawnLocation(dplayer.getCheckpoint());
 						
 						// Da einige Plugins einen anderen Respawn setzen wird
 						// ein Scheduler gestartet der den Player nach einer
 						// Sekunde teleportiert.
-						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dplayer.checkpoint), 10);
+						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dplayer.getCheckpoint()), 10);
 						
-						if (dplayer.wolf != null) {
-							dplayer.wolf.teleport(dplayer.checkpoint);
+						if (dplayer.getWolf() != null) {
+							dplayer.getWolf().teleport(dplayer.getCheckpoint());
 						}
 					}
 				}
@@ -343,7 +343,7 @@ public class PlayerListener implements Listener {
 		DPlayer dplayer = DPlayer.get(player);
 		
 		if (dplayer != null) {
-			if (dplayer.world != event.getTo().getWorld()) {
+			if (dplayer.getWorld() != event.getTo().getWorld()) {
 				if ( !player.isOp()) {
 					event.setCancelled(true);
 				}
@@ -356,7 +356,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		DPlayer dplayer = DPlayer.get(player);
 		if (dplayer != null) {
-			if (dplayer.isInDungeonChat) {
+			if (dplayer.isInDungeonChat()) {
 				dplayer.msg(player.getDisplayName() + ": " + event.getMessage());
 				event.setCancelled(true);
 			}
@@ -378,14 +378,14 @@ public class PlayerListener implements Listener {
 					dPlayer.leave();
 					
 				} else if (timeUntilKickOfflinePlayer > 0) {
-					dPlayer.msg(plugin.getDMessages().get("Player_Offline", dPlayer.player.getName(), "" + timeUntilKickOfflinePlayer));
-					dPlayer.offlineTime = System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000;
+					dPlayer.msg(plugin.getDMessages().get("Player_Offline", dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer));
+					dPlayer.setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
 					
 				} else {
-					dPlayer.msg(plugin.getDMessages().get("Player_OfflineNeverKick", dPlayer.player.getName()));
+					dPlayer.msg(plugin.getDMessages().get("Player_OfflineNeverKick", dPlayer.getPlayer().getName()));
 				}
 				
-			} else if (dPlayer.isEditing) {
+			} else if (dPlayer.isEditing()) {
 				dPlayer.leave();
 			}
 		}
@@ -398,15 +398,15 @@ public class PlayerListener implements Listener {
 		// Check dplayers
 		DPlayer dplayer = DPlayer.get(player.getName());
 		if (dplayer != null) {
-			DGroup dgroup = DGroup.get(dplayer.player);
+			DGroup dgroup = DGroup.get(dplayer.getPlayer());
 			if (dgroup != null) {
-				dgroup.getPlayers().remove(dplayer.player);
+				dgroup.getPlayers().remove(dplayer.getPlayer());
 				dgroup.getPlayers().add(player);
 			}
-			dplayer.player = player;
+			dplayer.setPlayer(player);
 			
 			// Check offlineTime
-			dplayer.offlineTime = 0;
+			dplayer.setOfflineTime(0);
 		}
 		
 		// Tutorial Mode
@@ -419,14 +419,14 @@ public class PlayerListener implements Listener {
 							
 							if (dgroup.getGWorld() == null) {
 								dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
-								dgroup.getGWorld().isTutorial = true;
+								dgroup.getGWorld().setTutorial(true);
 							}
 							
 							if (dgroup.getGWorld() != null) {
-								if (dgroup.getGWorld().locLobby == null) {
+								if (dgroup.getGWorld().getLocLobby() == null) {
 									
 								} else {
-									new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
+									new DPlayer(player, dgroup.getGWorld().getWorld(), dgroup.getGWorld().getLocLobby(), false);
 								}
 								
 							} else {
@@ -448,7 +448,7 @@ public class PlayerListener implements Listener {
 		
 		DPlayer dplayer = DPlayer.get(event.getPlayer());
 		if (dplayer != null) {
-			if (dplayer.isEditing && event.getPlayer().hasPermission("dungeonsxl.cmdedit") || event.getPlayer().isOp()) {
+			if (dplayer.isEditing() && event.getPlayer().hasPermission("dungeonsxl.cmdedit") || event.getPlayer().isOp()) {
 				return;
 			}
 			
@@ -523,11 +523,11 @@ public class PlayerListener implements Listener {
 			
 			if (dplayer != null) {
 				// Respawn Items
-				if (dplayer.respawnInventory != null || dplayer.respawnArmor != null) {
-					player.getInventory().setContents(dplayer.respawnInventory);
-					player.getInventory().setArmorContents(dplayer.respawnArmor);
-					dplayer.respawnInventory = null;
-					dplayer.respawnArmor = null;
+				if (dplayer.getRespawnInventory() != null || dplayer.getRespawnArmor() != null) {
+					player.getInventory().setContents(dplayer.getRespawnInventory());
+					player.getInventory().setArmorContents(dplayer.getRespawnArmor());
+					dplayer.setRespawnInventory(null);
+					dplayer.setRespawnArmor(null);
 				}
 			}
 		}

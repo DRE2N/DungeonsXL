@@ -17,8 +17,8 @@ public class DMob {
 	
 	private String trigger;
 	
-	public DMob(LivingEntity entity, GameWorld gworld, DMobType type) {
-		gworld.dMobs.add(this);
+	public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type) {
+		gameWorld.getdMobs().add(this);
 		
 		this.entity = entity;
 		this.type = type;
@@ -31,8 +31,8 @@ public class DMob {
 		this.entity.getEquipment().setItemInHandDropChance(0);
 	}
 	
-	public DMob(LivingEntity entity, GameWorld gworld, DMobType type, String trigger) {
-		gworld.dMobs.add(this);
+	public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type, String trigger) {
+		gameWorld.getdMobs().add(this);
 		
 		this.entity = entity;
 		this.type = type;
@@ -49,42 +49,46 @@ public class DMob {
 	// Statics
 	@SuppressWarnings("deprecation")
 	public static void onDeath(EntityDeathEvent event) {
-		if (event.getEntity() instanceof LivingEntity) {
-			LivingEntity victim = event.getEntity();
-			GameWorld gworld = GameWorld.get(victim.getWorld());
-			String name = null;
-			
-			if (gworld != null) {
-				for (DMob dmob : gworld.dMobs) {
-					if (dmob.entity == victim) {
+		if ( !(event.getEntity() instanceof LivingEntity)) {
+			return;
+		}
+		
+		LivingEntity victim = event.getEntity();
+		GameWorld gameWorld = GameWorld.get(victim.getWorld());
+		String name = null;
+		
+		if (gameWorld == null) {
+			return;
+		}
+		
+		for (DMob dMob : gameWorld.getdMobs()) {
+			if (dMob.entity == victim) {
+				
+				if (dMob.type != null) {
+					for (ItemStack item : dMob.type.getDrops().keySet()) {
+						Random randomGenerator = new Random();
+						int random = randomGenerator.nextInt(100);
 						
-						if (dmob.type != null) {
-							for (ItemStack item : dmob.type.getDrops().keySet()) {
-								Random randomGenerator = new Random();
-								int random = randomGenerator.nextInt(100);
-								
-								if (dmob.type.getDrops().get(item) > random) {
-									event.getDrops().add(item);
-								}
-							}
-							name = dmob.type.getName();
-							
-						} else if (dmob.type == null && dmob.trigger != null) {// <=MythicMobs mob
-							name = dmob.trigger;
-							
-						} else {
-							name = victim.getType().getName();
+						if (dMob.type.getDrops().get(item) > random) {
+							event.getDrops().add(item);
 						}
-						
-						MobTrigger trigger = MobTrigger.get(name, gworld);
-						if (trigger != null) {
-							trigger.onTrigger();
-						}
-						
-						gworld.dMobs.remove(dmob);
-						return;
 					}
+					name = dMob.type.getName();
+					
+				} else if (dMob.type == null && dMob.trigger != null) {// <=MythicMobs mob
+					name = dMob.trigger;
+					
+				} else {
+					name = victim.getType().getName();
 				}
+				
+				MobTrigger trigger = MobTrigger.get(name, gameWorld);
+				if (trigger != null) {
+					trigger.onTrigger();
+				}
+				
+				gameWorld.getdMobs().remove(dMob);
+				return;
 			}
 		}
 	}

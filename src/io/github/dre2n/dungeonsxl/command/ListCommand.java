@@ -38,10 +38,10 @@ public class ListCommand extends DCommand {
 		}
 		ArrayList<String> loadedList = new ArrayList<String>();
 		for (EditWorld editWorld : plugin.getEditWorlds()) {
-			loadedList.add(editWorld.world.getWorldFolder().getName());
+			loadedList.add(editWorld.getWorld().getWorldFolder().getName());
 		}
 		for (GameWorld gameWorld : plugin.getGameWorlds()) {
-			loadedList.add(gameWorld.world.getWorldFolder().getName());
+			loadedList.add(gameWorld.getWorld().getWorldFolder().getName());
 		}
 		ArrayList<String> toSend = new ArrayList<String>();
 		

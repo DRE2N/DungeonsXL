@@ -17,9 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class MobSign extends DSign {
 	
-	public static String name = "Mob";
-	public String buildPermissions = "dxl.sign.mob";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.MOB;
 	
 	// Variables
 	private String mob;
@@ -30,23 +28,28 @@ public class MobSign extends DSign {
 	private boolean active;
 	private int taskId = -1;
 	
-	public MobSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public MobSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
 		String lines[] = getSign().getLines();
-		if ( !lines[1].equals("") && !lines[2].equals("")) {
-			if (lines[1] != null) {
-				String[] atributes = lines[2].split(",");
-				if (atributes.length == 2) {
-					return true;
-				}
-			}
+		if (lines[1].equals("") || lines[2].equals("")) {
+			return false;
 		}
 		
-		return false;
+		if (lines[1] == null) {
+			return false;
+		}
+		
+		String[] atributes = lines[2].split(",");
+		if (atributes.length == 2) {
+			return true;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
@@ -55,11 +58,11 @@ public class MobSign extends DSign {
 		if ( !lines[1].equals("") && !lines[2].equals("")) {
 			String mob = lines[1];
 			if (mob != null) {
-				String[] atributes = lines[2].split(",");
-				if (atributes.length == 2) {
+				String[] attributes = lines[2].split(",");
+				if (attributes.length == 2) {
 					this.mob = mob;
-					maxinterval = IntegerUtil.parseInt(atributes[0]);
-					amount = IntegerUtil.parseInt(atributes[1]);
+					maxinterval = IntegerUtil.parseInt(attributes[0]);
+					amount = IntegerUtil.parseInt(attributes[1]);
 				}
 			}
 		}
@@ -70,30 +73,36 @@ public class MobSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		if (initialized && !active) {
-			MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
-			
-			taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, scheduler, 0L, 20L);
-			
-			active = true;
+		if ( !initialized || active) {
+			return;
 		}
+		
+		MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
+		
+		taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, scheduler, 0L, 20L);
+		
+		active = true;
 	}
 	
 	@Override
 	public void onDisable() {
-		if (initialized && active) {
-			killTask();
-			interval = 0;
-			active = false;
+		if ( !initialized || !active) {
+			return;
 		}
+		
+		killTask();
+		interval = 0;
+		active = false;
 	}
 	
 	public void killTask() {
-		if (initialized && active) {
-			if (taskId != -1) {
-				plugin.getServer().getScheduler().cancelTask(taskId);
-				taskId = -1;
-			}
+		if ( !initialized || !active) {
+			return;
+		}
+		
+		if (taskId != -1) {
+			plugin.getServer().getScheduler().cancelTask(taskId);
+			taskId = -1;
 		}
 	}
 	
@@ -109,9 +118,9 @@ public class MobSign extends DSign {
 		public void run() {
 			if (sign.interval <= 0) {
 				World world = sign.getSign().getWorld();
-				GameWorld gWorld = GameWorld.get(world);
+				GameWorld gameWorld = GameWorld.get(world);
 				
-				if (gWorld != null) {
+				if (gameWorld != null) {
 					Location spawnLoc = sign.getSign().getLocation().add(0.5, 0, 0.5);
 					
 					// Check normal mobs
@@ -130,12 +139,12 @@ public class MobSign extends DSign {
 							// Disable Despawning
 							entity.setRemoveWhenFarAway(false);
 							
-							new DMob(entity, sign.getGWorld(), null);
+							new DMob(entity, sign.getGameWorld(), null);
 						}
 					}
 					
 					// Check custom mobs
-					DMobType mobType = DMobType.get(sign.mob, gWorld.getConfig().getMobTypes());
+					DMobType mobType = DMobType.get(sign.mob, gameWorld.getConfig().getMobTypes());
 					
 					if (mobType != null) {
 						mobType.spawn(GameWorld.get(world), spawnLoc);
@@ -161,12 +170,8 @@ public class MobSign extends DSign {
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

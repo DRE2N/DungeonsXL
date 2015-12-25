@@ -13,9 +13,7 @@ import org.bukkit.entity.Player;
 
 public class CommandSign extends DSign {
 	
-	public static String name = "Cmd";
-	public String buildPermissions = "dxl.sign.cmd";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.COMMAND;
 	
 	// Variables
 	private CCommand cCommand;
@@ -23,14 +21,12 @@ public class CommandSign extends DSign {
 	private String executor;
 	private boolean initialized;
 	
-	public CommandSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public CommandSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
-		// TODO Auto-generated method stub
-		
 		return true;
 	}
 	
@@ -41,19 +37,22 @@ public class CommandSign extends DSign {
 		cCommand = CommandsXL.getCCommands().getCCommand(command);
 		
 		if (getTriggers().isEmpty()) {
-			InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGWorld());
-			if (trigger != null) {
-				trigger.addListener(this);
-				getTriggers().add(trigger);
-			}
-			getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-			getSign().setLine(1, ChatColor.DARK_GREEN + command);
-			getSign().setLine(2, "");
-			getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-			getSign().update();
-		} else {
 			getSign().getBlock().setType(Material.AIR);
+			return;
 		}
+		
+		InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGameWorld());
+		
+		if (trigger != null) {
+			trigger.addListener(this);
+			getTriggers().add(trigger);
+		}
+		
+		getSign().setLine(0, ChatColor.DARK_BLUE + "############");
+		getSign().setLine(1, ChatColor.DARK_GREEN + command);
+		getSign().setLine(2, "");
+		getSign().setLine(3, ChatColor.DARK_BLUE + "############");
+		getSign().update();
 		
 		initialized = true;
 	}
@@ -69,6 +68,7 @@ public class CommandSign extends DSign {
 		} else {
 			cCommand.execute(player, player, false);
 		}
+		
 		return true;
 	}
 	
@@ -80,12 +80,8 @@ public class CommandSign extends DSign {
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

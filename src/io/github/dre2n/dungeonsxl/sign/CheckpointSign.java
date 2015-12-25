@@ -13,16 +13,14 @@ import org.bukkit.entity.Player;
 
 public class CheckpointSign extends DSign {
 	
-	public static String name = "Checkpoint";
-	private String buildPermissions = "dxl.sign.checkpoint";
-	private boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.CHECKPOINT;
 	
 	// Variables
 	private boolean initialized;
 	private CopyOnWriteArrayList<DPlayer> done = new CopyOnWriteArrayList<DPlayer>();
 	
-	public CheckpointSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public CheckpointSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
@@ -39,41 +37,43 @@ public class CheckpointSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		if (initialized) {
-			for (DPlayer dplayer : DPlayer.get(getGWorld().world)) {
-				dplayer.setCheckpoint(getSign().getLocation());
-				MessageUtil.sendMessage(dplayer.player, DungeonsXL.getPlugin().getDMessages().get("Player_CheckpointReached"));
-			}
-			
-			remove();
+		if ( !initialized) {
+			return;
 		}
+		
+		for (DPlayer dplayer : DPlayer.get(getGameWorld().getWorld())) {
+			dplayer.setCheckpoint(getSign().getLocation());
+			MessageUtil.sendMessage(dplayer.getPlayer(), DungeonsXL.getPlugin().getDMessages().get("Player_CheckpointReached"));
+		}
+		
+		remove();
 	}
 	
 	@Override
 	public boolean onPlayerTrigger(Player player) {
-		if (initialized) {
-			DPlayer dplayer = DPlayer.get(player);
-			if (dplayer != null) {
-				if ( !done.contains(dplayer)) {
-					done.add(dplayer);
-					dplayer.setCheckpoint(getSign().getLocation());
-					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_CheckpointReached"));
-				}
-			}
-			if (done.size() >= DPlayer.get(getGWorld().world).size()) {
-				remove();
+		if ( !initialized) {
+			return true;
+		}
+		
+		DPlayer dplayer = DPlayer.get(player);
+		if (dplayer != null) {
+			if ( !done.contains(dplayer)) {
+				done.add(dplayer);
+				dplayer.setCheckpoint(getSign().getLocation());
+				MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_CheckpointReached"));
 			}
 		}
+		
+		if (done.size() >= DPlayer.get(getGameWorld().getWorld()).size()) {
+			remove();
+		}
+		
 		return true;
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

@@ -25,23 +25,22 @@ public class PortalCommand extends DCommand {
 		Player player = (Player) sender;
 		DPlayer dplayer = DPlayer.get(player);
 		
-		if (dplayer == null) {
-			DPortal dportal = DPortal.get(player);
-			
-			if (dportal == null) {
-				dportal = new DPortal(false);
-				dportal.setPlayer(player);
-				dportal.setWorld(player.getWorld());
-				player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalIntroduction"));
-				
-			} else {
-				plugin.getDPortals().remove(dportal);
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalAbort"));
-			}
+		if (dplayer != null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+		}
+		
+		DPortal dportal = DPortal.get(player);
+		
+		if (dportal == null) {
+			dportal = new DPortal(false);
+			dportal.setPlayer(player);
+			dportal.setWorld(player.getWorld());
+			player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalIntroduction"));
 			
 		} else {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+			plugin.getDPortals().remove(dportal);
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalAbort"));
 		}
 	}
 	

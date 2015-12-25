@@ -10,19 +10,17 @@ import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
-public class MsgSign extends DSign {
+public class MessageSign extends DSign {
 	
-	public static String name = "Msg";
-	public String buildPermissions = "dxl.sign.msg";
-	public boolean onDungeonInit = false;
+	private DSignType type = DSignTypeDefault.MESSAGE;
 	
 	// Variables
 	private String msg;
 	private boolean initialized;
 	private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<Player>();
 	
-	public MsgSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public MessageSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
@@ -39,7 +37,7 @@ public class MsgSign extends DSign {
 		String lines[] = getSign().getLines();
 		
 		if ( !lines[1].equals("")) {
-			String msg = getGWorld().getConfig().getMsg(IntegerUtil.parseInt(lines[1]), true);
+			String msg = getGameWorld().getConfig().getMsg(IntegerUtil.parseInt(lines[1]), true);
 			if (msg != null) {
 				this.msg = msg;
 				getSign().getBlock().setType(Material.AIR);
@@ -51,22 +49,26 @@ public class MsgSign extends DSign {
 	
 	@Override
 	public boolean onPlayerTrigger(Player player) {
-		if (initialized) {
-			if ( !done.contains(player)) {
-				MessageUtil.sendMessage(player, msg);
-				done.add(player);
-			}
-			if (done.size() >= getGWorld().world.getPlayers().size()) {
-				remove();
-			}
+		if ( !initialized) {
+			return true;
 		}
+		
+		if ( !done.contains(player)) {
+			MessageUtil.sendMessage(player, msg);
+			done.add(player);
+		}
+		
+		if (done.size() >= getGameWorld().getWorld().getPlayers().size()) {
+			remove();
+		}
+		
 		return true;
 	}
 	
 	@Override
 	public void onTrigger() {
 		if (initialized) {
-			for (Player player : getGWorld().world.getPlayers()) {
+			for (Player player : getGameWorld().getWorld().getPlayers()) {
 				MessageUtil.sendMessage(player, msg);
 			}
 			remove();
@@ -74,12 +76,8 @@ public class MsgSign extends DSign {
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

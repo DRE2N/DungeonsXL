@@ -24,7 +24,7 @@ public class LeaveCommand extends DCommand {
 		DPlayer dplayer = DPlayer.get(player);
 		
 		if (GameWorld.get(player.getWorld()) != null) {
-			if (GameWorld.get(player.getWorld()).isTutorial) {
+			if (GameWorld.get(player.getWorld()).isTutorial()) {
 				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NoLeaveInTutorial"));
 				return;
 			}

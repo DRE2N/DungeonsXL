@@ -65,22 +65,22 @@ public class TestCommand extends DCommand {
 			return;
 		}
 		
-		DGroup dgroup = new DGroup(player, identifier, multiFloor);
+		DGroup dGroup = new DGroup(player, identifier, multiFloor);
 		
-		if (dgroup.getGWorld() == null) {
-			dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
+		if (dGroup.getGWorld() == null) {
+			dGroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
 		}
 		
 		DPlayer newDPlayer;
 		
-		if (dgroup.getGWorld().locLobby == null) {
-			newDPlayer = new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().world.getSpawnLocation(), false);
+		if (dGroup.getGWorld().getLocLobby() == null) {
+			newDPlayer = new DPlayer(player, dGroup.getGWorld().getWorld(), dGroup.getGWorld().getWorld().getSpawnLocation(), false);
 			
 		} else {
-			newDPlayer = new DPlayer(player, dgroup.getGWorld().world, dgroup.getGWorld().locLobby, false);
+			newDPlayer = new DPlayer(player, dGroup.getGWorld().getWorld(), dGroup.getGWorld().getLocLobby(), false);
 		}
 		
-		newDPlayer.isinTestMode = true;
+		newDPlayer.setIsInTestMode(true);
 	}
 	
 }

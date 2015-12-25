@@ -7,12 +7,10 @@ import org.bukkit.block.Sign;
 
 public class StartSign extends DSign {
 	
-	public static String name = "Start";
-	public String buildPermissions = "dxl.sign.start";
-	public boolean onDungeonInit = true;
+	private DSignType type = DSignTypeDefault.START;
 	
-	public StartSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public StartSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
@@ -22,17 +20,13 @@ public class StartSign extends DSign {
 	
 	@Override
 	public void onInit() {
-		getGWorld().locStart = getSign().getLocation();
+		getGameWorld().setLocStart(getSign().getLocation());
 		getSign().getBlock().setType(Material.AIR);
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }

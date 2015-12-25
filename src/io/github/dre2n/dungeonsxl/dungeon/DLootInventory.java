@@ -19,13 +19,13 @@ public class DLootInventory {
 	
 	private long time;
 	
-	public DLootInventory(Player player, ItemStack[] istacks) {
+	public DLootInventory(Player player, ItemStack[] itemStacks) {
 		plugin.getDLootInventories().add(this);
 		
 		inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', DungeonsXL.getPlugin().getDMessages().get("Player_Treasures")));
-		for (ItemStack istack : istacks) {
-			if (istack != null) {
-				inventory.addItem(istack);
+		for (ItemStack itemStack : itemStacks) {
+			if (itemStack != null) {
+				inventory.addItem(itemStack);
 			}
 		}
 		this.player = player;

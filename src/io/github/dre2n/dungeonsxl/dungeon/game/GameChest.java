@@ -18,58 +18,71 @@ import org.bukkit.inventory.ItemStack;
 public class GameChest {
 	
 	// Variables
-	public boolean isUsed = false;
-	public Chest chest;
-	public GameWorld gWorld;
-	public double moneyReward;
+	private boolean isUsed = false;
+	private Chest chest;
+	private GameWorld gameWorld;
+	private double moneyReward;
 	
-	public GameChest(Block chest, GameWorld gWorld, double moneyReward) {
-		if (chest.getState() instanceof Chest) {
-			this.chest = (Chest) chest.getState();
-			
-			this.gWorld = gWorld;
-			
-			this.moneyReward = moneyReward;
-			
-			gWorld.gameChests.add(this);
+	public GameChest(Block chest, GameWorld gameWorld, double moneyReward) {
+		if ( !(chest.getState() instanceof Chest)) {
+			return;
 		}
+		
+		this.chest = (Chest) chest.getState();
+		
+		this.gameWorld = gameWorld;
+		
+		this.moneyReward = moneyReward;
+		
+		gameWorld.getGameChests().add(this);
 	}
 	
-	public void addTreasure(DGroup dgroup) {
-		if (dgroup != null) {
-			for (Player player : dgroup.getPlayers()) {
-				DPlayer dplayer = DPlayer.get(player);
-				if (dplayer != null) {
-					dplayer.treasureMoney = dplayer.treasureMoney + moneyReward;
-					String msg = "";
-					for (ItemStack istack : chest.getInventory().getContents()) {
-						
-						if (istack != null) {
-							dplayer.treasureInv.addItem(istack);
-							String name;
-							
-							if (istack.hasItemMeta() && istack.getItemMeta().hasDisplayName()) {
-								name = istack.getItemMeta().getDisplayName();
-								
-							} else {
-								ItemInfo itemInfo = Items.itemByStack(istack);
-								if (itemInfo != null) {
-									name = itemInfo.getName();
-								} else {
-									name = istack.getType().name();
-								}
-							}
-							msg = msg + ChatColor.RED + " " + istack.getAmount() + " " + name + ChatColor.GOLD + ",";
-						}
-					}
+	public void addTreasure(DGroup dGroup) {
+		if (dGroup == null) {
+			return;
+		}
+		
+		for (Player player : dGroup.getPlayers()) {
+			DPlayer dplayer = DPlayer.get(player);
+			if (dplayer == null) {
+				continue;
+			}
+			
+			dplayer.setTreasureMoney(dplayer.getTreasureMoney() + moneyReward);
+			String msg = "";
+			for (ItemStack itemStack : chest.getInventory().getContents()) {
+				
+				if (itemStack == null) {
+					continue;
+				}
+				
+				dplayer.getTreasureInv().addItem(itemStack);
+				String name;
+				
+				if ( !itemStack.hasItemMeta()) {
+					continue;
+				}
+				
+				if (itemStack.getItemMeta().hasDisplayName()) {
+					name = itemStack.getItemMeta().getDisplayName();
 					
-					msg = msg.substring(0, msg.length() - 1);
-					
-					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_LootAdded", msg));
-					if (moneyReward != 0) {
-						MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_LootAdded", String.valueOf(moneyReward)));
+				} else {
+					ItemInfo itemInfo = Items.itemByStack(itemStack);
+					if (itemInfo != null) {
+						name = itemInfo.getName();
+					} else {
+						name = itemStack.getType().name();
 					}
 				}
+				
+				msg = msg + ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
+			}
+			
+			msg = msg.substring(0, msg.length() - 1);
+			
+			MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_LootAdded", msg));
+			if (moneyReward != 0) {
+				MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_LootAdded", String.valueOf(moneyReward)));
 			}
 		}
 	}
@@ -78,30 +91,95 @@ public class GameChest {
 	public static void onOpenInventory(InventoryOpenEvent event) {
 		InventoryView inventory = event.getView();
 		
-		GameWorld gWorld = GameWorld.get(event.getPlayer().getWorld());
+		GameWorld gameWorld = GameWorld.get(event.getPlayer().getWorld());
 		
-		if (gWorld != null) {
-			if (inventory.getTopInventory().getHolder() instanceof Chest) {
-				Chest chest = (Chest) inventory.getTopInventory().getHolder();
-				
-				for (GameChest gchest : gWorld.gameChests) {
-					if (gchest.chest.equals(chest)) {
-						
-						if ( !gchest.isUsed) {
-							if (gchest.chest.getLocation().distance(chest.getLocation()) < 1) {
-								gchest.addTreasure(DGroup.get(gWorld));
-								gchest.isUsed = true;
-								event.setCancelled(true);
-							}
-							
-						} else {
-							MessageUtil.sendMessage(DungeonsXL.getPlugin().getServer().getPlayer(event.getPlayer().getUniqueId()), DungeonsXL.getPlugin().getDMessages().get("Error_ChestIsOpened"));
-							event.setCancelled(true);
-						}
-					}
-				}
+		if (gameWorld == null) {
+			return;
+		}
+		
+		if (inventory.getTopInventory().getHolder() instanceof Chest) {
+			return;
+		}
+		
+		Chest chest = (Chest) inventory.getTopInventory().getHolder();
+		
+		for (GameChest gameChest : gameWorld.getGameChests()) {
+			if ( !gameChest.chest.equals(chest)) {
+				continue;
+			}
+			
+			if ( !gameChest.isUsed) {
+				MessageUtil.sendMessage(DungeonsXL.getPlugin().getServer().getPlayer(event.getPlayer().getUniqueId()), DungeonsXL.getPlugin().getDMessages().get("Error_ChestIsOpened"));
+				event.setCancelled(true);
+				continue;
+			}
+			
+			if (gameChest.chest.getLocation().distance(chest.getLocation()) < 1) {
+				gameChest.addTreasure(DGroup.get(gameWorld));
+				gameChest.isUsed = true;
+				event.setCancelled(true);
 			}
 		}
+	}
+	
+	/**
+	 * @return the isUsed
+	 */
+	public boolean isUsed() {
+		return isUsed;
+	}
+	
+	/**
+	 * @param isUsed
+	 * the isUsed to set
+	 */
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
+	
+	/**
+	 * @return the chest
+	 */
+	public Chest getChest() {
+		return chest;
+	}
+	
+	/**
+	 * @param chest
+	 * the chest to set
+	 */
+	public void setChest(Chest chest) {
+		this.chest = chest;
+	}
+	
+	/**
+	 * @return the gameWorld
+	 */
+	public GameWorld getGameWorld() {
+		return gameWorld;
+	}
+	
+	/**
+	 * @param gameWorld
+	 * the gameWorld to set
+	 */
+	public void setGameWorld(GameWorld gameWorld) {
+		this.gameWorld = gameWorld;
+	}
+	
+	/**
+	 * @return the moneyReward
+	 */
+	public double getMoneyReward() {
+		return moneyReward;
+	}
+	
+	/**
+	 * @param moneyReward
+	 * the moneyReward to set
+	 */
+	public void setMoneyReward(double moneyReward) {
+		this.moneyReward = moneyReward;
 	}
 	
 }

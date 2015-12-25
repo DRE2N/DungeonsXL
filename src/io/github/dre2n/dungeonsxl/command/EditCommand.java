@@ -27,26 +27,31 @@ public class EditCommand extends DCommand {
 		DGroup dgroup = DGroup.get(player);
 		DPlayer dplayer = DPlayer.get(player);
 		
-		if (EditWorld.isInvitedPlayer(dungeonName, player.getUniqueId(), player.getName()) || player.hasPermission("dxl.edit")) {
-			if (dplayer == null) {
-				if (dgroup == null) {
-					if (eworld != null) {
-						if (eworld.lobby == null) {
-							new DPlayer(player, eworld.world, eworld.world.getSpawnLocation(), true);
-						} else {
-							new DPlayer(player, eworld.world, eworld.lobby, true);
-						}
-					} else {
-						MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", dungeonName));
-					}
-				} else {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveGroup"));
-				}
-			} else {
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
-			}
-		} else {
+		if ( !(EditWorld.isInvitedPlayer(dungeonName, player.getUniqueId(), player.getName()) || player.hasPermission("dxl.edit"))) {
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NoPermission"));
+			return;
+		}
+		
+		if (dplayer != null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+			return;
+		}
+		
+		if (dgroup != null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveGroup"));
+			return;
+		}
+		
+		if (eworld == null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", dungeonName));
+			return;
+		}
+		
+		if (eworld.getLobby() == null) {
+			new DPlayer(player, eworld.getWorld(), eworld.getWorld().getSpawnLocation(), true);
+			
+		} else {
+			new DPlayer(player, eworld.getWorld(), eworld.getLobby(), true);
 		}
 		
 	}

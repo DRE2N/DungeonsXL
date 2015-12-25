@@ -35,7 +35,6 @@ public class DMessages {
 	}
 	
 	private void setDefaults() {
-		
 		/* Log */
 		defaults.put("Log_NewDungeon", "&6New Dungeon");
 		defaults.put("Log_GenerateNewWorld", "&6Generate new world...");
@@ -147,45 +146,52 @@ public class DMessages {
 	}
 	
 	public void save() {
-		if (changed) {
-			/* Copy old File */
-			File source = new File(file.getPath());
-			String filePath = file.getPath();
-			File temp = new File(filePath.substring(0, filePath.length() - 4) + "_old.yml");
+		if ( !changed) {
+			return;
+		}
+		
+		/* Copy old File */
+		File source = new File(file.getPath());
+		String filePath = file.getPath();
+		File temp = new File(filePath.substring(0, filePath.length() - 4) + "_old.yml");
+		
+		if (temp.exists()) {
+			temp.delete();
+		}
+		
+		source.renameTo(temp);
+		
+		/* Save */
+		FileConfiguration configFile = new YamlConfiguration();
+		
+		for (String key : entries.keySet()) {
+			configFile.set(key, entries.get(key));
+		}
+		
+		try {
+			configFile.save(file);
 			
-			if (temp.exists()) {
-				temp.delete();
-			}
-			
-			source.renameTo(temp);
-			
-			/* Save */
-			FileConfiguration configFile = new YamlConfiguration();
-			
-			for (String key : entries.keySet()) {
-				configFile.set(key, entries.get(key));
-			}
-			
-			try {
-				configFile.save(file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public String get(String key, String... args) {
 		String entry = entries.get(key);
 		
-		if (entry != null) {
-			int i = 0;
-			for (String arg : args) {
-				i++;
-				if (arg != null) {
-					entry = entry.replace("&v" + i, arg);
-				} else {
-					entry = entry.replace("&v" + i, "null");
-				}
+		if (entry == null) {
+			return entry;
+		}
+		
+		int i = 0;
+		for (String arg : args) {
+			i++;
+			
+			if (arg != null) {
+				entry = entry.replace("&v" + i, arg);
+				
+			} else {
+				entry = entry.replace("&v" + i, "null");
 			}
 		}
 		

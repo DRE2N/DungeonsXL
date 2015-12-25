@@ -13,12 +13,10 @@ import org.bukkit.entity.Player;
 
 public class ReadySign extends DSign {
 	
-	public static String name = "Ready";
-	public String buildPermissions = "dxl.sign.ready";
-	public boolean onDungeonInit = true;
+	private DSignType type = DSignTypeDefault.READY;
 	
-	public ReadySign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public ReadySign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
@@ -28,20 +26,22 @@ public class ReadySign extends DSign {
 	
 	@Override
 	public void onInit() {
-		if (getTriggers().isEmpty()) {
-			InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGWorld());
-			if (trigger != null) {
-				trigger.addListener(this);
-				addTrigger(trigger);
-			}
-			getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-			getSign().setLine(1, ChatColor.DARK_GREEN + "Ready");
-			getSign().setLine(2, "");
-			getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-			getSign().update();
-		} else {
+		if ( !getTriggers().isEmpty()) {
 			getSign().getBlock().setType(Material.AIR);
+			return;
 		}
+		
+		InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGameWorld());
+		if (trigger != null) {
+			trigger.addListener(this);
+			addTrigger(trigger);
+		}
+		
+		getSign().setLine(0, ChatColor.DARK_BLUE + "############");
+		getSign().setLine(1, ChatColor.DARK_GREEN + "Ready");
+		getSign().setLine(2, "");
+		getSign().setLine(3, ChatColor.DARK_BLUE + "############");
+		getSign().update();
 	}
 	
 	@Override
@@ -58,26 +58,27 @@ public class ReadySign extends DSign {
 	}
 	
 	private void ready(DPlayer dplayer) {
-		if (dplayer != null) {
-			if ( !dplayer.isReady) {
-				if (getGWorld().signClass.isEmpty() || dplayer.dclass != null) {
-					dplayer.ready();
-					MessageUtil.sendMessage(dplayer.player, plugin.getDMessages().get("Player_Ready"));
-					return;
-				} else {
-					MessageUtil.sendMessage(dplayer.player, plugin.getDMessages().get("Error_Ready"));
-				}
-			}
+		if (dplayer == null) {
+			return;
+		}
+		
+		if (dplayer.isReady()) {
+			return;
+		}
+		
+		if (getGameWorld().getSignClass().isEmpty() || dplayer.getDClass() != null) {
+			dplayer.ready();
+			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getDMessages().get("Player_Ready"));
+			return;
+			
+		} else {
+			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getDMessages().get("Error_Ready"));
 		}
 	}
 	
 	@Override
-	public String getPermissions() {
-		return buildPermissions;
+	public DSignType getType() {
+		return type;
 	}
 	
-	@Override
-	public boolean isOnDungeonInit() {
-		return onDungeonInit;
-	}
 }
