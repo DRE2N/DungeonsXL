@@ -54,40 +54,44 @@ public class PlayerListener implements Listener {
 		final DPlayer dPlayer = DPlayer.get(player);
 		
 		GameWorld gameWorld = GameWorld.get(player.getLocation().getWorld());
-		if (gameWorld != null) {
-			WorldConfig dConfig = gameWorld.getConfig();
+		if (gameWorld == null) {
+			return;
+		}
+		
+		WorldConfig dConfig = gameWorld.getConfig();
+		
+		if (dPlayer == null) {
+			return;
+		}
+		
+		dPlayer.setLives(dPlayer.getLives() - 1);
+		
+		if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
+			Bukkit.broadcastMessage(plugin.getDMessages().get("Player_DeathKick").replaceAll("v1", player.getName()).replaceAll("&", "\u00a7"));
+			// TODO: This Runnable is a workaround for a bug I couldn't find, yet...
+			new BukkitRunnable() {
+				public void run() {
+					dPlayer.leave();
+				}
+			}.runTaskLater(plugin, 1L);
 			
-			if (dPlayer != null) {
-				dPlayer.setLives(dPlayer.getLives() - 1);
-				
-				if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-					Bukkit.broadcastMessage(plugin.getDMessages().get("Player_DeathKick").replaceAll("v1", player.getName()).replaceAll("&", "\u00a7"));
-					// TODO: This Runnable is a workaround for a bug I couldn't find, yet...
-					new BukkitRunnable() {
-						public void run() {
-							dPlayer.leave();
-						}
-					}.runTaskLater(plugin, 1L);
-					
-				} else if ( !(dPlayer.getLives() == -1)) {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_Death").replaceAll("v1", String.valueOf(dPlayer.getLives())));
-					
-				} else if (dConfig != null) {
-					if (dConfig.getKeepInventoryOnDeath()) {
-						dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
-						dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
-						// Delete all drops
-						for (ItemStack istack : event.getDrops()) {
-							istack.setType(Material.AIR);
-						}
-					}
+		} else if ( !(dPlayer.getLives() == -1)) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_Death").replaceAll("v1", String.valueOf(dPlayer.getLives())));
+			
+		} else if (dConfig != null) {
+			if (dConfig.getKeepInventoryOnDeath()) {
+				dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
+				dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
+				// Delete all drops
+				for (ItemStack istack : event.getDrops()) {
+					istack.setType(Material.AIR);
 				}
 			}
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void onInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
 		
@@ -96,13 +100,13 @@ public class PlayerListener implements Listener {
 			if (GameWorld.get(player.getWorld()) != null || EditWorld.get(player.getWorld()) != null) {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.ENDER_CHEST) {
-						if ( !player.isOp()) {// TODO: Permission
+						if ( !player.hasPermission("dxl.bypass")) {
 							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Enderchest"));
 							event.setCancelled(true);
 						}
 						
 					} else if (clickedBlock.getType() == Material.BED_BLOCK) {
-						if ( !player.isOp()) {// TODO: Permission
+						if ( !player.hasPermission("dxl.bypass")) {
 							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Bed"));
 							event.setCancelled(true);
 						}
@@ -114,7 +118,7 @@ public class PlayerListener implements Listener {
 			if (GameWorld.get(player.getWorld()) != null) {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.DISPENSER) {
-						if ( !player.isOp()) {
+						if ( !player.hasPermission("dxl.bypass")) {
 							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Dispenser"));
 							event.setCancelled(true);
 						}
@@ -152,9 +156,9 @@ public class PlayerListener implements Listener {
 			if (EditWorld.get(player.getWorld()) != null) {
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 					if (item.getType() == Material.STICK) {
-						DPlayer dplayer = DPlayer.get(player);
-						if (dplayer != null) {
-							dplayer.poke(clickedBlock);
+						DPlayer dPlayer = DPlayer.get(player);
+						if (dPlayer != null) {
+							dPlayer.poke(clickedBlock);
 							event.setCancelled(true);
 						}
 					}
@@ -162,10 +166,10 @@ public class PlayerListener implements Listener {
 			}
 			
 			// Trigger UseItem Signs
-			GameWorld gworld = GameWorld.get(player.getWorld());
-			if (gworld != null) {
+			GameWorld gameWorld = GameWorld.get(player.getWorld());
+			if (gameWorld != null) {
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-					if (UseItemTrigger.hasTriggers(gworld)) {
+					if (UseItemTrigger.hasTriggers(gameWorld)) {
 						String name = null;
 						if (item.hasItemMeta()) {
 							if (item.getItemMeta().hasDisplayName()) {
@@ -183,7 +187,7 @@ public class PlayerListener implements Listener {
 						if (name == null) {
 							name = item.getType().toString();
 						}
-						UseItemTrigger trigger = UseItemTrigger.get(name, gworld);
+						UseItemTrigger trigger = UseItemTrigger.get(name, gameWorld);
 						if (trigger != null) {
 							trigger.onTrigger(player);
 						}
@@ -206,15 +210,15 @@ public class PlayerListener implements Listener {
 					event.setCancelled(true);
 				}
 				
-				DPlayer dplayer = DPlayer.get(player);
-				if (dplayer != null) {
+				DPlayer dPlayer = DPlayer.get(player);
+				if (dPlayer != null) {
 					
 					// Check GameWorld Signs
-					GameWorld gworld = GameWorld.get(player.getWorld());
-					if (gworld != null) {
+					GameWorld gameWorld = GameWorld.get(player.getWorld());
+					if (gameWorld != null) {
 						
 						// Trigger InteractTrigger
-						InteractTrigger trigger = InteractTrigger.get(clickedBlock, gworld);
+						InteractTrigger trigger = InteractTrigger.get(clickedBlock, gameWorld);
 						if (trigger != null) {
 							if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 								trigger.onTrigger(player);
@@ -224,11 +228,11 @@ public class PlayerListener implements Listener {
 						}
 						
 						// Class Signs
-						for (Sign classSign : gworld.getSignClass()) {
+						for (Sign classSign : gameWorld.getSignClass()) {
 							if (classSign != null) {
 								if (classSign.getLocation().distance(clickedBlock.getLocation()) < 1) {
 									if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-										dplayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
+										dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
 									} else {
 										MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Leftklick"));
 									}
@@ -244,89 +248,99 @@ public class PlayerListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerDropItem(PlayerDropItemEvent event) {
+	public void onDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
 		
 		// Deny dropping things at the lobby
-		DGroup dgroup = DGroup.get(player);
-		if (dgroup != null) {
-			if ( !dgroup.isPlaying()) {
-				event.setCancelled(true);
-				return;
-			}
-			if ( !DPlayer.get(player).isReady()) {
-				event.setCancelled(true);
-				return;
-			}
-			
-			DPlayer dplayer = DPlayer.get(player);
-			GameWorld gworld = GameWorld.get(dplayer.getWorld());
-			if (dplayer != null) {
-				for (Material material : gworld.getConfig().getSecureObjects()) {
-					if (material == event.getItemDrop().getItemStack().getType()) {
-						event.setCancelled(true);
-						MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Drop"));
-						return;
-					}
+		DGroup dGroup = DGroup.get(player);
+		if (dGroup == null) {
+			return;
+		}
+		
+		if ( !dGroup.isPlaying()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		if ( !DPlayer.get(player).isReady()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		DPlayer dPlayer = DPlayer.get(player);
+		GameWorld gameWorld = GameWorld.get(dPlayer.getWorld());
+		
+		if (dPlayer != null) {
+			for (Material material : gameWorld.getConfig().getSecureObjects()) {
+				if (material == event.getItemDrop().getItemStack().getType()) {
+					event.setCancelled(true);
+					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Drop"));
+					return;
 				}
 			}
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
+	public void onRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
-		DPlayer dplayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.get(player);
 		
-		if (dplayer != null) {
-			if (dplayer.isEditing()) {
-				EditWorld eworld = EditWorld.get(dplayer.getWorld());
-				if (eworld != null) {
-					if (eworld.getLobby() == null) {
-						event.setRespawnLocation(eworld.getWorld().getSpawnLocation());
-						
-					} else {
-						event.setRespawnLocation(eworld.getLobby());
-					}
+		if (dPlayer == null) {
+			return;
+		}
+		
+		if (dPlayer.isEditing()) {
+			EditWorld editWorld = EditWorld.get(dPlayer.getWorld());
+			if (editWorld == null) {
+				return;
+			}
+			
+			if (editWorld.getLobby() == null) {
+				event.setRespawnLocation(editWorld.getWorld().getSpawnLocation());
+				
+			} else {
+				event.setRespawnLocation(editWorld.getLobby());
+			}
+			
+		} else {
+			GameWorld gameWorld = GameWorld.get(dPlayer.getWorld());
+			
+			if (gameWorld == null) {
+				return;
+			}
+			
+			DGroup dGroup = DGroup.get(dPlayer.getPlayer());
+			
+			if (dPlayer.getCheckpoint() == null) {
+				event.setRespawnLocation(dGroup.getGameWorld().getLocStart());
+				
+				// Da einige Plugins einen anderen Respawn setzen wird
+				// ein Scheduler gestartet der den Player nach einer
+				// Sekunde teleportiert.
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dGroup.getGameWorld().getLocStart()), 10);
+				
+				if (dPlayer.getWolf() != null) {
+					dPlayer.getWolf().teleport(dGroup.getGameWorld().getLocStart());
 				}
 				
 			} else {
-				GameWorld gworld = GameWorld.get(dplayer.getWorld());
+				event.setRespawnLocation(dPlayer.getCheckpoint());
 				
-				if (gworld != null) {
-					DGroup dgroup = DGroup.get(dplayer.getPlayer());
-					
-					if (dplayer.getCheckpoint() == null) {
-						event.setRespawnLocation(dgroup.getGWorld().getLocStart());
-						
-						// Da einige Plugins einen anderen Respawn setzen wird
-						// ein Scheduler gestartet der den Player nach einer
-						// Sekunde teleportiert.
-						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dgroup.getGWorld().getLocStart()), 10);
-						
-						if (dplayer.getWolf() != null) {
-							dplayer.getWolf().teleport(dgroup.getGWorld().getLocStart());
-						}
-						
-					} else {
-						event.setRespawnLocation(dplayer.getCheckpoint());
-						
-						// Da einige Plugins einen anderen Respawn setzen wird
-						// ein Scheduler gestartet der den Player nach einer
-						// Sekunde teleportiert.
-						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dplayer.getCheckpoint()), 10);
-						
-						if (dplayer.getWolf() != null) {
-							dplayer.getWolf().teleport(dplayer.getCheckpoint());
-						}
-					}
+				// Da einige Plugins einen anderen Respawn setzen wird
+				// ein Scheduler gestartet der den Player nach einer
+				// Sekunde teleportiert.
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dPlayer.getCheckpoint()), 10);
+				
+				if (dPlayer.getWolf() != null) {
+					dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
 				}
 			}
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerPortalEvent(PlayerPortalEvent event) {
+	public void onPortal(PlayerPortalEvent event) {
 		Player player = event.getPlayer();
 		Location location = event.getFrom();
 		DPortal dportal = DPortal.get(location);
@@ -338,125 +352,145 @@ public class PlayerListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		Player player = event.getPlayer();
-		DPlayer dplayer = DPlayer.get(player);
-		
-		if (dplayer != null) {
-			if (dplayer.getWorld() != event.getTo().getWorld()) {
-				if ( !player.isOp()) {
-					event.setCancelled(true);
-				}
-			}
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		Player player = event.getPlayer();
-		DPlayer dplayer = DPlayer.get(player);
-		if (dplayer != null) {
-			if (dplayer.isInDungeonChat()) {
-				dplayer.msg(player.getDisplayName() + ": " + event.getMessage());
-				event.setCancelled(true);
-			}
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onTeleport(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
 		DPlayer dPlayer = DPlayer.get(player);
 		
-		if (dPlayer != null) {
-			// Check GameWorld
-			GameWorld gWorld = GameWorld.get(player.getWorld());
-			if (gWorld != null) {
-				int timeUntilKickOfflinePlayer = gWorld.getConfig().getTimeUntilKickOfflinePlayer();
-				
-				if (timeUntilKickOfflinePlayer == 0) {
-					dPlayer.leave();
-					
-				} else if (timeUntilKickOfflinePlayer > 0) {
-					dPlayer.msg(plugin.getDMessages().get("Player_Offline", dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer));
-					dPlayer.setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
-					
-				} else {
-					dPlayer.msg(plugin.getDMessages().get("Player_OfflineNeverKick", dPlayer.getPlayer().getName()));
-				}
-				
-			} else if (dPlayer.isEditing()) {
+		if (dPlayer == null) {
+			return;
+		}
+		
+		if (dPlayer.getWorld() == event.getTo().getWorld()) {
+			return;
+		}
+		
+		if ( !player.hasPermission("dxl.bypass")) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onChat(AsyncPlayerChatEvent event) {
+		Player player = event.getPlayer();
+		DPlayer dPlayer = DPlayer.get(player);
+		if (dPlayer == null) {
+			return;
+		}
+		
+		if (dPlayer.isInDungeonChat()) {
+			dPlayer.msg(player.getDisplayName() + ": " + event.getMessage());
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		DPlayer dPlayer = DPlayer.get(player);
+		
+		if (dPlayer == null) {
+			return;
+		}
+		
+		// Check GameWorld
+		GameWorld gameWorld = GameWorld.get(player.getWorld());
+		if (gameWorld != null) {
+			int timeUntilKickOfflinePlayer = gameWorld.getConfig().getTimeUntilKickOfflinePlayer();
+			
+			if (timeUntilKickOfflinePlayer == 0) {
 				dPlayer.leave();
+				
+			} else if (timeUntilKickOfflinePlayer > 0) {
+				dPlayer.msg(plugin.getDMessages().get("Player_Offline", dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer));
+				dPlayer.setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
+				
+			} else {
+				dPlayer.msg(plugin.getDMessages().get("Player_OfflineNeverKick", dPlayer.getPlayer().getName()));
 			}
+			
+		} else if (dPlayer.isEditing()) {
+			dPlayer.leave();
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerJoin(PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		
-		// Check dplayers
-		DPlayer dplayer = DPlayer.get(player.getName());
-		if (dplayer != null) {
-			DGroup dgroup = DGroup.get(dplayer.getPlayer());
-			if (dgroup != null) {
-				dgroup.getPlayers().remove(dplayer.getPlayer());
-				dgroup.getPlayers().add(player);
+		// Check dPlayers
+		DPlayer dPlayer = DPlayer.get(player.getName());
+		if (dPlayer != null) {
+			DGroup dGroup = DGroup.get(dPlayer.getPlayer());
+			if (dGroup != null) {
+				dGroup.getPlayers().remove(dPlayer.getPlayer());
+				dGroup.getPlayers().add(player);
 			}
-			dplayer.setPlayer(player);
+			dPlayer.setPlayer(player);
 			
 			// Check offlineTime
-			dplayer.setOfflineTime(0);
+			dPlayer.setOfflineTime(0);
 		}
 		
 		// Tutorial Mode
-		if (plugin.getMainConfig().isTutorialActivated()) {
-			if (DPlayer.get(player) == null) {
-				if (plugin.getMainConfig().getTutorialDungeon() != null && plugin.getMainConfig().getTutorialStartGroup() != null && plugin.getMainConfig().getTutorialEndGroup() != null) {
-					for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
-						if (plugin.getMainConfig().getTutorialStartGroup().equalsIgnoreCase(group)) {
-							DGroup dgroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
-							
-							if (dgroup.getGWorld() == null) {
-								dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
-								dgroup.getGWorld().setTutorial(true);
-							}
-							
-							if (dgroup.getGWorld() != null) {
-								if (dgroup.getGWorld().getLocLobby() == null) {
-									
-								} else {
-									new DPlayer(player, dgroup.getGWorld().getWorld(), dgroup.getGWorld().getLocLobby(), false);
-								}
-								
-							} else {
-								MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_TutorialNotExist"));
-							}
-						}
-					}
-				}
+		if ( !plugin.getMainConfig().isTutorialActivated()) {
+			return;
+		}
+		
+		if (DPlayer.get(player) != null) {
+			return;
+		}
+		
+		if (plugin.getPermissionProvider() == null) {
+			return;
+		}
+		
+		if ((plugin.getMainConfig().getTutorialDungeon() == null || plugin.getMainConfig().getTutorialStartGroup() == null || plugin.getMainConfig().getTutorialEndGroup() == null)) {
+			return;
+		}
+		
+		for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
+			if ( !plugin.getMainConfig().getTutorialStartGroup().equalsIgnoreCase(group)) {
+				continue;
+			}
+			
+			DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
+			
+			if (dGroup.getGameWorld() == null) {
+				dGroup.setGameWorld(GameWorld.load(DGroup.get(player).getMapName()));
+				dGroup.getGameWorld().setTutorial(true);
+			}
+			
+			if (dGroup.getGameWorld() == null) {
+				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_TutorialNotExist"));
+				continue;
+			}
+			
+			if (dGroup.getGameWorld().getLocLobby() != null) {
+				new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false);
 			}
 		}
 	}
 	
 	// Deny Player Cmds
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
-		if (event.getPlayer().hasPermission("dungeonsxl.cmd")) {
+	public void onCommand(PlayerCommandPreprocessEvent event) {
+		if (event.getPlayer().hasPermission("dxl.bypass")) {
 			return;
 		}
 		
-		DPlayer dplayer = DPlayer.get(event.getPlayer());
-		if (dplayer != null) {
-			if (dplayer.isEditing() && event.getPlayer().hasPermission("dungeonsxl.cmdedit") || event.getPlayer().isOp()) {
-				return;
-			}
-			
-			String[] splittedCmd = event.getMessage().split(" ");
-			if ( !splittedCmd[0].equalsIgnoreCase("/dungeon") && !splittedCmd[0].equalsIgnoreCase("/dungeonsxl") && !splittedCmd[0].equalsIgnoreCase("/dxl")) {
-				MessageUtil.sendMessage(event.getPlayer(), plugin.getDMessages().get("Error_Cmd"));
-				event.setCancelled(true);
-			}
+		DPlayer dPlayer = DPlayer.get(event.getPlayer());
+		if (dPlayer == null) {
+			return;
+		}
+		
+		if (dPlayer.isEditing() && event.getPlayer().hasPermission("dxl.cmdedit")) {
+			return;
+		}
+		
+		String[] splittedCmd = event.getMessage().split(" ");
+		if ( !splittedCmd[0].equalsIgnoreCase("/dungeon") && !splittedCmd[0].equalsIgnoreCase("/dungeonsxl") && !splittedCmd[0].equalsIgnoreCase("/dxl")) {
+			MessageUtil.sendMessage(event.getPlayer(), plugin.getDMessages().get("Error_Cmd"));
+			event.setCancelled(true);
 		}
 	}
 	
@@ -469,36 +503,45 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event) {
 		Player player = (Player) event.getPlayer();
+		
 		for (DLootInventory inventory : plugin.getDLootInventories()) {
-			if (event.getView() == inventory.getInventoryView()) {
-				if (System.currentTimeMillis() - inventory.getTime() > 500) {
-					for (ItemStack istack : inventory.getInventory().getContents()) {
-						if (istack != null) {
-							player.getWorld().dropItem(player.getLocation(), istack);
-						}
-					}
-					
-					plugin.getDLootInventories().remove(inventory);
+			if (event.getView() != inventory.getInventoryView()) {
+				continue;
+			}
+			
+			if (System.currentTimeMillis() - inventory.getTime() <= 500) {
+				continue;
+			}
+			
+			for (ItemStack istack : inventory.getInventory().getContents()) {
+				if (istack != null) {
+					player.getWorld().dropItem(player.getLocation(), istack);
 				}
 			}
+			
+			plugin.getDLootInventories().remove(inventory);
 		}
 	}
 	
 	// Player move
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
+	public void onMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		DLootInventory inventory = DLootInventory.get(player);
 		
-		if (inventory != null) {
-			if (player.getLocation().getBlock().getType() != Material.PORTAL) {
-				if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
-				        && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative( -1, 0, 0).getType() != Material.PORTAL
-				        && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
-					inventory.setInventoryView(inventory.getPlayer().openInventory(inventory.getInventory()));
-					inventory.setTime(System.currentTimeMillis());
-				}
-			}
+		if (inventory == null) {
+			return;
+		}
+		
+		if (player.getLocation().getBlock().getType() == Material.PORTAL) {
+			return;
+		}
+		
+		if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
+		        && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative( -1, 0, 0).getType() != Material.PORTAL
+		        && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
+			inventory.setInventoryView(inventory.getPlayer().openInventory(inventory.getInventory()));
+			inventory.setTime(System.currentTimeMillis());
 		}
 	}
 	
@@ -519,17 +562,20 @@ public class PlayerListener implements Listener {
 				MiscUtil.secureTeleport(player, location);
 			}
 			
-			DPlayer dplayer = DPlayer.get(player);
+			DPlayer dPlayer = DPlayer.get(player);
 			
-			if (dplayer != null) {
-				// Respawn Items
-				if (dplayer.getRespawnInventory() != null || dplayer.getRespawnArmor() != null) {
-					player.getInventory().setContents(dplayer.getRespawnInventory());
-					player.getInventory().setArmorContents(dplayer.getRespawnArmor());
-					dplayer.setRespawnInventory(null);
-					dplayer.setRespawnArmor(null);
-				}
+			if (dPlayer == null) {
+				return;
+			}
+			
+			// Respawn Items
+			if (dPlayer.getRespawnInventory() != null || dPlayer.getRespawnArmor() != null) {
+				player.getInventory().setContents(dPlayer.getRespawnInventory());
+				player.getInventory().setArmorContents(dPlayer.getRespawnArmor());
+				dPlayer.setRespawnInventory(null);
+				dPlayer.setRespawnArmor(null);
 			}
 		}
 	}
+	
 }

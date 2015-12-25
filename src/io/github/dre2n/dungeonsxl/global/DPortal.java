@@ -89,19 +89,19 @@ public class DPortal {
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInGroup"));
 		}
 		
-		if (dgroup.getGWorld() == null) {
-			dgroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
+		if (dgroup.getGameWorld() == null) {
+			dgroup.setGameWorld(GameWorld.load(DGroup.get(player).getMapName()));
 		}
 		
-		if (dgroup.getGWorld() == null) {
+		if (dgroup.getGameWorld() == null) {
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", DGroup.get(player).getMapName()));
 		}
 		
-		if (dgroup.getGWorld().getLocLobby() == null) {
-			new DPlayer(player, dgroup.getGWorld().getWorld(), dgroup.getGWorld().getWorld().getSpawnLocation(), false);
+		if (dgroup.getGameWorld().getLocLobby() == null) {
+			new DPlayer(player, dgroup.getGameWorld().getWorld(), dgroup.getGameWorld().getWorld().getSpawnLocation(), false);
 			
 		} else {
-			new DPlayer(player, dgroup.getGWorld().getWorld(), dgroup.getGWorld().getLocLobby(), false);
+			new DPlayer(player, dgroup.getGameWorld().getWorld(), dgroup.getGameWorld().getLocLobby(), false);
 		}
 	}
 	

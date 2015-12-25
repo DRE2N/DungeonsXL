@@ -1,6 +1,3 @@
-/* TODO: Cleanup - Overhaul DPlayer, GameWorld, GameChest & Listeners - MiscUtil - FileUtil -
- * Variable names - Triggers */
-
 package io.github.dre2n.dungeonsxl;
 
 import io.github.dre2n.dungeonsxl.command.DCommands;

@@ -33,7 +33,9 @@ public class DGroup {
 		if (multiFloor) {
 			this.dungeonName = identifier;
 			this.mapName = plugin.getDungeons().getDungeon(dungeonName).getConfig().getStartFloor();
+			System.out.println("This one?");
 			this.unplayedFloors = plugin.getDungeons().getDungeon(dungeonName).getConfig().getFloors();
+			System.out.println("If this shows p,");
 			
 		} else {
 			this.mapName = identifier;
@@ -87,7 +89,7 @@ public class DGroup {
 	/**
 	 * @return the gameWorld
 	 */
-	public GameWorld getGWorld() {
+	public GameWorld getGameWorld() {
 		return gameWorld;
 	}
 	
@@ -95,7 +97,7 @@ public class DGroup {
 	 * @param gameWorld
 	 * the gameWorld to set
 	 */
-	public void setGWorld(GameWorld gameWorld) {
+	public void setGameWorld(GameWorld gameWorld) {
 		this.gameWorld = gameWorld;
 	}
 	
@@ -256,7 +258,7 @@ public class DGroup {
 	
 	public static DGroup get(GameWorld gameWorld) {
 		for (DGroup dGroup : plugin.getDGroups()) {
-			if (dGroup.getGWorld() == gameWorld) {
+			if (dGroup.getGameWorld() == gameWorld) {
 				return dGroup;
 			}
 		}

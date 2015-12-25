@@ -232,7 +232,7 @@ public class DPlayer {
 	public void respawn() {
 		DGroup dGroup = DGroup.get(getPlayer());
 		if (checkpoint == null) {
-			MiscUtil.secureTeleport(getPlayer(), dGroup.getGWorld().getLocStart());
+			MiscUtil.secureTeleport(getPlayer(), dGroup.getGameWorld().getLocStart());
 		} else {
 			MiscUtil.secureTeleport(getPlayer(), checkpoint);
 		}
@@ -305,10 +305,10 @@ public class DPlayer {
 		}
 		dGroup.removeUnplayedFloor(dGroup.getMapName());
 		dGroup.setMapName(newFloor);
-		dGroup.setGWorld(GameWorld.load(newFloor));
+		dGroup.setGameWorld(GameWorld.load(newFloor));
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dPlayer = get(player);
-			dPlayer.checkpoint = dGroup.getGWorld().getLocStart();
+			dPlayer.checkpoint = dGroup.getGameWorld().getLocStart();
 		}
 		dGroup.startGame();
 	}
@@ -816,9 +816,9 @@ public class DPlayer {
 						if (gameWorld != null) {
 							DGroup dGroup = DGroup.get(dplayer.getPlayer());
 							if (dplayer.checkpoint == null) {
-								MiscUtil.secureTeleport(dplayer.getPlayer(), dGroup.getGWorld().getLocStart());
+								MiscUtil.secureTeleport(dplayer.getPlayer(), dGroup.getGameWorld().getLocStart());
 								if (dplayer.wolf != null) {
-									dplayer.wolf.teleport(dGroup.getGWorld().getLocStart());
+									dplayer.wolf.teleport(dGroup.getGameWorld().getLocStart());
 								}
 							} else {
 								MiscUtil.secureTeleport(dplayer.getPlayer(), dplayer.checkpoint);

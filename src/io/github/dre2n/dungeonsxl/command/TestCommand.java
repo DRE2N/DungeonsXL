@@ -67,17 +67,17 @@ public class TestCommand extends DCommand {
 		
 		DGroup dGroup = new DGroup(player, identifier, multiFloor);
 		
-		if (dGroup.getGWorld() == null) {
-			dGroup.setGWorld(GameWorld.load(DGroup.get(player).getMapName()));
+		if (dGroup.getGameWorld() == null) {
+			dGroup.setGameWorld(GameWorld.load(DGroup.get(player).getMapName()));
 		}
 		
 		DPlayer newDPlayer;
 		
-		if (dGroup.getGWorld().getLocLobby() == null) {
-			newDPlayer = new DPlayer(player, dGroup.getGWorld().getWorld(), dGroup.getGWorld().getWorld().getSpawnLocation(), false);
+		if (dGroup.getGameWorld().getLocLobby() == null) {
+			newDPlayer = new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getWorld().getSpawnLocation(), false);
 			
 		} else {
-			newDPlayer = new DPlayer(player, dGroup.getGWorld().getWorld(), dGroup.getGWorld().getLocLobby(), false);
+			newDPlayer = new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false);
 		}
 		
 		newDPlayer.setIsInTestMode(true);
