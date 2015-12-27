@@ -43,7 +43,7 @@ public class GroupSign {
 		
 		this.startSign = startSign;
 		dGroups = new DGroup[maxGroups];
-		this.multiFloor = multiFloor;
+		this.setMultiFloor(multiFloor);
 		if (multiFloor) {
 			dungeonName = identifier;
 			Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
@@ -79,6 +79,36 @@ public class GroupSign {
 	 */
 	public void setDungeonName(String dungeonName) {
 		this.dungeonName = dungeonName;
+	}
+	
+	/**
+	 * @return the mapName
+	 */
+	public String getMapName() {
+		return mapName;
+	}
+	
+	/**
+	 * @param mapName
+	 * the mapName to set
+	 */
+	public void setMapName(String mapName) {
+		this.mapName = mapName;
+	}
+	
+	/**
+	 * @return the multiFloor
+	 */
+	public boolean isMultiFloor() {
+		return multiFloor;
+	}
+	
+	/**
+	 * @param multiFloor
+	 * the multiFloor to set
+	 */
+	public void setMultiFloor(boolean multiFloor) {
+		this.multiFloor = multiFloor;
 	}
 	
 	public void update() {
@@ -347,17 +377,20 @@ public class GroupSign {
 		}
 		
 		if ( !GameWorld.canPlayDungeon(groupSign.mapName, player)) {
-			File file = new File(DungeonsXL.getPlugin().getDataFolder() + "/maps/" + groupSign.mapName, "config.yml");
+			File file = new File(plugin.getDataFolder() + "/maps/" + groupSign.mapName, "config.yml");
 			if (file != null) {
 				WorldConfig confReader = new WorldConfig(file);
 				if (confReader != null) {
-					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_Cooldown", "" + confReader.getTimeToNextPlay()));
+					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Cooldown", "" + confReader.getTimeToNextPlay()));
 				}
 			}
+			
+			return true;
 		}
 		
 		if ( !GameWorld.checkRequirements(groupSign.mapName, player)) {
-			MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_Requirements"));
+			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Requirements"));
+			return true;
 		}
 		
 		int sx1 = groupSign.startSign.getX(), sy1 = groupSign.startSign.getY(), sz1 = groupSign.startSign.getZ();
@@ -379,7 +412,12 @@ public class GroupSign {
 		Sign topSign = (Sign) topBlock.getState();
 		if (topSign.getLine(0).equals(strNewGrp)) {
 			if (DGroup.get(player) == null) {
-				groupSign.dGroups[column] = new DGroup(player, groupSign.mapName, groupSign.multiFloor);
+				if (groupSign.isMultiFloor()) {
+					groupSign.dGroups[column] = new DGroup(player, groupSign.dungeonName, groupSign.isMultiFloor());
+					
+				} else {
+					groupSign.dGroups[column] = new DGroup(player, groupSign.mapName, groupSign.isMultiFloor());
+				}
 				groupSign.update();
 			}
 			
@@ -451,7 +489,7 @@ public class GroupSign {
 			configFile.set(preString + ".z", groupSign.startSign.getZ());
 			
 			// Etc.
-			if (groupSign.multiFloor) {
+			if (groupSign.isMultiFloor()) {
 				configFile.set(preString + ".dungeon", groupSign.dungeonName);
 				
 			} else {
@@ -460,7 +498,7 @@ public class GroupSign {
 			
 			configFile.set(preString + ".maxGroups", groupSign.dGroups.length);
 			configFile.set(preString + ".maxPlayersPerGroup", groupSign.maxPlayersPerGroup);
-			configFile.set(preString + ".multiFloor", groupSign.multiFloor);
+			configFile.set(preString + ".multiFloor", groupSign.isMultiFloor());
 		}
 	}
 	
@@ -480,8 +518,8 @@ public class GroupSign {
 					int maxGroups = configFile.getInt(preString + ".maxGroups");
 					int maxPlayersPerGroup = configFile.getInt(preString + ".maxPlayersPerGroup");
 					boolean multiFloor = false;
-					if (configFile.contains("multiFloor")) {
-						multiFloor = configFile.getBoolean("multiFloor");
+					if (configFile.contains(preString + ".multiFloor")) {
+						multiFloor = configFile.getBoolean(preString + ".multiFloor");
 					}
 					Block startSign = world.getBlockAt(configFile.getInt(preString + ".x"), configFile.getInt(preString + ".y"), configFile.getInt(preString + ".z"));
 					

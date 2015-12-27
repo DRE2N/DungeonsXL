@@ -30,12 +30,12 @@ public class DGroup {
 		plugin.getDGroups().add(this);
 		
 		this.players.add(player);
-		if (multiFloor) {
+		
+		Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+		if (multiFloor && dungeon != null) {
 			this.dungeonName = identifier;
-			this.mapName = plugin.getDungeons().getDungeon(dungeonName).getConfig().getStartFloor();
-			System.out.println("This one?");
-			this.unplayedFloors = plugin.getDungeons().getDungeon(dungeonName).getConfig().getFloors();
-			System.out.println("If this shows p,");
+			this.mapName = dungeon.getConfig().getStartFloor();
+			this.unplayedFloors = dungeon.getConfig().getFloors();
 			
 		} else {
 			this.mapName = identifier;

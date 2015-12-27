@@ -32,10 +32,12 @@ public class BlockListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		if (event.getBlock().getType() == Material.PORTAL) {
-			if (DPortal.get(event.getBlock()) != null) {
-				event.setCancelled(true);
-			}
+		if (event.getBlock().getType() != Material.PORTAL) {
+			return;
+		}
+		
+		if (DPortal.get(event.getBlock()) != null) {
+			event.setCancelled(true);
 		}
 	}
 	
@@ -72,14 +74,14 @@ public class BlockListener implements Listener {
 		}
 		
 		// Editworld Signs
-		EditWorld eworld = EditWorld.get(block.getWorld());
-		if (eworld != null) {
-			eworld.getSign().remove(event.getBlock());
+		EditWorld editWorld = EditWorld.get(block.getWorld());
+		if (editWorld != null) {
+			editWorld.getSign().remove(event.getBlock());
 		}
 		
 		// Deny GameWorld Blocks
-		GameWorld gworld = GameWorld.get(block.getWorld());
-		if (gworld != null) {
+		GameWorld gameWorld = GameWorld.get(block.getWorld());
+		if (gameWorld != null) {
 			event.setCancelled(true);
 		}
 		
@@ -90,25 +92,28 @@ public class BlockListener implements Listener {
 		Block block = event.getBlock();
 		
 		// Deny GameWorld Blocks
-		GameWorld gworld = GameWorld.get(block.getWorld());
-		if (gworld != null) {
-			if ( !GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gworld)) {
-				
-				// Workaround for a bug that would allow 3-Block-high jumping
-				Location loc = event.getPlayer().getLocation();
-				if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
-					if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
-						if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
-							loc.setX(block.getX() + 0.5);
-							loc.setY(block.getY());
-							loc.setZ(block.getZ() + 0.5);
-							event.getPlayer().teleport(loc);
-						}
-					}
+		GameWorld gameWorld = GameWorld.get(block.getWorld());
+		if (gameWorld == null) {
+			return;
+		}
+		
+		if (GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gameWorld)) {
+			return;
+		}
+		
+		// Workaround for a bug that would allow 3-Block-high jumping
+		Location loc = event.getPlayer().getLocation();
+		if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
+			if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
+				if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
+					loc.setX(block.getX() + 0.5);
+					loc.setY(block.getY());
+					loc.setZ(block.getZ() + 0.5);
+					event.getPlayer().teleport(loc);
 				}
-				event.setCancelled(true);
 			}
 		}
+		event.setCancelled(true);
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -116,40 +121,48 @@ public class BlockListener implements Listener {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		String[] lines = event.getLines();
-		EditWorld eworld = EditWorld.get(player.getWorld());
+		EditWorld editWorld = EditWorld.get(player.getWorld());
 		
 		// Group Signs
-		if (eworld == null) {
-			if (player.isOp() || player.hasPermission("dxl.sign")) {
-				if (lines[0].equalsIgnoreCase("[DXL]")) {
-					if (lines[1].equalsIgnoreCase("Group")) {
-						String dungeonName = lines[2];
-						
-						String[] data = lines[3].split("\\,");
-						if (data.length >= 2 && data.length <= 3) {
-							int maxGroups = IntegerUtil.parseInt(data[0]);
-							int maxPlayersPerGroup = IntegerUtil.parseInt(data[1]);
-							boolean multiFloor = false;
-							if (data.length == 3) {
-								if (data[2].equals("+")) {
-									multiFloor = true;
-								}
-							}
-							if (maxGroups > 0 && maxPlayersPerGroup > 0) {
-								if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup, multiFloor) != null) {
-									event.setCancelled(true);
-								}
-							}
+		if (editWorld == null) {
+			if ( !player.hasPermission("dxl.sign")) {
+				return;
+			}
+			
+			if ( !lines[0].equalsIgnoreCase("[DXL]")) {
+				return;
+			}
+			
+			if (lines[1].equalsIgnoreCase("Group")) {
+				String dungeonName = lines[2];
+				
+				String[] data = lines[3].split("\\,");
+				if (data.length >= 2 && data.length <= 3) {
+					int maxGroups = IntegerUtil.parseInt(data[0]);
+					int maxPlayersPerGroup = IntegerUtil.parseInt(data[1]);
+					boolean multiFloor = false;
+					if (data.length == 3) {
+						if (data[2].equals("+")) {
+							multiFloor = true;
 						}
-					} else if (lines[1].equalsIgnoreCase("Leave")) {
-						if (block.getState() instanceof Sign) {
-							Sign sign = (Sign) block.getState();
-							new LeaveSign(sign);
+					}
+					
+					if (maxGroups > 0 && maxPlayersPerGroup > 0) {
+						if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup, multiFloor) != null) {
+							event.setCancelled(true);
 						}
-						event.setCancelled(true);
 					}
 				}
+				
+			} else if (lines[1].equalsIgnoreCase("Leave")) {
+				if (block.getState() instanceof Sign) {
+					Sign sign = (Sign) block.getState();
+					new LeaveSign(sign);
+				}
+				
+				event.setCancelled(true);
 			}
+			
 		} else { // Editworld Signs
 			Sign sign = (Sign) block.getState();
 			if (sign != null) {
@@ -160,20 +173,21 @@ public class BlockListener implements Listener {
 				
 				DSign dsign = DSign.create(sign, null);
 				
-				if (dsign != null) {
-					if (player.isOp() || player.hasPermission(dsign.getType().getBuildPermission())) {
-						if (dsign.check()) {
-							eworld.checkSign(block);
-							eworld.getSign().add(block);
-							MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_SignCreated"));
-							
-						} else {
-							MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_SignWrongFormat"));
-						}
-						
-					} else {
-						MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_NoPermissions"));
-					}
+				if (dsign == null) {
+					return;
+				}
+				
+				if ( !player.hasPermission(dsign.getType().getBuildPermission())) {
+					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_NoPermissions"));
+				}
+				
+				if (dsign.check()) {
+					editWorld.checkSign(block);
+					editWorld.getSign().add(block);
+					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_SignCreated"));
+					
+				} else {
+					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_SignWrongFormat"));
 				}
 			}
 		}
@@ -183,18 +197,20 @@ public class BlockListener implements Listener {
 	public void onBlockSpread(BlockSpreadEvent event) {
 		Block block = event.getBlock();
 		// Block the Spread off Vines
-		if (block.getType() == Material.VINE) {
-			// Check GameWorlds
-			GameWorld gworld = GameWorld.get(event.getBlock().getWorld());
-			if (gworld != null) {
-				event.setCancelled(true);
-			}
-			
-			// Check EditWorlds
-			EditWorld eworld = EditWorld.get(event.getBlock().getWorld());
-			if (eworld != null) {
-				event.setCancelled(true);
-			}
+		if (block.getType() != Material.VINE) {
+			return;
+		}
+		
+		// Check GameWorlds
+		GameWorld gameWorld = GameWorld.get(event.getBlock().getWorld());
+		if (gameWorld != null) {
+			event.setCancelled(true);
+		}
+		
+		// Check EditWorlds
+		EditWorld editWorld = EditWorld.get(event.getBlock().getWorld());
+		if (editWorld != null) {
+			event.setCancelled(true);
 		}
 		
 	}
@@ -213,9 +229,9 @@ public class BlockListener implements Listener {
 		
 		@Override
 		public void run() {
-			for (GameWorld gworld : DungeonsXL.getPlugin().getGameWorlds()) {
-				if (block.getWorld() == gworld.getWorld()) {
-					RedstoneTrigger.updateAll(gworld);
+			for (GameWorld gameWorld : DungeonsXL.getPlugin().getGameWorlds()) {
+				if (block.getWorld() == gameWorld.getWorld()) {
+					RedstoneTrigger.updateAll(gameWorld);
 				}
 			}
 		}

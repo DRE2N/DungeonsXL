@@ -95,6 +95,7 @@ public class DPortal {
 		
 		if (dgroup.getGameWorld() == null) {
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", DGroup.get(player).getMapName()));
+			return;
 		}
 		
 		if (dgroup.getGameWorld().getLocLobby() == null) {
