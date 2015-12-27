@@ -79,14 +79,14 @@ public class WorldConfig {
 	@SuppressWarnings("deprecation")
 	public void load(ConfigurationSection configFile) {
 		/* Classes */
-		ConfigurationSection configSetionClasses = configFile.getConfigurationSection("classes");
-		if (configSetionClasses != null) {
-			Set<String> list = configSetionClasses.getKeys(false);
+		ConfigurationSection configSectionClasses = configFile.getConfigurationSection("classes");
+		if (configSectionClasses != null) {
+			Set<String> list = configSectionClasses.getKeys(false);
 			for (String className : list) {
 				String name = className;
-				boolean hasDog = configSetionClasses.getBoolean(className + ".dog");
+				boolean hasDog = configSectionClasses.getBoolean(className + ".dog");
 				/* Items */
-				List<String> items = configSetionClasses.getStringList(className + ".items");
+				List<String> items = configSectionClasses.getStringList(className + ".items");
 				CopyOnWriteArrayList<ItemStack> istacks = new CopyOnWriteArrayList<ItemStack>();
 				
 				for (String item : items) {
@@ -132,12 +132,12 @@ public class WorldConfig {
 		}
 		
 		/* Messages */
-		ConfigurationSection configSetionMessages = configFile.getConfigurationSection("message");
-		if (configSetionMessages != null) {
-			Set<String> list = configSetionMessages.getKeys(false);
+		ConfigurationSection configSectionMessages = configFile.getConfigurationSection("message");
+		if (configSectionMessages != null) {
+			Set<String> list = configSectionMessages.getKeys(false);
 			for (String messagePath : list) {
 				int messageId = IntegerUtil.parseInt(messagePath);
-				msgs.put(messageId, configSetionMessages.getString(messagePath));
+				msgs.put(messageId, configSectionMessages.getString(messagePath));
 			}
 		}
 		
@@ -257,8 +257,8 @@ public class WorldConfig {
 		}
 		
 		/* Mobtypes */
-		configSetionMessages = configFile.getConfigurationSection("mobTypes");
-		mobTypes = DMobType.load(configSetionMessages);
+		configSectionMessages = configFile.getConfigurationSection("mobTypes");
+		mobTypes = DMobType.load(configSectionMessages);
 	}
 	
 	@SuppressWarnings("deprecation")

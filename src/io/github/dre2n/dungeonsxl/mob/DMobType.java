@@ -108,7 +108,7 @@ public class DMobType {
 		Set<DMobType> set = new HashSet<DMobType>();
 		
 		if (configFile == null) {
-			return null;
+			return set;
 		}
 		
 		// Read Mobs

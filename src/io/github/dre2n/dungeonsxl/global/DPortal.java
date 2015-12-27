@@ -87,6 +87,7 @@ public class DPortal {
 		
 		if (dgroup == null) {
 			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInGroup"));
+			return;
 		}
 		
 		if (dgroup.getGameWorld() == null) {
