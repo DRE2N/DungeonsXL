@@ -63,7 +63,6 @@ public class DSavePlayer {
 	}
 	
 	public void reset(boolean keepInventory) {
-		@SuppressWarnings("deprecation")
 		Player player = plugin.getServer().getPlayer(playerName);
 		boolean offline = false;
 		if (player == null) {

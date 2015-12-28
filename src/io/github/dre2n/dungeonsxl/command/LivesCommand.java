@@ -19,7 +19,6 @@ public class LivesCommand extends DCommand {
 		setConsoleCommand(true);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = null;
