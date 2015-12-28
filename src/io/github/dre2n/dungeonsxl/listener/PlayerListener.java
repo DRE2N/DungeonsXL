@@ -378,7 +378,7 @@ public class PlayerListener implements Listener {
 		}
 		
 		if (dPlayer.isInDungeonChat()) {
-			dPlayer.msg(player.getDisplayName() + ": " + event.getMessage());
+			dPlayer.sendMessage(player.getDisplayName() + ": " + event.getMessage());
 			event.setCancelled(true);
 		}
 	}
@@ -392,6 +392,8 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
+		DGroup dGroup = DGroup.get(player);
+		
 		// Check GameWorld
 		GameWorld gameWorld = GameWorld.get(player.getWorld());
 		if (gameWorld != null) {
@@ -401,11 +403,11 @@ public class PlayerListener implements Listener {
 				dPlayer.leave();
 				
 			} else if (timeUntilKickOfflinePlayer > 0) {
-				dPlayer.msg(plugin.getDMessages().get("Player_Offline", dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer));
+				dGroup.sendMessage(plugin.getDMessages().get("Player_Offline", dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer), player);
 				dPlayer.setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
 				
 			} else {
-				dPlayer.msg(plugin.getDMessages().get("Player_OfflineNeverKick", dPlayer.getPlayer().getName()));
+				dGroup.sendMessage(plugin.getDMessages().get("Player_OfflineNever", dPlayer.getPlayer().getName()), player);
 			}
 			
 		} else if (dPlayer.isEditing()) {

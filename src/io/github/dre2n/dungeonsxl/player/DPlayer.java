@@ -345,21 +345,22 @@ public class DPlayer {
 		}
 	}
 	
-	public void msg(String msg) {
+	public void sendMessage(String message) {
 		if (isEditing) {
-			EditWorld eworld = EditWorld.get(world);
-			eworld.msg(msg);
+			EditWorld editWorld = EditWorld.get(world);
+			editWorld.msg(message);
 			for (Player player : plugin.getChatSpyers()) {
-				if ( !eworld.getWorld().getPlayers().contains(player)) {
-					MessageUtil.sendMessage(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + msg);
+				if ( !editWorld.getWorld().getPlayers().contains(player)) {
+					MessageUtil.sendMessage(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
 				}
 			}
+			
 		} else {
 			GameWorld gameWorld = GameWorld.get(world);
-			gameWorld.msg(msg);
+			gameWorld.msg(message);
 			for (Player player : plugin.getChatSpyers()) {
 				if ( !gameWorld.getWorld().getPlayers().contains(player)) {
-					MessageUtil.sendMessage(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + msg);
+					MessageUtil.sendMessage(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
 				}
 			}
 		}

@@ -244,6 +244,31 @@ public class DGroup {
 		GroupSign.updatePerGroup(this);
 	}
 	
+	/**
+	 * Send a message to all players in the group
+	 */
+	public void sendMessage(String message) {
+		for (Player player : players) {
+			if (player.isOnline()) {
+				MessageUtil.sendCenteredMessage(player, message);
+			}
+		}
+	}
+	
+	/**
+	 * Send a message to all players in the group
+	 * 
+	 * @param except
+	 * Players who do not receive the message
+	 */
+	public void sendMessage(String message, Player... except) {
+		for (Player player : players) {
+			if (player.isOnline() && !player.equals(except)) {
+				MessageUtil.sendCenteredMessage(player, message);
+			}
+		}
+	}
+	
 	// Statics
 	
 	public static DGroup get(Player player) {
