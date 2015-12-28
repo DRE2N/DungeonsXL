@@ -2,6 +2,7 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -86,7 +87,7 @@ public class DPortal {
 		DGroup dgroup = DGroup.get(player);
 		
 		if (dgroup == null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInGroup"));
+			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_NOT_IN_GROUP));
 			return;
 		}
 		
@@ -95,7 +96,7 @@ public class DPortal {
 		}
 		
 		if (dgroup.getGameWorld() == null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", DGroup.get(player).getMapName()));
+			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, DGroup.get(player).getMapName()));
 			return;
 		}
 		

@@ -4,6 +4,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -60,7 +61,7 @@ public class DGroup {
 	public void addPlayer(Player player) {
 		// Send message
 		for (Player groupPlayer : getPlayers()) {
-			MessageUtil.sendMessage(groupPlayer, DungeonsXL.getPlugin().getDMessages().get("Player_JoinGroup", player.getName()));
+			MessageUtil.sendMessage(groupPlayer, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_JOIN_GROUP, player.getName()));
 		}
 		
 		// Add player
@@ -77,7 +78,7 @@ public class DGroup {
 		
 		// Send message
 		for (Player groupPlayer : getPlayers()) {
-			MessageUtil.sendMessage(groupPlayer, DungeonsXL.getPlugin().getDMessages().get("Player_LeftGroup", player.getName()));
+			MessageUtil.sendMessage(groupPlayer, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_LEFT_GROUP, player.getName()));
 		}
 		
 		// Check group

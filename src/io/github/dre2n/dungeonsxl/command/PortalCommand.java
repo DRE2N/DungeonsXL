@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -15,7 +16,7 @@ public class PortalCommand extends DCommand {
 		setCommand("portal");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Portal"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_PORTAL));
 		setPermission("dxl.portal");
 		setPlayerCommand(true);
 	}
@@ -26,7 +27,7 @@ public class PortalCommand extends DCommand {
 		DPlayer dplayer = DPlayer.get(player);
 		
 		if (dplayer != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 		}
 		
 		DPortal dportal = DPortal.get(player);
@@ -36,11 +37,11 @@ public class PortalCommand extends DCommand {
 			dportal.setPlayer(player);
 			dportal.setWorld(player.getWorld());
 			player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalIntroduction"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_INTRODUCTION));
 			
 		} else {
 			plugin.getDPortals().remove(dportal);
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalAbort"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_ABORT));
 		}
 	}
 	

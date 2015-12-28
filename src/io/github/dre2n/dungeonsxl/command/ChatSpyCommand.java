@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
 import org.bukkit.command.CommandSender;
@@ -11,7 +12,7 @@ public class ChatSpyCommand extends DCommand {
 		setCommand("chatspy");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Chatspy"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_CHATSPY));
 		setPermission("dxl.chatspy");
 		setPlayerCommand(true);
 	}
@@ -22,11 +23,11 @@ public class ChatSpyCommand extends DCommand {
 		
 		if (plugin.getChatSpyers().contains(player)) {
 			plugin.getChatSpyers().remove(player);
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chatspy_Stopped"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_CHATSPY_STOPPED));
 			
 		} else {
 			plugin.getChatSpyers().add(player);
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chatspy_Start"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_CHATSPY_START));
 		}
 	}
 	

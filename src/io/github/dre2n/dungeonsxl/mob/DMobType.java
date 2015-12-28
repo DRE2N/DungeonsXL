@@ -2,6 +2,7 @@ package io.github.dre2n.dungeonsxl.mob;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.IntegerUtil;
 
 import java.util.Arrays;
@@ -23,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class DMobType {
+	
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private String name;
 	private EntityType type;
@@ -116,7 +119,7 @@ public class DMobType {
 			EntityType type = EntityType.fromName(configFile.getString(mobName + ".Type"));
 			
 			if (type == null) {
-				DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobType", configFile.getString(mobName + ".Type")));
+				plugin.getLogger().info(plugin.getDMessages().getMessage(Messages.LOG_ERROR_MOBTYPE, configFile.getString(mobName + ".Type")));
 				continue;
 			}
 			
@@ -198,7 +201,7 @@ public class DMobType {
 									itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
 								}
 							} else {
-								DungeonsXL.getPlugin().getLogger().info(DungeonsXL.getPlugin().getDMessages().get("Log_Error_MobEnchantment", splittedEnchantment[0]));
+								plugin.getLogger().info(plugin.getDMessages().getMessage(Messages.LOG_ERROR_MOB_ENCHANTMENT, splittedEnchantment[0]));
 							}
 						}
 					}
@@ -237,8 +240,8 @@ public class DMobType {
 			}
 		}
 		
-		if (DungeonsXL.getPlugin().getMainConfig().defaultDungeon != null) {
-			for (DMobType mobType : DungeonsXL.getPlugin().getMainConfig().defaultDungeon.getMobTypes()) {
+		if (plugin.getMainConfig().defaultDungeon != null) {
+			for (DMobType mobType : plugin.getMainConfig().defaultDungeon.getMobTypes()) {
 				if (mobType.name.equalsIgnoreCase(name)) {
 					return mobType;
 				}

@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -14,7 +15,7 @@ public class LeaveCommand extends DCommand {
 		setCommand("leave");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Leave"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_LEAVE));
 		setPlayerCommand(true);
 	}
 	
@@ -25,24 +26,24 @@ public class LeaveCommand extends DCommand {
 		
 		if (GameWorld.get(player.getWorld()) != null) {
 			if (GameWorld.get(player.getWorld()).isTutorial()) {
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NoLeaveInTutorial"));
+				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_LEAVE_IN_TUTORIAL));
 				return;
 			}
 		}
 		
 		if (dplayer != null) {
 			dplayer.leave();
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Leave_Success"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LEAVE_SUCCESS));
 			
 		} else {
 			DGroup dgroup = DGroup.get(player);
 			if (dgroup != null) {
 				dgroup.removePlayer(player);
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Leave_Success"));
+				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LEAVE_SUCCESS));
 				return;
 			}
 			
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
 		}
 	}
 	

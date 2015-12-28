@@ -4,6 +4,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.command.DCommand;
 import io.github.dre2n.dungeonsxl.file.DMessages;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +25,7 @@ public class CommandListener implements CommandExecutor {
 			if (dCommand != null) {
 				if (sender instanceof ConsoleCommandSender) {
 					if ( !dCommand.isConsoleCommand()) {
-						MessageUtil.sendMessage(sender, dMessages.get("Log_Error_NoConsoleCommand", dCommand.getCommand()));
+						MessageUtil.sendMessage(sender, dMessages.getMessage(Messages.LOG_ERROR_NO_CONSOLE_COMMAND, dCommand.getCommand()));
 						return false;
 					}
 				}
@@ -33,13 +34,13 @@ public class CommandListener implements CommandExecutor {
 					Player player = (Player) sender;
 					
 					if ( !dCommand.isPlayerCommand()) {
-						MessageUtil.sendMessage(player, dMessages.get("Error_NoPlayerCommand", dCommand.getCommand()));
+						MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PLAYER_COMMAND, dCommand.getCommand()));
 						return false;
 						
 					} else {
 						if (dCommand.getPermission() != null) {
 							if ( !dCommand.playerHasPermissions(player)) {
-								MessageUtil.sendMessage(player, dMessages.get("Error_NoPermissions"));
+								MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PERMISSIONS));
 								return false;
 							}
 						}

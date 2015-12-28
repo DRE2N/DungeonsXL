@@ -6,6 +6,8 @@ import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameChest;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
@@ -16,7 +18,6 @@ import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.MiscUtil;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,7 +47,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
 	
-	public DungeonsXL plugin = DungeonsXL.getPlugin();
+	DungeonsXL plugin = DungeonsXL.getPlugin();
+	DMessages dMessages = plugin.getDMessages();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onDeath(PlayerDeathEvent event) {
@@ -67,7 +69,8 @@ public class PlayerListener implements Listener {
 		dPlayer.setLives(dPlayer.getLives() - 1);
 		
 		if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-			Bukkit.broadcastMessage(plugin.getDMessages().get("Player_DeathKick").replaceAll("v1", player.getName()).replaceAll("&", "\u00a7"));
+			MessageUtil.broadcastMessage(dMessages.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
+			
 			// TODO: This Runnable is a workaround for a bug I couldn't find, yet...
 			new BukkitRunnable() {
 				public void run() {
@@ -76,7 +79,7 @@ public class PlayerListener implements Listener {
 			}.runTaskLater(plugin, 1L);
 			
 		} else if ( !(dPlayer.getLives() == -1)) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_Death").replaceAll("v1", String.valueOf(dPlayer.getLives())));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
 			
 		} else if (dConfig != null) {
 			if (dConfig.getKeepInventoryOnDeath()) {
@@ -101,13 +104,13 @@ public class PlayerListener implements Listener {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.ENDER_CHEST) {
 						if ( !player.hasPermission("dxl.bypass")) {
-							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Enderchest"));
+							MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_ENDERCHEST));
 							event.setCancelled(true);
 						}
 						
 					} else if (clickedBlock.getType() == Material.BED_BLOCK) {
 						if ( !player.hasPermission("dxl.bypass")) {
-							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Bed"));
+							MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_BED));
 							event.setCancelled(true);
 						}
 					}
@@ -119,7 +122,7 @@ public class PlayerListener implements Listener {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.DISPENSER) {
 						if ( !player.hasPermission("dxl.bypass")) {
-							MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Dispenser"));
+							MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DISPENSER));
 							event.setCancelled(true);
 						}
 					}
@@ -137,13 +140,13 @@ public class PlayerListener implements Listener {
 							if (dportal.getPlayer() == player) {
 								if (dportal.getBlock1() == null) {
 									dportal.setBlock1(event.getClickedBlock());
-									MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalProgress"));
+									MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_PROGRESS));
 									
 								} else if (dportal.getBlock2() == null) {
 									dportal.setBlock2(event.getClickedBlock());
 									dportal.setActive(true);
 									dportal.create();
-									MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalCreated"));
+									MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_CREATED));
 								}
 								event.setCancelled(true);
 							}
@@ -223,7 +226,7 @@ public class PlayerListener implements Listener {
 							if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 								trigger.onTrigger(player);
 							} else {
-								MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Leftklick"));
+								MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEFT_CLICK));
 							}
 						}
 						
@@ -234,7 +237,7 @@ public class PlayerListener implements Listener {
 									if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 										dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
 									} else {
-										MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Leftklick"));
+										MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEFT_CLICK));
 									}
 									return;
 								}
@@ -274,7 +277,7 @@ public class PlayerListener implements Listener {
 			for (Material material : gameWorld.getConfig().getSecureObjects()) {
 				if (material == event.getItemDrop().getItemStack().getType()) {
 					event.setCancelled(true);
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Drop"));
+					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DROP));
 					return;
 				}
 			}
@@ -403,11 +406,11 @@ public class PlayerListener implements Listener {
 				dPlayer.leave();
 				
 			} else if (timeUntilKickOfflinePlayer > 0) {
-				dGroup.sendMessage(plugin.getDMessages().get("Player_Offline", dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer), player);
+				dGroup.sendMessage(dMessages.getMessage(Messages.PLAYER_OFFLINE, dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer), player);
 				dPlayer.setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
 				
 			} else {
-				dGroup.sendMessage(plugin.getDMessages().get("Player_OfflineNever", dPlayer.getPlayer().getName()), player);
+				dGroup.sendMessage(dMessages.getMessage(Messages.PLAYER_OFFLINE_NEVER, dPlayer.getPlayer().getName()), player);
 			}
 			
 		} else if (dPlayer.isEditing()) {
@@ -463,7 +466,7 @@ public class PlayerListener implements Listener {
 			}
 			
 			if (dGroup.getGameWorld() == null) {
-				MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_TutorialNotExist"));
+				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_TUTORIAL_NOT_EXIST));
 				continue;
 			}
 			
@@ -491,7 +494,7 @@ public class PlayerListener implements Listener {
 		
 		String[] splittedCmd = event.getMessage().split(" ");
 		if ( !splittedCmd[0].equalsIgnoreCase("/dungeon") && !splittedCmd[0].equalsIgnoreCase("/dungeonsxl") && !splittedCmd[0].equalsIgnoreCase("/dxl")) {
-			MessageUtil.sendMessage(event.getPlayer(), plugin.getDMessages().get("Error_Cmd"));
+			MessageUtil.sendMessage(event.getPlayer(), dMessages.getMessage(Messages.ERROR_CMD));
 			event.setCancelled(true);
 		}
 	}

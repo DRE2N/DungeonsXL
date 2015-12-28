@@ -2,6 +2,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -68,11 +69,11 @@ public class ReadySign extends DSign {
 		
 		if (getGameWorld().getSignClass().isEmpty() || dplayer.getDClass() != null) {
 			dplayer.ready();
-			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getDMessages().get("Player_Ready"));
+			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getDMessages().getMessage(Messages.PLAYER_READY));
 			return;
 			
 		} else {
-			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getDMessages().get("Error_Ready"));
+			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getDMessages().getMessage(Messages.ERROR_READY));
 		}
 	}
 	

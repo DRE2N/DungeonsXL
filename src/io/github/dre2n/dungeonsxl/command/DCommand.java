@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
 import org.bukkit.ChatColor;
@@ -9,7 +10,8 @@ import org.bukkit.entity.Player;
 
 public abstract class DCommand {
 	
-	public DungeonsXL plugin = DungeonsXL.getPlugin();
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	DMessages dMessages = plugin.getDMessages();
 	
 	public boolean costsMoney;
 	private String command;

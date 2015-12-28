@@ -5,6 +5,7 @@ import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.IntegerUtil;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -19,7 +20,7 @@ public class ListCommand extends DCommand {
 		setCommand("list");
 		setMinArgs(0);
 		setMaxArgs(3);
-		setHelp(plugin.getDMessages().get("Help_Cmd_List"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_LIST));
 		setPlayerCommand(true);
 		setConsoleCommand(true);
 	}

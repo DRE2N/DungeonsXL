@@ -4,6 +4,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -376,12 +377,17 @@ public class GroupSign {
 			return false;
 		}
 		
+		if (DGroup.get(player) != null) {
+			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_LEAVE_GROUP));
+			return true;
+		}
+		
 		if ( !GameWorld.canPlayDungeon(groupSign.mapName, player)) {
 			File file = new File(plugin.getDataFolder() + "/maps/" + groupSign.mapName, "config.yml");
 			if (file != null) {
 				WorldConfig confReader = new WorldConfig(file);
 				if (confReader != null) {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Cooldown", "" + confReader.getTimeToNextPlay()));
+					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_COOLDOWN, String.valueOf(confReader.getTimeToNextPlay())));
 				}
 			}
 			
@@ -389,7 +395,7 @@ public class GroupSign {
 		}
 		
 		if ( !GameWorld.checkRequirements(groupSign.mapName, player)) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_Requirements"));
+			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_REQUIREMENTS));
 			return true;
 		}
 		
@@ -410,22 +416,19 @@ public class GroupSign {
 		}
 		
 		Sign topSign = (Sign) topBlock.getState();
+		
 		if (topSign.getLine(0).equals(strNewGrp)) {
-			if (DGroup.get(player) == null) {
-				if (groupSign.isMultiFloor()) {
-					groupSign.dGroups[column] = new DGroup(player, groupSign.dungeonName, groupSign.isMultiFloor());
-					
-				} else {
-					groupSign.dGroups[column] = new DGroup(player, groupSign.mapName, groupSign.isMultiFloor());
-				}
-				groupSign.update();
+			if (groupSign.isMultiFloor()) {
+				groupSign.dGroups[column] = new DGroup(player, groupSign.dungeonName, groupSign.isMultiFloor());
+				
+			} else {
+				groupSign.dGroups[column] = new DGroup(player, groupSign.mapName, groupSign.isMultiFloor());
 			}
+			groupSign.update();
 			
 		} else if (topSign.getLine(0).equals(strJoinGrp)) {
-			if (DGroup.get(player) == null) {
-				groupSign.dGroups[column].addPlayer(player);
-				groupSign.update();
-			}
+			groupSign.dGroups[column].addPlayer(player);
+			groupSign.update();
 		}
 		
 		return true;

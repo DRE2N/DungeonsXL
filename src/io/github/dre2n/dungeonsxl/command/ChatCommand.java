@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -12,7 +13,7 @@ public class ChatCommand extends DCommand {
 		setCommand("chat");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Chat"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_CHAT));
 		setPlayerCommand(true);
 	}
 	
@@ -22,17 +23,17 @@ public class ChatCommand extends DCommand {
 		DPlayer dplayer = DPlayer.get(player);
 		
 		if (dplayer == null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_GROUP));
 			return;
 		}
 		
 		if (dplayer.isInDungeonChat()) {
 			dplayer.setInDungeonChat(false);
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chat_NormalChat"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_CHAT_NORMAL_CHAT));
 			
 		} else {
 			dplayer.setInDungeonChat(true);
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Chat_DungeonChat"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_CHAT_DUNGEON_CHAT));
 		}
 	}
 	

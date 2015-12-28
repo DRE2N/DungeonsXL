@@ -3,6 +3,7 @@ package io.github.dre2n.dungeonsxl.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.IntegerUtil;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -14,7 +15,7 @@ public class HelpCommand extends DCommand {
 		setCommand("help");
 		setMinArgs(0);
 		setMaxArgs(1);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Help"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_HELP));
 		setPlayerCommand(true);
 		setConsoleCommand(true);
 	}

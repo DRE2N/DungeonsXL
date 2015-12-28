@@ -6,6 +6,8 @@ import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.util.IntegerUtil;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -36,6 +38,7 @@ import org.bukkit.potion.PotionEffect;
 public class DPlayer {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	DMessages dMessages = plugin.getDMessages();
 	
 	// Variables
 	private Player player;
@@ -59,7 +62,7 @@ public class DPlayer {
 	private ItemStack[] respawnArmor;
 	private String[] linesCopy;
 	
-	private Inventory treasureInv = DungeonsXL.getPlugin().getServer().createInventory(getPlayer(), 45, plugin.getDMessages().get("Player_Treasures"));
+	private Inventory treasureInv = DungeonsXL.getPlugin().getServer().createInventory(getPlayer(), 45, dMessages.getMessage(Messages.PLAYER_TREASURES));
 	private double treasureMoney = 0;
 	
 	private int initialLives = -1;
@@ -253,7 +256,7 @@ public class DPlayer {
 	}
 	
 	public void finishFloor(String specifiedFloor) {
-		MessageUtil.sendMessage(getPlayer(), plugin.getDMessages().get("Player_FinishedDungeon"));
+		MessageUtil.sendMessage(getPlayer(), dMessages.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
 		isFinished = true;
 		
 		DGroup dGroup = DGroup.get(getPlayer());
@@ -268,7 +271,7 @@ public class DPlayer {
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dplayer = get(player);
 			if ( !dplayer.isFinished) {
-				MessageUtil.sendMessage(this.getPlayer(), plugin.getDMessages().get("Player_WaitForOtherPlayers"));
+				MessageUtil.sendMessage(this.getPlayer(), dMessages.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
 				return;
 			}
 		}
@@ -319,7 +322,7 @@ public class DPlayer {
 	}
 	
 	public void finish() {
-		MessageUtil.sendMessage(getPlayer(), plugin.getDMessages().get("Player_FinishedDungeon"));
+		MessageUtil.sendMessage(getPlayer(), dMessages.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
 		isFinished = true;
 		
 		DGroup dGroup = DGroup.get(getPlayer());
@@ -334,7 +337,7 @@ public class DPlayer {
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dplayer = get(player);
 			if ( !dplayer.isFinished) {
-				MessageUtil.sendMessage(this.getPlayer(), plugin.getDMessages().get("Player_WaitForOtherPlayers"));
+				MessageUtil.sendMessage(this.getPlayer(), dMessages.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
 				return;
 			}
 		}
@@ -385,14 +388,14 @@ public class DPlayer {
 				}
 			} else {
 				linesCopy = lines;
-				MessageUtil.sendMessage(getPlayer(), plugin.getDMessages().get("Player_SignCopied"));
+				MessageUtil.sendMessage(getPlayer(), dMessages.getMessage(Messages.PLAYER_SIGN_COPIED));
 			}
 		} else {
 			String info = "" + block.getType();
 			if (block.getData() != 0) {
 				info = info + "," + block.getData();
 			}
-			MessageUtil.sendMessage(getPlayer(), plugin.getDMessages().get("Player_BlockInfo", info));
+			MessageUtil.sendMessage(getPlayer(), dMessages.getMessage(Messages.PLAYER_BLOCK_INFO, info));
 		}
 	}
 	

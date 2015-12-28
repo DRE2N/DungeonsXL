@@ -4,6 +4,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
@@ -29,6 +30,8 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class BlockListener implements Listener {
+	
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
@@ -59,7 +62,7 @@ public class BlockListener implements Listener {
 		
 		// DGSign destroying
 		if (GroupSign.getSign(block) != null) {
-			DungeonsXL.getPlugin().getGroupSigns().remove(GroupSign.getSign(block));
+			plugin.getGroupSigns().remove(GroupSign.getSign(block));
 		}
 		
 		// Deny LeaveSignblocks destroying
@@ -178,16 +181,16 @@ public class BlockListener implements Listener {
 				}
 				
 				if ( !player.hasPermission(dsign.getType().getBuildPermission())) {
-					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_NoPermissions"));
+					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_NO_PERMISSIONS));
 				}
 				
 				if (dsign.check()) {
 					editWorld.checkSign(block);
 					editWorld.getSign().add(block);
-					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_SignCreated"));
+					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_SIGN_CREATED));
 					
 				} else {
-					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_SignWrongFormat"));
+					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_SIGN_WRONG_FORMAT));
 				}
 			}
 		}
@@ -217,7 +220,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onBlockRedstoneEvent(BlockRedstoneEvent event) {
-		new RedstoneEventTask(event.getBlock()).runTaskLater(DungeonsXL.getPlugin(), 1);
+		new RedstoneEventTask(event.getBlock()).runTaskLater(plugin, 1);
 	}
 	
 	public class RedstoneEventTask extends BukkitRunnable {
@@ -229,7 +232,7 @@ public class BlockListener implements Listener {
 		
 		@Override
 		public void run() {
-			for (GameWorld gameWorld : DungeonsXL.getPlugin().getGameWorlds()) {
+			for (GameWorld gameWorld : plugin.getGameWorlds()) {
 				if (block.getWorld() == gameWorld.getWorld()) {
 					RedstoneTrigger.updateAll(gameWorld);
 				}

@@ -1,6 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -14,7 +14,7 @@ public class LivesCommand extends DCommand {
 		setCommand("lives");
 		setMinArgs(0);
 		setMaxArgs(1);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Lives"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_LIVES));
 		setPlayerCommand(true);
 		setConsoleCommand(true);
 	}
@@ -32,16 +32,16 @@ public class LivesCommand extends DCommand {
 			player = (Player) sender;
 			
 		} else {
-			MessageUtil.sendMessage(sender, DungeonsXL.getPlugin().getDMessages().get("Error_NoConsoleCommand", getCommand()));
+			MessageUtil.sendMessage(sender, dMessages.getMessage(Messages.ERROR_NO_CONSOLE_COMMAND, getCommand()));
 			return;
 		}
 		
 		DPlayer dPlayer = DPlayer.get(player);
 		if (dPlayer != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Lives").replaceAll("v1", player.getName()).replaceAll("v2", String.valueOf(dPlayer.getLives())));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LIVES).replaceAll("v1", player.getName()).replaceAll("v2", String.valueOf(dPlayer.getLives())));
 			
 		} else {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
 		}
 	}
 	

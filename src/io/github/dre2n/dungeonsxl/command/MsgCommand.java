@@ -2,6 +2,7 @@ package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.IntegerUtil;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -17,7 +18,7 @@ public class MsgCommand extends DCommand {
 		setMinArgs( -1);
 		setMaxArgs( -1);
 		setCommand("msg");
-		setHelp(plugin.getDMessages().get("Help_Cmd_Msg"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_MSG));
 		setPermission("dxl.msg");
 		setPlayerCommand(true);
 	}
@@ -28,7 +29,7 @@ public class MsgCommand extends DCommand {
 		EditWorld editWorld = EditWorld.get(player.getWorld());
 		
 		if (editWorld == null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NotInDungeon"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
 			return;
 		}
 		
@@ -49,7 +50,7 @@ public class MsgCommand extends DCommand {
 					MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
 					
 				} else {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgIdNotExist", "" + id));
+					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_MSG_ID_NOT_EXIST, "" + id));
 				}
 				
 			} else {
@@ -68,22 +69,22 @@ public class MsgCommand extends DCommand {
 					msg = splitMsg[1];
 					String old = confreader.getMsg(id, false);
 					if (old == null) {
-						MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Msg_Added", "" + id));
+						MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_MSG_ADDED, "" + id));
 						
 					} else {
-						MessageUtil.sendMessage(player, plugin.getDMessages().get("Cmd_Msg_Updated", "" + id));
+						MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_MSG_UPDATED, "" + id));
 					}
 					
 					confreader.setMsg(msg, id);
 					confreader.save();
 					
 				} else {
-					MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgFormat"));
+					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_MSG_FORMAT));
 				}
 			}
 			
 		} catch (NumberFormatException e) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_MsgNoInt"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_MSG_NO_INT));
 		}
 		
 	}

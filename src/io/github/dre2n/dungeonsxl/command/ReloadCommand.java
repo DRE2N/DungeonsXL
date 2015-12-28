@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil.Internals;
 
@@ -16,7 +17,7 @@ public class ReloadCommand extends DCommand {
 		setCommand("reload");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Reload"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_RELOAD));
 		setPermission("dxl.reload");
 		setPlayerCommand(true);
 		setConsoleCommand(true);
@@ -26,6 +27,7 @@ public class ReloadCommand extends DCommand {
 	public void onExecute(String[] args, CommandSender sender) {
 		PluginManager plugins = Bukkit.getServer().getPluginManager();
 		
+		int maps = new File(plugin.getDataFolder() + "/maps").listFiles().length;
 		int dungeons = new File(plugin.getDataFolder() + "/dungeons").listFiles().length;
 		int loaded = plugin.getEditWorlds().size() + plugin.getGameWorlds().size();
 		int players = plugin.getDPlayers().size();
@@ -51,9 +53,9 @@ public class ReloadCommand extends DCommand {
 		plugin.loadDungeons();
 		
 		MessageUtil.sendPluginTag(sender, plugin);
-		MessageUtil.sendCenteredMessage(sender, plugin.getDMessages().get("Cmd_Reload_Done"));
-		MessageUtil.sendCenteredMessage(sender, plugin.getDMessages().get("Cmd_Main_Loaded", String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-		MessageUtil.sendCenteredMessage(sender, plugin.getDMessages().get("Cmd_Main_Compatibility", String.valueOf(internals), vault, mythicMobs));
+		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_RELOAD_DONE));
+		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
+		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
 	}
 	
 }

@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
 
@@ -15,7 +16,7 @@ public class DeletePortalCommand extends DCommand {
 		setCommand("deleteportal");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(plugin.getDMessages().get("Help_Cmd_DeletePortal"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_DELETE_PORTAL));
 		setPermission("dxl.deleteportal");
 		setPlayerCommand(true);
 	}
@@ -27,10 +28,10 @@ public class DeletePortalCommand extends DCommand {
 		
 		if (dPortal != null) {
 			dPortal.delete();
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Player_PortalDeleted"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_DELETED));
 			
 		} else {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_NoPortal"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PORTAL));
 		}
 	}
 	

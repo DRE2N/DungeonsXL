@@ -3,6 +3,7 @@ package io.github.dre2n.dungeonsxl.file;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,38 +24,68 @@ public class MainConfig {
 	public WorldConfig defaultDungeon;
 	
 	public MainConfig(File file) {
-		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-		
-		/* Main Config */
-		if (configFile.contains("language")) {
-			language = configFile.getString("language");
-		}
-		
-		if (configFile.contains("enableEconomy")) {
-			enableEconomy = configFile.getBoolean("enableEconomy");
-		}
-		
-		if (configFile.contains("tutorial.activated")) {
-			tutorialActivated = configFile.getBoolean("tutorial.activated");
-		}
-		
-		if (configFile.contains("tutorial.dungeon")) {
-			tutorialDungeon = configFile.getString("tutorial.dungeon");
-		}
-		
-		if (configFile.contains("tutorial.startgroup")) {
-			tutorialStartGroup = configFile.getString("tutorial.startgroup");
-		}
-		
-		if (configFile.contains("tutorial.endgroup")) {
-			tutorialEndGroup = configFile.getString("tutorial.endgroup");
-		}
-		
-		/* Default Dungeon Config */
-		ConfigurationSection configSetion = configFile.getConfigurationSection("default");
-		if (configSetion != null) {
-			defaultDungeon = new WorldConfig(configSetion);
-			WorldConfig.defaultConfig = defaultDungeon;
+		if ( !file.exists()) {
+			try {
+				file.createNewFile();
+				
+				FileConfiguration configFile = new YamlConfiguration();
+				configFile.set("language", "en");
+				configFile.set("enableEconomy", true);
+				configFile.set("tutorialActivated", false);
+				configFile.set("tutorialDungeon", "tutorial");
+				configFile.set("tutorialStartGroup", "default");
+				configFile.set("tutorialEndGroup", "player");
+				configFile.set("tutorialEndGroup", "player");
+				
+				ConfigurationSection defaultDungeon = configFile.createSection("default");
+				defaultDungeon.set("initialLives", 3);
+				defaultDungeon.set("timeUntilKickOfflinePlayer", 10000);
+				defaultDungeon.set("keepInventoryOnEnter", false);
+				defaultDungeon.set("keepInventoryOnDeath", true);
+				defaultDungeon.set("keepInventoryOnFinish", false);
+				defaultDungeon.set("keepInventoryOnEscape", false);
+				
+				configFile.save(file);
+				
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+			
+		} else {
+			
+			FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
+			
+			/* Main Config */
+			if (configFile.contains("language")) {
+				language = configFile.getString("language");
+			}
+			
+			if (configFile.contains("enableEconomy")) {
+				enableEconomy = configFile.getBoolean("enableEconomy");
+			}
+			
+			if (configFile.contains("tutorial.activated")) {
+				tutorialActivated = configFile.getBoolean("tutorial.activated");
+			}
+			
+			if (configFile.contains("tutorial.dungeon")) {
+				tutorialDungeon = configFile.getString("tutorial.dungeon");
+			}
+			
+			if (configFile.contains("tutorial.startgroup")) {
+				tutorialStartGroup = configFile.getString("tutorial.startgroup");
+			}
+			
+			if (configFile.contains("tutorial.endgroup")) {
+				tutorialEndGroup = configFile.getString("tutorial.endgroup");
+			}
+			
+			/* Default Dungeon Config */
+			ConfigurationSection configSection = configFile.getConfigurationSection("default");
+			if (configSection != null) {
+				defaultDungeon = new WorldConfig(configSection);
+				WorldConfig.defaultConfig = defaultDungeon;
+			}
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.dungeon.game;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -80,9 +81,9 @@ public class GameChest {
 			
 			msg = msg.substring(0, msg.length() - 1);
 			
-			MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_LootAdded", msg));
+			MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
 			if (moneyReward != 0) {
-				MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Player_LootAdded", String.valueOf(moneyReward)));
+				MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, String.valueOf(moneyReward)));
 			}
 		}
 	}
@@ -109,7 +110,8 @@ public class GameChest {
 			}
 			
 			if ( !gameChest.isUsed) {
-				MessageUtil.sendMessage(DungeonsXL.getPlugin().getServer().getPlayer(event.getPlayer().getUniqueId()), DungeonsXL.getPlugin().getDMessages().get("Error_ChestIsOpened"));
+				MessageUtil
+				        .sendMessage(DungeonsXL.getPlugin().getServer().getPlayer(event.getPlayer().getUniqueId()), DungeonsXL.getPlugin().getDMessages().getMessage(Messages.ERROR_CHEST_IS_OPENED));
 				event.setCancelled(true);
 				continue;
 			}

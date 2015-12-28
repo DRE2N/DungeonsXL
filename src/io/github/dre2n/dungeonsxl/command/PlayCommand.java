@@ -1,10 +1,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -20,7 +20,7 @@ public class PlayCommand extends DCommand {
 		setCommand("play");
 		setMinArgs(1);
 		setMaxArgs(2);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Play"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_PLAY));
 		setPermission("dxl.play");
 		setPlayerCommand(true);
 	}
@@ -31,7 +31,7 @@ public class PlayCommand extends DCommand {
 		DPlayer dplayer = DPlayer.get(player);
 		
 		if (dplayer != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 			return;
 		}
 		
@@ -63,7 +63,7 @@ public class PlayCommand extends DCommand {
 		}
 		
 		if ( !multiFloor && !EditWorld.exist(identifier)) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", identifier));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, identifier));
 			return;
 		}
 		
@@ -74,19 +74,19 @@ public class PlayCommand extends DCommand {
 				WorldConfig confReader = new WorldConfig(file);
 				
 				if (confReader != null) {
-					MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_Cooldown", "" + confReader.getTimeToNextPlay()));
+					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_COOLDOWN, "" + confReader.getTimeToNextPlay()));
 				}
 			}
 			return;
 		}
 		
 		if ( !GameWorld.checkRequirements(mapName, player)) {
-			MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().get("Error_Requirements"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_REQUIREMENTS));
 			return;
 		}
 		
 		if (DGroup.get(player) != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveGroup"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_GROUP));
 			return;
 		}
 		

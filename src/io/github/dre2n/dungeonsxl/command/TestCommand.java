@@ -3,6 +3,7 @@ package io.github.dre2n.dungeonsxl.command;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.MessageUtil;
@@ -16,7 +17,7 @@ public class TestCommand extends DCommand {
 		setCommand("test");
 		setMinArgs(1);
 		setMaxArgs(2);
-		setHelp(plugin.getDMessages().get("Help_Cmd_Test"));
+		setHelp(dMessages.getMessage(Messages.HELP_CMD_TEST));
 		setPermission("dxl.test");
 		setPlayerCommand(true);
 	}
@@ -27,7 +28,7 @@ public class TestCommand extends DCommand {
 		DPlayer dplayer = DPlayer.get(player);
 		
 		if (dplayer != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveDungeon"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 			return;
 		}
 		
@@ -56,12 +57,12 @@ public class TestCommand extends DCommand {
 		}
 		
 		if ( !multiFloor && !EditWorld.exist(identifier)) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_DungeonNotExist", identifier));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, identifier));
 			return;
 		}
 		
 		if (DGroup.get(player) != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().get("Error_LeaveGroup"));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_GROUP));
 			return;
 		}
 		
