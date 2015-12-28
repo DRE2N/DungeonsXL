@@ -142,9 +142,9 @@ public class MessageUtil {
 	
 	private final static int CENTER_PX = 154;
 	
-	public static void sendCenteredMessage(CommandSender sender, String message) {
+	public static String center(String message) {
 		if (message == null || message.equals("")) {
-			sender.sendMessage("");
+			return "";
 		}
 		
 		message = ChatColor.translateAlternateColorCodes('&', message);
@@ -181,11 +181,24 @@ public class MessageUtil {
 			sb.append(" ");
 			compensated += spaceLength;
 		}
-		sender.sendMessage(sb.toString() + ChatColor.translateAlternateColorCodes('&', message));
+		
+		return sb.toString() + ChatColor.translateAlternateColorCodes('&', message);
+	}
+	
+	public static void broadcastMessage(String message) {
+		Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
+	}
+	
+	public static void broadcastCenteredMessage(String message) {
+		Bukkit.broadcastMessage(center(message));
 	}
 	
 	public static void sendMessage(CommandSender sender, String message) {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+	}
+	
+	public static void sendCenteredMessage(CommandSender sender, String message) {
+		sender.sendMessage(center(message));
 	}
 	
 	public static void sendPluginTag(CommandSender sender, Plugin plugin) {
