@@ -138,7 +138,7 @@ public abstract class DSign {
 		for (Trigger trigger : triggers) {
 			trigger.removeListener(this);
 		}
-		gameWorld.getdSigns().remove(this);
+		gameWorld.getDSigns().remove(this);
 	}
 	
 	public boolean hasTriggers() {

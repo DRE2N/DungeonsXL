@@ -22,23 +22,23 @@ public class LeaveCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		DPlayer dplayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
-		if (GameWorld.get(player.getWorld()) != null) {
-			if (GameWorld.get(player.getWorld()).isTutorial()) {
+		if (GameWorld.getByWorld(player.getWorld()) != null) {
+			if (GameWorld.getByWorld(player.getWorld()).isTutorial()) {
 				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_LEAVE_IN_TUTORIAL));
 				return;
 			}
 		}
 		
-		if (dplayer != null) {
-			dplayer.leave();
+		if (dPlayer != null) {
+			dPlayer.leave();
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LEAVE_SUCCESS));
 			
 		} else {
-			DGroup dgroup = DGroup.get(player);
-			if (dgroup != null) {
-				dgroup.removePlayer(player);
+			DGroup dGroup = DGroup.getByPlayer(player);
+			if (dGroup != null) {
+				dGroup.removePlayer(player);
 				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LEAVE_SUCCESS));
 				return;
 			}

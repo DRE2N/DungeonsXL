@@ -21,6 +21,7 @@ public class UUIDUtil {
 	public static boolean isValidUUID(String string) {
 		if (string.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")) {
 			return true;
+			
 		} else {
 			return false;
 		}

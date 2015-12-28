@@ -22,29 +22,29 @@ public class EscapeCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		DPlayer dplayer = DPlayer.get(player);
-		if (dplayer != null) {
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
+		if (dPlayer != null) {
 			
-			if ( !dplayer.isEditing()) {
+			if ( !dPlayer.isEditing()) {
 				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 				return;
 			}
 			
-			dplayer.escape();
+			dPlayer.escape();
 			
-			EditWorld eworld = EditWorld.get(dplayer.getWorld());
-			if (eworld == null) {
+			EditWorld editWorld = EditWorld.get(dPlayer.getWorld());
+			if (editWorld == null) {
 				return;
 			}
 			
-			if (eworld.getWorld().getPlayers().isEmpty()) {
-				eworld.deleteNoSave();
+			if (editWorld.getWorld().getPlayers().isEmpty()) {
+				editWorld.deleteNoSave();
 			}
 			
 		} else {
-			DGroup dgroup = DGroup.get(player);
-			if (dgroup != null) {
-				dgroup.removePlayer(player);
+			DGroup dGroup = DGroup.getByPlayer(player);
+			if (dGroup != null) {
+				dGroup.removePlayer(player);
 				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LEAVE_SUCCESS));
 				return;
 			}

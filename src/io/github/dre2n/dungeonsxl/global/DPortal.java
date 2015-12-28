@@ -21,12 +21,12 @@ public class DPortal {
 	private World world;
 	private Block block1;
 	private Block block2;
-	private boolean isActive;
+	private boolean active;
 	private Player player;
 	
 	public DPortal(boolean active) {
 		plugin.getDPortals().add(this);
-		isActive = active;
+		this.active = active;
 	}
 	
 	public void create() {
@@ -84,7 +84,7 @@ public class DPortal {
 	}
 	
 	public void teleport(Player player) {
-		DGroup dgroup = DGroup.get(player);
+		DGroup dgroup = DGroup.getByPlayer(player);
 		
 		if (dgroup == null) {
 			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_NOT_IN_GROUP));
@@ -92,11 +92,11 @@ public class DPortal {
 		}
 		
 		if (dgroup.getGameWorld() == null) {
-			dgroup.setGameWorld(GameWorld.load(DGroup.get(player).getMapName()));
+			dgroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
 		}
 		
 		if (dgroup.getGameWorld() == null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, DGroup.get(player).getMapName()));
+			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
 			return;
 		}
 		
@@ -156,11 +156,11 @@ public class DPortal {
 	}
 	
 	// Statics
-	public static DPortal get(Location location) {
-		return get(location.getBlock());
+	public static DPortal getByLocation(Location location) {
+		return getByBlock(location.getBlock());
 	}
 	
-	public static DPortal get(Block block) {
+	public static DPortal getByBlock(Block block) {
 		for (DPortal portal : plugin.getDPortals()) {
 			int x1 = portal.block1.getX(), y1 = portal.block1.getY(), z1 = portal.block1.getZ();
 			int x2 = portal.block2.getX(), y2 = portal.block2.getY(), z2 = portal.block2.getZ();
@@ -204,7 +204,7 @@ public class DPortal {
 		return null;
 	}
 	
-	public static DPortal get(Player player) {
+	public static DPortal getByPlayer(Player player) {
 		for (DPortal portal : plugin.getDPortals()) {
 			if (portal.player == player) {
 				return portal;
@@ -217,22 +217,22 @@ public class DPortal {
 	// Save and Load
 	public static void save(FileConfiguration configFile) {
 		int id = 0;
-		for (DPortal dportal : plugin.getDPortals()) {
+		for (DPortal dPortal : plugin.getDPortals()) {
 			id++;
 			
-			if ( !dportal.isActive) {
+			if ( !dPortal.active) {
 				continue;
 			}
 			
-			String preString = "portal." + dportal.world.getName() + "." + id;
+			String preString = "portal." + dPortal.world.getName() + "." + id;
 			// Location1
-			configFile.set(preString + ".loc1.x", dportal.block1.getX());
-			configFile.set(preString + ".loc1.y", dportal.block1.getY());
-			configFile.set(preString + ".loc1.z", dportal.block1.getZ());
+			configFile.set(preString + ".loc1.x", dPortal.block1.getX());
+			configFile.set(preString + ".loc1.y", dPortal.block1.getY());
+			configFile.set(preString + ".loc1.z", dPortal.block1.getZ());
 			// Location1
-			configFile.set(preString + ".loc2.x", dportal.block2.getX());
-			configFile.set(preString + ".loc2.y", dportal.block2.getY());
-			configFile.set(preString + ".loc2.z", dportal.block2.getZ());
+			configFile.set(preString + ".loc2.x", dPortal.block2.getX());
+			configFile.set(preString + ".loc2.y", dPortal.block2.getY());
+			configFile.set(preString + ".loc2.z", dPortal.block2.getZ());
 		}
 	}
 	
@@ -249,11 +249,11 @@ public class DPortal {
 				preString = "portal." + world.getName() + "." + id + ".";
 				
 				if (configFile.contains(preString)) {
-					DPortal dportal = new DPortal(true);
-					dportal.world = world;
-					dportal.block1 = world.getBlockAt(configFile.getInt(preString + "loc1.x"), configFile.getInt(preString + "loc1.y"), configFile.getInt(preString + "loc1.z"));
-					dportal.block2 = world.getBlockAt(configFile.getInt(preString + "loc2.x"), configFile.getInt(preString + "loc2.y"), configFile.getInt(preString + "loc2.z"));
-					dportal.create();
+					DPortal dPortal = new DPortal(true);
+					dPortal.world = world;
+					dPortal.block1 = world.getBlockAt(configFile.getInt(preString + "loc1.x"), configFile.getInt(preString + "loc1.y"), configFile.getInt(preString + "loc1.z"));
+					dPortal.block2 = world.getBlockAt(configFile.getInt(preString + "loc2.x"), configFile.getInt(preString + "loc2.y"), configFile.getInt(preString + "loc2.z"));
+					dPortal.create();
 				}
 				
 			} while (configFile.contains(preString));
@@ -306,18 +306,18 @@ public class DPortal {
 	}
 	
 	/**
-	 * @return the isActive
+	 * @return if the portal is active
 	 */
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 	
 	/**
-	 * @param isActive
-	 * the isActive to set
+	 * @param active
+	 * set the DPortal active
 	 */
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	/**

@@ -36,7 +36,7 @@ public class EntityListener implements Listener {
 	// Remove drops from breaking Signs
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onItemSpawn(ItemSpawnEvent event) {
-		if (GameWorld.get(event.getLocation().getWorld()) != null) {
+		if (GameWorld.getByWorld(event.getLocation().getWorld()) != null) {
 			if (event.getEntity().getItemStack().getType() == Material.SIGN) {
 				event.setCancelled(true);
 			}
@@ -47,10 +47,10 @@ public class EntityListener implements Listener {
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		World world = event.getLocation().getWorld();
 		
-		EditWorld eworld = EditWorld.get(world);
-		GameWorld gworld = GameWorld.get(world);
+		EditWorld editWorld = EditWorld.get(world);
+		GameWorld gameWorld = GameWorld.getByWorld(world);
 		
-		if (eworld != null || gworld != null) {
+		if (editWorld != null || gameWorld != null) {
 			if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.BREEDING || event.getSpawnReason() == SpawnReason.NATURAL
 			        || event.getSpawnReason() == SpawnReason.DEFAULT) {
 				event.setCancelled(true);
@@ -64,9 +64,9 @@ public class EntityListener implements Listener {
 		
 		if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity entity = event.getEntity();
-			GameWorld gworld = GameWorld.get(world);
-			if (gworld != null) {
-				if (gworld.isPlaying()) {
+			GameWorld gameWorld = GameWorld.getByWorld(world);
+			if (gameWorld != null) {
+				if (gameWorld.isPlaying()) {
 					if (entity.getType() != EntityType.PLAYER) {
 						event.getDrops().clear();
 						DMob.onDeath(event);
@@ -79,10 +79,10 @@ public class EntityListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamage(EntityDamageEvent event) {
 		World world = event.getEntity().getWorld();
-		GameWorld gworld = GameWorld.get(world);
-		if (gworld != null) {
+		GameWorld gameWorld = GameWorld.getByWorld(world);
+		if (gameWorld != null) {
 			// Deny all Damage in Lobby
-			if ( !gworld.isPlaying()) {
+			if ( !gameWorld.isPlaying()) {
 				event.setCancelled(true);
 			}
 			// Deny all Damage from Players to Players
@@ -106,9 +106,9 @@ public class EntityListener implements Listener {
 					
 					// Check Dogs
 					if (entity instanceof Player || entity2 instanceof Player) {
-						for (DPlayer dplayer : DPlayer.get(gworld.getWorld())) {
-							if (dplayer.getWolf() != null) {
-								if (entity == dplayer.getWolf() || entity2 == dplayer.getWolf()) {
+						for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
+							if (dPlayer.getWolf() != null) {
+								if (entity == dPlayer.getWolf() || entity2 == dPlayer.getWolf()) {
 									event.setCancelled(true);
 									return;
 								}
@@ -116,16 +116,16 @@ public class EntityListener implements Listener {
 						}
 					}
 					
-					for (DPlayer dplayer : DPlayer.get(gworld.getWorld())) {
-						if (dplayer.getWolf() != null) {
+					for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
+						if (dPlayer.getWolf() != null) {
 							if (entity instanceof Player || entity2 instanceof Player) {
-								if (entity == dplayer.getWolf() || entity2 == dplayer.getWolf()) {
+								if (entity == dPlayer.getWolf() || entity2 == dPlayer.getWolf()) {
 									event.setCancelled(true);
 									return;
 								}
 								
 							} else {
-								if (entity == dplayer.getWolf() || entity2 == dplayer.getWolf()) {
+								if (entity == dPlayer.getWolf() || entity2 == dPlayer.getWolf()) {
 									event.setCancelled(false);
 									return;
 								}
@@ -142,9 +142,9 @@ public class EntityListener implements Listener {
 	public void onFoodLevelChange(FoodLevelChangeEvent event) {
 		World world = event.getEntity().getWorld();
 		
-		GameWorld gworld = GameWorld.get(world);
-		if (gworld != null) {
-			if ( !gworld.isPlaying()) {
+		GameWorld gameWorld = GameWorld.getByWorld(world);
+		if (gameWorld != null) {
+			if ( !gameWorld.isPlaying()) {
 				event.setCancelled(true);
 			}
 		}
@@ -153,8 +153,8 @@ public class EntityListener implements Listener {
 	// Zombie/skeleton combustion from the sun.
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEntityCombust(EntityCombustEvent event) {
-		GameWorld gworld = GameWorld.get(event.getEntity().getWorld());
-		if (gworld != null) {
+		GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
+		if (gameWorld != null) {
 			event.setCancelled(true);
 		}
 	}
@@ -162,8 +162,8 @@ public class EntityListener implements Listener {
 	// Allow Other combustion
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityCombustByEntity(EntityCombustByEntityEvent event) {
-		GameWorld gworld = GameWorld.get(event.getEntity().getWorld());
-		if (gworld != null) {
+		GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
+		if (gameWorld != null) {
 			if (event.isCancelled()) {
 				event.setCancelled(false);
 			}
@@ -173,11 +173,11 @@ public class EntityListener implements Listener {
 	// Explosions
 	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent event) {
-		GameWorld gworld = GameWorld.get(event.getEntity().getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
 		
-		if (gworld != null) {
+		if (gameWorld != null) {
 			if (event.getEntity() instanceof LivingEntity) {
-				// Disable Creeper explosions in gameworlds
+				// Disable Creeper explosions in gameditWorlds
 				event.setCancelled(true);
 				return;
 				
@@ -193,7 +193,7 @@ public class EntityListener implements Listener {
 		for (Block block : blocklist) {
 			// Portals
 			if (block.getType() == Material.PORTAL) {
-				if (DPortal.get(block) != null) {
+				if (DPortal.getByBlock(block) != null) {
 					event.setCancelled(true);
 					return;
 				}

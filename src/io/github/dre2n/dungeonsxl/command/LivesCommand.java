@@ -36,9 +36,9 @@ public class LivesCommand extends DCommand {
 			return;
 		}
 		
-		DPlayer dPlayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		if (dPlayer != null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LIVES).replaceAll("v1", player.getName()).replaceAll("v2", String.valueOf(dPlayer.getLives())));
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LIVES, player.getName(), String.valueOf(dPlayer.getLives())));
 			
 		} else {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_DUNGEON));

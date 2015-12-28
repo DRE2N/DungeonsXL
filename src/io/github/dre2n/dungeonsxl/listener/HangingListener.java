@@ -10,8 +10,8 @@ public class HangingListener implements Listener {
 	
 	@EventHandler
 	public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
-		GameWorld gworld = GameWorld.get(event.getEntity().getWorld());
-		if (gworld != null) {
+		GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
+		if (gameWorld != null) {
 			event.setCancelled(true);
 		}
 	}

@@ -8,12 +8,12 @@ public class DClass {
 	
 	private CopyOnWriteArrayList<ItemStack> items = new CopyOnWriteArrayList<ItemStack>();
 	private String name;
-	private boolean hasDog;
+	private boolean dog;
 	
-	public DClass(String name, CopyOnWriteArrayList<ItemStack> items, boolean hasDog) {
+	public DClass(String name, CopyOnWriteArrayList<ItemStack> items, boolean dog) {
 		this.items = items;
 		this.name = name;
-		this.hasDog = hasDog;
+		this.dog = dog;
 	}
 	
 	/**
@@ -50,15 +50,15 @@ public class DClass {
 	 * @return if the class has a dog
 	 */
 	public boolean hasDog() {
-		return hasDog;
+		return dog;
 	}
 	
 	/**
-	 * @param hasDog
+	 * @param dog
 	 * set if the class has a dog
 	 */
-	public void setDog(boolean hasDog) {
-		this.hasDog = hasDog;
+	public void setDog(boolean dog) {
+		this.dog = dog;
 	}
 	
 }

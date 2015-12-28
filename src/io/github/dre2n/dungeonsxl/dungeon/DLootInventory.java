@@ -32,7 +32,11 @@ public class DLootInventory {
 		this.player = player;
 	}
 	
-	public static DLootInventory get(Player player) {
+	/**
+	 * @param player
+	 * the player whose DLootIntentory will be returned
+	 */
+	public static DLootInventory getByPlayer(Player player) {
 		for (DLootInventory inventory : plugin.getDLootInventories()) {
 			if (inventory.player == player) {
 				return inventory;

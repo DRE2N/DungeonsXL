@@ -122,7 +122,7 @@ public class DungeonConfig extends WorldConfig {
 	/**
 	 * @return the removeWhenPlayed
 	 */
-	public boolean isRemoveWhenPlayed() {
+	public boolean getRemoveWhenPlayed() {
 		return removeWhenPlayed;
 	}
 	

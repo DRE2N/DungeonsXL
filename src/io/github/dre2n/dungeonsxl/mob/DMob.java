@@ -18,7 +18,7 @@ public class DMob {
 	private String trigger;
 	
 	public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type) {
-		gameWorld.getdMobs().add(this);
+		gameWorld.getDMobs().add(this);
 		
 		this.entity = entity;
 		this.type = type;
@@ -32,7 +32,7 @@ public class DMob {
 	}
 	
 	public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type, String trigger) {
-		gameWorld.getdMobs().add(this);
+		gameWorld.getDMobs().add(this);
 		
 		this.entity = entity;
 		this.type = type;
@@ -54,23 +54,23 @@ public class DMob {
 		}
 		
 		LivingEntity victim = event.getEntity();
-		GameWorld gameWorld = GameWorld.get(victim.getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(victim.getWorld());
 		String name = null;
 		
 		if (gameWorld == null) {
 			return;
 		}
 		
-		for (DMob dMob : gameWorld.getdMobs()) {
+		for (DMob dMob : gameWorld.getDMobs()) {
 			if (dMob.entity == victim) {
 				
 				if (dMob.type != null) {
-					for (ItemStack item : dMob.type.getDrops().keySet()) {
+					for (ItemStack itemStack : dMob.type.getDrops().keySet()) {
 						Random randomGenerator = new Random();
 						int random = randomGenerator.nextInt(100);
 						
-						if (dMob.type.getDrops().get(item) > random) {
-							event.getDrops().add(item);
+						if (dMob.type.getDrops().get(itemStack) > random) {
+							event.getDrops().add(itemStack);
 						}
 					}
 					name = dMob.type.getName();
@@ -87,7 +87,7 @@ public class DMob {
 					trigger.onTrigger();
 				}
 				
-				gameWorld.getdMobs().remove(dMob);
+				gameWorld.getDMobs().remove(dMob);
 				return;
 			}
 		}

@@ -61,7 +61,7 @@ public class DGroup {
 	public void addPlayer(Player player) {
 		// Send message
 		for (Player groupPlayer : getPlayers()) {
-			MessageUtil.sendMessage(groupPlayer, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_JOIN_GROUP, player.getName()));
+			MessageUtil.sendMessage(groupPlayer, plugin.getDMessages().getMessage(Messages.PLAYER_JOIN_GROUP, player.getName()));
 		}
 		
 		// Add player
@@ -78,7 +78,7 @@ public class DGroup {
 		
 		// Send message
 		for (Player groupPlayer : getPlayers()) {
-			MessageUtil.sendMessage(groupPlayer, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_LEFT_GROUP, player.getName()));
+			MessageUtil.sendMessage(groupPlayer, plugin.getDMessages().getMessage(Messages.PLAYER_LEFT_GROUP, player.getName()));
 		}
 		
 		// Check group
@@ -167,7 +167,7 @@ public class DGroup {
 	 * the unplayedFloor to add
 	 */
 	public void removeUnplayedFloor(String unplayedFloor) {
-		if (getDungeon().getConfig().isRemoveWhenPlayed()) {
+		if (getDungeon().getConfig().getRemoveWhenPlayed()) {
 			unplayedFloors.remove(unplayedFloor);
 		}
 	}
@@ -224,8 +224,8 @@ public class DGroup {
 		fee = new WorldConfig(file).getFee();
 		
 		for (Player player : getPlayers()) {
-			DPlayer dplayer = DPlayer.get(player);
-			dplayer.respawn();
+			DPlayer dPlayer = DPlayer.getByPlayer(player);
+			dPlayer.respawn();
 			if (dungeonName != null) {
 				MessageUtil.sendScreenMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", ""));
 				
@@ -272,7 +272,7 @@ public class DGroup {
 	
 	// Statics
 	
-	public static DGroup get(Player player) {
+	public static DGroup getByPlayer(Player player) {
 		for (DGroup dGroup : plugin.getDGroups()) {
 			if (dGroup.getPlayers().contains(player)) {
 				return dGroup;
@@ -282,7 +282,7 @@ public class DGroup {
 		return null;
 	}
 	
-	public static DGroup get(GameWorld gameWorld) {
+	public static DGroup getByGameWorld(GameWorld gameWorld) {
 		for (DGroup dGroup : plugin.getDGroups()) {
 			if (dGroup.getGameWorld() == gameWorld) {
 				return dGroup;

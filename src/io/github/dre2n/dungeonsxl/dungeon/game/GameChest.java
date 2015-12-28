@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 public class GameChest {
 	
 	// Variables
-	private boolean isUsed = false;
+	private boolean used = false;
 	private Chest chest;
 	private GameWorld gameWorld;
 	private double moneyReward;
@@ -44,12 +44,12 @@ public class GameChest {
 		}
 		
 		for (Player player : dGroup.getPlayers()) {
-			DPlayer dplayer = DPlayer.get(player);
-			if (dplayer == null) {
+			DPlayer dPlayer = DPlayer.getByPlayer(player);
+			if (dPlayer == null) {
 				continue;
 			}
 			
-			dplayer.setTreasureMoney(dplayer.getTreasureMoney() + moneyReward);
+			dPlayer.setTreasureMoney(dPlayer.getTreasureMoney() + moneyReward);
 			String msg = "";
 			for (ItemStack itemStack : chest.getInventory().getContents()) {
 				
@@ -57,7 +57,7 @@ public class GameChest {
 					continue;
 				}
 				
-				dplayer.getTreasureInv().addItem(itemStack);
+				dPlayer.getTreasureInv().addItem(itemStack);
 				String name;
 				
 				if ( !itemStack.hasItemMeta()) {
@@ -92,7 +92,7 @@ public class GameChest {
 	public static void onOpenInventory(InventoryOpenEvent event) {
 		InventoryView inventory = event.getView();
 		
-		GameWorld gameWorld = GameWorld.get(event.getPlayer().getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(event.getPlayer().getWorld());
 		
 		if (gameWorld == null) {
 			return;
@@ -109,7 +109,7 @@ public class GameChest {
 				continue;
 			}
 			
-			if ( !gameChest.isUsed) {
+			if ( !gameChest.used) {
 				MessageUtil
 				        .sendMessage(DungeonsXL.getPlugin().getServer().getPlayer(event.getPlayer().getUniqueId()), DungeonsXL.getPlugin().getDMessages().getMessage(Messages.ERROR_CHEST_IS_OPENED));
 				event.setCancelled(true);
@@ -117,26 +117,26 @@ public class GameChest {
 			}
 			
 			if (gameChest.chest.getLocation().distance(chest.getLocation()) < 1) {
-				gameChest.addTreasure(DGroup.get(gameWorld));
-				gameChest.isUsed = true;
+				gameChest.addTreasure(DGroup.getByGameWorld(gameWorld));
+				gameChest.used = true;
 				event.setCancelled(true);
 			}
 		}
 	}
 	
 	/**
-	 * @return the isUsed
+	 * @return if the GameChest is used
 	 */
 	public boolean isUsed() {
-		return isUsed;
+		return used;
 	}
 	
 	/**
-	 * @param isUsed
-	 * the isUsed to set
+	 * @param used
+	 * set if the chest is used
 	 */
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 	
 	/**

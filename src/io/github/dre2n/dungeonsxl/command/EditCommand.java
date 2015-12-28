@@ -23,36 +23,36 @@ public class EditCommand extends DCommand {
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
 		
-		String dungeonName = args[1];
-		EditWorld eworld = EditWorld.load(dungeonName);
-		DGroup dgroup = DGroup.get(player);
-		DPlayer dplayer = DPlayer.get(player);
+		String mapName = args[1];
+		EditWorld editWorld = EditWorld.load(mapName);
+		DGroup dGroup = DGroup.getByPlayer(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
-		if ( !(EditWorld.isInvitedPlayer(dungeonName, player.getUniqueId(), player.getName()) || player.hasPermission("dxl.edit"))) {
+		if ( !(EditWorld.isInvitedPlayer(mapName, player.getUniqueId(), player.getName()) || player.hasPermission("dxl.edit"))) {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PERMISSIONS));
 			return;
 		}
 		
-		if (dplayer != null) {
+		if (dPlayer != null) {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 			return;
 		}
 		
-		if (dgroup != null) {
+		if (dGroup != null) {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_GROUP));
 			return;
 		}
 		
-		if (eworld == null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, dungeonName));
+		if (editWorld == null) {
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, mapName));
 			return;
 		}
 		
-		if (eworld.getLobby() == null) {
-			new DPlayer(player, eworld.getWorld(), eworld.getWorld().getSpawnLocation(), true);
+		if (editWorld.getLobby() == null) {
+			new DPlayer(player, editWorld.getWorld(), editWorld.getWorld().getSpawnLocation(), true);
 			
 		} else {
-			new DPlayer(player, eworld.getWorld(), eworld.getLobby(), true);
+			new DPlayer(player, editWorld.getWorld(), editWorld.getLobby(), true);
 		}
 		
 	}

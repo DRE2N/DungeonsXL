@@ -44,9 +44,9 @@ public class LeaveSign extends DSign {
 	
 	@Override
 	public boolean onPlayerTrigger(Player player) {
-		DPlayer dplayer = DPlayer.get(player);
-		if (dplayer != null) {
-			dplayer.leave();
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
+		if (dPlayer != null) {
+			dPlayer.leave();
 		}
 		
 		return true;
@@ -54,8 +54,8 @@ public class LeaveSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		for (DPlayer dplayer : DungeonsXL.getPlugin().getDPlayers()) {
-			dplayer.leave();
+		for (DPlayer dPlayer : DungeonsXL.getPlugin().getDPlayers()) {
+			dPlayer.leave();
 		}
 	}
 	

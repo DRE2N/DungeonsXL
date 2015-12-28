@@ -25,7 +25,7 @@ public class TestCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		DPlayer dplayer = DPlayer.get(player);
+		DPlayer dplayer = DPlayer.getByPlayer(player);
 		
 		if (dplayer != null) {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
@@ -61,7 +61,7 @@ public class TestCommand extends DCommand {
 			return;
 		}
 		
-		if (DGroup.get(player) != null) {
+		if (DGroup.getByPlayer(player) != null) {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_GROUP));
 			return;
 		}
@@ -69,7 +69,7 @@ public class TestCommand extends DCommand {
 		DGroup dGroup = new DGroup(player, identifier, multiFloor);
 		
 		if (dGroup.getGameWorld() == null) {
-			dGroup.setGameWorld(GameWorld.load(DGroup.get(player).getMapName()));
+			dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
 		}
 		
 		DPlayer newDPlayer;
@@ -81,7 +81,7 @@ public class TestCommand extends DCommand {
 			newDPlayer = new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false);
 		}
 		
-		newDPlayer.setIsInTestMode(true);
+		newDPlayer.setInTestMode(true);
 	}
 	
 }

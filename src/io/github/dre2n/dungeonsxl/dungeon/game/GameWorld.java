@@ -39,7 +39,7 @@ public class GameWorld {
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Variables placeable
-	private boolean isTutorial;
+	private boolean tutorial;
 	
 	private CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks = new CopyOnWriteArrayList<GamePlaceableBlock>();
 	private World world;
@@ -110,24 +110,24 @@ public class GameWorld {
 	}
 	
 	public void msg(String msg) {
-		for (DPlayer dplayer : DPlayer.get(world)) {
-			MessageUtil.sendMessage(dplayer.getPlayer(), msg);
+		for (DPlayer dPlayer : DPlayer.getByWorld(world)) {
+			MessageUtil.sendMessage(dPlayer.getPlayer(), msg);
 		}
 	}
 	
 	/**
-	 * @return the isTutorial
+	 * @return the tutorial
 	 */
 	public boolean isTutorial() {
-		return isTutorial;
+		return tutorial;
 	}
 	
 	/**
-	 * @param isTutorial
-	 * the isTutorial to set
+	 * @param tutorial
+	 * if the GameWorld is the tutorial
 	 */
-	public void setTutorial(boolean isTutorial) {
-		this.isTutorial = isTutorial;
+	public void setTutorial(boolean tutorial) {
+		this.tutorial = tutorial;
 	}
 	
 	/**
@@ -283,7 +283,7 @@ public class GameWorld {
 	/**
 	 * @return the dMobs
 	 */
-	public CopyOnWriteArrayList<DMob> getdMobs() {
+	public CopyOnWriteArrayList<DMob> getDMobs() {
 		return dMobs;
 	}
 	
@@ -291,7 +291,7 @@ public class GameWorld {
 	 * @param dMobs
 	 * the dMobs to set
 	 */
-	public void setdMobs(CopyOnWriteArrayList<DMob> dMobs) {
+	public void setDMobs(CopyOnWriteArrayList<DMob> dMobs) {
 		this.dMobs = dMobs;
 	}
 	
@@ -313,7 +313,7 @@ public class GameWorld {
 	/**
 	 * @return the dSigns
 	 */
-	public CopyOnWriteArrayList<DSign> getdSigns() {
+	public CopyOnWriteArrayList<DSign> getDSigns() {
 		return dSigns;
 	}
 	
@@ -321,7 +321,7 @@ public class GameWorld {
 	 * @param dSigns
 	 * the dSigns to set
 	 */
-	public void setdSigns(CopyOnWriteArrayList<DSign> dSigns) {
+	public void setDSigns(CopyOnWriteArrayList<DSign> dSigns) {
 		this.dSigns = dSigns;
 	}
 	
@@ -356,7 +356,7 @@ public class GameWorld {
 	
 	// Statics
 	
-	public static GameWorld get(World world) {
+	public static GameWorld getByWorld(World world) {
 		for (GameWorld gameWorld : plugin.getGameWorlds()) {
 			if (gameWorld.world.equals(world)) {
 				return gameWorld;
@@ -374,7 +374,7 @@ public class GameWorld {
 	
 	public static boolean canPlayDungeon(String dungeon, Player player) {
 		
-		if (player.hasPermission("dungeonsxl.ignoretimelimit")) {
+		if (player.hasPermission("dxl.ignoretimelimit")) {
 			return true;
 		}
 		

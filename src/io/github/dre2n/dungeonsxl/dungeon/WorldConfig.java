@@ -87,15 +87,15 @@ public class WorldConfig {
 				boolean hasDog = configSectionClasses.getBoolean(className + ".dog");
 				/* Items */
 				List<String> items = configSectionClasses.getStringList(className + ".items");
-				CopyOnWriteArrayList<ItemStack> istacks = new CopyOnWriteArrayList<ItemStack>();
+				CopyOnWriteArrayList<ItemStack> itemStacks = new CopyOnWriteArrayList<ItemStack>();
 				
 				for (String item : items) {
-					String[] itemsplit = item.split(",");
-					if (itemsplit.length > 0) {
+					String[] itemSplit = item.split(",");
+					if (itemSplit.length > 0) {
 						int itemId = 0, itemData = 0, itemSize = 1, itemLvlEnchantment = 1;
 						Enchantment itemEnchantment = null;
 						// Check Id & Data
-						String[] idAndData = itemsplit[0].split("/");
+						String[] idAndData = itemSplit[0].split("/");
 						itemId = IntegerUtil.parseInt(idAndData[0]);
 						
 						if (idAndData.length > 1) {
@@ -103,12 +103,12 @@ public class WorldConfig {
 						}
 						
 						// Size
-						if (itemsplit.length > 1) {
-							itemSize = IntegerUtil.parseInt(itemsplit[1]);
+						if (itemSplit.length > 1) {
+							itemSize = IntegerUtil.parseInt(itemSplit[1]);
 						}
 						// Enchantment
-						if (itemsplit.length > 2) {
-							String[] enchantmentSplit = itemsplit[2].split("/");
+						if (itemSplit.length > 2) {
+							String[] enchantmentSplit = itemSplit[2].split("/");
 							
 							itemEnchantment = Enchantment.getByName(enchantmentSplit[0]);
 							
@@ -118,16 +118,16 @@ public class WorldConfig {
 						}
 						
 						// Add Item to Stacks
-						ItemStack istack = new ItemStack(itemId, itemSize, (short) itemData);
+						ItemStack itemStack = new ItemStack(itemId, itemSize, (short) itemData);
 						if (itemEnchantment != null) {
-							istack.addEnchantment(itemEnchantment, itemLvlEnchantment);
+							itemStack.addEnchantment(itemEnchantment, itemLvlEnchantment);
 						}
-						istacks.add(istack);
+						itemStacks.add(itemStack);
 					}
 				}
 				
 				/* Create Class */
-				dClasses.add(new DClass(name, istacks, hasDog));
+				dClasses.add(new DClass(name, itemStacks, hasDog));
 			}
 		}
 		
@@ -143,16 +143,16 @@ public class WorldConfig {
 		
 		/* Secure Objects */
 		if (configFile.contains("secureObjects")) {
-			List<Integer> secureobjectlist = configFile.getIntegerList("secureObjects");
-			for (int i : secureobjectlist) {
+			List<Integer> secureObjectList = configFile.getIntegerList("secureObjects");
+			for (int i : secureObjectList) {
 				secureObjects.add(Material.getMaterial(i));
 			}
 		}
 		
 		/* Invited Players */
 		if (configFile.contains("invitedPlayers")) {
-			List<String> invitedplayers = configFile.getStringList("invitedPlayers");
-			for (String i : invitedplayers) {
+			List<String> invitedPlayers = configFile.getStringList("invitedPlayers");
+			for (String i : invitedPlayers) {
 				invitedPlayers.add(i);
 			}
 		}
@@ -269,7 +269,7 @@ public class WorldConfig {
 		FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
 		
 		// Messages
-		for (Integer msgs : this.msgs.keySet()) {
+		for (int msgs : this.msgs.keySet()) {
 			configFile.set("message." + msgs, this.msgs.get(msgs));
 		}
 		
@@ -288,8 +288,8 @@ public class WorldConfig {
 		try {
 			configFile.save(file);
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			exception.printStackTrace();
 		}
 	}
 	

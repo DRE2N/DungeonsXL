@@ -120,7 +120,7 @@ public class MythicMobsSign extends DSign {
 		public void run() {
 			if (sign.interval <= 0) {
 				World world = sign.getSign().getWorld();
-				GameWorld gameWorld = GameWorld.get(world);
+				GameWorld gameWorld = GameWorld.getByWorld(world);
 				
 				if (gameWorld != null) {
 					spawnLoc = sign.getSign().getLocation().add(0.5, 0, 0.5);

@@ -44,10 +44,10 @@ public class EndSign extends DSign {
 	
 	@Override
 	public boolean onPlayerTrigger(Player player) {
-		DPlayer dplayer = DPlayer.get(player);
-		if (dplayer != null) {
-			if ( !dplayer.isFinished()) {
-				dplayer.finish();
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
+		if (dPlayer != null) {
+			if ( !dPlayer.isFinished()) {
+				dPlayer.finish();
 			}
 		}
 		return true;
@@ -55,8 +55,8 @@ public class EndSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		for (DPlayer dplayer : plugin.getDPlayers()) {
-			dplayer.finish();
+		for (DPlayer dPlayer : plugin.getDPlayers()) {
+			dPlayer.finish();
 		}
 	}
 	

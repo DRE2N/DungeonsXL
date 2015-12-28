@@ -53,9 +53,9 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onDeath(PlayerDeathEvent event) {
 		Player player = event.getEntity();
-		final DPlayer dPlayer = DPlayer.get(player);
+		final DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
-		GameWorld gameWorld = GameWorld.get(player.getLocation().getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(player.getLocation().getWorld());
 		if (gameWorld == null) {
 			return;
 		}
@@ -100,7 +100,7 @@ public class PlayerListener implements Listener {
 		
 		if (clickedBlock != null) {
 			// Block Enderchests
-			if (GameWorld.get(player.getWorld()) != null || EditWorld.get(player.getWorld()) != null) {
+			if (GameWorld.getByWorld(player.getWorld()) != null || EditWorld.get(player.getWorld()) != null) {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.ENDER_CHEST) {
 						if ( !player.hasPermission("dxl.bypass")) {
@@ -118,7 +118,7 @@ public class PlayerListener implements Listener {
 			}
 			
 			// Block Dispensers
-			if (GameWorld.get(player.getWorld()) != null) {
+			if (GameWorld.getByWorld(player.getWorld()) != null) {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.DISPENSER) {
 						if ( !player.hasPermission("dxl.bypass")) {
@@ -159,7 +159,7 @@ public class PlayerListener implements Listener {
 			if (EditWorld.get(player.getWorld()) != null) {
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 					if (item.getType() == Material.STICK) {
-						DPlayer dPlayer = DPlayer.get(player);
+						DPlayer dPlayer = DPlayer.getByPlayer(player);
 						if (dPlayer != null) {
 							dPlayer.poke(clickedBlock);
 							event.setCancelled(true);
@@ -169,7 +169,7 @@ public class PlayerListener implements Listener {
 			}
 			
 			// Trigger UseItem Signs
-			GameWorld gameWorld = GameWorld.get(player.getWorld());
+			GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
 			if (gameWorld != null) {
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
 					if (UseItemTrigger.hasTriggers(gameWorld)) {
@@ -213,11 +213,11 @@ public class PlayerListener implements Listener {
 					event.setCancelled(true);
 				}
 				
-				DPlayer dPlayer = DPlayer.get(player);
+				DPlayer dPlayer = DPlayer.getByPlayer(player);
 				if (dPlayer != null) {
 					
 					// Check GameWorld Signs
-					GameWorld gameWorld = GameWorld.get(player.getWorld());
+					GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
 					if (gameWorld != null) {
 						
 						// Trigger InteractTrigger
@@ -255,7 +255,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// Deny dropping things at the lobby
-		DGroup dGroup = DGroup.get(player);
+		DGroup dGroup = DGroup.getByPlayer(player);
 		if (dGroup == null) {
 			return;
 		}
@@ -265,13 +265,13 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		if ( !DPlayer.get(player).isReady()) {
+		if ( !DPlayer.getByPlayer(player).isReady()) {
 			event.setCancelled(true);
 			return;
 		}
 		
-		DPlayer dPlayer = DPlayer.get(player);
-		GameWorld gameWorld = GameWorld.get(dPlayer.getWorld());
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
+		GameWorld gameWorld = GameWorld.getByWorld(dPlayer.getWorld());
 		
 		if (dPlayer != null) {
 			for (Material material : gameWorld.getConfig().getSecureObjects()) {
@@ -287,7 +287,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
-		DPlayer dPlayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
 		if (dPlayer == null) {
 			return;
@@ -307,13 +307,13 @@ public class PlayerListener implements Listener {
 			}
 			
 		} else {
-			GameWorld gameWorld = GameWorld.get(dPlayer.getWorld());
+			GameWorld gameWorld = GameWorld.getByWorld(dPlayer.getWorld());
 			
 			if (gameWorld == null) {
 				return;
 			}
 			
-			DGroup dGroup = DGroup.get(dPlayer.getPlayer());
+			DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
 			
 			if (dPlayer.getCheckpoint() == null) {
 				event.setRespawnLocation(dGroup.getGameWorld().getLocStart());
@@ -346,7 +346,7 @@ public class PlayerListener implements Listener {
 	public void onPortal(PlayerPortalEvent event) {
 		Player player = event.getPlayer();
 		Location location = event.getFrom();
-		DPortal dportal = DPortal.get(location);
+		DPortal dportal = DPortal.getByLocation(location);
 		
 		if (dportal != null) {
 			event.setCancelled(true);
@@ -357,7 +357,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onTeleport(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
-		DPlayer dPlayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
 		if (dPlayer == null) {
 			return;
@@ -375,7 +375,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
-		DPlayer dPlayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		if (dPlayer == null) {
 			return;
 		}
@@ -389,16 +389,16 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		DPlayer dPlayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
 		if (dPlayer == null) {
 			return;
 		}
 		
-		DGroup dGroup = DGroup.get(player);
+		DGroup dGroup = DGroup.getByPlayer(player);
 		
 		// Check GameWorld
-		GameWorld gameWorld = GameWorld.get(player.getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
 		if (gameWorld != null) {
 			int timeUntilKickOfflinePlayer = gameWorld.getConfig().getTimeUntilKickOfflinePlayer();
 			
@@ -423,9 +423,9 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// Check dPlayers
-		DPlayer dPlayer = DPlayer.get(player.getName());
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		if (dPlayer != null) {
-			DGroup dGroup = DGroup.get(dPlayer.getPlayer());
+			DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
 			if (dGroup != null) {
 				dGroup.getPlayers().remove(dPlayer.getPlayer());
 				dGroup.getPlayers().add(player);
@@ -441,7 +441,7 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		if (DPlayer.get(player) != null) {
+		if (DPlayer.getByPlayer(player) != null) {
 			return;
 		}
 		
@@ -461,7 +461,7 @@ public class PlayerListener implements Listener {
 			DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
 			
 			if (dGroup.getGameWorld() == null) {
-				dGroup.setGameWorld(GameWorld.load(DGroup.get(player).getMapName()));
+				dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
 				dGroup.getGameWorld().setTutorial(true);
 			}
 			
@@ -483,7 +483,7 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		DPlayer dPlayer = DPlayer.get(event.getPlayer());
+		DPlayer dPlayer = DPlayer.getByPlayer(event.getPlayer());
 		if (dPlayer == null) {
 			return;
 		}
@@ -532,7 +532,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
-		DLootInventory inventory = DLootInventory.get(player);
+		DLootInventory inventory = DLootInventory.getByPlayer(player);
 		
 		if (inventory == null) {
 			return;
@@ -567,7 +567,7 @@ public class PlayerListener implements Listener {
 				MiscUtil.secureTeleport(player, location);
 			}
 			
-			DPlayer dPlayer = DPlayer.get(player);
+			DPlayer dPlayer = DPlayer.getByPlayer(player);
 			
 			if (dPlayer == null) {
 				return;

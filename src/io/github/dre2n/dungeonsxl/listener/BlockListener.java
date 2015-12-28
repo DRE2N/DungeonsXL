@@ -39,7 +39,7 @@ public class BlockListener implements Listener {
 			return;
 		}
 		
-		if (DPortal.get(event.getBlock()) != null) {
+		if (DPortal.getByBlock(event.getBlock()) != null) {
 			event.setCancelled(true);
 		}
 	}
@@ -50,7 +50,7 @@ public class BlockListener implements Listener {
 		
 		// Deny DPortal destroying
 		if (block.getType() == Material.PORTAL) {
-			if (DPortal.get(event.getBlock()) != null) {
+			if (DPortal.getByBlock(event.getBlock()) != null) {
 				event.setCancelled(true);
 			}
 		}
@@ -83,7 +83,7 @@ public class BlockListener implements Listener {
 		}
 		
 		// Deny GameWorld Blocks
-		GameWorld gameWorld = GameWorld.get(block.getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
 		if (gameWorld != null) {
 			event.setCancelled(true);
 		}
@@ -95,7 +95,7 @@ public class BlockListener implements Listener {
 		Block block = event.getBlock();
 		
 		// Deny GameWorld Blocks
-		GameWorld gameWorld = GameWorld.get(block.getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
 		if (gameWorld == null) {
 			return;
 		}
@@ -205,7 +205,7 @@ public class BlockListener implements Listener {
 		}
 		
 		// Check GameWorlds
-		GameWorld gameWorld = GameWorld.get(event.getBlock().getWorld());
+		GameWorld gameWorld = GameWorld.getByWorld(event.getBlock().getWorld());
 		if (gameWorld != null) {
 			event.setCancelled(true);
 		}

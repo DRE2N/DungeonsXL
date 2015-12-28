@@ -20,7 +20,7 @@ public class ChatCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		DPlayer dplayer = DPlayer.get(player);
+		DPlayer dplayer = DPlayer.getByPlayer(player);
 		
 		if (dplayer == null) {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_GROUP));

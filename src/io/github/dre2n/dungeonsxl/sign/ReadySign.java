@@ -47,7 +47,7 @@ public class ReadySign extends DSign {
 	
 	@Override
 	public boolean onPlayerTrigger(Player player) {
-		ready(DPlayer.get(player));
+		ready(DPlayer.getByPlayer(player));
 		return true;
 	}
 	

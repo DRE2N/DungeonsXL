@@ -166,16 +166,16 @@ public class DungeonsXL extends JavaPlugin {
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			@Override
 			public void run() {
-				for (GameWorld gworld : gameWorlds) {
-					if (gworld.getWorld().getPlayers().isEmpty()) {
-						if (DPlayer.get(gworld.getWorld()).isEmpty()) {
-							gworld.delete();
+				for (GameWorld gameWorld : gameWorlds) {
+					if (gameWorld.getWorld().getPlayers().isEmpty()) {
+						if (DPlayer.getByWorld(gameWorld.getWorld()).isEmpty()) {
+							gameWorld.delete();
 						}
 					}
 				}
-				for (EditWorld eworld : editWorlds) {
-					if (eworld.getWorld().getPlayers().isEmpty()) {
-						eworld.delete();
+				for (EditWorld editWorld : editWorlds) {
+					if (editWorld.getWorld().getPlayers().isEmpty()) {
+						editWorld.delete();
 					}
 				}
 			}
@@ -239,7 +239,7 @@ public class DungeonsXL extends JavaPlugin {
 					if (dungeonFile.getName().contains(".id_")) {
 						String dungeonName = dungeonFile.getName().substring(4);
 						FileUtil.copyDirectory(file, new File(plugin.getDataFolder(), "/maps/" + dungeonName));
-						FileUtil.deletenotusingfiles(new File(plugin.getDataFolder(), "/maps/" + dungeonName));
+						FileUtil.deleteUnusedFiles(new File(plugin.getDataFolder(), "/maps/" + dungeonName));
 					}
 				}
 				

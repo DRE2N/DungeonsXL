@@ -11,9 +11,9 @@ public class WorldListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onChunkUnload(ChunkUnloadEvent event) {
-		GameWorld gWorld = GameWorld.get(event.getWorld());
-		if (gWorld != null) {
-			if (gWorld.getLoadedChunks().contains(event.getChunk())) {
+		GameWorld gameWorld = GameWorld.getByWorld(event.getWorld());
+		if (gameWorld != null) {
+			if (gameWorld.getLoadedChunks().contains(event.getChunk())) {
 				event.setCancelled(true);
 			}
 		}

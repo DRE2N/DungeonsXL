@@ -24,23 +24,23 @@ public class PortalCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		DPlayer dplayer = DPlayer.get(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
-		if (dplayer != null) {
+		if (dPlayer != null) {
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 		}
 		
-		DPortal dportal = DPortal.get(player);
+		DPortal dPortal = DPortal.getByPlayer(player);
 		
-		if (dportal == null) {
-			dportal = new DPortal(false);
-			dportal.setPlayer(player);
-			dportal.setWorld(player.getWorld());
+		if (dPortal == null) {
+			dPortal = new DPortal(false);
+			dPortal.setPlayer(player);
+			dPortal.setWorld(player.getWorld());
 			player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_INTRODUCTION));
 			
 		} else {
-			plugin.getDPortals().remove(dportal);
+			plugin.getDPortals().remove(dPortal);
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_ABORT));
 		}
 	}

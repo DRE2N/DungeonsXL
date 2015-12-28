@@ -118,7 +118,7 @@ public class MobSign extends DSign {
 		public void run() {
 			if (sign.interval <= 0) {
 				World world = sign.getSign().getWorld();
-				GameWorld gameWorld = GameWorld.get(world);
+				GameWorld gameWorld = GameWorld.getByWorld(world);
 				
 				if (gameWorld != null) {
 					Location spawnLoc = sign.getSign().getLocation().add(0.5, 0, 0.5);
@@ -144,10 +144,10 @@ public class MobSign extends DSign {
 					}
 					
 					// Check custom mobs
-					DMobType mobType = DMobType.get(sign.mob, gameWorld.getConfig().getMobTypes());
+					DMobType mobType = DMobType.getByName(sign.mob, gameWorld.getConfig().getMobTypes());
 					
 					if (mobType != null) {
-						mobType.spawn(GameWorld.get(world), spawnLoc);
+						mobType.spawn(GameWorld.getByWorld(world), spawnLoc);
 					}
 					
 					// Set the amount

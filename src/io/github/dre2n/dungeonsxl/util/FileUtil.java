@@ -27,7 +27,7 @@ public class FileUtil {
 		return files;
 	}
 	
-	private static final String[] excludedFiles = {"config.yml", "uid.dat", "DXLData.data"};
+	private static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
 	
 	public static void copyDirectory(File sourceLocation, File targetLocation) {
 		if (sourceLocation.isDirectory()) {
@@ -39,7 +39,7 @@ public class FileUtil {
 			for (String element : children) {
 				boolean isOk = true;
 				
-				for (String excluded : excludedFiles) {
+				for (String excluded : EXCLUDED_FILES) {
 					if (element.contains(excluded)) {
 						isOk = false;
 						break;
@@ -85,7 +85,7 @@ public class FileUtil {
 		}
 	}
 	
-	public static void deletenotusingfiles(File directory) {
+	public static void deleteUnusedFiles(File directory) {
 		File[] files = directory.listFiles();
 		for (File file : files) {
 			if (file.getName().equalsIgnoreCase("uid.dat") || file.getName().contains(".id_")) {
@@ -112,8 +112,10 @@ public class FileUtil {
 			inChannel = new FileInputStream(in).getChannel();
 			outChannel = new FileOutputStream(out).getChannel();
 			inChannel.transferTo(0, inChannel.size(), outChannel);
+			
 		} catch (IOException e) {
 			throw e;
+			
 		} finally {
 			if (inChannel != null) {
 				inChannel.close();

@@ -13,7 +13,7 @@ public class GamePlaceableBlock {
 	
 	// Variables
 	private Block block;
-	private Set<Material> mats = new HashSet<Material>();
+	private Set<Material> materials = new HashSet<Material>();
 	
 	private boolean onTop = false;
 	private boolean onBottom = false;
@@ -30,9 +30,9 @@ public class GamePlaceableBlock {
 			String[] splittedIds = ids.split(",");
 			for (String id : splittedIds) {
 				@SuppressWarnings("deprecation")
-				Material mat = Material.getMaterial(IntegerUtil.parseInt(id));
-				if (mat != null) {
-					mats.add(mat);
+				Material material = Material.getMaterial(IntegerUtil.parseInt(id));
+				if (material != null) {
+					materials.add(material);
 				}
 			}
 		}
@@ -240,36 +240,36 @@ public class GamePlaceableBlock {
 	
 	// Canbuild
 	public static boolean canBuildHere(Block block, BlockFace blockFace, Material mat, GameWorld gameWorld) {
-		for (GamePlaceableBlock gPBlock : gameWorld.getPlaceableBlocks()) {
-			if (gPBlock.block.getFace(block) != BlockFace.SELF) {
+		for (GamePlaceableBlock gamePlacableBlock : gameWorld.getPlaceableBlocks()) {
+			if (gamePlacableBlock.block.getFace(block) != BlockFace.SELF) {
 				continue;
 			}
 			
-			if ( !(gPBlock.mats.contains(mat) || gPBlock.mats.isEmpty())) {
+			if ( !(gamePlacableBlock.materials.contains(mat) || gamePlacableBlock.materials.isEmpty())) {
 				continue;
 			}
 			
-			if (blockFace == BlockFace.NORTH && gPBlock.onNorth) {
+			if (blockFace == BlockFace.NORTH && gamePlacableBlock.onNorth) {
 				return true;
 			}
 			
-			if (blockFace == BlockFace.SOUTH && gPBlock.onSouth) {
+			if (blockFace == BlockFace.SOUTH && gamePlacableBlock.onSouth) {
 				return true;
 			}
 			
-			if (blockFace == BlockFace.EAST && gPBlock.onEast) {
+			if (blockFace == BlockFace.EAST && gamePlacableBlock.onEast) {
 				return true;
 			}
 			
-			if (blockFace == BlockFace.WEST && gPBlock.onWest) {
+			if (blockFace == BlockFace.WEST && gamePlacableBlock.onWest) {
 				return true;
 			}
 			
-			if (blockFace == BlockFace.UP && gPBlock.onTop) {
+			if (blockFace == BlockFace.UP && gamePlacableBlock.onTop) {
 				return true;
 			}
 			
-			if (blockFace == BlockFace.DOWN && gPBlock.onBottom) {
+			if (blockFace == BlockFace.DOWN && gamePlacableBlock.onBottom) {
 				return true;
 			}
 		}

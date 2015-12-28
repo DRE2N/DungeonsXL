@@ -41,7 +41,7 @@ public class DMobType {
 	private Map<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
 	
 	/* Extra Values for different Mob Types */
-	private boolean isWitherSkeleton = false;
+	private boolean witherSkeleton = false;
 	private String ocelotType = null;
 	
 	/* Methods */
@@ -70,7 +70,7 @@ public class DMobType {
 		
 		/* Check mob specified stuff */
 		if (type == EntityType.SKELETON) {
-			if (isWitherSkeleton) {
+			if (witherSkeleton) {
 				((Skeleton) entity).setSkeletonType(SkeletonType.WITHER);
 			} else {
 				((Skeleton) entity).setSkeletonType(SkeletonType.NORMAL);
@@ -79,16 +79,8 @@ public class DMobType {
 		
 		if (type == EntityType.OCELOT) {
 			Ocelot ocelot = (Ocelot) entity;
-			if (ocelotType != null) {
-				if (ocelotType.equalsIgnoreCase("BLACK_CAT")) {
-					ocelot.setCatType(Ocelot.Type.BLACK_CAT);
-				} else if (ocelotType.equalsIgnoreCase("RED_CAT")) {
-					ocelot.setCatType(Ocelot.Type.RED_CAT);
-				} else if (ocelotType.equalsIgnoreCase("SIAMESE_CAT")) {
-					ocelot.setCatType(Ocelot.Type.SIAMESE_CAT);
-				} else if (ocelotType.equalsIgnoreCase("WILD_OCELOT")) {
-					ocelot.setCatType(Ocelot.Type.WILD_OCELOT);
-				}
+			if (Ocelot.Type.valueOf(ocelotType.toUpperCase()) != null) {
+				ocelot.setCatType(Ocelot.Type.valueOf(ocelotType.toUpperCase()));
 			}
 		}
 		
@@ -159,7 +151,7 @@ public class DMobType {
 			
 			// Load different Mob options
 			if (configFile.contains(mobName + ".isWitherSkeleton")) {
-				mobType.isWitherSkeleton = configFile.getBoolean(mobName + ".isWitherSkeleton");
+				mobType.witherSkeleton = configFile.getBoolean(mobName + ".isWitherSkeleton");
 			}
 			
 			if (configFile.contains(mobName + ".ocelotType")) {
@@ -233,7 +225,7 @@ public class DMobType {
 	}
 	
 	// Get
-	public static DMobType get(String name, Set<DMobType> mobTypes) {
+	public static DMobType getByName(String name, Set<DMobType> mobTypes) {
 		for (DMobType mobType : mobTypes) {
 			if (mobType.name.equalsIgnoreCase(name)) {
 				return mobType;
@@ -267,6 +259,111 @@ public class DMobType {
 	}
 	
 	/**
+	 * @return the type
+	 */
+	public EntityType getType() {
+		return type;
+	}
+	
+	/**
+	 * @param type
+	 * the type to set
+	 */
+	public void setType(EntityType type) {
+		this.type = type;
+	}
+	
+	/**
+	 * @return the maxHealth
+	 */
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+	
+	/**
+	 * @param maxHealth
+	 * the maxHealth to set
+	 */
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+	
+	/**
+	 * @return the itemHand
+	 */
+	public ItemStack getItemHand() {
+		return ItemHand;
+	}
+	
+	/**
+	 * @param itemHand
+	 * the itemHand to set
+	 */
+	public void setItemHand(ItemStack itemHand) {
+		ItemHand = itemHand;
+	}
+	
+	/**
+	 * @return the itemHelmet
+	 */
+	public ItemStack getItemHelmet() {
+		return ItemHelmet;
+	}
+	
+	/**
+	 * @param itemHelmet
+	 * the itemHelmet to set
+	 */
+	public void setItemHelmet(ItemStack itemHelmet) {
+		ItemHelmet = itemHelmet;
+	}
+	
+	/**
+	 * @return the itemChestplate
+	 */
+	public ItemStack getItemChestplate() {
+		return ItemChestplate;
+	}
+	
+	/**
+	 * @param itemChestplate
+	 * the itemChestplate to set
+	 */
+	public void setItemChestplate(ItemStack itemChestplate) {
+		ItemChestplate = itemChestplate;
+	}
+	
+	/**
+	 * @return the itemLeggings
+	 */
+	public ItemStack getItemLeggings() {
+		return ItemLeggings;
+	}
+	
+	/**
+	 * @param itemLeggings
+	 * the itemLeggings to set
+	 */
+	public void setItemLeggings(ItemStack itemLeggings) {
+		ItemLeggings = itemLeggings;
+	}
+	
+	/**
+	 * @return the itemBoots
+	 */
+	public ItemStack getItemBoots() {
+		return ItemBoots;
+	}
+	
+	/**
+	 * @param itemBoots
+	 * the itemBoots to set
+	 */
+	public void setItemBoots(ItemStack itemBoots) {
+		ItemBoots = itemBoots;
+	}
+	
+	/**
 	 * @return the drops
 	 */
 	public Map<ItemStack, Integer> getDrops() {
@@ -279,6 +376,36 @@ public class DMobType {
 	 */
 	public void setDrops(Map<ItemStack, Integer> drops) {
 		this.drops = drops;
+	}
+	
+	/**
+	 * @return if the skeleton is a wither skeleton
+	 */
+	public boolean isWitherSkeleton() {
+		return witherSkeleton;
+	}
+	
+	/**
+	 * @param witherSkeleton
+	 * set if the skeleton is a wither skeleton
+	 */
+	public void setWitherSkeleton(boolean witherSkeleton) {
+		this.witherSkeleton = witherSkeleton;
+	}
+	
+	/**
+	 * @return the ocelotType
+	 */
+	public String getOcelotType() {
+		return ocelotType;
+	}
+	
+	/**
+	 * @param ocelotType
+	 * the ocelotType to set
+	 */
+	public void setOcelotType(String ocelotType) {
+		this.ocelotType = ocelotType;
 	}
 	
 }

@@ -48,7 +48,7 @@ public class CreateCommand extends DCommand {
 		} else if (sender instanceof Player) {
 			Player player = (Player) sender;
 			
-			if (DPlayer.get(player) != null) {
+			if (DPlayer.getByPlayer(player) != null) {
 				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 				return;
 			}

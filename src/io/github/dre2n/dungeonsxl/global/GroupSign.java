@@ -24,10 +24,10 @@ public class GroupSign {
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Sign Labels
-	public static final String strIsPlaying = ChatColor.DARK_RED + "Is Playing";
-	public static final String strFull = ChatColor.DARK_RED + "Full";
-	public static final String strJoinGrp = ChatColor.DARK_GREEN + "Join Group";
-	public static final String strNewGrp = ChatColor.DARK_GREEN + "New Group";
+	public static final String IS_PLAYING = ChatColor.DARK_RED + "Is Playing";
+	public static final String FULL = ChatColor.DARK_RED + "Full";
+	public static final String JOIN_GROUP = ChatColor.DARK_GREEN + "Join Group";
+	public static final String NEW_GROUP = ChatColor.DARK_GREEN + "New Group";
 	
 	// Variables
 	private DGroup[] dGroups;
@@ -142,13 +142,13 @@ public class GroupSign {
 			// Set Signs
 			if (dGroup != null) {
 				if (dGroup.isPlaying()) {
-					sign.setLine(0, strIsPlaying);
+					sign.setLine(0, IS_PLAYING);
 					
 				} else if (dGroup.getPlayers().size() >= maxPlayersPerGroup) {
-					sign.setLine(0, strFull);
+					sign.setLine(0, FULL);
 					
 				} else {
-					sign.setLine(0, strJoinGrp);
+					sign.setLine(0, JOIN_GROUP);
 				}
 				
 				int j = 1;
@@ -169,7 +169,7 @@ public class GroupSign {
 				}
 				
 			} else {
-				sign.setLine(0, strNewGrp);
+				sign.setLine(0, NEW_GROUP);
 			}
 			
 			sign.update();
@@ -377,7 +377,7 @@ public class GroupSign {
 			return false;
 		}
 		
-		if (DGroup.get(player) != null) {
+		if (DGroup.getByPlayer(player) != null) {
 			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_LEAVE_GROUP));
 			return true;
 		}
@@ -417,7 +417,7 @@ public class GroupSign {
 		
 		Sign topSign = (Sign) topBlock.getState();
 		
-		if (topSign.getLine(0).equals(strNewGrp)) {
+		if (topSign.getLine(0).equals(NEW_GROUP)) {
 			if (groupSign.isMultiFloor()) {
 				groupSign.dGroups[column] = new DGroup(player, groupSign.dungeonName, groupSign.isMultiFloor());
 				
@@ -426,7 +426,7 @@ public class GroupSign {
 			}
 			groupSign.update();
 			
-		} else if (topSign.getLine(0).equals(strJoinGrp)) {
+		} else if (topSign.getLine(0).equals(JOIN_GROUP)) {
 			groupSign.dGroups[column].addPlayer(player);
 			groupSign.update();
 		}
@@ -434,7 +434,7 @@ public class GroupSign {
 		return true;
 	}
 	
-	public static void updatePerGroup(DGroup dGroupsearch) {
+	public static void updatePerGroup(DGroup dGroupSearch) {
 		
 		for (GroupSign groupSign : plugin.getGroupSigns()) {
 			int i = 0;
@@ -443,8 +443,8 @@ public class GroupSign {
 					continue;
 				}
 				
-				if (dGroup == dGroupsearch) {
-					if (dGroupsearch.isEmpty()) {
+				if (dGroup == dGroupSearch) {
+					if (dGroupSearch.isEmpty()) {
 						groupSign.dGroups[i] = null;
 					}
 					groupSign.update();

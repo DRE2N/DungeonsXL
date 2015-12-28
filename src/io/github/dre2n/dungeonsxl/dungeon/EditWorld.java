@@ -80,6 +80,7 @@ public class EditWorld {
 				out.writeInt(sign.getZ());
 			}
 			out.close();
+			
 		} catch (IOException exception) {
 		}
 	}
@@ -98,27 +99,27 @@ public class EditWorld {
 	public void delete() {
 		plugin.getEditWorlds().remove(this);
 		for (Player player : world.getPlayers()) {
-			DPlayer dplayer = DPlayer.get(player);
-			dplayer.leave();
+			DPlayer dPlayer = DPlayer.getByPlayer(player);
+			dPlayer.leave();
 		}
 		
 		plugin.getServer().unloadWorld(world, true);
 		File dir = new File("DXL_Edit_" + id);
 		FileUtil.copyDirectory(dir, new File(plugin.getDataFolder(), "/maps/" + mapName));
-		FileUtil.deletenotusingfiles(new File(plugin.getDataFolder(), "/maps/" + mapName));
+		FileUtil.deleteUnusedFiles(new File(plugin.getDataFolder(), "/maps/" + mapName));
 		FileUtil.removeDirectory(dir);
 	}
 	
 	public void deleteNoSave() {
 		plugin.getEditWorlds().remove(this);
 		for (Player player : world.getPlayers()) {
-			DPlayer dplayer = DPlayer.get(player);
-			dplayer.leave();
+			DPlayer dPlayer = DPlayer.getByPlayer(player);
+			dPlayer.leave();
 		}
 		
 		File dir = new File("DXL_Edit_" + id);
 		FileUtil.copyDirectory(dir, new File(plugin.getDataFolder(), "/maps/" + mapName));
-		FileUtil.deletenotusingfiles(new File(plugin.getDataFolder(), "/maps/" + mapName));
+		FileUtil.deleteUnusedFiles(new File(plugin.getDataFolder(), "/maps/" + mapName));
 		plugin.getServer().unloadWorld(world, true);
 		FileUtil.removeDirectory(dir);
 	}
@@ -220,15 +221,15 @@ public class EditWorld {
 	}
 	
 	public void msg(String msg) {
-		for (DPlayer dplayer : DPlayer.get(world)) {
-			MessageUtil.sendMessage(dplayer.getPlayer(), msg);
+		for (DPlayer dPlayer : DPlayer.getByWorld(world)) {
+			MessageUtil.sendMessage(dPlayer.getPlayer(), msg);
 		}
 	}
 	
 	// Invite
-	public static boolean addInvitedPlayer(String editWorldname, UUID uuid) {
-		if (exist(editWorldname)) {
-			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldname, "config.yml"));
+	public static boolean addInvitedPlayer(String editWorldName, UUID uuid) {
+		if (exist(editWorldName)) {
+			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml"));
 			config.addInvitedPlayer(uuid.toString());
 			config.save();
 			return true;
@@ -246,7 +247,7 @@ public class EditWorld {
 			// Kick Player
 			EditWorld editWorld = EditWorld.get(editWorldName);
 			if (editWorld != null) {
-				DPlayer player = DPlayer.get(name);
+				DPlayer player = DPlayer.getByName(name);
 				
 				if (player != null) {
 					if (editWorld.world.getPlayers().contains(player.getPlayer())) {
@@ -261,12 +262,12 @@ public class EditWorld {
 		return false;
 	}
 	
-	public static boolean isInvitedPlayer(String editWorldname, UUID uuid, String name) {
-		if ( !exist(editWorldname)) {
+	public static boolean isInvitedPlayer(String editWorldName, UUID uuid, String name) {
+		if ( !exist(editWorldName)) {
 			return false;
 		}
 		
-		WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldname, "config.yml"));
+		WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml"));
 		// get player from both a 0.9.1 and lower and 0.9.2 and higher file
 		if (config.getInvitedPlayers().contains(name.toLowerCase()) || config.getInvitedPlayers().contains(uuid.toString())) {
 			return true;

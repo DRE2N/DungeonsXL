@@ -37,20 +37,20 @@ public class LeaveSign {
 	
 	public static boolean playerInteract(Block block, Player player) {
 		
-		LeaveSign lsign = getSign(block);
+		LeaveSign leaveSign = getSign(block);
 		
-		if (lsign == null) {
+		if (leaveSign == null) {
 			return false;
 		}
 		
-		DPlayer dplayer = DPlayer.get(player);
+		DPlayer dplayer = DPlayer.getByPlayer(player);
 		
 		if (dplayer != null) {
 			dplayer.leave();
 			return true;
 			
 		} else {
-			DGroup dgroup = DGroup.get(player);
+			DGroup dgroup = DGroup.getByPlayer(player);
 			if (dgroup != null) {
 				dgroup.removePlayer(player);
 				MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_LEAVE_GROUP));// ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
@@ -63,24 +63,24 @@ public class LeaveSign {
 	
 	@SuppressWarnings("deprecation")
 	public static boolean isRelativeSign(Block block, int x, int z) {
-		LeaveSign lsign = getSign(block.getRelative(x, 0, z));
-		if (lsign == null) {
+		LeaveSign leaveSign = getSign(block.getRelative(x, 0, z));
+		if (leaveSign == null) {
 			return false;
 		}
 		
-		if (x == -1 && lsign.sign.getData().getData() == 4) {
+		if (x == -1 && leaveSign.sign.getData().getData() == 4) {
 			return true;
 		}
 		
-		if (x == 1 && lsign.sign.getData().getData() == 5) {
+		if (x == 1 && leaveSign.sign.getData().getData() == 5) {
 			return true;
 		}
 		
-		if (z == -1 && lsign.sign.getData().getData() == 2) {
+		if (z == -1 && leaveSign.sign.getData().getData() == 2) {
 			return true;
 		}
 		
-		if (z == 1 && lsign.sign.getData().getData() == 3) {
+		if (z == 1 && leaveSign.sign.getData().getData() == 3) {
 			return true;
 		}
 		
@@ -108,17 +108,17 @@ public class LeaveSign {
 	// Save and Load
 	public static void save(FileConfiguration configFile) {
 		int id = 0;
-		for (LeaveSign lsign : plugin.getLeaveSigns()) {
+		for (LeaveSign leaveSign : plugin.getLeaveSigns()) {
 			id++;
-			String preString = "leavesign." + lsign.sign.getWorld().getName() + "." + id;
-			configFile.set(preString + ".x", lsign.sign.getX());
-			configFile.set(preString + ".y", lsign.sign.getY());
-			configFile.set(preString + ".z", lsign.sign.getZ());
+			String preString = "leavesign." + leaveSign.sign.getWorld().getName() + "." + id;
+			configFile.set(preString + ".x", leaveSign.sign.getX());
+			configFile.set(preString + ".y", leaveSign.sign.getY());
+			configFile.set(preString + ".z", leaveSign.sign.getZ());
 		}
 	}
 	
 	public static void load(FileConfiguration configFile) {
-		for (World world : DungeonsXL.getPlugin().getServer().getWorlds()) {
+		for (World world : plugin.getServer().getWorlds()) {
 			if ( !configFile.contains("leavesign." + world.getName())) {
 				continue;
 			}
