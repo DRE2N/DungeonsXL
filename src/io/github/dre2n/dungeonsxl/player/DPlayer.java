@@ -305,10 +305,15 @@ public class DPlayer {
 		}
 		dGroup.removeUnplayedFloor(dGroup.getMapName());
 		dGroup.setMapName(newFloor);
-		dGroup.setGameWorld(GameWorld.load(newFloor));
+		GameWorld gameWorld = GameWorld.load(newFloor);
+		dGroup.setGameWorld(gameWorld);
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dPlayer = get(player);
-			dPlayer.checkpoint = dGroup.getGameWorld().getLocStart();
+			dPlayer.setWorld(gameWorld.getWorld());
+			dPlayer.setCheckpoint(dGroup.getGameWorld().getLocStart());
+			if (dPlayer.getWolf() != null) {
+				dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
+			}
 		}
 		dGroup.startGame();
 	}
