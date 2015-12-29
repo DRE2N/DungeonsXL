@@ -16,6 +16,7 @@ public class HelpCommand extends DCommand {
 		setMinArgs(0);
 		setMaxArgs(1);
 		setHelp(dMessages.getMessage(Messages.HELP_CMD_HELP));
+		setPermission("dxl.help");
 		setPlayerCommand(true);
 		setConsoleCommand(true);
 	}

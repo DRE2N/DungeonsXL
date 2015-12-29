@@ -14,6 +14,7 @@ public class ChatCommand extends DCommand {
 		setMinArgs(0);
 		setMaxArgs(0);
 		setHelp(dMessages.getMessage(Messages.HELP_CMD_CHAT));
+		setPermission("dxl.chat");
 		setPlayerCommand(true);
 	}
 	

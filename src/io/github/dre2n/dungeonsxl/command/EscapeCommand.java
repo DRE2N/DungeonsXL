@@ -16,6 +16,7 @@ public class EscapeCommand extends DCommand {
 		setMinArgs(0);
 		setMaxArgs(0);
 		setHelp(dMessages.getMessage(Messages.HELP_CMD_ESCAPE));
+		setPermission("dxl.escape");
 		setPlayerCommand(true);
 	}
 	

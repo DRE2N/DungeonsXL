@@ -16,6 +16,7 @@ public class LeaveCommand extends DCommand {
 		setMinArgs(0);
 		setMaxArgs(0);
 		setHelp(dMessages.getMessage(Messages.HELP_CMD_LEAVE));
+		setPermission("dxl.leave");
 		setPlayerCommand(true);
 	}
 	

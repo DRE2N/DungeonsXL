@@ -16,6 +16,7 @@ public class MainCommand extends DCommand {
 	public MainCommand() {
 		setCommand("main");
 		setHelp(dMessages.getMessage(Messages.HELP_CMD_MAIN));
+		setPermission("dxl.main");
 		setPlayerCommand(true);
 		setConsoleCommand(true);
 	}

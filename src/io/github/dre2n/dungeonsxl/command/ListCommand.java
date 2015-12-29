@@ -21,6 +21,7 @@ public class ListCommand extends DCommand {
 		setMinArgs(0);
 		setMaxArgs(3);
 		setHelp(dMessages.getMessage(Messages.HELP_CMD_LIST));
+		setPermission("dxl.list");
 		setPlayerCommand(true);
 		setConsoleCommand(true);
 	}
