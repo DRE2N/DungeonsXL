@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class CommandSign extends DSign {
 	
@@ -55,18 +56,17 @@ public class CommandSign extends DSign {
 		String[] attributes = lines[2].split(",");
 		
 		command = lines[1];
-		executor = attributes[0];
-		delay = IntegerUtil.parseInt(attributes[1]);
+		delay = IntegerUtil.parseInt(attributes[0]);
+		executor = attributes[1];
 		
 		cCommand = CommandsXL.getPlugin().getCCommands().getCCommand(command);
 		
-		if (getTriggers().isEmpty()) {
+		if ( !getTriggers().isEmpty()) {
 			getSign().getBlock().setType(Material.AIR);
 			return;
 		}
 		
 		InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGameWorld());
-		
 		if (trigger != null) {
 			trigger.addListener(this);
 			getTriggers().add(trigger);
@@ -82,15 +82,28 @@ public class CommandSign extends DSign {
 	}
 	
 	@Override
-	public boolean onPlayerTrigger(Player player) {
+	public boolean onPlayerTrigger(final Player player) {
 		if (executor.equalsIgnoreCase("Console")) {
-			new CCommandExecutorTask(player, cCommand, Bukkit.getConsoleSender(), true).runTaskLater(plugin, delay);
+			new CCommandExecutorTask(player, cCommand, Bukkit.getConsoleSender(), true).runTaskLater(plugin, delay * 20);
 			
 		} else if (executor.equalsIgnoreCase("OP")) {
-			new CCommandExecutorTask(player, cCommand, player, true).runTaskLater(plugin, delay);
+			boolean isOp = player.isOp();
+			
+			player.setOp(true);
+			
+			new CCommandExecutorTask(player, cCommand, player, true).runTaskLater(plugin, delay * 20);
+			
+			if ( !isOp) {
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						player.setOp(false);
+					}
+				}.runTaskLater(plugin, delay * 20 + 1);
+			}
 			
 		} else {
-			new CCommandExecutorTask(player, cCommand, player, false).runTaskLater(plugin, delay);
+			new CCommandExecutorTask(player, cCommand, player, false).runTaskLater(plugin, delay * 20);
 		}
 		
 		return true;
