@@ -27,7 +27,7 @@ public class TriggerSign extends DSign {
 	@Override
 	public boolean check() {
 		Set<Integer> used = new HashSet<Integer>();
-		for (Block block : EditWorld.get(getSign().getLocation().getWorld()).getSign()) {
+		for (Block block : EditWorld.getByWorld(getSign().getLocation().getWorld()).getSign()) {
 			if (block == null) {
 				continue;
 			}

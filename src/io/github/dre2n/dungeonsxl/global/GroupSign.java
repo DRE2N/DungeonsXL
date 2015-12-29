@@ -112,6 +112,10 @@ public class GroupSign {
 		this.multiFloor = multiFloor;
 	}
 	
+	public void delete() {
+		plugin.getGroupSigns().remove(this);
+	}
+	
 	public void update() {
 		int i = 0;
 		for (DGroup dGroup : dGroups) {

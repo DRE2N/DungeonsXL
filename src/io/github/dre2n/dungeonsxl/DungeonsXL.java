@@ -52,6 +52,7 @@ public class DungeonsXL extends JavaPlugin {
 	private DSigns dSigns;
 	private Dungeons dungeons;
 	
+	private CopyOnWriteArrayList<Player> inBreakMode = new CopyOnWriteArrayList<Player>();
 	private CopyOnWriteArrayList<Player> chatSpyers = new CopyOnWriteArrayList<Player>();
 	private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<DLootInventory>();
 	private CopyOnWriteArrayList<EditWorld> editWorlds = new CopyOnWriteArrayList<EditWorld>();
@@ -402,6 +403,13 @@ public class DungeonsXL extends JavaPlugin {
 	 */
 	public void loadDungeons() {
 		dungeons = new Dungeons();
+	}
+	
+	/**
+	 * @return the inBreakMode
+	 */
+	public CopyOnWriteArrayList<Player> getInBreakMode() {
+		return inBreakMode;
 	}
 	
 	/**

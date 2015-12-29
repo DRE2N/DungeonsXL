@@ -47,7 +47,7 @@ public class EntityListener implements Listener {
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		World world = event.getLocation().getWorld();
 		
-		EditWorld editWorld = EditWorld.get(world);
+		EditWorld editWorld = EditWorld.getByWorld(world);
 		GameWorld gameWorld = GameWorld.getByWorld(world);
 		
 		if (editWorld != null || gameWorld != null) {

@@ -125,7 +125,7 @@ public class EditWorld {
 	}
 	
 	// Static
-	public static EditWorld get(World world) {
+	public static EditWorld getByWorld(World world) {
 		for (EditWorld editWorld : plugin.getEditWorlds()) {
 			if (editWorld.world.equals(world)) {
 				return editWorld;
@@ -135,7 +135,7 @@ public class EditWorld {
 		return null;
 	}
 	
-	public static EditWorld get(String name) {
+	public static EditWorld getByName(String name) {
 		for (EditWorld editWorld : plugin.getEditWorlds()) {
 			if (editWorld.mapName.equalsIgnoreCase(name)) {
 				return editWorld;
@@ -245,7 +245,7 @@ public class EditWorld {
 			config.save();
 			
 			// Kick Player
-			EditWorld editWorld = EditWorld.get(editWorldName);
+			EditWorld editWorld = EditWorld.getByName(editWorldName);
 			if (editWorld != null) {
 				DPlayer player = DPlayer.getByName(name);
 				

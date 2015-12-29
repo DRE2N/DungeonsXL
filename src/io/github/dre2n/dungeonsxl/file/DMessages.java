@@ -40,6 +40,8 @@ public class DMessages {
 		PLAYER_TREASURES("Player_Treasures", "&1Treasures"),
 		PLAYER_WAIT_FOR_OTHER_PLAYERS("Player_WaitForOtherPlayers", "&6Waiting for teammates..."),
 		
+		CMD_BREAK_PROTECTED_MODE("Cmd_Break_ProtectedMode", "&6You may not break blocks protected by DungeonsXL anymore."),
+		CMD_BREAK_BREAK_MODE("Cmd_Break_BreakMode", "&6You may break a block protected by DungeonsXL."),
 		CMD_CHAT_DUNGEON_CHAT("Cmd_Chat_DungeonChat", "&6You have entered the Dungeon-chat"),
 		CMD_CHAT_NORMAL_CHAT("Cmd_Chat_NormalChat", "&6You are now in the public chat"),
 		CMD_CHATSPY_STOPPED("Cmd_Chatspy_Stopped", "&6You stopped spying the DXL-chat!"),

@@ -21,7 +21,7 @@ public class SaveCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		EditWorld editWorld = EditWorld.get(player.getWorld());
+		EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
 		if (editWorld != null) {
 			editWorld.save();
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_SAVE_SUCCESS));

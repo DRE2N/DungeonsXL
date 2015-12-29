@@ -98,9 +98,13 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
 		
+		if (plugin.getInBreakMode().contains(player)) {
+			return;
+		}
+		
 		if (clickedBlock != null) {
 			// Block Enderchests
-			if (GameWorld.getByWorld(player.getWorld()) != null || EditWorld.get(player.getWorld()) != null) {
+			if (GameWorld.getByWorld(player.getWorld()) != null || EditWorld.getByWorld(player.getWorld()) != null) {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.ENDER_CHEST) {
 						if ( !player.hasPermission("dxl.bypass")) {
@@ -156,7 +160,7 @@ public class PlayerListener implements Listener {
 			}
 			
 			// Copy/Paste a Sign and Block-info
-			if (EditWorld.get(player.getWorld()) != null) {
+			if (EditWorld.getByWorld(player.getWorld()) != null) {
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 					if (item.getType() == Material.STICK) {
 						DPlayer dPlayer = DPlayer.getByPlayer(player);
@@ -294,7 +298,7 @@ public class PlayerListener implements Listener {
 		}
 		
 		if (dPlayer.isEditing()) {
-			EditWorld editWorld = EditWorld.get(dPlayer.getWorld());
+			EditWorld editWorld = EditWorld.getByWorld(dPlayer.getWorld());
 			if (editWorld == null) {
 				return;
 			}

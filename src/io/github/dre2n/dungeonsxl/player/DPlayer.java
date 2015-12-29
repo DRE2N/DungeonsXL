@@ -131,7 +131,7 @@ public class DPlayer {
 		}
 		
 		if (editing) {
-			EditWorld editWorld = EditWorld.get(world);
+			EditWorld editWorld = EditWorld.getByWorld(world);
 			if (editWorld != null) {
 				editWorld.save();
 			}
@@ -349,7 +349,7 @@ public class DPlayer {
 	
 	public void sendMessage(String message) {
 		if (editing) {
-			EditWorld editWorld = EditWorld.get(world);
+			EditWorld editWorld = EditWorld.getByWorld(world);
 			editWorld.msg(message);
 			for (Player player : plugin.getChatSpyers()) {
 				if ( !editWorld.getWorld().getPlayers().contains(player)) {
@@ -811,7 +811,7 @@ public class DPlayer {
 			if ( !updateSecond) {
 				if ( !dPlayer.getPlayer().getWorld().equals(dPlayer.world)) {
 					if (dPlayer.editing) {
-						EditWorld editWorld = EditWorld.get(dPlayer.world);
+						EditWorld editWorld = EditWorld.getByWorld(dPlayer.world);
 						if (editWorld != null) {
 							if (editWorld.getLobby() == null) {
 								MiscUtil.secureTeleport(dPlayer.getPlayer(), editWorld.getWorld().getSpawnLocation());

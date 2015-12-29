@@ -32,7 +32,7 @@ public class EscapeCommand extends DCommand {
 			
 			dPlayer.escape();
 			
-			EditWorld editWorld = EditWorld.get(dPlayer.getWorld());
+			EditWorld editWorld = EditWorld.getByWorld(dPlayer.getWorld());
 			if (editWorld == null) {
 				return;
 			}

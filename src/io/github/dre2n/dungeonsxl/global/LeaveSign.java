@@ -35,6 +35,10 @@ public class LeaveSign {
 		sign.update();
 	}
 	
+	public void delete() {
+		plugin.getLeaveSigns().remove(this);
+	}
+	
 	public static boolean playerInteract(Block block, Player player) {
 		
 		LeaveSign leaveSign = getSign(block);

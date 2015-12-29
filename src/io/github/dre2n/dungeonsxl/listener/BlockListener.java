@@ -47,37 +47,72 @@ public class BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
+		Player player = event.getPlayer();
 		
 		// Deny DPortal destroying
 		if (block.getType() == Material.PORTAL) {
-			if (DPortal.getByBlock(event.getBlock()) != null) {
+			DPortal dPortal = DPortal.getByBlock(event.getBlock());
+			if (dPortal != null) {
+				if (plugin.getInBreakMode().contains(player)) {
+					dPortal.delete();
+					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+					plugin.getInBreakMode().remove(player);
+					
+				} else {
+					event.setCancelled(true);
+				}
+				
+				return;
+			}
+		}
+		
+		// Delete GroupSign
+		GroupSign groupSign = GroupSign.getSign(block);
+		if (groupSign != null) {
+			if (plugin.getInBreakMode().contains(player)) {
+				groupSign.delete();
+				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+				plugin.getInBreakMode().remove(player);
+				
+			} else {
 				event.setCancelled(true);
 			}
+			
+			return;
 		}
 		
 		// Deny DGSignblocks destroying
 		if (GroupSign.isRelativeSign(block, 1, 0) || GroupSign.isRelativeSign(block, -1, 0) || GroupSign.isRelativeSign(block, 0, 1) || GroupSign.isRelativeSign(block, 0, -1)) {
 			event.setCancelled(true);
+			return;
 		}
 		
-		// DGSign destroying
-		if (GroupSign.getSign(block) != null) {
-			plugin.getGroupSigns().remove(GroupSign.getSign(block));
+		// Delete LeaveSign
+		LeaveSign leaveSign = LeaveSign.getSign(block);
+		if (leaveSign != null) {
+			if (plugin.getInBreakMode().contains(player)) {
+				leaveSign.delete();
+				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+				plugin.getInBreakMode().remove(player);
+				
+			} else {
+				event.setCancelled(true);
+			}
+			
+			return;
 		}
 		
 		// Deny LeaveSignblocks destroying
 		if (LeaveSign.isRelativeSign(block, 1, 0) || LeaveSign.isRelativeSign(block, -1, 0) || LeaveSign.isRelativeSign(block, 0, 1) || LeaveSign.isRelativeSign(block, 0, -1)) {
 			event.setCancelled(true);
-		}
-		
-		// LeaveSign destroying
-		if (LeaveSign.getSign(block) != null) {
-			event.setCancelled(true);
-			// LeaveSign.lsigns.remove(LeaveSign.getSign(block));
+			return;
 		}
 		
 		// Editworld Signs
-		EditWorld editWorld = EditWorld.get(block.getWorld());
+		EditWorld editWorld = EditWorld.getByWorld(block.getWorld());
 		if (editWorld != null) {
 			editWorld.getSign().remove(event.getBlock());
 		}
@@ -124,7 +159,7 @@ public class BlockListener implements Listener {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		String[] lines = event.getLines();
-		EditWorld editWorld = EditWorld.get(player.getWorld());
+		EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
 		
 		// Group Signs
 		if (editWorld == null) {
@@ -211,7 +246,7 @@ public class BlockListener implements Listener {
 		}
 		
 		// Check EditWorlds
-		EditWorld editWorld = EditWorld.get(event.getBlock().getWorld());
+		EditWorld editWorld = EditWorld.getByWorld(event.getBlock().getWorld());
 		if (editWorld != null) {
 			event.setCancelled(true);
 		}
