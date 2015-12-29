@@ -43,8 +43,8 @@ public class MobSign extends DSign {
 			return false;
 		}
 		
-		String[] atributes = lines[2].split(",");
-		if (atributes.length == 2) {
+		String[] attributes = lines[2].split(",");
+		if (attributes.length == 2) {
 			return true;
 			
 		} else {

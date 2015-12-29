@@ -1,9 +1,11 @@
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.commandsxl.CCommand;
+import io.github.dre2n.commandsxl.command.CCommand;
+import io.github.dre2n.commandsxl.command.CCommandExecutorTask;
 import io.github.dre2n.commandsxl.CommandsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
+import io.github.dre2n.dungeonsxl.util.IntegerUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,6 +19,8 @@ public class CommandSign extends DSign {
 	
 	// Variables
 	private CCommand cCommand;
+	private long delay;
+	
 	private String command;
 	private String executor;
 	private boolean initialized;
@@ -27,14 +31,34 @@ public class CommandSign extends DSign {
 	
 	@Override
 	public boolean check() {
-		return true;
+		String lines[] = getSign().getLines();
+		if (lines[1].equals("") || lines[2].equals("")) {
+			return false;
+		}
+		
+		if (lines[1] == null) {
+			return false;
+		}
+		
+		String[] attributes = lines[2].split(",");
+		if (attributes.length == 2) {
+			return true;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
 	public void onInit() {
-		command = getSign().getLine(1);
-		executor = getSign().getLine(2);
-		cCommand = CommandsXL.getCCommands().getCCommand(command);
+		String[] lines = getSign().getLines();
+		String[] attributes = lines[2].split(",");
+		
+		command = lines[1];
+		executor = attributes[0];
+		delay = IntegerUtil.parseInt(attributes[1]);
+		
+		cCommand = CommandsXL.getPlugin().getCCommands().getCCommand(command);
 		
 		if (getTriggers().isEmpty()) {
 			getSign().getBlock().setType(Material.AIR);
@@ -60,13 +84,13 @@ public class CommandSign extends DSign {
 	@Override
 	public boolean onPlayerTrigger(Player player) {
 		if (executor.equalsIgnoreCase("Console")) {
-			cCommand.execute(player, Bukkit.getConsoleSender(), true);
+			new CCommandExecutorTask(player, cCommand, Bukkit.getConsoleSender(), true).runTaskLater(plugin, delay);
 			
 		} else if (executor.equalsIgnoreCase("OP")) {
-			cCommand.execute(player, player, true);
+			new CCommandExecutorTask(player, cCommand, player, true).runTaskLater(plugin, delay);
 			
 		} else {
-			cCommand.execute(player, player, false);
+			new CCommandExecutorTask(player, cCommand, player, false).runTaskLater(plugin, delay);
 		}
 		
 		return true;
