@@ -10,7 +10,7 @@ import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

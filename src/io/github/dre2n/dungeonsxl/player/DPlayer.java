@@ -10,8 +10,8 @@ import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.util.IntegerUtil;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.MiscUtil;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import java.io.File;
 import java.io.IOException;

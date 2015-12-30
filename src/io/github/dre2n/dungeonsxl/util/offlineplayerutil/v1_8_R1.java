@@ -15,9 +15,9 @@ import org.bukkit.entity.Player;
 
 import com.mojang.authlib.GameProfile;
 
-public class v1_8_R1 {
+class v1_8_R1 {
 	
-	public static Player getOfflinePlayer(String player, UUID uuid) {
+	static Player getOfflinePlayer(String player, UUID uuid) {
 		Player pplayer = null;
 		try {
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
@@ -44,7 +44,7 @@ public class v1_8_R1 {
 		return pplayer;
 	}
 	
-	public static Player getOfflinePlayer(String player, UUID uuid, Location location) {
+	static Player getOfflinePlayer(String player, UUID uuid, Location location) {
 		Player pplayer = null;
 		try {
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");

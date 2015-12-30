@@ -2,7 +2,7 @@ package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import java.util.Set;
 

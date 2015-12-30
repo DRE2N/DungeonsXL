@@ -4,8 +4,8 @@ import java.io.File;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil.Internals;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

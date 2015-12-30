@@ -11,7 +11,7 @@ import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import io.github.dre2n.dungeonsxl.util.IntegerUtil;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

@@ -4,7 +4,7 @@ import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

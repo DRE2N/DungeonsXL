@@ -15,8 +15,8 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.MiscUtil;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

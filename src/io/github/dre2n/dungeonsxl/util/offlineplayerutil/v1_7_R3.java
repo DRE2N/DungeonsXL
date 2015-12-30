@@ -14,9 +14,9 @@ import org.bukkit.craftbukkit.v1_7_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 import org.bukkit.entity.Player;
 
-public class v1_7_R3 {
+class v1_7_R3 {
 	
-	public static Player getOfflinePlayer(String player, UUID uuid) {
+	static Player getOfflinePlayer(String player, UUID uuid) {
 		Player pplayer = null;
 		try {
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
@@ -43,7 +43,7 @@ public class v1_7_R3 {
 		return pplayer;
 	}
 	
-	public static Player getOfflinePlayer(String player, UUID uuid, Location location) {
+	static Player getOfflinePlayer(String player, UUID uuid, Location location) {
 		Player pplayer = null;
 		try {
 			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");

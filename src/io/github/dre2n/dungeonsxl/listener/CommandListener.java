@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.listener;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.util.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.command.DCommand;
 import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;

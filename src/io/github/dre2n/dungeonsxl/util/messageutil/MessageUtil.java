@@ -1,4 +1,7 @@
-package io.github.dre2n.dungeonsxl.util;
+package io.github.dre2n.dungeonsxl.util.messageutil;
+
+import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.util.VersionUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class MessageUtil {
+	
+	static VersionUtil versionUtil = DungeonsXL.getPlugin().getVersion();
 	
 	public enum DefaultFontInfo {
 		
@@ -205,24 +210,34 @@ public class MessageUtil {
 		sendCenteredMessage(sender, "&4&l[ &6" + plugin.getDescription().getName() + " &4&l]");
 	}
 	
-	public static void sendScreenMessage(Player player, String title, String subtitle, long fadeIn, long show, long fadeOut) {
-		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
-		title = ChatColor.translateAlternateColorCodes('&', title);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " time " + fadeIn + " " + show + " " + fadeOut);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " subtitle " + subtitle);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title " + title);
+	public static void sendScreenMessage(Player player, String title, String subtitle, int fadeIn, int show, int fadeOut) {
+		switch (versionUtil.getInternals()) {
+			case v1_8_R1:
+				v1_8_R1.sendScreenMessage(player, title, subtitle, fadeIn, show, fadeOut);
+				break;
+			case v1_8_R2:
+				v1_8_R2.sendScreenMessage(player, title, subtitle, fadeIn, show, fadeOut);
+				break;
+			case v1_8_R3:
+				v1_8_R3.sendScreenMessage(player, title, subtitle, fadeIn, show, fadeOut);
+				break;
+			case v1_9_R1:
+				v1_9_R1.sendScreenMessage(player, title, subtitle, fadeIn, show, fadeOut);
+				break;
+			case UNKNOWN:
+				UNKNOWN.sendScreenMessage(player, title, subtitle, fadeIn, show, fadeOut);
+				break;
+			default:
+				return;
+		}
 	}
 	
 	public static void sendScreenMessage(Player player, String title, String subtitle) {
-		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
-		title = ChatColor.translateAlternateColorCodes('&', title);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " subtitle \"" + subtitle + "\"");
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title \"" + title + "\"");
+		sendScreenMessage(player, title, subtitle, 20, 60, 20);
 	}
 	
 	public static void sendScreenMessage(Player player, String title) {
-		title = ChatColor.translateAlternateColorCodes('&', title);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title \"" + title + "\"");
+		sendScreenMessage(player, title, "", 20, 60, 20);
 	}
 	
 	public static final String[] BIG_A =  {
