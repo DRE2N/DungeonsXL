@@ -13,6 +13,8 @@ public class InteractTrigger extends Trigger {
 	
 	private static Map<GameWorld, ArrayList<InteractTrigger>> triggers = new HashMap<GameWorld, ArrayList<InteractTrigger>>();
 	
+	private TriggerType type = TriggerTypeDefault.INTERACT;
+	
 	private int interactId;
 	private Block interactBlock;
 	
@@ -22,43 +24,48 @@ public class InteractTrigger extends Trigger {
 	}
 	
 	public void onTrigger(Player player) {
-		triggered = true;
-		this.player = player;
+		setTriggered(true);
+		this.setPlayer(player);
 		updateDSigns();
 	}
 	
 	@Override
-	public void register(GameWorld gworld) {
-		if ( !hasTriggers(gworld)) {
+	public void register(GameWorld gameWorld) {
+		if ( !hasTriggers(gameWorld)) {
 			ArrayList<InteractTrigger> list = new ArrayList<InteractTrigger>();
 			list.add(this);
-			triggers.put(gworld, list);
+			triggers.put(gameWorld, list);
 			
 		} else {
-			triggers.get(gworld).add(this);
+			triggers.get(gameWorld).add(this);
 		}
 	}
 	
 	@Override
-	public void unregister(GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			triggers.get(gworld).remove(this);
+	public void unregister(GameWorld gameWorld) {
+		if (hasTriggers(gameWorld)) {
+			triggers.get(gameWorld).remove(this);
 		}
 	}
 	
-	public static InteractTrigger getOrCreate(int id, GameWorld gworld) {
+	@Override
+	public TriggerType getType() {
+		return type;
+	}
+	
+	public static InteractTrigger getOrCreate(int id, GameWorld gameWorld) {
 		if (id == 0) {
 			return null;
 		}
-		InteractTrigger trigger = get(id, gworld);
+		InteractTrigger trigger = get(id, gameWorld);
 		if (trigger != null) {
 			return trigger;
 		}
 		return new InteractTrigger(id, null);
 	}
 	
-	public static InteractTrigger getOrCreate(int id, Block block, GameWorld gworld) {
-		InteractTrigger trigger = get(id, gworld);
+	public static InteractTrigger getOrCreate(int id, Block block, GameWorld gameWorld) {
+		InteractTrigger trigger = get(id, gameWorld);
 		if (trigger != null) {
 			trigger.interactBlock = block;
 			return trigger;
@@ -66,9 +73,9 @@ public class InteractTrigger extends Trigger {
 		return new InteractTrigger(id, block);
 	}
 	
-	public static InteractTrigger get(Block block, GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			for (InteractTrigger trigger : triggers.get(gworld)) {
+	public static InteractTrigger get(Block block, GameWorld gameWorld) {
+		if (hasTriggers(gameWorld)) {
+			for (InteractTrigger trigger : triggers.get(gameWorld)) {
 				if (trigger.interactBlock != null) {
 					if (trigger.interactBlock.equals(block)) {
 						return trigger;
@@ -79,10 +86,10 @@ public class InteractTrigger extends Trigger {
 		return null;
 	}
 	
-	public static InteractTrigger get(int id, GameWorld gworld) {
+	public static InteractTrigger get(int id, GameWorld gameWorld) {
 		if (id != 0) {
-			if (hasTriggers(gworld)) {
-				for (InteractTrigger trigger : triggers.get(gworld)) {
+			if (hasTriggers(gameWorld)) {
+				for (InteractTrigger trigger : triggers.get(gameWorld)) {
 					if (trigger.interactId == id) {
 						return trigger;
 					}
@@ -92,8 +99,8 @@ public class InteractTrigger extends Trigger {
 		return null;
 	}
 	
-	public static boolean hasTriggers(GameWorld gworld) {
-		return !triggers.isEmpty() && triggers.containsKey(gworld);
+	public static boolean hasTriggers(GameWorld gameWorld) {
+		return !triggers.isEmpty() && triggers.containsKey(gameWorld);
 	}
 	
 }

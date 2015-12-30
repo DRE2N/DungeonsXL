@@ -13,6 +13,8 @@ public class UseItemTrigger extends Trigger {
 	
 	private static Map<GameWorld, ArrayList<UseItemTrigger>> triggers = new HashMap<GameWorld, ArrayList<UseItemTrigger>>();
 	
+	private TriggerType type = TriggerTypeDefault.USE_ITEM;
+	
 	private String name;
 	private String matchedName;
 	
@@ -25,40 +27,45 @@ public class UseItemTrigger extends Trigger {
 	}
 	
 	public void onTrigger(Player player) {
-		triggered = true;
-		this.player = player;
+		setTriggered(true);
+		this.setPlayer(player);
 		updateDSigns();
 	}
 	
 	@Override
-	public void register(GameWorld gworld) {
-		if ( !hasTriggers(gworld)) {
+	public void register(GameWorld gameWorld) {
+		if ( !hasTriggers(gameWorld)) {
 			ArrayList<UseItemTrigger> list = new ArrayList<UseItemTrigger>();
 			list.add(this);
-			triggers.put(gworld, list);
+			triggers.put(gameWorld, list);
 		} else {
-			triggers.get(gworld).add(this);
+			triggers.get(gameWorld).add(this);
 		}
 	}
 	
 	@Override
-	public void unregister(GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			triggers.get(gworld).remove(this);
+	public void unregister(GameWorld gameWorld) {
+		if (hasTriggers(gameWorld)) {
+			triggers.get(gameWorld).remove(this);
 		}
 	}
 	
-	public static UseItemTrigger getOrCreate(String name, GameWorld gworld) {
-		UseItemTrigger trigger = get(name, gworld);
+	@Override
+	public TriggerType getType() {
+		return type;
+	}
+	
+	public static UseItemTrigger getOrCreate(String name, GameWorld gameWorld) {
+		UseItemTrigger trigger = get(name, gameWorld);
 		if (trigger != null) {
 			return trigger;
 		}
 		return new UseItemTrigger(name);
 	}
 	
-	public static UseItemTrigger get(String name, GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			for (UseItemTrigger trigger : triggers.get(gworld)) {
+	public static UseItemTrigger get(String name, GameWorld gameWorld) {
+		if (hasTriggers(gameWorld)) {
+			for (UseItemTrigger trigger : triggers.get(gameWorld)) {
 				if (trigger.name.equalsIgnoreCase(name)) {
 					return trigger;
 				} else {
@@ -73,8 +80,8 @@ public class UseItemTrigger extends Trigger {
 		return null;
 	}
 	
-	public static boolean hasTriggers(GameWorld gworld) {
-		return !triggers.isEmpty() && triggers.containsKey(gworld);
+	public static boolean hasTriggers(GameWorld gameWorld) {
+		return !triggers.isEmpty() && triggers.containsKey(gameWorld);
 	}
 	
 }

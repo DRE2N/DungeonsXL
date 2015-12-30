@@ -10,6 +10,8 @@ public class SignTrigger extends Trigger {
 	
 	private static Map<GameWorld, ArrayList<SignTrigger>> triggers = new HashMap<GameWorld, ArrayList<SignTrigger>>();
 	
+	private TriggerType type = TriggerTypeDefault.SIGN;
+	
 	private int stId;
 	
 	public SignTrigger(int stId) {
@@ -17,42 +19,47 @@ public class SignTrigger extends Trigger {
 	}
 	
 	public void onTrigger(boolean enable) {
-		if (enable != triggered) {
-			triggered = enable;
+		if (enable != isTriggered()) {
+			setTriggered(enable);
 			updateDSigns();
 		}
 	}
 	
 	@Override
-	public void register(GameWorld gworld) {
-		if ( !hasTriggers(gworld)) {
+	public void register(GameWorld gameWorld) {
+		if ( !hasTriggers(gameWorld)) {
 			ArrayList<SignTrigger> list = new ArrayList<SignTrigger>();
 			list.add(this);
-			triggers.put(gworld, list);
+			triggers.put(gameWorld, list);
 			
 		} else {
-			triggers.get(gworld).add(this);
+			triggers.get(gameWorld).add(this);
 		}
 	}
 	
 	@Override
-	public void unregister(GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			triggers.get(gworld).remove(this);
+	public void unregister(GameWorld gameWorld) {
+		if (hasTriggers(gameWorld)) {
+			triggers.get(gameWorld).remove(this);
 		}
 	}
 	
-	public static SignTrigger getOrCreate(int id, GameWorld gworld) {
-		SignTrigger trigger = get(id, gworld);
+	@Override
+	public TriggerType getType() {
+		return type;
+	}
+	
+	public static SignTrigger getOrCreate(int id, GameWorld gameWorld) {
+		SignTrigger trigger = get(id, gameWorld);
 		if (trigger != null) {
 			return trigger;
 		}
 		return new SignTrigger(id);
 	}
 	
-	public static SignTrigger get(int id, GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			for (SignTrigger trigger : triggers.get(gworld)) {
+	public static SignTrigger get(int id, GameWorld gameWorld) {
+		if (hasTriggers(gameWorld)) {
+			for (SignTrigger trigger : triggers.get(gameWorld)) {
 				if (trigger.stId == id) {
 					return trigger;
 				}
@@ -61,8 +68,8 @@ public class SignTrigger extends Trigger {
 		return null;
 	}
 	
-	public static boolean hasTriggers(GameWorld gworld) {
-		return !triggers.isEmpty() && triggers.containsKey(gworld);
+	public static boolean hasTriggers(GameWorld gameWorld) {
+		return !triggers.isEmpty() && triggers.containsKey(gameWorld);
 	}
 	
 }
