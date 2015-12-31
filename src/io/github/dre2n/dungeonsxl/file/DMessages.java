@@ -20,12 +20,12 @@ public class DMessages {
 		
 		PLAYER_BLOCK_INFO("Player_BlockInfo", "&6Block-ID: &2&v1"),
 		PLAYER_CHECKPOINT_REACHED("Player_CheckpointReached", "&6Checkpoint reached!"),
-		PLAYER_DEATH("Player_Death", "&6You died, lives left: &2v1"),
-		PLAYER_DEATH_KICK("Player_DeathKick", "&2v1&6 died and lost his last life."),
+		PLAYER_DEATH("Player_Death", "&6You died, lives left: &2&v1"),
+		PLAYER_DEATH_KICK("Player_DeathKick", "&2&v1&6 died and lost his last life."),
 		PLAYER_FINISHED_DUNGEON("Player_FinishedDungeon", "&6You successfully finished the Dungeon!"),
-		PLAYER_JOIN_GROUP("Player_JoinGroup", "&Player &4&v1&6 has joined the Group!"),
+		PLAYER_JOIN_GROUP("Player_JoinGroup", "&6Player &4&v1&6 has joined the Group!"),
 		PLAYER_LEAVE_GROUP("Player_LeaveGroup", "&6You have successfully left your group!"),
-		PLAYER_LEFT_GROUP("Player_LeftGroup", "&Player &4&v1&6 has left the Group!"),
+		PLAYER_LEFT_GROUP("Player_LeftGroup", "&6Player &4&v1&6 has left the Group!"),
 		PLAYER_LOOT_ADDED("Player_LootAdded", "&4&v1&6 have been added to your reward inventory!"),
 		PLAYER_OFFLINE("Player_Offline", "&Player &4&v1&6 went offline. In &4&v2&6 seconds he will autmatically be kicked from the Dungeon!"),
 		PLAYER_OFFLINE_NEVER("Player_OfflineNever", "&Player &4&v1&6 went offline. He will &4not&6 be kicked from the Dungeon automatically!"),
@@ -194,7 +194,10 @@ public class DMessages {
 		if (config != null) {
 			Set<String> keySet = config.getKeys(false);
 			for (String key : keySet) {
-				Messages.getByIdentifier(key).setMessage(config.getString(key));
+				Messages message = Messages.getByIdentifier(key);
+				if (message != null) {
+					message.setMessage(config.getString(key));
+				}
 			}
 		}
 	}

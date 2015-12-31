@@ -68,6 +68,9 @@ public class DungeonsXL extends JavaPlugin {
 		plugin = this;
 		getDataFolder().mkdir();
 		
+		// InitFolders
+		initFolders();
+		
 		// Load Language
 		loadDMessages(new File(plugin.getDataFolder(), "languages/en.yml"));
 		// Load Config
@@ -78,9 +81,6 @@ public class DungeonsXL extends JavaPlugin {
 		loadDCommands();
 		loadDSigns();
 		loadDungeons();
-		
-		// InitFolders
-		initFolders();
 		
 		// Setup Permissions
 		loadPermissionProvider();
