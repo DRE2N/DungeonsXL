@@ -427,7 +427,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// Check dPlayers
-		DPlayer dPlayer = DPlayer.getByPlayer(player);
+		DPlayer dPlayer = DPlayer.getByName(player.getName());
 		if (dPlayer != null) {
 			DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
 			if (dGroup != null) {
