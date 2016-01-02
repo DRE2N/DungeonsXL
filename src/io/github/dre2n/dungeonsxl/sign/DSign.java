@@ -113,7 +113,7 @@ public abstract class DSign {
 	
 	public void onUpdate() {
 		for (Trigger trigger : triggers) {
-			if ( !trigger.triggered) {
+			if ( !trigger.isTriggered()) {
 				onDisable();
 				return;
 			}
@@ -122,11 +122,11 @@ public abstract class DSign {
 				continue;
 			}
 			
-			if (trigger.player == null) {
+			if (trigger.getPlayer() == null) {
 				continue;
 			}
 			
-			if (onPlayerTrigger(trigger.player)) {
+			if (onPlayerTrigger(trigger.getPlayer())) {
 				return;
 			}
 		}

@@ -13,6 +13,8 @@ public class DistanceTrigger extends Trigger {
 	
 	private static Map<GameWorld, ArrayList<DistanceTrigger>> triggers = new HashMap<GameWorld, ArrayList<DistanceTrigger>>();
 	
+	private TriggerType type = TriggerTypeDefault.DISTANCE;
+	
 	private int distance = 5;
 	private Location loc;
 	
@@ -28,56 +30,61 @@ public class DistanceTrigger extends Trigger {
 	}
 	
 	public void onTrigger(Player player) {
-		triggered = true;
-		this.player = player;
+		setTriggered(true);
+		this.setPlayer(player);
 		updateDSigns();
 	}
 	
 	@Override
-	public void register(GameWorld gworld) {
-		if ( !hasTriggers(gworld)) {
+	public void register(GameWorld gameWorld) {
+		if ( !hasTriggers(gameWorld)) {
 			ArrayList<DistanceTrigger> list = new ArrayList<DistanceTrigger>();
 			list.add(this);
-			triggers.put(gworld, list);
+			triggers.put(gameWorld, list);
 			
 		} else {
-			triggers.get(gworld).add(this);
+			triggers.get(gameWorld).add(this);
 		}
 	}
 	
 	@Override
-	public void unregister(GameWorld gworld) {
-		if (hasTriggers(gworld)) {
-			triggers.get(gworld).remove(this);
+	public void unregister(GameWorld gameWorld) {
+		if (hasTriggers(gameWorld)) {
+			triggers.get(gameWorld).remove(this);
 		}
 	}
 	
-	public static void triggerAllInDistance(Player player, GameWorld gWorld) {
-		if ( !hasTriggers(gWorld)) {
+	@Override
+	public TriggerType getType() {
+		return type;
+	}
+	
+	public static void triggerAllInDistance(Player player, GameWorld gameWorld) {
+		if ( !hasTriggers(gameWorld)) {
 			return;
 		}
 		
-		if ( !player.getLocation().getWorld().equals(gWorld.getWorld())) {
+		if ( !player.getLocation().getWorld().equals(gameWorld.getWorld())) {
 			return;
 		}
 		
-		for (DistanceTrigger trigger : getTriggersArray(gWorld)) {
+		for (DistanceTrigger trigger : getTriggersArray(gameWorld)) {
 			if (player.getLocation().distance(trigger.loc) < trigger.distance) {
 				trigger.onTrigger(player);
 			}
 		}
 	}
 	
-	public static boolean hasTriggers(GameWorld gworld) {
-		return !triggers.isEmpty() && triggers.containsKey(gworld);
+	public static boolean hasTriggers(GameWorld gameWorld) {
+		return !triggers.isEmpty() && triggers.containsKey(gameWorld);
 	}
 	
-	public static ArrayList<DistanceTrigger> getTriggers(GameWorld gworld) {
-		return triggers.get(gworld);
+	public static ArrayList<DistanceTrigger> getTriggers(GameWorld gameWorld) {
+		return triggers.get(gameWorld);
 	}
 	
-	public static DistanceTrigger[] getTriggersArray(GameWorld gworld) {
-		return getTriggers(gworld).toArray(new DistanceTrigger[getTriggers(gworld).size()]);
+	public static DistanceTrigger[] getTriggersArray(GameWorld gameWorld) {
+		return getTriggers(gameWorld).toArray(new DistanceTrigger[getTriggers(gameWorld).size()]);
 	}
 	
 }

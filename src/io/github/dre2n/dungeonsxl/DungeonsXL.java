@@ -21,6 +21,7 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.sign.DSigns;
+import io.github.dre2n.dungeonsxl.trigger.Triggers;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil.Internals;
@@ -50,6 +51,7 @@ public class DungeonsXL extends JavaPlugin {
 	private VersionUtil versionUtil;
 	private DCommands dCommands;
 	private DSigns dSigns;
+	private Triggers triggers;
 	private Dungeons dungeons;
 	
 	private CopyOnWriteArrayList<Player> inBreakMode = new CopyOnWriteArrayList<Player>();
@@ -389,6 +391,21 @@ public class DungeonsXL extends JavaPlugin {
 	 */
 	public void loadDSigns() {
 		dSigns = new DSigns();
+	}
+	
+	/**
+	 * @return the triggers
+	 */
+	public Triggers getTriggers() {
+		return triggers;
+	}
+	
+	/**
+	 * @param triggers
+	 * the triggers to set
+	 */
+	public void loadTriggers() {
+		triggers = new Triggers();
 	}
 	
 	/**
