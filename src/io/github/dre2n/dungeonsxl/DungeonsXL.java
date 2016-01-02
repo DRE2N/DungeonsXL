@@ -20,7 +20,10 @@ import io.github.dre2n.dungeonsxl.listener.WorldListener;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
+import io.github.dre2n.dungeonsxl.requirement.Requirements;
+import io.github.dre2n.dungeonsxl.reward.Rewards;
 import io.github.dre2n.dungeonsxl.sign.DSigns;
+import io.github.dre2n.dungeonsxl.trigger.Triggers;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil.Internals;
@@ -50,6 +53,9 @@ public class DungeonsXL extends JavaPlugin {
 	private VersionUtil versionUtil;
 	private DCommands dCommands;
 	private DSigns dSigns;
+	private Requirements requirements;
+	private Rewards rewards;
+	private Triggers triggers;
 	private Dungeons dungeons;
 	
 	private CopyOnWriteArrayList<Player> inBreakMode = new CopyOnWriteArrayList<Player>();
@@ -79,6 +85,8 @@ public class DungeonsXL extends JavaPlugin {
 		loadDMessages(new File(plugin.getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
 		loadVersionUtil();
 		loadDCommands();
+		loadRequirements();
+		loadRewards();
 		loadDSigns();
 		loadDungeons();
 		
@@ -385,10 +393,52 @@ public class DungeonsXL extends JavaPlugin {
 	}
 	
 	/**
-	 * load / reload a new instance of Dungeons
+	 * load / reload a new instance of DSigns
 	 */
 	public void loadDSigns() {
 		dSigns = new DSigns();
+	}
+	
+	/**
+	 * @return the requirements
+	 */
+	public Requirements getRequirements() {
+		return requirements;
+	}
+	
+	/**
+	 * load / reload a new instance of Requirements
+	 */
+	public void loadRequirements() {
+		requirements = new Requirements();
+	}
+	
+	/**
+	 * @return the rewards
+	 */
+	public Rewards getRewards() {
+		return rewards;
+	}
+	
+	/**
+	 * load / reload a new instance of Rewards
+	 */
+	public void loadRewards() {
+		rewards = new Rewards();
+	}
+	
+	/**
+	 * @return the triggers
+	 */
+	public Triggers getTriggers() {
+		return triggers;
+	}
+	
+	/**
+	 * load / reload a new instance of Triggers
+	 */
+	public void loadTriggers() {
+		triggers = new Triggers();
 	}
 	
 	/**

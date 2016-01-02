@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -26,7 +26,7 @@ public class ChunkUpdaterSign extends DSign {
 		Chunk chunk = getGameWorld().getWorld().getChunkAt(getSign().getBlock());
 		
 		if ( !lines[1].equals("")) {
-			Integer radius = IntegerUtil.parseInt(lines[1]);
+			Integer radius = NumberUtil.parseInt(lines[1]);
 			for (int x = -radius; x < radius; x++) {
 				for (int z = -radius; z < radius; z++) {
 					Chunk chunk1 = getGameWorld().getWorld().getChunkAt(chunk.getX() - x, chunk.getZ() - z);

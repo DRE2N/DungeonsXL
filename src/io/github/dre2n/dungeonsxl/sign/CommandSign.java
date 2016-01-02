@@ -5,7 +5,7 @@ import io.github.dre2n.commandsxl.command.CCommandExecutorTask;
 import io.github.dre2n.commandsxl.CommandsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -56,7 +56,7 @@ public class CommandSign extends DSign {
 		String[] attributes = lines[2].split(",");
 		
 		command = lines[1];
-		delay = IntegerUtil.parseInt(attributes[0]);
+		delay = NumberUtil.parseInt(attributes[0]);
 		executor = attributes[1];
 		
 		cCommand = CommandsXL.getPlugin().getCCommands().getCCommand(command);

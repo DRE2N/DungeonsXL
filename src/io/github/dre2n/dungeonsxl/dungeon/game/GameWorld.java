@@ -7,6 +7,7 @@ import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
@@ -398,8 +399,9 @@ public class GameWorld {
 	}
 	
 	public static boolean checkRequirements(String dungeon, Player player) {
-		/* if (plugin.permission.has(player, "dungeonsxl.ignoreRequirements") || player.isOp()) {
-		 * return true; } */
+		if (player.hasPermission("dxl.ignorerequirements")) {
+			return true;
+		}
 		
 		if (new File(plugin.getDataFolder() + "/maps/" + dungeon).isDirectory() == false) {
 			return false;
@@ -407,8 +409,8 @@ public class GameWorld {
 		
 		WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + dungeon, "config.yml"));
 		
-		if (plugin.getEconomyProvider() != null) {
-			if ( !(DungeonsXL.getPlugin().getEconomyProvider().getBalance(player) >= worldConfig.getFee())) {
+		for (Requirement requirement : worldConfig.getRequirements()) {
+			if ( !requirement.check(player)) {
 				return false;
 			}
 		}

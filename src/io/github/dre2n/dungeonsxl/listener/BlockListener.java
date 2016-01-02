@@ -10,7 +10,7 @@ import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import org.bukkit.Location;
@@ -176,8 +176,8 @@ public class BlockListener implements Listener {
 				
 				String[] data = lines[3].split("\\,");
 				if (data.length >= 2 && data.length <= 3) {
-					int maxGroups = IntegerUtil.parseInt(data[0]);
-					int maxPlayersPerGroup = IntegerUtil.parseInt(data[1]);
+					int maxGroups = NumberUtil.parseInt(data[0]);
+					int maxPlayersPerGroup = NumberUtil.parseInt(data[1]);
 					boolean multiFloor = false;
 					if (data.length == 3) {
 						if (data[2].equals("+")) {

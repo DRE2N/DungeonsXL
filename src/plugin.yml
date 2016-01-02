@@ -1,6 +1,6 @@
 name: DungeonsXL
 main: io.github.dre2n.dungeonsxl.DungeonsXL
-version: 0.10
+version: 0.11-SNAPSHOT
 author: Frank Baumann
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 website: https://dre2n.github.io
@@ -49,6 +49,8 @@ permissions:
   dxl.uninvite:
     default: op
   dxl.ignoretimelimit:
+    default: op
+  dxl.ignorerequirements:
     default: op
   dxl.sign:
     default: op

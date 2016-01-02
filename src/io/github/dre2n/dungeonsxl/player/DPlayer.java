@@ -8,8 +8,9 @@ import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
+import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.MiscUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -62,7 +63,6 @@ public class DPlayer {
 	private String[] linesCopy;
 	
 	private Inventory treasureInv = DungeonsXL.getPlugin().getServer().createInventory(getPlayer(), 45, dMessages.getMessage(Messages.PLAYER_TREASURES));
-	private double treasureMoney = 0;
 	
 	private int initialLives = -1;
 	private int lives;
@@ -146,10 +146,11 @@ public class DPlayer {
 			// Belohnung
 			if ( !inTestMode) {// Nur wenn man nicht am Testen ist
 				if (finished) {
-					addTreasure();
-					if (plugin.getEconomyProvider() != null) {
-						plugin.getEconomyProvider().depositPlayer(getPlayer(), treasureMoney);
+					for (Reward reward : gameWorld.getConfig().getRewards()) {
+						reward.giveTo(player);
 					}
+					
+					addTreasure();
 					
 					// Set Time
 					File file = new File(plugin.getDataFolder() + "/maps/" + gameWorld.getMapName(), "players.yml");
@@ -297,7 +298,7 @@ public class DPlayer {
 		}
 		
 		DungeonConfig dConfig = dGroup.getDungeon().getConfig();
-		int random = IntegerUtil.generateRandomInt(0, dConfig.getFloors().size());
+		int random = NumberUtil.generateRandomInt(0, dConfig.getFloors().size());
 		String newFloor = dGroup.getUnplayedFloors().get(random);
 		if (dConfig.getFloorCount() == dGroup.getFloorCount() - 1) {
 			newFloor = dConfig.getEndFloor();
@@ -723,21 +724,6 @@ public class DPlayer {
 	 */
 	public void setTreasureInv(Inventory treasureInv) {
 		this.treasureInv = treasureInv;
-	}
-	
-	/**
-	 * @return the treasureMoney
-	 */
-	public double getTreasureMoney() {
-		return treasureMoney;
-	}
-	
-	/**
-	 * @param treasureMoney
-	 * the treasureMoney to set
-	 */
-	public void setTreasureMoney(double treasureMoney) {
-		this.treasureMoney = treasureMoney;
 	}
 	
 	/**

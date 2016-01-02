@@ -2,7 +2,7 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.sign.DSign;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,79 +11,132 @@ import org.bukkit.entity.Player;
 
 public abstract class Trigger {
 	
-	protected Set<DSign> dsigns = new HashSet<DSign>();
-	public boolean triggered = false;
-	public Player player = null; // Holds Player for Player specific Triggers
+	private boolean triggered;
+	private Player player; // Holds Player for Player specific Triggers
 	
-	public Trigger() {
-		
+	private Set<DSign> dSigns = new HashSet<DSign>();
+	
+	/**
+	 * @return the triggered
+	 */
+	public boolean isTriggered() {
+		return triggered;
 	}
 	
-	public abstract void register(GameWorld gworld);
+	/**
+	 * @param triggered
+	 * the triggered to set
+	 */
+	public void setTriggered(boolean triggered) {
+		this.triggered = triggered;
+	}
 	
-	public abstract void unregister(GameWorld gworld);
+	/**
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
 	
+	/**
+	 * @param player
+	 * the player to set
+	 */
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	/**
+	 * @return the dSigns
+	 */
+	public Set<DSign> getDSigns() {
+		return dSigns;
+	}
+	
+	/**
+	 * @param dSign
+	 * the dSign to add
+	 */
+	public void addDSign(DSign dSign) {
+		dSigns.add(dSign);
+	}
+	
+	/**
+	 * @param dSign
+	 * the dSign to remove
+	 */
+	public void removeDSign(DSign dSign) {
+		dSigns.remove(dSign);
+	}
+	
+	public void addListener(DSign dSign) {
+		if (dSigns.isEmpty()) {
+			register(dSign.getGameWorld());
+		}
+		dSigns.add(dSign);
+	}
+	
+	public void removeListener(DSign dSign) {
+		dSigns.remove(dSign);
+		if (dSigns.isEmpty()) {
+			unregister(dSign.getGameWorld());
+		}
+	}
+	
+	public void updateDSigns() {
+		for (DSign dSign : dSigns.toArray(new DSign[dSigns.size()])) {
+			dSign.onUpdate();
+		}
+	}
+	
+	//TODO: Dynamic checks
 	public static Trigger getOrCreate(String type, String value, DSign dsign) {
-		Trigger trigger = null;
-		
 		if (type.equalsIgnoreCase("R")) {
 			
-			trigger = RedstoneTrigger.getOrCreate(dsign.getSign(), dsign.getGameWorld());
+			return RedstoneTrigger.getOrCreate(dsign.getSign(), dsign.getGameWorld());
 			
 		} else if (type.equalsIgnoreCase("D")) {
 			
 			if (value != null) {
-				trigger = new DistanceTrigger(IntegerUtil.parseInt(value), dsign.getSign().getLocation());
+				return new DistanceTrigger(NumberUtil.parseInt(value), dsign.getSign().getLocation());
 			} else {
-				trigger = new DistanceTrigger(dsign.getSign().getLocation());
+				return new DistanceTrigger(dsign.getSign().getLocation());
 			}
 			
 		} else if (type.equalsIgnoreCase("T")) {
 			
 			if (value != null) {
-				trigger = SignTrigger.getOrCreate(IntegerUtil.parseInt(value), dsign.getGameWorld());
+				return SignTrigger.getOrCreate(NumberUtil.parseInt(value), dsign.getGameWorld());
 			}
 			
 		} else if (type.equalsIgnoreCase("I")) {
 			
 			if (value != null) {
-				trigger = InteractTrigger.getOrCreate(IntegerUtil.parseInt(value), dsign.getGameWorld());
+				return InteractTrigger.getOrCreate(NumberUtil.parseInt(value), dsign.getGameWorld());
 			}
 			
 		} else if (type.equalsIgnoreCase("M")) {
 			
 			if (value != null) {
-				trigger = MobTrigger.getOrCreate(value, dsign.getGameWorld());
+				return MobTrigger.getOrCreate(value, dsign.getGameWorld());
 			}
 			
 		} else if (type.equalsIgnoreCase("U")) {
 			
 			if (value != null) {
-				trigger = UseItemTrigger.getOrCreate(value, dsign.getGameWorld());
+				return UseItemTrigger.getOrCreate(value, dsign.getGameWorld());
 			}
-			
 		}
-		return trigger;
+		
+		return null;
 	}
 	
-	public void addListener(DSign dsign) {
-		if (dsigns.isEmpty()) {
-			register(dsign.getGameWorld());
-		}
-		dsigns.add(dsign);
-	}
+	// Abstract methods
 	
-	public void removeListener(DSign dsign) {
-		dsigns.remove(dsign);
-		if (dsigns.isEmpty()) {
-			unregister(dsign.getGameWorld());
-		}
-	}
+	public abstract void register(GameWorld gameWorld);
 	
-	public void updateDSigns() {
-		for (DSign dsign : dsigns.toArray(new DSign[dsigns.size()])) {
-			dsign.onUpdate();
-		}
-	}
+	public abstract void unregister(GameWorld gameWorld);
+	
+	public abstract TriggerType getType();
 	
 }

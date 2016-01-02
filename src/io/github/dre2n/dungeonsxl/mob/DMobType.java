@@ -3,7 +3,7 @@ package io.github.dre2n.dungeonsxl.mob;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -188,7 +188,7 @@ public class DMobType {
 							String[] splittedEnchantment = enchantment.split(" ");
 							if (Enchantment.getByName(splittedEnchantment[0].toUpperCase()) != null) {
 								if (splittedEnchantment.length > 1) {
-									itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), IntegerUtil.parseInt(splittedEnchantment[1]), true);
+									itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), NumberUtil.parseInt(splittedEnchantment[1]), true);
 								} else {
 									itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
 								}

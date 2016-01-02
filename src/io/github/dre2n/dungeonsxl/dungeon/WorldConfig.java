@@ -3,7 +3,9 @@ package io.github.dre2n.dungeonsxl.dungeon;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
 import io.github.dre2n.dungeonsxl.player.DClass;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.requirement.Requirement;
+import io.github.dre2n.dungeonsxl.reward.Reward;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +52,8 @@ public class WorldConfig {
 	
 	private int timeUntilKickOfflinePlayer = -1;
 	
-	private double fee = 0;
+	private List<Requirement> requirements = new ArrayList<Requirement>();
+	private List<Reward> rewards = new ArrayList<Reward>();
 	
 	private List<String> finishedOne;
 	private List<String> finishedAll;
@@ -96,15 +99,15 @@ public class WorldConfig {
 						Enchantment itemEnchantment = null;
 						// Check Id & Data
 						String[] idAndData = itemSplit[0].split("/");
-						itemId = IntegerUtil.parseInt(idAndData[0]);
+						itemId = NumberUtil.parseInt(idAndData[0]);
 						
 						if (idAndData.length > 1) {
-							itemData = IntegerUtil.parseInt(idAndData[1]);
+							itemData = NumberUtil.parseInt(idAndData[1]);
 						}
 						
 						// Size
 						if (itemSplit.length > 1) {
-							itemSize = IntegerUtil.parseInt(itemSplit[1]);
+							itemSize = NumberUtil.parseInt(itemSplit[1]);
 						}
 						// Enchantment
 						if (itemSplit.length > 2) {
@@ -113,7 +116,7 @@ public class WorldConfig {
 							itemEnchantment = Enchantment.getByName(enchantmentSplit[0]);
 							
 							if (enchantmentSplit.length > 1) {
-								itemLvlEnchantment = IntegerUtil.parseInt(enchantmentSplit[1]);
+								itemLvlEnchantment = NumberUtil.parseInt(enchantmentSplit[1]);
 							}
 						}
 						
@@ -136,7 +139,7 @@ public class WorldConfig {
 		if (configSectionMessages != null) {
 			Set<String> list = configSectionMessages.getKeys(false);
 			for (String messagePath : list) {
-				int messageId = IntegerUtil.parseInt(messagePath);
+				int messageId = NumberUtil.parseInt(messagePath);
 				msgs.put(messageId, configSectionMessages.getString(messagePath));
 			}
 		}
@@ -234,10 +237,12 @@ public class WorldConfig {
 		}
 		
 		/* Dungeon Requirements */
-		if (configFile.contains("fee")) {
-			fee = configFile.getDouble("fee");
+		if (configFile.contains("requirements")) {
+			for (String identifier : configFile.getConfigurationSection("requirements").getKeys(false)) {
+				requirements.add(Requirement.create(plugin.getRequirements().getByIdentifier(identifier)));
+			}
 		} else {
-			fee = plugin.getDefaultConfig().fee;
+			requirements = plugin.getDefaultConfig().requirements;
 		}
 		
 		if (configFile.contains("mustFinishOne")) {
@@ -395,12 +400,16 @@ public class WorldConfig {
 		return timeUntilKickOfflinePlayer;
 	}
 	
-	public int getTimeLastPlayed() {
-		return timeLastPlayed;
+	public List<Requirement> getRequirements() {
+		return requirements;
 	}
 	
-	public double getFee() {
-		return fee;
+	public List<Reward> getRewards() {
+		return rewards;
+	}
+	
+	public int getTimeLastPlayed() {
+		return timeLastPlayed;
 	}
 	
 	public List<String> getFinishedAll() {

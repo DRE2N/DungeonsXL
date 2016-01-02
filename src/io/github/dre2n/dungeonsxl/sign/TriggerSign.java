@@ -3,7 +3,7 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.trigger.SignTrigger;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class TriggerSign extends DSign {
 			if (block.getState() instanceof Sign) {
 				Sign rsign = (Sign) block.getState();
 				if (rsign.getLine(0).equalsIgnoreCase("[" + type.getName() + "]")) {
-					used.add(IntegerUtil.parseInt(rsign.getLine(1)));
+					used.add(NumberUtil.parseInt(rsign.getLine(1)));
 				}
 			}
 		}
@@ -53,7 +53,7 @@ public class TriggerSign extends DSign {
 			}
 			
 		} else {
-			id = IntegerUtil.parseInt(getSign().getLine(1));
+			id = NumberUtil.parseInt(getSign().getLine(1));
 			if (used.contains(id)) {
 				return false;
 			} else {
@@ -68,7 +68,7 @@ public class TriggerSign extends DSign {
 	
 	@Override
 	public void onInit() {
-		triggerId = IntegerUtil.parseInt(getSign().getLine(1));
+		triggerId = NumberUtil.parseInt(getSign().getLine(1));
 		getSign().getBlock().setType(Material.AIR);
 		
 		initialized = true;

@@ -2,13 +2,13 @@ package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
+import io.github.dre2n.dungeonsxl.requirement.Requirement;
+import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -26,6 +26,7 @@ public class DGroup {
 	private GameWorld gameWorld;
 	private boolean playing;
 	private int floorCount;
+	private List<Reward> rewards = new ArrayList<Reward>();
 	
 	public DGroup(Player player, String identifier, boolean multiFloor) {
 		plugin.getDGroups().add(this);
@@ -203,6 +204,21 @@ public class DGroup {
 	}
 	
 	/**
+	 * @return the rewards
+	 */
+	public List<Reward> getRewards() {
+		return rewards;
+	}
+	
+	/**
+	 * @param rewards
+	 * the rewards to set
+	 */
+	public void setRewards(List<Reward> rewards) {
+		this.rewards = rewards;
+	}
+	
+	/**
 	 * @return whether there are players in the group
 	 */
 	public boolean isEmpty() {
@@ -219,10 +235,6 @@ public class DGroup {
 		gameWorld.startGame();
 		floorCount++;
 		
-		double fee;
-		File file = new File(plugin.getDataFolder() + "/maps/" + mapName + "/config.yml");
-		fee = new WorldConfig(file).getFee();
-		
 		for (Player player : getPlayers()) {
 			DPlayer dPlayer = DPlayer.getByPlayer(player);
 			dPlayer.respawn();
@@ -237,9 +249,10 @@ public class DGroup {
 				continue;
 			}
 			
-			if (plugin.getEconomyProvider() != null) {
-				plugin.getEconomyProvider().withdrawPlayer(player, fee);
+			for (Requirement requirement : gameWorld.getConfig().getRequirements()) {
+				requirement.demand(player);
 			}
+			
 		}
 		
 		GroupSign.updatePerGroup(this);

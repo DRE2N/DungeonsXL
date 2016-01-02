@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -37,10 +37,10 @@ public class BlockSign extends DSign {
 			if (offBlock != null) {
 				offBlockId = offBlock.getId();
 			} else {
-				offBlockId = IntegerUtil.parseInt(line1[0]);
+				offBlockId = NumberUtil.parseInt(line1[0]);
 			}
 			if (line1.length > 1) {
-				offBlockData = (byte) IntegerUtil.parseInt(line1[1]);
+				offBlockData = (byte) NumberUtil.parseInt(line1[1]);
 			}
 		}
 		
@@ -52,11 +52,11 @@ public class BlockSign extends DSign {
 				onBlockId = onBlock.getId();
 				
 			} else {
-				onBlockId = IntegerUtil.parseInt(line2[0]);
+				onBlockId = NumberUtil.parseInt(line2[0]);
 			}
 			
 			if (line2.length > 1) {
-				onBlockData = (byte) IntegerUtil.parseInt(line2[1]);
+				onBlockData = (byte) NumberUtil.parseInt(line2[1]);
 			}
 		}
 		

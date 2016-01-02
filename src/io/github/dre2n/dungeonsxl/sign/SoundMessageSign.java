@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -37,7 +37,7 @@ public class SoundMessageSign extends DSign {
 		String lines[] = getSign().getLines();
 		
 		if ( !lines[1].equals("")) {
-			String msg = getGameWorld().getConfig().getMsg(IntegerUtil.parseInt(lines[1]), true);
+			String msg = getGameWorld().getConfig().getMsg(NumberUtil.parseInt(lines[1]), true);
 			if (msg != null) {
 				this.msg = msg;
 				getSign().getBlock().setType(Material.AIR);

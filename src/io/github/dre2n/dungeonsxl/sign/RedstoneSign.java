@@ -2,7 +2,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,15 +38,15 @@ public class RedstoneSign extends DSign {
 		int line11 = 0;
 		if ( !getSign().getLine(1).equals("")) {
 			String line[] = getSign().getLine(1).split(",");
-			line1 = IntegerUtil.parseInt(line[0]);
+			line1 = NumberUtil.parseInt(line[0]);
 			if (line.length > 1) {
-				line11 = IntegerUtil.parseInt(line[1]);
+				line11 = NumberUtil.parseInt(line[1]);
 			}
 		}
 		
 		int line2 = 1;
 		if ( !getSign().getLine(2).equals("")) {
-			line2 = IntegerUtil.parseInt(getSign().getLine(2));
+			line2 = NumberUtil.parseInt(getSign().getLine(2));
 		}
 		
 		if (line1 > 0) {

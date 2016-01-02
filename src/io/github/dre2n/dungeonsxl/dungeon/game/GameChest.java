@@ -4,6 +4,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;
@@ -49,7 +50,10 @@ public class GameChest {
 				continue;
 			}
 			
-			dPlayer.setTreasureMoney(dPlayer.getTreasureMoney() + moneyReward);
+			for (Reward reward : dGroup.getRewards()) {
+				reward.giveTo(player);
+			}
+			
 			String msg = "";
 			for (ItemStack itemStack : chest.getInventory().getContents()) {
 				

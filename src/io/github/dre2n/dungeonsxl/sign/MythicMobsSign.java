@@ -2,7 +2,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.mob.DMob;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.util.ArrayList;
 
@@ -64,8 +64,8 @@ public class MythicMobsSign extends DSign {
 				String[] attributes = lines[2].split(",");
 				if (attributes.length == 2) {
 					this.mob = mob;
-					maxinterval = IntegerUtil.parseInt(attributes[0]);
-					amount = IntegerUtil.parseInt(attributes[1]);
+					maxinterval = NumberUtil.parseInt(attributes[0]);
+					amount = NumberUtil.parseInt(attributes[1]);
 				}
 			}
 		}

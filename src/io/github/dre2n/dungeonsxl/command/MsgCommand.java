@@ -3,7 +3,7 @@ package io.github.dre2n.dungeonsxl.command;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import java.io.File;
@@ -39,7 +39,7 @@ public class MsgCommand extends DCommand {
 		}
 		
 		try {
-			int id = IntegerUtil.parseInt(args[1]);
+			int id = NumberUtil.parseInt(args[1]);
 			
 			WorldConfig confreader = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorld.getMapName(), "config.yml"));
 			

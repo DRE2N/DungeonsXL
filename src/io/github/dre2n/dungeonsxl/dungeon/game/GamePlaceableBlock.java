@@ -1,6 +1,6 @@
 package io.github.dre2n.dungeonsxl.dungeon.game;
 
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +30,7 @@ public class GamePlaceableBlock {
 			String[] splittedIds = ids.split(",");
 			for (String id : splittedIds) {
 				@SuppressWarnings("deprecation")
-				Material material = Material.getMaterial(IntegerUtil.parseInt(id));
+				Material material = Material.getMaterial(NumberUtil.parseInt(id));
 				if (material != null) {
 					materials.add(material);
 				}

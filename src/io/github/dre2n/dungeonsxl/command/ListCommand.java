@@ -6,7 +6,7 @@ import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
-import io.github.dre2n.dungeonsxl.util.IntegerUtil;
+import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import java.io.File;
@@ -81,10 +81,10 @@ public class ListCommand extends DCommand {
 		
 		int page = 1;
 		if (args.length == 3) {
-			page = IntegerUtil.parseInt(args[2], 1);
+			page = NumberUtil.parseInt(args[2], 1);
 			
 		} else if (args.length == 2 & !specified) {
-			page = IntegerUtil.parseInt(args[1], 1);
+			page = NumberUtil.parseInt(args[1], 1);
 		}
 		
 		int send = 0;
