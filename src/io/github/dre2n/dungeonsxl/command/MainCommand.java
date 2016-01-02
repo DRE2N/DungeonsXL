@@ -48,7 +48,7 @@ public class MainCommand extends DCommand {
 		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
 		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
 		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_MAIN_HELP));
-		MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2015 Frank Baumann & contributors; lcsd. under GPLv3.");
+		MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2016 Frank Baumann & contributors; lcsd. under GPLv3.");
 	}
 	
 }
