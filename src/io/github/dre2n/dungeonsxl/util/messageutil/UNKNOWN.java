@@ -14,16 +14,4 @@ class UNKNOWN {
 		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title " + title);
 	}
 	
-	static void sendScreenMessage(Player player, String title, String subtitle) {
-		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
-		title = ChatColor.translateAlternateColorCodes('&', title);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " subtitle " + subtitle);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title " + title);
-	}
-	
-	public static void sendScreenMessage(Player player, String title) {
-		title = ChatColor.translateAlternateColorCodes('&', title);
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title \"" + title + "\"");
-	}
-	
 }

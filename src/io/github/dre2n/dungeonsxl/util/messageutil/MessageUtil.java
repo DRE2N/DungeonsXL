@@ -227,6 +227,11 @@ public class MessageUtil {
 			case UNKNOWN:
 				UNKNOWN.sendScreenMessage(player, title, subtitle, fadeIn, show, fadeOut);
 				break;
+			case v1_7_R3:
+			case v1_7_R4:
+			case OUTDATED:
+				OUTDATED.sendScreenMessage(player, title, subtitle, fadeIn, show, fadeOut);
+				break;
 			default:
 				return;
 		}
