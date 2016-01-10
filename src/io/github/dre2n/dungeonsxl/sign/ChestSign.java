@@ -13,17 +13,12 @@ public class ChestSign extends DSign {
 	// Variables
 	private double moneyReward;
 	
-	public ChestSign(Sign sign, GameWorld gWorld) {
-		super(sign, gWorld);
+	public ChestSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
 	}
 	
 	@Override
 	public boolean check() {
-		String lines[] = getSign().getLines();
-		if (lines[1].equals("")) {
-			return false;
-		}
-		
 		return true;
 	}
 	
