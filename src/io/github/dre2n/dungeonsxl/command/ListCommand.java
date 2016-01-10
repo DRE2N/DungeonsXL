@@ -107,7 +107,11 @@ public class ListCommand extends DCommand {
 			
 			for (String map : toSend) {
 				WorldConfig worldConfig = new WorldConfig(new File(mapFolder + "/" + map, "config.yml"));
-				MessageUtil.sendMessage(sender, "&b" + map + "&7 | &e" + worldConfig.getInvitedPlayers().contains(sender));
+				boolean invited = false;
+				if (worldConfig != null) {
+					invited = worldConfig.getInvitedPlayers().contains(sender);
+				}
+				MessageUtil.sendMessage(sender, "&b" + map + "&7 | &e" + invited);
 			}
 			
 		} else if (listType == 1) {
