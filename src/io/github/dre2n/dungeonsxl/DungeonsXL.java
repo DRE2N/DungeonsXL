@@ -87,6 +87,7 @@ public class DungeonsXL extends JavaPlugin {
 		loadDCommands();
 		loadRequirements();
 		loadRewards();
+		loadTriggers();
 		loadDSigns();
 		loadDungeons();
 		
