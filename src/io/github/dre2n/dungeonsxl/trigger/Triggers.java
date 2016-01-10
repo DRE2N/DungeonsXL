@@ -14,6 +14,19 @@ public class Triggers {
 	}
 	
 	/**
+	 * @return the trigger which has the identifier
+	 */
+	public TriggerType getByIdentifier(String identifier) {
+		for (TriggerType trigger : triggers) {
+			if (trigger.getIdentifier().equalsIgnoreCase(identifier)) {
+				return trigger;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * @return the triggers
 	 */
 	public List<TriggerType> getTriggers() {

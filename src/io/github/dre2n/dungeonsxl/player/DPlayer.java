@@ -346,6 +346,10 @@ public class DPlayer {
 			DPlayer dPlayer = getByPlayer(player);
 			dPlayer.leave();
 		}
+		
+		for (Reward reward : dGroup.getRewards()) {
+			reward.giveTo(player);
+		}
 	}
 	
 	public void sendMessage(String message) {

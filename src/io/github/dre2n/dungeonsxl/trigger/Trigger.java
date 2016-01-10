@@ -1,15 +1,20 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
 
 public abstract class Trigger {
+	
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private boolean triggered;
 	private Player player; // Holds Player for Player specific Triggers
@@ -89,43 +94,62 @@ public abstract class Trigger {
 		}
 	}
 	
-	//TODO: Dynamic checks
-	public static Trigger getOrCreate(String type, String value, DSign dsign) {
-		if (type.equalsIgnoreCase("R")) {
+	public static Trigger getOrCreate(String identifier, String value, DSign dSign) {
+		TriggerType type = plugin.getTriggers().getByIdentifier(identifier);
+		
+		if (type == TriggerTypeDefault.REDSTONE) {
 			
-			return RedstoneTrigger.getOrCreate(dsign.getSign(), dsign.getGameWorld());
+			return RedstoneTrigger.getOrCreate(dSign.getSign(), dSign.getGameWorld());
 			
-		} else if (type.equalsIgnoreCase("D")) {
+		} else if (type == TriggerTypeDefault.DISTANCE) {
 			
 			if (value != null) {
-				return new DistanceTrigger(NumberUtil.parseInt(value), dsign.getSign().getLocation());
+				return new DistanceTrigger(NumberUtil.parseInt(value), dSign.getSign().getLocation());
+				
 			} else {
-				return new DistanceTrigger(dsign.getSign().getLocation());
+				return new DistanceTrigger(dSign.getSign().getLocation());
 			}
 			
-		} else if (type.equalsIgnoreCase("T")) {
+		} else if (type == TriggerTypeDefault.SIGN) {
 			
 			if (value != null) {
-				return SignTrigger.getOrCreate(NumberUtil.parseInt(value), dsign.getGameWorld());
+				return SignTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
 			}
 			
-		} else if (type.equalsIgnoreCase("I")) {
+		} else if (type == TriggerTypeDefault.INTERACT) {
 			
 			if (value != null) {
-				return InteractTrigger.getOrCreate(NumberUtil.parseInt(value), dsign.getGameWorld());
+				return InteractTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
 			}
 			
-		} else if (type.equalsIgnoreCase("M")) {
+		} else if (type == TriggerTypeDefault.MOB) {
 			
 			if (value != null) {
-				return MobTrigger.getOrCreate(value, dsign.getGameWorld());
+				return MobTrigger.getOrCreate(value, dSign.getGameWorld());
 			}
 			
-		} else if (type.equalsIgnoreCase("U")) {
+		} else if (type == TriggerTypeDefault.USE_ITEM) {
 			
 			if (value != null) {
-				return UseItemTrigger.getOrCreate(value, dsign.getGameWorld());
+				return UseItemTrigger.getOrCreate(value, dSign.getGameWorld());
 			}
+			
+		} else if (type != null) {
+			Trigger trigger = null;
+			
+			Method method;
+			try {
+				method = type.getHandler().getDeclaredMethod("getOrCreate", String.class, GameWorld.class);
+				trigger = (Trigger) method.invoke(value, dSign.getGameWorld());
+				
+			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
+				plugin.getLogger().info("An error occurred while accessing the handler class of the sign " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
+				if ( !(type instanceof TriggerTypeDefault)) {
+					plugin.getLogger().info("Please note that this trigger is an unsupported feature added by an addon!");
+				}
+			}
+			
+			return trigger;
 		}
 		
 		return null;

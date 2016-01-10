@@ -211,11 +211,19 @@ public class DGroup {
 	}
 	
 	/**
-	 * @param rewards
-	 * the rewards to set
+	 * @param reward
+	 * the rewards to add
 	 */
-	public void setRewards(List<Reward> rewards) {
-		this.rewards = rewards;
+	public void addReward(Reward reward) {
+		rewards.add(reward);
+	}
+	
+	/**
+	 * @param reward
+	 * the rewards to remove
+	 */
+	public void removeReward(Reward reward) {
+		rewards.remove(reward);
 	}
 	
 	/**
@@ -243,10 +251,6 @@ public class DGroup {
 				
 			} else {
 				MessageUtil.sendScreenMessage(player, "&4&l" + mapName.replaceAll("_", ""));
-			}
-			
-			if ( !DungeonsXL.getPlugin().getMainConfig().enableEconomy()) {
-				continue;
 			}
 			
 			for (Requirement requirement : gameWorld.getConfig().getRequirements()) {

@@ -83,6 +83,7 @@ public class DMessages {
 		ERROR_NO_PROTECTED_BLOCK("Error_NoDXLBlock", "&4This is not a block protected by DungeonsXL!"),
 		ERROR_NOT_IN_DUNGEON("Error_NotInDungeon", "&4You are not in a dungeon!"),
 		ERROR_NOT_IN_GROUP("Error_NotInGroup", "&4You have to join a group first!"),
+		ERROR_NOT_SAVED("Error_NotSaved", "&4The map &6&v1&4 has not been saved to the &6DungeonsXL/maps/ &4folder yet!"),
 		ERROR_TUTORIAL_NOT_EXIST("Error_TutorialNotExist", "&4Tutorial dungeon does not exist!"),
 		ERROR_READY("Error_Ready", "&4Choose your class first!"),
 		ERROR_REQUIREMENTS("Error_Requirements", "&4You don't fulfill the requirements for this Dungeon!"),
@@ -106,7 +107,9 @@ public class DMessages {
 		HELP_CMD_RELOAD("Help_Cmd_Reload", "/dxl reload - Reloads the plugin"),
 		HELP_CMD_SAVE("Help_Cmd_Save", "/dxl save - Saves the current dungeon"),
 		HELP_CMD_TEST("Help_Cmd_Test", "/dxl test ([dungeon|map]) [name] - Tests a dungeon"),
-		HELP_CMD_UNINVITE("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon");
+		HELP_CMD_UNINVITE("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon"),
+		
+		REWARD_MONEY("Reward_Money", "&6You received &4&v1 &6for finishing the dungeon.");
 		
 		private String identifier;
 		private String message;

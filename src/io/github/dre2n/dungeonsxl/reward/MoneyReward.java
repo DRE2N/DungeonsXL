@@ -1,5 +1,8 @@
 package io.github.dre2n.dungeonsxl.reward;
 
+import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
+import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
+
 import org.bukkit.entity.Player;
 
 public class MoneyReward extends Reward {
@@ -17,6 +20,14 @@ public class MoneyReward extends Reward {
 	
 	/**
 	 * @param money
+	 * the money to add
+	 */
+	public void addMoney(double money) {
+		this.money += money;
+	}
+	
+	/**
+	 * @param money
 	 * the money to set
 	 */
 	public void setMoney(double money) {
@@ -28,6 +39,8 @@ public class MoneyReward extends Reward {
 		if (plugin.getEconomyProvider() != null) {
 			plugin.getEconomyProvider().depositPlayer(player, money);
 		}
+		
+		MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.REWARD_MONEY, plugin.getEconomyProvider().format(money)));
 	}
 	
 	@Override

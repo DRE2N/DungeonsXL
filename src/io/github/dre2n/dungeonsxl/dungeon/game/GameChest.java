@@ -5,10 +5,13 @@ import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.reward.Reward;
+import io.github.dre2n.dungeonsxl.reward.MoneyReward;
+import io.github.dre2n.dungeonsxl.reward.RewardTypeDefault;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -18,6 +21,8 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 public class GameChest {
+	
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Variables
 	private boolean used = false;
@@ -50,8 +55,18 @@ public class GameChest {
 				continue;
 			}
 			
+			boolean hasMoneyReward = false;
+			
 			for (Reward reward : dGroup.getRewards()) {
-				reward.giveTo(player);
+				if (reward instanceof MoneyReward) {
+					hasMoneyReward = true;
+					((MoneyReward) reward).addMoney(moneyReward);
+				}
+			}
+			
+			if ( !hasMoneyReward) {
+				Reward reward = Reward.create(RewardTypeDefault.MONEY);
+				((MoneyReward) reward).addMoney(moneyReward);
 			}
 			
 			String msg = "";
@@ -62,16 +77,16 @@ public class GameChest {
 				}
 				
 				dPlayer.getTreasureInv().addItem(itemStack);
-				String name;
+				String name = null;
 				
-				if ( !itemStack.hasItemMeta()) {
-					continue;
+				if (itemStack.hasItemMeta()) {
+					if (itemStack.getItemMeta().hasDisplayName()) {
+						name = itemStack.getItemMeta().getDisplayName();
+					}
+					
 				}
 				
-				if (itemStack.getItemMeta().hasDisplayName()) {
-					name = itemStack.getItemMeta().getDisplayName();
-					
-				} else {
+				if (name == null && Bukkit.getPluginManager().getPlugin("Vault") != null) {
 					ItemInfo itemInfo = Items.itemByStack(itemStack);
 					if (itemInfo != null) {
 						name = itemInfo.getName();
@@ -80,14 +95,14 @@ public class GameChest {
 					}
 				}
 				
-				msg = msg + ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
+				msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
 			}
 			
 			msg = msg.substring(0, msg.length() - 1);
 			
-			MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
+			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
 			if (moneyReward != 0) {
-				MessageUtil.sendMessage(player, DungeonsXL.getPlugin().getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, String.valueOf(moneyReward)));
+				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, String.valueOf(moneyReward)));
 			}
 		}
 	}
@@ -102,7 +117,7 @@ public class GameChest {
 			return;
 		}
 		
-		if (inventory.getTopInventory().getHolder() instanceof Chest) {
+		if ( !(inventory.getTopInventory().getHolder() instanceof Chest)) {
 			return;
 		}
 		
@@ -113,9 +128,8 @@ public class GameChest {
 				continue;
 			}
 			
-			if ( !gameChest.used) {
-				MessageUtil
-				        .sendMessage(DungeonsXL.getPlugin().getServer().getPlayer(event.getPlayer().getUniqueId()), DungeonsXL.getPlugin().getDMessages().getMessage(Messages.ERROR_CHEST_IS_OPENED));
+			if (gameChest.used) {
+				MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), plugin.getDMessages().getMessage(Messages.ERROR_CHEST_IS_OPENED));
 				event.setCancelled(true);
 				continue;
 			}
