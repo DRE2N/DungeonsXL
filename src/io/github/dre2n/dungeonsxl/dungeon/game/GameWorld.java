@@ -5,6 +5,7 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
@@ -87,6 +88,12 @@ public class GameWorld {
 	}
 	
 	public void startGame() {
+		GameWorldStartGameEvent event = new GameWorldStartGameEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		isPlaying = true;
 		
 		for (DSign dSign : dSigns) {
@@ -474,8 +481,9 @@ public class GameWorld {
 		if ( !file.exists()) {
 			try {
 				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
+				
+			} catch (IOException exception) {
+				exception.printStackTrace();
 			}
 		}
 		
@@ -504,10 +512,10 @@ public class GameWorld {
 			GameWorld gameWorld = new GameWorld();
 			gameWorld.mapName = name;
 			
-			// Unload empty eworlds
-			for (EditWorld eworld : plugin.getEditWorlds()) {
-				if (eworld.getWorld().getPlayers().isEmpty()) {
-					eworld.delete();
+			// Unload empty editWorlds
+			for (EditWorld editWorld : plugin.getEditWorlds()) {
+				if (editWorld.getWorld().getPlayers().isEmpty()) {
+					editWorld.delete();
 				}
 			}
 			
@@ -544,10 +552,12 @@ public class GameWorld {
 				}
 				
 				os.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				
+			} catch (FileNotFoundException exception) {
+				plugin.getLogger().info("Could not find any sign data for the world \"" + name + "\"!");
+				
+			} catch (IOException exception) {
+				exception.printStackTrace();
 			}
 			
 			return gameWorld;
