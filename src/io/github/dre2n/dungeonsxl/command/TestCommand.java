@@ -72,6 +72,12 @@ public class TestCommand extends DCommand {
 			dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
 		}
 		
+		if (dGroup.getGameWorld() == null) {
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_SAVED, DGroup.getByPlayer(player).getMapName()));
+			dGroup.remove();
+			return;
+		}
+		
 		DPlayer newDPlayer;
 		
 		if (dGroup.getGameWorld().getLocLobby() == null) {

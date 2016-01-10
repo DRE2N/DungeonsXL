@@ -70,7 +70,7 @@ public class PlayCommand extends DCommand {
 		if ( !GameWorld.canPlayDungeon(identifier, player)) {
 			File file = new File(plugin.getDataFolder() + "/maps/" + identifier + "/config.yml");
 			
-			if (file != null) {
+			if (file.exists()) {
 				WorldConfig confReader = new WorldConfig(file);
 				
 				if (confReader != null) {
@@ -94,6 +94,12 @@ public class PlayCommand extends DCommand {
 		
 		if (dGroup.getGameWorld() == null) {
 			dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
+		}
+		
+		if (dGroup.getGameWorld() == null) {
+			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_SAVED, DGroup.getByPlayer(player).getMapName()));
+			dGroup.remove();
+			return;
 		}
 		
 		if (dGroup.getGameWorld().getLocLobby() == null) {
