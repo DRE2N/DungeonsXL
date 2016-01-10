@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 
 public abstract class GameWorldEvent extends Event {
 	
-	private GameWorld gameWorld;
+	protected GameWorld gameWorld;
 	
 	public GameWorldEvent(GameWorld gameWorld) {
 		this.gameWorld = gameWorld;

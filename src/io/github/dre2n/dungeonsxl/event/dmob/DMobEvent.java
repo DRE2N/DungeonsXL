@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 
 public abstract class DMobEvent extends Event {
 	
-	private DMob dMob;
+	protected DMob dMob;
 	
 	public DMobEvent(DMob dMob) {
 		this.dMob = dMob;

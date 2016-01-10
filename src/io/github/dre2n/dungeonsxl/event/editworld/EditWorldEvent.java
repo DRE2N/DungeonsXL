@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 
 public abstract class EditWorldEvent extends Event {
 	
-	private EditWorld editWorld;
+	protected EditWorld editWorld;
 	
 	public EditWorldEvent(EditWorld editWorld) {
 		this.editWorld = editWorld;

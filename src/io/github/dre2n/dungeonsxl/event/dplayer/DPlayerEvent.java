@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 
 public abstract class DPlayerEvent extends Event {
 	
-	private DPlayer dPlayer;
+	protected DPlayer dPlayer;
 	
 	public DPlayerEvent(DPlayer dPlayer) {
 		this.dPlayer = dPlayer;

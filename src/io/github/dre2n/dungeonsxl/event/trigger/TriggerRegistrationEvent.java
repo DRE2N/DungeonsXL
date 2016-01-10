@@ -1,23 +1,25 @@
-package io.github.dre2n.dungeonsxl.event;
+package io.github.dre2n.dungeonsxl.event.trigger;
 
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
 
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class TriggerEvent extends Event implements Cancellable {
+public class TriggerRegistrationEvent extends TriggerEvent implements Cancellable {
 	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
-	private Trigger trigger;
+	public TriggerRegistrationEvent(Trigger trigger) {
+		super(trigger);
+	}
 	
 	/**
-	 * @return the trigger
+	 * @param trigger
+	 * the trigger to set
 	 */
-	public Trigger getTrigger() {
-		return trigger;
+	public void setTrigger(Trigger trigger) {
+		this.trigger = trigger;
 	}
 	
 	@Override
