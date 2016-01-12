@@ -7,6 +7,7 @@ import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameChest;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
@@ -67,7 +68,13 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		dPlayer.setLives(dPlayer.getLives() - 1);
+		DPlayerDeathEvent dPlayerDeathEvent = new DPlayerDeathEvent(dPlayer, event, 1);
+		
+		if (dPlayerDeathEvent.isCancelled()) {
+			return;
+		}
+		
+		dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
 		
 		if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
 			MessageUtil.broadcastMessage(dMessages.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));

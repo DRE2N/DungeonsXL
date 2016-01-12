@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 
@@ -46,6 +46,12 @@ public class LeaveSign extends DSign {
 	public boolean onPlayerTrigger(Player player) {
 		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		if (dPlayer != null) {
+			DPlayerEscapeEvent event = new DPlayerEscapeEvent(dPlayer);
+			
+			if (event.isCancelled()) {
+				return false;
+			}
+			
 			dPlayer.leave();
 		}
 		
@@ -54,7 +60,13 @@ public class LeaveSign extends DSign {
 	
 	@Override
 	public void onTrigger() {
-		for (DPlayer dPlayer : DungeonsXL.getPlugin().getDPlayers()) {
+		for (DPlayer dPlayer : plugin.getDPlayers()) {
+			DPlayerEscapeEvent event = new DPlayerEscapeEvent(dPlayer);
+			
+			if (event.isCancelled()) {
+				return;
+			}
+			
 			dPlayer.leave();
 		}
 	}

@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -33,6 +34,12 @@ public class LeaveCommand extends DCommand {
 		}
 		
 		if (dPlayer != null) {
+			DPlayerEscapeEvent event = new DPlayerEscapeEvent(dPlayer);
+			
+			if (event.isCancelled()) {
+				return;
+			}
+			
 			dPlayer.leave();
 			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LEAVE_SUCCESS));
 			

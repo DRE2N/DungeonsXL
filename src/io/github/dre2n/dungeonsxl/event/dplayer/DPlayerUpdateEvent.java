@@ -15,14 +15,16 @@ public class DPlayerUpdateEvent extends DPlayerEvent implements Cancellable {
 	private boolean respawnInventory;
 	private boolean offline;
 	private boolean kick;
+	private boolean triggerAllInDistance;
 	
-	public DPlayerUpdateEvent(DPlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean respawnInventory, boolean offline, boolean kick) {
+	public DPlayerUpdateEvent(DPlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean respawnInventory, boolean offline, boolean kick, boolean triggerAllInDistance) {
 		super(dPlayer);
 		this.locationValid = locationValid;
 		this.teleportWolf = teleportWolf;
 		this.respawnInventory = respawnInventory;
 		this.offline = offline;
 		this.kick = kick;
+		this.triggerAllInDistance = triggerAllInDistance;
 	}
 	
 	/**
@@ -90,6 +92,21 @@ public class DPlayerUpdateEvent extends DPlayerEvent implements Cancellable {
 	 */
 	public void setKick(boolean kick) {
 		this.kick = kick;
+	}
+	
+	/**
+	 * @return the triggerAllInDistance
+	 */
+	public boolean getTriggerAllInDistance() {
+		return triggerAllInDistance;
+	}
+	
+	/**
+	 * @param triggerAllInDistance
+	 * the triggerAllInDistance to set
+	 */
+	public void setTriggerAllInDistance(boolean triggerAllInDistance) {
+		this.triggerAllInDistance = triggerAllInDistance;
 	}
 	
 	@Override

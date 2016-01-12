@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 
 import org.bukkit.event.Cancellable;
@@ -11,10 +12,12 @@ public class DPlayerJoinDGroupEvent extends DPlayerEvent implements Cancellable 
 	private boolean cancelled;
 	
 	private boolean creator;
+	private DGroup dGroup;
 	
-	public DPlayerJoinDGroupEvent(DPlayer dPlayer, boolean creator) {
+	public DPlayerJoinDGroupEvent(DPlayer dPlayer, boolean creator, DGroup dGroup) {
 		super(dPlayer);
 		this.creator = creator;
+		this.dGroup = dGroup;
 	}
 	
 	/**
@@ -22,6 +25,13 @@ public class DPlayerJoinDGroupEvent extends DPlayerEvent implements Cancellable 
 	 */
 	public boolean isCreator() {
 		return creator;
+	}
+	
+	/**
+	 * @return the dGroup
+	 */
+	public DGroup getDGroup() {
+		return dGroup;
 	}
 	
 	@Override

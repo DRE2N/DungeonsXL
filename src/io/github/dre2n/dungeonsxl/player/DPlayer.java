@@ -8,6 +8,9 @@ import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -64,7 +67,7 @@ public class DPlayer {
 	private ItemStack[] respawnArmor;
 	private String[] linesCopy;
 	
-	private Inventory treasureInv = DungeonsXL.getPlugin().getServer().createInventory(getPlayer(), 45, dMessages.getMessage(Messages.PLAYER_TREASURES));
+	private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, dMessages.getMessage(Messages.PLAYER_TREASURES));
 	
 	private int initialLives = -1;
 	private int lives;
@@ -343,17 +346,30 @@ public class DPlayer {
 			return;
 		}
 		
+		boolean first = true;
+		boolean hasToWait = false;
+		
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dPlayer = getByPlayer(player);
 			if ( !dPlayer.finished) {
 				MessageUtil.sendMessage(this.getPlayer(), dMessages.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
-				return;
+				hasToWait = true;
+				
+			} else if (dPlayer != this) {
+				first = false;
 			}
 		}
 		
-		DGroupFinishDungeonEvent event = new DGroupFinishDungeonEvent(dGroup);
+		DPlayerFinishEvent dPlayerFinishEvent = new DPlayerFinishEvent(this, first, hasToWait);
 		
-		if (event.isCancelled()) {
+		if (dPlayerFinishEvent.isCancelled()) {
+			finished = false;
+			return;
+		}
+		
+		DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dGroup);
+		
+		if (dGroupFinishDungeonEvent.isCancelled()) {
 			return;
 		}
 		
@@ -813,46 +829,53 @@ public class DPlayer {
 	
 	public static void update(boolean updateSecond) {
 		for (DPlayer dPlayer : plugin.getDPlayers()) {
+			boolean locationValid = true;
+			Location teleportLocation = dPlayer.getPlayer().getLocation();
+			boolean teleportWolf = false;
+			boolean respawnInventory = false;
+			boolean offline = false;
+			boolean kick = false;
+			boolean triggerAllInDistance = false;
+			
+			GameWorld gameWorld = GameWorld.getByWorld(dPlayer.world);
+			EditWorld editWorld = EditWorld.getByWorld(dPlayer.world);
+			
 			if ( !updateSecond) {
 				if ( !dPlayer.getPlayer().getWorld().equals(dPlayer.world)) {
+					locationValid = false;
+					
 					if (dPlayer.editing) {
-						EditWorld editWorld = EditWorld.getByWorld(dPlayer.world);
 						if (editWorld != null) {
 							if (editWorld.getLobby() == null) {
-								MiscUtil.secureTeleport(dPlayer.getPlayer(), editWorld.getWorld().getSpawnLocation());
+								teleportLocation = editWorld.getWorld().getSpawnLocation();
 							} else {
-								MiscUtil.secureTeleport(dPlayer.getPlayer(), editWorld.getLobby());
+								teleportLocation = editWorld.getLobby();
 							}
 						}
 					} else {
-						GameWorld gameWorld = GameWorld.getByWorld(dPlayer.world);
 						if (gameWorld != null) {
 							DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
 							if (dPlayer.checkpoint == null) {
-								MiscUtil.secureTeleport(dPlayer.getPlayer(), dGroup.getGameWorld().getLocStart());
+								teleportLocation = dGroup.getGameWorld().getLocStart();
 								if (dPlayer.wolf != null) {
 									dPlayer.wolf.teleport(dGroup.getGameWorld().getLocStart());
 								}
 							} else {
-								MiscUtil.secureTeleport(dPlayer.getPlayer(), dPlayer.checkpoint);
+								teleportLocation = dPlayer.getCheckpoint();
 								if (dPlayer.wolf != null) {
-									dPlayer.wolf.teleport(dPlayer.checkpoint);
+									teleportWolf = true;
 								}
 							}
 							
 							// Respawn Items
 							if (dPlayer.respawnInventory != null || dPlayer.respawnArmor != null) {
-								dPlayer.getPlayer().getInventory().setContents(dPlayer.respawnInventory);
-								dPlayer.getPlayer().getInventory().setArmorContents(dPlayer.respawnArmor);
-								dPlayer.respawnInventory = null;
-								dPlayer.respawnArmor = null;
+								respawnInventory = true;
 							}
 						}
 					}
 				}
-			} else {
-				GameWorld gameWorld = GameWorld.getByWorld(dPlayer.world);
 				
+			} else {
 				if (gameWorld != null) {
 					// Update Wolf
 					if (dPlayer.wolf != null) {
@@ -869,14 +892,48 @@ public class DPlayer {
 					
 					// Kick offline plugin.getDPlayers()
 					if (dPlayer.offlineTime > 0) {
+						offline = true;
+						
 						if (dPlayer.offlineTime < System.currentTimeMillis()) {
-							dPlayer.leave();
+							kick = true;
 						}
 					}
 					
-					// Check Distance Trigger Signs
-					DistanceTrigger.triggerAllInDistance(dPlayer.getPlayer(), gameWorld);
+					triggerAllInDistance = true;
 				}
+			}
+			
+			DPlayerUpdateEvent event = new DPlayerUpdateEvent(dPlayer, locationValid, teleportWolf, respawnInventory, offline, kick, triggerAllInDistance);
+			
+			if (event.isCancelled()) {
+				return;
+			}
+			
+			if ( !locationValid) {
+				MiscUtil.secureTeleport(dPlayer.getPlayer(), teleportLocation);
+			}
+			
+			if (teleportWolf) {
+				dPlayer.wolf.teleport(dPlayer.checkpoint);
+			}
+			
+			if (respawnInventory) {
+				dPlayer.getPlayer().getInventory().setContents(dPlayer.respawnInventory);
+				dPlayer.getPlayer().getInventory().setArmorContents(dPlayer.respawnArmor);
+				dPlayer.respawnInventory = null;
+				dPlayer.respawnArmor = null;
+			}
+			
+			if (kick) {
+				DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer);
+				
+				if ( !dPlayerKickEvent.isCancelled()) {
+					dPlayer.leave();
+				}
+			}
+			
+			if (triggerAllInDistance) {
+				DistanceTrigger.triggerAllInDistance(dPlayer.getPlayer(), gameWorld);
 			}
 		}
 	}
