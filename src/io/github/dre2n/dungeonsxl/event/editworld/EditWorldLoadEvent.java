@@ -1,17 +1,33 @@
 package io.github.dre2n.dungeonsxl.event.editworld;
 
-import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class EditWorldLoadEvent extends EditWorldEvent implements Cancellable {
+public class EditWorldLoadEvent extends Event implements Cancellable {
 	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
-	public EditWorldLoadEvent(EditWorld editWorld) {
-		super(editWorld);
+	private String name;
+	
+	public EditWorldLoadEvent(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @param name
+	 * the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	@Override

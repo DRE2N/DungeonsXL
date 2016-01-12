@@ -15,7 +15,7 @@ public abstract class DSignEvent extends Event {
 	/**
 	 * @return the dSign
 	 */
-	public DSign getdSign() {
+	public DSign getDSign() {
 		return dSign;
 	}
 	
@@ -23,7 +23,7 @@ public abstract class DSignEvent extends Event {
 	 * @param dSign
 	 * the dSign to set
 	 */
-	public void setdSign(DSign dSign) {
+	public void setDSign(DSign dSign) {
 		this.dSign = dSign;
 	}
 	

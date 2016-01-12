@@ -1,17 +1,33 @@
 package io.github.dre2n.dungeonsxl.event.gameworld;
 
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class GameWorldLoadEvent extends GameWorldEvent implements Cancellable {
+public class GameWorldLoadEvent extends Event implements Cancellable {
 	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
-	public GameWorldLoadEvent(GameWorld gameWorld) {
-		super(gameWorld);
+	private String name;
+	
+	public GameWorldLoadEvent(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @param name
+	 * the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	@Override

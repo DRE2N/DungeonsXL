@@ -5,7 +5,9 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldLoadEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
+import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
@@ -498,6 +500,12 @@ public class GameWorld {
 	}
 	
 	public void delete() {
+		GameWorldUnloadEvent event = new GameWorldUnloadEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		plugin.getGameWorlds().remove(this);
 		plugin.getServer().unloadWorld(world, true);
 		File dir = new File("DXL_Game_" + id);
@@ -505,6 +513,11 @@ public class GameWorld {
 	}
 	
 	public static GameWorld load(String name) {
+		GameWorldLoadEvent event = new GameWorldLoadEvent(name);
+		
+		if (event.isCancelled()) {
+			return null;
+		}
 		
 		File file = new File(plugin.getDataFolder(), "/maps/" + name);
 		

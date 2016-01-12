@@ -1,6 +1,10 @@
 package io.github.dre2n.dungeonsxl.dungeon;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.event.editworld.EditWorldGenerateEvent;
+import io.github.dre2n.dungeonsxl.event.editworld.EditWorldLoadEvent;
+import io.github.dre2n.dungeonsxl.event.editworld.EditWorldSaveEvent;
+import io.github.dre2n.dungeonsxl.event.editworld.EditWorldUnloadEvent;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
@@ -65,10 +69,22 @@ public class EditWorld {
 		creator.type(WorldType.FLAT);
 		creator.generateStructures(false);
 		
+		EditWorldGenerateEvent event = new EditWorldGenerateEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		world = plugin.getServer().createWorld(creator);
 	}
 	
 	public void save() {
+		EditWorldSaveEvent event = new EditWorldSaveEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		world.save();
 		
 		try {
@@ -97,6 +113,12 @@ public class EditWorld {
 	}
 	
 	public void delete() {
+		EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		plugin.getEditWorlds().remove(this);
 		for (Player player : world.getPlayers()) {
 			DPlayer dPlayer = DPlayer.getByPlayer(player);
@@ -111,6 +133,12 @@ public class EditWorld {
 	}
 	
 	public void deleteNoSave() {
+		EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, false);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		plugin.getEditWorlds().remove(this);
 		for (Player player : world.getPlayers()) {
 			DPlayer dPlayer = DPlayer.getByPlayer(player);
@@ -152,6 +180,12 @@ public class EditWorld {
 	}
 	
 	public static EditWorld load(String name) {
+		EditWorldLoadEvent event = new EditWorldLoadEvent(name);
+		
+		if (event.isCancelled()) {
+			return null;
+		}
+		
 		for (EditWorld editWorld : plugin.getEditWorlds()) {
 			
 			if (editWorld.mapName.equalsIgnoreCase(name)) {
