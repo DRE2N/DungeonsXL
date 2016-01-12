@@ -6,14 +6,14 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class DGroupJoinGameWorldEvent extends DGroupEvent implements Cancellable {
+public class DGroupStartFloorEvent extends DGroupEvent implements Cancellable {
 	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
 	private GameWorld gameWorld;
 	
-	public DGroupJoinGameWorldEvent(DGroup dGroup, GameWorld gameWorld) {
+	public DGroupStartFloorEvent(DGroup dGroup, GameWorld gameWorld) {
 		super(dGroup);
 		this.gameWorld = gameWorld;
 	}

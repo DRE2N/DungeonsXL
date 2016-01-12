@@ -3,6 +3,7 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
@@ -239,6 +240,12 @@ public class DGroup {
 	}
 	
 	public void startGame() {
+		DGroupStartFloorEvent event = new DGroupStartFloorEvent(this, gameWorld);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		playing = true;
 		gameWorld.startGame();
 		floorCount++;

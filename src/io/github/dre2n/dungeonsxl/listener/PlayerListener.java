@@ -6,6 +6,7 @@ import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameChest;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
@@ -47,7 +48,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
 	
-	DungeonsXL plugin = DungeonsXL.getPlugin();
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	DMessages dMessages = plugin.getDMessages();
 	
 	@EventHandler(priority = EventPriority.HIGH)
@@ -463,6 +464,16 @@ public class PlayerListener implements Listener {
 			}
 			
 			DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
+			
+			DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
+			
+			if (createEvent.isCancelled()) {
+				dGroup = null;
+			}
+			
+			if (dGroup == null) {
+				continue;
+			}
 			
 			if (dGroup.getGameWorld() == null) {
 				dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));

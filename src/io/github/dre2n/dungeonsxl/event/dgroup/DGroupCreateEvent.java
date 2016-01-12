@@ -8,14 +8,25 @@ import org.bukkit.event.HandlerList;
 
 public class DGroupCreateEvent extends DGroupEvent implements Cancellable {
 	
+	public enum Cause {
+		
+		COMMAND,
+		GROUP_SIGN,
+		CUSTOM;
+		
+	}
+	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
 	private Player creator;
 	
-	public DGroupCreateEvent(DGroup dGroup, Player creator) {
+	private Cause cause;
+	
+	public DGroupCreateEvent(DGroup dGroup, Player creator, Cause cause) {
 		super(dGroup);
 		this.creator = creator;
+		this.cause = cause;
 	}
 	
 	/**
@@ -31,6 +42,21 @@ public class DGroupCreateEvent extends DGroupEvent implements Cancellable {
 	 */
 	public void setCreator(Player creator) {
 		this.creator = creator;
+	}
+	
+	/**
+	 * @return the cause
+	 */
+	public Cause getCause() {
+		return cause;
+	}
+	
+	/**
+	 * @param cause
+	 * the cause to set
+	 */
+	public void setCause(Cause cause) {
+		this.cause = cause;
 	}
 	
 	@Override

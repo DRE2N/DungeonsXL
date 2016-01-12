@@ -6,6 +6,8 @@ import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -306,6 +308,13 @@ public class DPlayer {
 		} else if (specifiedFloor != null) {
 			newFloor = specifiedFloor;
 		}
+		
+		DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(dGroup, dGroup.getGameWorld(), newFloor);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		dGroup.removeUnplayedFloor(dGroup.getMapName());
 		dGroup.setMapName(newFloor);
 		GameWorld gameWorld = GameWorld.load(newFloor);
@@ -340,6 +349,12 @@ public class DPlayer {
 				MessageUtil.sendMessage(this.getPlayer(), dMessages.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
 				return;
 			}
+		}
+		
+		DGroupFinishDungeonEvent event = new DGroupFinishDungeonEvent(dGroup);
+		
+		if (event.isCancelled()) {
+			return;
 		}
 		
 		for (Player player : dGroup.getPlayers()) {

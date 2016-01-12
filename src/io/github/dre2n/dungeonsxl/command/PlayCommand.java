@@ -4,6 +4,7 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -91,6 +92,16 @@ public class PlayCommand extends DCommand {
 		}
 		
 		DGroup dGroup = new DGroup(player, identifier, multiFloor);
+		
+		DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
+		
+		if (event.isCancelled()) {
+			dGroup = null;
+		}
+		
+		if (dGroup == null) {
+			return;
+		}
 		
 		if (dGroup.getGameWorld() == null) {
 			dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
