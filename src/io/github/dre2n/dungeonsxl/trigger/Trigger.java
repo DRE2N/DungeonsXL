@@ -2,6 +2,7 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.trigger.TriggerRegistrationEvent;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
@@ -147,6 +148,12 @@ public abstract class Trigger {
 				if ( !(type instanceof TriggerTypeDefault)) {
 					plugin.getLogger().info("Please note that this trigger is an unsupported feature added by an addon!");
 				}
+			}
+			
+			TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
+			
+			if (event.isCancelled()) {
+				return null;
 			}
 			
 			return trigger;

@@ -4,6 +4,8 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
+import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
+import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
@@ -216,6 +218,12 @@ public class DGroup {
 	 * the rewards to add
 	 */
 	public void addReward(Reward reward) {
+		RewardAdditionEvent event = new RewardAdditionEvent(reward, this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		rewards.add(reward);
 	}
 	
@@ -261,6 +269,12 @@ public class DGroup {
 			}
 			
 			for (Requirement requirement : gameWorld.getConfig().getRequirements()) {
+				RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
+				
+				if (requirementDemandEvent.isCancelled()) {
+					continue;
+				}
+				
 				requirement.demand(player);
 			}
 			

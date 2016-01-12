@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,12 @@ public class RedstoneTrigger extends Trigger {
 	}
 	
 	public void onTrigger() {
+		TriggerActionEvent event = new TriggerActionEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		if (rtBlock.isBlockPowered()) {
 			if ( !isTriggered()) {
 				setTriggered(true);

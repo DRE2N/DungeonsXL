@@ -8,6 +8,7 @@ import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldLoadEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
+import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
@@ -419,6 +420,11 @@ public class GameWorld {
 		WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + dungeon, "config.yml"));
 		
 		for (Requirement requirement : worldConfig.getRequirements()) {
+			RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
+			if (event.isCancelled()) {
+				continue;
+			}
+			
 			if ( !requirement.check(player)) {
 				return false;
 			}

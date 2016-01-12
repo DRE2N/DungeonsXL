@@ -6,14 +6,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class RequirementCheckEvent extends RequirementEvent implements Cancellable {
+public class RequirementDemandEvent extends RequirementEvent implements Cancellable {
 	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
 	private Player player;
 	
-	public RequirementCheckEvent(Requirement requirement, Player player) {
+	public RequirementDemandEvent(Requirement requirement, Player player) {
 		super(requirement);
 		this.player = player;
 	}

@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,12 @@ public class DistanceTrigger extends Trigger {
 	}
 	
 	public void onTrigger(Player player) {
+		TriggerActionEvent event = new TriggerActionEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		setTriggered(true);
 		this.setPlayer(player);
 		updateDSigns();

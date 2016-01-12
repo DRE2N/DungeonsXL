@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.event.reward;
 
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 
 import org.bukkit.event.Cancellable;
@@ -10,8 +11,26 @@ public class RewardAdditionEvent extends RewardEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
-	public RewardAdditionEvent(Reward reward) {
+	private DGroup dGroup;
+	
+	public RewardAdditionEvent(Reward reward, DGroup dGroup) {
 		super(reward);
+		this.dGroup = dGroup;
+	}
+	
+	/**
+	 * @return the dGroup
+	 */
+	public DGroup getDGroup() {
+		return dGroup;
+	}
+	
+	/**
+	 * @param dGroup
+	 * the dGroup to set
+	 */
+	public void setDGroup(DGroup dGroup) {
+		this.dGroup = dGroup;
 	}
 	
 	@Override
