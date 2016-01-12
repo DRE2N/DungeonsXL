@@ -67,6 +67,7 @@ public class GameChest {
 			if ( !hasMoneyReward) {
 				Reward reward = Reward.create(RewardTypeDefault.MONEY);
 				((MoneyReward) reward).addMoney(moneyReward);
+				dGroup.addReward(reward);
 			}
 			
 			String msg = "";
@@ -102,7 +103,7 @@ public class GameChest {
 			
 			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
 			if (moneyReward != 0) {
-				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, String.valueOf(moneyReward)));
+				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
 			}
 		}
 	}

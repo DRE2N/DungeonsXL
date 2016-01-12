@@ -109,6 +109,8 @@ public class DMessages {
 		HELP_CMD_TEST("Help_Cmd_Test", "/dxl test ([dungeon|map]) [name] - Tests a dungeon"),
 		HELP_CMD_UNINVITE("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon"),
 		
+		REQUIREMENT_FEE("Requirement_Fee", "&6You have been charged &4&v1 &6for entering the dungeon."),
+		
 		REWARD_MONEY("Reward_Money", "&6You received &4&v1 &6for finishing the dungeon.");
 		
 		private String identifier;

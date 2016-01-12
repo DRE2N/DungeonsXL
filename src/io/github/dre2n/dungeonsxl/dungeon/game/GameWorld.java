@@ -381,7 +381,6 @@ public class GameWorld {
 	}
 	
 	public static boolean canPlayDungeon(String dungeon, Player player) {
-		
 		if (player.hasPermission("dxl.ignoretimelimit")) {
 			return true;
 		}
@@ -391,13 +390,14 @@ public class GameWorld {
 			
 			if (worldConfig.getTimeToNextPlay() != 0) {
 				// read PlayerConfig
-				Long time = getPlayerTime(dungeon, player);
+				long time = getPlayerTime(dungeon, player);
 				if (time != -1) {
 					if (time + worldConfig.getTimeToNextPlay() * 1000 * 60 * 60 > System.currentTimeMillis()) {
 						return false;
 					}
 				}
 			}
+			
 		} else {
 			return false;
 		}

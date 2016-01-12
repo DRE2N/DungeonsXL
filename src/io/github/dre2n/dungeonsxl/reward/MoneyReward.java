@@ -36,10 +36,11 @@ public class MoneyReward extends Reward {
 	
 	@Override
 	public void giveTo(Player player) {
-		if (plugin.getEconomyProvider() != null) {
-			plugin.getEconomyProvider().depositPlayer(player, money);
+		if (plugin.getEconomyProvider() == null) {
+			return;
 		}
 		
+		plugin.getEconomyProvider().depositPlayer(player, money);
 		MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.REWARD_MONEY, plugin.getEconomyProvider().format(money)));
 	}
 	

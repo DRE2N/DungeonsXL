@@ -3,6 +3,7 @@ package io.github.dre2n.dungeonsxl.dungeon;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
 import io.github.dre2n.dungeonsxl.player.DClass;
+import io.github.dre2n.dungeonsxl.requirement.FeeRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
@@ -239,7 +240,14 @@ public class WorldConfig {
 		/* Dungeon Requirements */
 		if (configFile.contains("requirements")) {
 			for (String identifier : configFile.getConfigurationSection("requirements").getKeys(false)) {
-				requirements.add(Requirement.create(plugin.getRequirements().getByIdentifier(identifier)));
+				Requirement requirement = Requirement.create(plugin.getRequirements().getByIdentifier(identifier));
+				
+				// Check for built-in requirements
+				if (requirement instanceof FeeRequirement) {
+					((FeeRequirement) requirement).setFee(configFile.getDouble("requirements.fee"));
+				}
+				
+				requirements.add(requirement);
 			}
 		} else {
 			requirements = plugin.getDefaultConfig().requirements;
