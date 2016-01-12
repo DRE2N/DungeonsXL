@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.mob;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.event.dmob.DMobDeathEvent;
 import io.github.dre2n.dungeonsxl.trigger.MobTrigger;
 
 import java.util.Random;
@@ -63,6 +64,12 @@ public class DMob {
 		
 		for (DMob dMob : gameWorld.getDMobs()) {
 			if (dMob.entity == victim) {
+				
+				DMobDeathEvent dMobDeathEvent = new DMobDeathEvent(dMob, event);
+				
+				if (dMobDeathEvent.isCancelled()) {
+					return;
+				}
 				
 				if (dMob.type != null) {
 					for (ItemStack itemStack : dMob.type.getDrops().keySet()) {
