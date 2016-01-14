@@ -16,7 +16,6 @@ public class EditCommand extends DCommand {
 		setMinArgs(1);
 		setMaxArgs(1);
 		setHelp(dMessages.getMessage(Messages.HELP_CMD_EDIT));
-		setPermission("dxl.edit");
 		setPlayerCommand(true);
 	}
 	
