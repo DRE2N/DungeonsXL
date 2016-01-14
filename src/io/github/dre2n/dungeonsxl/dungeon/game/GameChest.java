@@ -49,25 +49,25 @@ public class GameChest {
 			return;
 		}
 		
+		boolean hasMoneyReward = false;
+		
+		for (Reward reward : dGroup.getRewards()) {
+			if (reward instanceof MoneyReward) {
+				hasMoneyReward = true;
+				((MoneyReward) reward).addMoney(moneyReward);
+			}
+		}
+		
+		if ( !hasMoneyReward) {
+			Reward reward = Reward.create(RewardTypeDefault.MONEY);
+			((MoneyReward) reward).addMoney(moneyReward);
+			dGroup.addReward(reward);
+		}
+		
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dPlayer = DPlayer.getByPlayer(player);
 			if (dPlayer == null) {
 				continue;
-			}
-			
-			boolean hasMoneyReward = false;
-			
-			for (Reward reward : dGroup.getRewards()) {
-				if (reward instanceof MoneyReward) {
-					hasMoneyReward = true;
-					((MoneyReward) reward).addMoney(moneyReward);
-				}
-			}
-			
-			if ( !hasMoneyReward) {
-				Reward reward = Reward.create(RewardTypeDefault.MONEY);
-				((MoneyReward) reward).addMoney(moneyReward);
-				dGroup.addReward(reward);
 			}
 			
 			String msg = "";

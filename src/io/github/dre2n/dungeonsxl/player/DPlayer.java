@@ -367,6 +367,10 @@ public class DPlayer {
 			return;
 		}
 		
+		if (hasToWait) {
+			return;
+		}
+		
 		DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dGroup);
 		
 		if (dGroupFinishDungeonEvent.isCancelled()) {
@@ -376,10 +380,10 @@ public class DPlayer {
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dPlayer = getByPlayer(player);
 			dPlayer.leave();
-		}
-		
-		for (Reward reward : dGroup.getRewards()) {
-			reward.giveTo(player);
+			
+			for (Reward reward : dGroup.getRewards()) {
+				reward.giveTo(player);
+			}
 		}
 	}
 	
