@@ -34,7 +34,7 @@ public class BlockListener implements Listener {
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockPhysics(BlockPhysicsEvent event) {
+	public void onPhysics(BlockPhysicsEvent event) {
 		if (event.getBlock().getType() != Material.PORTAL) {
 			return;
 		}
@@ -45,7 +45,7 @@ public class BlockListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockBreak(BlockBreakEvent event) {
+	public void onBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
 		Player player = event.getPlayer();
 		
@@ -120,13 +120,14 @@ public class BlockListener implements Listener {
 		// Deny GameWorld Blocks
 		GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
 		if (gameWorld != null) {
-			event.setCancelled(true);
+			if (gameWorld.getDSigns().contains(block) || !gameWorld.getConfig().canBuild()) {
+				event.setCancelled(true);
+			}
 		}
-		
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockPlace(BlockPlaceEvent event) {
+	public void onPlace(BlockPlaceEvent event) {
 		Block block = event.getBlock();
 		
 		// Deny GameWorld Blocks
@@ -135,7 +136,7 @@ public class BlockListener implements Listener {
 			return;
 		}
 		
-		if (GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gameWorld)) {
+		if (gameWorld.getConfig().canBuild() || GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gameWorld)) {
 			return;
 		}
 		
@@ -232,7 +233,7 @@ public class BlockListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onBlockSpread(BlockSpreadEvent event) {
+	public void onSpread(BlockSpreadEvent event) {
 		Block block = event.getBlock();
 		// Block the Spread off Vines
 		if (block.getType() != Material.VINE) {
@@ -254,7 +255,7 @@ public class BlockListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onBlockRedstoneEvent(BlockRedstoneEvent event) {
+	public void onRedstoneEvent(BlockRedstoneEvent event) {
 		new RedstoneEventTask(event.getBlock()).runTaskLater(plugin, 1);
 	}
 	

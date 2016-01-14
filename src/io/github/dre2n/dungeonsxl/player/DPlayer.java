@@ -90,15 +90,15 @@ public class DPlayer {
 			clearPlayerData();
 			
 		} else {
-			this.getPlayer().setGameMode(GameMode.SURVIVAL);
-			WorldConfig dConfig = GameWorld.getByWorld(world).getConfig();
-			if ( !dConfig.getKeepInventoryOnEnter()) {
+			WorldConfig worldConfig = GameWorld.getByWorld(world).getConfig();
+			this.getPlayer().setGameMode(worldConfig.getGameMode());
+			if ( !worldConfig.getKeepInventoryOnEnter()) {
 				clearPlayerData();
 			}
-			if (dConfig.isLobbyDisabled()) {
+			if (worldConfig.isLobbyDisabled()) {
 				ready();
 			}
-			initialLives = GameWorld.getByWorld(world).getConfig().getInitialLives();
+			initialLives = worldConfig.getInitialLives();
 			lives = initialLives;
 		}
 		

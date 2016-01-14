@@ -587,8 +587,12 @@ public class GameWorld {
 	
 	public static void update() {
 		for (GameWorld gameWorld : plugin.getGameWorlds()) {
+			if (gameWorld.getWorld() == null) {
+				return;
+			}
+			
 			// Update Spiders
-			for (LivingEntity mob : gameWorld.world.getLivingEntities()) {
+			for (LivingEntity mob : gameWorld.getWorld().getLivingEntities()) {
 				if (mob.getType() == EntityType.SPIDER || mob.getType() == EntityType.CAVE_SPIDER) {
 					Spider spider = (Spider) mob;
 					if (spider.getTarget() != null) {

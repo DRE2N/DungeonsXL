@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.lang3.EnumUtils;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,16 +35,20 @@ public class WorldConfig {
 	
 	private File file;
 	
+	private List<String> invitedPlayers = new ArrayList<String>();
+	
 	private boolean keepInventory = false;
 	private boolean keepInventoryOnEnter = false;
 	private boolean keepInventoryOnEscape = false;
 	private boolean keepInventoryOnFinish = false;
 	private boolean keepInventoryOnDeath = true;
 	
+	private GameMode gameMode = GameMode.SURVIVAL;
+	private boolean build = false;
+	
 	private List<DClass> dClasses = new ArrayList<DClass>();
 	private Map<Integer, String> msgs = new HashMap<Integer, String>();
 	
-	private List<String> invitedPlayers = new ArrayList<String>();
 	private List<Material> secureObjects = new ArrayList<Material>();
 	
 	private int initialLives = 3;
@@ -208,6 +214,24 @@ public class WorldConfig {
 			keepInventoryOnDeath = plugin.getDefaultConfig().keepInventoryOnDeath;
 		}
 		
+		/* Build */
+		if (configFile.contains("build")) {
+			build = configFile.getBoolean("build");
+		} else {
+			build = plugin.getDefaultConfig().build;
+		}
+		
+		/* GameMode */
+		if (configFile.contains("gameMode")) {
+			if (EnumUtils.isValidEnum(GameMode.class, configFile.getString("gameMode").toUpperCase())) {
+				gameMode = GameMode.valueOf(configFile.getString("gameMode"));
+			} else {
+				gameMode = GameMode.getByValue(configFile.getInt("gameMode"));
+			}
+		} else {
+			gameMode = plugin.getDefaultConfig().gameMode;
+		}
+		
 		/* Lives */
 		if (configFile.contains("initialLives")) {
 			initialLives = configFile.getInt("initialLives");
@@ -315,6 +339,39 @@ public class WorldConfig {
 	}
 	
 	// Getters and Setters
+	/**
+	 * @return the UUIDs or names of the players invited to edit the map
+	 */
+	public CopyOnWriteArrayList<String> getInvitedPlayers() {
+		CopyOnWriteArrayList<String> tmpInvitedPlayers = new CopyOnWriteArrayList<String>();
+		tmpInvitedPlayers.addAll(invitedPlayers);
+		tmpInvitedPlayers.addAll(plugin.getDefaultConfig().invitedPlayers);
+		return tmpInvitedPlayers;
+	}
+	
+	/**
+	 * @param uuid
+	 * the player's unique ID
+	 */
+	public void addInvitedPlayer(String uuid) {
+		invitedPlayers.add(uuid);
+	}
+	
+	/**
+	 * @param uuid
+	 * the player's unique ID
+	 * @param name
+	 * the player's name
+	 */
+	public void removeInvitedPlayers(String uuid, String name) {
+		invitedPlayers.remove(uuid);
+		// remove player from a 0.9.1 and lower file
+		invitedPlayers.remove(name);
+	}
+	
+	/**
+	 * @return the classes
+	 */
 	public List<DClass> getClasses() {
 		if (dClasses != null) {
 			if ( !dClasses.isEmpty()) {
@@ -325,6 +382,10 @@ public class WorldConfig {
 		return plugin.getDefaultConfig().dClasses;
 	}
 	
+	/**
+	 * @param name
+	 * the name of the class
+	 */
 	public DClass getClass(String name) {
 		for (DClass dClass : dClasses) {
 			if (dClass.getName().equals(name)) {
@@ -340,6 +401,12 @@ public class WorldConfig {
 		return null;
 	}
 	
+	/**
+	 * @param id
+	 * the id of the message
+	 * @param returnMainConfig
+	 * if a default value shall be returned
+	 */
 	public String getMsg(int id, boolean returnMainConfig) {
 		String msg = msgs.get(id);
 		if (msg != null) {
@@ -352,27 +419,19 @@ public class WorldConfig {
 		return null;
 	}
 	
+	/**
+	 * @param msg
+	 * the message to set
+	 * @param id
+	 * the ID of the message
+	 */
 	public void setMsg(String msg, int id) {
 		msgs.put(id, msg);
 	}
 	
-	public CopyOnWriteArrayList<String> getInvitedPlayers() {
-		CopyOnWriteArrayList<String> tmpInvitedPlayers = new CopyOnWriteArrayList<String>();
-		tmpInvitedPlayers.addAll(invitedPlayers);
-		tmpInvitedPlayers.addAll(plugin.getDefaultConfig().invitedPlayers);
-		return tmpInvitedPlayers;
-	}
-	
-	public void addInvitedPlayer(String uuid) {
-		invitedPlayers.add(uuid);
-	}
-	
-	public void removeInvitedPlayers(String uuid, String name) {
-		invitedPlayers.remove(uuid);
-		// remove player from a 0.9.1 and lower file
-		invitedPlayers.remove(name);
-	}
-	
+	/**
+	 * @return the objects to get passed to another player of the group when this player leaves
+	 */
 	public CopyOnWriteArrayList<Material> getSecureObjects() {
 		CopyOnWriteArrayList<Material> tmpSecureObjects = new CopyOnWriteArrayList<Material>();
 		tmpSecureObjects.addAll(secureObjects);
@@ -380,58 +439,115 @@ public class WorldConfig {
 		return tmpSecureObjects;
 	}
 	
+	/**
+	 * @return if the inventory shall be kept when the player enters the dungeon
+	 */
 	public boolean getKeepInventoryOnEnter() {
 		return keepInventoryOnEnter;
 	}
 	
+	/**
+	 * @return if the inventory shall be kept when the player leaves the dungeon successlessly
+	 */
 	public boolean getKeepInventoryOnEscape() {
 		return keepInventoryOnEscape;
 	}
 	
+	/**
+	 * @return if the inventory shall be kept when the player finishs the dungeon
+	 */
 	public boolean getKeepInventoryOnFinish() {
 		return keepInventoryOnFinish;
 	}
 	
+	/**
+	 * @return if the inventory shall be kept on death
+	 */
 	public boolean getKeepInventoryOnDeath() {
 		return keepInventoryOnDeath;
 	}
 	
+	/**
+	 * @return the gameMode
+	 */
+	public GameMode getGameMode() {
+		return gameMode;
+	}
+	
+	/**
+	 * @return if players may build
+	 */
+	public boolean canBuild() {
+		return build;
+	}
+	
+	/**
+	 * @return the initial amount of lives
+	 */
 	public int getInitialLives() {
 		return initialLives;
 	}
 	
+	/**
+	 * @return if the lobby is disabled
+	 */
 	public boolean isLobbyDisabled() {
 		return isLobbyDisabled;
 	}
 	
+	/**
+	 * @return the time until a player can play again
+	 */
 	public int getTimeToNextPlay() {
 		return timeToNextPlay;
 	}
 	
+	/**
+	 * @return the time until a player can get loot again
+	 */
 	public int getTimeToNextLoot() {
 		return timeToNextLoot;
 	}
 	
+	/**
+	 * @return the time until a player gets kicked from his group if he is offline
+	 */
 	public int getTimeUntilKickOfflinePlayer() {
 		return timeUntilKickOfflinePlayer;
 	}
 	
+	/**
+	 * @return the requirements
+	 */
 	public List<Requirement> getRequirements() {
 		return requirements;
 	}
 	
+	/**
+	 * @return the rewards
+	 */
 	public List<Reward> getRewards() {
 		return rewards;
 	}
 	
+	/**
+	 * @return the timeLastPlayed
+	 */
 	public int getTimeLastPlayed() {
 		return timeLastPlayed;
 	}
 	
+	/**
+	 * @return all maps needed to be finished to play this map
+	 */
 	public List<String> getFinishedAll() {
 		return finishedAll;
 	}
 	
+	/**
+	 * @return all maps needed to be finished to play this map and a collection of maps of which at
+	 * least one has to be finished
+	 */
 	public List<String> getFinished() {
 		List<String> merge = new ArrayList<String>();
 		merge.addAll(finishedAll);
@@ -439,6 +555,9 @@ public class WorldConfig {
 		return merge;
 	}
 	
+	/**
+	 * @return the mobTypes
+	 */
 	public Set<DMobType> getMobTypes() {
 		return mobTypes;
 	}

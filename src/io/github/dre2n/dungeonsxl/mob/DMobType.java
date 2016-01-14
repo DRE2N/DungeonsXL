@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -79,7 +80,7 @@ public class DMobType {
 		
 		if (type == EntityType.OCELOT) {
 			Ocelot ocelot = (Ocelot) entity;
-			if (Ocelot.Type.valueOf(ocelotType.toUpperCase()) != null) {
+			if (EnumUtils.isValidEnum(Ocelot.Type.class, ocelotType.toUpperCase())) {
 				ocelot.setCatType(Ocelot.Type.valueOf(ocelotType.toUpperCase()));
 			}
 		}
