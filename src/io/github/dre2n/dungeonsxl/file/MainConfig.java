@@ -4,6 +4,8 @@ import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,6 +25,8 @@ public class MainConfig {
 	/* Default Dungeon Settings */
 	public WorldConfig defaultDungeon;
 	
+	private List<String> editCommandWhitelist = new ArrayList<String>();
+	
 	public MainConfig(File file) {
 		if ( !file.exists()) {
 			try {
@@ -36,6 +40,7 @@ public class MainConfig {
 				configFile.set("tutorialStartGroup", "default");
 				configFile.set("tutorialEndGroup", "player");
 				configFile.set("tutorialEndGroup", "player");
+				configFile.createSection("editCommandWhitelist");
 				
 				ConfigurationSection defaultDungeon = configFile.createSection("default");
 				defaultDungeon.set("initialLives", 3);
@@ -78,6 +83,10 @@ public class MainConfig {
 			
 			if (configFile.contains("tutorial.endgroup")) {
 				tutorialEndGroup = configFile.getString("tutorial.endgroup");
+			}
+			
+			if (configFile.contains("editCommandWhitelist")) {
+				editCommandWhitelist = configFile.getStringList("editCommandWhitelist");
 			}
 			
 			/* Default Dungeon Config */
@@ -137,6 +146,13 @@ public class MainConfig {
 	 */
 	public String getTutorialEndGroup() {
 		return tutorialEndGroup;
+	}
+	
+	/**
+	 * @return the editCommandWhitelist
+	 */
+	public List<String> getEditCommandWhitelist() {
+		return editCommandWhitelist;
 	}
 	
 }

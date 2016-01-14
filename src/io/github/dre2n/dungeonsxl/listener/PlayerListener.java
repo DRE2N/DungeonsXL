@@ -1,5 +1,7 @@
 package io.github.dre2n.dungeonsxl.listener;
 
+import java.util.ArrayList;
+
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
@@ -510,14 +512,39 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		if (dPlayer.isEditing() && event.getPlayer().hasPermission("dxl.cmdedit")) {
-			return;
+		String command = event.getMessage().toLowerCase();
+		ArrayList<String> commandWhitelist = new ArrayList<String>();
+		
+		GameWorld gameWorld = GameWorld.getByWorld(dPlayer.getWorld());
+		
+		if (dPlayer.isEditing()) {
+			if (event.getPlayer().hasPermission("dxl.cmdedit")) {
+				return;
+				
+			} else {
+				commandWhitelist.addAll(plugin.getMainConfig().getEditCommandWhitelist());
+			}
+			
+		} else if (gameWorld != null) {
+			if (gameWorld.getConfig() != null) {
+				commandWhitelist.addAll(gameWorld.getConfig().getGameCommandWhitelist());
+			}
 		}
 		
-		String[] splittedCmd = event.getMessage().split(" ");
-		if ( !splittedCmd[0].equalsIgnoreCase("/dungeon") && !splittedCmd[0].equalsIgnoreCase("/dungeonsxl") && !splittedCmd[0].equalsIgnoreCase("/dxl")) {
+		commandWhitelist.add("dungeonsxl");
+		commandWhitelist.add("dungeon");
+		commandWhitelist.add("dxl");
+		
+		event.setCancelled(true);
+		
+		for (String whitelistEntry : commandWhitelist) {
+			if (command.equals('/' + whitelistEntry.toLowerCase()) || command.startsWith('/' + whitelistEntry.toLowerCase() + ' ')) {
+				event.setCancelled(false);
+			}
+		}
+		
+		if (event.isCancelled()) {
 			MessageUtil.sendMessage(event.getPlayer(), dMessages.getMessage(Messages.ERROR_CMD));
-			event.setCancelled(true);
 		}
 	}
 	

@@ -262,38 +262,53 @@ public class EditWorld {
 	
 	// Invite
 	public static boolean addInvitedPlayer(String editWorldName, UUID uuid) {
-		if (exist(editWorldName)) {
-			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml"));
-			config.addInvitedPlayer(uuid.toString());
-			config.save();
-			return true;
+		if ( !exist(editWorldName)) {
+			return false;
 		}
 		
-		return false;
+		File file = new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml");
+		if ( !file.exists()) {
+			try {
+				file.createNewFile();
+				
+			} catch (IOException exception) {
+				exception.printStackTrace();
+				return false;
+			}
+		}
+		WorldConfig config = new WorldConfig(file);
+		config.addInvitedPlayer(uuid.toString());
+		config.save();
+		
+		return true;
 	}
 	
 	public static boolean removeInvitedPlayer(String editWorldName, UUID uuid, String name) {
-		if (exist(editWorldName)) {
-			WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml"));
-			config.removeInvitedPlayers(uuid.toString(), name.toLowerCase());
-			config.save();
-			
-			// Kick Player
-			EditWorld editWorld = EditWorld.getByName(editWorldName);
-			if (editWorld != null) {
-				DPlayer player = DPlayer.getByName(name);
-				
-				if (player != null) {
-					if (editWorld.world.getPlayers().contains(player.getPlayer())) {
-						player.leave();
-					}
-				}
-			}
-			
-			return true;
+		if ( !exist(editWorldName)) {
+			return false;
 		}
 		
-		return false;
+		File file = new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml");
+		if ( !file.exists()) {
+			return false;
+		}
+		WorldConfig config = new WorldConfig(file);
+		config.removeInvitedPlayers(uuid.toString(), name.toLowerCase());
+		config.save();
+		
+		// Kick Player
+		EditWorld editWorld = EditWorld.getByName(editWorldName);
+		if (editWorld != null) {
+			DPlayer player = DPlayer.getByName(name);
+			
+			if (player != null) {
+				if (editWorld.world.getPlayers().contains(player.getPlayer())) {
+					player.leave();
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	public static boolean isInvitedPlayer(String editWorldName, UUID uuid, String name) {
@@ -301,7 +316,12 @@ public class EditWorld {
 			return false;
 		}
 		
-		WorldConfig config = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml"));
+		File file = new File(plugin.getDataFolder() + "/maps/" + editWorldName, "config.yml");
+		if ( !file.exists()) {
+			return false;
+		}
+		
+		WorldConfig config = new WorldConfig(file);
 		// get player from both a 0.9.1 and lower and 0.9.2 and higher file
 		if (config.getInvitedPlayers().contains(name.toLowerCase()) || config.getInvitedPlayers().contains(uuid.toString())) {
 			return true;

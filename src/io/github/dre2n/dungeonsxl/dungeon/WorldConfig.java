@@ -39,11 +39,11 @@ public class WorldConfig {
 	private boolean keepInventoryOnFinish = false;
 	private boolean keepInventoryOnDeath = true;
 	
-	private CopyOnWriteArrayList<DClass> dClasses = new CopyOnWriteArrayList<DClass>();
+	private List<DClass> dClasses = new ArrayList<DClass>();
 	private Map<Integer, String> msgs = new HashMap<Integer, String>();
 	
-	private CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<Material>();
+	private List<String> invitedPlayers = new ArrayList<String>();
+	private List<Material> secureObjects = new ArrayList<Material>();
 	
 	private int initialLives = 3;
 	
@@ -63,8 +63,9 @@ public class WorldConfig {
 	// MobTypes
 	private Set<DMobType> mobTypes = new HashSet<DMobType>();
 	
+	private List<String> gameCommandWhitelist = new ArrayList<String>();
+	
 	public WorldConfig() {
-		
 	}
 	
 	public WorldConfig(File file) {
@@ -147,18 +148,21 @@ public class WorldConfig {
 		
 		/* Secure Objects */
 		if (configFile.contains("secureObjects")) {
-			List<Integer> secureObjectList = configFile.getIntegerList("secureObjects");
-			for (int i : secureObjectList) {
-				secureObjects.add(Material.getMaterial(i));
+			List<String> secureObjectList = configFile.getStringList("secureObjects");
+			for (String id : secureObjectList) {
+				if (Material.getMaterial(NumberUtil.parseInt(id)) != null) {
+					secureObjects.add(Material.getMaterial(NumberUtil.parseInt(id)));
+					
+				} else if (Material.getMaterial(id) != null) {
+					secureObjects.add(Material.getMaterial(id));
+				}
 			}
 		}
 		
 		/* Invited Players */
 		if (configFile.contains("invitedPlayers")) {
-			List<String> invitedPlayers = configFile.getStringList("invitedPlayers");
-			for (String i : invitedPlayers) {
-				invitedPlayers.add(i);
-			}
+			invitedPlayers = configFile.getStringList("invitedPlayers");
+			
 		}
 		
 		/* Keep Inventory */
@@ -272,6 +276,10 @@ public class WorldConfig {
 		/* Mobtypes */
 		configSectionMessages = configFile.getConfigurationSection("mobTypes");
 		mobTypes = DMobType.load(configSectionMessages);
+		
+		if (configFile.contains("gameCommandWhitelist")) {
+			gameCommandWhitelist = configFile.getStringList("gameCommandWhitelist");
+		}
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -307,7 +315,7 @@ public class WorldConfig {
 	}
 	
 	// Getters and Setters
-	public CopyOnWriteArrayList<DClass> getClasses() {
+	public List<DClass> getClasses() {
 		if (dClasses != null) {
 			if ( !dClasses.isEmpty()) {
 				return dClasses;
@@ -433,6 +441,13 @@ public class WorldConfig {
 	
 	public Set<DMobType> getMobTypes() {
 		return mobTypes;
+	}
+	
+	/**
+	 * @return the gameCommandWhitelist
+	 */
+	public List<String> getGameCommandWhitelist() {
+		return gameCommandWhitelist;
 	}
 	
 }
