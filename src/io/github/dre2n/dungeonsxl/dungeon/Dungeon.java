@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.dungeon;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 
 import java.io.File;
 

@@ -1,19 +1,11 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.mob.DMob;
-import io.github.dre2n.dungeonsxl.mob.DMobType;
+import io.github.dre2n.dungeonsxl.task.MobSpawnTask;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Skeleton.SkeletonType;
-import org.bukkit.inventory.ItemStack;
 
 public class MobSign extends DSign {
 	
@@ -26,10 +18,115 @@ public class MobSign extends DSign {
 	private int amount = 1;
 	private boolean initialized;
 	private boolean active;
-	private int taskId = -1;
+	private MobSpawnTask task;
 	
 	public MobSign(Sign sign, GameWorld gameWorld) {
 		super(sign, gameWorld);
+	}
+	
+	/**
+	 * @return the mob
+	 */
+	public String getMob() {
+		return mob;
+	}
+	
+	/**
+	 * @param mob
+	 * the mob to set
+	 */
+	public void setMob(String mob) {
+		this.mob = mob;
+	}
+	
+	/**
+	 * @return the maxinterval
+	 */
+	public int getMaxinterval() {
+		return maxinterval;
+	}
+	
+	/**
+	 * @param maxinterval
+	 * the maxinterval to set
+	 */
+	public void setMaxinterval(int maxinterval) {
+		this.maxinterval = maxinterval;
+	}
+	
+	/**
+	 * @return the interval
+	 */
+	public int getInterval() {
+		return interval;
+	}
+	
+	/**
+	 * @param interval
+	 * the interval to set
+	 */
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
+	
+	/**
+	 * @return the amount
+	 */
+	public int getAmount() {
+		return amount;
+	}
+	
+	/**
+	 * @param amount
+	 * the amount to set
+	 */
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	
+	/**
+	 * @return the initialized
+	 */
+	public boolean isInitialized() {
+		return initialized;
+	}
+	
+	/**
+	 * @param initialized
+	 * the initialized to set
+	 */
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
+	
+	/**
+	 * @return the active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+	
+	/**
+	 * @param active
+	 * the active to set
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	/**
+	 * @return the task
+	 */
+	public MobSpawnTask getTask() {
+		return task;
+	}
+	
+	/**
+	 * @param task
+	 * the task to set
+	 */
+	public void setTask(MobSpawnTask task) {
+		this.task = task;
 	}
 	
 	@Override
@@ -77,9 +174,7 @@ public class MobSign extends DSign {
 			return;
 		}
 		
-		MobSpawnScheduler scheduler = new MobSpawnScheduler(this);
-		
-		taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, scheduler, 0L, 20L);
+		task = (MobSpawnTask) new MobSpawnTask(this).runTaskTimer(plugin, 0L, 20L);
 		
 		active = true;
 	}
@@ -100,72 +195,9 @@ public class MobSign extends DSign {
 			return;
 		}
 		
-		if (taskId != -1) {
-			plugin.getServer().getScheduler().cancelTask(taskId);
-			taskId = -1;
-		}
-	}
-	
-	public class MobSpawnScheduler implements Runnable {
-		private MobSign sign;
-		
-		public MobSpawnScheduler(MobSign sign) {
-			this.sign = sign;
-		}
-		
-		@SuppressWarnings("deprecation")
-		@Override
-		public void run() {
-			if (sign.interval <= 0) {
-				World world = sign.getSign().getWorld();
-				GameWorld gameWorld = GameWorld.getByWorld(world);
-				
-				if (gameWorld != null) {
-					Location spawnLoc = sign.getSign().getLocation().add(0.5, 0, 0.5);
-					
-					// Check normal mobs
-					if (EntityType.fromName(sign.mob) != null) {
-						if (EntityType.fromName(sign.mob).isAlive()) {
-							LivingEntity entity = (LivingEntity) world.spawnEntity(spawnLoc, EntityType.fromName(sign.mob));
-							
-							// Add Bow to normal Skeletons
-							if (entity.getType() == EntityType.SKELETON) {
-								Skeleton skeleton = (Skeleton) entity;
-								if (skeleton.getSkeletonType() == SkeletonType.NORMAL) {
-									skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW));
-								}
-							}
-							
-							// Disable Despawning
-							entity.setRemoveWhenFarAway(false);
-							
-							new DMob(entity, sign.getGameWorld(), null);
-						}
-					}
-					
-					// Check custom mobs
-					DMobType mobType = DMobType.getByName(sign.mob, gameWorld.getConfig().getMobTypes());
-					
-					if (mobType != null) {
-						mobType.spawn(GameWorld.getByWorld(world), spawnLoc);
-					}
-					
-					// Set the amount
-					if (amount != -1) {
-						if (amount > 1) {
-							amount--;
-						} else {
-							killTask();
-							sign.remove();
-						}
-					}
-					
-					sign.interval = sign.maxinterval;
-				} else {
-					sign.killTask();
-				}
-			}
-			sign.interval--;
+		if (task != null) {
+			task.cancel();
+			task = null;
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.util.offlineplayerutil;
+package io.github.dre2n.dungeonsxl.util.playerutil;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.util.VersionUtil;
@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class OfflinePlayerUtil {
+public class PlayerUtil {
 	
 	public static Player getOfflinePlayer(String player, UUID uuid) {
 		VersionUtil versions = DungeonsXL.getPlugin().getVersion();
@@ -61,6 +61,14 @@ public class OfflinePlayerUtil {
 		} else {
 			return null;
 		}
+	}
+	
+	public static void secureTeleport(Player player, Location location) {
+		if (player.isInsideVehicle()) {
+			player.leaveVehicle();
+		}
+		
+		player.teleport(location);
 	}
 	
 }

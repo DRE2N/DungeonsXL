@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.util.VersionUtil.Internals;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -17,7 +17,7 @@ public class ReloadCommand extends DCommand {
 		setCommand("reload");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_RELOAD));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_RELOAD));
 		setPermission("dxl.reload");
 		setPlayerCommand(true);
 		setConsoleCommand(true);
@@ -43,19 +43,19 @@ public class ReloadCommand extends DCommand {
 		
 		// Save
 		plugin.saveData();
-		plugin.getDMessages().save();
+		plugin.getMessageConfig().save();
 		
 		// Load Config
 		plugin.loadMainConfig(new File(plugin.getDataFolder(), "config.yml"));
-		plugin.loadDMessages(new File(plugin.getDataFolder(), "languages/" + plugin.getMainConfig().getLanguage() + ".yml"));
+		plugin.loadMessageConfig(new File(plugin.getDataFolder(), "languages/" + plugin.getMainConfig().getLanguage() + ".yml"));
 		plugin.loadVersionUtil();
 		plugin.loadDCommands();
 		plugin.loadDungeons();
 		
 		MessageUtil.sendPluginTag(sender, plugin);
-		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_RELOAD_DONE));
-		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-		MessageUtil.sendCenteredMessage(sender, dMessages.getMessage(Messages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
+		MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_RELOAD_DONE));
+		MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
+		MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
 	}
 	
 }

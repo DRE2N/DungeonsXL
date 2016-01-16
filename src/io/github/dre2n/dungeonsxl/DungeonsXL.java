@@ -1,13 +1,13 @@
 package io.github.dre2n.dungeonsxl;
 
 import io.github.dre2n.dungeonsxl.command.DCommands;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages;
-import io.github.dre2n.dungeonsxl.file.MainConfig;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
@@ -23,6 +23,9 @@ import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirements;
 import io.github.dre2n.dungeonsxl.reward.Rewards;
 import io.github.dre2n.dungeonsxl.sign.DSigns;
+import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
+import io.github.dre2n.dungeonsxl.task.UpdateTask;
+import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.Triggers;
 import io.github.dre2n.dungeonsxl.util.FileUtil;
 import io.github.dre2n.dungeonsxl.util.VersionUtil;
@@ -49,14 +52,20 @@ public class DungeonsXL extends JavaPlugin {
 	private Permission permissionProvider;
 	
 	private MainConfig mainConfig;
-	private DMessages dMessages;
+	private MessageConfig messageConfig;
+	
 	private VersionUtil versionUtil;
+	
 	private DCommands dCommands;
 	private DSigns dSigns;
 	private Requirements requirements;
 	private Rewards rewards;
 	private Triggers triggers;
 	private Dungeons dungeons;
+	
+	private WorldUnloadTask worldUnloadTask;
+	private LazyUpdateTask lazyUpdateTask;
+	private UpdateTask updateTask;
 	
 	private CopyOnWriteArrayList<Player> inBreakMode = new CopyOnWriteArrayList<Player>();
 	private CopyOnWriteArrayList<Player> chatSpyers = new CopyOnWriteArrayList<Player>();
@@ -72,17 +81,16 @@ public class DungeonsXL extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = this;
-		getDataFolder().mkdir();
 		
 		// InitFolders
 		initFolders();
 		
 		// Load Language
-		loadDMessages(new File(plugin.getDataFolder(), "languages/en.yml"));
+		loadMessageConfig(new File(plugin.getDataFolder(), "languages/en.yml"));
 		// Load Config
 		loadMainConfig(new File(plugin.getDataFolder(), "config.yml"));
 		// Load Language 2
-		loadDMessages(new File(plugin.getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
+		loadMessageConfig(new File(plugin.getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
 		loadVersionUtil();
 		loadDCommands();
 		loadRequirements();
@@ -107,8 +115,10 @@ public class DungeonsXL extends JavaPlugin {
 		// Load All
 		loadAll();
 		
-		// Scheduler
-		initSchedulers();
+		// Tasks
+		startWorldUnloadTask(1200L);
+		startLazyUpdateTask(20L);
+		startUpdateTask(20L);
 		
 		// MSG
 		getLogger().info("DungeonsXL " + getDescription().getVersion() + " for Spigot 1.8.8 loaded succesfully!");
@@ -121,7 +131,7 @@ public class DungeonsXL extends JavaPlugin {
 	public void onDisable() {
 		// Save
 		saveData();
-		dMessages.save();
+		messageConfig.save();
 		
 		// DPlayer leaves World
 		for (DPlayer dplayer : dPlayers) {
@@ -170,41 +180,6 @@ public class DungeonsXL extends JavaPlugin {
 		if ( !maps.exists()) {
 			maps.mkdir();
 		}
-	}
-	
-	public void initSchedulers() {
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				for (GameWorld gameWorld : gameWorlds) {
-					if (gameWorld.getWorld().getPlayers().isEmpty()) {
-						if (DPlayer.getByWorld(gameWorld.getWorld()).isEmpty()) {
-							gameWorld.delete();
-						}
-					}
-				}
-				for (EditWorld editWorld : editWorlds) {
-					if (editWorld.getWorld().getPlayers().isEmpty()) {
-						editWorld.delete();
-					}
-				}
-			}
-		}, 0L, 1200L);
-		
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				GameWorld.update();
-				DPlayer.update(true);
-			}
-		}, 0L, 20L);
-		
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				DPlayer.update(false);
-			}
-		}, 0L, 2L);
 	}
 	
 	// Save and Load
@@ -359,17 +334,17 @@ public class DungeonsXL extends JavaPlugin {
 	}
 	
 	/**
-	 * @return the loaded instance of DMessages
+	 * @return the loaded instance of MessageConfig
 	 */
-	public DMessages getDMessages() {
-		return dMessages;
+	public MessageConfig getMessageConfig() {
+		return messageConfig;
 	}
 	
 	/**
-	 * load / reload a new instance of DMessages
+	 * load / reload a new instance of MessageConfig
 	 */
-	public void loadDMessages(File file) {
-		dMessages = new DMessages(file);
+	public void loadMessageConfig(File file) {
+		messageConfig = new MessageConfig(file);
 	}
 	
 	/**
@@ -454,6 +429,48 @@ public class DungeonsXL extends JavaPlugin {
 	 */
 	public void loadDungeons() {
 		dungeons = new Dungeons();
+	}
+	
+	/**
+	 * @return the worldUnloadTask
+	 */
+	public WorldUnloadTask getWorldUnloadTask() {
+		return worldUnloadTask;
+	}
+	
+	/**
+	 * start a new WorldUnloadTask
+	 */
+	public void startWorldUnloadTask(long period) {
+		worldUnloadTask = (WorldUnloadTask) new WorldUnloadTask().runTaskTimerAsynchronously(this, 0L, period);
+	}
+	
+	/**
+	 * @return the lazyUpdateTask
+	 */
+	public LazyUpdateTask getLazyUpdateTask() {
+		return lazyUpdateTask;
+	}
+	
+	/**
+	 * start a new LazyUpdateTask
+	 */
+	public void startLazyUpdateTask(long period) {
+		lazyUpdateTask = (LazyUpdateTask) new LazyUpdateTask().runTaskTimerAsynchronously(this, 0L, period);
+	}
+	
+	/**
+	 * @return the updateTask
+	 */
+	public UpdateTask getUpdateTask() {
+		return updateTask;
+	}
+	
+	/**
+	 * start a new LazyUpdateTask
+	 */
+	public void startUpdateTask(long period) {
+		updateTask = (UpdateTask) new UpdateTask().runTaskTimerAsynchronously(this, 0L, period);
 	}
 	
 	/**

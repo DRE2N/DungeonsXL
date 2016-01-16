@@ -3,23 +3,23 @@ package io.github.dre2n.dungeonsxl.listener;
 import java.util.ArrayList;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameChest;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
-import io.github.dre2n.dungeonsxl.file.DMessages;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
-import io.github.dre2n.dungeonsxl.util.MiscUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import org.bukkit.ChatColor;
@@ -47,12 +47,11 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
-	DMessages dMessages = plugin.getDMessages();
+	MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onDeath(PlayerDeathEvent event) {
@@ -79,17 +78,17 @@ public class PlayerListener implements Listener {
 		dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
 		
 		if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-			MessageUtil.broadcastMessage(dMessages.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
+			MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
 			
 			// TODO: This Runnable is a workaround for a bug I couldn't find, yet...
-			new BukkitRunnable() {
+			new org.bukkit.scheduler.BukkitRunnable() {
 				public void run() {
 					dPlayer.leave();
 				}
 			}.runTaskLater(plugin, 1L);
 			
 		} else if ( !(dPlayer.getLives() == -1)) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
 			
 		} else if (dConfig != null) {
 			if (dConfig.getKeepInventoryOnDeath()) {
@@ -118,13 +117,13 @@ public class PlayerListener implements Listener {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.ENDER_CHEST) {
 						if ( !player.hasPermission("dxl.bypass")) {
-							MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_ENDERCHEST));
+							MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_ENDERCHEST));
 							event.setCancelled(true);
 						}
 						
 					} else if (clickedBlock.getType() == Material.BED_BLOCK) {
 						if ( !player.hasPermission("dxl.bypass")) {
-							MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_BED));
+							MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_BED));
 							event.setCancelled(true);
 						}
 					}
@@ -136,7 +135,7 @@ public class PlayerListener implements Listener {
 				if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
 					if (clickedBlock.getType() == Material.DISPENSER) {
 						if ( !player.hasPermission("dxl.bypass")) {
-							MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DISPENSER));
+							MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DISPENSER));
 							event.setCancelled(true);
 						}
 					}
@@ -154,13 +153,13 @@ public class PlayerListener implements Listener {
 							if (dportal.getPlayer() == player) {
 								if (dportal.getBlock1() == null) {
 									dportal.setBlock1(event.getClickedBlock());
-									MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_PROGRESS));
+									MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_PROGRESS));
 									
 								} else if (dportal.getBlock2() == null) {
 									dportal.setBlock2(event.getClickedBlock());
 									dportal.setActive(true);
 									dportal.create();
-									MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PORTAL_CREATED));
+									MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_CREATED));
 								}
 								event.setCancelled(true);
 							}
@@ -240,7 +239,7 @@ public class PlayerListener implements Listener {
 							if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 								trigger.onTrigger(player);
 							} else {
-								MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEFT_CLICK));
+								MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEFT_CLICK));
 							}
 						}
 						
@@ -251,7 +250,7 @@ public class PlayerListener implements Listener {
 									if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 										dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
 									} else {
-										MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEFT_CLICK));
+										MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEFT_CLICK));
 									}
 									return;
 								}
@@ -291,7 +290,7 @@ public class PlayerListener implements Listener {
 			for (Material material : gameWorld.getConfig().getSecureObjects()) {
 				if (material == event.getItemDrop().getItemStack().getType()) {
 					event.setCancelled(true);
-					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DROP));
+					MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DROP));
 					return;
 				}
 			}
@@ -335,7 +334,7 @@ public class PlayerListener implements Listener {
 				// Da einige Plugins einen anderen Respawn setzen wird
 				// ein Scheduler gestartet der den Player nach einer
 				// Sekunde teleportiert.
-				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dGroup.getGameWorld().getLocStart()), 10);
+				new RespawnTask(player, dGroup.getGameWorld().getLocStart()).runTaskLater(plugin, 10L);
 				
 				if (dPlayer.getWolf() != null) {
 					dPlayer.getWolf().teleport(dGroup.getGameWorld().getLocStart());
@@ -347,7 +346,7 @@ public class PlayerListener implements Listener {
 				// Da einige Plugins einen anderen Respawn setzen wird
 				// ein Scheduler gestartet der den Player nach einer
 				// Sekunde teleportiert.
-				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RespawnRunnable(player, dPlayer.getCheckpoint()), 10);
+				new RespawnTask(player, dPlayer.getCheckpoint()).runTaskLater(plugin, 10L);
 				
 				if (dPlayer.getWolf() != null) {
 					dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
@@ -420,11 +419,11 @@ public class PlayerListener implements Listener {
 				dPlayer.leave();
 				
 			} else if (timeUntilKickOfflinePlayer > 0) {
-				dGroup.sendMessage(dMessages.getMessage(Messages.PLAYER_OFFLINE, dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer), player);
+				dGroup.sendMessage(messageConfig.getMessage(Messages.PLAYER_OFFLINE, dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer), player);
 				dPlayer.setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
 				
 			} else {
-				dGroup.sendMessage(dMessages.getMessage(Messages.PLAYER_OFFLINE_NEVER, dPlayer.getPlayer().getName()), player);
+				dGroup.sendMessage(messageConfig.getMessage(Messages.PLAYER_OFFLINE_NEVER, dPlayer.getPlayer().getName()), player);
 			}
 			
 		} else if (dPlayer.isEditing()) {
@@ -490,7 +489,7 @@ public class PlayerListener implements Listener {
 			}
 			
 			if (dGroup.getGameWorld() == null) {
-				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_TUTORIAL_NOT_EXIST));
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_TUTORIAL_NOT_EXIST));
 				continue;
 			}
 			
@@ -544,7 +543,7 @@ public class PlayerListener implements Listener {
 		}
 		
 		if (event.isCancelled()) {
-			MessageUtil.sendMessage(event.getPlayer(), dMessages.getMessage(Messages.ERROR_CMD));
+			MessageUtil.sendMessage(event.getPlayer(), messageConfig.getMessage(Messages.ERROR_CMD));
 		}
 	}
 	
@@ -596,39 +595,6 @@ public class PlayerListener implements Listener {
 		        && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
 			inventory.setInventoryView(inventory.getPlayer().openInventory(inventory.getInventory()));
 			inventory.setTime(System.currentTimeMillis());
-		}
-	}
-	
-	// Etc. ---------------------------------
-	
-	public class RespawnRunnable implements Runnable {
-		private Player player;
-		private Location location;
-		
-		public RespawnRunnable(Player player, Location location) {
-			this.location = location;
-			this.player = player;
-		}
-		
-		@Override
-		public void run() {
-			if (player.getLocation().distance(location) > 2) {
-				MiscUtil.secureTeleport(player, location);
-			}
-			
-			DPlayer dPlayer = DPlayer.getByPlayer(player);
-			
-			if (dPlayer == null) {
-				return;
-			}
-			
-			// Respawn Items
-			if (dPlayer.getRespawnInventory() != null || dPlayer.getRespawnArmor() != null) {
-				player.getInventory().setContents(dPlayer.getRespawnInventory());
-				player.getInventory().setArmorContents(dPlayer.getRespawnArmor());
-				dPlayer.setRespawnInventory(null);
-				dPlayer.setRespawnArmor(null);
-			}
 		}
 	}
 	

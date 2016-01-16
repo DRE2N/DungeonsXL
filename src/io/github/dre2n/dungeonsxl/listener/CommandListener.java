@@ -3,8 +3,8 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.command.DCommand;
-import io.github.dre2n.dungeonsxl.file.DMessages;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
+import io.github.dre2n.dungeonsxl.config.MessageConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,13 +19,13 @@ public class CommandListener implements CommandExecutor {
 		DungeonsXL plugin = DungeonsXL.getPlugin();
 		
 		if (args.length > 0) {
-			DMessages dMessages = plugin.getDMessages();
+			MessageConfig MessageConfig = plugin.getMessageConfig();
 			DCommand dCommand = plugin.getDCommands().getDCommand(args[0]);
 			
 			if (dCommand != null) {
 				if (sender instanceof ConsoleCommandSender) {
 					if ( !dCommand.isConsoleCommand()) {
-						MessageUtil.sendMessage(sender, dMessages.getMessage(Messages.LOG_ERROR_NO_CONSOLE_COMMAND, dCommand.getCommand()));
+						MessageUtil.sendMessage(sender, MessageConfig.getMessage(Messages.LOG_ERROR_NO_CONSOLE_COMMAND, dCommand.getCommand()));
 						return false;
 					}
 				}
@@ -34,13 +34,13 @@ public class CommandListener implements CommandExecutor {
 					Player player = (Player) sender;
 					
 					if ( !dCommand.isPlayerCommand()) {
-						MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PLAYER_COMMAND, dCommand.getCommand()));
+						MessageUtil.sendMessage(player, MessageConfig.getMessage(Messages.ERROR_NO_PLAYER_COMMAND, dCommand.getCommand()));
 						return false;
 						
 					} else {
 						if (dCommand.getPermission() != null) {
 							if ( !dCommand.playerHasPermissions(player)) {
-								MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PERMISSIONS));
+								MessageUtil.sendMessage(player, MessageConfig.getMessage(Messages.ERROR_NO_PERMISSIONS));
 								return false;
 							}
 						}

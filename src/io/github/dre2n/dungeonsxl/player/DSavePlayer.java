@@ -1,8 +1,7 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.util.MiscUtil;
-import io.github.dre2n.dungeonsxl.util.offlineplayerutil.OfflinePlayerUtil;
+import io.github.dre2n.dungeonsxl.util.playerutil.PlayerUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +65,7 @@ public class DSavePlayer {
 		Player player = plugin.getServer().getPlayer(playerName);
 		boolean offline = false;
 		if (player == null) {
-			player = OfflinePlayerUtil.getOfflinePlayer(playerName, UUID.fromString(uuid), oldLocation);
+			player = PlayerUtil.getOfflinePlayer(playerName, UUID.fromString(uuid), oldLocation);
 			offline = true;
 		}
 		if (player == null) {
@@ -96,7 +95,7 @@ public class DSavePlayer {
 			}
 			
 			if ( !offline && oldLocation.getWorld() != null) {
-				MiscUtil.secureTeleport(player, oldLocation);
+				PlayerUtil.secureTeleport(player, oldLocation);
 			}
 			
 		} catch (NullPointerException exception) {

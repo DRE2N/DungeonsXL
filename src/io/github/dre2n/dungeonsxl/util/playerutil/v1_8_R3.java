@@ -1,20 +1,21 @@
-package io.github.dre2n.dungeonsxl.util.offlineplayerutil;
+package io.github.dre2n.dungeonsxl.util.playerutil;
 
 import java.io.File;
 import java.util.UUID;
 
-import net.minecraft.server.v1_7_R4.EntityPlayer;
-import net.minecraft.server.v1_7_R4.MinecraftServer;
-import net.minecraft.server.v1_7_R4.PlayerInteractManager;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
-import org.bukkit.craftbukkit.v1_7_R4.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.Player;
 
-class v1_7_R4 {
+import com.mojang.authlib.GameProfile;
+
+class v1_8_R3 {
 	
 	static Player getOfflinePlayer(String player, UUID uuid) {
 		Player pplayer = null;
