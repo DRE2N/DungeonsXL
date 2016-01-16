@@ -87,6 +87,10 @@ public class EditWorld {
 		
 		world.save();
 		
+		File dir = new File("DXL_Edit_" + id);
+		FileUtil.copyDirectory(dir, new File(plugin.getDataFolder(), "/maps/" + mapName));
+		FileUtil.deleteUnusedFiles(new File(plugin.getDataFolder(), "/maps/" + mapName));
+		
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(plugin.getDataFolder(), "/maps/" + mapName + "/DXLData.data")));
 			out.writeInt(sign.size());
