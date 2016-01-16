@@ -46,6 +46,9 @@ public class WorldConfig {
 	private GameMode gameMode = GameMode.SURVIVAL;
 	private boolean build = false;
 	
+	private boolean playerVersusPlayer = false;
+	private boolean friendlyFire = false;
+	
 	private List<DClass> dClasses = new ArrayList<DClass>();
 	private Map<Integer, String> msgs = new HashMap<Integer, String>();
 	
@@ -230,6 +233,20 @@ public class WorldConfig {
 			}
 		} else {
 			gameMode = plugin.getDefaultConfig().gameMode;
+		}
+		
+		/* PvP */
+		if (configFile.contains("playerVersusPlayer")) {
+			playerVersusPlayer = configFile.getBoolean("playerVersusPlayer");
+		} else {
+			playerVersusPlayer = plugin.getDefaultConfig().playerVersusPlayer;
+		}
+		
+		/* Friendly fire */
+		if (configFile.contains("friendlyFire")) {
+			friendlyFire = configFile.getBoolean("friendlyFire");
+		} else {
+			friendlyFire = plugin.getDefaultConfig().friendlyFire;
 		}
 		
 		/* Lives */
@@ -479,6 +496,20 @@ public class WorldConfig {
 	 */
 	public boolean canBuild() {
 		return build;
+	}
+	
+	/**
+	 * @return if players may attack each other
+	 */
+	public boolean isPlayerVersusPlayer() {
+		return playerVersusPlayer;
+	}
+	
+	/**
+	 * @return if players may attack group members
+	 */
+	public boolean isFriendlyFire() {
+		return friendlyFire;
 	}
 	
 	/**

@@ -22,6 +22,7 @@ public class DGroup {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
+	private String name;
 	private CopyOnWriteArrayList<Player> players = new CopyOnWriteArrayList<Player>();
 	private String dungeonName;
 	private String mapName;
@@ -31,8 +32,28 @@ public class DGroup {
 	private int floorCount;
 	private List<Reward> rewards = new ArrayList<Reward>();
 	
+	public DGroup(String name, Player player, String identifier, boolean multiFloor) {
+		plugin.getDGroups().add(this);
+		this.name = name;
+		
+		this.players.add(player);
+		
+		Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+		if (multiFloor && dungeon != null) {
+			this.dungeonName = identifier;
+			this.mapName = dungeon.getConfig().getStartFloor();
+			this.unplayedFloors = dungeon.getConfig().getFloors();
+			
+		} else {
+			this.mapName = identifier;
+		}
+		this.playing = false;
+		this.floorCount = 0;
+	}
+	
 	public DGroup(Player player, String identifier, boolean multiFloor) {
 		plugin.getDGroups().add(this);
+		this.name = "Group_" + plugin.getDGroups().size();
 		
 		this.players.add(player);
 		
@@ -50,6 +71,21 @@ public class DGroup {
 	}
 	
 	// Getters and setters
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @param name
+	 * the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 	/**
 	 * @return the players

@@ -1,10 +1,12 @@
 package io.github.dre2n.dungeonsxl.listener;
 
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.mob.DMob;
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 
 import java.util.List;
@@ -80,56 +82,84 @@ public class EntityListener implements Listener {
 	public void onEntityDamage(EntityDamageEvent event) {
 		World world = event.getEntity().getWorld();
 		GameWorld gameWorld = GameWorld.getByWorld(world);
-		if (gameWorld != null) {
-			// Deny all Damage in Lobby
-			if ( !gameWorld.isPlaying()) {
+		
+		if (gameWorld == null) {
+			return;
+		}
+		
+		WorldConfig config = gameWorld.getConfig();
+		
+		// Deny all Damage in Lobby
+		if ( !gameWorld.isPlaying()) {
+			event.setCancelled(true);
+		}
+		
+		// Deny all Damage from Players to Players
+		if ( !(event instanceof EntityDamageByEntityEvent)) {
+			return;
+		}
+		
+		EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent) event;
+		Entity attackerEntity = sub.getDamager();
+		Entity attackedEntity = sub.getEntity();
+		
+		if (attackerEntity instanceof Projectile) {
+			attackerEntity = (Entity) ((Projectile) attackerEntity).getShooter();
+		}
+		
+		Player attackerPlayer = null;
+		Player attackedPlayer = null;
+		
+		DGroup attackerDGroup = null;
+		DGroup attackedDGroup = null;
+		
+		if (attackerEntity instanceof Player && attackedEntity instanceof Player) {
+			attackerPlayer = (Player) attackerEntity;
+			attackedPlayer = (Player) attackedEntity;
+			
+			attackerDGroup = DGroup.getByPlayer(attackerPlayer);
+			attackedDGroup = DGroup.getByPlayer(attackedPlayer);
+			
+			if (config.isPlayerVersusPlayer()) {
 				event.setCancelled(true);
 			}
-			// Deny all Damage from Players to Players
-			if (event instanceof EntityDamageByEntityEvent) {
-				EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent) event;
-				Entity entity = sub.getDamager();
-				Entity entity2 = sub.getEntity();
-				
-				if (entity instanceof Projectile) {
-					entity = (Entity) ((Projectile) entity).getShooter();
-				}
-				
-				if (entity instanceof Player && entity2 instanceof Player) {
+			
+			if (attackerDGroup != null && attackedDGroup != null) {
+				if (config.isFriendlyFire() && attackerDGroup.equals(attackedDGroup)) {
 					event.setCancelled(true);
 				}
-				
-				if (entity instanceof LivingEntity && entity2 instanceof LivingEntity) {
-					if ( !(entity instanceof Player) && !(entity2 instanceof Player)) {
-						event.setCancelled(true);
-					}
-					
-					// Check Dogs
-					if (entity instanceof Player || entity2 instanceof Player) {
-						for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
-							if (dPlayer.getWolf() != null) {
-								if (entity == dPlayer.getWolf() || entity2 == dPlayer.getWolf()) {
-									event.setCancelled(true);
-									return;
-								}
-							}
+			}
+		}
+		
+		if (attackerEntity instanceof LivingEntity && attackedEntity instanceof LivingEntity) {
+			if ( !(attackerEntity instanceof Player) && !(attackedEntity instanceof Player)) {
+				event.setCancelled(true);
+			}
+			
+			// Check Dogs
+			if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
+				for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
+					if (dPlayer.getWolf() != null) {
+						if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
+							event.setCancelled(true);
+							return;
 						}
 					}
-					
-					for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
-						if (dPlayer.getWolf() != null) {
-							if (entity instanceof Player || entity2 instanceof Player) {
-								if (entity == dPlayer.getWolf() || entity2 == dPlayer.getWolf()) {
-									event.setCancelled(true);
-									return;
-								}
-								
-							} else {
-								if (entity == dPlayer.getWolf() || entity2 == dPlayer.getWolf()) {
-									event.setCancelled(false);
-									return;
-								}
-							}
+				}
+			}
+			
+			for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
+				if (dPlayer.getWolf() != null) {
+					if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
+						if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
+							event.setCancelled(true);
+							return;
+						}
+						
+					} else {
+						if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
+							event.setCancelled(false);
+							return;
 						}
 					}
 				}
