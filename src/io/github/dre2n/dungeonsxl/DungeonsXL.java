@@ -44,6 +44,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public class DungeonsXL extends JavaPlugin {
 	
@@ -63,9 +64,9 @@ public class DungeonsXL extends JavaPlugin {
 	private Triggers triggers;
 	private Dungeons dungeons;
 	
-	private WorldUnloadTask worldUnloadTask;
-	private LazyUpdateTask lazyUpdateTask;
-	private UpdateTask updateTask;
+	private BukkitTask worldUnloadTask;
+	private BukkitTask lazyUpdateTask;
+	private BukkitTask updateTask;
 	
 	private CopyOnWriteArrayList<Player> inBreakMode = new CopyOnWriteArrayList<Player>();
 	private CopyOnWriteArrayList<Player> chatSpyers = new CopyOnWriteArrayList<Player>();
@@ -434,7 +435,7 @@ public class DungeonsXL extends JavaPlugin {
 	/**
 	 * @return the worldUnloadTask
 	 */
-	public WorldUnloadTask getWorldUnloadTask() {
+	public BukkitTask getWorldUnloadTask() {
 		return worldUnloadTask;
 	}
 	
@@ -442,13 +443,13 @@ public class DungeonsXL extends JavaPlugin {
 	 * start a new WorldUnloadTask
 	 */
 	public void startWorldUnloadTask(long period) {
-		worldUnloadTask = (WorldUnloadTask) new WorldUnloadTask().runTaskTimerAsynchronously(this, 0L, period);
+		worldUnloadTask = new WorldUnloadTask().runTaskTimerAsynchronously(this, 0L, period);
 	}
 	
 	/**
 	 * @return the lazyUpdateTask
 	 */
-	public LazyUpdateTask getLazyUpdateTask() {
+	public BukkitTask getLazyUpdateTask() {
 		return lazyUpdateTask;
 	}
 	
@@ -456,13 +457,13 @@ public class DungeonsXL extends JavaPlugin {
 	 * start a new LazyUpdateTask
 	 */
 	public void startLazyUpdateTask(long period) {
-		lazyUpdateTask = (LazyUpdateTask) new LazyUpdateTask().runTaskTimerAsynchronously(this, 0L, period);
+		lazyUpdateTask = new LazyUpdateTask().runTaskTimerAsynchronously(this, 0L, period);
 	}
 	
 	/**
 	 * @return the updateTask
 	 */
-	public UpdateTask getUpdateTask() {
+	public BukkitTask getUpdateTask() {
 		return updateTask;
 	}
 	
@@ -470,7 +471,7 @@ public class DungeonsXL extends JavaPlugin {
 	 * start a new LazyUpdateTask
 	 */
 	public void startUpdateTask(long period) {
-		updateTask = (UpdateTask) new UpdateTask().runTaskTimerAsynchronously(this, 0L, period);
+		updateTask = new UpdateTask().runTaskTimerAsynchronously(this, 0L, period);
 	}
 	
 	/**

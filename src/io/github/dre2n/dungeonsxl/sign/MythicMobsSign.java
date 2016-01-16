@@ -12,6 +12,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 public class MythicMobsSign extends DSign {
 	
@@ -24,7 +25,7 @@ public class MythicMobsSign extends DSign {
 	private int amount = 1;
 	private boolean initialized;
 	private boolean active;
-	private MythicMobSpawnTask task;
+	private BukkitTask task;
 	private Location spawnLocation;
 	private LivingEntity mythicMob;
 	private ArrayList<Entity> mythicMobs = new ArrayList<Entity>();
@@ -171,7 +172,7 @@ public class MythicMobsSign extends DSign {
 	/**
 	 * @return the task
 	 */
-	public MythicMobSpawnTask getTask() {
+	public BukkitTask getTask() {
 		return task;
 	}
 	
@@ -179,7 +180,7 @@ public class MythicMobsSign extends DSign {
 	 * @param task
 	 * the task to set
 	 */
-	public void setTask(MythicMobSpawnTask task) {
+	public void setTask(BukkitTask task) {
 		this.task = task;
 	}
 	
@@ -228,7 +229,7 @@ public class MythicMobsSign extends DSign {
 			return;
 		}
 		
-		task = (MythicMobSpawnTask) new MythicMobSpawnTask(this).runTaskTimer(plugin, 0L, 20L);
+		task = new MythicMobSpawnTask(this).runTaskTimer(plugin, 0L, 20L);
 		
 		active = true;
 	}

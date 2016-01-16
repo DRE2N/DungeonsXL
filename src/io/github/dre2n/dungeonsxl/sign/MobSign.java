@@ -6,6 +6,7 @@ import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
+import org.bukkit.scheduler.BukkitTask;
 
 public class MobSign extends DSign {
 	
@@ -18,7 +19,7 @@ public class MobSign extends DSign {
 	private int amount = 1;
 	private boolean initialized;
 	private boolean active;
-	private MobSpawnTask task;
+	private BukkitTask task;
 	
 	public MobSign(Sign sign, GameWorld gameWorld) {
 		super(sign, gameWorld);
@@ -117,7 +118,7 @@ public class MobSign extends DSign {
 	/**
 	 * @return the task
 	 */
-	public MobSpawnTask getTask() {
+	public BukkitTask getTask() {
 		return task;
 	}
 	
@@ -125,7 +126,7 @@ public class MobSign extends DSign {
 	 * @param task
 	 * the task to set
 	 */
-	public void setTask(MobSpawnTask task) {
+	public void setTask(BukkitTask task) {
 		this.task = task;
 	}
 	
@@ -174,7 +175,7 @@ public class MobSign extends DSign {
 			return;
 		}
 		
-		task = (MobSpawnTask) new MobSpawnTask(this).runTaskTimer(plugin, 0L, 20L);
+		task = new MobSpawnTask(this).runTaskTimer(plugin, 0L, 20L);
 		
 		active = true;
 	}

@@ -7,6 +7,7 @@ import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.scheduler.BukkitTask;
 
 public class RedstoneSign extends DSign {
 	
@@ -15,8 +16,8 @@ public class RedstoneSign extends DSign {
 	// Variables
 	private boolean initialized;
 	private boolean active;
-	private DelayedPowerTask enableTask;
-	private DelayedPowerTask disableTask;
+	private BukkitTask enableTask;
+	private BukkitTask disableTask;
 	private Block block;
 	private long delay = 0;
 	private long offDelay = 0;
@@ -60,7 +61,7 @@ public class RedstoneSign extends DSign {
 	/**
 	 * @return the enableTask
 	 */
-	public DelayedPowerTask getEnableTask() {
+	public BukkitTask getEnableTask() {
 		return enableTask;
 	}
 	
@@ -68,14 +69,14 @@ public class RedstoneSign extends DSign {
 	 * @param enableTask
 	 * the enableTask to set
 	 */
-	public void setEnableTask(DelayedPowerTask enableTask) {
+	public void setEnableTask(BukkitTask enableTask) {
 		this.enableTask = enableTask;
 	}
 	
 	/**
 	 * @return the disableTask
 	 */
-	public DelayedPowerTask getDisableTask() {
+	public BukkitTask getDisableTask() {
 		return disableTask;
 	}
 	
@@ -83,7 +84,7 @@ public class RedstoneSign extends DSign {
 	 * @param disableTask
 	 * the disableTask to set
 	 */
-	public void setDisableTask(DelayedPowerTask disableTask) {
+	public void setDisableTask(BukkitTask disableTask) {
 		this.disableTask = disableTask;
 	}
 	
@@ -209,11 +210,11 @@ public class RedstoneSign extends DSign {
 		}
 		
 		if (delay > 0) {
-			enableTask = (DelayedPowerTask) new DelayedPowerTask(this, true).runTaskTimer(plugin, delay, delay + offDelay);
+			enableTask = new DelayedPowerTask(this, true).runTaskTimer(plugin, delay, delay + offDelay);
 			
 			if (repeat != 1) {
 				repeatsToDo = repeat;
-				disableTask = (DelayedPowerTask) new DelayedPowerTask(this, false).runTaskTimer(plugin, delay + offDelay, delay + offDelay);
+				disableTask = new DelayedPowerTask(this, false).runTaskTimer(plugin, delay + offDelay, delay + offDelay);
 			}
 			
 		} else {
