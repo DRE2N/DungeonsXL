@@ -95,7 +95,7 @@ public class DSavePlayer {
 				}
 			}
 			
-			if ( !offline) {
+			if ( !offline && oldLocation.getWorld() != null) {
 				MiscUtil.secureTeleport(player, oldLocation);
 			}
 			
