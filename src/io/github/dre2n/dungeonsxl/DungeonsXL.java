@@ -443,7 +443,7 @@ public class DungeonsXL extends JavaPlugin {
 	 * start a new WorldUnloadTask
 	 */
 	public void startWorldUnloadTask(long period) {
-		worldUnloadTask = new WorldUnloadTask().runTaskTimerAsynchronously(this, 0L, period);
+		worldUnloadTask = new WorldUnloadTask().runTaskTimer(this, 0L, period);
 	}
 	
 	/**
@@ -457,7 +457,7 @@ public class DungeonsXL extends JavaPlugin {
 	 * start a new LazyUpdateTask
 	 */
 	public void startLazyUpdateTask(long period) {
-		lazyUpdateTask = new LazyUpdateTask().runTaskTimerAsynchronously(this, 0L, period);
+		lazyUpdateTask = new LazyUpdateTask().runTaskTimer(this, 0L, period);
 	}
 	
 	/**
@@ -471,7 +471,7 @@ public class DungeonsXL extends JavaPlugin {
 	 * start a new LazyUpdateTask
 	 */
 	public void startUpdateTask(long period) {
-		updateTask = new UpdateTask().runTaskTimerAsynchronously(this, 0L, period);
+		updateTask = new UpdateTask().runTaskTimer(this, 0L, period);
 	}
 	
 	/**
