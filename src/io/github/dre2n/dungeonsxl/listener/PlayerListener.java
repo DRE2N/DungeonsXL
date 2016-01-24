@@ -587,13 +587,13 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		if (player.getLocation().getBlock().getType() == Material.PORTAL) {
+		if (player.getLocation().getBlock().getType() == (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			return;
 		}
 		
-		if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
-		        && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative( -1, 0, 0).getType() != Material.PORTAL
-		        && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
+		if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL) && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)
+		        && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL) && player.getLocation().getBlock().getRelative( -1, 0, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)
+		        && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL) && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			inventory.setInventoryView(inventory.getPlayer().openInventory(inventory.getInventory()));
 			inventory.setTime(System.currentTimeMillis());
 		}

@@ -35,7 +35,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPhysics(BlockPhysicsEvent event) {
-		if (event.getBlock().getType() != Material.PORTAL) {
+		if (event.getBlock().getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			return;
 		}
 		
@@ -50,7 +50,7 @@ public class BlockListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// Deny DPortal destroying
-		if (block.getType() == Material.PORTAL) {
+		if (block.getType() == (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			DPortal dPortal = DPortal.getByBlock(event.getBlock());
 			if (dPortal != null) {
 				if (plugin.getInBreakMode().contains(player)) {

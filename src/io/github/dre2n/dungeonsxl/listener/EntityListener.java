@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.listener;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
@@ -34,7 +35,8 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 
 public class EntityListener implements Listener {
-	
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
+        
 	// Remove drops from breaking Signs
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onItemSpawn(ItemSpawnEvent event) {
@@ -222,7 +224,7 @@ public class EntityListener implements Listener {
 		List<Block> blocklist = event.blockList();
 		for (Block block : blocklist) {
 			// Portals
-			if (block.getType() == Material.PORTAL) {
+			if (block.getType() == (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 				if (DPortal.getByBlock(block) != null) {
 					event.setCancelled(true);
 					return;
