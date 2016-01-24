@@ -1,15 +1,15 @@
 package io.github.dre2n.dungeonsxl.listener;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.sign.DSign;
-import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
+import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -27,7 +27,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class BlockListener implements Listener {
 	
@@ -35,7 +34,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPhysics(BlockPhysicsEvent event) {
-		if (event.getBlock().getType() != Material.PORTAL) {
+		if (event.getBlock().getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			return;
 		}
 		
@@ -50,13 +49,13 @@ public class BlockListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// Deny DPortal destroying
-		if (block.getType() == Material.PORTAL) {
+		if (block.getType() == (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			DPortal dPortal = DPortal.getByBlock(event.getBlock());
 			if (dPortal != null) {
 				if (plugin.getInBreakMode().contains(player)) {
 					dPortal.delete();
-					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
-					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+					MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+					MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
 					plugin.getInBreakMode().remove(player);
 					
 				} else {
@@ -72,8 +71,8 @@ public class BlockListener implements Listener {
 		if (groupSign != null) {
 			if (plugin.getInBreakMode().contains(player)) {
 				groupSign.delete();
-				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
-				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+				MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+				MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
 				plugin.getInBreakMode().remove(player);
 				
 			} else {
@@ -94,8 +93,8 @@ public class BlockListener implements Listener {
 		if (leaveSign != null) {
 			if (plugin.getInBreakMode().contains(player)) {
 				leaveSign.delete();
-				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
-				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+				MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+				MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
 				plugin.getInBreakMode().remove(player);
 				
 			} else {
@@ -217,16 +216,16 @@ public class BlockListener implements Listener {
 				}
 				
 				if ( !player.hasPermission(dsign.getType().getBuildPermission())) {
-					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_NO_PERMISSIONS));
+					MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_NO_PERMISSIONS));
 				}
 				
 				if (dsign.check()) {
 					editWorld.checkSign(block);
 					editWorld.getSign().add(block);
-					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_SIGN_CREATED));
+					MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_SIGN_CREATED));
 					
 				} else {
-					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_SIGN_WRONG_FORMAT));
+					MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_SIGN_WRONG_FORMAT));
 				}
 			}
 		}
@@ -257,24 +256,6 @@ public class BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onRedstoneEvent(BlockRedstoneEvent event) {
 		new RedstoneEventTask(event.getBlock()).runTaskLater(plugin, 1);
-	}
-	
-	public class RedstoneEventTask extends BukkitRunnable {
-		private final Block block;
-		
-		public RedstoneEventTask(final Block block) {
-			this.block = block;
-		}
-		
-		@Override
-		public void run() {
-			for (GameWorld gameWorld : plugin.getGameWorlds()) {
-				if (block.getWorld() == gameWorld.getWorld()) {
-					RedstoneTrigger.updateAll(gameWorld);
-				}
-			}
-		}
-		
 	}
 	
 }

@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.dungeon;
+package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
@@ -31,6 +31,7 @@ public class WorldConfig {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
+	@Deprecated
 	public static WorldConfig defaultConfig = new WorldConfig();
 	
 	private File file;

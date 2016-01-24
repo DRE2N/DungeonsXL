@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.util.offlineplayerutil;
+package io.github.dre2n.dungeonsxl.util.playerutil;
 
 import java.io.File;
 import java.util.UUID;

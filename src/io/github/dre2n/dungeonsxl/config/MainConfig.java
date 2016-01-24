@@ -1,6 +1,4 @@
-package io.github.dre2n.dungeonsxl.file;
-
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
+package io.github.dre2n.dungeonsxl.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +13,7 @@ public class MainConfig {
 	
 	private String language = "en";
 	private boolean enableEconomy = false;
+        private boolean useWaterPortal = false;
 	
 	/* Tutorial */
 	private boolean tutorialActivated = false;
@@ -23,7 +22,7 @@ public class MainConfig {
 	private String tutorialEndGroup = "player";
 	
 	/* Default Dungeon Settings */
-	public WorldConfig defaultDungeon;
+	private WorldConfig defaultWorldConfig;
 	
 	private List<String> editCommandWhitelist = new ArrayList<String>();
 	
@@ -35,6 +34,7 @@ public class MainConfig {
 				FileConfiguration configFile = new YamlConfiguration();
 				configFile.set("language", "en");
 				configFile.set("enableEconomy", true);
+                                configFile.set("useWaterPortal", false);
 				configFile.set("tutorialActivated", false);
 				configFile.set("tutorialDungeon", "tutorial");
 				configFile.set("tutorialStartGroup", "default");
@@ -68,6 +68,10 @@ public class MainConfig {
 			if (configFile.contains("enableEconomy")) {
 				enableEconomy = configFile.getBoolean("enableEconomy");
 			}
+                        
+                        if (configFile.contains("useWaterPortal")) {
+				useWaterPortal = configFile.getBoolean("useWaterPortal");
+			}
 			
 			if (configFile.contains("tutorial.activated")) {
 				tutorialActivated = configFile.getBoolean("tutorial.activated");
@@ -92,8 +96,8 @@ public class MainConfig {
 			/* Default Dungeon Config */
 			ConfigurationSection configSection = configFile.getConfigurationSection("default");
 			if (configSection != null) {
-				defaultDungeon = new WorldConfig(configSection);
-				WorldConfig.defaultConfig = defaultDungeon;
+				setDefaultWorldConfig(new WorldConfig(configSection));
+				WorldConfig.defaultConfig = defaultWorldConfig;// TODO
 			}
 		}
 	}
@@ -118,6 +122,13 @@ public class MainConfig {
 	 */
 	public boolean enableEconomy() {
 		return enableEconomy;
+	}
+        
+        /**
+	 * @return the useWaterPortal
+	 */
+	public boolean useWaterPortal() {
+		return useWaterPortal;
 	}
 	
 	/**
@@ -153,6 +164,21 @@ public class MainConfig {
 	 */
 	public List<String> getEditCommandWhitelist() {
 		return editCommandWhitelist;
+	}
+	
+	/**
+	 * @return the defaultWorldConfig
+	 */
+	public WorldConfig getDefaultWorldConfig() {
+		return defaultWorldConfig;
+	}
+	
+	/**
+	 * @param defaultWorldConfig
+	 * the defaultWorldConfig to set
+	 */
+	public void setDefaultWorldConfig(WorldConfig defaultWorldConfig) {
+		this.defaultWorldConfig = defaultWorldConfig;
 	}
 	
 }

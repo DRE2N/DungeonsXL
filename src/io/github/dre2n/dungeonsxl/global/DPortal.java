@@ -1,8 +1,8 @@
 package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
@@ -27,6 +27,81 @@ public class DPortal {
 	public DPortal(boolean active) {
 		plugin.getDPortals().add(this);
 		this.active = active;
+	}
+	
+	/**
+	 * @return the world
+	 */
+	public World getWorld() {
+		return world;
+	}
+	
+	/**
+	 * @param world
+	 * the world to set
+	 */
+	public void setWorld(World world) {
+		this.world = world;
+	}
+	
+	/**
+	 * @return the block1
+	 */
+	public Block getBlock1() {
+		return block1;
+	}
+	
+	/**
+	 * @param block1
+	 * the block1 to set
+	 */
+	public void setBlock1(Block block1) {
+		this.block1 = block1;
+	}
+	
+	/**
+	 * @return the block2
+	 */
+	public Block getBlock2() {
+		return block2;
+	}
+	
+	/**
+	 * @param block2
+	 * the block2 to set
+	 */
+	public void setBlock2(Block block2) {
+		this.block2 = block2;
+	}
+	
+	/**
+	 * @return if the portal is active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+	
+	/**
+	 * @param active
+	 * set the DPortal active
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	/**
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+	
+	/**
+	 * @param player
+	 * the player to set
+	 */
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 	
 	public void create() {
@@ -70,7 +145,7 @@ public class DPortal {
 					        || type == Material.WEB || type == Material.LONG_GRASS || type == Material.DEAD_BUSH || type == Material.PISTON_EXTENSION || type == Material.YELLOW_FLOWER
 					        || type == Material.RED_ROSE || type == Material.BROWN_MUSHROOM || type == Material.RED_MUSHROOM || type == Material.TORCH || type == Material.FIRE
 					        || type == Material.CROPS || type == Material.REDSTONE_WIRE || type == Material.REDSTONE_TORCH_OFF || type == Material.SNOW || type == Material.REDSTONE_TORCH_ON) {
-						world.getBlockAt(xx, yy, zz).setType(Material.PORTAL);
+						world.getBlockAt(xx, yy, zz).setType(plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL);
 					}
 					
 					zz = zz + zcount;
@@ -87,7 +162,7 @@ public class DPortal {
 		DGroup dgroup = DGroup.getByPlayer(player);
 		
 		if (dgroup == null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_NOT_IN_GROUP));
+			MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_NOT_IN_GROUP));
 			return;
 		}
 		
@@ -96,7 +171,7 @@ public class DPortal {
 		}
 		
 		if (dgroup.getGameWorld() == null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
+			MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
 			return;
 		}
 		
@@ -141,7 +216,7 @@ public class DPortal {
 				do {
 					Material type = world.getBlockAt(xx, yy, zz).getType();
 					
-					if (type == Material.PORTAL) {
+					if (type == (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 						world.getBlockAt(xx, yy, zz).setType(Material.AIR);
 					}
 					
@@ -258,81 +333,6 @@ public class DPortal {
 				
 			} while (configFile.contains(preString));
 		}
-	}
-	
-	/**
-	 * @return the world
-	 */
-	public World getWorld() {
-		return world;
-	}
-	
-	/**
-	 * @param world
-	 * the world to set
-	 */
-	public void setWorld(World world) {
-		this.world = world;
-	}
-	
-	/**
-	 * @return the block1
-	 */
-	public Block getBlock1() {
-		return block1;
-	}
-	
-	/**
-	 * @param block1
-	 * the block1 to set
-	 */
-	public void setBlock1(Block block1) {
-		this.block1 = block1;
-	}
-	
-	/**
-	 * @return the block2
-	 */
-	public Block getBlock2() {
-		return block2;
-	}
-	
-	/**
-	 * @param block2
-	 * the block2 to set
-	 */
-	public void setBlock2(Block block2) {
-		this.block2 = block2;
-	}
-	
-	/**
-	 * @return if the portal is active
-	 */
-	public boolean isActive() {
-		return active;
-	}
-	
-	/**
-	 * @param active
-	 * set the DPortal active
-	 */
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-	
-	/**
-	 * @return the player
-	 */
-	public Player getPlayer() {
-		return player;
-	}
-	
-	/**
-	 * @param player
-	 * the player to set
-	 */
-	public void setPlayer(Player player) {
-		this.player = player;
 	}
 	
 }

@@ -1,12 +1,12 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -101,7 +101,7 @@ public class DGroup {
 	public void addPlayer(Player player) {
 		// Send message
 		for (Player groupPlayer : getPlayers()) {
-			MessageUtil.sendMessage(groupPlayer, plugin.getDMessages().getMessage(Messages.PLAYER_JOIN_GROUP, player.getName()));
+			MessageUtil.sendMessage(groupPlayer, plugin.getMessageConfig().getMessage(Messages.PLAYER_JOIN_GROUP, player.getName()));
 		}
 		
 		// Add player
@@ -118,7 +118,7 @@ public class DGroup {
 		
 		// Send message
 		for (Player groupPlayer : getPlayers()) {
-			MessageUtil.sendMessage(groupPlayer, plugin.getDMessages().getMessage(Messages.PLAYER_LEFT_GROUP, player.getName()));
+			MessageUtil.sendMessage(groupPlayer, plugin.getMessageConfig().getMessage(Messages.PLAYER_LEFT_GROUP, player.getName()));
 		}
 		
 		// Check group
@@ -325,7 +325,7 @@ public class DGroup {
 	public void sendMessage(String message) {
 		for (Player player : players) {
 			if (player.isOnline()) {
-				MessageUtil.sendCenteredMessage(player, message);
+				MessageUtil.sendMessage(player, message);
 			}
 		}
 	}
@@ -339,7 +339,7 @@ public class DGroup {
 	public void sendMessage(String message, Player... except) {
 		for (Player player : players) {
 			if (player.isOnline() && !player.equals(except)) {
-				MessageUtil.sendCenteredMessage(player, message);
+				MessageUtil.sendMessage(player, message);
 			}
 		}
 	}

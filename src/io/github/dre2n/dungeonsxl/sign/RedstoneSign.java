@@ -1,12 +1,13 @@
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.task.DelayedPowerTask;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.scheduler.BukkitTask;
 
 public class RedstoneSign extends DSign {
 	
@@ -15,16 +16,151 @@ public class RedstoneSign extends DSign {
 	// Variables
 	private boolean initialized;
 	private boolean active;
-	private int enableTaskId = -1;
-	private int disableTaskId = -1;
+	private BukkitTask enableTask;
+	private BukkitTask disableTask;
 	private Block block;
 	private long delay = 0;
 	private long offDelay = 0;
 	private int repeat = 1;
 	private int repeatsToDo = 1;
 	
-	public RedstoneSign(Sign sign, GameWorld gworld) {
-		super(sign, gworld);
+	public RedstoneSign(Sign sign, GameWorld gameWorld) {
+		super(sign, gameWorld);
+	}
+	
+	/**
+	 * @return the initialized
+	 */
+	public boolean isInitialized() {
+		return initialized;
+	}
+	
+	/**
+	 * @param initialized
+	 * the initialized to set
+	 */
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
+	
+	/**
+	 * @return the active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+	
+	/**
+	 * @param active
+	 * the active to set
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	/**
+	 * @return the enableTask
+	 */
+	public BukkitTask getEnableTask() {
+		return enableTask;
+	}
+	
+	/**
+	 * @param enableTask
+	 * the enableTask to set
+	 */
+	public void setEnableTask(BukkitTask enableTask) {
+		this.enableTask = enableTask;
+	}
+	
+	/**
+	 * @return the disableTask
+	 */
+	public BukkitTask getDisableTask() {
+		return disableTask;
+	}
+	
+	/**
+	 * @param disableTask
+	 * the disableTask to set
+	 */
+	public void setDisableTask(BukkitTask disableTask) {
+		this.disableTask = disableTask;
+	}
+	
+	/**
+	 * @return the block
+	 */
+	public Block getBlock() {
+		return block;
+	}
+	
+	/**
+	 * @param block
+	 * the block to set
+	 */
+	public void setBlock(Block block) {
+		this.block = block;
+	}
+	
+	/**
+	 * @return the delay
+	 */
+	public long getDelay() {
+		return delay;
+	}
+	
+	/**
+	 * @param delay
+	 * the delay to set
+	 */
+	public void setDelay(long delay) {
+		this.delay = delay;
+	}
+	
+	/**
+	 * @return the offDelay
+	 */
+	public long getOffDelay() {
+		return offDelay;
+	}
+	
+	/**
+	 * @param offDelay
+	 * the offDelay to set
+	 */
+	public void setOffDelay(long offDelay) {
+		this.offDelay = offDelay;
+	}
+	
+	/**
+	 * @return the repeat
+	 */
+	public int getRepeat() {
+		return repeat;
+	}
+	
+	/**
+	 * @param repeat
+	 * the repeat to set
+	 */
+	public void setRepeat(int repeat) {
+		this.repeat = repeat;
+	}
+	
+	/**
+	 * @return the repeatsToDo
+	 */
+	public int getRepeatsToDo() {
+		return repeatsToDo;
+	}
+	
+	/**
+	 * @param repeatsToDo
+	 * the repeatsToDo to set
+	 */
+	public void setRepeatsToDo(int repeatsToDo) {
+		this.repeatsToDo = repeatsToDo;
 	}
 	
 	@Override
@@ -74,11 +210,11 @@ public class RedstoneSign extends DSign {
 		}
 		
 		if (delay > 0) {
-			enableTaskId = DungeonsXL.getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(DungeonsXL.getPlugin(), new DelayedPower(true), delay, delay + offDelay);
+			enableTask = new DelayedPowerTask(this, true).runTaskTimer(plugin, delay, delay + offDelay);
 			
 			if (repeat != 1) {
 				repeatsToDo = repeat;
-				disableTaskId = DungeonsXL.getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(DungeonsXL.getPlugin(), new DelayedPower(false), delay + offDelay, delay + offDelay);
+				disableTask = new DelayedPowerTask(this, false).runTaskTimer(plugin, delay + offDelay, delay + offDelay);
 			}
 			
 		} else {
@@ -96,10 +232,8 @@ public class RedstoneSign extends DSign {
 		
 		unpower();
 		
-		disableTask(enableTaskId);
-		disableTask(disableTaskId);
-		enableTaskId = -1;
-		disableTaskId = -1;
+		enableTask.cancel();
+		disableTask.cancel();
 		
 		active = false;
 	}
@@ -112,50 +246,9 @@ public class RedstoneSign extends DSign {
 		block.setType(Material.AIR);
 	}
 	
-	public void disableTask(int taskId) {
-		if (taskId == -1) {
-			return;
-		}
-		
-		if (DungeonsXL.getPlugin().getServer().getScheduler().isCurrentlyRunning(taskId) || DungeonsXL.getPlugin().getServer().getScheduler().isQueued(taskId)) {
-			DungeonsXL.getPlugin().getServer().getScheduler().cancelTask(taskId);
-		}
-	}
-	
 	@Override
 	public DSignType getType() {
 		return type;
-	}
-	
-	public class DelayedPower implements Runnable {
-		private final boolean enable;
-		
-		public DelayedPower(boolean enable) {
-			this.enable = enable;
-		}
-		
-		@Override
-		public void run() {
-			if (GameWorld.getByWorld(block.getWorld()) == null) {
-				disableTask(enableTaskId);
-				disableTask(disableTaskId);
-				return;
-			}
-			if (enable) {
-				power();
-				if (repeatsToDo == 1) {
-					disableTask(enableTaskId);
-					enableTaskId = -1;
-				}
-			} else {
-				unpower();
-				if (repeatsToDo == 1) {
-					disableTask(disableTaskId);
-					disableTaskId = -1;
-				}
-				repeatsToDo--;
-			}
-		}
 	}
 	
 }

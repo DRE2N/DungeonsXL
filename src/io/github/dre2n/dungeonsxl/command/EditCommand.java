@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
@@ -15,7 +15,7 @@ public class EditCommand extends DCommand {
 		setCommand("edit");
 		setMinArgs(1);
 		setMaxArgs(1);
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_EDIT));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_EDIT));
 		setPlayerCommand(true);
 	}
 	
@@ -29,22 +29,22 @@ public class EditCommand extends DCommand {
 		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
 		if ( !(EditWorld.isInvitedPlayer(mapName, player.getUniqueId(), player.getName()) || player.hasPermission("dxl.edit"))) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PERMISSIONS));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NO_PERMISSIONS));
 			return;
 		}
 		
 		if (dPlayer != null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 			return;
 		}
 		
 		if (dGroup != null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_GROUP));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_GROUP));
 			return;
 		}
 		
 		if (editWorld == null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, mapName));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, mapName));
 			return;
 		}
 		

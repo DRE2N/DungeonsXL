@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.dungeon.game;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -42,105 +42,6 @@ public class GameChest {
 		this.moneyReward = moneyReward;
 		
 		gameWorld.getGameChests().add(this);
-	}
-	
-	public void addTreasure(DGroup dGroup) {
-		if (dGroup == null) {
-			return;
-		}
-		
-		boolean hasMoneyReward = false;
-		
-		for (Reward reward : dGroup.getRewards()) {
-			if (reward instanceof MoneyReward) {
-				hasMoneyReward = true;
-				((MoneyReward) reward).addMoney(moneyReward);
-			}
-		}
-		
-		if ( !hasMoneyReward) {
-			Reward reward = Reward.create(RewardTypeDefault.MONEY);
-			((MoneyReward) reward).addMoney(moneyReward);
-			dGroup.addReward(reward);
-		}
-		
-		for (Player player : dGroup.getPlayers()) {
-			DPlayer dPlayer = DPlayer.getByPlayer(player);
-			if (dPlayer == null) {
-				continue;
-			}
-			
-			String msg = "";
-			for (ItemStack itemStack : chest.getInventory().getContents()) {
-				
-				if (itemStack == null) {
-					continue;
-				}
-				
-				dPlayer.getTreasureInv().addItem(itemStack);
-				String name = null;
-				
-				if (itemStack.hasItemMeta()) {
-					if (itemStack.getItemMeta().hasDisplayName()) {
-						name = itemStack.getItemMeta().getDisplayName();
-					}
-					
-				}
-				
-				if (name == null && Bukkit.getPluginManager().getPlugin("Vault") != null) {
-					ItemInfo itemInfo = Items.itemByStack(itemStack);
-					if (itemInfo != null) {
-						name = itemInfo.getName();
-					} else {
-						name = itemStack.getType().name();
-					}
-				}
-				
-				msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
-			}
-			
-			msg = msg.substring(0, msg.length() - 1);
-			
-			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
-			if (moneyReward != 0) {
-				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
-			}
-		}
-	}
-	
-	// Statics
-	public static void onOpenInventory(InventoryOpenEvent event) {
-		InventoryView inventory = event.getView();
-		
-		GameWorld gameWorld = GameWorld.getByWorld(event.getPlayer().getWorld());
-		
-		if (gameWorld == null) {
-			return;
-		}
-		
-		if ( !(inventory.getTopInventory().getHolder() instanceof Chest)) {
-			return;
-		}
-		
-		Chest chest = (Chest) inventory.getTopInventory().getHolder();
-		
-		for (GameChest gameChest : gameWorld.getGameChests()) {
-			if ( !gameChest.chest.equals(chest)) {
-				continue;
-			}
-			
-			if (gameChest.used) {
-				MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), plugin.getDMessages().getMessage(Messages.ERROR_CHEST_IS_OPENED));
-				event.setCancelled(true);
-				continue;
-			}
-			
-			if (gameChest.chest.getLocation().distance(chest.getLocation()) < 1) {
-				gameChest.addTreasure(DGroup.getByGameWorld(gameWorld));
-				gameChest.used = true;
-				event.setCancelled(true);
-			}
-		}
 	}
 	
 	/**
@@ -201,6 +102,105 @@ public class GameChest {
 	 */
 	public void setMoneyReward(double moneyReward) {
 		this.moneyReward = moneyReward;
+	}
+	
+	public void addTreasure(DGroup dGroup) {
+		if (dGroup == null) {
+			return;
+		}
+		
+		boolean hasMoneyReward = false;
+		
+		for (Reward reward : dGroup.getRewards()) {
+			if (reward instanceof MoneyReward) {
+				hasMoneyReward = true;
+				((MoneyReward) reward).addMoney(moneyReward);
+			}
+		}
+		
+		if ( !hasMoneyReward) {
+			Reward reward = Reward.create(RewardTypeDefault.MONEY);
+			((MoneyReward) reward).addMoney(moneyReward);
+			dGroup.addReward(reward);
+		}
+		
+		for (Player player : dGroup.getPlayers()) {
+			DPlayer dPlayer = DPlayer.getByPlayer(player);
+			if (dPlayer == null) {
+				continue;
+			}
+			
+			String msg = "";
+			for (ItemStack itemStack : chest.getInventory().getContents()) {
+				
+				if (itemStack == null) {
+					continue;
+				}
+				
+				dPlayer.getTreasureInv().addItem(itemStack);
+				String name = null;
+				
+				if (itemStack.hasItemMeta()) {
+					if (itemStack.getItemMeta().hasDisplayName()) {
+						name = itemStack.getItemMeta().getDisplayName();
+					}
+					
+				}
+				
+				if (name == null && Bukkit.getPluginManager().getPlugin("Vault") != null) {
+					ItemInfo itemInfo = Items.itemByStack(itemStack);
+					if (itemInfo != null) {
+						name = itemInfo.getName();
+					} else {
+						name = itemStack.getType().name();
+					}
+				}
+				
+				msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
+			}
+			
+			msg = msg.substring(0, msg.length() - 1);
+			
+			MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
+			if (moneyReward != 0) {
+				MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
+			}
+		}
+	}
+	
+	// Statics
+	public static void onOpenInventory(InventoryOpenEvent event) {
+		InventoryView inventory = event.getView();
+		
+		GameWorld gameWorld = GameWorld.getByWorld(event.getPlayer().getWorld());
+		
+		if (gameWorld == null) {
+			return;
+		}
+		
+		if ( !(inventory.getTopInventory().getHolder() instanceof Chest)) {
+			return;
+		}
+		
+		Chest chest = (Chest) inventory.getTopInventory().getHolder();
+		
+		for (GameChest gameChest : gameWorld.getGameChests()) {
+			if ( !gameChest.chest.equals(chest)) {
+				continue;
+			}
+			
+			if (gameChest.used) {
+				MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), plugin.getMessageConfig().getMessage(Messages.ERROR_CHEST_IS_OPENED));
+				event.setCancelled(true);
+				continue;
+			}
+			
+			if (gameChest.chest.getLocation().distance(chest.getLocation()) < 1) {
+				gameChest.addTreasure(DGroup.getByGameWorld(gameWorld));
+				gameChest.used = true;
+				event.setCancelled(true);
+			}
+		}
 	}
 	
 }

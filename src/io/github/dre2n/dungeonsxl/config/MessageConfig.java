@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.file;
+package io.github.dre2n.dungeonsxl.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.Set;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class DMessages {
+public class MessageConfig {
 	
 	public enum Messages {
 		
@@ -175,7 +175,7 @@ public class DMessages {
 	private File file;
 	private FileConfiguration config;
 	
-	public DMessages(File file) {
+	public MessageConfig(File file) {
 		this.file = file;
 		
 		if ( !file.exists()) {

@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.dungeon;
+package io.github.dre2n.dungeonsxl.config;
 
 import java.io.File;
 import java.util.ArrayList;
