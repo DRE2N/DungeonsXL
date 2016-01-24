@@ -238,7 +238,7 @@ public class GamePlaceableBlock {
 		}
 	}
 	
-	// Canbuild
+	// Can build
 	public static boolean canBuildHere(Block block, BlockFace blockFace, Material mat, GameWorld gameWorld) {
 		for (GamePlaceableBlock gamePlacableBlock : gameWorld.getPlaceableBlocks()) {
 			if (gamePlacableBlock.block.getFace(block) != BlockFace.SELF) {

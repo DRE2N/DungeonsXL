@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ public class SaveCommand extends DCommand {
 		setCommand("save");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_SAVE));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_SAVE));
 		setPermission("dxl.save");
 		setPlayerCommand(true);
 	}
@@ -24,10 +24,10 @@ public class SaveCommand extends DCommand {
 		EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
 		if (editWorld != null) {
 			editWorld.save();
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_SAVE_SUCCESS));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_SAVE_SUCCESS));
 			
 		} else {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
 		}
 	}
 	

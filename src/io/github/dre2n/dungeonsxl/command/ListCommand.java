@@ -1,11 +1,11 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
-import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -20,7 +20,7 @@ public class ListCommand extends DCommand {
 		setCommand("list");
 		setMinArgs(0);
 		setMaxArgs(3);
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_LIST));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_LIST));
 		setPermission("dxl.list");
 		setPlayerCommand(true);
 		setConsoleCommand(true);

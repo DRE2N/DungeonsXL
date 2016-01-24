@@ -2,6 +2,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.task.SignUpdateTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
@@ -60,7 +61,9 @@ public class InteractSign extends DSign {
 		}
 		
 		getSign().setLine(1, id + "");
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new UpdateTask(), 2);
+		
+		new SignUpdateTask(getSign()).runTaskLater(plugin, 2L);
+		
 		return true;
 	}
 	
@@ -87,17 +90,6 @@ public class InteractSign extends DSign {
 	@Override
 	public DSignType getType() {
 		return type;
-	}
-	
-	public class UpdateTask implements Runnable {
-		
-		public UpdateTask() {
-		}
-		
-		@Override
-		public void run() {
-			getSign().update();
-		}
 	}
 	
 }

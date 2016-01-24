@@ -1,10 +1,10 @@
 package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -382,7 +382,7 @@ public class GroupSign {
 		}
 		
 		if (DGroup.getByPlayer(player) != null) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_LEAVE_GROUP));
+			MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_LEAVE_GROUP));
 			return true;
 		}
 		
@@ -391,7 +391,7 @@ public class GroupSign {
 			if (file != null) {
 				WorldConfig confReader = new WorldConfig(file);
 				if (confReader != null) {
-					MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_COOLDOWN, String.valueOf(confReader.getTimeToNextPlay())));
+					MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_COOLDOWN, String.valueOf(confReader.getTimeToNextPlay())));
 				}
 			}
 			
@@ -399,7 +399,7 @@ public class GroupSign {
 		}
 		
 		if ( !GameWorld.checkRequirements(groupSign.mapName, player)) {
-			MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.ERROR_REQUIREMENTS));
+			MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_REQUIREMENTS));
 			return true;
 		}
 		

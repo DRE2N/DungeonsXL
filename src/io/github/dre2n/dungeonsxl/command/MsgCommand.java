@@ -1,8 +1,8 @@
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -18,7 +18,7 @@ public class MsgCommand extends DCommand {
 		setMinArgs( -1);
 		setMaxArgs( -1);
 		setCommand("msg");
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_MSG));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_MSG));
 		setPermission("dxl.msg");
 		setPlayerCommand(true);
 	}
@@ -29,7 +29,7 @@ public class MsgCommand extends DCommand {
 		EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
 		
 		if (editWorld == null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
 			return;
 		}
 		
@@ -50,7 +50,7 @@ public class MsgCommand extends DCommand {
 					MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
 					
 				} else {
-					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_MSG_ID_NOT_EXIST, "" + id));
+					MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_MSG_ID_NOT_EXIST, "" + id));
 				}
 				
 			} else {
@@ -69,22 +69,22 @@ public class MsgCommand extends DCommand {
 					msg = splitMsg[1];
 					String old = confreader.getMsg(id, false);
 					if (old == null) {
-						MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_MSG_ADDED, "" + id));
+						MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_MSG_ADDED, "" + id));
 						
 					} else {
-						MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_MSG_UPDATED, "" + id));
+						MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_MSG_UPDATED, "" + id));
 					}
 					
 					confreader.setMsg(msg, id);
 					confreader.save();
 					
 				} else {
-					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_MSG_FORMAT));
+					MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_MSG_FORMAT));
 				}
 			}
 			
 		} catch (NumberFormatException e) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_MSG_NO_INT));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_MSG_NO_INT));
 		}
 		
 	}
