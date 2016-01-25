@@ -366,6 +366,8 @@ public class PlayerListener implements Listener {
 			dportal.teleport(player);
 		}
 	}
+
+        
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onTeleport(PlayerTeleportEvent event) {
@@ -581,6 +583,13 @@ public class PlayerListener implements Listener {
 	public void onMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		DLootInventory inventory = DLootInventory.getByPlayer(player);
+                
+                DPortal dportal = DPortal.getByLocation(player.getLocation());
+		
+		if (plugin.getMainConfig().useWaterPortal() && dportal != null && DGroup.getByPlayer(player) != null){
+			dportal.teleport(player);
+                        return;
+                }
 		
 		if (inventory == null) {
 			return;
@@ -596,6 +605,7 @@ public class PlayerListener implements Listener {
 			inventory.setInventoryView(inventory.getPlayer().openInventory(inventory.getInventory()));
 			inventory.setTime(System.currentTimeMillis());
 		}
+                
 	}
 	
 }
