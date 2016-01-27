@@ -162,7 +162,7 @@ public class DPortal {
 		DGroup dgroup = DGroup.getByPlayer(player);
 		
 		if (dgroup == null) {
-			MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_NOT_IN_GROUP));
+			MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_JOIN_GROUP));
 			return;
 		}
 		

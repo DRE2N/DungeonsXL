@@ -12,6 +12,7 @@ import io.github.dre2n.dungeonsxl.dungeon.game.GameChest;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
@@ -78,14 +79,18 @@ public class PlayerListener implements Listener {
 		dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
 		
 		if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-			MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
+			DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
 			
-			// TODO: This Runnable is a workaround for a bug I couldn't find, yet...
-			new org.bukkit.scheduler.BukkitRunnable() {
-				public void run() {
-					dPlayer.leave();
-				}
-			}.runTaskLater(plugin, 1L);
+			if ( !dPlayerKickEvent.isCancelled()) {
+				MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
+				
+				// TODO: This Runnable is a workaround for a bug I couldn't find, yet...
+				new org.bukkit.scheduler.BukkitRunnable() {
+					public void run() {
+						dPlayer.leave();
+					}
+				}.runTaskLater(plugin, 1L);
+			}
 			
 		} else if ( !(dPlayer.getLives() == -1)) {
 			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));

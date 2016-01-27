@@ -1,5 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
@@ -62,16 +63,43 @@ public class TestCommand extends DCommand {
 			return;
 		}
 		
-		if (DGroup.getByPlayer(player) != null) {
-			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_GROUP));
-			return;
-		}
+		DGroup dGroup = DGroup.getByPlayer(player);
 		
-		DGroup dGroup = new DGroup(player, identifier, multiFloor);
+		if (dGroup != null) {
+			if ( !dGroup.getCaptain().equals(player) && !player.hasPermission("dxl.bypass")) {
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_CAPTAIN));
+			}
+			
+			if (dGroup.getMapName() == null) {
+				if ( !multiFloor) {
+					dGroup.setMapName(identifier);
+					
+				} else {
+					dGroup.setDungeonName(identifier);
+					Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+					
+					if (dungeon != null) {
+						DungeonConfig config = dungeon.getConfig();
+						
+						if (config != null) {
+							dGroup.setMapName(config.getStartFloor());
+						}
+					}
+				}
+				
+			} else {
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_GROUP));
+				return;
+			}
+			
+		} else {
+			dGroup = new DGroup(player, identifier, multiFloor);
+		}
 		
 		DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
 		
 		if (event.isCancelled()) {
+			plugin.getDGroups().remove(dGroup);
 			dGroup = null;
 		}
 		
@@ -88,17 +116,16 @@ public class TestCommand extends DCommand {
 			dGroup.remove();
 			return;
 		}
-		
-		DPlayer newDPlayer;
-		
 		if (dGroup.getGameWorld().getLocLobby() == null) {
-			newDPlayer = new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getWorld().getSpawnLocation(), false);
+			for (Player groupPlayer : dGroup.getPlayers()) {
+				new DPlayer(groupPlayer, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getWorld().getSpawnLocation(), false).setInTestMode(true);
+			}
 			
 		} else {
-			newDPlayer = new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false);
+			for (Player groupPlayer : dGroup.getPlayers()) {
+				new DPlayer(groupPlayer, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false).setInTestMode(true);
+			}
 		}
-		
-		newDPlayer.setInTestMode(true);
 	}
 	
 }

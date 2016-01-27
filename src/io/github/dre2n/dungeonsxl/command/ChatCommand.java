@@ -24,7 +24,7 @@ public class ChatCommand extends DCommand {
 		DPlayer dplayer = DPlayer.getByPlayer(player);
 		
 		if (dplayer == null) {
-			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_IN_GROUP));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_JOIN_GROUP));
 			return;
 		}
 		

@@ -22,6 +22,10 @@ permissions:
     default: op
   dxl.escape:
     default: true
+  dxl.group:
+    default: op
+  dxl.group.admin:
+    default: op
   dxl.help:
     default: true
   dxl.invite:

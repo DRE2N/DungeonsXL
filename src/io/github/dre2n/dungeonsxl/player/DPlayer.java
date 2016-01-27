@@ -44,7 +44,7 @@ import org.bukkit.potion.PotionEffect;
 public class DPlayer {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
-	MessageConfig MessageConfig = plugin.getMessageConfig();
+	MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	// Variables
 	private Player player;
@@ -67,7 +67,7 @@ public class DPlayer {
 	private ItemStack[] respawnArmor;
 	private String[] linesCopy;
 	
-	private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, MessageConfig.getMessage(Messages.PLAYER_TREASURES));
+	private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, messageConfig.getMessage(Messages.PLAYER_TREASURES));
 	
 	private int initialLives = -1;
 	private int lives;
@@ -488,6 +488,7 @@ public class DPlayer {
 			} else {
 				savePlayer.reset(dConfig.getKeepInventoryOnEscape());
 			}
+			
 		} else {
 			savePlayer.reset(false);
 		}
@@ -551,18 +552,18 @@ public class DPlayer {
 				}
 			}
 			
-			// Give Secure Objects other Players
 			if (dGroup != null) {
+				// Give Secure Objects other Players
 				if ( !dGroup.isEmpty()) {
 					int i = 0;
 					Player groupPlayer;
 					do {
 						groupPlayer = dGroup.getPlayers().get(i);
 						if (groupPlayer != null) {
-							for (ItemStack istack : getPlayer().getInventory()) {
-								if (istack != null) {
-									if (gameWorld.getSecureObjects().contains(istack.getType())) {
-										groupPlayer.getInventory().addItem(istack);
+							for (ItemStack itemStack : getPlayer().getInventory()) {
+								if (itemStack != null) {
+									if (gameWorld.getSecureObjects().contains(itemStack.getType())) {
+										groupPlayer.getInventory().addItem(itemStack);
 									}
 								}
 							}
@@ -570,7 +571,16 @@ public class DPlayer {
 						i++;
 					} while (groupPlayer == null);
 				}
+				
+				if (dGroup.getCaptain().equals(player) && dGroup.getPlayers().size() > 0) {
+					// Captain here!
+					Player newCaptain = dGroup.getPlayers().get(0);
+					dGroup.setCaptain(newCaptain);
+					MessageUtil.sendMessage(newCaptain, messageConfig.getMessage(Messages.PLAYER_NEW_CAPTAIN));
+					// ...*flies away*
+				}
 			}
+			
 		}
 	}
 	
@@ -618,7 +628,7 @@ public class DPlayer {
 	}
 	
 	public void finishFloor(String specifiedFloor) {
-		MessageUtil.sendMessage(getPlayer(), MessageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
+		MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
 		finished = true;
 		
 		DGroup dGroup = DGroup.getByPlayer(getPlayer());
@@ -633,7 +643,7 @@ public class DPlayer {
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dPlayer = getByPlayer(player);
 			if ( !dPlayer.finished) {
-				MessageUtil.sendMessage(this.getPlayer(), MessageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
+				MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
 				return;
 			}
 		}
@@ -691,7 +701,7 @@ public class DPlayer {
 	}
 	
 	public void finish() {
-		MessageUtil.sendMessage(getPlayer(), MessageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
+		MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
 		finished = true;
 		
 		DGroup dGroup = DGroup.getByPlayer(getPlayer());
@@ -709,7 +719,7 @@ public class DPlayer {
 		for (Player player : dGroup.getPlayers()) {
 			DPlayer dPlayer = getByPlayer(player);
 			if ( !dPlayer.finished) {
-				MessageUtil.sendMessage(this.getPlayer(), MessageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
+				MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
 				hasToWait = true;
 				
 			} else if (dPlayer != this) {
@@ -784,14 +794,14 @@ public class DPlayer {
 				}
 			} else {
 				linesCopy = lines;
-				MessageUtil.sendMessage(getPlayer(), MessageConfig.getMessage(Messages.PLAYER_SIGN_COPIED));
+				MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_SIGN_COPIED));
 			}
 		} else {
 			String info = "" + block.getType();
 			if (block.getData() != 0) {
 				info = info + "," + block.getData();
 			}
-			MessageUtil.sendMessage(getPlayer(), MessageConfig.getMessage(Messages.PLAYER_BLOCK_INFO, info));
+			MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_BLOCK_INFO, info));
 		}
 	}
 	
@@ -896,7 +906,7 @@ public class DPlayer {
 		}
 		
 		if (kick) {
-			DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this);
+			DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.OFFLINE);
 			
 			if ( !dPlayerKickEvent.isCancelled()) {
 				leave();
