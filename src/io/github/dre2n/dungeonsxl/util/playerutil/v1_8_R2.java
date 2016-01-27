@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.util.offlineplayerutil;
+package io.github.dre2n.dungeonsxl.util.playerutil;
 
 import java.io.File;
 import java.util.UUID;
@@ -17,18 +17,18 @@ import com.mojang.authlib.GameProfile;
 
 class v1_8_R2 {
 	
-	static Player getOfflinePlayer(String player, UUID uuid) {
+	static Player getOfflinePlayer(String name, UUID uuid) {
 		Player pplayer = null;
 		try {
-			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
+			File playerFolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
 			
-			for (File playerfile : playerfolder.listFiles()) {
-				String filename = playerfile.getName();
-				String playername = filename.substring(0, filename.length() - 4);
+			for (File playerFile : playerFolder.listFiles()) {
+				String fileName = playerFile.getName();
+				String playerName = fileName.substring(0, fileName.length() - 4);
 				
-				GameProfile profile = new GameProfile(uuid, playername);
+				GameProfile profile = new GameProfile(uuid, playerName);
 				
-				if (playername.trim().equalsIgnoreCase(player)) {
+				if (playerName.trim().equalsIgnoreCase(name)) {
 					MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
 					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), profile, new PlayerInteractManager(server.getWorldServer(0)));
 					Player target = entity == null ? null : (Player) entity.getBukkitEntity();
@@ -44,18 +44,18 @@ class v1_8_R2 {
 		return pplayer;
 	}
 	
-	static Player getOfflinePlayer(String player, UUID uuid, Location location) {
+	static Player getOfflinePlayer(String name, UUID uuid, Location location) {
 		Player pplayer = null;
 		try {
-			File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
+			File playerFolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
 			
-			for (File playerfile : playerfolder.listFiles()) {
-				String filename = playerfile.getName();
-				String playername = filename.substring(0, filename.length() - 4);
+			for (File playerFile : playerFolder.listFiles()) {
+				String fileName = playerFile.getName();
+				String playerName = fileName.substring(0, fileName.length() - 4);
 				
-				GameProfile profile = new GameProfile(uuid, playername);
+				GameProfile profile = new GameProfile(uuid, playerName);
 				
-				if (playername.trim().equalsIgnoreCase(player)) {
+				if (playerName.trim().equalsIgnoreCase(name)) {
 					MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
 					EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), profile, new PlayerInteractManager(server.getWorldServer(0)));
 					entity.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());

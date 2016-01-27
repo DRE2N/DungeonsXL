@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.dungeon;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,27 +23,13 @@ public class DLootInventory {
 	public DLootInventory(Player player, ItemStack[] itemStacks) {
 		plugin.getDLootInventories().add(this);
 		
-		inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', plugin.getDMessages().getMessage(Messages.PLAYER_TREASURES)));
+		inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', plugin.getMessageConfig().getMessage(Messages.PLAYER_TREASURES)));
 		for (ItemStack itemStack : itemStacks) {
 			if (itemStack != null) {
 				inventory.addItem(itemStack);
 			}
 		}
 		this.player = player;
-	}
-	
-	/**
-	 * @param player
-	 * the player whose DLootIntentory will be returned
-	 */
-	public static DLootInventory getByPlayer(Player player) {
-		for (DLootInventory inventory : plugin.getDLootInventories()) {
-			if (inventory.player == player) {
-				return inventory;
-			}
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -104,6 +90,22 @@ public class DLootInventory {
 	 */
 	public void setTime(long time) {
 		this.time = time;
+	}
+	
+	// Static
+	
+	/**
+	 * @param player
+	 * the player whose DLootIntentory will be returned
+	 */
+	public static DLootInventory getByPlayer(Player player) {
+		for (DLootInventory inventory : plugin.getDLootInventories()) {
+			if (inventory.player == player) {
+				return inventory;
+			}
+		}
+		
+		return null;
 	}
 	
 }

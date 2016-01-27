@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class DGroupCreateEvent extends DGroupEvent implements Cancellable {
+public class DGroupDisbandEvent extends DGroupEvent implements Cancellable {
 	
 	public enum Cause {
 		
 		COMMAND,
-		GROUP_SIGN,
+		DUNGEON_FINISHED,
 		CUSTOM
 		
 	}
@@ -19,29 +19,34 @@ public class DGroupCreateEvent extends DGroupEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
-	private Player creator;
+	private Player disbander;
 	
 	private Cause cause;
 	
-	public DGroupCreateEvent(DGroup dGroup, Player creator, Cause cause) {
+	public DGroupDisbandEvent(DGroup dGroup, Cause cause) {
 		super(dGroup);
-		this.creator = creator;
+		this.cause = cause;
+	}
+	
+	public DGroupDisbandEvent(DGroup dGroup, Player disbander, Cause cause) {
+		super(dGroup);
+		this.disbander = disbander;
 		this.cause = cause;
 	}
 	
 	/**
-	 * @return the creator
+	 * @return the disbander
 	 */
-	public Player getCreator() {
-		return creator;
+	public Player getDisbander() {
+		return disbander;
 	}
 	
 	/**
-	 * @param creator
-	 * the creator to set
+	 * @param disbander
+	 * the disbander to set
 	 */
-	public void setCreator(Player creator) {
-		this.creator = creator;
+	public void setDisbander(Player disbander) {
+		this.disbander = disbander;
 	}
 	
 	/**

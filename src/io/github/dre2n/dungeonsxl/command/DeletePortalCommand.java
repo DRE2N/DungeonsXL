@@ -1,6 +1,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -29,10 +29,10 @@ public class DeletePortalCommand extends DCommand {
 		
 		if (dPortal != null) {
 			dPortal.delete();
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
 			
 		} else {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NO_PROTECTED_BLOCK));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NO_PROTECTED_BLOCK));
 		}
 	}
 	

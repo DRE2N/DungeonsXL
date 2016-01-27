@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.file;
+package io.github.dre2n.dungeonsxl.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,9 +7,16 @@ import java.util.Set;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class DMessages {
+public class MessageConfig {
 	
 	public enum Messages {
+		
+		GROUP_CREATED("Group_Created", "&4&v1&6 created the group &4&v2&6!"),
+		GROUP_DISBANDED("Group_Disbanded", "&4&v1&6 disbanded the group &4&v2&6."),
+		GROUP_INVITED_PLAYER("Group_InvitedPlayer", "&4&v1&6 invited the player &4&v2&6 to the group &4&v3&6."),
+		GROUP_UNINVITED_PLAYER("Group_UninvitedPlayer", "&4&v1&6 took back the invitation for &4&v2&6 to the group &4&v3&6."),
+		GROUP_KICKED_PLAYER("Group_KickedPlayer", "&4&v1&6 kicked the player &4&v2&6 from the group &4&v3&6."),
+		GROUP_PLAYER_JOINED("Group_PlayerJoined", "&6Player &4&v1&6 has joined the group!"),
 		
 		LOG_ERROR_MOB_ENCHANTMENT("Log_Error_MobEnchantment", "&4Error at loading mob.yml: Enchantment &6&v1&4 doesn't exist!"),
 		LOG_ERROR_MOBTYPE("Log_Error_MobType", "&4Error at loading mob.yml: Mob &6&v1&4 doesn't exist!"),
@@ -23,10 +30,14 @@ public class DMessages {
 		PLAYER_DEATH("Player_Death", "&6You died, lives left: &2&v1"),
 		PLAYER_DEATH_KICK("Player_DeathKick", "&2&v1&6 died and lost his last life."),
 		PLAYER_FINISHED_DUNGEON("Player_FinishedDungeon", "&6You successfully finished the Dungeon!"),
-		PLAYER_JOIN_GROUP("Player_JoinGroup", "&6Player &4&v1&6 has joined the Group!"),
+		PLAYER_INVITED("Player_Invited", "&4&v1&6 invited you to the group &4&v2&6."),
+		PLAYER_UNINVITED("Player_Uninvited", "&4&v1&6 took back your invitation to the group &4&v2&6."),
+		PLAYER_JOIN_GROUP("Player_JoinGroup", "&6You successfully joined the group!"),
+		PLAYER_KICKED("Player_Kicked", "&4You have been kicked out of the group &6&v1&4."),
 		PLAYER_LEAVE_GROUP("Player_LeaveGroup", "&6You have successfully left your group!"),
 		PLAYER_LEFT_GROUP("Player_LeftGroup", "&6Player &4&v1&6 has left the Group!"),
 		PLAYER_LOOT_ADDED("Player_LootAdded", "&4&v1&6 have been added to your reward inventory!"),
+		PLAYER_NEW_CAPTAIN("Player_NewCaptain", "&6You are now the new captain of your group."),
 		PLAYER_OFFLINE("Player_Offline", "&Player &4&v1&6 went offline. In &4&v2&6 seconds he will autmatically be kicked from the Dungeon!"),
 		PLAYER_OFFLINE_NEVER("Player_OfflineNever", "&Player &4&v1&6 went offline. He will &4not&6 be kicked from the Dungeon automatically!"),
 		PLAYER_PORTAL_ABORT("Player_PortalAbort", "&6Portal creation cancelled!"),
@@ -69,6 +80,8 @@ public class DMessages {
 		ERROR_DROP("Error_Drop", "&4You cannot drop safe items"),
 		ERROR_DUNGEON_NOT_EXIST("Error_DungeonNotExist", "&4Dungeon &6&v1&4 does not exist!"),
 		ERROR_ENDERCHEST("Error_Enderchest", "&4You cannot use an enderchest while in a Dungeon!"),
+		ERROR_IN_GROUP("Error_InGroup", "&4The player &6&v1&4 is already member of a group."),
+		ERROR_JOIN_GROUP("Error_JoinGroup", "&4You have to join a group first!"),
 		ERROR_LEAVE_DUNGEON("Error_LeaveDungeon", "&4You have to leave your current dungeon first!"),
 		ERROR_LEAVE_GROUP("Error_LeaveGroup", "&4You have to leave your group first!"),
 		ERROR_LEFT_CLICK("Error_Leftklick", "&4You have to use Left-Click on this sign!"),
@@ -81,8 +94,12 @@ public class DMessages {
 		ERROR_NO_PERMISSIONS("Error_NoPermissions", "&4You have no permission to do this!"),
 		ERROR_NO_PLAYER_COMMAND("Error_NoPlayerCommand", "&6/dxl &v1&4 cannot be executed as player!"),
 		ERROR_NO_PROTECTED_BLOCK("Error_NoDXLBlock", "&4This is not a block protected by DungeonsXL!"),
+		ERROR_NO_SUCH_GROUP("Error_NoSuchGroup", "&4The group &6&v1&4 does not exist!"),
+		ERROR_NO_SUCH_PLAYER("Error_NoSuchPlayer", "&4The player &6&v1&4 does not exist!"),
+		ERROR_NOT_CAPTAIN("Error_NotCaptain", "&4You are not the captain of your group!"),
 		ERROR_NOT_IN_DUNGEON("Error_NotInDungeon", "&4You are not in a dungeon!"),
-		ERROR_NOT_IN_GROUP("Error_NotInGroup", "&4You have to join a group first!"),
+		ERROR_NOT_IN_GROUP("Error_NotInGroup", "&4The player &6&v1&4 is not member of the group &6&v2&v4."),
+		ERROR_NOT_INVITED("Error_NotInvited", "&4You are not invited to the group &6&v1&4."),
 		ERROR_NOT_SAVED("Error_NotSaved", "&4The map &6&v1&4 has not been saved to the &6DungeonsXL/maps/ &4folder yet!"),
 		ERROR_TUTORIAL_NOT_EXIST("Error_TutorialNotExist", "&4Tutorial dungeon does not exist!"),
 		ERROR_READY("Error_Ready", "&4Choose your class first!"),
@@ -95,6 +112,14 @@ public class DMessages {
 		HELP_CMD_CREATE("Help_Cmd_Create", "/dxl create <name> - Creates a new dungeon"),
 		HELP_CMD_EDIT("Help_Cmd_Edit", "/dxl edit <name> - Edit an existing dungeon"),
 		HELP_CMD_ESCAPE("Help_Cmd_Escape", "/dxl escape - Leaves the current dungeon, without saving!"),
+		HELP_CMD_GROUP("Help_Cmd_Group", "/dxl group - Shows group command help"),
+		HELP_CMD_GROUP_CREATE("Help_Cmd_GroupCreate", "/dxl group create [group] - Creates a new group"),
+		HELP_CMD_GROUP_DISBAND("Help_Cmd_GroupDisband", "/dxl group disband ([group]) - Disbands a group"),
+		HELP_CMD_GROUP_INVITE("Help_Cmd_GroupInvite", "/dxl group invite [player]- Invites someone to your group"),
+		HELP_CMD_GROUP_UNINVITE("Help_Cmd_GroupUninvite", "/dxl group uninvite [player] - Takes back an invitation to your group"),
+		HELP_CMD_GROUP_JOIN("Help_Cmd_GroupJoin", "/dxl group join [group]- Join a group"),
+		HELP_CMD_GROUP_KICK("Help_Cmd_GroupKick", "/dxl group kick [player] - Kicks a player"),
+		HELP_CMD_GROUP_SHOW("Help_Cmd_GroupShow", "/dxl group show [group] - Shows a group"),
 		HELP_CMD_HELP("Help_Cmd_Help", "/dxl help <page> - Shows the help page"),
 		HELP_CMD_INVITE("Help_Cmd_Invite", "/dxl invite <player> <dungeon> - Invite a player to edit a dungeon"),
 		HELP_CMD_LEAVE("Help_Cmd_Leave", "/dxl leave - Leaves the current dungeon"),
@@ -175,7 +200,7 @@ public class DMessages {
 	private File file;
 	private FileConfiguration config;
 	
-	public DMessages(File file) {
+	public MessageConfig(File file) {
 		this.file = file;
 		
 		if ( !file.exists()) {

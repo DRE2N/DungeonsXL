@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
@@ -15,7 +15,7 @@ public class EscapeCommand extends DCommand {
 		setCommand("escape");
 		setMinArgs(0);
 		setMaxArgs(0);
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_ESCAPE));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_ESCAPE));
 		setPermission("dxl.escape");
 		setPlayerCommand(true);
 	}
@@ -27,7 +27,7 @@ public class EscapeCommand extends DCommand {
 		if (dPlayer != null) {
 			
 			if ( !dPlayer.isEditing()) {
-				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 				return;
 			}
 			
@@ -46,10 +46,10 @@ public class EscapeCommand extends DCommand {
 			DGroup dGroup = DGroup.getByPlayer(player);
 			if (dGroup != null) {
 				dGroup.removePlayer(player);
-				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.CMD_LEAVE_SUCCESS));
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_LEAVE_SUCCESS));
 				return;
 			}
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
 		}
 	}
 	

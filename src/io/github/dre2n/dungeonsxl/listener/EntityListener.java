@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.listener;
 
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
@@ -11,6 +11,7 @@ import io.github.dre2n.dungeonsxl.player.DPlayer;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -121,11 +122,13 @@ public class EntityListener implements Listener {
 			attackedDGroup = DGroup.getByPlayer(attackedPlayer);
 			
 			if (config.isPlayerVersusPlayer()) {
+				Bukkit.broadcastMessage("pvp cancel");
 				event.setCancelled(true);
 			}
 			
 			if (attackerDGroup != null && attackedDGroup != null) {
 				if (config.isFriendlyFire() && attackerDGroup.equals(attackedDGroup)) {
+					Bukkit.broadcastMessage("ff cancel");
 					event.setCancelled(true);
 				}
 			}

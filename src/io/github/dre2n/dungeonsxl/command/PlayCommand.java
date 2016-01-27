@@ -1,11 +1,12 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
@@ -21,7 +22,7 @@ public class PlayCommand extends DCommand {
 		setCommand("play");
 		setMinArgs(1);
 		setMaxArgs(2);
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_PLAY));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_PLAY));
 		setPermission("dxl.play");
 		setPlayerCommand(true);
 	}
@@ -29,10 +30,10 @@ public class PlayCommand extends DCommand {
 	@Override
 	public void onExecute(String[] args, CommandSender sender) {
 		Player player = (Player) sender;
-		DPlayer dplayer = DPlayer.getByPlayer(player);
+		DPlayer dPlayer = DPlayer.getByPlayer(player);
 		
-		if (dplayer != null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
+		if (dPlayer != null) {
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 			return;
 		}
 		
@@ -63,8 +64,8 @@ public class PlayCommand extends DCommand {
 			}
 		}
 		
-		if ( !multiFloor && !EditWorld.exist(identifier)) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, identifier));
+		if ( !multiFloor && !EditWorld.exists(identifier)) {
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, identifier));
 			return;
 		}
 		
@@ -75,27 +76,54 @@ public class PlayCommand extends DCommand {
 				WorldConfig confReader = new WorldConfig(file);
 				
 				if (confReader != null) {
-					MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_COOLDOWN, "" + confReader.getTimeToNextPlay()));
+					MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_COOLDOWN, "" + confReader.getTimeToNextPlay()));
 				}
 			}
 			return;
 		}
 		
 		if ( !GameWorld.checkRequirements(mapName, player)) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_REQUIREMENTS));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_REQUIREMENTS));
 			return;
 		}
 		
-		if (DGroup.getByPlayer(player) != null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_GROUP));
-			return;
-		}
+		DGroup dGroup = DGroup.getByPlayer(player);
 		
-		DGroup dGroup = new DGroup(player, identifier, multiFloor);
+		if (dGroup != null) {
+			if ( !dGroup.getCaptain().equals(player) && !player.hasPermission("dxl.bypass")) {
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_CAPTAIN));
+			}
+			
+			if (dGroup.getMapName() == null) {
+				if ( !multiFloor) {
+					dGroup.setMapName(identifier);
+					
+				} else {
+					dGroup.setDungeonName(identifier);
+					Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+					
+					if (dungeon != null) {
+						DungeonConfig config = dungeon.getConfig();
+						
+						if (config != null) {
+							dGroup.setMapName(config.getStartFloor());
+						}
+					}
+				}
+				
+			} else {
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_GROUP));
+				return;
+			}
+			
+		} else {
+			dGroup = new DGroup(player, identifier, multiFloor);
+		}
 		
 		DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
 		
 		if (event.isCancelled()) {
+			plugin.getDGroups().remove(dGroup);
 			dGroup = null;
 		}
 		
@@ -108,16 +136,20 @@ public class PlayCommand extends DCommand {
 		}
 		
 		if (dGroup.getGameWorld() == null) {
-			MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NOT_SAVED, DGroup.getByPlayer(player).getMapName()));
+			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_SAVED, DGroup.getByPlayer(player).getMapName()));
 			dGroup.remove();
 			return;
 		}
 		
 		if (dGroup.getGameWorld().getLocLobby() == null) {
-			new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getWorld().getSpawnLocation(), false);
+			for (Player groupPlayer : dGroup.getPlayers()) {
+				new DPlayer(groupPlayer, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getWorld().getSpawnLocation(), false);
+			}
 			
 		} else {
-			new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false);
+			for (Player groupPlayer : dGroup.getPlayers()) {
+				new DPlayer(groupPlayer, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false);
+			}
 		}
 	}
 	

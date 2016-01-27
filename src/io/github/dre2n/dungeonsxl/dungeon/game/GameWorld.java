@@ -1,9 +1,9 @@
 package io.github.dre2n.dungeonsxl.dungeon.game;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
-import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldLoadEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
@@ -80,49 +80,6 @@ public class GameWorld {
 			if ( !exist) {
 				id = i;
 			}
-		}
-	}
-	
-	public void checkSign(Block block) {
-		if (block.getState() instanceof Sign) {
-			Sign sign = (Sign) block.getState();
-			dSigns.add(DSign.create(sign, this));
-		}
-	}
-	
-	public void startGame() {
-		GameWorldStartGameEvent event = new GameWorldStartGameEvent(this);
-		
-		if (event.isCancelled()) {
-			return;
-		}
-		
-		isPlaying = true;
-		
-		for (DSign dSign : dSigns) {
-			if (dSign != null) {
-				if ( !dSign.getType().isOnDungeonInit()) {
-					dSign.onInit();
-				}
-			}
-		}
-		if (RedstoneTrigger.hasTriggers(this)) {
-			for (RedstoneTrigger trigger : RedstoneTrigger.getTriggersArray(this)) {
-				trigger.onTrigger();
-			}
-		}
-		for (DSign dSign : dSigns) {
-			if (dSign != null) {
-				if ( !dSign.hasTriggers()) {
-					dSign.onTrigger();
-				}
-			}
-		}
-	}
-	
-	public void msg(String msg) {
-		for (DPlayer dPlayer : DPlayer.getByWorld(world)) {
-			MessageUtil.sendMessage(dPlayer.getPlayer(), msg);
 		}
 	}
 	
@@ -365,7 +322,153 @@ public class GameWorld {
 		return null;
 	}
 	
+	public void checkSign(Block block) {
+		if (block.getState() instanceof Sign) {
+			Sign sign = (Sign) block.getState();
+			dSigns.add(DSign.create(sign, this));
+		}
+	}
+	
+	public void startGame() {
+		GameWorldStartGameEvent event = new GameWorldStartGameEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
+		isPlaying = true;
+		
+		for (DSign dSign : dSigns) {
+			if (dSign != null) {
+				if ( !dSign.getType().isOnDungeonInit()) {
+					dSign.onInit();
+				}
+			}
+		}
+		if (RedstoneTrigger.hasTriggers(this)) {
+			for (RedstoneTrigger trigger : RedstoneTrigger.getTriggersArray(this)) {
+				trigger.onTrigger();
+			}
+		}
+		for (DSign dSign : dSigns) {
+			if (dSign != null) {
+				if ( !dSign.hasTriggers()) {
+					dSign.onTrigger();
+				}
+			}
+		}
+	}
+	
+	public void sendMessage(String message) {
+		for (DPlayer dPlayer : DPlayer.getByWorld(world)) {
+			MessageUtil.sendMessage(dPlayer.getPlayer(), message);
+		}
+	}
+	
+	public void delete() {
+		GameWorldUnloadEvent event = new GameWorldUnloadEvent(this);
+		
+		if (event.isCancelled()) {
+			return;
+		}
+		
+		plugin.getGameWorlds().remove(this);
+		plugin.getServer().unloadWorld(world, true);
+		File dir = new File("DXL_Game_" + id);
+		FileUtil.removeDirectory(dir);
+	}
+	
+	public void update() {
+		if (getWorld() == null) {
+			return;
+		}
+		
+		// Update Spiders
+		for (LivingEntity mob : getWorld().getLivingEntities()) {
+			if (mob.getType() == EntityType.SPIDER || mob.getType() == EntityType.CAVE_SPIDER) {
+				Spider spider = (Spider) mob;
+				if (spider.getTarget() != null) {
+					if (spider.getTarget().getType() == EntityType.PLAYER) {
+						continue;
+					}
+				}
+				for (Entity player : spider.getNearbyEntities(10, 10, 10)) {
+					if (player.getType() == EntityType.PLAYER) {
+						spider.setTarget((LivingEntity) player);
+					}
+				}
+			}
+		}
+	}
+	
 	// Statics
+	
+	public static GameWorld load(String name) {
+		GameWorldLoadEvent event = new GameWorldLoadEvent(name);
+		
+		if (event.isCancelled()) {
+			return null;
+		}
+		
+		File file = new File(plugin.getDataFolder(), "/maps/" + name);
+		
+		if (file.exists()) {
+			GameWorld gameWorld = new GameWorld();
+			gameWorld.mapName = name;
+			
+			// Unload empty editWorlds
+			for (EditWorld editWorld : plugin.getEditWorlds()) {
+				if (editWorld.getWorld().getPlayers().isEmpty()) {
+					editWorld.delete();
+				}
+			}
+			
+			// Config einlesen
+			gameWorld.worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName, "config.yml"));
+			
+			// Secure Objects
+			gameWorld.secureObjects = gameWorld.worldConfig.getSecureObjects();
+			
+			// World
+			FileUtil.copyDirectory(file, new File("DXL_Game_" + gameWorld.id));
+			
+			// Id File
+			File idFile = new File("DXL_Game_" + gameWorld.id + "/.id_" + name);
+			try {
+				idFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			gameWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + gameWorld.id));
+			
+			ObjectInputStream os;
+			try {
+				os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName + "/DXLData.data")));
+				
+				int length = os.readInt();
+				for (int i = 0; i < length; i++) {
+					int x = os.readInt();
+					int y = os.readInt();
+					int z = os.readInt();
+					Block block = gameWorld.world.getBlockAt(x, y, z);
+					gameWorld.checkSign(block);
+				}
+				
+				os.close();
+				
+			} catch (FileNotFoundException exception) {
+				plugin.getLogger().info("Could not find any sign data for the world \"" + name + "\"!");
+				
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+			
+			return gameWorld;
+		}
+		
+		return null;
+	}
 	
 	public static GameWorld getByWorld(World world) {
 		for (GameWorld gameWorld : plugin.getGameWorlds()) {
@@ -406,6 +509,28 @@ public class GameWorld {
 		}
 		
 		return true;
+	}
+	
+	public static long getPlayerTime(String dungeon, Player player) {
+		File file = new File(plugin.getDataFolder() + "/maps/" + dungeon, "players.yml");
+		
+		if ( !file.exists()) {
+			try {
+				file.createNewFile();
+				
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+		}
+		
+		FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
+		if (playerConfig.contains(player.getUniqueId().toString())) {
+			return playerConfig.getLong(player.getUniqueId().toString());
+		}
+		if (playerConfig.contains(player.getName())) {
+			return playerConfig.getLong(player.getName());
+		}
+		return -1;
 	}
 	
 	public static boolean checkRequirements(String dungeon, Player player) {
@@ -481,133 +606,6 @@ public class GameWorld {
 			}
 		}
 		return true;
-	}
-	
-	public static long getPlayerTime(String dungeon, Player player) {
-		File file = new File(plugin.getDataFolder() + "/maps/" + dungeon, "players.yml");
-		
-		if ( !file.exists()) {
-			try {
-				file.createNewFile();
-				
-			} catch (IOException exception) {
-				exception.printStackTrace();
-			}
-		}
-		
-		FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-		if (playerConfig.contains(player.getUniqueId().toString())) {
-			return playerConfig.getLong(player.getUniqueId().toString());
-		}
-		if (playerConfig.contains(player.getName())) {
-			return playerConfig.getLong(player.getName());
-		}
-		return -1;
-	}
-	
-	public void delete() {
-		GameWorldUnloadEvent event = new GameWorldUnloadEvent(this);
-		
-		if (event.isCancelled()) {
-			return;
-		}
-		
-		plugin.getGameWorlds().remove(this);
-		plugin.getServer().unloadWorld(world, true);
-		File dir = new File("DXL_Game_" + id);
-		FileUtil.removeDirectory(dir);
-	}
-	
-	public static GameWorld load(String name) {
-		GameWorldLoadEvent event = new GameWorldLoadEvent(name);
-		
-		if (event.isCancelled()) {
-			return null;
-		}
-		
-		File file = new File(plugin.getDataFolder(), "/maps/" + name);
-		
-		if (file.exists()) {
-			GameWorld gameWorld = new GameWorld();
-			gameWorld.mapName = name;
-			
-			// Unload empty editWorlds
-			for (EditWorld editWorld : plugin.getEditWorlds()) {
-				if (editWorld.getWorld().getPlayers().isEmpty()) {
-					editWorld.delete();
-				}
-			}
-			
-			// Config einlesen
-			gameWorld.worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName, "config.yml"));
-			
-			// Secure Objects
-			gameWorld.secureObjects = gameWorld.worldConfig.getSecureObjects();
-			
-			// World
-			FileUtil.copyDirectory(file, new File("DXL_Game_" + gameWorld.id));
-			
-			// Id File
-			File idFile = new File("DXL_Game_" + gameWorld.id + "/.id_" + name);
-			try {
-				idFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			gameWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + gameWorld.id));
-			
-			ObjectInputStream os;
-			try {
-				os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName + "/DXLData.data")));
-				
-				int length = os.readInt();
-				for (int i = 0; i < length; i++) {
-					int x = os.readInt();
-					int y = os.readInt();
-					int z = os.readInt();
-					Block block = gameWorld.world.getBlockAt(x, y, z);
-					gameWorld.checkSign(block);
-				}
-				
-				os.close();
-				
-			} catch (FileNotFoundException exception) {
-				plugin.getLogger().info("Could not find any sign data for the world \"" + name + "\"!");
-				
-			} catch (IOException exception) {
-				exception.printStackTrace();
-			}
-			
-			return gameWorld;
-		}
-		
-		return null;
-	}
-	
-	public static void update() {
-		for (GameWorld gameWorld : plugin.getGameWorlds()) {
-			if (gameWorld.getWorld() == null) {
-				return;
-			}
-			
-			// Update Spiders
-			for (LivingEntity mob : gameWorld.getWorld().getLivingEntities()) {
-				if (mob.getType() == EntityType.SPIDER || mob.getType() == EntityType.CAVE_SPIDER) {
-					Spider spider = (Spider) mob;
-					if (spider.getTarget() != null) {
-						if (spider.getTarget().getType() == EntityType.PLAYER) {
-							continue;
-						}
-					}
-					for (Entity player : spider.getNearbyEntities(10, 10, 10)) {
-						if (player.getType() == EntityType.PLAYER) {
-							spider.setTarget((LivingEntity) player);
-						}
-					}
-				}
-			}
-		}
 	}
 	
 }

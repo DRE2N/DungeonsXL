@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -15,7 +15,7 @@ public class CreateCommand extends DCommand {
 		setMinArgs(1);
 		setMaxArgs(1);
 		setCommand("create");
-		setHelp(dMessages.getMessage(Messages.HELP_CMD_CREATE));
+		setHelp(messageConfig.getMessage(Messages.HELP_CMD_CREATE));
 		setPermission("dxl.create");
 		setPlayerCommand(true);
 		setConsoleCommand(true);
@@ -28,8 +28,8 @@ public class CreateCommand extends DCommand {
 		if (sender instanceof ConsoleCommandSender) {
 			if (name.length() <= 15) {
 				// Msg create
-				plugin.getLogger().info(dMessages.getMessage(Messages.LOG_NEW_DUNGEON));
-				plugin.getLogger().info(dMessages.getMessage(Messages.LOG_GENERATE_NEW_WORLD));
+				plugin.getLogger().info(messageConfig.getMessage(Messages.LOG_NEW_DUNGEON));
+				plugin.getLogger().info(messageConfig.getMessage(Messages.LOG_GENERATE_NEW_WORLD));
 				
 				// Create World
 				EditWorld editWorld = new EditWorld();
@@ -39,24 +39,24 @@ public class CreateCommand extends DCommand {
 				editWorld.delete();
 				
 				// MSG Done
-				plugin.getLogger().info(dMessages.getMessage(Messages.LOG_WORLD_GENERATION_FINISHED));
+				plugin.getLogger().info(messageConfig.getMessage(Messages.LOG_WORLD_GENERATION_FINISHED));
 				
 			} else {
-				MessageUtil.sendMessage(sender, dMessages.getMessage(Messages.ERROR_NAME_TO_LONG));
+				MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NAME_TO_LONG));
 			}
 			
 		} else if (sender instanceof Player) {
 			Player player = (Player) sender;
 			
 			if (DPlayer.getByPlayer(player) != null) {
-				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_LEAVE_DUNGEON));
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_DUNGEON));
 				return;
 			}
 			
 			if (name.length() <= 15) {
 				// Msg create
-				plugin.getLogger().info(dMessages.getMessage(Messages.LOG_NEW_DUNGEON));
-				plugin.getLogger().info(dMessages.getMessage(Messages.LOG_GENERATE_NEW_WORLD));
+				plugin.getLogger().info(messageConfig.getMessage(Messages.LOG_NEW_DUNGEON));
+				plugin.getLogger().info(messageConfig.getMessage(Messages.LOG_GENERATE_NEW_WORLD));
 				
 				// Create World
 				EditWorld editWorld = new EditWorld();
@@ -64,7 +64,7 @@ public class CreateCommand extends DCommand {
 				editWorld.setMapName(name);
 				
 				// MSG Done
-				plugin.getLogger().info(dMessages.getMessage(Messages.LOG_WORLD_GENERATION_FINISHED));
+				plugin.getLogger().info(messageConfig.getMessage(Messages.LOG_WORLD_GENERATION_FINISHED));
 				
 				// Tp Player
 				if (editWorld.getLobby() == null) {
@@ -75,7 +75,7 @@ public class CreateCommand extends DCommand {
 				}
 				
 			} else {
-				MessageUtil.sendMessage(player, dMessages.getMessage(Messages.ERROR_NAME_TO_LONG));
+				MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NAME_TO_LONG));
 			}
 		}
 	}

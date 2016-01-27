@@ -7,11 +7,38 @@ import org.bukkit.event.HandlerList;
 
 public class DPlayerKickEvent extends DPlayerEvent implements Cancellable {
 	
+	public enum Cause {
+		
+		COMMAND,
+		DEATH,
+		OFFLINE,
+		CUSTOM
+		
+	}
+	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled;
 	
-	public DPlayerKickEvent(DPlayer dPlayer) {
+	private Cause cause;
+	
+	public DPlayerKickEvent(DPlayer dPlayer, Cause cause) {
 		super(dPlayer);
+		this.cause = cause;
+	}
+	
+	/**
+	 * @return the cause
+	 */
+	public Cause getCause() {
+		return cause;
+	}
+	
+	/**
+	 * @param cause
+	 * the cause to set
+	 */
+	public void setCause(Cause cause) {
+		this.cause = cause;
 	}
 	
 	@Override

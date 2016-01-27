@@ -1,6 +1,4 @@
-package io.github.dre2n.dungeonsxl.file;
-
-import io.github.dre2n.dungeonsxl.dungeon.WorldConfig;
+package io.github.dre2n.dungeonsxl.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +21,7 @@ public class MainConfig {
 	private String tutorialEndGroup = "player";
 	
 	/* Default Dungeon Settings */
-	public WorldConfig defaultDungeon;
+	private WorldConfig defaultWorldConfig;
 	
 	private List<String> editCommandWhitelist = new ArrayList<String>();
 	
@@ -92,8 +90,8 @@ public class MainConfig {
 			/* Default Dungeon Config */
 			ConfigurationSection configSection = configFile.getConfigurationSection("default");
 			if (configSection != null) {
-				defaultDungeon = new WorldConfig(configSection);
-				WorldConfig.defaultConfig = defaultDungeon;
+				setDefaultWorldConfig(new WorldConfig(configSection));
+				WorldConfig.defaultConfig = defaultWorldConfig;// TODO
 			}
 		}
 	}
@@ -153,6 +151,21 @@ public class MainConfig {
 	 */
 	public List<String> getEditCommandWhitelist() {
 		return editCommandWhitelist;
+	}
+	
+	/**
+	 * @return the defaultWorldConfig
+	 */
+	public WorldConfig getDefaultWorldConfig() {
+		return defaultWorldConfig;
+	}
+	
+	/**
+	 * @param defaultWorldConfig
+	 * the defaultWorldConfig to set
+	 */
+	public void setDefaultWorldConfig(WorldConfig defaultWorldConfig) {
+		this.defaultWorldConfig = defaultWorldConfig;
 	}
 	
 }

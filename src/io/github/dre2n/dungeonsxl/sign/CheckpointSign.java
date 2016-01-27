@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
-import io.github.dre2n.dungeonsxl.file.DMessages.Messages;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 
@@ -43,7 +43,7 @@ public class CheckpointSign extends DSign {
 		
 		for (DPlayer dplayer : DPlayer.getByWorld(getGameWorld().getWorld())) {
 			dplayer.setCheckpoint(getSign().getLocation());
-			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getDMessages().getMessage(Messages.PLAYER_CHECKPOINT_REACHED));
+			MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getMessageConfig().getMessage(Messages.PLAYER_CHECKPOINT_REACHED));
 		}
 		
 		remove();
@@ -60,7 +60,7 @@ public class CheckpointSign extends DSign {
 			if ( !done.contains(dplayer)) {
 				done.add(dplayer);
 				dplayer.setCheckpoint(getSign().getLocation());
-				MessageUtil.sendMessage(player, plugin.getDMessages().getMessage(Messages.PLAYER_CHECKPOINT_REACHED));
+				MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_CHECKPOINT_REACHED));
 			}
 		}
 		
