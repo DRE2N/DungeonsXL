@@ -145,7 +145,7 @@ public class DPortal {
 					        || type == Material.WEB || type == Material.LONG_GRASS || type == Material.DEAD_BUSH || type == Material.PISTON_EXTENSION || type == Material.YELLOW_FLOWER
 					        || type == Material.RED_ROSE || type == Material.BROWN_MUSHROOM || type == Material.RED_MUSHROOM || type == Material.TORCH || type == Material.FIRE
 					        || type == Material.CROPS || type == Material.REDSTONE_WIRE || type == Material.REDSTONE_TORCH_OFF || type == Material.SNOW || type == Material.REDSTONE_TORCH_ON) {
-						world.getBlockAt(xx, yy, zz).setType(Material.PORTAL);
+						world.getBlockAt(xx, yy, zz).setType(plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL);
 					}
 					
 					zz = zz + zcount;
@@ -216,7 +216,7 @@ public class DPortal {
 				do {
 					Material type = world.getBlockAt(xx, yy, zz).getType();
 					
-					if (type == Material.PORTAL) {
+					if (type == (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 						world.getBlockAt(xx, yy, zz).setType(Material.AIR);
 					}
 					

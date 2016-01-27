@@ -371,6 +371,8 @@ public class PlayerListener implements Listener {
 			dportal.teleport(player);
 		}
 	}
+
+        
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onTeleport(PlayerTeleportEvent event) {
@@ -586,21 +588,29 @@ public class PlayerListener implements Listener {
 	public void onMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		DLootInventory inventory = DLootInventory.getByPlayer(player);
+                
+                DPortal dportal = DPortal.getByLocation(player.getLocation());
+		
+		if (plugin.getMainConfig().useWaterPortal() && dportal != null && DGroup.getByPlayer(player) != null){
+			dportal.teleport(player);
+                        return;
+                }
 		
 		if (inventory == null) {
 			return;
 		}
 		
-		if (player.getLocation().getBlock().getType() == Material.PORTAL) {
+		if (player.getLocation().getBlock().getType() == (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			return;
 		}
 		
-		if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
-		        && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative( -1, 0, 0).getType() != Material.PORTAL
-		        && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
+		if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL) && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)
+		        && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL) && player.getLocation().getBlock().getRelative( -1, 0, 0).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)
+		        && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL) && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != (plugin.getMainConfig().useWaterPortal() ? Material.STATIONARY_WATER : Material.PORTAL)) {
 			inventory.setInventoryView(inventory.getPlayer().openInventory(inventory.getInventory()));
 			inventory.setTime(System.currentTimeMillis());
 		}
+                
 	}
 	
 }

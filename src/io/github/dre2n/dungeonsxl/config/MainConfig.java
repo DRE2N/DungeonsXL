@@ -13,6 +13,7 @@ public class MainConfig {
 	
 	private String language = "en";
 	private boolean enableEconomy = false;
+        private boolean useWaterPortal = false;
 	
 	/* Tutorial */
 	private boolean tutorialActivated = false;
@@ -33,6 +34,7 @@ public class MainConfig {
 				FileConfiguration configFile = new YamlConfiguration();
 				configFile.set("language", "en");
 				configFile.set("enableEconomy", true);
+                                configFile.set("useWaterPortal", false);
 				configFile.set("tutorialActivated", false);
 				configFile.set("tutorialDungeon", "tutorial");
 				configFile.set("tutorialStartGroup", "default");
@@ -65,6 +67,10 @@ public class MainConfig {
 			
 			if (configFile.contains("enableEconomy")) {
 				enableEconomy = configFile.getBoolean("enableEconomy");
+			}
+                        
+                        if (configFile.contains("useWaterPortal")) {
+				useWaterPortal = configFile.getBoolean("useWaterPortal");
 			}
 			
 			if (configFile.contains("tutorial.activated")) {
@@ -116,6 +122,13 @@ public class MainConfig {
 	 */
 	public boolean enableEconomy() {
 		return enableEconomy;
+	}
+        
+        /**
+	 * @return the useWaterPortal
+	 */
+	public boolean useWaterPortal() {
+		return useWaterPortal;
 	}
 	
 	/**
