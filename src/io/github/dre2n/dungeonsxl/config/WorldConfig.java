@@ -1,6 +1,7 @@
 package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
 import io.github.dre2n.dungeonsxl.player.DClass;
 import io.github.dre2n.dungeonsxl.requirement.FeeRequirement;
@@ -69,6 +70,8 @@ public class WorldConfig {
 	private List<String> finishedOne;
 	private List<String> finishedAll;
 	private int timeLastPlayed = 0;
+	
+	private GameType forcedGameType;
 	
 	// MobTypes
 	private Set<DMobType> mobTypes = new HashSet<DMobType>();
@@ -286,7 +289,7 @@ public class WorldConfig {
 		/* Dungeon Requirements */
 		if (configFile.contains("requirements")) {
 			for (String identifier : configFile.getConfigurationSection("requirements").getKeys(false)) {
-				Requirement requirement = Requirement.create(plugin.getRequirements().getByIdentifier(identifier));
+				Requirement requirement = Requirement.create(plugin.getRequirementTypes().getByIdentifier(identifier));
 				
 				// Check for built-in requirements
 				if (requirement instanceof FeeRequirement) {
@@ -321,6 +324,18 @@ public class WorldConfig {
 		
 		if (configFile.contains("gameCommandWhitelist")) {
 			gameCommandWhitelist = configFile.getStringList("gameCommandWhitelist");
+		} else {
+			gameCommandWhitelist = plugin.getDefaultConfig().gameCommandWhitelist;
+		}
+		
+		if (configFile.contains("forcedGameType")) {
+			GameType gameType = plugin.getGameTypes().getByName(configFile.getString("forcedGameType"));
+			if (gameType != null) {
+				forcedGameType = gameType;
+				
+			} else {
+				forcedGameType = null;
+			}
 		}
 	}
 	
@@ -599,6 +614,21 @@ public class WorldConfig {
 	 */
 	public List<String> getGameCommandWhitelist() {
 		return gameCommandWhitelist;
+	}
+	
+	/**
+	 * @return the forcedGameType
+	 */
+	public GameType getForcedGameType() {
+		return forcedGameType;
+	}
+	
+	/**
+	 * @param forcedGameType
+	 * the forcedGameType to set
+	 */
+	public void setForcedGameType(GameType forcedGameType) {
+		this.forcedGameType = forcedGameType;
 	}
 	
 }

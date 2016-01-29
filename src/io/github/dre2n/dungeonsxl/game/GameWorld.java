@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.dungeon.game;
+package io.github.dre2n.dungeonsxl.game;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
@@ -43,7 +43,9 @@ public class GameWorld {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
-	// Variables placeable
+	// Variables
+	private Game game;
+	
 	private boolean tutorial;
 	
 	private CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks = new CopyOnWriteArrayList<GamePlaceableBlock>();
@@ -81,6 +83,21 @@ public class GameWorld {
 				id = i;
 			}
 		}
+	}
+	
+	/**
+	 * @return the game
+	 */
+	public Game getGame() {
+		return game;
+	}
+	
+	/**
+	 * @param game
+	 * the game to set
+	 */
+	public void setGame(Game game) {
+		this.game = game;
 	}
 	
 	/**
@@ -330,7 +347,7 @@ public class GameWorld {
 	}
 	
 	public void startGame() {
-		GameWorldStartGameEvent event = new GameWorldStartGameEvent(this);
+		GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, game);
 		
 		if (event.isCancelled()) {
 			return;

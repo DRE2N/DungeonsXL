@@ -3,8 +3,8 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.dungeon.game.GamePlaceableBlock;
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
@@ -30,7 +30,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class BlockListener implements Listener {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPhysics(BlockPhysicsEvent event) {

@@ -1,4 +1,4 @@
-package io.github.dre2n.dungeonsxl.dungeon.game;
+package io.github.dre2n.dungeonsxl.game;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;

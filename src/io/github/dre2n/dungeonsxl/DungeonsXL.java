@@ -7,7 +7,8 @@ import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.game.GameTypes;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
@@ -20,8 +21,8 @@ import io.github.dre2n.dungeonsxl.listener.WorldListener;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
-import io.github.dre2n.dungeonsxl.requirement.Requirements;
-import io.github.dre2n.dungeonsxl.reward.Rewards;
+import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
+import io.github.dre2n.dungeonsxl.reward.RewardTypes;
 import io.github.dre2n.dungeonsxl.sign.DSigns;
 import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
@@ -49,6 +50,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class DungeonsXL extends JavaPlugin {
 	
 	private static DungeonsXL plugin;
+	
 	private Economy economyProvider;
 	private Permission permissionProvider;
 	
@@ -59,8 +61,9 @@ public class DungeonsXL extends JavaPlugin {
 	
 	private DCommands dCommands;
 	private DSigns dSigns;
-	private Requirements requirements;
-	private Rewards rewards;
+	private GameTypes gameTypes;
+	private RequirementTypes requirementTypes;
+	private RewardTypes rewardTypes;
 	private Triggers triggers;
 	private Dungeons dungeons;
 	
@@ -94,8 +97,9 @@ public class DungeonsXL extends JavaPlugin {
 		loadMessageConfig(new File(plugin.getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
 		loadVersionUtil();
 		loadDCommands();
-		loadRequirements();
-		loadRewards();
+		loadGameTypes();
+		loadRequirementTypes();
+		loadRewardTypes();
 		loadTriggers();
 		loadDSigns();
 		loadDungeons();
@@ -135,8 +139,8 @@ public class DungeonsXL extends JavaPlugin {
 		messageConfig.save();
 		
 		// DPlayer leaves World
-		for (DPlayer dplayer : dPlayers) {
-			dplayer.leave();
+		for (DPlayer dPlayer : dPlayers) {
+			dPlayer.leave();
 		}
 		
 		// Delete all Data
@@ -195,8 +199,8 @@ public class DungeonsXL extends JavaPlugin {
 		try {
 			configFile.save(file);
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			exception.printStackTrace();
 		}
 	}
 	
@@ -377,31 +381,45 @@ public class DungeonsXL extends JavaPlugin {
 	}
 	
 	/**
-	 * @return the requirements
+	 * @return the game types
 	 */
-	public Requirements getRequirements() {
-		return requirements;
+	public GameTypes getGameTypes() {
+		return gameTypes;
 	}
 	
 	/**
-	 * load / reload a new instance of Requirements
+	 * load / reload a new instance of GameTypes
 	 */
-	public void loadRequirements() {
-		requirements = new Requirements();
+	public void loadGameTypes() {
+		gameTypes = new GameTypes();
 	}
 	
 	/**
-	 * @return the rewards
+	 * @return the requirement types
 	 */
-	public Rewards getRewards() {
-		return rewards;
+	public RequirementTypes getRequirementTypes() {
+		return requirementTypes;
 	}
 	
 	/**
-	 * load / reload a new instance of Rewards
+	 * load / reload a new instance of RequirementTypes
 	 */
-	public void loadRewards() {
-		rewards = new Rewards();
+	public void loadRequirementTypes() {
+		requirementTypes = new RequirementTypes();
+	}
+	
+	/**
+	 * @return the reward types
+	 */
+	public RewardTypes getRewardTypes() {
+		return rewardTypes;
+	}
+	
+	/**
+	 * load / reload a new instance of RewardTypes
+	 */
+	public void loadRewardTypes() {
+		rewardTypes = new RewardTypes();
 	}
 	
 	/**

@@ -3,10 +3,11 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -15,6 +16,7 @@ import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Player;
 
@@ -24,7 +26,7 @@ public class DGroup {
 	
 	private String name;
 	private Player captain;
-	private List<Player> players = new ArrayList<Player>();
+	private List<Player> players = new CopyOnWriteArrayList<Player>();
 	private List<UUID> invitedPlayers = new ArrayList<UUID>();
 	private String dungeonName;
 	private String mapName;
@@ -414,7 +416,30 @@ public class DGroup {
 		GroupSign.updatePerGroup(this);
 	}
 	
-	public void startGame() {
+	public void startGame(Game game) {
+		if (game == null) {
+			return;
+		}
+		
+		for (DGroup dGroup : game.getDGroups()) {
+			if (dGroup == null) {
+				continue;
+			}
+			
+			for (Player player : dGroup.getPlayers()) {
+				DPlayer dPlayer = DPlayer.getByPlayer(player);
+				if (dPlayer == null) {
+					continue;
+				}
+				
+				if ( !dPlayer.isReady()) {
+					return;
+				}
+			}
+		}
+		
+		gameWorld.setGame(game);
+		
 		DGroupStartFloorEvent event = new DGroupStartFloorEvent(this, gameWorld);
 		
 		if (event.isCancelled()) {
@@ -429,10 +454,10 @@ public class DGroup {
 			DPlayer dPlayer = DPlayer.getByPlayer(player);
 			dPlayer.respawn();
 			if (dungeonName != null) {
-				MessageUtil.sendScreenMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", ""));
+				MessageUtil.sendScreenMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", " "));
 				
 			} else {
-				MessageUtil.sendScreenMessage(player, "&4&l" + mapName.replaceAll("_", ""));
+				MessageUtil.sendScreenMessage(player, "&4&l" + mapName.replaceAll("_", " "));
 			}
 			
 			for (Requirement requirement : gameWorld.getConfig().getRequirements()) {

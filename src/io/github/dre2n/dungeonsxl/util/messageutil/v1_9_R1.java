@@ -16,8 +16,8 @@ class v1_9_R1 {
 		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
 		title = ChatColor.translateAlternateColorCodes('&', title);
 		
-		IChatBaseComponent subtitleComponent = ChatSerializer.a("{\"text\": \"" + ChatColor.translateAlternateColorCodes('&', subtitle) + "\"}");
-		IChatBaseComponent titleComponent = ChatSerializer.a("{\"text\": \"" + ChatColor.translateAlternateColorCodes('&', title) + "\"}");
+		IChatBaseComponent subtitleComponent = ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
+		IChatBaseComponent titleComponent = ChatSerializer.a("{\"text\": \"" + title + "\"}");
 		
 		PacketPlayOutTitle clearPacket = new PacketPlayOutTitle(EnumTitleAction.CLEAR, titleComponent);
 		PacketPlayOutTitle resetPacket = new PacketPlayOutTitle(EnumTitleAction.RESET, titleComponent);

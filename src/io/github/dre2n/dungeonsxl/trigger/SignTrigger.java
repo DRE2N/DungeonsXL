@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 
 import java.util.ArrayList;
 import java.util.HashMap;

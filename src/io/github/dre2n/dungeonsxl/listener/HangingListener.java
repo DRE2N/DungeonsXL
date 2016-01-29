@@ -1,6 +1,6 @@
 package io.github.dre2n.dungeonsxl.listener;
 
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

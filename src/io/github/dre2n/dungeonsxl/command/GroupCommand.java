@@ -215,7 +215,7 @@ public class GroupCommand extends DCommand {
 		
 		MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dGroup.getName() + " &4&l]");
 		MessageUtil.sendMessage(sender, "&bCaptain: &e" + dGroup.getCaptain().getName());
-		String players = "&e";
+		String players = "";
 		for (Player player : dGroup.getPlayers()) {
 			players += (player == dGroup.getPlayers().get(0) ? "" : "&b, &e") + player.getName();
 		}

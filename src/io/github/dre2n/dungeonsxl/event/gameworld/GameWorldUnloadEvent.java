@@ -1,6 +1,6 @@
 package io.github.dre2n.dungeonsxl.event.gameworld;
 
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

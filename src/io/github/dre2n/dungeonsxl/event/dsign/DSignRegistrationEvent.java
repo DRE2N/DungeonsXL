@@ -1,6 +1,6 @@
 package io.github.dre2n.dungeonsxl.event.dsign;
 
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 
 import org.bukkit.block.Sign;

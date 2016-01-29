@@ -14,10 +14,10 @@ import org.bukkit.entity.Player;
 
 public class CommandListener implements CommandExecutor {
 	
+	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd_notused, String arg, String[] args) {
-		DungeonsXL plugin = DungeonsXL.getPlugin();
-		
 		if (args.length > 0) {
 			MessageConfig MessageConfig = plugin.getMessageConfig();
 			DCommand dCommand = plugin.getDCommands().getDCommand(args[0]);

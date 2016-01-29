@@ -1,6 +1,6 @@
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
 
 import java.util.concurrent.CopyOnWriteArrayList;

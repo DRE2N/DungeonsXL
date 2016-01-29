@@ -1,7 +1,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.task.SignUpdateTask;
 import io.github.dre2n.dungeonsxl.trigger.SignTrigger;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;

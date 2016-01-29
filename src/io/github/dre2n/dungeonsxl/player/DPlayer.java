@@ -7,12 +7,14 @@ import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
-import io.github.dre2n.dungeonsxl.dungeon.game.GameWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameType;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.util.NumberUtil;
@@ -44,7 +46,7 @@ import org.bukkit.potion.PotionEffect;
 public class DPlayer {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
-	MessageConfig messageConfig = plugin.getMessageConfig();
+	static MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	// Variables
 	private Player player;
@@ -588,17 +590,31 @@ public class DPlayer {
 		ready = true;
 		
 		DGroup dGroup = DGroup.getByPlayer(getPlayer());
+		
+		if (dGroup == null) {
+			return;
+		}
+		
 		if ( !dGroup.isPlaying()) {
-			if (dGroup != null) {
-				for (Player player : dGroup.getPlayers()) {
-					DPlayer dPlayer = getByPlayer(player);
-					if ( !dPlayer.ready) {
-						return;
-					}
-				}
-			}
+			dGroup.startGame(new Game(dGroup));
 			
-			dGroup.startGame();
+		} else {
+			respawn();
+		}
+	}
+	
+	public void ready(GameType gameType) {
+		ready = true;
+		
+		DGroup dGroup = DGroup.getByPlayer(getPlayer());
+		
+		if (dGroup == null) {
+			return;
+		}
+		
+		if ( !dGroup.isPlaying()) {
+			dGroup.startGame(new Game(dGroup, gameType));
+			
 		} else {
 			respawn();
 		}
@@ -685,6 +701,8 @@ public class DPlayer {
 			return;
 		}
 		
+		Game game = dGroup.getGameWorld().getGame();
+		
 		dGroup.removeUnplayedFloor(dGroup.getMapName());
 		dGroup.setMapName(newFloor);
 		GameWorld gameWorld = GameWorld.load(newFloor);
@@ -697,7 +715,7 @@ public class DPlayer {
 				dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
 			}
 		}
-		dGroup.startGame();
+		dGroup.startGame(game);
 	}
 	
 	public void finish() {

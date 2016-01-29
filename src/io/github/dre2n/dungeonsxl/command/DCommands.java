@@ -17,6 +17,7 @@ public class DCommands {
 		dCommands.add(new CreateCommand());
 		dCommands.add(new EditCommand());
 		dCommands.add(new EscapeCommand());
+		dCommands.add(new GameCommand());
 		dCommands.add(new GroupCommand());
 		dCommands.add(new InviteCommand());
 		dCommands.add(new LeaveCommand());
