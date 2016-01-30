@@ -14,6 +14,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
+import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
@@ -54,7 +55,6 @@ public class DPlayer {
 	
 	private DSavePlayer savePlayer;
 	
-	private boolean inTestMode = false;
 	private boolean editing;
 	private boolean inDungeonChat = false;
 	private boolean ready = false;
@@ -170,15 +170,27 @@ public class DPlayer {
 	 * @return if the player is in test mode
 	 */
 	public boolean isInTestMode() {
-		return inTestMode;
-	}
-	
-	/**
-	 * @param inTestMode
-	 * if the player is in test mode
-	 */
-	public void setInTestMode(boolean inTestMode) {
-		this.inTestMode = inTestMode;
+		DGroup dGroup = DGroup.getByPlayer(player);
+		if (dGroup == null) {
+			return false;
+		}
+		
+		GameWorld gameWorld = dGroup.getGameWorld();
+		if (gameWorld == null) {
+			return false;
+		}
+		
+		Game game = gameWorld.getGame();
+		if (game == null) {
+			return false;
+		}
+		
+		GameType gameType = game.getType();
+		if (gameType == GameTypeDefault.TEST) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -509,7 +521,7 @@ public class DPlayer {
 			}
 			
 			// Belohnung
-			if ( !inTestMode) {// Nur wenn man nicht am Testen ist
+			if ( !isInTestMode()) {// Nur wenn man nicht am Testen ist
 				if (finished) {
 					for (Reward reward : gameWorld.getConfig().getRewards()) {
 						reward.giveTo(player);
@@ -582,7 +594,6 @@ public class DPlayer {
 					// ...*flies away*
 				}
 			}
-			
 		}
 	}
 	

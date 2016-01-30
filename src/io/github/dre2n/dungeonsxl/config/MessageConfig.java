@@ -133,7 +133,7 @@ public class MessageConfig {
 		HELP_CMD_PORTAL("Help_Cmd_Portal", "/dxl portal - Creates a portal that leads into a dungeon"),
 		HELP_CMD_RELOAD("Help_Cmd_Reload", "/dxl reload - Reloads the plugin"),
 		HELP_CMD_SAVE("Help_Cmd_Save", "/dxl save - Saves the current dungeon"),
-		HELP_CMD_TEST("Help_Cmd_Test", "/dxl test ([dungeon|map]) [name] - Tests a dungeon"),
+		HELP_CMD_TEST("Help_Cmd_Test", "/dxl test - Starts the game in test mode"),
 		HELP_CMD_UNINVITE("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon"),
 		
 		REQUIREMENT_FEE("Requirement_Fee", "&6You have been charged &4&v1 &6for entering the dungeon."),
