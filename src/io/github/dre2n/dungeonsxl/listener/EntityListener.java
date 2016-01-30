@@ -2,6 +2,9 @@ package io.github.dre2n.dungeonsxl.listener;
 
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameType;
+import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
@@ -62,7 +65,7 @@ public class EntityListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityDeath(EntityDeathEvent event) {
+	public void onDeath(EntityDeathEvent event) {
 		World world = event.getEntity().getWorld();
 		
 		if (event.getEntity() instanceof LivingEntity) {
@@ -80,7 +83,7 @@ public class EntityListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityDamage(EntityDamageEvent event) {
+	public void onDamage(EntityDamageEvent event) {
 		World world = event.getEntity().getWorld();
 		GameWorld gameWorld = GameWorld.getByWorld(world);
 		
@@ -88,21 +91,40 @@ public class EntityListener implements Listener {
 			return;
 		}
 		
-		WorldConfig config = gameWorld.getConfig();
-		
 		// Deny all Damage in Lobby
 		if ( !gameWorld.isPlaying()) {
 			event.setCancelled(true);
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onDamageByEntity(EntityDamageByEntityEvent event) {
+		World world = event.getEntity().getWorld();
+		GameWorld gameWorld = GameWorld.getByWorld(world);
 		
-		// Deny all Damage from Players to Players
-		if ( !(event instanceof EntityDamageByEntityEvent)) {
+		if (gameWorld == null) {
 			return;
 		}
 		
-		EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent) event;
-		Entity attackerEntity = sub.getDamager();
-		Entity attackedEntity = sub.getEntity();
+		Game game = gameWorld.getGame();
+		
+		if (game == null) {
+			return;
+		}
+		
+		WorldConfig config = gameWorld.getConfig();
+		GameType type = game.getType();
+		
+		boolean pvp = config.isPlayerVersusPlayer();
+		boolean friendlyFire = config.isFriendlyFire();
+		
+		if (type != GameTypeDefault.DEFAULT) {
+			pvp = type.isPlayerVersusPlayer();
+			friendlyFire = type.isFriendlyFire();
+		}
+		
+		Entity attackerEntity = event.getDamager();
+		Entity attackedEntity = event.getEntity();
 		
 		if (attackerEntity instanceof Projectile) {
 			attackerEntity = (Entity) ((Projectile) attackerEntity).getShooter();
@@ -121,13 +143,12 @@ public class EntityListener implements Listener {
 			attackerDGroup = DGroup.getByPlayer(attackerPlayer);
 			attackedDGroup = DGroup.getByPlayer(attackedPlayer);
 			
-			if (config.isPlayerVersusPlayer()) {
-				Bukkit.broadcastMessage("pvp cancel");
+			if ( !pvp) {
 				event.setCancelled(true);
 			}
 			
 			if (attackerDGroup != null && attackedDGroup != null) {
-				if (config.isFriendlyFire() && attackerDGroup.equals(attackedDGroup)) {
+				if ( !friendlyFire && attackerDGroup.equals(attackedDGroup)) {
 					Bukkit.broadcastMessage("ff cancel");
 					event.setCancelled(true);
 				}
@@ -185,7 +206,7 @@ public class EntityListener implements Listener {
 	
 	// Zombie/skeleton combustion from the sun.
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onEntityCombust(EntityCombustEvent event) {
+	public void onCombust(EntityCombustEvent event) {
 		GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
 		if (gameWorld != null) {
 			event.setCancelled(true);
@@ -194,7 +215,7 @@ public class EntityListener implements Listener {
 	
 	// Allow Other combustion
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityCombustByEntity(EntityCombustByEntityEvent event) {
+	public void onCombustByEntity(EntityCombustByEntityEvent event) {
 		GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
 		if (gameWorld != null) {
 			if (event.isCancelled()) {
@@ -205,7 +226,7 @@ public class EntityListener implements Listener {
 	
 	// Explosions
 	@EventHandler
-	public void onEntityExplode(EntityExplodeEvent event) {
+	public void onExplode(EntityExplodeEvent event) {
 		GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
 		
 		if (gameWorld != null) {
@@ -241,4 +262,5 @@ public class EntityListener implements Listener {
 			}
 		}
 	}
+	
 }

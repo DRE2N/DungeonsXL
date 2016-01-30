@@ -38,6 +38,17 @@ public interface GameType {
 	public void setPlayerVersusPlayer(boolean playerVersusPlayer);
 	
 	/**
+	 * @return the friendlyFire
+	 */
+	public boolean isFriendlyFire();
+	
+	/**
+	 * @param friendlyFire
+	 * the friendlyFire to set
+	 */
+	public void setFriendlyFire(boolean friendlyFire);
+	
+	/**
 	 * @return the mobWaves
 	 */
 	public boolean hasMobWaves();
