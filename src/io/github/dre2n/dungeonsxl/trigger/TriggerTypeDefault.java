@@ -7,7 +7,8 @@ public enum TriggerTypeDefault implements TriggerType {
 	MOB("M", MobTrigger.class),
 	REDSTONE("R", RedstoneTrigger.class),
 	SIGN("T", SignTrigger.class),
-	USE_ITEM("U", UseItemTrigger.class);
+	USE_ITEM("U", UseItemTrigger.class),
+	WAVE("W", WaveTrigger.class);
 	
 	private String identifier;
 	private Class<? extends Trigger> handler;

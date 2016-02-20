@@ -18,28 +18,23 @@ public enum GameTypeDefault implements GameType {
 	QUEST_TIME_IS_RUNNING("Quest - Time is Running", "Quest TiR", false, false, false, true, true, false, GameMode.SURVIVAL),
 	TEST("Test", "Test", false, false, false, false, true, true, GameMode.SURVIVAL),
 	TUTORIAL("Tutorial", "Tutorial", false, false, false, true, false, false, GameMode.SURVIVAL),
-	DEFAULT("Default", "Default");
+	DEFAULT("Default", "Default", false, false, false, true, false, false, GameMode.SURVIVAL);
 	
 	private String displayName;
 	private String signName;
-	private boolean playerVersusPlayer;
-	private boolean friendlyFire;
-	private boolean mobWaves;
-	private boolean rewards;
-	private boolean showTime;
-	private boolean build;
-	private GameMode gameMode;
-	
-	GameTypeDefault(String displayName, String signName) {
-		this.displayName = displayName;
-		this.signName = signName;
-	}
+	private boolean playerVersusPlayer;// TODO: Testing
+	private boolean friendlyFire;// TODO: Testing
+	private boolean mobWaves;// TODO: Implementing
+	private boolean rewards;// TODO: Testing
+	private boolean showTime;// TODO: Implementing
+	private boolean build;// TODO: Testing
+	private GameMode gameMode;// TODO: Testing
 	
 	GameTypeDefault(String displayName, String signName, boolean playerVersusPlayer, boolean friendlyFire, boolean mobWaves, boolean rewards, boolean showTime, boolean build, GameMode gameMode) {
 		this.displayName = displayName;
 		this.signName = signName;
 		this.playerVersusPlayer = playerVersusPlayer;
-		this.setFriendlyFire(friendlyFire);
+		this.friendlyFire = friendlyFire;
 		this.mobWaves = mobWaves;
 		this.rewards = rewards;
 		this.showTime = showTime;

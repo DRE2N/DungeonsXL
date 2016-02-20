@@ -1,17 +1,22 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameType;
+import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.playerutil.PlayerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,7 @@ import org.bukkit.entity.Player;
 public class DGroup {
 	
 	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	static MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	private String name;
 	private Player captain;
@@ -34,6 +40,7 @@ public class DGroup {
 	private GameWorld gameWorld;
 	private boolean playing;
 	private int floorCount;
+	private int waveCount;
 	private List<Reward> rewards = new ArrayList<Reward>();
 	
 	public DGroup(String name, Player player) {
@@ -376,6 +383,21 @@ public class DGroup {
 	}
 	
 	/**
+	 * @return the waveCount
+	 */
+	public int getWaveCount() {
+		return waveCount;
+	}
+	
+	/**
+	 * @param waveCount
+	 * the waveCount to set
+	 */
+	public void setWaveCount(int waveCount) {
+		this.waveCount = waveCount;
+	}
+	
+	/**
 	 * @return the rewards
 	 */
 	public List<Reward> getRewards() {
@@ -460,19 +482,39 @@ public class DGroup {
 				MessageUtil.sendScreenMessage(player, "&4&l" + mapName.replaceAll("_", " "));
 			}
 			
-			for (Requirement requirement : gameWorld.getConfig().getRequirements()) {
-				RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
-				
-				if (requirementDemandEvent.isCancelled()) {
-					continue;
+			WorldConfig config = gameWorld.getConfig();
+			if (config != null) {
+				for (Requirement requirement : config.getRequirements()) {
+					RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
+					
+					if (requirementDemandEvent.isCancelled()) {
+						continue;
+					}
+					
+					requirement.demand(player);
 				}
 				
-				requirement.demand(player);
+				GameType gameType = game.getType();
+				if (gameType == GameTypeDefault.DEFAULT) {
+					player.setGameMode(config.getGameMode());
+					
+				} else {
+					player.setGameMode(gameType.getGameMode());
+				}
 			}
-			
 		}
 		
 		GroupSign.updatePerGroup(this);
+	}
+	
+	public void finishWave(double mobCountIncreaseRate) {
+		for (DGroup dGroup : DGroup.getByGameWorld(gameWorld)) {
+			dGroup.sendMessage(messageConfig.getMessage(Messages.GROUP_WAVE_FINISHED, String.valueOf(dGroup.getWaveCount()) + "TIME"));// TODO
+			
+			for (Player player : dGroup.getPlayers()) {
+				PlayerUtil.secureTeleport(player, gameWorld.getLocStart());
+			}
+		}
 	}
 	
 	/**
@@ -522,22 +564,28 @@ public class DGroup {
 		return null;
 	}
 	
-	public static DGroup getByGameWorld(GameWorld gameWorld) {
-		for (DGroup dGroup : plugin.getDGroups()) {
-			if (dGroup.getGameWorld() == gameWorld) {
-				return dGroup;
-			}
-		}
-		
-		return null;
-	}
-	
 	public static void leaveGroup(Player player) {
 		for (DGroup dGroup : plugin.getDGroups()) {
 			if (dGroup.getPlayers().contains(player)) {
 				dGroup.getPlayers().remove(player);
 			}
 		}
+	}
+	
+	/**
+	 * @param gameWorld
+	 * the GameWorld to check
+	 * @return a List of DGroups in this GameWorld
+	 */
+	public static List<DGroup> getByGameWorld(GameWorld gameWorld) {
+		List<DGroup> dGroups = new ArrayList<DGroup>();
+		for (DGroup dGroup : plugin.getDGroups()) {
+			if (dGroup.getGameWorld().equals(gameWorld)) {
+				dGroups.add(dGroup);
+			}
+		}
+		
+		return dGroups;
 	}
 	
 }

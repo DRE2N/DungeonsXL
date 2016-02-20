@@ -135,6 +135,12 @@ public abstract class Trigger {
 				return UseItemTrigger.getOrCreate(value, dSign.getGameWorld());
 			}
 			
+		} else if (type == TriggerTypeDefault.WAVE) {
+			
+			if (value != null) {
+				return WaveTrigger.getOrCreate(NumberUtil.parseInt(value, 1), dSign.getGameWorld());
+			}
+			
 		} else if (type != null) {
 			Trigger trigger = null;
 			

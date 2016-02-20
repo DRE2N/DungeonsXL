@@ -93,7 +93,7 @@ public class DPlayer {
 			
 		} else {
 			WorldConfig worldConfig = GameWorld.getByWorld(world).getConfig();
-			this.getPlayer().setGameMode(worldConfig.getGameMode());
+			this.getPlayer().setGameMode(GameMode.SURVIVAL);
 			if ( !worldConfig.getKeepInventoryOnEnter()) {
 				clearPlayerData();
 			}
@@ -523,8 +523,12 @@ public class DPlayer {
 			// Belohnung
 			if ( !isInTestMode()) {// Nur wenn man nicht am Testen ist
 				if (finished) {
-					for (Reward reward : gameWorld.getConfig().getRewards()) {
-						reward.giveTo(player);
+					if (gameWorld.getGame() != null) {
+						if (gameWorld.getGame().getType().hasRewards()) {
+							for (Reward reward : gameWorld.getConfig().getRewards()) {
+								reward.giveTo(player);
+							}
+						}
 					}
 					
 					addTreasure();

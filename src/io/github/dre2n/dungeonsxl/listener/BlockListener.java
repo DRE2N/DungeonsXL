@@ -4,6 +4,8 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
+import io.github.dre2n.dungeonsxl.game.GameType;
+import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
@@ -119,8 +121,17 @@ public class BlockListener implements Listener {
 		// Deny GameWorld Blocks
 		GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
 		if (gameWorld != null) {
-			if (gameWorld.getDSigns().contains(block) || !gameWorld.getConfig().canBuild()) {
+			if (gameWorld.getDSigns().contains(block)) {
 				event.setCancelled(true);
+				
+			} else if (gameWorld.getGame() != null) {
+				GameType gameType = gameWorld.getGame().getType();
+				if (gameType == GameTypeDefault.DEFAULT && gameWorld.getConfig() != null) {
+					event.setCancelled( !gameWorld.getConfig().canBuild());
+					
+				} else if ( !gameType.canBuild()) {
+					event.setCancelled(true);
+				}
 			}
 		}
 	}

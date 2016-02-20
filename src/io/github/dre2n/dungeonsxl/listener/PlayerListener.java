@@ -92,16 +92,19 @@ public class PlayerListener implements Listener {
 				}.runTaskLater(plugin, 1L);
 			}
 			
-		} else if ( !(dPlayer.getLives() == -1)) {
+		}
+		
+		if (dPlayer.getLives() != -1) {
 			MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
 			
-		} else if (dConfig != null) {
-			if (dConfig.getKeepInventoryOnDeath()) {
-				dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
-				dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
-				// Delete all drops
-				for (ItemStack istack : event.getDrops()) {
-					istack.setType(Material.AIR);
+			if (dConfig != null) {
+				if (dConfig.getKeepInventoryOnDeath()) {
+					dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
+					dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
+					// Delete all drops
+					for (ItemStack istack : event.getDrops()) {
+						istack.setType(Material.AIR);
+					}
 				}
 			}
 		}
@@ -555,7 +558,9 @@ public class PlayerListener implements Listener {
 	// Inventory Events
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onInventoryOpen(InventoryOpenEvent event) {
-		GameChest.onOpenInventory(event);
+		if (event.getPlayer() instanceof Player) {
+			GameChest.onOpenInventory(event);
+		}
 	}
 	
 	@EventHandler

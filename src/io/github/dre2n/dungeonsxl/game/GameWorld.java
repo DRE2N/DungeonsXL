@@ -60,6 +60,7 @@ public class GameWorld {
 	
 	private CopyOnWriteArrayList<Sign> signClass = new CopyOnWriteArrayList<Sign>();
 	private CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<DMob>();
+	//TODO: Killed mobs
 	private CopyOnWriteArrayList<GameChest> gameChests = new CopyOnWriteArrayList<GameChest>();
 	private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<DSign>();
 	private WorldConfig worldConfig;
@@ -273,11 +274,19 @@ public class GameWorld {
 	}
 	
 	/**
-	 * @param dMobs
-	 * the dMobs to set
+	 * @param dMob
+	 * the dMob to add
 	 */
-	public void setDMobs(CopyOnWriteArrayList<DMob> dMobs) {
-		this.dMobs = dMobs;
+	public void addDMob(DMob dMob) {
+		dMobs.add(dMob);
+	}
+	
+	/**
+	 * @param dMob
+	 * the dMob to remove
+	 */
+	public void removeDMob(DMob dMob) {
+		dMobs.remove(dMob);
 	}
 	
 	/**

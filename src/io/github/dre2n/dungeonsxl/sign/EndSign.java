@@ -45,11 +45,15 @@ public class EndSign extends DSign {
 	@Override
 	public boolean onPlayerTrigger(Player player) {
 		DPlayer dPlayer = DPlayer.getByPlayer(player);
-		if (dPlayer != null) {
-			if ( !dPlayer.isFinished()) {
-				dPlayer.finish();
-			}
+		if (dPlayer == null) {
+			return true;
 		}
+		
+		if (dPlayer.isFinished()) {
+			return true;
+		}
+		
+		dPlayer.finish();
 		return true;
 	}
 	

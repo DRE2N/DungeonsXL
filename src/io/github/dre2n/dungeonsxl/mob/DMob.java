@@ -19,7 +19,7 @@ public class DMob {
 	private String trigger;
 	
 	public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type) {
-		gameWorld.getDMobs().add(this);
+		gameWorld.addDMob(this);
 		
 		this.entity = entity;
 		this.type = type;
@@ -33,7 +33,7 @@ public class DMob {
 	}
 	
 	public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type, String trigger) {
-		gameWorld.getDMobs().add(this);
+		gameWorld.addDMob(this);
 		
 		this.entity = entity;
 		this.type = type;
@@ -63,40 +63,41 @@ public class DMob {
 		}
 		
 		for (DMob dMob : gameWorld.getDMobs()) {
-			if (dMob.entity == victim) {
-				
-				DMobDeathEvent dMobDeathEvent = new DMobDeathEvent(dMob, event);
-				
-				if (dMobDeathEvent.isCancelled()) {
-					return;
-				}
-				
-				if (dMob.type != null) {
-					for (ItemStack itemStack : dMob.type.getDrops().keySet()) {
-						Random randomGenerator = new Random();
-						int random = randomGenerator.nextInt(100);
-						
-						if (dMob.type.getDrops().get(itemStack) > random) {
-							event.getDrops().add(itemStack);
-						}
-					}
-					name = dMob.type.getName();
-					
-				} else if (dMob.type == null && dMob.trigger != null) {// <=MythicMobs mob
-					name = dMob.trigger;
-					
-				} else {
-					name = victim.getType().getName();
-				}
-				
-				MobTrigger trigger = MobTrigger.get(name, gameWorld);
-				if (trigger != null) {
-					trigger.onTrigger();
-				}
-				
-				gameWorld.getDMobs().remove(dMob);
+			if (dMob.entity != victim) {
+				continue;
+			}
+			
+			DMobDeathEvent dMobDeathEvent = new DMobDeathEvent(dMob, event);
+			
+			if (dMobDeathEvent.isCancelled()) {
 				return;
 			}
+			
+			if (dMob.type != null) {
+				for (ItemStack itemStack : dMob.type.getDrops().keySet()) {
+					Random randomGenerator = new Random();
+					int random = randomGenerator.nextInt(100);
+					
+					if (dMob.type.getDrops().get(itemStack) > random) {
+						event.getDrops().add(itemStack);
+					}
+				}
+				name = dMob.type.getName();
+				
+			} else if (dMob.type == null && dMob.trigger != null) {// <=MythicMobs mob
+				name = dMob.trigger;
+				
+			} else {
+				name = victim.getType().getName();
+			}
+			
+			MobTrigger trigger = MobTrigger.get(name, gameWorld);
+			if (trigger != null) {
+				trigger.onTrigger();
+			}
+			
+			gameWorld.removeDMob(dMob);
+			return;
 		}
 	}
 	

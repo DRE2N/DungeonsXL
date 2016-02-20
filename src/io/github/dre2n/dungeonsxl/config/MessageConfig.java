@@ -17,6 +17,7 @@ public class MessageConfig {
 		GROUP_UNINVITED_PLAYER("Group_UninvitedPlayer", "&4&v1&6 took back the invitation for &4&v2&6 to the group &4&v3&6."),
 		GROUP_KICKED_PLAYER("Group_KickedPlayer", "&4&v1&6 kicked the player &4&v2&6 from the group &4&v3&6."),
 		GROUP_PLAYER_JOINED("Group_PlayerJoined", "&6Player &4&v1&6 has joined the group!"),
+		GROUP_WAVE_FINISHED("Group_WaveFinished", "&6Your group finished wave no. &4&v1&6. The next one is going to start in &4&v2&6 seconds."),
 		
 		LOG_ERROR_MOB_ENCHANTMENT("Log_Error_MobEnchantment", "&4Error at loading mob.yml: Enchantment &6&v1&4 doesn't exist!"),
 		LOG_ERROR_MOBTYPE("Log_Error_MobType", "&4Error at loading mob.yml: Mob &6&v1&4 doesn't exist!"),

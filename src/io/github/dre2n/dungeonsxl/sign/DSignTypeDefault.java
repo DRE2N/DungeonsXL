@@ -21,7 +21,8 @@ public enum DSignTypeDefault implements DSignType {
 	REDSTONE("Redstone", "dxl.sign.redstone", false, RedstoneSign.class),
 	SOUND_MESSAGE("SoundMSG", "dxl.sign.soundmsg", false, SoundMessageSign.class),
 	START("Start", "dxl.sign.start", true, StartSign.class),
-	TRIGGER("Trigger", "dxl.sign.trigger", true, TriggerSign.class);
+	TRIGGER("Trigger", "dxl.sign.trigger", true, TriggerSign.class),
+	WAVE("Wave", "dxl.sign.wave", false, WaveSign.class);
 	
 	private String name;
 	private String buildPermission;

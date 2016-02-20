@@ -169,6 +169,10 @@ public class GameChest {
 	}
 	
 	// Statics
+	/**
+	 * @param event
+	 * event.getPlayer() has to be a Player
+	 */
 	public static void onOpenInventory(InventoryOpenEvent event) {
 		InventoryView inventory = event.getView();
 		
@@ -196,7 +200,7 @@ public class GameChest {
 			}
 			
 			if (gameChest.chest.getLocation().distance(chest.getLocation()) < 1) {
-				gameChest.addTreasure(DGroup.getByGameWorld(gameWorld));
+				gameChest.addTreasure(DGroup.getByPlayer((Player) event.getPlayer()));
 				gameChest.used = true;
 				event.setCancelled(true);
 			}
