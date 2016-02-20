@@ -521,13 +521,11 @@ public class DPlayer {
 			}
 			
 			// Belohnung
-			if ( !isInTestMode()) {// Nur wenn man nicht am Testen ist
+			if (gameWorld.getGame().getType().hasRewards()) {
 				if (finished) {
 					if (gameWorld.getGame() != null) {
-						if (gameWorld.getGame().getType().hasRewards()) {
-							for (Reward reward : gameWorld.getConfig().getRewards()) {
-								reward.giveTo(player);
-							}
+						for (Reward reward : gameWorld.getConfig().getRewards()) {
+							reward.giveTo(player);
 						}
 					}
 					
