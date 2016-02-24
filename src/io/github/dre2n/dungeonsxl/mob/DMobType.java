@@ -26,7 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class DMobType {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private String name;
 	private EntityType type;

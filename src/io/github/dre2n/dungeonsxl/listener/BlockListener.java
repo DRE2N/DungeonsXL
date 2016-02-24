@@ -32,7 +32,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class BlockListener implements Listener {
 	
-	DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPhysics(BlockPhysicsEvent event) {

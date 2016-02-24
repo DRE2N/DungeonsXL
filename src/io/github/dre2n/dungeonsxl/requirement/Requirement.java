@@ -10,7 +10,7 @@ import io.github.dre2n.dungeonsxl.event.requirement.RequirementRegistrationEvent
 
 public abstract class Requirement {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	public static Requirement create(RequirementType type) {
 		Requirement requirement = null;

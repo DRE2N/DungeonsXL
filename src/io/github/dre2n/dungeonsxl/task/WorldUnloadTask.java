@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class WorldUnloadTask extends BukkitRunnable {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	@Override
 	public void run() {

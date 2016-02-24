@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 
 public class EditWorld {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Variables
 	private World world;

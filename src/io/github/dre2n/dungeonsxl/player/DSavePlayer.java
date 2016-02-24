@@ -21,7 +21,7 @@ import org.bukkit.potion.PotionEffect;
 
 public class DSavePlayer {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private static CopyOnWriteArrayList<DSavePlayer> savePlayers = new CopyOnWriteArrayList<DSavePlayer>();
 	

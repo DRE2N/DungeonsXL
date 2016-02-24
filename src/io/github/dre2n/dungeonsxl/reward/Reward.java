@@ -13,7 +13,7 @@ import io.github.dre2n.dungeonsxl.reward.RewardTypeDefault;
 
 public abstract class Reward {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	public static Reward create(RewardType type) {
 		Reward reward = null;

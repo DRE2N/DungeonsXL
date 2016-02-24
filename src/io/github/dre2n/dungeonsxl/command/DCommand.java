@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 
 public abstract class DCommand {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
-	static MessageConfig messageConfig = plugin.getMessageConfig();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	public boolean costsMoney;
 	private String command;

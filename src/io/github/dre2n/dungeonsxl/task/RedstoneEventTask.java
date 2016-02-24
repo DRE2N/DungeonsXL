@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class RedstoneEventTask extends BukkitRunnable {
 	
-	private final Block block;
+	private Block block;
 	
 	public RedstoneEventTask(final Block block) {
 		this.block = block;

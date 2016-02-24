@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 public class CommandListener implements CommandExecutor {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd_notused, String arg, String[] args) {

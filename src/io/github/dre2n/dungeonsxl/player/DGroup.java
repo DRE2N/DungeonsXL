@@ -27,8 +27,8 @@ import org.bukkit.entity.Player;
 
 public class DGroup {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
-	static MessageConfig messageConfig = plugin.getMessageConfig();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	private String name;
 	private Player captain;

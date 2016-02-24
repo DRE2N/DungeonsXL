@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class LazyUpdateTask extends BukkitRunnable {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	@Override
 	public void run() {

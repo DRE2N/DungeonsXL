@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class DLootInventory {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private Inventory inventory;
 	private InventoryView inventoryView;

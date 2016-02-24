@@ -51,8 +51,8 @@ import org.bukkit.inventory.meta.BookMeta;
 
 public class PlayerListener implements Listener {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
-	static MessageConfig messageConfig = plugin.getMessageConfig();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onDeath(PlayerDeathEvent event) {

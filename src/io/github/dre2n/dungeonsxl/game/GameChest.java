@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class GameChest {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Variables
 	private boolean used = false;

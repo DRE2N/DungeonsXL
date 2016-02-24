@@ -10,6 +10,7 @@ import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.mob.DMob;
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.sign.DSign;
@@ -41,7 +42,7 @@ import org.bukkit.entity.Spider;
 
 public class GameWorld {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Variables
 	private Game game;
@@ -60,7 +61,7 @@ public class GameWorld {
 	
 	private CopyOnWriteArrayList<Sign> signClass = new CopyOnWriteArrayList<Sign>();
 	private CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<DMob>();
-	//TODO: Killed mobs
+	// TODO: Killed mobs
 	private CopyOnWriteArrayList<GameChest> gameChests = new CopyOnWriteArrayList<GameChest>();
 	private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<DSign>();
 	private WorldConfig worldConfig;
@@ -512,17 +513,17 @@ public class GameWorld {
 		}
 	}
 	
-	public static boolean canPlayDungeon(String dungeon, Player player) {
+	public static boolean canPlayDungeon(String map, Player player) {
 		if (player.hasPermission("dxl.ignoretimelimit")) {
 			return true;
 		}
 		
-		if (new File(plugin.getDataFolder() + "/maps/" + dungeon).isDirectory()) {
-			WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + dungeon, "config.yml"));
+		if (new File(plugin.getDataFolder() + "/maps/" + map).isDirectory()) {
+			WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + map, "config.yml"));
 			
 			if (worldConfig.getTimeToNextPlay() != 0) {
 				// read PlayerConfig
-				long time = getPlayerTime(dungeon, player);
+				long time = getPlayerTime(map, player);
 				if (time != -1) {
 					if (time + worldConfig.getTimeToNextPlay() * 1000 * 60 * 60 > System.currentTimeMillis()) {
 						return false;
@@ -532,6 +533,20 @@ public class GameWorld {
 			
 		} else {
 			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean canPlayDungeon(String dungeon, DGroup dGroup) {
+		if (dGroup.getCaptain().hasPermission("dxl.ignoretimelimit")) {
+			return true;
+		}
+		
+		for (Player player : dGroup.getPlayers()) {
+			if ( !canPlayDungeon(dungeon, player)) {
+				return false;
+			}
 		}
 		
 		return true;
@@ -559,16 +574,16 @@ public class GameWorld {
 		return -1;
 	}
 	
-	public static boolean checkRequirements(String dungeon, Player player) {
+	public static boolean checkRequirements(String map, Player player) {
 		if (player.hasPermission("dxl.ignorerequirements")) {
 			return true;
 		}
 		
-		if (new File(plugin.getDataFolder() + "/maps/" + dungeon).isDirectory() == false) {
+		if (new File(plugin.getDataFolder() + "/maps/" + map).isDirectory() == false) {
 			return false;
 		}
 		
-		WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + dungeon, "config.yml"));
+		WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + map, "config.yml"));
 		
 		for (Requirement requirement : worldConfig.getRequirements()) {
 			RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
@@ -631,6 +646,20 @@ public class GameWorld {
 				
 			}
 		}
+		return true;
+	}
+	
+	public static boolean checkRequirements(String map, DGroup dGroup) {
+		if (dGroup.getCaptain().hasPermission("dxl.ignorerequirements")) {
+			return true;
+		}
+		
+		for (Player player : dGroup.getPlayers()) {
+			if ( !checkRequirements(map, player)) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 	

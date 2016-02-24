@@ -46,8 +46,8 @@ import org.bukkit.potion.PotionEffect;
 
 public class DPlayer {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
-	static MessageConfig messageConfig = plugin.getMessageConfig();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static MessageConfig messageConfig = plugin.getMessageConfig();
 	
 	// Variables
 	private Player player;

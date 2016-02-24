@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public abstract class DSign {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private Sign sign;
 	private GameWorld gameWorld;

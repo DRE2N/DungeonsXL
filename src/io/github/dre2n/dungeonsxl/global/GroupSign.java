@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 
 public class GroupSign {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	// Sign Labels
 	public static final String IS_PLAYING = ChatColor.DARK_RED + "Is Playing";
@@ -313,7 +313,7 @@ public class GroupSign {
 	}
 	
 	public static GroupSign getSign(Block block) {
-		if (block.getType() != Material.WALL_SIGN) {
+		if ( !(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) {
 			return null;
 		}
 		
@@ -510,7 +510,7 @@ public class GroupSign {
 	}
 	
 	public static void load(FileConfiguration configFile) {
-		for (World world : DungeonsXL.getPlugin().getServer().getWorlds()) {
+		for (World world : plugin.getServer().getWorlds()) {
 			if ( !configFile.contains("groupsign." + world.getName())) {
 				continue;
 			}

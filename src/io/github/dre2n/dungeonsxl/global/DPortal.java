@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class DPortal {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private World world;
 	private Block block1;

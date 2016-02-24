@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public abstract class Trigger {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private boolean triggered;
 	private Player player; // Holds Player for Player specific Triggers

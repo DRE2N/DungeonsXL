@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class LeaveSign {
 	
-	static DungeonsXL plugin = DungeonsXL.getPlugin();
+	protected static DungeonsXL plugin = DungeonsXL.getPlugin();
 	
 	private Sign sign;
 	
