@@ -84,6 +84,7 @@ public class MessageConfig {
 		ERROR_IN_GROUP("Error_InGroup", "&4The player &6&v1&4 is already member of a group."),
 		ERROR_JOIN_GROUP("Error_JoinGroup", "&4You have to join a group first!"),
 		ERROR_LEAVE_DUNGEON("Error_LeaveDungeon", "&4You have to leave your current dungeon first!"),
+		ERROR_LEAVE_GAME("Error_LeaveGame", "&4You have to leave your game first!"),
 		ERROR_LEAVE_GROUP("Error_LeaveGroup", "&4You have to leave your group first!"),
 		ERROR_LEFT_CLICK("Error_Leftklick", "&4You have to use Left-Click on this sign!"),
 		ERROR_MSG_ID_NOT_EXIST("Error_MsgIdNotExist", "&4Messages with Id &6&v1&4 does not exist!"),

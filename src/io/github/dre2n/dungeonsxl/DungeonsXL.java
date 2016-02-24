@@ -7,9 +7,11 @@ import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
+import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.listener.BlockListener;
@@ -76,9 +78,11 @@ public class DungeonsXL extends JavaPlugin {
 	private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<DLootInventory>();
 	private CopyOnWriteArrayList<EditWorld> editWorlds = new CopyOnWriteArrayList<EditWorld>();
 	private CopyOnWriteArrayList<GameWorld> gameWorlds = new CopyOnWriteArrayList<GameWorld>();
+	private CopyOnWriteArrayList<GameSign> gameSigns = new CopyOnWriteArrayList<GameSign>();
 	private CopyOnWriteArrayList<GroupSign> groupSigns = new CopyOnWriteArrayList<GroupSign>();
 	private CopyOnWriteArrayList<LeaveSign> leaveSigns = new CopyOnWriteArrayList<LeaveSign>();
 	private CopyOnWriteArrayList<DPortal> dPortals = new CopyOnWriteArrayList<DPortal>();
+	private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<Game>();
 	private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<DGroup>();
 	private CopyOnWriteArrayList<DPlayer> dPlayers = new CopyOnWriteArrayList<DPlayer>();
 	
@@ -535,6 +539,13 @@ public class DungeonsXL extends JavaPlugin {
 	}
 	
 	/**
+	 * @return the gameSigns
+	 */
+	public CopyOnWriteArrayList<GameSign> getGameSigns() {
+		return gameSigns;
+	}
+	
+	/**
 	 * @return the groupSigns
 	 */
 	public CopyOnWriteArrayList<GroupSign> getGroupSigns() {
@@ -553,6 +564,13 @@ public class DungeonsXL extends JavaPlugin {
 	 */
 	public CopyOnWriteArrayList<LeaveSign> getLeaveSigns() {
 		return leaveSigns;
+	}
+	
+	/**
+	 * @return the games
+	 */
+	public CopyOnWriteArrayList<Game> getGames() {
+		return games;
 	}
 	
 	/**
