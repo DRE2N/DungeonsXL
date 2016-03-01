@@ -1,0 +1,557 @@
+/*
+ * Copyright (C) 2012-2016 Frank Baumann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package io.github.dre2n.dungeonsxl;
+
+import io.github.dre2n.commons.command.BRCommands;
+import io.github.dre2n.commons.compatibility.Internals;
+import io.github.dre2n.commons.javaplugin.BRPlugin;
+import io.github.dre2n.commons.javaplugin.BRPluginSettings;
+import io.github.dre2n.commons.util.FileUtil;
+import io.github.dre2n.dungeonsxl.command.*;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
+import io.github.dre2n.dungeonsxl.config.MessageConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
+import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
+import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameTypes;
+import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.global.DPortal;
+import io.github.dre2n.dungeonsxl.global.GameSign;
+import io.github.dre2n.dungeonsxl.global.GroupSign;
+import io.github.dre2n.dungeonsxl.global.LeaveSign;
+import io.github.dre2n.dungeonsxl.listener.BlockListener;
+import io.github.dre2n.dungeonsxl.listener.EntityListener;
+import io.github.dre2n.dungeonsxl.listener.HangingListener;
+import io.github.dre2n.dungeonsxl.listener.PlayerListener;
+import io.github.dre2n.dungeonsxl.listener.WorldListener;
+import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DSavePlayer;
+import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
+import io.github.dre2n.dungeonsxl.reward.RewardTypes;
+import io.github.dre2n.dungeonsxl.sign.DSigns;
+import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
+import io.github.dre2n.dungeonsxl.task.UpdateTask;
+import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
+import io.github.dre2n.dungeonsxl.trigger.Triggers;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.scheduler.BukkitTask;
+
+/**
+ * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
+ */
+public class DungeonsXL extends BRPlugin {
+
+    private static DungeonsXL instance;
+
+    public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
+
+    private MainConfig mainConfig;
+    private MessageConfig messageConfig;
+
+    private BRCommands dCommands;
+    private DSigns dSigns;
+    private GameTypes gameTypes;
+    private RequirementTypes requirementTypes;
+    private RewardTypes rewardTypes;
+    private Triggers triggers;
+    private Dungeons dungeons;
+
+    private BukkitTask worldUnloadTask;
+    private BukkitTask lazyUpdateTask;
+    private BukkitTask updateTask;
+
+    private CopyOnWriteArrayList<Player> inBreakMode = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Player> chatSpyers = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<EditWorld> editWorlds = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<GameWorld> gameWorlds = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<GameSign> gameSigns = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<GroupSign> groupSigns = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<LeaveSign> leaveSigns = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<DPortal> dPortals = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<DPlayer> dPlayers = new CopyOnWriteArrayList<>();
+
+    public DungeonsXL() {
+        /*
+         * ##########################
+         * ####~BRPluginSettings~####
+         * ##########################
+         * #~Internals~##~~v1_7_R3+~#
+         * #~SpigotAPI~##~~~false~~~#
+         * #~~~~UUID~~~##~~~~true~~~#
+         * #~~Economy~~##~~~~true~~~#
+         * #Permissions##~~~~true~~~#
+         * ##########################
+         */
+
+        settings = new BRPluginSettings(false, true, true, true, Internals.andHigher(Internals.v1_7_R3));
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+
+        instance = this;
+
+        // InitFolders
+        initFolders();
+
+        // Load Language
+        loadMessageConfig(new File(getDataFolder(), "languages/en.yml"));
+        // Load Config
+        loadMainConfig(new File(getDataFolder(), "config.yml"));
+        // Load Language 2
+        loadMessageConfig(new File(getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
+        loadDCommands();
+        loadGameTypes();
+        loadRequirementTypes();
+        loadRewardTypes();
+        loadTriggers();
+        loadDSigns();
+        loadDungeons();
+
+        manager.registerEvents(new EntityListener(), this);
+        manager.registerEvents(new PlayerListener(), this);
+        manager.registerEvents(new BlockListener(), this);
+        manager.registerEvents(new WorldListener(), this);
+        manager.registerEvents(new HangingListener(), this);
+
+        // Load All
+        loadAll();
+
+        // Tasks
+        startWorldUnloadTask(1200L);
+        startLazyUpdateTask(20L);
+        startUpdateTask(20L);
+    }
+
+    @Override
+    public void onDisable() {
+        // Save
+        saveData();
+        messageConfig.save();
+
+        // DPlayer leaves World
+        for (DPlayer dPlayer : dPlayers) {
+            dPlayer.leave();
+        }
+
+        // Delete all Data
+        chatSpyers.clear();
+        dLootInventories.clear();
+        groupSigns.clear();
+        leaveSigns.clear();
+        dPortals.clear();
+        dGroups.clear();
+        dPlayers.clear();
+
+        // Delete Worlds
+        GameWorld.deleteAll();
+        gameWorlds.clear();
+        EditWorld.deleteAll();
+        editWorlds.clear();
+
+        // Disable listeners
+        HandlerList.unregisterAll(this);
+
+        // Stop shedulers
+        getServer().getScheduler().cancelTasks(this);
+    }
+
+    // Init.
+    public void initFolders() {
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdir();
+        }
+
+        File dungeons = new File(getDataFolder() + "/dungeons");
+        if (!dungeons.exists()) {
+            dungeons.mkdir();
+        }
+
+        File languages = new File(getDataFolder() + "/languages");
+        if (!languages.exists()) {
+            languages.mkdir();
+        }
+
+        File maps = new File(getDataFolder() + "/maps");
+        if (!maps.exists()) {
+            maps.mkdir();
+        }
+    }
+
+    // Save and Load
+    public void saveData() {
+        File file = new File(getDataFolder(), "data.yml");
+        FileConfiguration configFile = new YamlConfiguration();
+
+        DPortal.save(configFile);
+        GroupSign.save(configFile);
+        LeaveSign.save(configFile);
+
+        try {
+            configFile.save(file);
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void loadAll() {
+        // Load world data
+        File file = new File(getDataFolder(), "data.yml");
+        FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
+
+        DPortal.load(configFile);
+        GroupSign.load(configFile);
+        LeaveSign.load(configFile);
+
+        // Load saved players
+        DSavePlayer.load();
+
+        // Check Worlds
+        checkWorlds();
+    }
+
+    public void checkWorlds() {
+        File serverDir = new File(".");
+
+        for (File file : serverDir.listFiles()) {
+            if (file.getName().contains("DXL_Edit_") && file.isDirectory()) {
+                for (File dungeonFile : file.listFiles()) {
+                    if (dungeonFile.getName().contains(".id_")) {
+                        String dungeonName = dungeonFile.getName().substring(4);
+                        FileUtil.copyDirectory(file, new File(getDataFolder(), "/maps/" + dungeonName), EXCLUDED_FILES);
+                        FileUtil.deleteUnusedFiles(new File(getDataFolder(), "/maps/" + dungeonName));
+                    }
+                }
+
+                FileUtil.removeDirectory(file);
+
+            } else if (file.getName().contains("DXL_Game_") && file.isDirectory()) {
+                FileUtil.removeDirectory(file);
+            }
+        }
+    }
+
+    // Getters & loaders
+    /**
+     * @return the plugin instance
+     */
+    public static DungeonsXL getInstance() {
+        return instance;
+    }
+
+    /**
+     * @return the loaded instance of MainConfig
+     */
+    public MainConfig getMainConfig() {
+        return mainConfig;
+    }
+
+    /**
+     * load / reload a new instance of MainConfig
+     */
+    public void loadMainConfig(File file) {
+        mainConfig = new MainConfig(file);
+    }
+
+    /**
+     * @return the loaded instance of MessageConfig
+     */
+    public MessageConfig getMessageConfig() {
+        return messageConfig;
+    }
+
+    /**
+     * load / reload a new instance of MessageConfig
+     */
+    public void loadMessageConfig(File file) {
+        messageConfig = new MessageConfig(file);
+    }
+
+    /**
+     * @return the loaded instance of BRCommands
+     */
+    @Override
+    public BRCommands getCommands() {
+        return dCommands;
+    }
+
+    /**
+     * load / reload a new instance of DCommands
+     */
+    public void loadDCommands() {
+        dCommands = new BRCommands(
+                "dungeonsxl",
+                this,
+                new HelpCommand(),
+                new BreakCommand(),
+                new ChatCommand(),
+                new ChatSpyCommand(),
+                new CreateCommand(),
+                new EditCommand(),
+                new EscapeCommand(),
+                new GameCommand(),
+                new GroupCommand(),
+                new InviteCommand(),
+                new LeaveCommand(),
+                new ListCommand(),
+                new LivesCommand(),
+                new MainCommand(),
+                new UninviteCommand(),
+                new MsgCommand(),
+                new PlayCommand(),
+                new PortalCommand(),
+                new DeletePortalCommand(),
+                new ReloadCommand(),
+                new SaveCommand(),
+                new TestCommand()
+        );
+
+        dCommands.register(this);
+    }
+
+    /**
+     * @return the dSigns
+     */
+    public DSigns getDSigns() {
+        return dSigns;
+    }
+
+    /**
+     * load / reload a new instance of DSigns
+     */
+    public void loadDSigns() {
+        dSigns = new DSigns();
+    }
+
+    /**
+     * @return the game types
+     */
+    public GameTypes getGameTypes() {
+        return gameTypes;
+    }
+
+    /**
+     * load / reload a new instance of GameTypes
+     */
+    public void loadGameTypes() {
+        gameTypes = new GameTypes();
+    }
+
+    /**
+     * @return the requirement types
+     */
+    public RequirementTypes getRequirementTypes() {
+        return requirementTypes;
+    }
+
+    /**
+     * load / reload a new instance of RequirementTypes
+     */
+    public void loadRequirementTypes() {
+        requirementTypes = new RequirementTypes();
+    }
+
+    /**
+     * @return the reward types
+     */
+    public RewardTypes getRewardTypes() {
+        return rewardTypes;
+    }
+
+    /**
+     * load / reload a new instance of RewardTypes
+     */
+    public void loadRewardTypes() {
+        rewardTypes = new RewardTypes();
+    }
+
+    /**
+     * @return the triggers
+     */
+    public Triggers getTriggers() {
+        return triggers;
+    }
+
+    /**
+     * load / reload a new instance of Triggers
+     */
+    public void loadTriggers() {
+        triggers = new Triggers();
+    }
+
+    /**
+     * @return the loaded instance of Dungeons
+     */
+    public Dungeons getDungeons() {
+        return dungeons;
+    }
+
+    /**
+     * load / reload a new instance of Dungeons
+     */
+    public void loadDungeons() {
+        dungeons = new Dungeons();
+    }
+
+    /**
+     * @return the worldUnloadTask
+     */
+    public BukkitTask getWorldUnloadTask() {
+        return worldUnloadTask;
+    }
+
+    /**
+     * start a new WorldUnloadTask
+     */
+    public void startWorldUnloadTask(long period) {
+        worldUnloadTask = new WorldUnloadTask().runTaskTimer(this, 0L, period);
+    }
+
+    /**
+     * @return the lazyUpdateTask
+     */
+    public BukkitTask getLazyUpdateTask() {
+        return lazyUpdateTask;
+    }
+
+    /**
+     * start a new LazyUpdateTask
+     */
+    public void startLazyUpdateTask(long period) {
+        lazyUpdateTask = new LazyUpdateTask().runTaskTimer(this, 0L, period);
+    }
+
+    /**
+     * @return the updateTask
+     */
+    public BukkitTask getUpdateTask() {
+        return updateTask;
+    }
+
+    /**
+     * start a new LazyUpdateTask
+     */
+    public void startUpdateTask(long period) {
+        updateTask = new UpdateTask().runTaskTimer(this, 0L, period);
+    }
+
+    /**
+     * @return the inBreakMode
+     */
+    public CopyOnWriteArrayList<Player> getInBreakMode() {
+        return inBreakMode;
+    }
+
+    /**
+     * @return the chatSpyers
+     */
+    public CopyOnWriteArrayList<Player> getChatSpyers() {
+        return chatSpyers;
+    }
+
+    /**
+     * @return the dLootInventories
+     */
+    public CopyOnWriteArrayList<DLootInventory> getDLootInventories() {
+        return dLootInventories;
+    }
+
+    /**
+     * @return the editWorlds
+     */
+    public CopyOnWriteArrayList<EditWorld> getEditWorlds() {
+        return editWorlds;
+    }
+
+    /**
+     * @return the defaultConfig
+     */
+    public WorldConfig getDefaultConfig() {
+        return WorldConfig.defaultConfig;// TODO
+    }
+
+    /**
+     * @return the gameWorlds
+     */
+    public CopyOnWriteArrayList<GameWorld> getGameWorlds() {
+        return gameWorlds;
+    }
+
+    /**
+     * @return the gameSigns
+     */
+    public CopyOnWriteArrayList<GameSign> getGameSigns() {
+        return gameSigns;
+    }
+
+    /**
+     * @return the groupSigns
+     */
+    public CopyOnWriteArrayList<GroupSign> getGroupSigns() {
+        return groupSigns;
+    }
+
+    /**
+     * @return the dPortals
+     */
+    public CopyOnWriteArrayList<DPortal> getDPortals() {
+        return dPortals;
+    }
+
+    /**
+     * @return the leaveSigns
+     */
+    public CopyOnWriteArrayList<LeaveSign> getLeaveSigns() {
+        return leaveSigns;
+    }
+
+    /**
+     * @return the games
+     */
+    public CopyOnWriteArrayList<Game> getGames() {
+        return games;
+    }
+
+    /**
+     * @return the dGroups
+     */
+    public CopyOnWriteArrayList<DGroup> getDGroups() {
+        return dGroups;
+    }
+
+    /**
+     * @return the dPlayers
+     */
+    public CopyOnWriteArrayList<DPlayer> getDPlayers() {
+        return dPlayers;
+    }
+
+}
