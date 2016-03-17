@@ -159,6 +159,8 @@ public class MainConfig extends BRConfig {
         if (!config.contains("default")) {
             config.createSection("default");
         }
+
+        save();
     }
 
     @Override
