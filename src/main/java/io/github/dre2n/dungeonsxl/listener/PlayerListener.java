@@ -94,6 +94,14 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (gameWorld.getGame() != null) {
+            if (!gameWorld.getGame().getType().hasLives()) {
+                return;
+            }
+        } else {
+            return;
+        }
+
         dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
 
         if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
@@ -308,21 +316,23 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (!DPlayer.getByPlayer(player).isReady()) {
+        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        if (dPlayer == null) {
+            return;
+        }
+
+        if (!dPlayer.isReady()) {
             event.setCancelled(true);
             return;
         }
 
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
         GameWorld gameWorld = GameWorld.getByWorld(dPlayer.getWorld());
 
-        if (dPlayer != null) {
-            for (Material material : gameWorld.getConfig().getSecureObjects()) {
-                if (material == event.getItemDrop().getItemStack().getType()) {
-                    event.setCancelled(true);
-                    MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DROP));
-                    return;
-                }
+        for (Material material : gameWorld.getConfig().getSecureObjects()) {
+            if (material == event.getItemDrop().getItemStack().getType()) {
+                event.setCancelled(true);
+                MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DROP));
+                return;
             }
         }
     }
@@ -331,7 +341,6 @@ public class PlayerListener implements Listener {
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         DPlayer dPlayer = DPlayer.getByPlayer(player);
-
         if (dPlayer == null) {
             return;
         }

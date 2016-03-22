@@ -74,40 +74,40 @@ public interface GameType {
 
     /**
      * @param mobWaves
-     * the mobWaves to set
+     * enable / disable mob waves
      */
     public void setMobWaves(boolean mobWaves);
 
     /**
-     * @return the rewards
+     * @return if players get rewards after the dungeon
      */
     public boolean hasRewards();
 
     /**
      * @param rewards
-     * the rewards to set
+     * enable / disable rewards
      */
     public void setRewards(boolean rewards);
 
     /**
-     * @return the showTime
+     * @return if players shall see how long they play
      */
     public boolean getShowTime();
 
     /**
      * @param showTime
-     * the showTime to set
+     * set if players shall see how long they play
      */
     public void setShowTime(boolean showTime);
 
     /**
-     * @return the build
+     * @return if players can build
      */
     public boolean canBuild();
 
     /**
      * @param build
-     * the build to set
+     * enable / disable building
      */
     public void setBuild(boolean build);
 
@@ -121,5 +121,16 @@ public interface GameType {
      * the gameMode to set
      */
     public void setGameMode(GameMode gameMode);
+
+    /**
+     * @return if players lose lives
+     */
+    public boolean hasLives();
+
+    /**
+     * @param lives
+     * set if the gametype uses player lives
+     */
+    public void setLives(boolean lives);
 
 }

@@ -68,7 +68,7 @@ public class MainCommand extends BRCommand {
         MessageUtil.sendCenteredMessage(sender, "&4" + D[2] + "&f" + X[2] + L[2]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[3] + "&f" + X[3] + L[3]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[4] + "&f" + X[4] + L[4]);
-        MessageUtil.sendCenteredMessage(sender, "&b&l####### " + messageConfig.getMessage(Messages.CMD_MAIN_WELCOME) + "&7 v" + plugin.getDescription().getVersion() + " &b&l#######");
+        MessageUtil.sendCenteredMessage(sender, "&b&l###### " + messageConfig.getMessage(Messages.CMD_MAIN_WELCOME) + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
         MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
         MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_HELP));
