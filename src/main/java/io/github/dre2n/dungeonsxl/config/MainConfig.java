@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 1;
+    public static final int CONFIG_VERSION = 2;
 
     private String language = "en";
     private boolean enableEconomy = false;
@@ -38,10 +38,12 @@ public class MainConfig extends BRConfig {
     private String tutorialStartGroup = "default";
     private String tutorialEndGroup = "player";
 
+    /* Misc */
+    private boolean sendFloorTitle = true;
+    private List<String> editCommandWhitelist = new ArrayList<>();
+
     /* Default Dungeon Settings */
     private WorldConfig defaultWorldConfig;
-
-    private List<String> editCommandWhitelist = new ArrayList<>();
 
     public MainConfig(File file) {
         super(file, CONFIG_VERSION);
@@ -93,6 +95,13 @@ public class MainConfig extends BRConfig {
      */
     public String getTutorialStartGroup() {
         return tutorialStartGroup;
+    }
+
+    /**
+     * @return if the floor title shall be sent
+     */
+    public boolean getSendFloorTitle() {
+        return sendFloorTitle;
     }
 
     /**
@@ -151,6 +160,10 @@ public class MainConfig extends BRConfig {
             config.set("tutorial.endgroup", tutorialEndGroup);
         }
 
+        if (!config.contains("sendFloorTitle")) {
+            config.set("sendFloorTitle", sendFloorTitle);
+        }
+
         if (!config.contains("editCommandWhitelist")) {
             config.set("editCommandWhitelist", editCommandWhitelist);
         }
@@ -188,6 +201,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("tutorial.endgroup")) {
             tutorialEndGroup = config.getString("tutorial.endgroup");
+        }
+
+        if (config.contains("sendFloorTitle")) {
+            sendFloorTitle = config.getBoolean("sendFloorTitle");
         }
 
         if (config.contains("editCommandWhitelist")) {

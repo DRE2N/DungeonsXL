@@ -493,11 +493,14 @@ public class DGroup {
         for (Player player : getPlayers()) {
             DPlayer dPlayer = DPlayer.getByPlayer(player);
             dPlayer.respawn();
-            if (dungeonName != null) {
-                MessageUtil.sendTitleMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", " "));
 
-            } else {
-                MessageUtil.sendTitleMessage(player, "&4&l" + mapName.replaceAll("_", " "));
+            if (plugin.getMainConfig().getSendFloorTitle()) {
+                if (dungeonName != null) {
+                    MessageUtil.sendTitleMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", " "));
+
+                } else {
+                    MessageUtil.sendTitleMessage(player, "&4&l" + mapName.replaceAll("_", " "));
+                }
             }
 
             WorldConfig config = gameWorld.getConfig();
