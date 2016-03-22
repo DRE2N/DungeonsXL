@@ -16,6 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
@@ -99,9 +101,14 @@ public class DPlayer {
 
         double health = ((Damageable) player).getHealth();
 
-        savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLevel(),
-                player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
+        if (CompatibilityHandler.getInstance().getVersion() != Version.MC1_9) {
+            savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), null, player.getLevel(),
+                    player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
+        } else {
+            savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getInventory().getItemInOffHand(), player.getLevel(),
+                    player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
+        }
         this.editing = editing;
 
         if (this.editing) {
@@ -531,48 +538,50 @@ public class DPlayer {
             }
 
             // Belohnung
-            if (gameWorld.getGame().getType().hasRewards()) {
-                if (finished) {
-                    if (gameWorld.getGame() != null) {
-                        for (Reward reward : gameWorld.getConfig().getRewards()) {
-                            reward.giveTo(player);
+            if (gameWorld.getGame() != null) {
+                if (gameWorld.getGame().getType().hasRewards()) {
+                    if (finished) {
+                        if (gameWorld.getGame() != null) {
+                            for (Reward reward : gameWorld.getConfig().getRewards()) {
+                                reward.giveTo(player);
+                            }
                         }
-                    }
 
-                    addTreasure();
+                        addTreasure();
 
-                    // Set Time
-                    File file = new File(plugin.getDataFolder() + "/maps/" + gameWorld.getMapName(), "players.yml");
+                        // Set Time
+                        File file = new File(plugin.getDataFolder() + "/maps/" + gameWorld.getMapName(), "players.yml");
 
-                    if (!file.exists()) {
+                        if (!file.exists()) {
+                            try {
+                                file.createNewFile();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
+
+                        playerConfig.set(getPlayer().getUniqueId().toString(), System.currentTimeMillis());
+
                         try {
-                            file.createNewFile();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                            playerConfig.save(file);
 
-                    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-
-                    playerConfig.set(getPlayer().getUniqueId().toString(), System.currentTimeMillis());
-
-                    try {
-                        playerConfig.save(file);
-
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
-
-                    // Tutorial Permissions
-                    if (gameWorld.isTutorial()) {
-                        String endGroup = plugin.getMainConfig().getTutorialEndGroup();
-                        if (plugin.isGroupEnabled(endGroup)) {
-                            plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
                         }
 
-                        String startGroup = plugin.getMainConfig().getTutorialStartGroup();
-                        if (plugin.isGroupEnabled(startGroup)) {
-                            plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
+                        // Tutorial Permissions
+                        if (gameWorld.isTutorial()) {
+                            String endGroup = plugin.getMainConfig().getTutorialEndGroup();
+                            if (plugin.isGroupEnabled(endGroup)) {
+                                plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
+                            }
+
+                            String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+                            if (plugin.isGroupEnabled(startGroup)) {
+                                plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
+                            }
                         }
                     }
                 }

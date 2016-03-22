@@ -16,11 +16,15 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Version;
+import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -47,18 +51,19 @@ public class DSavePlayer {
     private String uuid;
 
     private Location oldLocation;
-    private ItemStack[] oldInventory;
-    private ItemStack[] oldArmor;
+    private ArrayList<ItemStack> oldInventory;
+    private ArrayList<ItemStack> oldArmor;
+    private ItemStack oldOffHand;
     private int oldLvl;
     private int oldExp;
     private int oldHealth;
     private int oldFoodLevel;
     private int oldFireTicks;
-    private GameMode oldGamemode;
+    private GameMode oldGameMode;
     private Collection<PotionEffect> oldPotionEffects;
 
-    public DSavePlayer(String playerName, UUID uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
-            GameMode oldGamemode, Collection<PotionEffect> oldPotionEffects) {
+    public DSavePlayer(String playerName, UUID uuid, Location oldLocation, ArrayList<ItemStack> oldInventory, ArrayList<ItemStack> oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
+            GameMode oldGameMode, Collection<PotionEffect> oldPotionEffects) {
         savePlayers.add(this);
 
         this.playerName = playerName;
@@ -67,10 +72,33 @@ public class DSavePlayer {
         this.oldLocation = oldLocation;
         this.oldInventory = oldInventory;
         this.oldArmor = oldArmor;
+        this.oldOffHand = oldOffHand;
         this.oldExp = oldExp;
         this.oldHealth = oldHealth;
         this.oldFoodLevel = oldFoodLevel;
-        this.oldGamemode = oldGamemode;
+        this.oldGameMode = oldGameMode;
+        this.oldLvl = oldLvl;
+        this.oldFireTicks = oldFireTicks;
+        this.oldPotionEffects = oldPotionEffects;
+
+        save();
+    }
+
+    public DSavePlayer(String playerName, UUID uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
+            GameMode oldGameMode, Collection<PotionEffect> oldPotionEffects) {
+        savePlayers.add(this);
+
+        this.playerName = playerName;
+        this.uuid = uuid.toString();
+
+        this.oldLocation = oldLocation;
+        this.oldInventory = new ArrayList<>(Arrays.asList(oldInventory));
+        this.oldArmor = new ArrayList<>(Arrays.asList(oldArmor));
+        this.oldOffHand = oldOffHand;
+        this.oldExp = oldExp;
+        this.oldHealth = oldHealth;
+        this.oldFoodLevel = oldFoodLevel;
+        this.oldGameMode = oldGameMode;
         this.oldLvl = oldLvl;
         this.oldFireTicks = oldFireTicks;
         this.oldPotionEffects = oldPotionEffects;
@@ -91,13 +119,19 @@ public class DSavePlayer {
 
         try {
             if (!keepInventory) {
-                player.getInventory().setContents(oldInventory);
-                player.getInventory().setArmorContents(oldArmor);
+                while (oldInventory.size() > 36) {
+                    oldInventory.remove(36);
+                }
+                player.getInventory().setContents(oldInventory.toArray(new ItemStack[36]));
+                player.getInventory().setArmorContents(oldArmor.toArray(new ItemStack[4]));
+                if (CompatibilityHandler.getInstance().getVersion() == Version.MC1_9) {
+                    player.getInventory().setItemInOffHand(oldOffHand);
+                }
                 player.setTotalExperience(oldExp);
                 player.setLevel(oldLvl);
                 player.setHealth(oldHealth);
                 player.setFoodLevel(oldFoodLevel);
-                player.setGameMode(oldGamemode);
+                player.setGameMode(oldGameMode);
                 player.setFireTicks(oldFireTicks);
                 for (PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
@@ -124,13 +158,12 @@ public class DSavePlayer {
     }
 
     /* Statics */
-    @SuppressWarnings("deprecation")
     public static void save() {
         FileConfiguration configFile = new YamlConfiguration();
 
         for (DSavePlayer savePlayer : savePlayers) {
             configFile.set(savePlayer.playerName + ".uuid", savePlayer.uuid);
-            configFile.set(savePlayer.playerName + ".oldGamemode", savePlayer.oldGamemode.getValue());
+            configFile.set(savePlayer.playerName + ".oldGameMode", savePlayer.oldGameMode.toString());
             configFile.set(savePlayer.playerName + ".oldFireTicks", savePlayer.oldFireTicks);
             configFile.set(savePlayer.playerName + ".oldFoodLevel", savePlayer.oldFoodLevel);
             configFile.set(savePlayer.playerName + ".oldHealth", savePlayer.oldHealth);
@@ -138,6 +171,7 @@ public class DSavePlayer {
             configFile.set(savePlayer.playerName + ".oldLvl", savePlayer.oldLvl);
             configFile.set(savePlayer.playerName + ".oldArmor", savePlayer.oldArmor);
             configFile.set(savePlayer.playerName + ".oldInventory", savePlayer.oldInventory);
+            configFile.set(savePlayer.playerName + ".oldOffHand", savePlayer.oldOffHand);
             configFile.set(savePlayer.playerName + ".oldLocation.x", savePlayer.oldLocation.getX());
             configFile.set(savePlayer.playerName + ".oldLocation.y", savePlayer.oldLocation.getY());
             configFile.set(savePlayer.playerName + ".oldLocation.z", savePlayer.oldLocation.getZ());
@@ -154,7 +188,6 @@ public class DSavePlayer {
         }
     }
 
-    @SuppressWarnings({"unchecked", "deprecation"})
     public static void load() {
         FileConfiguration configFile = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "savePlayers.yml"));
 
@@ -163,11 +196,9 @@ public class DSavePlayer {
             UUID uuid = UUID.fromString(configFile.getString(playerName + ".uuid"));
 
             // Load inventory data
-            ArrayList<ItemStack> oldInventoryList = (ArrayList<ItemStack>) configFile.get(playerName + ".oldInventory");
-            ArrayList<ItemStack> oldArmorList = (ArrayList<ItemStack>) configFile.get(playerName + ".oldArmor");
-
-            ItemStack[] oldInventory = oldInventoryList.toArray(new ItemStack[oldInventoryList.size()]);
-            ItemStack[] oldArmor = oldArmorList.toArray(new ItemStack[oldArmorList.size()]);
+            ArrayList<ItemStack> oldInventory = (ArrayList<ItemStack>) configFile.get(playerName + ".oldInventory");
+            ArrayList<ItemStack> oldArmor = (ArrayList<ItemStack>) configFile.get(playerName + ".oldArmor");
+            ItemStack oldOffHand = (ItemStack) configFile.get(playerName + ".oldOffHand");
 
             // Load other data
             int oldLvl = configFile.getInt(playerName + ".oldLvl");
@@ -175,7 +206,10 @@ public class DSavePlayer {
             int oldHealth = configFile.getInt(playerName + ".oldHealth");
             int oldFoodLevel = configFile.getInt(playerName + ".oldFoodLevel");
             int oldFireTicks = configFile.getInt(playerName + ".oldFireTicks");
-            GameMode oldGamemode = GameMode.getByValue(configFile.getInt(playerName + ".oldGamemode"));
+            GameMode oldGameMode = GameMode.SURVIVAL;
+            if (EnumUtil.isValidEnum(GameMode.class, configFile.getString(playerName + ".oldGameMode"))) {
+                oldGameMode = GameMode.valueOf(configFile.getString(playerName + ".oldGameMode"));
+            }
             Collection<PotionEffect> oldPotionEffects = (Collection<PotionEffect>) configFile.get(playerName + ".oldPotionEffects");
 
             // Location
@@ -188,7 +222,7 @@ public class DSavePlayer {
                     + ".oldLocation.z"), configFile.getInt(playerName + ".oldLocation.yaw"), configFile.getInt(playerName + ".oldLocation.pitch"));
 
             // Create Player
-            DSavePlayer savePlayer = new DSavePlayer(playerName, uuid, oldLocation, oldInventory, oldArmor, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGamemode, oldPotionEffects);
+            DSavePlayer savePlayer = new DSavePlayer(playerName, uuid, oldLocation, oldInventory, oldArmor, oldOffHand, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGameMode, oldPotionEffects);
             savePlayer.reset(false);
         }
     }
