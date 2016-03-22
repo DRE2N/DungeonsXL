@@ -29,6 +29,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.game.GameChest;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
+import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -246,6 +247,11 @@ public class PlayerListener implements Listener {
                     event.setCancelled(true);
                 }
 
+                // Check Game Signs
+                if (GameSign.playerInteract(event.getClickedBlock(), player)) {
+                    event.setCancelled(true);
+                }
+
                 // Leave Sign
                 if (LeaveSign.playerInteract(event.getClickedBlock(), player)) {
                     event.setCancelled(true);
@@ -285,7 +291,6 @@ public class PlayerListener implements Listener {
                 }
             }
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGH)
