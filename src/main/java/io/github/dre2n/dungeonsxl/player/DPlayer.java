@@ -825,7 +825,6 @@ public class DPlayer {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public void poke(Block block) {
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();

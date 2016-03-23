@@ -117,7 +117,6 @@ public class PlayerListener implements Listener {
                     }
                 }.runTaskLater(plugin, 1L);
             }
-
         }
 
         if (dPlayer.getLives() != -1) {

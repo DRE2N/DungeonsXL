@@ -111,7 +111,6 @@ public class WorldConfig {
     }
 
     // Load & Save
-    @SuppressWarnings("deprecation")
     public void load(ConfigurationSection configFile) {
         /* Classes */
         ConfigurationSection configSectionClasses = configFile.getConfigurationSection("classes");
@@ -354,7 +353,6 @@ public class WorldConfig {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public void save() {
         if (file == null) {
             return;

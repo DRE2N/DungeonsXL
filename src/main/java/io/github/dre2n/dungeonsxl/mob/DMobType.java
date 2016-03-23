@@ -68,7 +68,7 @@ public class DMobType {
         this.type = type;
     }
 
-    public void spawn(GameWorld gWorld, Location loc) {
+    public void spawn(GameWorld gameWorld, Location loc) {
         if (type == null) {
             return;
         }
@@ -77,7 +77,7 @@ public class DMobType {
             return;
         }
 
-        LivingEntity entity = (LivingEntity) gWorld.getWorld().spawnEntity(loc, type);
+        LivingEntity entity = (LivingEntity) gameWorld.getWorld().spawnEntity(loc, type);
 
         /* Set the Items */
         entity.getEquipment().setItemInHand(ItemHand);
@@ -112,11 +112,10 @@ public class DMobType {
         entity.setRemoveWhenFarAway(false);
 
         /* Spawn Mob */
-        new DMob(entity, gWorld, this);
+        new DMob(entity, gameWorld, this);
     }
 
     // Load Config
-    @SuppressWarnings("deprecation")
     public static Set<DMobType> load(ConfigurationSection configFile) {
         Set<DMobType> set = new HashSet<>();
 

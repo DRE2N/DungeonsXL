@@ -36,8 +36,8 @@ public class BlockSign extends DSign {
     private byte offBlockData = 0x0;
     private byte onBlockData = 0x0;
 
-    public BlockSign(Sign sign, GameWorld gworld) {
-        super(sign, gworld);
+    public BlockSign(Sign sign, GameWorld gameWorld) {
+        super(sign, gameWorld);
     }
 
     @Override
@@ -45,7 +45,6 @@ public class BlockSign extends DSign {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onInit() {
         String lines[] = getSign().getLines();
@@ -82,7 +81,6 @@ public class BlockSign extends DSign {
         initialized = true;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onTrigger() {
         if (initialized && !active) {
@@ -91,7 +89,6 @@ public class BlockSign extends DSign {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onDisable() {
         if (initialized && active) {

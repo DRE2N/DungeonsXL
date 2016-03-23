@@ -43,10 +43,9 @@ public class GamePlaceableBlock {
         this.block = block;
 
         // Split ids
-        if (!ids.equals("")) {
+        if (!ids.isEmpty()) {
             String[] splittedIds = ids.split(",");
             for (String id : splittedIds) {
-                @SuppressWarnings("deprecation")
                 Material material = Material.getMaterial(NumberUtil.parseInt(id));
                 if (material != null) {
                     materials.add(material);
@@ -72,7 +71,6 @@ public class GamePlaceableBlock {
                 }
 
                 if (block.getType() == Material.WALL_SIGN) {
-                    @SuppressWarnings("deprecation")
                     int data = block.getData();
                     switch (data) {
                         case 3:
@@ -153,7 +151,6 @@ public class GamePlaceableBlock {
                     }
 
                 } else {
-                    @SuppressWarnings("deprecation")
                     int data = block.getData();
                     switch (data) {
                         case 0:

@@ -41,7 +41,6 @@ public class MobSpawnTask extends BukkitRunnable {
         this.sign = sign;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void run() {
         if (sign.getInterval() <= 0) {

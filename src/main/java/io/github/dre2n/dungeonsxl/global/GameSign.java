@@ -77,7 +77,6 @@ public class GameSign {
         this.maxGroupsPerGame = maxGroupsPerGame;
         verticalSigns = (int) Math.ceil((float) (1 + maxGroupsPerGame) / 4);
 
-        @SuppressWarnings("deprecation")
         int[] direction = getDirection(this.startSign.getData());
         directionX = direction[0];
         directionZ = direction[1];
@@ -201,7 +200,6 @@ public class GameSign {
     }
 
     // Static
-    @SuppressWarnings("deprecation")
     public static GameSign tryToCreate(Block startSign, String mapName, int maxGames, int maxGroupsPerGame, boolean multiFloor) {
         World world = startSign.getWorld();
         int direction = startSign.getData();
@@ -303,7 +301,6 @@ public class GameSign {
         return sign;
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean isRelativeSign(Block block, int x, int z) {
         GameSign gameSign = getSign(block.getRelative(x, 0, z));
         if (gameSign == null) {

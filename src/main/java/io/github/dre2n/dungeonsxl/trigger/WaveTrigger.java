@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class WaveTrigger extends Trigger {
 
-    private static Map<GameWorld, ArrayList<WaveTrigger>> triggers = new HashMap<GameWorld, ArrayList<WaveTrigger>>();
+    private static Map<GameWorld, ArrayList<WaveTrigger>> triggers = new HashMap<>();
 
     private TriggerType type = TriggerTypeDefault.WAVE;
 

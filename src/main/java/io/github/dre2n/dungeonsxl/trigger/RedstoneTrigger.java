@@ -84,7 +84,6 @@ public class RedstoneTrigger extends Trigger {
         return type;
     }
 
-    @SuppressWarnings("deprecation")
     public static RedstoneTrigger getOrCreate(Sign sign, GameWorld gameWorld) {
         Block rtBlock = null;
         if (sign.getBlock().getType() == Material.WALL_SIGN) {

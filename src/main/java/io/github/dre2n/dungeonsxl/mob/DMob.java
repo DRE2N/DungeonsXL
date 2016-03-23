@@ -65,7 +65,6 @@ public class DMob {
     }
 
     /* Statics */
-    @SuppressWarnings("deprecation")
     public static void onDeath(EntityDeathEvent event) {
         if (!(event.getEntity() instanceof LivingEntity)) {
             return;

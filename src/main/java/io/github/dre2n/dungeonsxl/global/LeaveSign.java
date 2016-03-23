@@ -83,7 +83,6 @@ public class LeaveSign {
         return false;
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean isRelativeSign(Block block, int x, int z) {
         LeaveSign leaveSign = getSign(block.getRelative(x, 0, z));
         if (leaveSign == null) {

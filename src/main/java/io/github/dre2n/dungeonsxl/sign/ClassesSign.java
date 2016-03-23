@@ -40,7 +40,6 @@ public class ClassesSign extends DSign {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onInit() {
         if (getGameWorld().getConfig().isLobbyDisabled()) {
