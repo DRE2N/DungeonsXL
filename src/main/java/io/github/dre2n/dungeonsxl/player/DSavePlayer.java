@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,13 +37,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 /**
+ * Represents a player in a GameWorld who went offline.
+ *
  * @author Frank Baumann, Tobias Schmitz, Milan Albrecht, Daniel Saukel
  */
 public class DSavePlayer {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-
-    private static CopyOnWriteArrayList<DSavePlayer> savePlayers = new CopyOnWriteArrayList<>();
+    protected static DPlayers dPlayers = plugin.getDPlayers();
 
     // Variables
     private String playerName;
@@ -64,8 +64,6 @@ public class DSavePlayer {
 
     public DSavePlayer(String playerName, UUID uuid, Location oldLocation, ArrayList<ItemStack> oldInventory, ArrayList<ItemStack> oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
             GameMode oldGameMode, Collection<PotionEffect> oldPotionEffects) {
-        savePlayers.add(this);
-
         this.playerName = playerName;
         this.uuid = uuid.toString();
 
@@ -82,28 +80,12 @@ public class DSavePlayer {
         this.oldPotionEffects = oldPotionEffects;
 
         save();
+        dPlayers.addDSavePlayer(this);
     }
 
     public DSavePlayer(String playerName, UUID uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
             GameMode oldGameMode, Collection<PotionEffect> oldPotionEffects) {
-        savePlayers.add(this);
-
-        this.playerName = playerName;
-        this.uuid = uuid.toString();
-
-        this.oldLocation = oldLocation;
-        this.oldInventory = new ArrayList<>(Arrays.asList(oldInventory));
-        this.oldArmor = new ArrayList<>(Arrays.asList(oldArmor));
-        this.oldOffHand = oldOffHand;
-        this.oldExp = oldExp;
-        this.oldHealth = oldHealth;
-        this.oldFoodLevel = oldFoodLevel;
-        this.oldGameMode = oldGameMode;
-        this.oldLvl = oldLvl;
-        this.oldFireTicks = oldFireTicks;
-        this.oldPotionEffects = oldPotionEffects;
-
-        save();
+        this(playerName, uuid, oldLocation, new ArrayList<>(Arrays.asList(oldInventory)), new ArrayList<>(Arrays.asList(oldArmor)), oldOffHand, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGameMode, oldPotionEffects);
     }
 
     public void reset(boolean keepInventory) {
@@ -124,7 +106,7 @@ public class DSavePlayer {
                 }
                 player.getInventory().setContents(oldInventory.toArray(new ItemStack[36]));
                 player.getInventory().setArmorContents(oldArmor.toArray(new ItemStack[4]));
-                if (CompatibilityHandler.getInstance().getVersion() == Version.MC1_9) {
+                if (Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
                     player.getInventory().setItemInOffHand(oldOffHand);
                 }
                 player.setTotalExperience(oldExp);
@@ -153,15 +135,16 @@ public class DSavePlayer {
             plugin.getLogger().info("Corrupted playerdata detected and removed!");
         }
 
-        savePlayers.remove(this);
         save();
+        dPlayers.removeDSavePlayer(this);
     }
 
     /* Statics */
+    @Deprecated
     public static void save() {
         FileConfiguration configFile = new YamlConfiguration();
 
-        for (DSavePlayer savePlayer : savePlayers) {
+        for (DSavePlayer savePlayer : dPlayers.getDSavePlayers()) {
             configFile.set(savePlayer.playerName + ".uuid", savePlayer.uuid);
             configFile.set(savePlayer.playerName + ".oldGameMode", savePlayer.oldGameMode.toString());
             configFile.set(savePlayer.playerName + ".oldFireTicks", savePlayer.oldFireTicks);
@@ -188,6 +171,7 @@ public class DSavePlayer {
         }
     }
 
+    @Deprecated
     public static void load() {
         FileConfiguration configFile = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "savePlayers.yml"));
 

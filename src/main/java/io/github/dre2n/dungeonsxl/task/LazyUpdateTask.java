@@ -34,7 +34,7 @@ public class LazyUpdateTask extends BukkitRunnable {
             gameWorld.update();
         }
 
-        for (DPlayer dPlayer : plugin.getDPlayers()) {
+        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
             dPlayer.update(true);
         }
     }

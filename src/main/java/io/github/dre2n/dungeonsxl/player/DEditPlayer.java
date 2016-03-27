@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 Frank Baumann
+ * Copyright (C) 2016 Daniel Saukel
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.task;
-
-import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
-import org.bukkit.scheduler.BukkitRunnable;
+package io.github.dre2n.dungeonsxl.player;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * Represents a player in an EditWorld.
+ *
+ * @author Daniel Saukel
  */
-public class UpdateTask extends BukkitRunnable {
+public class DEditPlayer extends DGlobalPlayer {
 
-    @Override
-    public void run() {
-        for (DPlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDPlayers()) {
-            dPlayer.update(false);
-        }
+    public DEditPlayer(DGlobalPlayer player) {
+        super(player.getPlayer());
     }
 
 }

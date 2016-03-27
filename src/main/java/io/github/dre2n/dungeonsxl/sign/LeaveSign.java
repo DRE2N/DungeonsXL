@@ -78,7 +78,7 @@ public class LeaveSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DPlayer dPlayer : plugin.getDPlayers()) {
+        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
             DPlayerEscapeEvent event = new DPlayerEscapeEvent(dPlayer);
 
             if (event.isCancelled()) {

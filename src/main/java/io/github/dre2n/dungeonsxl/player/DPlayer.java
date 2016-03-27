@@ -61,15 +61,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 /**
+ * Represents a player in a GameWorld.
+ *
  * @author Frank Baumann, Tobias Schmitz, Milan Albrecht, Daniel Saukel
  */
-public class DPlayer {
+public class DPlayer extends DGlobalPlayer {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
     protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     // Variables
-    private Player player;
     private World world;
 
     private DSavePlayer savePlayer;
@@ -94,14 +95,13 @@ public class DPlayer {
     private int lives;
 
     public DPlayer(Player player, World world, Location teleport, boolean editing) {
-        plugin.getDPlayers().add(this);
+        super(player);
 
-        this.setPlayer(player);
         this.world = world;
 
         double health = ((Damageable) player).getHealth();
 
-        if (CompatibilityHandler.getInstance().getVersion() != Version.MC1_9) {
+        if (!Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
             savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), null, player.getLevel(),
                     player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
@@ -143,14 +143,7 @@ public class DPlayer {
         }
     }
 
-    // Getters and setters
-    /**
-     * @return the player
-     */
-    public Player getPlayer() {
-        return player;
-    }
-
+    /* Getters and setters */
     /**
      * @param player
      * the player to set
@@ -193,7 +186,7 @@ public class DPlayer {
      * @return if the player is in test mode
      */
     public boolean isInTestMode() {
-        DGroup dGroup = DGroup.getByPlayer(player);
+        DGroup dGroup = DGroup.getByPlayer(getPlayer());
         if (dGroup == null) {
             return false;
         }
@@ -216,17 +209,12 @@ public class DPlayer {
         return false;
     }
 
-    /**
-     * @return the editing
-     */
+    @Deprecated
     public boolean isEditing() {
         return editing;
     }
 
-    /**
-     * @param editing
-     * the editing to set
-     */
+    @Deprecated
     public void setEditing(boolean editing) {
         this.editing = editing;
     }
@@ -543,7 +531,7 @@ public class DPlayer {
                     if (finished) {
                         if (gameWorld.getGame() != null) {
                             for (Reward reward : gameWorld.getConfig().getRewards()) {
-                                reward.giveTo(player);
+                                reward.giveTo(getPlayer());
                             }
                         }
 
@@ -607,7 +595,7 @@ public class DPlayer {
                     } while (groupPlayer == null);
                 }
 
-                if (dGroup.getCaptain().equals(player) && dGroup.getPlayers().size() > 0) {
+                if (dGroup.getCaptain().equals(getPlayer()) && dGroup.getPlayers().size() > 0) {
                     // Captain here!
                     Player newCaptain = dGroup.getPlayers().get(0);
                     dGroup.setCaptain(newCaptain);
@@ -808,18 +796,22 @@ public class DPlayer {
         if (editing) {
             EditWorld editWorld = EditWorld.getByWorld(world);
             editWorld.sendMessage(message);
-            for (Player player : plugin.getChatSpyers()) {
-                if (!editWorld.getWorld().getPlayers().contains(player)) {
-                    MessageUtil.sendMessage(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
+            for (DGlobalPlayer player : plugin.getDPlayers().getPlayers()) {
+                if (player.isInChatSpyMode()) {
+                    if (!editWorld.getWorld().getPlayers().contains(player.getPlayer())) {
+                        MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
+                    }
                 }
             }
 
         } else {
             GameWorld gameWorld = GameWorld.getByWorld(world);
             gameWorld.sendMessage(message);
-            for (Player player : plugin.getChatSpyers()) {
-                if (!gameWorld.getWorld().getPlayers().contains(player)) {
-                    MessageUtil.sendMessage(player, ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
+            for (DGlobalPlayer player : plugin.getDPlayers().getPlayers()) {
+                if (player.isInChatSpyMode()) {
+                    if (!gameWorld.getWorld().getPlayers().contains(player.getPlayer())) {
+                        MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
+                    }
                 }
             }
         }
@@ -965,11 +957,11 @@ public class DPlayer {
 
     /* Statics */
     public static void remove(DPlayer player) {
-        plugin.getDPlayers().remove(player);
+        plugin.getDPlayers().removePlayer(player);
     }
 
     public static DPlayer getByPlayer(Player player) {
-        for (DPlayer dPlayer : plugin.getDPlayers()) {
+        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
             if (dPlayer.getPlayer().equals(player)) {
                 return dPlayer;
             }
@@ -978,7 +970,7 @@ public class DPlayer {
     }
 
     public static DPlayer getByName(String name) {
-        for (DPlayer dPlayer : plugin.getDPlayers()) {
+        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
             if (dPlayer.getPlayer().getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
@@ -989,7 +981,7 @@ public class DPlayer {
     public static CopyOnWriteArrayList<DPlayer> getByWorld(World world) {
         CopyOnWriteArrayList<DPlayer> dPlayers = new CopyOnWriteArrayList<>();
 
-        for (DPlayer dPlayer : plugin.getDPlayers()) {
+        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
             if (dPlayer.world == world) {
                 dPlayers.add(dPlayer);
             }

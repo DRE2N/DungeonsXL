@@ -26,8 +26,12 @@ import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
+import io.github.dre2n.dungeonsxl.global.GameSign;
+import io.github.dre2n.dungeonsxl.global.GlobalProtection;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
+import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
 import org.bukkit.Location;
@@ -51,6 +55,7 @@ import org.bukkit.event.block.SignChangeEvent;
 public class BlockListener implements Listener {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    protected static DPlayers dPlayers = plugin.getDPlayers();
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPhysics(BlockPhysicsEvent event) {
@@ -67,66 +72,20 @@ public class BlockListener implements Listener {
     public void onBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
+        DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
 
-        // Deny DPortal destroying
-        if (block.getType() == Material.PORTAL) {
-            DPortal dPortal = DPortal.getByBlock(event.getBlock());
-            if (dPortal != null) {
-                if (plugin.getInBreakMode().contains(player)) {
-                    dPortal.delete();
-                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
-                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
-                    plugin.getInBreakMode().remove(player);
-
-                } else {
-                    event.setCancelled(true);
-                }
-
-                return;
-            }
-        }
-
-        // Delete GroupSign
-        GroupSign groupSign = GroupSign.getSign(block);
-        if (groupSign != null) {
-            if (plugin.getInBreakMode().contains(player)) {
-                groupSign.delete();
+        GlobalProtection protection = plugin.getGlobalProtections().getByBlock(event.getBlock());
+        if (protection != null) {
+            if (dGlobalPlayer.isInBreakMode()) {
+                protection.delete();
                 MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
                 MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
-                plugin.getInBreakMode().remove(player);
+                dGlobalPlayer.setInBreakMode(false);
 
             } else {
                 event.setCancelled(true);
             }
 
-            return;
-        }
-
-        // Deny DGSignblocks destroying
-        if (GroupSign.isRelativeSign(block, 1, 0) || GroupSign.isRelativeSign(block, -1, 0) || GroupSign.isRelativeSign(block, 0, 1) || GroupSign.isRelativeSign(block, 0, -1)) {
-            event.setCancelled(true);
-            return;
-        }
-
-        // Delete LeaveSign
-        LeaveSign leaveSign = LeaveSign.getSign(block);
-        if (leaveSign != null) {
-            if (plugin.getInBreakMode().contains(player)) {
-                leaveSign.delete();
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
-                plugin.getInBreakMode().remove(player);
-
-            } else {
-                event.setCancelled(true);
-            }
-
-            return;
-        }
-
-        // Deny LeaveSignblocks destroying
-        if (LeaveSign.isRelativeSign(block, 1, 0) || LeaveSign.isRelativeSign(block, -1, 0) || LeaveSign.isRelativeSign(block, 0, 1) || LeaveSign.isRelativeSign(block, 0, -1)) {
-            event.setCancelled(true);
             return;
         }
 
@@ -155,7 +114,6 @@ public class BlockListener implements Listener {
                 }
             }
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -184,6 +142,7 @@ public class BlockListener implements Listener {
                 }
             }
         }
+
         event.setCancelled(true);
     }
 
@@ -204,13 +163,13 @@ public class BlockListener implements Listener {
                 return;
             }
 
-            if (lines[1].equalsIgnoreCase("Group")) {
+            if (lines[1].equalsIgnoreCase("Game") || lines[1].equalsIgnoreCase("Group")) {
                 String dungeonName = lines[2];
 
                 String[] data = lines[3].split("\\,");
                 if (data.length >= 2 && data.length <= 3) {
-                    int maxGroups = NumberUtil.parseInt(data[0]);
-                    int maxPlayersPerGroup = NumberUtil.parseInt(data[1]);
+                    int maxObjects = NumberUtil.parseInt(data[0]);
+                    int maxMembersPerObject = NumberUtil.parseInt(data[1]);
                     boolean multiFloor = false;
                     if (data.length == 3) {
                         if (data[2].equals("+")) {
@@ -218,9 +177,16 @@ public class BlockListener implements Listener {
                         }
                     }
 
-                    if (maxGroups > 0 && maxPlayersPerGroup > 0) {
-                        if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxGroups, maxPlayersPerGroup, multiFloor) != null) {
-                            event.setCancelled(true);
+                    if (maxObjects > 0 && maxMembersPerObject > 0) {
+                        if (lines[1].equalsIgnoreCase("Game")) {
+                            if (GameSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject, multiFloor) != null) {
+                                event.setCancelled(true);
+                            }
+
+                        } else if (lines[1].equalsIgnoreCase("Group")) {
+                            if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject, multiFloor) != null) {
+                                event.setCancelled(true);
+                            }
                         }
                     }
                 }
@@ -228,7 +194,7 @@ public class BlockListener implements Listener {
             } else if (lines[1].equalsIgnoreCase("Leave")) {
                 if (block.getState() instanceof Sign) {
                     Sign sign = (Sign) block.getState();
-                    new LeaveSign(sign);
+                    new LeaveSign(plugin.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
                 }
 
                 event.setCancelled(true);
@@ -283,7 +249,6 @@ public class BlockListener implements Listener {
         if (editWorld != null) {
             event.setCancelled(true);
         }
-
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

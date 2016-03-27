@@ -16,14 +16,13 @@
  */
 package io.github.dre2n.dungeonsxl.listener;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
-import io.github.dre2n.dungeonsxl.global.DPortal;
-import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -246,7 +245,7 @@ public class EntityListener implements Listener {
 
         if (gameWorld != null) {
             if (event.getEntity() instanceof LivingEntity) {
-                // Disable Creeper explosions in gameditWorlds
+                // Disable Creeper explosions in gameWorlds
                 event.setCancelled(true);
                 return;
 
@@ -254,26 +253,13 @@ public class EntityListener implements Listener {
                 // Disable drops from TNT
                 event.setYield(0);
             }
-
         }
 
-        // Prevent Portal and Sign Destroying
+        // Prevent GlobalProtection destroying
         List<Block> blocklist = event.blockList();
         for (Block block : blocklist) {
-            // Portals
-            if (block.getType() == Material.PORTAL) {
-                if (DPortal.getByBlock(block) != null) {
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-
-            // Signs
-            if (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) {
-                if (GroupSign.getSign(block) != null) {
-                    event.setCancelled(true);
-                    return;
-                }
+            if (DungeonsXL.getInstance().getGlobalProtections().isProtectedBlock(block)) {
+                event.setCancelled(true);
             }
         }
     }

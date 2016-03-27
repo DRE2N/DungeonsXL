@@ -21,6 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,13 +45,14 @@ public class ChatSpyCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
+        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
 
-        if (plugin.getChatSpyers().contains(player)) {
-            plugin.getChatSpyers().remove(player);
+        if (dGlobalPlayer.isInChatSpyMode()) {
+            dGlobalPlayer.setInChatSpyMode(false);
             MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_CHATSPY_STOPPED));
 
         } else {
-            plugin.getChatSpyers().add(player);
+            dGlobalPlayer.setInChatSpyMode(true);
             MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_CHATSPY_START));
         }
     }

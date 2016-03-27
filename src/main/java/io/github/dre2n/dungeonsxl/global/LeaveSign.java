@@ -16,14 +16,15 @@
  */
 package io.github.dre2n.dungeonsxl.global;
 
+import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import java.util.HashSet;
+import java.util.Set;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,14 +33,15 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann
  */
-public class LeaveSign {
+public class LeaveSign extends GlobalProtection {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Sign sign;
+    private Set<Block> blocks;
 
-    public LeaveSign(Sign sign) {
-        plugin.getLeaveSigns().add(this);
+    public LeaveSign(int id, Sign sign) {
+        super(sign.getWorld(), id);
 
         this.sign = sign;
         setText();
@@ -53,13 +55,48 @@ public class LeaveSign {
         sign.update();
     }
 
-    public void delete() {
-        plugin.getLeaveSigns().remove(this);
+    @Override
+    public Set<Block> getBlocks() {
+        if (blocks == null) {
+            blocks = new HashSet<>();
+
+            blocks.add(sign.getBlock());
+            blocks.add(BlockUtil.getAttachedBlock(sign.getBlock()));
+        }
+
+        return blocks;
     }
 
+    @Override
+    public void save(FileConfiguration config) {
+        String preString = "leavesign." + sign.getWorld().getName() + "." + getId();
+        config.set(preString + ".x", sign.getX());
+        config.set(preString + ".y", sign.getY());
+        config.set(preString + ".z", sign.getZ());
+    }
+
+    /* Statics */
+    /**
+     * @param block
+     * a block which is protected by the returned LeaveSign
+     */
+    public static LeaveSign getByBlock(Block block) {
+        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(LeaveSign.class)) {
+            LeaveSign leaveSign = (LeaveSign) protection;
+
+            if (leaveSign.getBlocks().contains(block)) {
+                return leaveSign;
+            }
+        }
+
+        return null;
+    }
+
+    /* SUBJECT TO CHANGE */
+    @Deprecated
     public static boolean playerInteract(Block block, Player player) {
 
-        LeaveSign leaveSign = getSign(block);
+        LeaveSign leaveSign = getByBlock(block);
 
         if (leaveSign == null) {
             return false;
@@ -75,91 +112,12 @@ public class LeaveSign {
             DGroup dgroup = DGroup.getByPlayer(player);
             if (dgroup != null) {
                 dgroup.removePlayer(player);
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LEAVE_GROUP));// ChatColor.YELLOW+"Du hast deine Gruppe erfolgreich verlassen!");
+                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LEAVE_GROUP));
                 return true;
             }
         }
 
         return false;
-    }
-
-    public static boolean isRelativeSign(Block block, int x, int z) {
-        LeaveSign leaveSign = getSign(block.getRelative(x, 0, z));
-        if (leaveSign == null) {
-            return false;
-        }
-
-        if (x == -1 && leaveSign.sign.getData().getData() == 4) {
-            return true;
-        }
-
-        if (x == 1 && leaveSign.sign.getData().getData() == 5) {
-            return true;
-        }
-
-        if (z == -1 && leaveSign.sign.getData().getData() == 2) {
-            return true;
-        }
-
-        if (z == 1 && leaveSign.sign.getData().getData() == 3) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static LeaveSign getSign(Block block) {
-        if (!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) {
-            return null;
-        }
-
-        for (LeaveSign leavesign : plugin.getLeaveSigns()) {
-            if (block.getWorld() != leavesign.sign.getWorld()) {
-                continue;
-            }
-
-            if (block.getLocation().distance(leavesign.sign.getBlock().getLocation()) < 1) {
-                return leavesign;
-            }
-        }
-
-        return null;
-    }
-
-    // Save and Load
-    public static void save(FileConfiguration configFile) {
-        int id = 0;
-        for (LeaveSign leaveSign : plugin.getLeaveSigns()) {
-            id++;
-            String preString = "leavesign." + leaveSign.sign.getWorld().getName() + "." + id;
-            configFile.set(preString + ".x", leaveSign.sign.getX());
-            configFile.set(preString + ".y", leaveSign.sign.getY());
-            configFile.set(preString + ".z", leaveSign.sign.getZ());
-        }
-    }
-
-    public static void load(FileConfiguration configFile) {
-        for (World world : plugin.getServer().getWorlds()) {
-            if (!configFile.contains("leavesign." + world.getName())) {
-                continue;
-            }
-
-            int id = 0;
-            String preString;
-
-            do {
-                id++;
-                preString = "leavesign." + world.getName() + "." + id + ".";
-                if (configFile.contains(preString)) {
-                    Block block = world.getBlockAt(configFile.getInt(preString + ".x"), configFile.getInt(preString + ".y"), configFile.getInt(preString + ".z"));
-                    if (block.getState() instanceof Sign) {
-                        Sign sign = (Sign) block.getState();
-                        new LeaveSign(sign);
-                    }
-                }
-
-            } while (configFile.contains(preString));
-        }
     }
 
 }

@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.global;
 
+import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
@@ -25,6 +26,8 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -37,15 +40,16 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class GameSign {
+public class GameSign extends GlobalProtection {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    protected static GlobalProtections protections = plugin.getGlobalProtections();
 
     // Sign Labels
     public static final String IS_PLAYING = ChatColor.DARK_RED + "Is Playing";
     public static final String FULL = ChatColor.DARK_RED + "Full";
-    public static final String JOIN_GROUP = ChatColor.DARK_GREEN + "Join Game";
-    public static final String NEW_GROUP = ChatColor.DARK_GREEN + "New Game";
+    public static final String JOIN_GAME = ChatColor.DARK_GREEN + "Join Game";
+    public static final String NEW_GAME = ChatColor.DARK_GREEN + "New Game";
 
     // Variables
     private Game[] games;
@@ -56,9 +60,10 @@ public class GameSign {
     private Block startSign;
     private int directionX = 0, directionZ = 0;
     private int verticalSigns;
+    private Set<Block> blocks;
 
-    public GameSign(Block startSign, String identifier, int maxGames, int maxGroupsPerGame, boolean multiFloor) {
-        plugin.getGameSigns().add(this);
+    public GameSign(int id, Block startSign, String identifier, int maxGames, int maxGroupsPerGame, boolean multiFloor) {
+        super(startSign.getWorld(), id);
 
         this.startSign = startSign;
         games = new Game[maxGames];
@@ -82,6 +87,36 @@ public class GameSign {
         directionZ = direction[1];
 
         update();
+    }
+
+    /**
+     * @return the games
+     */
+    public Game[] getGames() {
+        return games;
+    }
+
+    /**
+     * @param games
+     * the games to set
+     */
+    public void setGames(Game[] games) {
+        this.games = games;
+    }
+
+    /**
+     * @return the multiFloor
+     */
+    public boolean isMultiFloor() {
+        return multiFloor;
+    }
+
+    /**
+     * @param multiFloor
+     * the multiFloor to set
+     */
+    public void setMultiFloor(boolean multiFloor) {
+        this.multiFloor = multiFloor;
     }
 
     /**
@@ -115,24 +150,23 @@ public class GameSign {
     }
 
     /**
-     * @return the multiFloor
+     * @return the maximum player count per group
      */
-    public boolean isMultiFloor() {
-        return multiFloor;
+    public int getMaxGroupsPerGame() {
+        return maxGroupsPerGame;
     }
 
     /**
-     * @param multiFloor
-     * the multiFloor to set
+     * @param maxGroupsPerGame
+     * the maximum player count per group to set
      */
-    public void setMultiFloor(boolean multiFloor) {
-        this.multiFloor = multiFloor;
+    public void setMaxGroupsPerGame(int maxGroupsPerGame) {
+        this.maxGroupsPerGame = maxGroupsPerGame;
     }
 
-    public void delete() {
-        plugin.getGameSigns().remove(this);
-    }
-
+    /**
+     * Update this game sign to show the game(s) correctly.
+     */
     public void update() {
         int i = 0;
         for (Game game : games) {
@@ -169,7 +203,7 @@ public class GameSign {
                     sign.setLine(0, FULL);
 
                 } else {
-                    sign.setLine(0, JOIN_GROUP);
+                    sign.setLine(0, JOIN_GAME);
                 }
 
                 int j = 1;
@@ -190,7 +224,7 @@ public class GameSign {
                 }
 
             } else {
-                sign.setLine(0, NEW_GROUP);
+                sign.setLine(0, NEW_GAME);
             }
 
             sign.update();
@@ -199,7 +233,121 @@ public class GameSign {
         }
     }
 
-    // Static
+    @Override
+    public Set<Block> getBlocks() {
+        if (blocks == null) {
+            blocks = new HashSet<>();
+
+            int i = games.length;
+            do {
+                i--;
+
+                blocks.add(startSign.getRelative(i * directionX, 0, i * directionZ));
+
+            } while (i >= 0);
+
+            HashSet<Block> toAdd = new HashSet<>();
+            for (Block block : blocks) {
+                i = verticalSigns;
+                do {
+                    i--;
+
+                    Block beneath = block.getLocation().add(0, -1 * i, 0).getBlock();
+                    toAdd.add(beneath);
+                    toAdd.add(BlockUtil.getAttachedBlock(beneath));
+
+                } while (i >= 0);
+            }
+            blocks.addAll(toAdd);
+        }
+
+        return blocks;
+    }
+
+    @Override
+    public void save(FileConfiguration config) {
+        String preString = "gamesign." + getWorld().getName() + "." + getId();
+
+        config.set(preString + ".x", startSign.getX());
+        config.set(preString + ".y", startSign.getY());
+        config.set(preString + ".z", startSign.getZ());
+
+        if (isMultiFloor()) {
+            config.set(preString + ".dungeon", dungeonName);
+
+        } else {
+            config.set(preString + ".dungeon", mapName);
+        }
+
+        config.set(preString + ".maxGames", games.length);
+        config.set(preString + ".maxGroupsPerGame", maxGroupsPerGame);
+        config.set(preString + ".multiFloor", isMultiFloor());
+    }
+
+    /* Statics */
+    /**
+     * @param block
+     * a block which is protected by the returned GameSign
+     */
+    public static GameSign getByBlock(Block block) {
+        if (!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) {
+            return null;
+        }
+
+        int x = block.getX(), y = block.getY(), z = block.getZ();
+        for (GlobalProtection protection : protections.getProtections(GameSign.class)) {
+            GameSign gameSign = (GameSign) protection;
+
+            int sx1 = gameSign.startSign.getX(), sy1 = gameSign.startSign.getY(), sz1 = gameSign.startSign.getZ();
+            int sx2 = sx1 + (gameSign.games.length - 1) * gameSign.directionX;
+            int sy2 = sy1 - gameSign.verticalSigns + 1;
+            int sz2 = sz1 + (gameSign.games.length - 1) * gameSign.directionZ;
+
+            if (sx1 > sx2) {
+                if (x < sx2 || x > sx1) {
+                    continue;
+                }
+
+            } else if (sx1 < sx2) {
+                if (x > sx2 || x < sx1) {
+                    continue;
+                }
+
+            } else if (x != sx1) {
+                continue;
+            }
+
+            if (sy1 > sy2) {
+                if (y < sy2 || y > sy1) {
+                    continue;
+                }
+
+            } else if (y != sy1) {
+                continue;
+            }
+
+            if (sz1 > sz2) {
+                if (z < sz2 || z > sz1) {
+                    continue;
+                }
+
+            } else if (sz1 < sz2) {
+                if (z > sz2 || z < sz1) {
+                    continue;
+                }
+
+            } else if (z != sz1) {
+                continue;
+            }
+
+            return gameSign;
+        }
+
+        return null;
+    }
+
+    /* SUBJECT TO CHANGE*/
+    @Deprecated
     public static GameSign tryToCreate(Block startSign, String mapName, int maxGames, int maxGroupsPerGame, boolean multiFloor) {
         World world = startSign.getWorld();
         int direction = startSign.getData();
@@ -296,100 +444,26 @@ public class GameSign {
             block.setTypeIdAndData(68, startSign.getData(), true);
         }
 
-        GameSign sign = new GameSign(startSign, mapName, maxGames, maxGroupsPerGame, multiFloor);
+        GameSign sign = new GameSign(protections.generateId(GameSign.class, world), startSign, mapName, maxGames, maxGroupsPerGame, multiFloor);
 
         return sign;
     }
 
-    public static boolean isRelativeSign(Block block, int x, int z) {
-        GameSign gameSign = getSign(block.getRelative(x, 0, z));
-        if (gameSign == null) {
-            return false;
-        }
-
-        if (x == -1 && gameSign.startSign.getData() == 4) {
-            return true;
-        }
-
-        if (x == 1 && gameSign.startSign.getData() == 5) {
-            return true;
-        }
-
-        if (z == -1 && gameSign.startSign.getData() == 2) {
-            return true;
-        }
-
-        if (z == 1 && gameSign.startSign.getData() == 3) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static GameSign getSign(Block block) {
-        if (!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) {
-            return null;
-        }
-
-        int x = block.getX(), y = block.getY(), z = block.getZ();
-        for (GameSign gameSign : plugin.getGameSigns()) {
-            int sx1 = gameSign.startSign.getX(), sy1 = gameSign.startSign.getY(), sz1 = gameSign.startSign.getZ();
-            int sx2 = sx1 + (gameSign.games.length - 1) * gameSign.directionX;
-            int sy2 = sy1 - gameSign.verticalSigns + 1;
-            int sz2 = sz1 + (gameSign.games.length - 1) * gameSign.directionZ;
-
-            if (sx1 > sx2) {
-                if (x < sx2 || x > sx1) {
-                    continue;
-                }
-
-            } else if (sx1 < sx2) {
-                if (x > sx2 || x < sx1) {
-                    continue;
-                }
-
-            } else if (x != sx1) {
-                continue;
-            }
-
-            if (sy1 > sy2) {
-                if (y < sy2 || y > sy1) {
-                    continue;
-                }
-
-            } else if (y != sy1) {
-                continue;
-            }
-
-            if (sz1 > sz2) {
-                if (z < sz2 || z > sz1) {
-                    continue;
-                }
-
-            } else if (sz1 < sz2) {
-                if (z > sz2 || z < sz1) {
-                    continue;
-                }
-
-            } else if (z != sz1) {
-                continue;
-            }
-
-            return gameSign;
-        }
-
-        return null;
-    }
-
+    @Deprecated
     public static boolean playerInteract(Block block, Player player) {
         int x = block.getX(), y = block.getY(), z = block.getZ();
-        GameSign gameSign = getSign(block);
+        GameSign gameSign = getByBlock(block);
 
         if (gameSign == null) {
             return false;
         }
 
         DGroup dGroup = DGroup.getByPlayer(player);
+
+        if (dGroup == null) {
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_JOIN_GROUP));
+            return true;
+        }
 
         if (!dGroup.getCaptain().equals(player)) {
             MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_NOT_CAPTAIN));
@@ -436,11 +510,11 @@ public class GameSign {
 
         Sign topSign = (Sign) topBlock.getState();
 
-        if (topSign.getLine(0).equals(NEW_GROUP)) {
+        if (topSign.getLine(0).equals(NEW_GAME)) {
             gameSign.games[column] = new Game(dGroup);
             gameSign.update();
 
-        } else if (topSign.getLine(0).equals(JOIN_GROUP)) {
+        } else if (topSign.getLine(0).equals(JOIN_GAME)) {
             gameSign.games[column].addDGroup(dGroup);
             gameSign.update();
         }
@@ -448,9 +522,11 @@ public class GameSign {
         return true;
     }
 
+    @Deprecated
     public static void updatePerGame(Game gameSearch) {
+        for (GlobalProtection protection : protections.getProtections(GameSign.class)) {
+            GameSign gameSign = (GameSign) protection;
 
-        for (GameSign gameSign : plugin.getGameSigns()) {
             int i = 0;
             for (Game game : gameSign.games) {
                 if (game == null) {
@@ -469,6 +545,7 @@ public class GameSign {
         }
     }
 
+    @Deprecated
     public static int[] getDirection(byte data) {
         int[] direction = new int[2];
 
@@ -490,60 +567,6 @@ public class GameSign {
                 break;
         }
         return direction;
-    }
-
-    // Save and Load
-    public static void save(FileConfiguration configFile) {
-        int id = 0;
-
-        for (GameSign gameSign : plugin.getGameSigns()) {
-            id++;
-            String preString = "gamesign." + gameSign.startSign.getWorld().getName() + "." + id;
-
-            // Location
-            configFile.set(preString + ".x", gameSign.startSign.getX());
-            configFile.set(preString + ".y", gameSign.startSign.getY());
-            configFile.set(preString + ".z", gameSign.startSign.getZ());
-
-            // Etc.
-            if (gameSign.isMultiFloor()) {
-                configFile.set(preString + ".dungeon", gameSign.dungeonName);
-
-            } else {
-                configFile.set(preString + ".dungeon", gameSign.mapName);
-            }
-
-            configFile.set(preString + ".maxGames", gameSign.games.length);
-            configFile.set(preString + ".maxGroupsPerGame", gameSign.maxGroupsPerGame);
-            configFile.set(preString + ".multiFloor", gameSign.isMultiFloor());
-        }
-    }
-
-    public static void load(FileConfiguration configFile) {
-        for (World world : plugin.getServer().getWorlds()) {
-            if (!configFile.contains("gamesign." + world.getName())) {
-                continue;
-            }
-
-            int id = 0;
-            String preString;
-            do {
-                id++;
-                preString = "gamesign." + world.getName() + "." + id + ".";
-                if (configFile.contains(preString)) {
-                    String mapName = configFile.getString(preString + ".dungeon");
-                    int maxGames = configFile.getInt(preString + ".maxGames");
-                    int maxGroupsPerGame = configFile.getInt(preString + ".maxGroupsPerGame");
-                    boolean multiFloor = false;
-                    if (configFile.contains(preString + ".multiFloor")) {
-                        multiFloor = configFile.getBoolean(preString + ".multiFloor");
-                    }
-                    Block startSign = world.getBlockAt(configFile.getInt(preString + ".x"), configFile.getInt(preString + ".y"), configFile.getInt(preString + ".z"));
-
-                    new GameSign(startSign, mapName, maxGames, maxGroupsPerGame, multiFloor);
-                }
-            } while (configFile.contains(preString));
-        }
     }
 
 }

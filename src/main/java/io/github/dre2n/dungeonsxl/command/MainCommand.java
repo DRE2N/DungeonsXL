@@ -52,7 +52,7 @@ public class MainCommand extends BRCommand {
         int maps = new File(plugin.getDataFolder() + "/maps").listFiles().length;
         int dungeons = new File(plugin.getDataFolder() + "/dungeons").listFiles().length;
         int loaded = plugin.getEditWorlds().size() + plugin.getGameWorlds().size();
-        int players = plugin.getDPlayers().size();
+        int players = plugin.getDPlayers().getDPlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {

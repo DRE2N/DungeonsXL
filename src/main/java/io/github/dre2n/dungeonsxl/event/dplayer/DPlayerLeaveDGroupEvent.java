@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 Frank Baumann
+ * Copyright (C) 2016 Daniel Saukel
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,73 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.event.dgroup;
+package io.github.dre2n.dungeonsxl.event.dplayer;
 
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import org.bukkit.entity.Player;
+import io.github.dre2n.dungeonsxl.player.DPlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
  * @author Daniel Saukel
  */
-public class DGroupDisbandEvent extends DGroupEvent implements Cancellable {
-
-    public enum Cause {
-
-        COMMAND,
-        DUNGEON_FINISHED,
-        GROUP_IS_EMPTY,
-        CUSTOM
-
-    }
+public class DPlayerLeaveDGroupEvent extends DPlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Player disbander;
+    private DGroup dGroup;
 
-    private Cause cause;
-
-    public DGroupDisbandEvent(DGroup dGroup, Cause cause) {
-        super(dGroup);
-        this.cause = cause;
-    }
-
-    public DGroupDisbandEvent(DGroup dGroup, Player disbander, Cause cause) {
-        super(dGroup);
-        this.disbander = disbander;
-        this.cause = cause;
+    public DPlayerLeaveDGroupEvent(DPlayer dPlayer, DGroup dGroup) {
+        super(dPlayer);
+        this.dGroup = dGroup;
     }
 
     /**
-     * @return the disbander
+     * @return the dGroup
      */
-    public Player getDisbander() {
-        return disbander;
-    }
-
-    /**
-     * @param disbander
-     * the disbander to set
-     */
-    public void setDisbander(Player disbander) {
-        this.disbander = disbander;
-    }
-
-    /**
-     * @return the cause
-     */
-    public Cause getCause() {
-        return cause;
-    }
-
-    /**
-     * @param cause
-     * the cause to set
-     */
-    public void setCause(Cause cause) {
-        this.cause = cause;
+    public DGroup getDGroup() {
+        return dGroup;
     }
 
     @Override

@@ -22,6 +22,7 @@ import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
 import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.command.*;
+import io.github.dre2n.dungeonsxl.config.DataConfig;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
@@ -31,10 +32,7 @@ import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
-import io.github.dre2n.dungeonsxl.global.DPortal;
-import io.github.dre2n.dungeonsxl.global.GameSign;
-import io.github.dre2n.dungeonsxl.global.GroupSign;
-import io.github.dre2n.dungeonsxl.global.LeaveSign;
+import io.github.dre2n.dungeonsxl.global.GlobalProtections;
 import io.github.dre2n.dungeonsxl.listener.BlockListener;
 import io.github.dre2n.dungeonsxl.listener.EntityListener;
 import io.github.dre2n.dungeonsxl.listener.HangingListener;
@@ -42,6 +40,7 @@ import io.github.dre2n.dungeonsxl.listener.PlayerListener;
 import io.github.dre2n.dungeonsxl.listener.WorldListener;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
@@ -51,11 +50,7 @@ import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.Triggers;
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -68,6 +63,7 @@ public class DungeonsXL extends BRPlugin {
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
 
+    private DataConfig dataConfig;
     private MainConfig mainConfig;
     private MessageConfig messageConfig;
 
@@ -78,23 +74,18 @@ public class DungeonsXL extends BRPlugin {
     private RewardTypes rewardTypes;
     private Triggers triggers;
     private Dungeons dungeons;
+    private GlobalProtections protections;
+    private DPlayers dPlayers;
 
     private BukkitTask worldUnloadTask;
     private BukkitTask lazyUpdateTask;
     private BukkitTask updateTask;
 
-    private CopyOnWriteArrayList<Player> inBreakMode = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Player> chatSpyers = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<EditWorld> editWorlds = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<GameWorld> gameWorlds = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<GameSign> gameSigns = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<GroupSign> groupSigns = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<LeaveSign> leaveSigns = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<DPortal> dPortals = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<DPlayer> dPlayers = new CopyOnWriteArrayList<>();
 
     public DungeonsXL() {
         /*
@@ -124,6 +115,7 @@ public class DungeonsXL extends BRPlugin {
         // Load Language
         loadMessageConfig(new File(getDataFolder(), "languages/en.yml"));
         // Load Config
+        loadDataConfig(new File(getDataFolder(), "data.yml"));
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
         loadMessageConfig(new File(getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
@@ -134,6 +126,8 @@ public class DungeonsXL extends BRPlugin {
         loadTriggers();
         loadDSigns();
         loadDungeons();
+        loadGlobalProtections();
+        loadDPlayers();
 
         manager.registerEvents(new EntityListener(), this);
         manager.registerEvents(new PlayerListener(), this);
@@ -157,18 +151,13 @@ public class DungeonsXL extends BRPlugin {
         messageConfig.save();
 
         // DPlayer leaves World
-        for (DPlayer dPlayer : dPlayers) {
+        for (DPlayer dPlayer : dPlayers.getDPlayers()) {
             dPlayer.leave();
         }
 
         // Delete all Data
-        chatSpyers.clear();
         dLootInventories.clear();
-        groupSigns.clear();
-        leaveSigns.clear();
-        dPortals.clear();
         dGroups.clear();
-        dPlayers.clear();
 
         // Delete Worlds
         GameWorld.deleteAll();
@@ -205,36 +194,19 @@ public class DungeonsXL extends BRPlugin {
         }
     }
 
-    // Save and Load
+    // Save and load
     public void saveData() {
-        File file = new File(getDataFolder(), "data.yml");
-        FileConfiguration configFile = new YamlConfiguration();
-
-        DPortal.save(configFile);
-        GroupSign.save(configFile);
-        LeaveSign.save(configFile);
-
-        try {
-            configFile.save(file);
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        protections.saveAll();
+        DSavePlayer.save();
+        for (EditWorld editWorld : editWorlds) {
+            editWorld.save();
         }
     }
 
     public void loadAll() {
-        // Load world data
-        File file = new File(getDataFolder(), "data.yml");
-        FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-
-        DPortal.load(configFile);
-        GroupSign.load(configFile);
-        LeaveSign.load(configFile);
-
-        // Load saved players
+        protections.loadAll();
+        dPlayers.loadAll();
         DSavePlayer.load();
-
-        // Check Worlds
         checkWorlds();
     }
 
@@ -265,6 +237,20 @@ public class DungeonsXL extends BRPlugin {
      */
     public static DungeonsXL getInstance() {
         return instance;
+    }
+
+    /**
+     * @return the loaded instance of DataConfig
+     */
+    public DataConfig getDataConfig() {
+        return dataConfig;
+    }
+
+    /**
+     * load / reload a new instance of MainConfig
+     */
+    public void loadDataConfig(File file) {
+        dataConfig = new DataConfig(file);
     }
 
     /**
@@ -422,6 +408,34 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
+     * @return the loaded instance of GlobalProtections
+     */
+    public GlobalProtections getGlobalProtections() {
+        return protections;
+    }
+
+    /**
+     * load / reload a new instance of GlobalProtections
+     */
+    public void loadGlobalProtections() {
+        protections = new GlobalProtections();
+    }
+
+    /**
+     * @return the loaded instance of DPlayers
+     */
+    public DPlayers getDPlayers() {
+        return dPlayers;
+    }
+
+    /**
+     * load / reload a new instance of DPlayers
+     */
+    public void loadDPlayers() {
+        dPlayers = new DPlayers();
+    }
+
+    /**
      * @return the worldUnloadTask
      */
     public BukkitTask getWorldUnloadTask() {
@@ -464,20 +478,6 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the inBreakMode
-     */
-    public CopyOnWriteArrayList<Player> getInBreakMode() {
-        return inBreakMode;
-    }
-
-    /**
-     * @return the chatSpyers
-     */
-    public CopyOnWriteArrayList<Player> getChatSpyers() {
-        return chatSpyers;
-    }
-
-    /**
      * @return the dLootInventories
      */
     public CopyOnWriteArrayList<DLootInventory> getDLootInventories() {
@@ -506,34 +506,6 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the gameSigns
-     */
-    public CopyOnWriteArrayList<GameSign> getGameSigns() {
-        return gameSigns;
-    }
-
-    /**
-     * @return the groupSigns
-     */
-    public CopyOnWriteArrayList<GroupSign> getGroupSigns() {
-        return groupSigns;
-    }
-
-    /**
-     * @return the dPortals
-     */
-    public CopyOnWriteArrayList<DPortal> getDPortals() {
-        return dPortals;
-    }
-
-    /**
-     * @return the leaveSigns
-     */
-    public CopyOnWriteArrayList<LeaveSign> getLeaveSigns() {
-        return leaveSigns;
-    }
-
-    /**
      * @return the games
      */
     public CopyOnWriteArrayList<Game> getGames() {
@@ -545,13 +517,6 @@ public class DungeonsXL extends BRPlugin {
      */
     public CopyOnWriteArrayList<DGroup> getDGroups() {
         return dGroups;
-    }
-
-    /**
-     * @return the dPlayers
-     */
-    public CopyOnWriteArrayList<DPlayer> getDPlayers() {
-        return dPlayers;
     }
 
 }
