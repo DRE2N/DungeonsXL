@@ -61,11 +61,6 @@ public class LeaveCommand extends BRCommand {
         if (dPlayer != null) {
             DGroup dGroup = DGroup.getByPlayer(player);
 
-            if (dGroup == null) {
-                MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_IN_GROUP));
-                return;
-            }
-
             DPlayerEscapeEvent dPlayerEscapeEvent = new DPlayerEscapeEvent(dPlayer);
             DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
 
