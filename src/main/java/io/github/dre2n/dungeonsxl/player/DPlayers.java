@@ -29,6 +29,12 @@ public class DPlayers {
     private List<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
     private List<DSavePlayer> dSavePlayers = new CopyOnWriteArrayList<>();
 
+    public DPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            new DGlobalPlayer(player);
+        }
+    }
+
     /**
      * @return the DGlobalPlayer which represents the player
      */
