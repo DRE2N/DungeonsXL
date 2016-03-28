@@ -494,12 +494,11 @@ public class DPlayer extends DGlobalPlayer {
 
     // ...
     public void escape() {
-        remove(this);
+        delete();
         savePlayer.reset(false);
     }
 
     public void leave() {
-        remove(this);
         if (!editing) {
             WorldConfig dConfig = GameWorld.getByWorld(world).getConfig();
             if (finished) {
@@ -604,6 +603,8 @@ public class DPlayer extends DGlobalPlayer {
                 }
             }
         }
+
+        delete();
     }
 
     public void ready() {
@@ -955,11 +956,19 @@ public class DPlayer extends DGlobalPlayer {
         }
     }
 
-    /* Statics */
-    public static void remove(DPlayer player) {
-        plugin.getDPlayers().removePlayer(player);
+    /**
+     * Delete this DPlayer. Creates a DGlobalPlayer to replace it!
+     */
+    public void delete() {
+        if (player.isOnline()) {
+            new DGlobalPlayer(player);
+
+        } else {
+            plugin.getDPlayers().removePlayer(this);
+        }
     }
 
+    /* Statics */
     public static DPlayer getByPlayer(Player player) {
         for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
             if (dPlayer.getPlayer().equals(player)) {
