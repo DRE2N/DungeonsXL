@@ -499,6 +499,8 @@ public class DPlayer extends DGlobalPlayer {
     }
 
     public void leave() {
+        delete();
+        
         if (!editing) {
             WorldConfig dConfig = GameWorld.getByWorld(world).getConfig();
             if (finished) {
@@ -603,8 +605,6 @@ public class DPlayer extends DGlobalPlayer {
                 }
             }
         }
-
-        delete();
     }
 
     public void ready() {
