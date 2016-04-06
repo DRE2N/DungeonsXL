@@ -85,8 +85,6 @@ public class DPlayer extends DGlobalPlayer {
     private Wolf wolf;
     private int wolfRespawnTime = 30;
     private long offlineTime;
-    private ItemStack[] respawnInventory;
-    private ItemStack[] respawnArmor;
     private String[] linesCopy;
 
     private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, messageConfig.getMessage(Messages.PLAYER_TREASURES));
@@ -403,36 +401,6 @@ public class DPlayer extends DGlobalPlayer {
     }
 
     /**
-     * @return the respawnInventory
-     */
-    public ItemStack[] getRespawnInventory() {
-        return respawnInventory;
-    }
-
-    /**
-     * @param respawnInventory
-     * the respawnInventory to set
-     */
-    public void setRespawnInventory(ItemStack[] respawnInventory) {
-        this.respawnInventory = respawnInventory;
-    }
-
-    /**
-     * @return the respawnArmor
-     */
-    public ItemStack[] getRespawnArmor() {
-        return respawnArmor;
-    }
-
-    /**
-     * @param respawnArmor
-     * the respawnArmor to set
-     */
-    public void setRespawnArmor(ItemStack[] respawnArmor) {
-        this.respawnArmor = respawnArmor;
-    }
-
-    /**
      * @return the linesCopy
      */
     public String[] getLinesCopy() {
@@ -500,7 +468,7 @@ public class DPlayer extends DGlobalPlayer {
 
     public void leave() {
         delete();
-        
+
         if (!editing) {
             WorldConfig dConfig = GameWorld.getByWorld(world).getConfig();
             if (finished) {
@@ -654,13 +622,7 @@ public class DPlayer extends DGlobalPlayer {
 
         // Respawn Items
         if (GameWorld.getByWorld(world).getConfig().getKeepInventoryOnDeath()) {
-            if (respawnInventory != null || respawnArmor != null) {
-                getPlayer().getInventory().setContents(respawnInventory);
-                getPlayer().getInventory().setArmorContents(respawnArmor);
-                respawnInventory = null;
-                respawnArmor = null;
-            }
-            // P.plugin.updateInventory(this.player);
+            applyRespawnInventory();
         }
     }
 
@@ -937,10 +899,7 @@ public class DPlayer extends DGlobalPlayer {
         }
 
         if (respawnInventory) {
-            getPlayer().getInventory().setContents(getRespawnInventory());
-            getPlayer().getInventory().setArmorContents(getRespawnArmor());
-            setRespawnInventory(null);
-            setRespawnArmor(null);
+            applyRespawnInventory();
         }
 
         if (kick) {
@@ -961,7 +920,8 @@ public class DPlayer extends DGlobalPlayer {
      */
     public void delete() {
         if (player.isOnline()) {
-            new DGlobalPlayer(player);
+            // Create a new DGlobalPlayer (outside a dungeon)
+            new DGlobalPlayer(this);
 
         } else {
             plugin.getDPlayers().removePlayer(this);

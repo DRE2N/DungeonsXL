@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Represents a player in the non-DXL worlds of the server.
@@ -33,8 +34,22 @@ public class DGlobalPlayer {
     private boolean chatSpyMode;
     private DPortal creatingPortal;
 
+    private ItemStack[] respawnInventory;
+    private ItemStack[] respawnArmor;
+
     public DGlobalPlayer(Player player) {
         this.player = player;
+
+        DungeonsXL.getInstance().getDPlayers().addPlayer(this);
+    }
+
+    public DGlobalPlayer(DGlobalPlayer dPlayer) {
+        player = dPlayer.getPlayer();
+        breakMode = dPlayer.isInBreakMode();
+        chatSpyMode = dPlayer.isInChatSpyMode();
+        creatingPortal = dPlayer.getPortal();
+        respawnInventory = dPlayer.getRespawnInventory();
+        respawnArmor = dPlayer.getRespawnArmor();
 
         DungeonsXL.getInstance().getDPlayers().addPlayer(this);
     }
@@ -96,6 +111,50 @@ public class DGlobalPlayer {
      */
     public void setCreatingPortal(DPortal dPortal) {
         creatingPortal = dPortal;
+    }
+
+    /**
+     * @return the respawnInventory
+     */
+    public ItemStack[] getRespawnInventory() {
+        return respawnInventory;
+    }
+
+    /**
+     * @param respawnInventory
+     * the respawnInventory to set
+     */
+    public void setRespawnInventory(ItemStack[] respawnInventory) {
+        this.respawnInventory = respawnInventory;
+    }
+
+    /**
+     * Give the saved respawn inventory to the player
+     */
+    public void applyRespawnInventory() {
+        if (respawnInventory == null || respawnArmor == null) {
+            return;
+        }
+
+        player.getInventory().setContents(respawnInventory);
+        player.getInventory().setArmorContents(respawnArmor);
+        respawnInventory = null;
+        respawnArmor = null;
+    }
+
+    /**
+     * @return the respawnArmor
+     */
+    public ItemStack[] getRespawnArmor() {
+        return respawnArmor;
+    }
+
+    /**
+     * @param respawnArmor
+     * the respawnArmor to set
+     */
+    public void setRespawnArmor(ItemStack[] respawnArmor) {
+        this.respawnArmor = respawnArmor;
     }
 
 }

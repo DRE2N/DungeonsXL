@@ -108,21 +108,6 @@ public class PlayerListener implements Listener {
 
         dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
 
-        if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-            DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
-
-            if (!dPlayerKickEvent.isCancelled()) {
-                MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
-
-                // TODO: This Runnable is a workaround for a bug I couldn't find, yet...
-                new org.bukkit.scheduler.BukkitRunnable() {
-                    public void run() {
-                        dPlayer.leave();
-                    }
-                }.runTaskLater(plugin, 1L);
-            }
-        }
-
         if (dPlayer.getLives() != -1) {
             MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
 
@@ -131,9 +116,22 @@ public class PlayerListener implements Listener {
                     dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
                     dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
                     // Delete all drops
-                    for (ItemStack istack : event.getDrops()) {
-                        istack.setType(Material.AIR);
+                    for (ItemStack item : event.getDrops()) {
+                        item.setType(Material.AIR);
                     }
+                }
+            }
+        }
+
+        if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
+            DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
+
+            if (!dPlayerKickEvent.isCancelled()) {
+                MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
+                dPlayer.leave();
+                if (gameWorld.getConfig().getKeepInventoryOnEscape()) {
+                    /*new org.bukkit.scheduler.BukkitRunnable() {public void run(){*/
+                    dPlayer.applyRespawnInventory();/*}}.runTaskLater(plugin, 1);*/
                 }
             }
         }
@@ -348,6 +346,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
+        plugin.getDPlayers().getByPlayer(player).applyRespawnInventory();
+
         DPlayer dPlayer = DPlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
