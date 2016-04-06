@@ -27,7 +27,6 @@ import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -165,7 +164,6 @@ public class EntityListener implements Listener {
 
             if (attackerDGroup != null && attackedDGroup != null) {
                 if (!friendlyFire && attackerDGroup.equals(attackedDGroup)) {
-                    Bukkit.broadcastMessage("ff cancel");
                     event.setCancelled(true);
                 }
             }
