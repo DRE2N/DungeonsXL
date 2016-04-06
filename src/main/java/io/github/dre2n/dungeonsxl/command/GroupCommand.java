@@ -114,7 +114,7 @@ public class GroupCommand extends BRCommand {
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
 
             if (event.isCancelled()) {
-                plugin.getDGroups().remove(dGroup);
+                dGroup.delete();
                 dGroup = null;
 
             } else {
@@ -131,7 +131,7 @@ public class GroupCommand extends BRCommand {
             DGroupDisbandEvent event = new DGroupDisbandEvent(dGroup, player, DGroupDisbandEvent.Cause.COMMAND);
 
             if (!event.isCancelled()) {
-                plugin.getDGroups().remove(dGroup);
+                dGroup.delete();
                 MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.GROUP_DISBANDED, sender.getName(), dGroup.getName()));
                 dGroup = null;
             }

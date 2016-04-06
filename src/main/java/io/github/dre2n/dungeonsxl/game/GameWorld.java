@@ -648,6 +648,7 @@ public class GameWorld {
 
                 if (bestTime == 0) {
                     return false;
+
                 } else if (worldConfig.getTimeLastPlayed() != 0) {
                     if (System.currentTimeMillis() - bestTime > worldConfig.getTimeLastPlayed() * (long) 3600000) {
                         return false;

@@ -14,22 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.task;
+package io.github.dre2n.dungeonsxl.config;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
-import org.bukkit.scheduler.BukkitRunnable;
+import io.github.dre2n.commons.config.BRConfig;
+import java.io.File;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * @author Daniel Saukel
  */
-public class UpdateTask extends BukkitRunnable {
+public class DataConfig extends BRConfig {
+
+    public static final int CONFIG_VERSION = 1;
+
+    public DataConfig(File file) {
+        super(file, CONFIG_VERSION);
+
+        if (initialize) {
+            initialize();
+        }
+        load();
+    }
 
     @Override
-    public void run() {
-        for (DPlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDPlayers()) {
-            dPlayer.update(false);
-        }
+    public void initialize() {
+        save();
+    }
+
+    @Override
+    public void load() {
+        // Load?
     }
 
 }

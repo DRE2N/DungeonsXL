@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
@@ -30,6 +31,7 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -195,7 +197,11 @@ public class DGroup {
 
         // Check group
         if (isEmpty()) {
-            remove();
+            DGroupDisbandEvent event = new DGroupDisbandEvent(this, player, DGroupDisbandEvent.Cause.GROUP_IS_EMPTY);
+
+            if (!event.isCancelled()) {
+                delete();
+            }
         }
     }
 
@@ -451,8 +457,15 @@ public class DGroup {
         return players.isEmpty();
     }
 
-    public void remove() {
+    /**
+     * Remove the group from the List
+     */
+    public void delete() {
         plugin.getDGroups().remove(this);
+        if (Game.getByDGroup(this) != null){
+            Game.getByDGroup(this).removeDGroup(this);
+        }
+        GameSign.updatePerGame(Game.getByDGroup(this));
         GroupSign.updatePerGroup(this);
     }
 

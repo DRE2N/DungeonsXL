@@ -21,6 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,13 +45,15 @@ public class BreakCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        if (!plugin.getInBreakMode().contains(player)) {
-            plugin.getInBreakMode().add(player);
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.CMD_BREAK_BREAK_MODE));
+        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+
+        if (dGlobalPlayer.isInBreakMode()) {
+            dGlobalPlayer.setInBreakMode(false);
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
 
         } else {
-            plugin.getInBreakMode().remove(player);
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+            dGlobalPlayer.setInBreakMode(true);
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.CMD_BREAK_BREAK_MODE));
         }
     }
 

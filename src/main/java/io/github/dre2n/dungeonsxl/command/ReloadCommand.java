@@ -53,7 +53,7 @@ public class ReloadCommand extends BRCommand {
         int maps = new File(plugin.getDataFolder() + "/maps").listFiles().length;
         int dungeons = new File(plugin.getDataFolder() + "/dungeons").listFiles().length;
         int loaded = plugin.getEditWorlds().size() + plugin.getGameWorlds().size();
-        int players = plugin.getDPlayers().size();
+        int players = plugin.getDPlayers().getDPlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {
@@ -72,6 +72,7 @@ public class ReloadCommand extends BRCommand {
         // Load Language
         plugin.loadMessageConfig(new File(plugin.getDataFolder(), "languages/en.yml"));
         // Load Config
+        plugin.loadDataConfig(new File(plugin.getDataFolder(), "data.yml"));
         plugin.loadMainConfig(new File(plugin.getDataFolder(), "config.yml"));
         // Load Language 2
         plugin.loadMessageConfig(new File(plugin.getDataFolder(), "languages/" + plugin.getMainConfig().getLanguage() + ".yml"));

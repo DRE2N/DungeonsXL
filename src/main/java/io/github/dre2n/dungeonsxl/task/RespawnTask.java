@@ -17,7 +17,8 @@
 package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,19 +42,13 @@ public class RespawnTask extends BukkitRunnable {
             PlayerUtil.secureTeleport(player, location);
         }
 
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
 
         if (dPlayer == null) {
             return;
         }
 
-        // Respawn Items
-        if (dPlayer.getRespawnInventory() != null || dPlayer.getRespawnArmor() != null) {
-            player.getInventory().setContents(dPlayer.getRespawnInventory());
-            player.getInventory().setArmorContents(dPlayer.getRespawnArmor());
-            dPlayer.setRespawnInventory(null);
-            dPlayer.setRespawnArmor(null);
-        }
+        dPlayer.applyRespawnInventory();
     }
 
 }

@@ -96,7 +96,7 @@ public class ReadySign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DPlayer dPlayer : plugin.getDPlayers()) {
+        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
             ready(dPlayer);
         }
     }

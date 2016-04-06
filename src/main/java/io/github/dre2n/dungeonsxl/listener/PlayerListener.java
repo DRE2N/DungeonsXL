@@ -30,10 +30,13 @@ import io.github.dre2n.dungeonsxl.game.GameChest;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
+import io.github.dre2n.dungeonsxl.global.GlobalProtection;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
@@ -71,6 +74,7 @@ public class PlayerListener implements Listener {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
     protected static MessageConfig messageConfig = plugin.getMessageConfig();
+    protected static DPlayers dPlayers = plugin.getDPlayers();
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
@@ -104,21 +108,6 @@ public class PlayerListener implements Listener {
 
         dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
 
-        if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-            DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
-
-            if (!dPlayerKickEvent.isCancelled()) {
-                MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
-
-                // TODO: This Runnable is a workaround for a bug I couldn't find, yet...
-                new org.bukkit.scheduler.BukkitRunnable() {
-                    public void run() {
-                        dPlayer.leave();
-                    }
-                }.runTaskLater(plugin, 1L);
-            }
-        }
-
         if (dPlayer.getLives() != -1) {
             MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
 
@@ -127,9 +116,22 @@ public class PlayerListener implements Listener {
                     dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
                     dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
                     // Delete all drops
-                    for (ItemStack istack : event.getDrops()) {
-                        istack.setType(Material.AIR);
+                    for (ItemStack item : event.getDrops()) {
+                        item.setType(Material.AIR);
                     }
+                }
+            }
+        }
+
+        if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
+            DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
+
+            if (!dPlayerKickEvent.isCancelled()) {
+                MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
+                dPlayer.leave();
+                if (gameWorld.getConfig().getKeepInventoryOnEscape()) {
+                    /*new org.bukkit.scheduler.BukkitRunnable() {public void run(){*/
+                    dPlayer.applyRespawnInventory();/*}}.runTaskLater(plugin, 1);*/
                 }
             }
         }
@@ -138,9 +140,10 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
         Block clickedBlock = event.getClickedBlock();
 
-        if (plugin.getInBreakMode().contains(player)) {
+        if (dGlobalPlayer.isInBreakMode()) {
             return;
         }
 
@@ -179,22 +182,26 @@ public class PlayerListener implements Listener {
         // Check Portals
         if (event.getItem() != null) {
             ItemStack item = event.getItem();
-            if (item.getType() == Material.WOOD_SWORD) {
-                if (clickedBlock != null) {
-                    for (DPortal dportal : plugin.getDPortals()) {
-                        if (!dportal.isActive()) {
-                            if (dportal.getPlayer() == player) {
-                                if (dportal.getBlock1() == null) {
-                                    dportal.setBlock1(event.getClickedBlock());
-                                    MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_PROGRESS));
 
-                                } else if (dportal.getBlock2() == null) {
-                                    dportal.setBlock2(event.getClickedBlock());
-                                    dportal.setActive(true);
-                                    dportal.create();
-                                    MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_CREATED));
+            if (dGlobalPlayer.isCreatingPortal()) {
+                if (item.getType() == Material.WOOD_SWORD) {
+                    if (clickedBlock != null) {
+                        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(DPortal.class)) {
+                            DPortal dPortal = (DPortal) protection;
+                            if (!dPortal.isActive()) {
+                                if (dPortal == dGlobalPlayer.getPortal()) {
+                                    if (dPortal.getBlock1() == null) {
+                                        dPortal.setBlock1(event.getClickedBlock());
+                                        MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_PROGRESS));
+
+                                    } else if (dPortal.getBlock2() == null) {
+                                        dPortal.setBlock2(event.getClickedBlock());
+                                        dPortal.setActive(true);
+                                        dPortal.create();
+                                        MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_CREATED));
+                                    }
+                                    event.setCancelled(true);
                                 }
-                                event.setCancelled(true);
                             }
                         }
                     }
@@ -339,6 +346,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
+        plugin.getDPlayers().getByPlayer(player).applyRespawnInventory();
+
         DPlayer dPlayer = DPlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
@@ -397,11 +406,11 @@ public class PlayerListener implements Listener {
     public void onPortal(PlayerPortalEvent event) {
         Player player = event.getPlayer();
         Location location = event.getFrom();
-        DPortal dportal = DPortal.getByLocation(location);
+        DPortal dPortal = DPortal.getByLocation(location);
 
-        if (dportal != null) {
+        if (dPortal != null) {
             event.setCancelled(true);
-            dportal.teleport(player);
+            dPortal.teleport(player);
         }
     }
 
@@ -443,6 +452,7 @@ public class PlayerListener implements Listener {
         DPlayer dPlayer = DPlayer.getByPlayer(player);
 
         if (dPlayer == null) {
+            dPlayers.removePlayer(dPlayer);
             return;
         }
 
@@ -472,6 +482,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        new DGlobalPlayer(player);
 
         // Check dPlayers
         DPlayer dPlayer = DPlayer.getByName(player.getName());

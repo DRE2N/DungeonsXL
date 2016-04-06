@@ -160,7 +160,7 @@ public class PlayCommand extends BRCommand {
 
         if (dGroup.getGameWorld() == null) {
             MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_SAVED, DGroup.getByPlayer(player).getMapName()));
-            dGroup.remove();
+            dGroup.delete();
             return;
         }
 
