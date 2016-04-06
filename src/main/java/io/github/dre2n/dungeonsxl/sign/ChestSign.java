@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.game.GameChest;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import org.bukkit.Material;
@@ -44,7 +45,7 @@ public class ChestSign extends DSign {
     public void onInit() {
         String lines[] = getSign().getLines();
         if (!lines[1].isEmpty()) {
-            moneyReward = Double.parseDouble(lines[1]);
+            moneyReward = NumberUtil.parseDouble(lines[1]);
         }
 
         for (int i = -1; i <= 1; i++) {
