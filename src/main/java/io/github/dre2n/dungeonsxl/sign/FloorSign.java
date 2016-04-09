@@ -74,19 +74,22 @@ public class FloorSign extends DSign {
     @Override
     public boolean onPlayerTrigger(Player player) {
         DPlayer dPlayer = DPlayer.getByPlayer(player);
-        if (dPlayer != null) {
-            if (!dPlayer.isFinished()) {
-                dPlayer.finishFloor(floor);
-            }
+        if (dPlayer == null) {
+            return true;
         }
 
+        if (dPlayer.isFinished()) {
+            return true;
+        }
+
+        dPlayer.finishFloor(floor);
         return true;
     }
 
     @Override
     public void onTrigger() {
         for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
-            dPlayer.finish();
+            dPlayer.finishFloor(floor);
         }
     }
 

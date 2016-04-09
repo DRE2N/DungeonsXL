@@ -657,7 +657,7 @@ public class DPlayer extends DGlobalPlayer {
             DPlayer dPlayer = getByPlayer(player);
 
             if (invalid) {
-                dPlayer.leave();
+                dPlayer.finish(false);
 
             } else {
                 dPlayer.finished = false;
@@ -702,7 +702,13 @@ public class DPlayer extends DGlobalPlayer {
     }
 
     public void finish() {
-        MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
+        finish(true);
+    }
+
+    public void finish(boolean message) {
+        if (message) {
+            MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
+        }
         finished = true;
 
         DGroup dGroup = DGroup.getByPlayer(getPlayer());
@@ -720,7 +726,9 @@ public class DPlayer extends DGlobalPlayer {
         for (Player player : dGroup.getPlayers()) {
             DPlayer dPlayer = getByPlayer(player);
             if (!dPlayer.finished) {
-                MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
+                if (message) {
+                    MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
+                }
                 hasToWait = true;
 
             } else if (dPlayer != this) {
