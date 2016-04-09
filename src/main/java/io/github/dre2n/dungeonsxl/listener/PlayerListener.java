@@ -37,10 +37,12 @@ import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
+import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
 import java.util.ArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -497,6 +499,18 @@ public class PlayerListener implements Listener {
 
             // Check offlineTime
             dPlayer.setOfflineTime(0);
+
+        } else {
+            DSavePlayer dSavePlayer = dPlayers.getDSavePlayerByPlayer(player);
+
+            Location target = Bukkit.getServer().getWorlds().get(0).getSpawnLocation();
+            if (dSavePlayer != null) {
+                target = dSavePlayer.getOldLocation();
+            }
+
+            if (EditWorld.getByWorld(player.getWorld()) != null || GameWorld.getByWorld(player.getWorld()) != null) {
+                player.teleport(target);
+            }
         }
 
         // Tutorial Mode

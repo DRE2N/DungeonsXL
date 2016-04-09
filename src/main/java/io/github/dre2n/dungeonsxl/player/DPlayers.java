@@ -98,6 +98,19 @@ public class DPlayers {
     }
 
     /**
+     * @return the DSavePlayer that represents the player
+     */
+    public DSavePlayer getDSavePlayerByPlayer(Player player) {
+        for (DSavePlayer dSavePlayer : dSavePlayers) {
+            if (dSavePlayer.getName().equals(player.getName())) {
+                return dSavePlayer;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return the dSavePlayers
      */
     public List<DSavePlayer> getDSavePlayers() {
