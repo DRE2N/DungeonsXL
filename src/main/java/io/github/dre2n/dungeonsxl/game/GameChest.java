@@ -203,11 +203,16 @@ public class GameChest {
                 msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
             }
 
-            msg = msg.substring(0, msg.length() - 1);
+            if (msg.length() >= 1) {
+                msg = msg.substring(0, msg.length() - 1);
+            }
 
             MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
             if (moneyReward != 0) {
                 MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
+            }
+            if (levelReward != 0) {
+                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, levelReward + " levels"));
             }
         }
     }
