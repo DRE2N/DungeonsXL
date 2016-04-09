@@ -22,7 +22,8 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
 import io.github.dre2n.dungeonsxl.player.DClass;
-import io.github.dre2n.dungeonsxl.requirement.FeeRequirement;
+import io.github.dre2n.dungeonsxl.requirement.FeeLevelRequirement;
+import io.github.dre2n.dungeonsxl.requirement.FeeMoneyRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import java.io.File;
@@ -306,8 +307,11 @@ public class WorldConfig {
                 Requirement requirement = Requirement.create(plugin.getRequirementTypes().getByIdentifier(identifier));
 
                 // Check for built-in requirements
-                if (requirement instanceof FeeRequirement) {
-                    ((FeeRequirement) requirement).setFee(configFile.getDouble("requirements.fee"));
+                if (requirement instanceof FeeMoneyRequirement) {
+                    ((FeeMoneyRequirement) requirement).setFee(configFile.getDouble("requirements.feeMoney"));
+
+                } else if (requirement instanceof FeeLevelRequirement) {
+                    ((FeeLevelRequirement) requirement).setFee(configFile.getInt("requirements.feeLevel"));
                 }
 
                 requirements.add(requirement);

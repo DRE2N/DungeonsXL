@@ -23,43 +23,39 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class MoneyReward extends Reward {
+public class LevelReward extends Reward {
 
-    private RewardType type = RewardTypeDefault.MONEY;
+    private RewardType type = RewardTypeDefault.LEVEL;
 
-    private double money;
+    private int levels;
 
     /**
-     * @return the money
+     * @return the levels
      */
-    public double getMoney() {
-        return money;
+    public int getLevels() {
+        return levels;
     }
 
     /**
-     * @param money
-     * the money to add
+     * @param levels
+     * the levels to add
      */
-    public void addMoney(double money) {
-        this.money += money;
+    public void addLevels(int levels) {
+        this.levels += levels;
     }
 
     /**
-     * @param money
-     * the money to set
+     * @param levels
+     * the levels to set
      */
-    public void setMoney(double money) {
-        this.money = money;
+    public void setLevels(int levels) {
+        this.levels = levels;
     }
 
     @Override
     public void giveTo(Player player) {
-        if (plugin.getEconomyProvider() == null) {
-            return;
-        }
-
-        plugin.getEconomyProvider().depositPlayer(player, money);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REWARD_GENERAL, plugin.getEconomyProvider().format(money)));
+        player.setLevel(player.getLevel() + levels);
+        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REWARD_GENERAL, levels + " levels"));
     }
 
     @Override

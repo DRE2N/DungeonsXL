@@ -158,7 +158,7 @@ public class MessageConfig {
 
         REQUIREMENT_FEE("Requirement_Fee", "&6You have been charged &4&v1 &6for entering the dungeon."),
 
-        REWARD_MONEY("Reward_Money", "&6You received &4&v1 &6for finishing the dungeon.");
+        REWARD_GENERAL("Reward_General", "&6You received &4&v1 &6for finishing the dungeon.");
 
         private String identifier;
         private String message;

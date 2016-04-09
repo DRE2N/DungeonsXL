@@ -21,6 +21,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.reward.LevelReward;
 import io.github.dre2n.dungeonsxl.reward.MoneyReward;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.reward.RewardTypeDefault;
@@ -47,17 +48,17 @@ public class GameChest {
     private Chest chest;
     private GameWorld gameWorld;
     private double moneyReward;
+    private int levelReward;
 
-    public GameChest(Block chest, GameWorld gameWorld, double moneyReward) {
+    public GameChest(Block chest, GameWorld gameWorld, double moneyReward, int levelReward) {
         if (!(chest.getState() instanceof Chest)) {
             return;
         }
 
         this.chest = (Chest) chest.getState();
-
         this.gameWorld = gameWorld;
-
         this.moneyReward = moneyReward;
+        this.levelReward = levelReward;
 
         gameWorld.getGameChests().add(this);
     }
@@ -122,23 +123,48 @@ public class GameChest {
         this.moneyReward = moneyReward;
     }
 
+    /**
+     * @return the levelReward
+     */
+    public double getLevelReward() {
+        return levelReward;
+    }
+
+    /**
+     * @param levelReward
+     * the levelReward to set
+     */
+    public void setLevelReward(int levelReward) {
+        this.levelReward = levelReward;
+    }
+
     public void addTreasure(DGroup dGroup) {
         if (dGroup == null) {
             return;
         }
 
         boolean hasMoneyReward = false;
+        boolean hasLevelReward = false;
 
         for (Reward reward : dGroup.getRewards()) {
             if (reward instanceof MoneyReward) {
                 hasMoneyReward = true;
                 ((MoneyReward) reward).addMoney(moneyReward);
+            } else if (reward instanceof LevelReward) {
+                hasLevelReward = true;
+                ((LevelReward) reward).addLevels(levelReward);
             }
         }
 
         if (!hasMoneyReward) {
             Reward reward = Reward.create(RewardTypeDefault.MONEY);
             ((MoneyReward) reward).addMoney(moneyReward);
+            dGroup.addReward(reward);
+        }
+
+        if (!hasLevelReward) {
+            Reward reward = Reward.create(RewardTypeDefault.LEVEL);
+            ((LevelReward) reward).addLevels(levelReward);
             dGroup.addReward(reward);
         }
 

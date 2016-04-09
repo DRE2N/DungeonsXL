@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.reward;
+package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
@@ -23,47 +23,48 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class MoneyReward extends Reward {
+public class FeeMoneyRequirement extends Requirement {
 
-    private RewardType type = RewardTypeDefault.MONEY;
+    private RequirementType type = RequirementTypeDefault.FEE_MONEY;
 
-    private double money;
+    private double fee;
 
     /**
-     * @return the money
+     * @return the fee
      */
-    public double getMoney() {
-        return money;
+    public double getFee() {
+        return fee;
     }
 
     /**
-     * @param money
-     * the money to add
+     * @param fee
+     * the fee to set
      */
-    public void addMoney(double money) {
-        this.money += money;
-    }
-
-    /**
-     * @param money
-     * the money to set
-     */
-    public void setMoney(double money) {
-        this.money = money;
+    public void setFee(double fee) {
+        this.fee = fee;
     }
 
     @Override
-    public void giveTo(Player player) {
+    public boolean check(Player player) {
+        if (plugin.getEconomyProvider() == null) {
+            return true;
+        }
+
+        return plugin.getEconomyProvider().getBalance(player) >= fee;
+    }
+
+    @Override
+    public void demand(Player player) {
         if (plugin.getEconomyProvider() == null) {
             return;
         }
 
-        plugin.getEconomyProvider().depositPlayer(player, money);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REWARD_GENERAL, plugin.getEconomyProvider().format(money)));
+        plugin.getEconomyProvider().withdrawPlayer(player, fee);
+        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REQUIREMENT_FEE, plugin.getEconomyProvider().format(fee)));
     }
 
     @Override
-    public RewardType getType() {
+    public RequirementType getType() {
         return type;
     }
 

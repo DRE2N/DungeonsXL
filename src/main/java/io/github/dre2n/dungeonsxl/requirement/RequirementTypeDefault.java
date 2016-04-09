@@ -21,7 +21,8 @@ package io.github.dre2n.dungeonsxl.requirement;
  */
 public enum RequirementTypeDefault implements RequirementType {
 
-    FEE("fee", FeeRequirement.class);
+    FEE_LEVEL("level", FeeLevelRequirement.class),
+    FEE_MONEY("fee", FeeMoneyRequirement.class);
 
     private String identifier;
     private Class<? extends Requirement> handler;

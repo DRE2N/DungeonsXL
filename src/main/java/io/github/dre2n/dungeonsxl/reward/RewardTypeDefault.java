@@ -22,6 +22,7 @@ package io.github.dre2n.dungeonsxl.reward;
 public enum RewardTypeDefault implements RewardType {
 
     MONEY("money", MoneyReward.class),
+    LEVEL("level", LevelReward.class),
     LOOT_INVENTORY("loot", Reward.class);
 
     private String identifier;

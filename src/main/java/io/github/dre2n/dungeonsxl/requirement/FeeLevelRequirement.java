@@ -23,16 +23,16 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class FeeRequirement extends Requirement {
+public class FeeLevelRequirement extends Requirement {
 
-    private RequirementType type = RequirementTypeDefault.FEE;
+    private RequirementType type = RequirementTypeDefault.FEE_LEVEL;
 
-    private double fee;
+    private int fee;
 
     /**
      * @return the fee
      */
-    public double getFee() {
+    public int getFee() {
         return fee;
     }
 
@@ -40,32 +40,19 @@ public class FeeRequirement extends Requirement {
      * @param fee
      * the fee to set
      */
-    public void setFee(double fee) {
+    public void setFee(int fee) {
         this.fee = fee;
     }
 
     @Override
     public boolean check(Player player) {
-        if (plugin.getEconomyProvider() == null) {
-            return true;
-        }
-
-        if (plugin.getEconomyProvider().getBalance(player) >= fee) {
-            return true;
-
-        } else {
-            return false;
-        }
+        return player.getLevel() >= fee;
     }
 
     @Override
     public void demand(Player player) {
-        if (plugin.getEconomyProvider() == null) {
-            return;
-        }
-
-        plugin.getEconomyProvider().withdrawPlayer(player, fee);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REQUIREMENT_FEE, plugin.getEconomyProvider().format(fee)));
+        player.setLevel(player.getLevel() - fee);
+        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REQUIREMENT_FEE, fee + " levels"));
     }
 
     @Override

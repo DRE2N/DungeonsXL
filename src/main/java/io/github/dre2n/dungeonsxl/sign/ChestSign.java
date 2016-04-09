@@ -31,6 +31,7 @@ public class ChestSign extends DSign {
 
     // Variables
     private double moneyReward;
+    private int levelReward;
 
     public ChestSign(Sign sign, GameWorld gameWorld) {
         super(sign, gameWorld);
@@ -43,22 +44,28 @@ public class ChestSign extends DSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
+        String[] lines = getSign().getLines();
         if (!lines[1].isEmpty()) {
-            moneyReward = NumberUtil.parseDouble(lines[1]);
+            String[] attributes = lines[1].split(",");
+            if (attributes.length >= 1) {
+                moneyReward = NumberUtil.parseDouble(attributes[0]);
+            }
+            if (attributes.length >= 2) {
+                levelReward = NumberUtil.parseInt(attributes[1]);
+            }
         }
 
         for (int i = -1; i <= 1; i++) {
             if (getSign().getBlock().getRelative(i, 0, 0).getType() == Material.CHEST) {
-                new GameChest(getSign().getBlock().getRelative(i, 0, 0), getGameWorld(), moneyReward);
+                new GameChest(getSign().getBlock().getRelative(i, 0, 0), getGameWorld(), moneyReward, levelReward);
             }
 
             if (getSign().getBlock().getRelative(0, 0, i).getType() == Material.CHEST) {
-                new GameChest(getSign().getBlock().getRelative(0, 0, i), getGameWorld(), moneyReward);
+                new GameChest(getSign().getBlock().getRelative(0, 0, i), getGameWorld(), moneyReward, levelReward);
             }
 
             if (getSign().getBlock().getRelative(0, i, 0).getType() == Material.CHEST) {
-                new GameChest(getSign().getBlock().getRelative(0, i, 0), getGameWorld(), moneyReward);
+                new GameChest(getSign().getBlock().getRelative(0, i, 0), getGameWorld(), moneyReward, levelReward);
             }
         }
 
