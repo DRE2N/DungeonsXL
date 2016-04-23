@@ -18,9 +18,11 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import org.bukkit.ChatColor;
@@ -96,8 +98,10 @@ public class ReadySign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
-            ready(dPlayer);
+        for (DGroup dGroup : Game.getByGameWorld(getGameWorld()).getDGroups()) {
+            for (Player player : dGroup.getPlayers()) {
+                ready(DPlayer.getByPlayer(player));
+            }
         }
     }
 
@@ -111,7 +115,8 @@ public class ReadySign extends DSign {
         }
 
         if (getGameWorld().getSignClass().isEmpty() || dPlayer.getDClass() != null) {
-            dPlayer.ready(gameType);
+            GameType forced = getGameWorld().getConfig().getForcedGameType();
+            dPlayer.ready(forced == null ? gameType : forced);
             MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(Messages.PLAYER_READY));
 
         } else {

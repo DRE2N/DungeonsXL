@@ -76,43 +76,11 @@ public class DGroup {
     }
 
     public DGroup(Player player, String identifier, boolean multiFloor) {
-        plugin.getDGroups().add(this);
-        name = "Group_" + plugin.getDGroups().size();
-
-        captain = player;
-        players.add(player);
-
-        Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
-        if (multiFloor && dungeon != null) {
-            dungeonName = identifier;
-            mapName = dungeon.getConfig().getStartFloor();
-            unplayedFloors = dungeon.getConfig().getFloors();
-
-        } else {
-            mapName = identifier;
-        }
-        playing = false;
-        floorCount = 0;
+        this("Group_" + plugin.getDGroups().size(), player, identifier, multiFloor);
     }
 
     public DGroup(String name, Player player, String identifier, boolean multiFloor) {
-        plugin.getDGroups().add(this);
-        this.name = name;
-
-        captain = player;
-        players.add(player);
-
-        Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
-        if (multiFloor && dungeon != null) {
-            dungeonName = identifier;
-            mapName = dungeon.getConfig().getStartFloor();
-            unplayedFloors = dungeon.getConfig().getFloors();
-
-        } else {
-            mapName = identifier;
-        }
-        playing = false;
-        floorCount = 0;
+        this(name, player, new CopyOnWriteArrayList<>(Arrays.asList(player)), identifier, multiFloor);
     }
 
     public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
@@ -462,7 +430,7 @@ public class DGroup {
      */
     public void delete() {
         plugin.getDGroups().remove(this);
-        if (Game.getByDGroup(this) != null){
+        if (Game.getByDGroup(this) != null) {
             Game.getByDGroup(this).removeDGroup(this);
         }
         GameSign.updatePerGame(Game.getByDGroup(this));
@@ -491,8 +459,6 @@ public class DGroup {
             }
         }
 
-        gameWorld.setGame(game);
-
         DGroupStartFloorEvent event = new DGroupStartFloorEvent(this, gameWorld);
 
         if (event.isCancelled()) {
@@ -500,7 +466,13 @@ public class DGroup {
         }
 
         playing = true;
-        gameWorld.startGame();
+
+        if (gameWorld != null) {
+            if (!gameWorld.isPlaying()) {
+                gameWorld.startGame();
+            }
+        }
+
         floorCount++;
 
         for (Player player : getPlayers()) {

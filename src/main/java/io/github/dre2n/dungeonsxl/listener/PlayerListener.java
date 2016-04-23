@@ -81,7 +81,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        final DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DPlayer dPlayer = DPlayer.getByPlayer(player);
 
         GameWorld gameWorld = GameWorld.getByWorld(player.getLocation().getWorld());
         if (gameWorld == null) {
@@ -132,8 +132,7 @@ public class PlayerListener implements Listener {
                 MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
                 dPlayer.leave();
                 if (gameWorld.getConfig().getKeepInventoryOnEscape()) {
-                    /*new org.bukkit.scheduler.BukkitRunnable() {public void run(){*/
-                    dPlayer.applyRespawnInventory();/*}}.runTaskLater(plugin, 1);*/
+                    dPlayer.applyRespawnInventory();
                 }
             }
         }
@@ -406,13 +405,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPortal(PlayerPortalEvent event) {
-        Player player = event.getPlayer();
-        Location location = event.getFrom();
-        DPortal dPortal = DPortal.getByLocation(location);
-
-        if (dPortal != null) {
+        if (DPortal.getByLocation(event.getFrom()) != null) {
             event.setCancelled(true);
-            dPortal.teleport(player);
         }
     }
 
@@ -557,9 +551,7 @@ public class PlayerListener implements Listener {
                 continue;
             }
 
-            if (dGroup.getGameWorld().getLocLobby() != null) {
-                new DPlayer(player, dGroup.getGameWorld().getWorld(), dGroup.getGameWorld().getLocLobby(), false);
-            }
+            new DPlayer(player, dGroup.getGameWorld());
         }
     }
 
@@ -648,11 +640,14 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         DLootInventory inventory = DLootInventory.getByPlayer(player);
 
-        if (inventory == null) {
+        DPortal dPortal = DPortal.getByLocation(player.getEyeLocation());
+        //TODO: Fix chat spam
+        if (dPortal != null) {
+            dPortal.teleport(player);
             return;
         }
 
-        if (player.getLocation().getBlock().getType() == Material.PORTAL) {
+        if (inventory == null) {
             return;
         }
 

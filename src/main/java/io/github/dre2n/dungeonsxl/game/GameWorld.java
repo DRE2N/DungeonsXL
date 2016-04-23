@@ -39,6 +39,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -62,8 +63,6 @@ public class GameWorld {
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
 
     // Variables
-    private Game game;
-
     private boolean tutorial;
 
     private CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks = new CopyOnWriteArrayList<>();
@@ -105,18 +104,17 @@ public class GameWorld {
     }
 
     /**
-     * @return the game
+     * @return
+     * the Game connected to the GameWorld
      */
     public Game getGame() {
-        return game;
-    }
+        for (Game game : plugin.getGames()) {
+            if (game.getWorld() == this) {
+                return game;
+            }
+        }
 
-    /**
-     * @param game
-     * the game to set
-     */
-    public void setGame(Game game) {
-        this.game = game;
+        return null;
     }
 
     /**
@@ -341,6 +339,10 @@ public class GameWorld {
      * @return the worldConfig
      */
     public WorldConfig getConfig() {
+        if (worldConfig == null) {
+            return plugin.getDefaultConfig();
+        }
+
         return worldConfig;
     }
 
@@ -374,7 +376,7 @@ public class GameWorld {
     }
 
     public void startGame() {
-        GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, game);
+        GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, getGame());
 
         if (event.isCancelled()) {
             return;
@@ -472,39 +474,42 @@ public class GameWorld {
             // Secure Objects
             gameWorld.secureObjects = gameWorld.worldConfig.getSecureObjects();
 
-            // World
-            FileUtil.copyDirectory(file, new File("DXL_Game_" + gameWorld.id), DungeonsXL.EXCLUDED_FILES);
+            if (Bukkit.getWorld("DXL_Game_" + gameWorld.id) == null) {
 
-            // Id File
-            File idFile = new File("DXL_Game_" + gameWorld.id + "/.id_" + name);
-            try {
-                idFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                // World
+                FileUtil.copyDirectory(file, new File("DXL_Game_" + gameWorld.id), DungeonsXL.EXCLUDED_FILES);
 
-            gameWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + gameWorld.id));
-
-            ObjectInputStream os;
-            try {
-                os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName + "/DXLData.data")));
-
-                int length = os.readInt();
-                for (int i = 0; i < length; i++) {
-                    int x = os.readInt();
-                    int y = os.readInt();
-                    int z = os.readInt();
-                    Block block = gameWorld.world.getBlockAt(x, y, z);
-                    gameWorld.checkSign(block);
+                // Id File
+                File idFile = new File("DXL_Game_" + gameWorld.id + "/.id_" + name);
+                try {
+                    idFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
-                os.close();
+                gameWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + gameWorld.id));
 
-            } catch (FileNotFoundException exception) {
-                plugin.getLogger().info("Could not find any sign data for the world \"" + name + "\"!");
+                ObjectInputStream os;
+                try {
+                    os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName + "/DXLData.data")));
 
-            } catch (IOException exception) {
-                exception.printStackTrace();
+                    int length = os.readInt();
+                    for (int i = 0; i < length; i++) {
+                        int x = os.readInt();
+                        int y = os.readInt();
+                        int z = os.readInt();
+                        Block block = gameWorld.world.getBlockAt(x, y, z);
+                        gameWorld.checkSign(block);
+                    }
+
+                    os.close();
+
+                } catch (FileNotFoundException exception) {
+                    plugin.getLogger().info("Could not find any sign data for the world \"" + name + "\"!");
+
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
             }
 
             return gameWorld;

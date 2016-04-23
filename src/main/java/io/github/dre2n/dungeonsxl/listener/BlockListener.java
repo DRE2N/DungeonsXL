@@ -89,18 +89,20 @@ public class BlockListener implements Listener {
             return;
         }
 
-        // Editworld Signs
+        // EditWorld Signs
         EditWorld editWorld = EditWorld.getByWorld(block.getWorld());
         if (editWorld != null) {
-            editWorld.getSign().remove(event.getBlock());
+            editWorld.getSigns().remove(event.getBlock());
+            return;
         }
 
-        // Deny GameWorld Blocks
+        // Deny GameWorld block breaking
         GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
             for (DSign dSign : gameWorld.getDSigns()) {
                 if (dSign.getSign().equals(block)) {
                     event.setCancelled(true);
+                    return;
                 }
             }
 
@@ -112,6 +114,9 @@ public class BlockListener implements Listener {
                 } else if (!gameType.canBuild()) {
                     event.setCancelled(true);
                 }
+
+            } else {
+                event.setCancelled(true);
             }
         }
     }
@@ -220,7 +225,7 @@ public class BlockListener implements Listener {
 
                 if (dsign.check()) {
                     editWorld.checkSign(block);
-                    editWorld.getSign().add(block);
+                    editWorld.getSigns().add(block);
                     MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_SIGN_CREATED));
 
                 } else {

@@ -20,6 +20,7 @@ import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -162,28 +163,48 @@ public class DPortal extends GlobalProtection {
      * the player to teleport into his dungeon
      */
     public void teleport(Player player) {
-        DGroup dgroup = DGroup.getByPlayer(player);
+        DGroup dGroup = DGroup.getByPlayer(player);
 
-        if (dgroup == null) {
+        if (dGroup == null) {
             MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_JOIN_GROUP));
             return;
         }
 
-        if (dgroup.getGameWorld() == null) {
-            dgroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
+        GameWorld target = dGroup.getGameWorld();
+        Game game = Game.getByDGroup(dGroup);
+
+        if (target == null && game != null) {
+            target = game.getWorld();
         }
 
-        if (dgroup.getGameWorld() == null) {
+        if (target == null) {
+            if (game != null) {
+                for (DGroup otherTeam : game.getDGroups()) {
+                    if (otherTeam.getGameWorld() != null) {
+                        target = otherTeam.getGameWorld();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (target == null) {
+            target = GameWorld.load(dGroup.getMapName());
+            dGroup.setGameWorld(target);
+        }
+
+        if (target == null) {
             MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
             return;
         }
 
-        if (dgroup.getGameWorld().getLocLobby() == null) {
-            new DPlayer(player, dgroup.getGameWorld().getWorld(), dgroup.getGameWorld().getWorld().getSpawnLocation(), false);
-
-        } else {
-            new DPlayer(player, dgroup.getGameWorld().getWorld(), dgroup.getGameWorld().getLocLobby(), false);
+        if (game != null) {
+            game.setWorld(target);
         }
+
+        dGroup.setGameWorld(target);
+
+        new DPlayer(player, target);
     }
 
     @Override
@@ -276,6 +297,10 @@ public class DPortal extends GlobalProtection {
     public static DPortal getByBlock(Block block) {
         for (GlobalProtection protection : protections.getProtections(DPortal.class)) {
             DPortal portal = (DPortal) protection;
+            if (portal.getBlock1() == null || portal.getBlock2() == null) {
+                continue;
+            }
+
             int x1 = portal.block1.getX(), y1 = portal.block1.getY(), z1 = portal.block1.getZ();
             int x2 = portal.block2.getX(), y2 = portal.block2.getY(), z2 = portal.block2.getZ();
             int x3 = block.getX(), y3 = block.getY(), z3 = block.getZ();

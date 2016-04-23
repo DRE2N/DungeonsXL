@@ -92,12 +92,17 @@ public class DPlayer extends DGlobalPlayer {
     private int initialLives = -1;
     private int lives;
 
-    public DPlayer(Player player, World world, Location teleport, boolean editing) {
+    public DPlayer(Player player, GameWorld gameWorld) {
+        this(player, gameWorld.getWorld(), false);
+    }
+
+    @Deprecated
+    public DPlayer(Player player, World world, boolean editing) {
         super(player);
 
         this.world = world;
 
-        double health = ((Damageable) player).getHealth();
+        double health = player.getHealth();
 
         if (!Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
             savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), null, player.getLevel(),
@@ -109,9 +114,11 @@ public class DPlayer extends DGlobalPlayer {
         }
         this.editing = editing;
 
+        Location teleport;
         if (this.editing) {
             this.getPlayer().setGameMode(GameMode.CREATIVE);
             clearPlayerData();
+            teleport = EditWorld.getByWorld(world).getLobby();
 
         } else {
             WorldConfig worldConfig = GameWorld.getByWorld(world).getConfig();
@@ -124,9 +131,15 @@ public class DPlayer extends DGlobalPlayer {
             }
             initialLives = worldConfig.getInitialLives();
             lives = initialLives;
+            teleport = GameWorld.getByWorld(world).getLocLobby();
         }
 
-        PlayerUtil.secureTeleport(this.getPlayer(), teleport);
+        if (teleport == null) {
+            PlayerUtil.secureTeleport(player, world.getSpawnLocation());
+
+        } else {
+            PlayerUtil.secureTeleport(player, teleport);
+        }
     }
 
     public void clearPlayerData() {
@@ -496,12 +509,10 @@ public class DPlayer extends DGlobalPlayer {
 
             // Belohnung
             if (gameWorld.getGame() != null) {
-                if (gameWorld.getGame().getType().hasRewards()) {
-                    if (finished) {
-                        if (gameWorld.getGame() != null) {
-                            for (Reward reward : gameWorld.getConfig().getRewards()) {
-                                reward.giveTo(getPlayer());
-                            }
+                if (finished) {
+                    if (gameWorld.getGame().getType().hasRewards()) {
+                        for (Reward reward : gameWorld.getConfig().getRewards()) {
+                            reward.giveTo(getPlayer());
                         }
 
                         addTreasure();
@@ -576,20 +587,7 @@ public class DPlayer extends DGlobalPlayer {
     }
 
     public void ready() {
-        ready = true;
-
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-
-        if (dGroup == null) {
-            return;
-        }
-
-        if (!dGroup.isPlaying()) {
-            dGroup.startGame(new Game(dGroup));
-
-        } else {
-            respawn();
-        }
+        ready(GameTypeDefault.DEFAULT);
     }
 
     public void ready(GameType gameType) {
@@ -601,11 +599,21 @@ public class DPlayer extends DGlobalPlayer {
             return;
         }
 
-        if (!dGroup.isPlaying()) {
-            dGroup.startGame(new Game(dGroup, gameType));
+        Game game = Game.getByGameWorld(dGroup.getGameWorld());
+        if (game == null) {
+            game = new Game(dGroup, gameType, dGroup.getGameWorld());
 
         } else {
-            respawn();
+            game.setType(gameType);
+        }
+
+        for (DGroup gameGroup : game.getDGroups()) {
+            if (!gameGroup.isPlaying()) {
+                gameGroup.startGame(game);
+
+            } else {
+                respawn();
+            }
         }
     }
 

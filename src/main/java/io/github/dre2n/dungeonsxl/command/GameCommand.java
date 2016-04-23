@@ -71,7 +71,7 @@ public class GameCommand extends BRCommand {
             groups += (group == game.getDGroups().get(0) ? "" : "&b, &e") + group.getName();
         }
         MessageUtil.sendMessage(sender, "&bGroups: &e" + groups);
-        MessageUtil.sendMessage(sender, "&bGame type: &e" + game.getType());
+        MessageUtil.sendMessage(sender, "&bGame type: &e" + (game.getType() == null ? "Not started yet" : game.getType()));
         MessageUtil.sendMessage(sender, "&bDungeon: &e" + (dGroup.getDungeonName() == null ? "N/A" : dGroup.getDungeonName()));
         MessageUtil.sendMessage(sender, "&bMap: &e" + (dGroup.getMapName() == null ? "N/A" : dGroup.getMapName()));
     }

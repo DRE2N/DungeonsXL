@@ -42,7 +42,7 @@ public class InteractSign extends DSign {
     @Override
     public boolean check() {
         Set<Integer> used = new HashSet<>();
-        for (Block block : EditWorld.getByWorld(getSign().getLocation().getWorld()).getSign()) {
+        for (Block block : EditWorld.getByWorld(getSign().getLocation().getWorld()).getSigns()) {
             if (block == null) {
                 continue;
             }

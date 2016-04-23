@@ -127,6 +127,10 @@ public class EntityListener implements Listener {
             return;
         }
 
+        if (!game.hasStarted()) {
+            return;
+        }
+
         WorldConfig config = gameWorld.getConfig();
         GameType type = game.getType();
 

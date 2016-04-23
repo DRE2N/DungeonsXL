@@ -57,7 +57,7 @@ public class EditWorld {
     private int id;
     private Location lobby;
     private CopyOnWriteArrayList<String> invitedPlayers = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Block> sign = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Block> signs = new CopyOnWriteArrayList<>();
 
     public EditWorld() {
         plugin.getEditWorlds().add(this);
@@ -188,18 +188,18 @@ public class EditWorld {
     }
 
     /**
-     * @return the sign
+     * @return the signs
      */
-    public CopyOnWriteArrayList<Block> getSign() {
-        return sign;
+    public CopyOnWriteArrayList<Block> getSigns() {
+        return signs;
     }
 
     /**
      * @param sign
      * the sign to set
      */
-    public void setSign(CopyOnWriteArrayList<Block> sign) {
-        this.sign = sign;
+    public void setSigns(CopyOnWriteArrayList<Block> signs) {
+        this.signs = signs;
     }
 
     public void generate() {
@@ -231,8 +231,8 @@ public class EditWorld {
 
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(plugin.getDataFolder(), "/maps/" + mapName + "/DXLData.data")));
-            out.writeInt(sign.size());
-            for (Block sign : this.sign) {
+            out.writeInt(signs.size());
+            for (Block sign : signs) {
                 out.writeInt(sign.getX());
                 out.writeInt(sign.getY());
                 out.writeInt(sign.getZ());
@@ -368,7 +368,7 @@ public class EditWorld {
                     int z = os.readInt();
                     Block block = editWorld.world.getBlockAt(x, y, z);
                     editWorld.checkSign(block);
-                    editWorld.sign.add(block);
+                    editWorld.signs.add(block);
                 }
                 os.close();
 

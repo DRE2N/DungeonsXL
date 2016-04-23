@@ -72,12 +72,7 @@ public class EditCommand extends BRCommand {
             return;
         }
 
-        if (editWorld.getLobby() == null) {
-            new DPlayer(player, editWorld.getWorld(), editWorld.getWorld().getSpawnLocation(), true);
-
-        } else {
-            new DPlayer(player, editWorld.getWorld(), editWorld.getLobby(), true);
-        }
+        new DPlayer(player, editWorld.getWorld(), true);
 
     }
 

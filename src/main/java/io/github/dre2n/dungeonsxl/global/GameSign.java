@@ -511,7 +511,8 @@ public class GameSign extends GlobalProtection {
         Sign topSign = (Sign) topBlock.getState();
 
         if (topSign.getLine(0).equals(NEW_GAME)) {
-            gameSign.games[column] = new Game(dGroup);
+            Game game = new Game(dGroup);
+            gameSign.games[column] = game;
             gameSign.update();
 
         } else if (topSign.getLine(0).equals(JOIN_GAME)) {

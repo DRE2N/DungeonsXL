@@ -91,12 +91,7 @@ public class CreateCommand extends BRCommand {
                 plugin.getLogger().info(messageConfig.getMessage(Messages.LOG_WORLD_GENERATION_FINISHED));
 
                 // Tp Player
-                if (editWorld.getLobby() == null) {
-                    new DPlayer(player, editWorld.getWorld(), editWorld.getWorld().getSpawnLocation(), true);
-
-                } else {
-                    new DPlayer(player, editWorld.getWorld(), editWorld.getLobby(), true);
-                }
+                new DPlayer(player, editWorld.getWorld(), true);
 
             } else {
                 MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NAME_TO_LONG));

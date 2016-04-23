@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.game;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.entity.Player;
 
@@ -30,16 +31,28 @@ public class Game {
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private List<DGroup> dGroups = new ArrayList<>();
+    private boolean started;
     private GameType type;
+    private GameWorld world;
 
     public Game(DGroup dGroup) {
-        this.dGroups.add(dGroup);
-        this.type = GameTypeDefault.DEFAULT;
+        dGroups.add(dGroup);
+        started = false;
+
+        plugin.getGames().add(this);
     }
 
-    public Game(DGroup dGroup, GameType type) {
-        this.dGroups.add(dGroup);
+    public Game(DGroup dGroup, GameType type, GameWorld world) {
+        this(new ArrayList<>(Arrays.asList(dGroup)), type, world);
+    }
+
+    public Game(List<DGroup> dGroups, GameType type, GameWorld world) {
+        this.dGroups = dGroups;
         this.type = type;
+        this.world = world;
+        this.started = true;
+
+        plugin.getGames().add(this);
     }
 
     /**
@@ -66,6 +79,21 @@ public class Game {
     }
 
     /**
+     * @return if the Game has started yet
+     */
+    public boolean hasStarted() {
+        return started;
+    }
+
+    /**
+     * @param started
+     * set if the Game has started yet
+     */
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    /**
      * @return the type
      */
     public GameType getType() {
@@ -78,6 +106,21 @@ public class Game {
      */
     public void setType(GameType type) {
         this.type = type;
+    }
+
+    /**
+     * @return the GameWorld connected to the Game
+     */
+    public GameWorld getWorld() {
+        return world;
+    }
+
+    /**
+     * @param gameWorld
+     * the GameWorld to connect to the Game
+     */
+    public void setWorld(GameWorld world) {
+        this.world = world;
     }
 
     /**
@@ -104,7 +147,7 @@ public class Game {
 
     public static Game getByGameWorld(GameWorld gameWorld) {
         for (Game game : plugin.getGames()) {
-            if (game.getDGroups().get(0).getGameWorld().equals(gameWorld)) {
+            if (game.getWorld().equals(gameWorld)) {
                 return game;
             }
         }
