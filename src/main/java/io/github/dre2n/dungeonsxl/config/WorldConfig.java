@@ -81,6 +81,7 @@ public class WorldConfig {
     private int timeToNextLoot = 0;
 
     private int timeUntilKickOfflinePlayer = -1;
+    private int timeToFinish = -1;
 
     private List<Requirement> requirements = new ArrayList<>();
     private List<Reward> rewards = new ArrayList<>();
@@ -91,7 +92,6 @@ public class WorldConfig {
 
     private GameType forcedGameType;
 
-    // MobTypes
     private Set<DMobType> mobTypes = new HashSet<>();
 
     private List<String> gameCommandWhitelist = new ArrayList<>();
@@ -299,6 +299,12 @@ public class WorldConfig {
             timeUntilKickOfflinePlayer = configFile.getInt("timeUntilKickOfflinePlayer");
         } else {
             timeUntilKickOfflinePlayer = plugin.getDefaultConfig().timeUntilKickOfflinePlayer;
+        }
+
+        if (configFile.contains("timeToFinish")) {
+            timeToFinish = configFile.getInt("timeToFinish");
+        } else {
+            timeToFinish = plugin.getDefaultConfig().timeToFinish;
         }
 
         /* Dungeon Requirements */
@@ -578,6 +584,20 @@ public class WorldConfig {
      */
     public int getTimeUntilKickOfflinePlayer() {
         return timeUntilKickOfflinePlayer;
+    }
+
+    /**
+     * @return if the game is "time is running"
+     */
+    public boolean isTimeIsRunning() {
+        return timeToFinish != -1;
+    }
+
+    /**
+     * @return the time until a player gets kicked from his group
+     */
+    public int getTimeToFinish() {
+        return timeToFinish;
     }
 
     /**

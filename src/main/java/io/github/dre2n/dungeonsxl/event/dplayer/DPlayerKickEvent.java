@@ -30,6 +30,7 @@ public class DPlayerKickEvent extends DPlayerEvent implements Cancellable {
         COMMAND,
         DEATH,
         OFFLINE,
+        TIME_EXPIRED,
         CUSTOM
 
     }

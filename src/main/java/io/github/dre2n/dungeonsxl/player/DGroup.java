@@ -35,6 +35,7 @@ import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
+import io.github.dre2n.dungeonsxl.task.TimeIsRunningTask;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -63,6 +65,7 @@ public class DGroup {
     private int floorCount;
     private int waveCount;
     private List<Reward> rewards = new ArrayList<>();
+    private BukkitTask timeIsRunningTask;
 
     public DGroup(String name, Player player) {
         plugin.getDGroups().add(this);
@@ -419,6 +422,21 @@ public class DGroup {
     }
 
     /**
+     * @return the "Time is Running" task of the game
+     */
+    public BukkitTask getTimeIsRunningTask() {
+        return timeIsRunningTask;
+    }
+
+    /**
+     * @param task
+     * the task to set
+     */
+    public void setTimeIsRunningTask(BukkitTask task) {
+        this.timeIsRunningTask = task;
+    }
+
+    /**
      * @return whether there are players in the group
      */
     public boolean isEmpty() {
@@ -430,9 +448,15 @@ public class DGroup {
      */
     public void delete() {
         plugin.getDGroups().remove(this);
+
+        if (timeIsRunningTask != null) {
+            timeIsRunningTask.cancel();
+        }
+
         if (Game.getByDGroup(this) != null) {
             Game.getByDGroup(this).removeDGroup(this);
         }
+
         GameSign.updatePerGame(Game.getByDGroup(this));
         GroupSign.updatePerGroup(this);
     }
@@ -477,6 +501,10 @@ public class DGroup {
 
         for (Player player : getPlayers()) {
             DPlayer dPlayer = DPlayer.getByPlayer(player);
+            if (dPlayer == null) {
+                continue;
+            }
+
             dPlayer.respawn();
 
             if (plugin.getMainConfig().getSendFloorTitle()) {
@@ -503,9 +531,15 @@ public class DGroup {
                 GameType gameType = game.getType();
                 if (gameType == GameTypeDefault.DEFAULT) {
                     player.setGameMode(config.getGameMode());
+                    if (config.isTimeIsRunning()) {
+                        timeIsRunningTask = new TimeIsRunningTask(this, config.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
+                    }
 
                 } else {
                     player.setGameMode(gameType.getGameMode());
+                    if (gameType.getShowTime()) {
+                        timeIsRunningTask = new TimeIsRunningTask(this, config.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
+                    }
                 }
             }
         }

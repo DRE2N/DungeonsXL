@@ -67,6 +67,8 @@ public class MessageConfig {
         PLAYER_READY("Player_Ready", "&6You are now ready for the Dungeon!"),
         PLAYER_SIGN_CREATED("Player_SignCreated", "&6Sign created!"),
         PLAYER_SIGN_COPIED("Player_SignCopied", "&6Copied!"),
+        PLAYER_TIME_LEFT("Player_TimeLeft", "&v1You have &6&v2 &v1seconds left to finish the dungeon!"),
+        PLAYER_TIME_KICK("Player_TimeKick", "&2&v1&6's time expired."),
         PLAYER_TREASURES("Player_Treasures", "&1Treasures"),
         PLAYER_WAIT_FOR_OTHER_PLAYERS("Player_WaitForOtherPlayers", "&6Waiting for teammates..."),
 

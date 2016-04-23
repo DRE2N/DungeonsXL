@@ -447,7 +447,7 @@ public class GameWorld {
         }
     }
 
-    // Statics
+    /* Statics */
     public static GameWorld load(String name) {
         GameWorldLoadEvent event = new GameWorldLoadEvent(name);
 
@@ -520,7 +520,10 @@ public class GameWorld {
 
     public static GameWorld getByWorld(World world) {
         for (GameWorld gameWorld : plugin.getGameWorlds()) {
-            if (gameWorld.world.equals(world)) {
+            if (gameWorld.getWorld() == null) {
+                continue;
+
+            } else if (gameWorld.getWorld().equals(world)) {
                 return gameWorld;
             }
         }
