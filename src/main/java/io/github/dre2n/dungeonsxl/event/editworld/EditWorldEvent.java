@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.editworld;
 
-import io.github.dre2n.dungeonsxl.dungeon.EditWorld;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.event.Event;
 
 /**

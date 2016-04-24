@@ -19,7 +19,7 @@ package io.github.dre2n.dungeonsxl.trigger;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerRegistrationEvent;
-import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

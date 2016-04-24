@@ -20,7 +20,7 @@ import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
-import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;

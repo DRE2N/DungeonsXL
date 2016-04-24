@@ -41,13 +41,13 @@ public enum GameTypeDefault implements GameType {
 
     private String displayName;
     private String signName;
-    private boolean playerVersusPlayer;// TODO: Testing
-    private boolean friendlyFire;// TODO: Testing
+    private boolean playerVersusPlayer;
+    private boolean friendlyFire;
     private boolean mobWaves;// TODO: Implementing
-    private boolean rewards;// TODO: Testing
-    private boolean showTime;// TODO: Implementing
-    private boolean build;// TODO: Testing
-    private GameMode gameMode;// TODO: Testing
+    private boolean rewards;
+    private boolean showTime;
+    private boolean build;
+    private GameMode gameMode;
     private boolean lives;
 
     GameTypeDefault(String displayName, String signName, boolean playerVersusPlayer, boolean friendlyFire, boolean mobWaves, boolean rewards, boolean showTime, boolean build, GameMode gameMode, boolean lives) {

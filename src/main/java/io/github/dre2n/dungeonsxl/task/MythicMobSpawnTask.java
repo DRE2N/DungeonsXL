@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.task;
 
-import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.sign.MythicMobsSign;
 import org.bukkit.Bukkit;

@@ -20,7 +20,7 @@ import io.github.dre2n.commandsxl.CommandsXL;
 import io.github.dre2n.commandsxl.command.CCommand;
 import io.github.dre2n.commandsxl.command.CCommandExecutorTask;
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

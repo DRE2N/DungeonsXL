@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.gameworld;
 
-import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.event.Event;
 
 /**

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dgroup;
 
-import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

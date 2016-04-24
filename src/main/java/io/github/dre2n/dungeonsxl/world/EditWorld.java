@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.dungeon;
+package io.github.dre2n.dungeonsxl.world;
 
 import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;

@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
-import io.github.dre2n.dungeonsxl.game.GameWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Material;

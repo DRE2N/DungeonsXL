@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.commons.util.NumberUtil;
 import java.util.HashSet;
 import java.util.Set;
