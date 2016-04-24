@@ -28,10 +28,8 @@ import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.global.GlobalProtections;
 import io.github.dre2n.dungeonsxl.listener.BlockListener;
 import io.github.dre2n.dungeonsxl.listener.EntityListener;
@@ -49,6 +47,8 @@ import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.Triggers;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.event.HandlerList;
@@ -97,10 +97,11 @@ public class DungeonsXL extends BRPlugin {
          * #~~~~UUID~~~##~~~~true~~~#
          * #~~Economy~~##~~~~true~~~#
          * #Permissions##~~~~true~~~#
+         * #~~Metrics~~##~~~~true~~~#
          * ##########################
          */
 
-        settings = new BRPluginSettings(false, true, true, true, Internals.andHigher(Internals.v1_7_R3));
+        settings = new BRPluginSettings(false, true, true, true, true, Internals.andHigher(Internals.v1_7_R3));
     }
 
     @Override
