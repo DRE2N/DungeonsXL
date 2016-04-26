@@ -20,7 +20,9 @@ import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -31,10 +33,25 @@ public class WaveTrigger extends Trigger {
 
     private TriggerType type = TriggerTypeDefault.WAVE;
 
-    private int mustKillAmount;
+    private double mustKillRate = 1;
 
-    public WaveTrigger(int mustKillAmount) {
-        this.mustKillAmount = mustKillAmount;
+    public WaveTrigger(double mustKillRate) {
+        this.mustKillRate = mustKillRate;
+    }
+
+    /**
+     * @return the minimal mob kill rate to trigger the wave
+     */
+    public double getMustKillRate() {
+        return mustKillRate;
+    }
+
+    /**
+     * @param mustKillRate
+     * the minimal mob kill rate to trigger the wave to set
+     */
+    public void setMustKillRate(double mustKillRate) {
+        this.mustKillRate = mustKillRate;
     }
 
     public void onTrigger() {
@@ -46,12 +63,13 @@ public class WaveTrigger extends Trigger {
 
         setTriggered(true);
         updateDSigns();
+        setTriggered(false);
     }
 
     @Override
     public void register(GameWorld gameWorld) {
         if (!hasTriggers(gameWorld)) {
-            ArrayList<WaveTrigger> list = new ArrayList<WaveTrigger>();
+            ArrayList<WaveTrigger> list = new ArrayList<>();
             list.add(this);
             triggers.put(gameWorld, list);
 
@@ -72,40 +90,24 @@ public class WaveTrigger extends Trigger {
         return type;
     }
 
-    public static WaveTrigger getOrCreate(int mustKillAmount, GameWorld gameWorld) {
-        WaveTrigger trigger = get(gameWorld);
-        if (trigger != null) {
-            return trigger;
-        }
-        return new WaveTrigger(mustKillAmount);
+    /* Statics */
+    public static WaveTrigger getOrCreate(double mustKillRate, GameWorld gameWorld) {
+        return new WaveTrigger(mustKillRate);
     }
 
-    public static WaveTrigger get(GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            for (WaveTrigger trigger : triggers.get(gameWorld)) {
-                return trigger;
-            }
+    /**
+     * @return the WaveTriggers in the GameWorld
+     */
+    public static Set<WaveTrigger> getByGameWorld(GameWorld gameWorld) {
+        Set<WaveTrigger> toReturn = new HashSet<>();
+        for (WaveTrigger trigger : triggers.get(gameWorld)) {
+            toReturn.add(trigger);
         }
-        return null;
+        return toReturn;
     }
 
     public static boolean hasTriggers(GameWorld gameWorld) {
         return !triggers.isEmpty() && triggers.containsKey(gameWorld);
-    }
-
-    /**
-     * @return the mustKillAmount
-     */
-    public int getMustKillAmount() {
-        return mustKillAmount;
-    }
-
-    /**
-     * @param mustKillAmount
-     * the mustKillAmount to set
-     */
-    public void setMustKillAmount(int mustKillAmount) {
-        this.mustKillAmount = mustKillAmount;
     }
 
 }

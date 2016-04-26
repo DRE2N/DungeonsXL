@@ -32,7 +32,7 @@ public enum DSignTypeDefault implements DSignType {
     INTERACT("Interact", "dxl.sign.interact", true, InteractSign.class),
     LEAVE("Leave", "dxl.sign.leave", true, LeaveSign.class),
     LOBBY("Lobby", "dxl.sign.lobby", true, LobbySign.class),
-    MOB("Mob", "dxl.sign.mob", false, MobSign.class),
+    MOB("Mob", "dxl.sign.mob", false, DMobSign.class),
     MESSAGE("MSG", "dxl.sign.msg", false, MessageSign.class),
     MYTHIC_MOBS("MythicMobs", "dxl.sign.mob", false, MythicMobsSign.class),
     PLACE("Place", "dxl.sign.place", false, PlaceSign.class),

@@ -27,7 +27,6 @@ import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
@@ -36,9 +35,10 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -473,7 +473,7 @@ public class DPlayer extends DGlobalPlayer {
         this.lives = lives;
     }
 
-    // ...
+    /* Actions */
     public void escape() {
         delete();
         savePlayer.reset(false);
@@ -760,6 +760,8 @@ public class DPlayer extends DGlobalPlayer {
         if (dGroupFinishDungeonEvent.isCancelled()) {
             return;
         }
+
+        Game.getByDGroup(dGroup).resetWaveKills();
 
         for (Player player : dGroup.getPlayers()) {
             DPlayer dPlayer = getByPlayer(player);

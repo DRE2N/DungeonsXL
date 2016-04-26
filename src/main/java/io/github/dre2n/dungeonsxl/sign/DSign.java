@@ -18,8 +18,9 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.dsign.DSignRegistrationEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -94,6 +95,13 @@ public abstract class DSign {
     }
 
     /**
+     * @return the game
+     */
+    public Game getGame() {
+        return Game.getByGameWorld(gameWorld);
+    }
+
+    /**
      * @return the triggers
      */
     public Set<Trigger> getTriggers() {
@@ -134,10 +142,6 @@ public abstract class DSign {
             if (!trigger.isTriggered()) {
                 onDisable();
                 return;
-            }
-
-            if (triggers.size() != 1) {
-                continue;
             }
 
             if (trigger.getPlayer() == null) {

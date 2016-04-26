@@ -51,7 +51,7 @@ public class MobTrigger extends Trigger {
     @Override
     public void register(GameWorld gameWorld) {
         if (!hasTriggers(gameWorld)) {
-            ArrayList<MobTrigger> list = new ArrayList<MobTrigger>();
+            ArrayList<MobTrigger> list = new ArrayList<>();
             list.add(this);
             triggers.put(gameWorld, list);
 

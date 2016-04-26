@@ -16,10 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.task;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
-import io.github.dre2n.dungeonsxl.sign.MobSign;
+import io.github.dre2n.dungeonsxl.sign.DMobSign;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -35,9 +35,9 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class MobSpawnTask extends BukkitRunnable {
 
-    private MobSign sign;
+    private DMobSign sign;
 
-    public MobSpawnTask(MobSign sign) {
+    public MobSpawnTask(DMobSign sign) {
         this.sign = sign;
     }
 
@@ -84,11 +84,10 @@ public class MobSpawnTask extends BukkitRunnable {
 
                     } else {
                         sign.killTask();
-                        sign.remove();
                     }
                 }
 
-                sign.setInterval(sign.getMaxinterval());
+                sign.setInterval(sign.getMaxInterval());
 
             } else {
                 sign.killTask();

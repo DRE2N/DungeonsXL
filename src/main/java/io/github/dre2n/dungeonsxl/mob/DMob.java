@@ -17,9 +17,13 @@
 package io.github.dre2n.dungeonsxl.mob;
 
 import io.github.dre2n.dungeonsxl.event.dmob.DMobDeathEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.trigger.MobTrigger;
+import io.github.dre2n.dungeonsxl.trigger.WaveTrigger;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.Random;
+import java.util.Set;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -50,22 +54,11 @@ public class DMob {
     }
 
     public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type, String trigger) {
-        gameWorld.addDMob(this);
-
-        this.entity = entity;
-        this.type = type;
+        this(entity, gameWorld, type);
         this.trigger = trigger;
-
-        /* Remove DropChance of equipment */
-        this.entity.getEquipment().setHelmetDropChance(0);
-        this.entity.getEquipment().setChestplateDropChance(0);
-        this.entity.getEquipment().setLeggingsDropChance(0);
-        this.entity.getEquipment().setBootsDropChance(0);
-        this.entity.getEquipment().setItemInHandDropChance(0);
     }
 
-    /* Statics */
-    public static void onDeath(EntityDeathEvent event) {
+    public void onDeath(EntityDeathEvent event) {
         if (!(event.getEntity() instanceof LivingEntity)) {
             return;
         }
@@ -78,43 +71,56 @@ public class DMob {
             return;
         }
 
-        for (DMob dMob : gameWorld.getDMobs()) {
-            if (dMob.entity != victim) {
-                continue;
-            }
+        DMobDeathEvent dMobDeathEvent = new DMobDeathEvent(this, event);
 
-            DMobDeathEvent dMobDeathEvent = new DMobDeathEvent(dMob, event);
-
-            if (dMobDeathEvent.isCancelled()) {
-                return;
-            }
-
-            if (dMob.type != null) {
-                for (ItemStack itemStack : dMob.type.getDrops().keySet()) {
-                    Random randomGenerator = new Random();
-                    int random = randomGenerator.nextInt(100);
-
-                    if (dMob.type.getDrops().get(itemStack) > random) {
-                        event.getDrops().add(itemStack);
-                    }
-                }
-                name = dMob.type.getName();
-
-            } else if (dMob.type == null && dMob.trigger != null) {// <=MythicMobs mob
-                name = dMob.trigger;
-
-            } else {
-                name = victim.getType().getName();
-            }
-
-            MobTrigger trigger = MobTrigger.get(name, gameWorld);
-            if (trigger != null) {
-                trigger.onTrigger();
-            }
-
-            gameWorld.removeDMob(dMob);
+        if (dMobDeathEvent.isCancelled()) {
             return;
         }
+
+        if (type != null) {
+            for (ItemStack itemStack : type.getDrops().keySet()) {
+                Random randomGenerator = new Random();
+                int random = randomGenerator.nextInt(100);
+
+                if (type.getDrops().get(itemStack) > random) {
+                    event.getDrops().add(itemStack);
+                }
+            }
+            name = type.getName();
+
+        } else if (type == null && trigger != null) {// <=MythicMobs mob
+            name = trigger;
+
+        } else {
+            name = victim.getType().getName();
+        }
+
+        MobTrigger mobTriger = MobTrigger.get(name, gameWorld);
+        if (mobTriger != null) {
+            mobTriger.onTrigger();
+        }
+
+        Set<WaveTrigger> waveTriggers = WaveTrigger.getByGameWorld(gameWorld);
+        for (WaveTrigger waveTrigger : waveTriggers) {
+            if (Game.getByGameWorld(gameWorld).getWaveKills() >= Math.ceil(gameWorld.getMobCount() * waveTrigger.getMustKillRate())) {
+                waveTrigger.onTrigger();
+            }
+        }
+
+        gameWorld.removeDMob(this);
+    }
+
+    /* Statics */
+    public static DMob getByEntity(Entity entity) {
+        GameWorld gameWorld = GameWorld.getByWorld(entity.getWorld());
+
+        for (DMob dMob : gameWorld.getDMobs()) {
+            if (dMob.entity == entity) {
+                return dMob;
+            }
+        }
+
+        return null;
     }
 
 }

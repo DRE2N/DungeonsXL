@@ -18,14 +18,14 @@ package io.github.dre2n.dungeonsxl.listener;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -90,7 +90,11 @@ public class EntityListener implements Listener {
                 if (gameWorld.isPlaying()) {
                     if (entity.getType() != EntityType.PLAYER) {
                         event.getDrops().clear();
-                        DMob.onDeath(event);
+
+                        DMob dMob = DMob.getByEntity(entity);
+                        if (dMob != null) {
+                            dMob.onDeath(event);
+                        }
                     }
                 }
             }
@@ -109,6 +113,31 @@ public class EntityListener implements Listener {
         // Deny all Damage in Lobby
         if (!gameWorld.isPlaying()) {
             event.setCancelled(true);
+        }
+
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+
+        boolean dead = ((LivingEntity) event.getEntity()).getHealth() - event.getFinalDamage() <= 0;
+        if (dead && DMob.getByEntity(event.getEntity()) != null) {
+            String killer = null;
+
+            if (event instanceof EntityDamageByEntityEvent) {
+                Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+
+                if (damager instanceof Projectile) {
+                    if (((Projectile) damager).getShooter() instanceof Player) {
+                        damager = (Player) ((Projectile) damager).getShooter();
+                    }
+                }
+
+                if (damager instanceof Player) {
+                    killer = damager.getName();
+                }
+            }
+
+            gameWorld.getGame().addKill(killer);
         }
     }
 
@@ -155,27 +184,23 @@ public class EntityListener implements Listener {
         DGroup attackerDGroup = null;
         DGroup attackedDGroup = null;
 
-        if (attackerEntity instanceof Player && attackedEntity instanceof Player) {
-            attackerPlayer = (Player) attackerEntity;
-            attackedPlayer = (Player) attackedEntity;
+        if (attackerEntity instanceof LivingEntity && attackedEntity instanceof LivingEntity) {
+            if (attackerEntity instanceof Player && attackedEntity instanceof Player) {
+                attackerPlayer = (Player) attackerEntity;
+                attackedPlayer = (Player) attackedEntity;
 
-            attackerDGroup = DGroup.getByPlayer(attackerPlayer);
-            attackedDGroup = DGroup.getByPlayer(attackedPlayer);
+                attackerDGroup = DGroup.getByPlayer(attackerPlayer);
+                attackedDGroup = DGroup.getByPlayer(attackedPlayer);
 
-            if (!pvp) {
-                event.setCancelled(true);
-            }
-
-            if (attackerDGroup != null && attackedDGroup != null) {
-                if (!friendlyFire && attackerDGroup.equals(attackedDGroup)) {
+                if (!pvp) {
                     event.setCancelled(true);
                 }
-            }
-        }
 
-        if (attackerEntity instanceof LivingEntity && attackedEntity instanceof LivingEntity) {
-            if (!(attackerEntity instanceof Player) && !(attackedEntity instanceof Player)) {
-                event.setCancelled(true);
+                if (attackerDGroup != null && attackedDGroup != null) {
+                    if (!friendlyFire && attackerDGroup.equals(attackedDGroup)) {
+                        event.setCancelled(true);
+                    }
+                }
             }
 
             // Check Dogs

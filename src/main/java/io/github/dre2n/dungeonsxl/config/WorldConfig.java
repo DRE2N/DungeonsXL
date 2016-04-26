@@ -79,6 +79,7 @@ public class WorldConfig {
     private boolean isLobbyDisabled = false;
     private int timeToNextPlay = 0;
     private int timeToNextLoot = 0;
+    private int timeToNextWave = 10;
 
     private int timeUntilKickOfflinePlayer = -1;
     private int timeToFinish = -1;
@@ -293,6 +294,12 @@ public class WorldConfig {
             timeToNextLoot = configFile.getInt("timeToNextLoot");
         } else {
             timeToNextLoot = plugin.getDefaultConfig().timeToNextLoot;
+        }
+
+        if (configFile.contains("timeToNextWave")) {
+            timeToNextWave = configFile.getInt("timeToNextWave");
+        } else {
+            timeToNextWave = plugin.getDefaultConfig().timeToNextWave;
         }
 
         if (configFile.contains("timeUntilKickOfflinePlayer")) {
@@ -577,6 +584,13 @@ public class WorldConfig {
      */
     public int getTimeToNextLoot() {
         return timeToNextLoot;
+    }
+
+    /**
+     * @return the break between two waves
+     */
+    public int getTimeToNextWave() {
+        return timeToNextWave;
     }
 
     /**

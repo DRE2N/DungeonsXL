@@ -22,7 +22,6 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldLoadEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
@@ -35,6 +34,7 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.sign.DSign;
+import io.github.dre2n.dungeonsxl.sign.MobSign;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import java.io.File;
 import java.io.FileInputStream;
@@ -336,6 +336,23 @@ public class GameWorld {
      */
     public void setDSigns(CopyOnWriteArrayList<DSign> dSigns) {
         this.dSigns = dSigns;
+    }
+
+    /**
+     * @return the potential amount of mobs in the world
+     */
+    public int getMobCount() {
+        int mobCount = 0;
+
+        for (DSign dSign : dSigns) {
+            if (!(dSign instanceof MobSign)) {
+                continue;
+            }
+
+            mobCount += ((MobSign) dSign).getInitialAmount();
+        }
+
+        return mobCount;
     }
 
     /**

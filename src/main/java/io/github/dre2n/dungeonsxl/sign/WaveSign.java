@@ -17,9 +17,8 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -33,6 +32,7 @@ public class WaveSign extends DSign {
     private DSignType type = DSignTypeDefault.WAVE;
 
     private double mobCountIncreaseRate;
+    private boolean teleport;
 
     public WaveSign(Sign sign, GameWorld gameWorld) {
         super(sign, gameWorld);
@@ -53,6 +53,21 @@ public class WaveSign extends DSign {
         this.mobCountIncreaseRate = mobCountIncreaseRate;
     }
 
+    /**
+     * @return if the group members will be teleported to the start location
+     */
+    public boolean getTeleport() {
+        return teleport;
+    }
+
+    /**
+     * @param teleport
+     * Set if the players shall get teleported to the start location
+     */
+    public void setTeleport(boolean teleport) {
+        this.teleport = teleport;
+    }
+
     @Override
     public boolean check() {
         return true;
@@ -63,6 +78,10 @@ public class WaveSign extends DSign {
         String[] lines = getSign().getLines();
         if (!lines[1].isEmpty()) {
             mobCountIncreaseRate = NumberUtil.parseDouble(lines[1], 2);
+        }
+
+        if (!lines[2].isEmpty()) {
+            teleport = lines[2].equals("+") || lines[2].equals("true");
         }
 
         if (!getTriggers().isEmpty()) {
@@ -85,24 +104,13 @@ public class WaveSign extends DSign {
 
     @Override
     public boolean onPlayerTrigger(Player player) {
-        DGroup dGroup = DGroup.getByPlayer(player);
-        if (dGroup == null) {
-            return true;
-        }
-
-        if (getGameWorld() == null) {
-            return true;
-        }
-
-        dGroup.finishWave(mobCountIncreaseRate);
+        getGame().finishWave(mobCountIncreaseRate, teleport);
         return true;
     }
 
     @Override
     public void onTrigger() {
-        for (DGroup dGroup : plugin.getDGroups()) {
-            dGroup.finishWave(mobCountIncreaseRate);
-        }
+        getGame().finishWave(mobCountIncreaseRate, teleport);
     }
 
     @Override

@@ -43,7 +43,7 @@ public enum GameTypeDefault implements GameType {
     private String signName;
     private boolean playerVersusPlayer;
     private boolean friendlyFire;
-    private boolean mobWaves;// TODO: Implementing
+    private boolean mobWaves;
     private boolean rewards;
     private boolean showTime;
     private boolean build;

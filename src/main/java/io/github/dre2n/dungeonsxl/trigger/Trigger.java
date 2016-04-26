@@ -19,8 +19,8 @@ package io.github.dre2n.dungeonsxl.trigger;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerRegistrationEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.sign.DSign;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -107,7 +107,7 @@ public abstract class Trigger {
     }
 
     public void updateDSigns() {
-        for (DSign dSign : dSigns.toArray(new DSign[dSigns.size()])) {
+        for (DSign dSign : dSigns) {
             dSign.onUpdate();
         }
     }
@@ -155,7 +155,7 @@ public abstract class Trigger {
         } else if (type == TriggerTypeDefault.WAVE) {
 
             if (value != null) {
-                return WaveTrigger.getOrCreate(NumberUtil.parseInt(value, 1), dSign.getGameWorld());
+                return WaveTrigger.getOrCreate(NumberUtil.parseDouble(value, 1), dSign.getGameWorld());
             }
 
         } else if (type != null) {

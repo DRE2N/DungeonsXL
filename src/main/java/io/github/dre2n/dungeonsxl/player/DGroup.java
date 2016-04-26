@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
@@ -30,12 +29,12 @@ import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.task.TimeIsRunningTask;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -63,7 +62,6 @@ public class DGroup {
     private GameWorld gameWorld;
     private boolean playing;
     private int floorCount;
-    private int waveCount;
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
 
@@ -378,21 +376,6 @@ public class DGroup {
     }
 
     /**
-     * @return the waveCount
-     */
-    public int getWaveCount() {
-        return waveCount;
-    }
-
-    /**
-     * @param waveCount
-     * the waveCount to set
-     */
-    public void setWaveCount(int waveCount) {
-        this.waveCount = waveCount;
-    }
-
-    /**
      * @return the rewards
      */
     public List<Reward> getRewards() {
@@ -442,7 +425,8 @@ public class DGroup {
     public boolean isEmpty() {
         return players.isEmpty();
     }
-
+    
+    /* Actions */
     /**
      * Remove the group from the List
      */
@@ -545,16 +529,6 @@ public class DGroup {
         }
 
         GroupSign.updatePerGroup(this);
-    }
-
-    public void finishWave(double mobCountIncreaseRate) {
-        for (DGroup dGroup : DGroup.getByGameWorld(gameWorld)) {
-            dGroup.sendMessage(messageConfig.getMessage(Messages.GROUP_WAVE_FINISHED, String.valueOf(dGroup.getWaveCount()) + "TIME"));// TODO
-
-            for (Player player : dGroup.getPlayers()) {
-                PlayerUtil.secureTeleport(player, gameWorld.getLocStart());
-            }
-        }
     }
 
     /**

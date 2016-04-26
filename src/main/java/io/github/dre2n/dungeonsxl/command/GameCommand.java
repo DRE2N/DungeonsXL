@@ -22,8 +22,8 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -74,6 +74,8 @@ public class GameCommand extends BRCommand {
         MessageUtil.sendMessage(sender, "&bGame type: &e" + (game.getType() == null ? "Not started yet" : game.getType()));
         MessageUtil.sendMessage(sender, "&bDungeon: &e" + (dGroup.getDungeonName() == null ? "N/A" : dGroup.getDungeonName()));
         MessageUtil.sendMessage(sender, "&bMap: &e" + (dGroup.getMapName() == null ? "N/A" : dGroup.getMapName()));
+        MessageUtil.sendMessage(sender, "&bWaves finished: &e" + game.getWaveCount());
+        MessageUtil.sendMessage(sender, "&bKills: &e" + game.getGameKills() + " / Game; " + game.getWaveKills() + " / Wave");
     }
 
 }

@@ -16,13 +16,22 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.sign.DSign;
+import io.github.dre2n.dungeonsxl.sign.MobSign;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Daniel Saukel
@@ -35,6 +44,9 @@ public class Game {
     private boolean started;
     private GameType type;
     private GameWorld world;
+    private int waveCount;
+    private Map<String, Integer> gameKills = new HashMap<>();
+    private Map<String, Integer> waveKills = new HashMap<>();
 
     public Game(DGroup dGroup) {
         dGroups.add(dGroup);
@@ -125,13 +137,128 @@ public class Game {
     }
 
     /**
+     * @return the waveCount
+     */
+    public int getWaveCount() {
+        return waveCount;
+    }
+
+    /**
+     * @param waveCount
+     * the waveCount to set
+     */
+    public void setWaveCount(int waveCount) {
+        this.waveCount = waveCount;
+    }
+
+    /**
+     * @return how many mobs have been killed in the game
+     */
+    public int getGameKills() {
+        int count = 0;
+        for (String killer : gameKills.keySet()) {
+            count += gameKills.get(killer);
+        }
+        return count;
+    }
+
+    /**
+     * @return how many mobs have been killed in the last game
+     */
+    public int getWaveKills() {
+        int count = 0;
+        for (String killer : waveKills.keySet()) {
+            count += waveKills.get(killer);
+        }
+        return count;
+    }
+
+    /**
+     * @param killer
+     * the killer; null if the killer is not a player
+     */
+    public void addKill(String killer) {
+        if (killer == null) {
+            killer = "N/A";
+        }
+        waveKills.put(killer, waveKills.get(killer) == null ? 1 : waveKills.get(killer) + 1);
+    }
+
+    /**
+     * Adds the values of the wave kills map to the game kills map and resets the wave kills.
+     */
+    public void resetWaveKills() {
+        gameKills.putAll(waveKills);
+        waveKills.clear();
+    }
+
+    /**
+     * @return the players in all dGroups
+     */
+    public Set<Player> getPlayers() {
+        Set<Player> toReturn = new HashSet<>();
+        for (DGroup dGroup : dGroups) {
+            toReturn.addAll(dGroup.getPlayers());
+        }
+        return toReturn;
+    }
+
+    /**
      * @return if the DGroup list is empty
      */
     public boolean isEmpty() {
         return dGroups.isEmpty();
     }
 
-    // Static
+    /* Actions */
+    /**
+     * @param mobCountIncreaseRate
+     * the new mob count will be increased by this rate
+     * @param teleport
+     * whether or not to teleport the players to the start location
+     */
+    public void finishWave(final double mobCountIncreaseRate, final boolean teleport) {
+        waveCount++;
+        resetWaveKills();
+
+        int delay = world.getConfig().getTimeToNextWave();
+        sendMessage(plugin.getMessageConfig().getMessage(MessageConfig.Messages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (teleport) {
+                    for (Player player : getPlayers()) {
+                        PlayerUtil.secureTeleport(player, world.getLocStart());
+                    }
+                }
+
+                for (DSign dSign : world.getDSigns()) {
+                    if (!(dSign instanceof MobSign)) {
+                        continue;
+                    }
+
+                    MobSign mobSign = (MobSign) dSign;
+                    int newAmount = (int) Math.ceil(mobSign.getInitialAmount() * mobCountIncreaseRate);
+
+                    mobSign.setAmount(newAmount);
+                    mobSign.setInitialAmount(newAmount);
+                    mobSign.initializeTask();
+                }
+            }
+        }.runTaskLater(plugin, delay * 20);
+    }
+
+    /**
+     * @param message the message to send
+     */
+    public void sendMessage(String message) {
+        for (DGroup dGroup : dGroups) {
+            dGroup.sendMessage(message);
+        }
+    }
+
+    /* Statics */
     public static Game getByDGroup(DGroup dGroup) {
         for (Game game : plugin.getGames()) {
             if (game.getDGroups().contains(dGroup)) {

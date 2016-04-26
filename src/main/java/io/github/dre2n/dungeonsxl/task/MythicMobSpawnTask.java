@@ -16,9 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.task;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.sign.MythicMobsSign;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -60,11 +60,10 @@ public class MythicMobSpawnTask extends BukkitRunnable {
                         sign.setAmount(sign.getAmount() - 1);
                     } else {
                         sign.killTask();
-                        sign.remove();
                     }
                 }
 
-                sign.setInterval(sign.getMaxinterval());
+                sign.setInterval(sign.getMaxInterval());
 
             } else {
                 sign.killTask();
