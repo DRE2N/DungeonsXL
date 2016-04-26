@@ -19,9 +19,11 @@ package io.github.dre2n.dungeonsxl.game;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MessageConfig;
+import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
+import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,6 +139,36 @@ public class Game {
     }
 
     /**
+     * Refers to the DGroup with the best progress.
+     *
+     * @return the unplayed floors
+     */
+    public List<String> getUnplayedFloors() {
+        List<String> unplayedFloors = new ArrayList<>();
+        for (DGroup dGroup : dGroups) {
+            if (dGroup.getUnplayedFloors().size() < unplayedFloors.size()) {
+                unplayedFloors = dGroup.getUnplayedFloors();
+            }
+        }
+        return unplayedFloors;
+    }
+
+    /**
+     * Refers to the DGroup with the best progress.
+     *
+     * @return the floorCount
+     */
+    public int getFloorCount() {
+        int floorCount = 0;
+        for (DGroup dGroup : dGroups) {
+            if (dGroup.getFloorCount() > floorCount) {
+                floorCount = dGroup.getFloorCount();
+            }
+        }
+        return floorCount;
+    }
+
+    /**
      * @return the waveCount
      */
     public int getWaveCount() {
@@ -193,6 +225,15 @@ public class Game {
     }
 
     /**
+     * Refers to a DGroup.
+     *
+     * @return the dungeon
+     */
+    public Dungeon getDungeon() {
+        return dGroups.get(0).getDungeon();
+    }
+
+    /**
      * @return the players in all dGroups
      */
     public Set<Player> getPlayers() {
@@ -220,6 +261,13 @@ public class Game {
     public void finishWave(final double mobCountIncreaseRate, final boolean teleport) {
         waveCount++;
         resetWaveKills();
+
+        Set<ProgressTrigger> triggers = ProgressTrigger.getByGameWorld(world);
+        for (ProgressTrigger trigger : triggers) {
+            if (getWaveCount() >= trigger.getWaveCount() & getFloorCount() >= trigger.getFloorCount() - 1 || !getUnplayedFloors().contains(trigger.getFloor()) & trigger.getFloor() != null) {
+                trigger.onTrigger();
+            }
+        }
 
         int delay = world.getConfig().getTimeToNextWave();
         sendMessage(plugin.getMessageConfig().getMessage(MessageConfig.Messages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));

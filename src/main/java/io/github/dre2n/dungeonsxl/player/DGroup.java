@@ -425,7 +425,7 @@ public class DGroup {
     public boolean isEmpty() {
         return players.isEmpty();
     }
-    
+
     /* Actions */
     /**
      * Remove the group from the List

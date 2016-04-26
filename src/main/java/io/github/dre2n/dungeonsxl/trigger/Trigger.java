@@ -146,6 +146,19 @@ public abstract class Trigger {
                 return MobTrigger.getOrCreate(value, dSign.getGameWorld());
             }
 
+        } else if (type == TriggerTypeDefault.PROGRESS) {
+
+            if (value != null) {
+                if (value.matches("[0-99]/[0-999]")) {
+                    int floorCount = NumberUtil.parseInt(value.split("/")[0]);
+                    int waveCount = NumberUtil.parseInt(value.split("/")[1]);
+                    return ProgressTrigger.getOrCreate(floorCount, waveCount, dSign.getGameWorld());
+
+                } else {
+                    return ProgressTrigger.getOrCreate(value, dSign.getGameWorld());
+                }
+            }
+
         } else if (type == TriggerTypeDefault.USE_ITEM) {
 
             if (value != null) {

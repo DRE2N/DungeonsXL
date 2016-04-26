@@ -24,6 +24,7 @@ public enum TriggerTypeDefault implements TriggerType {
     DISTANCE("D", DistanceTrigger.class),
     INTERACT("I", InteractTrigger.class),
     MOB("M", MobTrigger.class),
+    PROGRESS("P", ProgressTrigger.class),
     REDSTONE("R", RedstoneTrigger.class),
     SIGN("T", SignTrigger.class),
     USE_ITEM("U", UseItemTrigger.class),
