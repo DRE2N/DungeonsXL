@@ -619,11 +619,24 @@ public class DPlayer extends DGlobalPlayer {
 
     public void respawn() {
         DGroup dGroup = DGroup.getByPlayer(getPlayer());
-        if (checkpoint == null) {
-            PlayerUtil.secureTeleport(getPlayer(), dGroup.getGameWorld().getLocStart());
-        } else {
-            PlayerUtil.secureTeleport(getPlayer(), checkpoint);
+
+        Location respawn = checkpoint;
+
+        if (respawn == null) {
+            respawn = dGroup.getGameWorld().getLocStart();
         }
+
+        if (respawn == null) {
+            respawn = dGroup.getGameWorld().getLocLobby();
+        }
+
+        if (respawn == null) {
+            respawn = world.getSpawnLocation();
+        }
+
+        PlayerUtil.secureTeleport(getPlayer(), respawn);
+
+        // Don't forget Doge!
         if (wolf != null) {
             wolf.teleport(getPlayer());
         }
@@ -833,7 +846,7 @@ public class DPlayer extends DGlobalPlayer {
 
     public void update(boolean updateSecond) {
         boolean locationValid = true;
-        Location teleportLocation = getPlayer().getLocation();
+        Location teleportLocation = player.getLocation();
         boolean teleportWolf = false;
         boolean respawnInventory = false;
         boolean offline = false;
@@ -855,18 +868,27 @@ public class DPlayer extends DGlobalPlayer {
                             teleportLocation = editWorld.getLobby();
                         }
                     }
+
                 } else if (gameWorld != null) {
                     DGroup dGroup = DGroup.getByPlayer(getPlayer());
-                    if (getCheckpoint() == null) {
+
+                    teleportLocation = getCheckpoint();
+
+                    if (teleportLocation == null) {
                         teleportLocation = dGroup.getGameWorld().getLocStart();
-                        if (getWolf() != null) {
-                            getWolf().teleport(dGroup.getGameWorld().getLocStart());
-                        }
-                    } else {
-                        teleportLocation = getCheckpoint();
-                        if (getWolf() != null) {
-                            teleportWolf = true;
-                        }
+                    }
+
+                    if (teleportLocation == null) {
+                        teleportLocation = dGroup.getGameWorld().getLocLobby();
+                    }
+
+                    if (teleportLocation == null) {
+                        teleportLocation = getWorld().getSpawnLocation();
+                    }
+
+                    // Don't forget Doge!
+                    if (getWolf() != null) {
+                        teleportWolf = true;
                     }
 
                     // Respawn Items
@@ -876,7 +898,8 @@ public class DPlayer extends DGlobalPlayer {
                 }
             }
 
-        } else if (gameWorld != null) {
+        } else if (gameWorld
+                != null) {
             // Update Wolf
             if (getWolf() != null) {
                 if (getWolf().isDead()) {
@@ -913,7 +936,7 @@ public class DPlayer extends DGlobalPlayer {
         }
 
         if (teleportWolf) {
-            getWolf().teleport(getCheckpoint());
+            getWolf().teleport(teleportLocation);
         }
 
         if (respawnInventory) {

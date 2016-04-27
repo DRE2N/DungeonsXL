@@ -22,12 +22,10 @@ import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.game.GameChest;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GlobalProtection;
@@ -41,6 +39,8 @@ import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -376,29 +376,26 @@ public class PlayerListener implements Listener {
 
             DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
 
-            if (dPlayer.getCheckpoint() == null) {
-                event.setRespawnLocation(dGroup.getGameWorld().getLocStart());
+            Location respawn = dPlayer.getCheckpoint();
 
-                // Da einige Plugins einen anderen Respawn setzen wird
-                // ein Scheduler gestartet der den Player nach einer
-                // Sekunde teleportiert.
-                new RespawnTask(player, dGroup.getGameWorld().getLocStart()).runTaskLater(plugin, 10L);
+            if (respawn == null) {
+                respawn = dGroup.getGameWorld().getLocStart();
+            }
 
-                if (dPlayer.getWolf() != null) {
-                    dPlayer.getWolf().teleport(dGroup.getGameWorld().getLocStart());
-                }
+            if (respawn == null) {
+                respawn = dGroup.getGameWorld().getLocLobby();
+            }
 
-            } else {
-                event.setRespawnLocation(dPlayer.getCheckpoint());
+            if (respawn == null) {
+                respawn = dGroup.getGameWorld().getWorld().getSpawnLocation();
+            }
 
-                // Da einige Plugins einen anderen Respawn setzen wird
-                // ein Scheduler gestartet der den Player nach einer
-                // Sekunde teleportiert.
-                new RespawnTask(player, dPlayer.getCheckpoint()).runTaskLater(plugin, 10L);
+            // Because some plugins set another respawn point, DXL teleports a few ticks later.
+            new RespawnTask(player, respawn).runTaskLater(plugin, 10);
 
-                if (dPlayer.getWolf() != null) {
-                    dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
-                }
+            // Don't forget Doge!
+            if (dPlayer.getWolf() != null) {
+                dPlayer.getWolf().teleport(respawn);
             }
         }
     }
