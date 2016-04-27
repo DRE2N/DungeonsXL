@@ -260,7 +260,7 @@ public class MythicMobsSign extends DSign implements MobSign {
         for (Entity entity : spawnLocation.getChunk().getEntities()) {
             if (entity.getLocation().getX() >= spawnLocation.getX() - 1 && entity.getLocation().getX() <= spawnLocation.getX() + 1 && entity.getLocation().getY() >= spawnLocation.getY() - 1
                     && entity.getLocation().getY() <= spawnLocation.getY() + 1 && entity.getLocation().getZ() >= spawnLocation.getZ() - 1 && entity.getLocation().getZ() <= spawnLocation.getZ() + 1
-                    && !mythicMobs.contains(entity) && entity.isCustomNameVisible() && !(entity instanceof Player)) {
+                    && !mythicMobs.contains(entity) && !(entity instanceof Player)) {
                 setMythicMob((LivingEntity) entity);
                 mythicMobs.add(entity);
                 return;
