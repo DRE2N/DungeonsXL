@@ -46,7 +46,7 @@ public class MythicMobSpawnTask extends BukkitRunnable {
                 double y = sign.getSpawnLocation().getY();
                 double z = sign.getSpawnLocation().getZ();
 
-                String command = "mm mobs spawn " + sign.getMob() + " " + sign.getAmount() + " DXL_Game_" + gameWorld.getId() + "," + x + "," + y + "," + z;
+                String command = "mm mobs spawn " + sign.getMob() + " 1 DXL_Game_" + gameWorld.getId() + "," + x + "," + y + "," + z;
                 Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
 
                 sign.setMythicMobs();
@@ -58,6 +58,7 @@ public class MythicMobSpawnTask extends BukkitRunnable {
                 if (sign.getAmount() != -1) {
                     if (sign.getAmount() > 1) {
                         sign.setAmount(sign.getAmount() - 1);
+
                     } else {
                         sign.killTask();
                     }
