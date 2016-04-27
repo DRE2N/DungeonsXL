@@ -22,6 +22,16 @@ DungeonsXL also provides custom game mechanics to make these worlds interesting.
 * Per dungeon configuration (you should try that after you became familiar with the basics of this plugin). [Read more...](../../wiki/dungeon-configuration)
 * Link multiple floors together to create large dungeons with multiple levels. [Read more...](../../wiki/getting-started#advanced-multi-floor-dungeons-mfds)
 * Use a dungeon as a tutorial and give them a PEX group when they finish it. [Read more...](../../wiki/main-configuration)
+* Players can play the dungeon with their own items or with configurable classes.
+* _The classes support doges!_
+* Mob waves: [Read more...](../../wiki/signs#wave)
+* PvP
+* Time limits
+* A built-in custom mob system and support for MythicMobs. [Read more...](../../wiki/signs#mob)
+* A powerful API: [Read more...](../../wiki/api-tutorial)
+* Different game types allow you to use your maps dynamically for different purposes. [Read more...](../../wiki/game-types)
+* ...and many more!
+
 
 ## The concept
 
@@ -57,7 +67,7 @@ Instead of referencing the internals of the implementation directly, DungeonsXL 
 The shaded version of DXL (standard version) contains this library, while the original version needs it as an external plugin.
 Have a look at the [installation instructions](../../wiki/getting-started#installation) for detailed information.
 
-DungeonsXL currently uses BRCommons 0.3.
+DungeonsXL currently uses BRCommons 0.4.
 
 ### Java
 7 and higher
