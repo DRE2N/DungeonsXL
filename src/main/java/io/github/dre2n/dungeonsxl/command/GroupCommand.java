@@ -186,10 +186,9 @@ public class GroupCommand extends BRCommand {
             return;
         }
 
-        for (DGroup anyDGroup : plugin.getDGroups()) {
-            if (anyDGroup.getPlayers().contains(player)) {
-                MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_LEAVE_GROUP));
-            }
+        if (DGroup.getByPlayer(player) != null) {
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_LEAVE_GROUP));
+            return;
         }
 
         if (!dGroup.getInvitedPlayers().contains(player) && !player.hasPermission("dxl.bypass")) {
