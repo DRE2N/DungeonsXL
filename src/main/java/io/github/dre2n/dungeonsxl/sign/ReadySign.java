@@ -17,14 +17,14 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -117,10 +117,10 @@ public class ReadySign extends DSign {
         if (getGameWorld().getSignClass().isEmpty() || dPlayer.getDClass() != null) {
             GameType forced = getGameWorld().getConfig().getForcedGameType();
             dPlayer.ready(forced == null ? gameType : forced);
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(Messages.PLAYER_READY));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.PLAYER_READY));
 
         } else {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(Messages.ERROR_READY));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.ERROR_READY));
         }
     }
 

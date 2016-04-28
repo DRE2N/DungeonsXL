@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.task.SignUpdateTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;

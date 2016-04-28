@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
@@ -39,7 +39,7 @@ public class GameCommand extends BRCommand {
         setCommand("game");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_GAME));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_GAME));
         setPermission("dxl.game");
         setPlayerCommand(true);
     }
@@ -49,19 +49,19 @@ public class GameCommand extends BRCommand {
         Player player = (Player) sender;
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
             return;
         }
 
         GameWorld gameWorld = dGroup.getGameWorld();
         if (gameWorld == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NO_GAME));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_GAME));
             return;
         }
 
         Game game = gameWorld.getGame();
         if (game == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NO_GAME));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_GAME));
             return;
         }
 

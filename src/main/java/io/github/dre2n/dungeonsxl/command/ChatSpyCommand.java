@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,7 +37,7 @@ public class ChatSpyCommand extends BRCommand {
         setCommand("chatspy");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_CHATSPY));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_CHATSPY));
         setPermission("dxl.chatspy");
         setPlayerCommand(true);
     }
@@ -49,11 +49,11 @@ public class ChatSpyCommand extends BRCommand {
 
         if (dGlobalPlayer.isInChatSpyMode()) {
             dGlobalPlayer.setInChatSpyMode(false);
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_CHATSPY_STOPPED));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_CHATSPY_STOPPED));
 
         } else {
             dGlobalPlayer.setInChatSpyMode(true);
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_CHATSPY_START));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_CHATSPY_START));
         }
     }
 

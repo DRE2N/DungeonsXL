@@ -19,12 +19,12 @@ package io.github.dre2n.dungeonsxl.global;
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -461,17 +461,17 @@ public class GameSign extends GlobalProtection {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup == null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_JOIN_GROUP));
             return true;
         }
 
         if (!dGroup.getCaptain().equals(player)) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_NOT_CAPTAIN));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_NOT_CAPTAIN));
             return true;
         }
 
         if (Game.getByDGroup(dGroup) != null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_LEAVE_GAME));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_LEAVE_GAME));
             return true;
         }
 
@@ -480,7 +480,7 @@ public class GameSign extends GlobalProtection {
             if (file != null) {
                 WorldConfig confReader = new WorldConfig(file);
                 if (confReader != null) {
-                    dGroup.sendMessage(plugin.getMessageConfig().getMessage(Messages.ERROR_COOLDOWN, String.valueOf(confReader.getTimeToNextPlay())));
+                    dGroup.sendMessage(plugin.getMessageConfig().getMessage(DMessages.ERROR_COOLDOWN, String.valueOf(confReader.getTimeToNextPlay())));
                 }
             }
 
@@ -488,7 +488,7 @@ public class GameSign extends GlobalProtection {
         }
 
         if (!GameWorld.checkRequirements(gameSign.mapName, dGroup)) {
-            dGroup.sendMessage(plugin.getMessageConfig().getMessage(Messages.ERROR_REQUIREMENTS));
+            dGroup.sendMessage(plugin.getMessageConfig().getMessage(DMessages.ERROR_REQUIREMENTS));
             return true;
         }
 

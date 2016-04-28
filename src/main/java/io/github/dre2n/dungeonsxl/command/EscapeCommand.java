@@ -17,13 +17,13 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +39,7 @@ public class EscapeCommand extends BRCommand {
         setCommand("escape");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_ESCAPE));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_ESCAPE));
         setPermission("dxl.escape");
         setPlayerCommand(true);
     }
@@ -51,7 +51,7 @@ public class EscapeCommand extends BRCommand {
         if (dPlayer != null) {
 
             if (!dPlayer.isEditing()) {
-                MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_DUNGEON));
+                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
                 return;
             }
 
@@ -70,10 +70,10 @@ public class EscapeCommand extends BRCommand {
             DGroup dGroup = DGroup.getByPlayer(player);
             if (dGroup != null) {
                 dGroup.removePlayer(player);
-                MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_LEAVE_SUCCESS));
+                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_LEAVE_SUCCESS));
                 return;
             }
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
         }
     }
 

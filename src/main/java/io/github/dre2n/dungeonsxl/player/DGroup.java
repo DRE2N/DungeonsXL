@@ -16,10 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
@@ -147,8 +147,8 @@ public class DGroup {
      * the player to add
      */
     public void addPlayer(Player player) {
-        sendMessage(plugin.getMessageConfig().getMessage(Messages.GROUP_PLAYER_JOINED, player.getName()));
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_JOIN_GROUP));
+        sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_PLAYER_JOINED, player.getName()));
+        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_JOIN_GROUP));
 
         players.add(player);
     }
@@ -162,7 +162,7 @@ public class DGroup {
         GroupSign.updatePerGroup(this);
 
         // Send message
-        sendMessage(plugin.getMessageConfig().getMessage(Messages.PLAYER_LEFT_GROUP, player.getName()));
+        sendMessage(plugin.getMessageConfig().getMessage(DMessages.PLAYER_LEFT_GROUP, player.getName()));
 
         // Check group
         if (isEmpty()) {
@@ -197,18 +197,18 @@ public class DGroup {
 
         if (DGroup.getByPlayer(player) != null) {
             if (!silent) {
-                MessageUtil.sendMessage(captain, plugin.getMessageConfig().getMessage(Messages.ERROR_IN_GROUP, player.getName()));
+                MessageUtil.sendMessage(captain, plugin.getMessageConfig().getMessage(DMessages.ERROR_IN_GROUP, player.getName()));
             }
             return;
         }
 
         if (!silent) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_INVITED, captain.getName(), name));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_INVITED, captain.getName(), name));
         }
 
         // Send message
         if (!silent) {
-            sendMessage(plugin.getMessageConfig().getMessage(Messages.GROUP_INVITED_PLAYER, captain.getName(), player.getName(), name));
+            sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_INVITED_PLAYER, captain.getName(), player.getName(), name));
         }
 
         // Add player
@@ -226,19 +226,19 @@ public class DGroup {
 
         if (DGroup.getByPlayer(player) != this) {
             if (!silent) {
-                MessageUtil.sendMessage(captain, plugin.getMessageConfig().getMessage(Messages.ERROR_NOT_IN_GROUP, player.getName(), name));
+                MessageUtil.sendMessage(captain, plugin.getMessageConfig().getMessage(DMessages.ERROR_NOT_IN_GROUP, player.getName(), name));
             }
             return;
         }
 
         if (!silent) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_UNINVITED, player.getName(), name));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_UNINVITED, player.getName(), name));
         }
 
         // Send message
         if (!silent) {
             for (Player groupPlayer : getPlayers()) {
-                MessageUtil.sendMessage(groupPlayer, plugin.getMessageConfig().getMessage(Messages.GROUP_UNINVITED_PLAYER, captain.getName(), player.getName(), name));
+                MessageUtil.sendMessage(groupPlayer, plugin.getMessageConfig().getMessage(DMessages.GROUP_UNINVITED_PLAYER, captain.getName(), player.getName(), name));
             }
         }
 

@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -38,7 +38,7 @@ public class LivesCommand extends BRCommand {
         setCommand("lives");
         setMinArgs(0);
         setMaxArgs(1);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_LIVES));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_LIVES));
         setPermission("dxl.lives");
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -57,16 +57,16 @@ public class LivesCommand extends BRCommand {
             player = (Player) sender;
 
         } else {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NO_CONSOLE_COMMAND, getCommand()));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_CONSOLE_COMMAND, getCommand()));
             return;
         }
 
         DPlayer dPlayer = DPlayer.getByPlayer(player);
         if (dPlayer != null) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.CMD_LIVES, player.getName(), String.valueOf(dPlayer.getLives())));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_LIVES, player.getName(), String.valueOf(dPlayer.getLives())));
 
         } else {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
         }
     }
 

@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -39,7 +39,7 @@ public class EnterCommand extends BRCommand {
         setMinArgs(1);
         setMaxArgs(2);
         setCommand("enter");
-        setHelp(messageConfig.getMessage(MessageConfig.Messages.HELP_CMD_ENTER));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_ENTER));
         setPermission("dxl.enter");
         setPlayerCommand(true);
     }
@@ -53,18 +53,18 @@ public class EnterCommand extends BRCommand {
         DGroup target = DGroup.getByName(targetName);
 
         if (target == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NO_SUCH_GROUP, targetName));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_GROUP, targetName));
             return;
         }
 
         Game game = Game.getByDGroup(target);
         if (game == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NOT_IN_GAME, targetName));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_IN_GAME, targetName));
             return;
         }
 
         if (Game.getByDGroup(joining) != null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_LEAVE_GAME));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_LEAVE_GAME));
             return;
         }
 
@@ -73,13 +73,13 @@ public class EnterCommand extends BRCommand {
         }
 
         if (joining.getCaptain() != captain && !sender.hasPermission("dxl.bypass")) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NOT_CAPTAIN));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_CAPTAIN));
             return;
         }
 
         joining.setGameWorld(game.getWorld());
         game.addDGroup(joining);
-        joining.sendMessage(messageConfig.getMessage(Messages.CMD_ENTER_SUCCESS, joining.getName(), targetName));
+        joining.sendMessage(messageConfig.getMessage(DMessages.CMD_ENTER_SUCCESS, joining.getName(), targetName));
 
         for (Player player : joining.getPlayers()) {
             new DPlayer(player, game.getWorld()).ready();

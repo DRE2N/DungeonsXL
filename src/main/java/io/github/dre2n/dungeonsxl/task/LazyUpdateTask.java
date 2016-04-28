@@ -17,8 +17,8 @@
 package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**

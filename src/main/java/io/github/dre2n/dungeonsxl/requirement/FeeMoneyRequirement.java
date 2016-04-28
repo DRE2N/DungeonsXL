@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import org.bukkit.entity.Player;
 
 /**
@@ -60,7 +60,7 @@ public class FeeMoneyRequirement extends Requirement {
         }
 
         plugin.getEconomyProvider().withdrawPlayer(player, fee);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REQUIREMENT_FEE, plugin.getEconomyProvider().format(fee)));
+        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REQUIREMENT_FEE, plugin.getEconomyProvider().format(fee)));
     }
 
     @Override

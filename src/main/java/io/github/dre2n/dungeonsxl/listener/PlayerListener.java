@@ -16,10 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.listener;
 
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
@@ -111,7 +111,7 @@ public class PlayerListener implements Listener {
         dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
 
         if (dPlayer.getLives() != -1) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_DEATH, String.valueOf(dPlayer.getLives())));
 
             if (dConfig != null) {
                 if (dConfig.getKeepInventoryOnDeath()) {
@@ -129,7 +129,7 @@ public class PlayerListener implements Listener {
             DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
 
             if (!dPlayerKickEvent.isCancelled()) {
-                MessageUtil.broadcastMessage(messageConfig.getMessage(Messages.PLAYER_DEATH_KICK, player.getName()));
+                MessageUtil.broadcastMessage(messageConfig.getMessage(DMessages.PLAYER_DEATH_KICK, player.getName()));
                 dPlayer.leave();
                 if (gameWorld.getConfig().getKeepInventoryOnEscape()) {
                     dPlayer.applyRespawnInventory();
@@ -154,13 +154,13 @@ public class PlayerListener implements Listener {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.ENDER_CHEST) {
                         if (!player.hasPermission("dxl.bypass")) {
-                            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_ENDERCHEST));
+                            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_ENDERCHEST));
                             event.setCancelled(true);
                         }
 
                     } else if (clickedBlock.getType() == Material.BED_BLOCK) {
                         if (!player.hasPermission("dxl.bypass")) {
-                            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_BED));
+                            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_BED));
                             event.setCancelled(true);
                         }
                     }
@@ -172,7 +172,7 @@ public class PlayerListener implements Listener {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.DISPENSER) {
                         if (!player.hasPermission("dxl.bypass")) {
-                            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DISPENSER));
+                            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_DISPENSER));
                             event.setCancelled(true);
                         }
                     }
@@ -193,13 +193,13 @@ public class PlayerListener implements Listener {
                                 if (dPortal == dGlobalPlayer.getPortal()) {
                                     if (dPortal.getBlock1() == null) {
                                         dPortal.setBlock1(event.getClickedBlock());
-                                        MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_PROGRESS));
+                                        MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PORTAL_PROGRESS));
 
                                     } else if (dPortal.getBlock2() == null) {
                                         dPortal.setBlock2(event.getClickedBlock());
                                         dPortal.setActive(true);
                                         dPortal.create();
-                                        MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_CREATED));
+                                        MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PORTAL_CREATED));
                                     }
                                     event.setCancelled(true);
                                 }
@@ -285,7 +285,7 @@ public class PlayerListener implements Listener {
                             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                                 trigger.onTrigger(player);
                             } else {
-                                MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEFT_CLICK));
+                                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEFT_CLICK));
                             }
                         }
 
@@ -296,7 +296,7 @@ public class PlayerListener implements Listener {
                                     if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                                         dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
                                     } else {
-                                        MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEFT_CLICK));
+                                        MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEFT_CLICK));
                                     }
                                     return;
                                 }
@@ -338,7 +338,7 @@ public class PlayerListener implements Listener {
         for (Material material : gameWorld.getConfig().getSecureObjects()) {
             if (material == event.getItemDrop().getItemStack().getType()) {
                 event.setCancelled(true);
-                MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_DROP));
+                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_DROP));
                 return;
             }
         }
@@ -460,11 +460,11 @@ public class PlayerListener implements Listener {
                 dPlayer.leave();
 
             } else if (timeUntilKickOfflinePlayer > 0) {
-                dGroup.sendMessage(messageConfig.getMessage(Messages.PLAYER_OFFLINE, dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer), player);
+                dGroup.sendMessage(messageConfig.getMessage(DMessages.PLAYER_OFFLINE, dPlayer.getPlayer().getName(), "" + timeUntilKickOfflinePlayer), player);
                 dPlayer.setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
 
             } else {
-                dGroup.sendMessage(messageConfig.getMessage(Messages.PLAYER_OFFLINE_NEVER, dPlayer.getPlayer().getName()), player);
+                dGroup.sendMessage(messageConfig.getMessage(DMessages.PLAYER_OFFLINE_NEVER, dPlayer.getPlayer().getName()), player);
             }
 
         } else if (dPlayer.isEditing()) {
@@ -544,7 +544,7 @@ public class PlayerListener implements Listener {
             }
 
             if (dGroup.getGameWorld() == null) {
-                MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_TUTORIAL_NOT_EXIST));
+                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_TUTORIAL_NOT_EXIST));
                 continue;
             }
 
@@ -596,7 +596,7 @@ public class PlayerListener implements Listener {
         }
 
         if (event.isCancelled()) {
-            MessageUtil.sendMessage(event.getPlayer(), messageConfig.getMessage(Messages.ERROR_CMD));
+            MessageUtil.sendMessage(event.getPlayer(), messageConfig.getMessage(DMessages.ERROR_CMD));
         }
     }
 

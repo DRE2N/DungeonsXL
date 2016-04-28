@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -33,43 +33,43 @@ import org.bukkit.inventory.ItemStack;
  * @author Frank Baumann, Daniel Saukel
  */
 public class PortalCommand extends BRCommand {
-    
+
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
     protected static MessageConfig messageConfig = plugin.getMessageConfig();
-    
+
     public PortalCommand() {
         setCommand("portal");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_PORTAL));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_PORTAL));
         setPermission("dxl.portal");
         setPlayerCommand(true);
     }
-    
+
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
         DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
-        
+
         if (dGlobalPlayer instanceof DPlayer) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_LEAVE_DUNGEON));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
             return;
         }
-        
+
         DPortal dPortal = dGlobalPlayer.getPortal();
-        
+
         if (dPortal == null) {
             dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_INTRODUCTION));
-            
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PORTAL_INTRODUCTION));
+
         } else {
             dPortal.delete();
             dGlobalPlayer.setCreatingPortal(null);
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PORTAL_ABORT));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PORTAL_ABORT));
         }
     }
-    
+
 }

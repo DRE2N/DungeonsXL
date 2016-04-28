@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import org.bukkit.entity.Player;
 
 /**
@@ -55,7 +55,7 @@ public class LevelReward extends Reward {
     @Override
     public void giveTo(Player player) {
         player.setLevel(player.getLevel() + levels);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REWARD_GENERAL, levels + " levels"));
+        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REWARD_GENERAL, levels + " levels"));
     }
 
     @Override

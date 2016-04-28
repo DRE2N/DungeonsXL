@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.event.dsign;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.sign.DSign;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.block.Sign;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

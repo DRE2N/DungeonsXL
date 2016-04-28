@@ -19,11 +19,11 @@ package io.github.dre2n.dungeonsxl.command;
 import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Internals;
+import io.github.dre2n.commons.config.MessageConfig;
 import static io.github.dre2n.commons.util.messageutil.FatLetters.*;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -39,7 +39,7 @@ public class MainCommand extends BRCommand {
 
     public MainCommand() {
         setCommand("main");
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_MAIN));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_MAIN));
         setPermission("dxl.main");
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -68,10 +68,10 @@ public class MainCommand extends BRCommand {
         MessageUtil.sendCenteredMessage(sender, "&4" + D[2] + "&f" + X[2] + L[2]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[3] + "&f" + X[3] + L[3]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[4] + "&f" + X[4] + L[4]);
-        MessageUtil.sendCenteredMessage(sender, "&b&l###### " + messageConfig.getMessage(Messages.CMD_MAIN_WELCOME) + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_HELP));
+        MessageUtil.sendCenteredMessage(sender, "&b&l###### " + messageConfig.getMessage(DMessages.CMD_MAIN_WELCOME) + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
+        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
+        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
+        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_MAIN_HELP));
         MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2016 Frank Baumann & contributors; lcsd. under GPLv3.");
     }
 

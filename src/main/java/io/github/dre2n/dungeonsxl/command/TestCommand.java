@@ -17,15 +17,15 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,7 +41,7 @@ public class TestCommand extends BRCommand {
         setCommand("test");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_TEST));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_TEST));
         setPermission("dxl.test");
         setPlayerCommand(true);
     }
@@ -52,24 +52,24 @@ public class TestCommand extends BRCommand {
 
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
             return;
         }
 
         if (!dGroup.getCaptain().equals(player)) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NOT_CAPTAIN));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_CAPTAIN));
             return;
         }
 
         GameWorld gameWorld = dGroup.getGameWorld();
         if (gameWorld == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
             return;
         }
 
         Game game = gameWorld.getGame();
         if (game != null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(Messages.ERROR_LEAVE_DUNGEON));
+            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
             return;
         }
 

@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.dungeon;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -41,7 +41,7 @@ public class DLootInventory {
     public DLootInventory(Player player, ItemStack[] itemStacks) {
         plugin.getDLootInventories().add(this);
 
-        inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', plugin.getMessageConfig().getMessage(Messages.PLAYER_TREASURES)));
+        inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', plugin.getMessageConfig().getMessage(DMessages.PLAYER_TREASURES)));
         for (ItemStack itemStack : itemStacks) {
             if (itemStack != null) {
                 inventory.addItem(itemStack);

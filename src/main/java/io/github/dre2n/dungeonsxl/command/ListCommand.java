@@ -17,12 +17,12 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
@@ -43,7 +43,7 @@ public class ListCommand extends BRCommand {
         setCommand("list");
         setMinArgs(0);
         setMaxArgs(3);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_LIST));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_LIST));
         setPermission("dxl.list");
         setPlayerCommand(true);
         setConsoleCommand(true);

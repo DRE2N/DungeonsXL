@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import java.util.Set;
 import org.bukkit.Material;
@@ -52,10 +52,10 @@ public class DeletePortalCommand extends BRCommand {
 
         if (dPortal != null) {
             dPortal.delete();
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
 
         } else {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(Messages.ERROR_NO_PROTECTED_BLOCK));
+            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NO_PROTECTED_BLOCK));
         }
     }
 

@@ -19,11 +19,11 @@ package io.github.dre2n.dungeonsxl.global;
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -166,7 +166,7 @@ public class DPortal extends GlobalProtection {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup == null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_JOIN_GROUP));
             return;
         }
 
@@ -194,7 +194,7 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
             return;
         }
 

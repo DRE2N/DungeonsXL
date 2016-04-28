@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.game;
 
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.sign.DSign;
@@ -270,7 +270,7 @@ public class Game {
         }
 
         int delay = world.getConfig().getTimeToNextWave();
-        sendMessage(plugin.getMessageConfig().getMessage(MessageConfig.Messages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));
+        sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));
 
         new BukkitRunnable() {
             @Override

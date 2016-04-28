@@ -18,13 +18,14 @@ package io.github.dre2n.dungeonsxl;
 
 import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.compatibility.Internals;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
 import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.command.*;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DataConfig;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
@@ -279,7 +280,7 @@ public class DungeonsXL extends BRPlugin {
      * load / reload a new instance of MessageConfig
      */
     public void loadMessageConfig(File file) {
-        messageConfig = new MessageConfig(file);
+        messageConfig = new MessageConfig(DMessages.class, file);
     }
 
     /**

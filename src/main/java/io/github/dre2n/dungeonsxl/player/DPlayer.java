@@ -18,13 +18,13 @@ package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Version;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.DLootInventory;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
@@ -87,7 +87,7 @@ public class DPlayer extends DGlobalPlayer {
     private long offlineTime;
     private String[] linesCopy;
 
-    private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, messageConfig.getMessage(Messages.PLAYER_TREASURES));
+    private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, messageConfig.getMessage(DMessages.PLAYER_TREASURES));
 
     private int initialLives = -1;
     private int lives;
@@ -579,7 +579,7 @@ public class DPlayer extends DGlobalPlayer {
                     // Captain here!
                     Player newCaptain = dGroup.getPlayers().get(0);
                     dGroup.setCaptain(newCaptain);
-                    MessageUtil.sendMessage(newCaptain, messageConfig.getMessage(Messages.PLAYER_NEW_CAPTAIN));
+                    MessageUtil.sendMessage(newCaptain, messageConfig.getMessage(DMessages.PLAYER_NEW_CAPTAIN));
                     // ...*flies away*
                 }
             }
@@ -648,7 +648,7 @@ public class DPlayer extends DGlobalPlayer {
     }
 
     public void finishFloor(String specifiedFloor) {
-        MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
+        MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(DMessages.PLAYER_FINISHED_DUNGEON));
         finished = true;
 
         DGroup dGroup = DGroup.getByPlayer(getPlayer());
@@ -663,7 +663,7 @@ public class DPlayer extends DGlobalPlayer {
         for (Player player : dGroup.getPlayers()) {
             DPlayer dPlayer = getByPlayer(player);
             if (!dPlayer.finished) {
-                MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
+                MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
                 return;
             }
         }
@@ -728,7 +728,7 @@ public class DPlayer extends DGlobalPlayer {
 
     public void finish(boolean message) {
         if (message) {
-            MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_FINISHED_DUNGEON));
+            MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(DMessages.PLAYER_FINISHED_DUNGEON));
         }
         finished = true;
 
@@ -748,7 +748,7 @@ public class DPlayer extends DGlobalPlayer {
             DPlayer dPlayer = getByPlayer(player);
             if (!dPlayer.finished) {
                 if (message) {
-                    MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(Messages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
+                    MessageUtil.sendMessage(this.getPlayer(), messageConfig.getMessage(DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS));
                 }
                 hasToWait = true;
 
@@ -829,14 +829,14 @@ public class DPlayer extends DGlobalPlayer {
                 }
             } else {
                 linesCopy = lines;
-                MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_SIGN_COPIED));
+                MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(DMessages.PLAYER_SIGN_COPIED));
             }
         } else {
             String info = "" + block.getType();
             if (block.getData() != 0) {
                 info = info + "," + block.getData();
             }
-            MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(Messages.PLAYER_BLOCK_INFO, info));
+            MessageUtil.sendMessage(getPlayer(), messageConfig.getMessage(DMessages.PLAYER_BLOCK_INFO, info));
         }
     }
 

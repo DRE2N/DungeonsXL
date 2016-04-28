@@ -16,16 +16,16 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.reward.LevelReward;
 import io.github.dre2n.dungeonsxl.reward.MoneyReward;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.reward.RewardTypeDefault;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;
 import org.bukkit.Bukkit;
@@ -208,12 +208,12 @@ public class GameChest {
                 msg = msg.substring(0, msg.length() - 1);
             }
 
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, msg));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, msg));
             if (moneyReward != 0) {
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
+                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
             }
             if (levelReward != 0) {
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LOOT_ADDED, levelReward + " levels"));
+                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, levelReward + " levels"));
             }
         }
     }
@@ -244,7 +244,7 @@ public class GameChest {
             }
 
             if (gameChest.used) {
-                MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), plugin.getMessageConfig().getMessage(Messages.ERROR_CHEST_IS_OPENED));
+                MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), plugin.getMessageConfig().getMessage(DMessages.ERROR_CHEST_IS_OPENED));
                 event.setCancelled(true);
                 continue;
             }

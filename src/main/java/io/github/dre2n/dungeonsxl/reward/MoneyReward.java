@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import org.bukkit.entity.Player;
 
 /**
@@ -59,7 +59,7 @@ public class MoneyReward extends Reward {
         }
 
         plugin.getEconomyProvider().depositPlayer(player, money);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.REWARD_GENERAL, plugin.getEconomyProvider().format(money)));
+        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REWARD_GENERAL, plugin.getEconomyProvider().format(money)));
     }
 
     @Override

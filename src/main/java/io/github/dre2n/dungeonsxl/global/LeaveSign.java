@@ -19,7 +19,7 @@ package io.github.dre2n.dungeonsxl.global;
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import java.util.HashSet;
@@ -112,7 +112,7 @@ public class LeaveSign extends GlobalProtection {
             DGroup dgroup = DGroup.getByPlayer(player);
             if (dgroup != null) {
                 dgroup.removePlayer(player);
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_LEAVE_GROUP));
+                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LEAVE_GROUP));
                 return true;
             }
         }

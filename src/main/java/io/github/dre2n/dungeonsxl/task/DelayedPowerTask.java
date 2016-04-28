@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.task;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.sign.RedstoneSign;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**

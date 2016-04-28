@@ -19,10 +19,10 @@ package io.github.dre2n.dungeonsxl.command;
 import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Internals;
+import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -40,7 +40,7 @@ public class ReloadCommand extends BRCommand {
         setCommand("reload");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(Messages.HELP_CMD_RELOAD));
+        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_RELOAD));
         setPermission("dxl.reload");
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -85,9 +85,9 @@ public class ReloadCommand extends BRCommand {
         plugin.loadDungeons();
 
         MessageUtil.sendPluginTag(sender, plugin);
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_RELOAD_DONE));
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(Messages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
+        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_RELOAD_DONE));
+        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
+        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
     }
 
 }

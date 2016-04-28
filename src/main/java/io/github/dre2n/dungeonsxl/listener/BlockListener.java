@@ -19,12 +19,10 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.MessageConfig.Messages;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GlobalProtection;
@@ -34,6 +32,8 @@ import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
+import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -78,8 +78,8 @@ public class BlockListener implements Listener {
         if (protection != null) {
             if (dGlobalPlayer.isInBreakMode()) {
                 protection.delete();
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_PROTECTED_BLOCK_DELETED));
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.CMD_BREAK_PROTECTED_MODE));
+                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
+                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.CMD_BREAK_PROTECTED_MODE));
                 dGlobalPlayer.setInBreakMode(false);
 
             } else {
@@ -220,16 +220,16 @@ public class BlockListener implements Listener {
                 }
 
                 if (!player.hasPermission(dsign.getType().getBuildPermission())) {
-                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_NO_PERMISSIONS));
+                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_NO_PERMISSIONS));
                 }
 
                 if (dsign.check()) {
                     editWorld.checkSign(block);
                     editWorld.getSigns().add(block);
-                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.PLAYER_SIGN_CREATED));
+                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_SIGN_CREATED));
 
                 } else {
-                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(Messages.ERROR_SIGN_WRONG_FORMAT));
+                    MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_SIGN_WRONG_FORMAT));
                 }
             }
         }
