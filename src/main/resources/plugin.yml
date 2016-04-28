@@ -20,6 +20,8 @@ permissions:
     default: op
   dxl.edit:
     default: op
+  dxl.enter:
+    default: op
   dxl.escape:
     default: true
   dxl.game:

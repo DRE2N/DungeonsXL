@@ -307,6 +307,7 @@ public class DungeonsXL extends BRPlugin {
                 new GameCommand(),
                 new GroupCommand(),
                 new InviteCommand(),
+                new EnterCommand(),
                 new LeaveCommand(),
                 new ListCommand(),
                 new LivesCommand(),
