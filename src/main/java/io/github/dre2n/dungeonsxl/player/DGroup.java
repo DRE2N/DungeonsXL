@@ -458,7 +458,7 @@ public class DGroup {
             for (Player player : dGroup.getPlayers()) {
                 DPlayer dPlayer = DPlayer.getByPlayer(player);
                 if (dPlayer == null) {
-                    continue;
+                    new DPlayer(player, gameWorld);
                 }
 
                 if (!dPlayer.isReady()) {
