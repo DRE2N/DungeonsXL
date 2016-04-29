@@ -24,6 +24,7 @@ import static io.github.dre2n.commons.util.messageutil.FatLetters.*;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -40,7 +41,7 @@ public class MainCommand extends BRCommand {
     public MainCommand() {
         setCommand("main");
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_MAIN));
-        setPermission("dxl.main");
+        setPermission(DPermissions.MAIN.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

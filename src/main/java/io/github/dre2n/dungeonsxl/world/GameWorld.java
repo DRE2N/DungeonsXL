@@ -31,6 +31,7 @@ import io.github.dre2n.dungeonsxl.game.GameChest;
 import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.sign.DSign;
@@ -558,7 +559,7 @@ public class GameWorld {
     }
 
     public static boolean canPlayDungeon(String map, Player player) {
-        if (player.hasPermission("dxl.ignoretimelimit")) {
+        if (DPermissions.hasPermission(player, DPermissions.IGNORE_TIME_LIMIT)) {
             return true;
         }
 
@@ -583,7 +584,7 @@ public class GameWorld {
     }
 
     public static boolean canPlayDungeon(String dungeon, DGroup dGroup) {
-        if (dGroup.getCaptain().hasPermission("dxl.ignoretimelimit")) {
+        if (DPermissions.hasPermission(dGroup.getCaptain(), DPermissions.IGNORE_TIME_LIMIT)) {
             return true;
         }
 
@@ -619,7 +620,7 @@ public class GameWorld {
     }
 
     public static boolean checkRequirements(String map, Player player) {
-        if (player.hasPermission("dxl.ignorerequirements")) {
+        if (DPermissions.hasPermission(player, DPermissions.IGNORE_REQUIREMENTS)) {
             return true;
         }
 
@@ -693,7 +694,7 @@ public class GameWorld {
     }
 
     public static boolean checkRequirements(String map, DGroup dGroup) {
-        if (dGroup.getCaptain().hasPermission("dxl.ignorerequirements")) {
+        if (DPermissions.hasPermission(dGroup.getCaptain(), DPermissions.IGNORE_REQUIREMENTS)) {
             return true;
         }
 

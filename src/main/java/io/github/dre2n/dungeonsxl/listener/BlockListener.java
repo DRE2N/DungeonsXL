@@ -29,6 +29,7 @@ import io.github.dre2n.dungeonsxl.global.GlobalProtection;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
@@ -160,7 +161,7 @@ public class BlockListener implements Listener {
 
         // Group Signs
         if (editWorld == null) {
-            if (!player.hasPermission("dxl.sign")) {
+            if (!DPermissions.hasPermission(player, DPermissions.SIGN)) {
                 return;
             }
 
@@ -219,8 +220,9 @@ public class BlockListener implements Listener {
                     return;
                 }
 
-                if (!player.hasPermission(dsign.getType().getBuildPermission())) {
+                if (!DPermissions.hasPermission(player, dsign.getType().getBuildPermission())) {
                     MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_NO_PERMISSIONS));
+                    return;
                 }
 
                 if (dsign.check()) {

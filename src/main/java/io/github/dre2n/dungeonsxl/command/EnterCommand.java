@@ -22,7 +22,9 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +42,7 @@ public class EnterCommand extends BRCommand {
         setMaxArgs(2);
         setCommand("enter");
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_ENTER));
-        setPermission("dxl.enter");
+        setPermission(DPermissions.ENTER.getNode());
         setPlayerCommand(true);
     }
 
@@ -72,7 +74,7 @@ public class EnterCommand extends BRCommand {
             joining = new DGroup(captain, game.getWorld().getMapName(), game.getDungeon() != null);
         }
 
-        if (joining.getCaptain() != captain && !sender.hasPermission("dxl.bypass")) {
+        if (joining.getCaptain() != captain && !DPermissions.hasPermission(sender, DPermissions.BYPASS)) {
             MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_CAPTAIN));
             return;
         }

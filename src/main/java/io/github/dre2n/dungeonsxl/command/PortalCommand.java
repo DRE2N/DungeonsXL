@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -42,7 +43,7 @@ public class PortalCommand extends BRCommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_PORTAL));
-        setPermission("dxl.portal");
+        setPermission(DPermissions.PORTAL.getNode());
         setPlayerCommand(true);
     }
 

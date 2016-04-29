@@ -22,7 +22,6 @@ import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
@@ -67,7 +66,6 @@ import org.bukkit.potion.PotionEffect;
  */
 public class DPlayer extends DGlobalPlayer {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
     protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     // Variables

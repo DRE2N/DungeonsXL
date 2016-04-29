@@ -23,6 +23,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import java.io.File;
 import org.bukkit.ChatColor;
@@ -42,7 +43,7 @@ public class MsgCommand extends BRCommand {
         setMaxArgs(-1);
         setCommand("msg");
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_MSG));
-        setPermission("dxl.msg");
+        setPermission(DPermissions.MESSAGE.getNode());
         setPlayerCommand(true);
     }
 

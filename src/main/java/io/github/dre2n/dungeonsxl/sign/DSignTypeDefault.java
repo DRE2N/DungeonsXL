@@ -16,32 +16,34 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.player.DPermissions;
+
 /**
  * @author Daniel Saukel
  */
 public enum DSignTypeDefault implements DSignType {
 
-    BLOCK("Block", "dxl.sign.block", false, BlockSign.class),
-    CHECKPOINT("Checkpoint", "dxl.sign.checkpoint", false, CheckpointSign.class),
-    CHEST("Chest", "dxl.sign.chest", false, ChestSign.class),
-    CHUNK_UPDATER("ChunkUpdater", "dxl.sign.chunkupdater", true, ChunkUpdaterSign.class),
-    CLASSES("Classes", "dxl.sign.classes", true, ClassesSign.class),
-    COMMAND("CMD", "dxl.sign.cmd", false, CommandSign.class),
-    END("End", "dxl.sign.end", false, EndSign.class),
-    FLOOR("Floor", "dxl.sign.floor", false, FloorSign.class),
-    INTERACT("Interact", "dxl.sign.interact", true, InteractSign.class),
-    LEAVE("Leave", "dxl.sign.leave", true, LeaveSign.class),
-    LOBBY("Lobby", "dxl.sign.lobby", true, LobbySign.class),
-    MOB("Mob", "dxl.sign.mob", false, DMobSign.class),
-    MESSAGE("MSG", "dxl.sign.msg", false, MessageSign.class),
-    MYTHIC_MOBS("MythicMobs", "dxl.sign.mob", false, MythicMobsSign.class),
-    PLACE("Place", "dxl.sign.place", false, PlaceSign.class),
-    READY("Ready", "dxl.sign.ready", true, ReadySign.class),
-    REDSTONE("Redstone", "dxl.sign.redstone", false, RedstoneSign.class),
-    SOUND_MESSAGE("SoundMSG", "dxl.sign.soundmsg", false, SoundMessageSign.class),
-    START("Start", "dxl.sign.start", true, StartSign.class),
-    TRIGGER("Trigger", "dxl.sign.trigger", true, TriggerSign.class),
-    WAVE("Wave", "dxl.sign.wave", false, WaveSign.class);
+    BLOCK("Block", "block", false, BlockSign.class),
+    CHECKPOINT("Checkpoint", "checkpoint", false, CheckpointSign.class),
+    CHEST("Chest", "chest", false, ChestSign.class),
+    CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, ChunkUpdaterSign.class),
+    CLASSES("Classes", "classes", true, ClassesSign.class),
+    COMMAND("CMD", "cmd", false, CommandSign.class),
+    END("End", "end", false, EndSign.class),
+    FLOOR("Floor", "floor", false, FloorSign.class),
+    INTERACT("Interact", "interact", true, InteractSign.class),
+    LEAVE("Leave", "leave", true, LeaveSign.class),
+    LOBBY("Lobby", "lobby", true, LobbySign.class),
+    MOB("Mob", "mob", false, DMobSign.class),
+    MESSAGE("MSG", "msg", false, MessageSign.class),
+    MYTHIC_MOBS("MythicMobs", "mob", false, MythicMobsSign.class),
+    PLACE("Place", "place", false, PlaceSign.class),
+    READY("Ready", "ready", true, ReadySign.class),
+    REDSTONE("Redstone", "redstone", false, RedstoneSign.class),
+    SOUND_MESSAGE("SoundMSG", "soundmsg", false, SoundMessageSign.class),
+    START("Start", "start", true, StartSign.class),
+    TRIGGER("Trigger", "trigger", true, TriggerSign.class),
+    WAVE("Wave", "wave", false, WaveSign.class);
 
     private String name;
     private String buildPermission;
@@ -62,7 +64,7 @@ public enum DSignTypeDefault implements DSignType {
 
     @Override
     public String getBuildPermission() {
-        return buildPermission;
+        return DPermissions.SIGN.getNode() + "." + buildPermission;
     }
 
     @Override

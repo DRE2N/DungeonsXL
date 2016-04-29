@@ -24,7 +24,9 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,7 +44,7 @@ public class GroupCommand extends BRCommand {
         setMinArgs(0);
         setMaxArgs(2);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_GROUP));
-        setPermission("dxl.group");
+        setPermission(DPermissions.GROUP.getNode());
         setPlayerCommand(true);
     }
 
@@ -91,7 +93,7 @@ public class GroupCommand extends BRCommand {
                 createGroup();
                 return;
 
-            } else if (args[1].equalsIgnoreCase("disband") && sender.hasPermission("dxl.group.admin")) {
+            } else if (args[1].equalsIgnoreCase("disband") && DPermissions.hasPermission(sender, DPermissions.GROUP_ADMIN)) {
                 disbandGroup(DGroup.getByName(args[2]));
                 return;
 
@@ -99,7 +101,7 @@ public class GroupCommand extends BRCommand {
                 joinGroup(DGroup.getByName(args[2]));
                 return;
 
-            } else if (args[1].equalsIgnoreCase("show") && sender.hasPermission("dxl.group.admin")) {
+            } else if (args[1].equalsIgnoreCase("show") && DPermissions.hasPermission(sender, DPermissions.GROUP_ADMIN)) {
                 showGroup(DGroup.getByName(args[2]));
                 return;
             }
@@ -191,7 +193,7 @@ public class GroupCommand extends BRCommand {
             return;
         }
 
-        if (!dGroup.getInvitedPlayers().contains(player) && !player.hasPermission("dxl.bypass")) {
+        if (!dGroup.getInvitedPlayers().contains(player) && !DPermissions.hasPermission(player, DPermissions.BYPASS)) {
             MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_INVITED, args[2]));
             return;
         }

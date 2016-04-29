@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
@@ -44,7 +45,7 @@ public class ListCommand extends BRCommand {
         setMinArgs(0);
         setMaxArgs(3);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_LIST));
-        setPermission("dxl.list");
+        setPermission(DPermissions.LIST.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

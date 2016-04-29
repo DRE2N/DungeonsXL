@@ -22,6 +22,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -38,7 +39,7 @@ public class BreakCommand extends BRCommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_BREAK));
-        setPermission("dxl.break");
+        setPermission(DPermissions.BREAK.getNode());
         setPlayerCommand(true);
     }
 

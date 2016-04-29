@@ -23,6 +23,7 @@ import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -41,7 +42,7 @@ public class ReloadCommand extends BRCommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_RELOAD));
-        setPermission("dxl.reload");
+        setPermission(DPermissions.RELOAD.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

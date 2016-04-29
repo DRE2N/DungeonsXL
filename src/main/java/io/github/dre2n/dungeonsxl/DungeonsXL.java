@@ -38,6 +38,7 @@ import io.github.dre2n.dungeonsxl.listener.HangingListener;
 import io.github.dre2n.dungeonsxl.listener.PlayerListener;
 import io.github.dre2n.dungeonsxl.listener.WorldListener;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
@@ -124,6 +125,7 @@ public class DungeonsXL extends BRPlugin {
         // Load Language 2
         loadMessageConfig(new File(getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
         loadDCommands();
+        DPermissions.register();
         loadGameTypes();
         loadRequirementTypes();
         loadRewardTypes();

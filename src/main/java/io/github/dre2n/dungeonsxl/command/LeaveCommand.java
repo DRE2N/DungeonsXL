@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.command.CommandSender;
@@ -42,7 +43,7 @@ public class LeaveCommand extends BRCommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_LEAVE));
-        setPermission("dxl.leave");
+        setPermission(DPermissions.LEAVE.getNode());
         setPlayerCommand(true);
     }
 

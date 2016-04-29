@@ -28,6 +28,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DGlobalPlayer {
 
+    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+
     protected Player player;
 
     private boolean breakMode;
@@ -40,7 +42,7 @@ public class DGlobalPlayer {
     public DGlobalPlayer(Player player) {
         this.player = player;
 
-        DungeonsXL.getInstance().getDPlayers().addPlayer(this);
+        plugin.getDPlayers().addPlayer(this);
     }
 
     public DGlobalPlayer(DGlobalPlayer dPlayer) {
@@ -51,7 +53,7 @@ public class DGlobalPlayer {
         respawnInventory = dPlayer.getRespawnInventory();
         respawnArmor = dPlayer.getRespawnArmor();
 
-        DungeonsXL.getInstance().getDPlayers().addPlayer(this);
+        plugin.getDPlayers().addPlayer(this);
     }
 
     /**
@@ -155,6 +157,24 @@ public class DGlobalPlayer {
      */
     public void setRespawnArmor(ItemStack[] respawnArmor) {
         this.respawnArmor = respawnArmor;
+    }
+
+    /**
+     * @param permission
+     * the permission to check
+     * @return if the player has the permission
+     */
+    public boolean hasPermission(DPermissions permission) {
+        return DPermissions.hasPermission(player, permission);
+    }
+
+    /**
+     * @param permission
+     * the permission to check
+     * @return if the player has the permission
+     */
+    public boolean hasPermission(String permission) {
+        return DPermissions.hasPermission(player, permission);
     }
 
 }

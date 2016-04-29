@@ -22,6 +22,7 @@ import io.github.dre2n.commons.util.UUIDUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.command.CommandSender;
 
@@ -38,7 +39,7 @@ public class UninviteCommand extends BRCommand {
         setMinArgs(2);
         setMaxArgs(2);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_UNINVITE));
-        setPermission("dxl.uninvite");
+        setPermission(DPermissions.UNINVITE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

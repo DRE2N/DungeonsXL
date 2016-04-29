@@ -33,6 +33,7 @@ import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
@@ -155,13 +156,13 @@ public class PlayerListener implements Listener {
             if (GameWorld.getByWorld(player.getWorld()) != null || EditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.ENDER_CHEST) {
-                        if (!player.hasPermission("dxl.bypass")) {
+                        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
                             MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_ENDERCHEST));
                             event.setCancelled(true);
                         }
 
                     } else if (clickedBlock.getType() == Material.BED_BLOCK) {
-                        if (!player.hasPermission("dxl.bypass")) {
+                        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
                             MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_BED));
                             event.setCancelled(true);
                         }
@@ -173,7 +174,7 @@ public class PlayerListener implements Listener {
             if (GameWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.DISPENSER) {
-                        if (!player.hasPermission("dxl.bypass")) {
+                        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
                             MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_DISPENSER));
                             event.setCancelled(true);
                         }
@@ -319,7 +320,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (dPlayer.isEditing() && !plugin.getMainConfig().getDropItems() && !player.hasPermission("dxl.insecure")) {
+        if (dPlayer.isEditing() && !plugin.getMainConfig().getDropItems() && !DPermissions.hasPermission(player, DPermissions.INSECURE)) {
             event.setCancelled(true);
         }
 
@@ -425,7 +426,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (!player.hasPermission("dxl.bypass")) {
+        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
             event.setCancelled(true);
         }
     }
@@ -560,7 +561,7 @@ public class PlayerListener implements Listener {
     // Deny Player Cmds
     @EventHandler(priority = EventPriority.HIGH)
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (event.getPlayer().hasPermission("dxl.bypass")) {
+        if (DPermissions.hasPermission(event.getPlayer(), DPermissions.BYPASS)) {
             return;
         }
 
@@ -575,7 +576,7 @@ public class PlayerListener implements Listener {
         GameWorld gameWorld = GameWorld.getByWorld(dPlayer.getWorld());
 
         if (dPlayer.isEditing()) {
-            if (event.getPlayer().hasPermission("dxl.cmdedit")) {
+            if (DPermissions.hasPermission(event.getPlayer(), DPermissions.CMD_EDIT)) {
                 return;
 
             } else {
@@ -614,7 +615,7 @@ public class PlayerListener implements Listener {
 
         GameChest.onOpenInventory(event);
 
-        if (!plugin.getMainConfig().getOpenInventories() && !event.getPlayer().hasPermission("dxl.insecure")) {
+        if (!plugin.getMainConfig().getOpenInventories() && !DPermissions.hasPermission(event.getPlayer(), DPermissions.INSECURE)) {
             World world = event.getPlayer().getWorld();
             if (event.getInventory().getType() != InventoryType.CREATIVE && EditWorld.getByWorld(world) != null) {
                 event.setCancelled(true);

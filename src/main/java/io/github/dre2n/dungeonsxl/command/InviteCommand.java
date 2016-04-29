@@ -22,6 +22,7 @@ import io.github.dre2n.commons.util.UUIDUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.command.CommandSender;
 
@@ -38,7 +39,7 @@ public class InviteCommand extends BRCommand {
         setMaxArgs(2);
         setCommand("invite");
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_INVITE));
-        setPermission("dxl.invite");
+        setPermission(DPermissions.INVITE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

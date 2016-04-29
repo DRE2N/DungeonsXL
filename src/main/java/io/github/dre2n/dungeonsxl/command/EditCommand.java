@@ -21,7 +21,9 @@ import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.command.CommandSender;
@@ -52,7 +54,7 @@ public class EditCommand extends BRCommand {
         DGroup dGroup = DGroup.getByPlayer(player);
         DPlayer dPlayer = DPlayer.getByPlayer(player);
 
-        if (!(EditWorld.isInvitedPlayer(mapName, player.getUniqueId(), player.getName()) || player.hasPermission("dxl.edit"))) {
+        if (!(EditWorld.isInvitedPlayer(mapName, player.getUniqueId(), player.getName()) || DPermissions.hasPermission(player, DPermissions.EDIT))) {
             MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NO_PERMISSIONS));
             return;
         }

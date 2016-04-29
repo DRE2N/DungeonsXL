@@ -25,7 +25,9 @@ import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
@@ -46,7 +48,7 @@ public class PlayCommand extends BRCommand {
         setMinArgs(1);
         setMaxArgs(2);
         setHelp(messageConfig.getMessage(DMessages.HELP_CMD_PLAY));
-        setPermission("dxl.play");
+        setPermission(DPermissions.PLAY.getNode());
         setPlayerCommand(true);
     }
 
@@ -113,7 +115,7 @@ public class PlayCommand extends BRCommand {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup != null) {
-            if (!dGroup.getCaptain().equals(player) && !player.hasPermission("dxl.bypass")) {
+            if (!dGroup.getCaptain().equals(player) && !DPermissions.hasPermission(player, DPermissions.BYPASS)) {
                 MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_CAPTAIN));
             }
 
