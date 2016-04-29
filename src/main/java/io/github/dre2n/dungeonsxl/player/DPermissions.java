@@ -153,6 +153,10 @@ public enum DPermissions {
      * @return if the player has the permission
      */
     public static boolean hasPermission(CommandSender sender, String permission) {
+        if (sender.hasPermission(permission)) {
+            return true;
+        }
+
         DPermissions dPermission = null;
         if (EnumUtil.isValidEnum(DPermissions.class, permission)) {
             dPermission = DPermissions.valueOf(permission);
@@ -160,12 +164,18 @@ public enum DPermissions {
         } else if (DPermissions.getByNode(permission) != null) {
             dPermission = DPermissions.getByNode(permission);
         }
-        
+
         if (dPermission == null) {
             return false;
         }
 
-        return hasPermission(sender, dPermission);
+        for (DPermissions parent : DPermissions.values()) {
+            if (parent.getChildren().contains(dPermission) && sender.hasPermission(parent.getNode())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
