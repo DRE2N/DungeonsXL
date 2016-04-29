@@ -79,5 +79,5 @@ Supported.
 * Towny
 * Corpses
 
-Many incompatibilities can be fixed with [PerWorldPlugins](http://dev.bukkit.org/bukkit-plugins/perworldplugins/) ([fork for 1.8+](http://dev.bukkit.org/bukkit-plugins/perworldplugins-1-8/)).
+Many incompatibilities can be fixed with [PerWorldPlugins](http://dev.bukkit.org/bukkit-plugins/perworldplugins/) ([fork for 1.8+](https://www.spigotmc.org/resources/perworldplugins-unofficial-update-version.6454/)).
 Try to add the incompatible plugins only to the worlds where you need them.
