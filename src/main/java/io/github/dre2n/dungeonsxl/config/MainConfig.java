@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 3;
+    public static final int CONFIG_VERSION = 4;
 
     private String language = "en";
     private boolean enableEconomy = false;
@@ -43,7 +43,7 @@ public class MainConfig extends BRConfig {
 
     /* Secure Mode*/
     private boolean secureModeEnabled = false;
-    private long secureModeCheckInterval = 100;
+    private double secureModeCheckInterval = 5;
     private boolean openInventories = false;
     private boolean dropItems = false;
     private List<String> editCommandWhitelist = new ArrayList<>();
@@ -134,7 +134,7 @@ public class MainConfig extends BRConfig {
      * @return the interval for the check task
      */
     public long getSecureModeCheckInterval() {
-        return secureModeCheckInterval;
+        return (long) (secureModeCheckInterval * 20);
     }
 
     /**
@@ -254,7 +254,7 @@ public class MainConfig extends BRConfig {
         }
 
         if (config.contains("secureMode.checkInterval")) {
-            secureModeCheckInterval = config.getLong("secureMode.checkInterval");
+            secureModeCheckInterval = config.getDouble("secureMode.checkInterval");
         }
 
         if (config.contains("secureMode.editCommandWhitelist")) {
