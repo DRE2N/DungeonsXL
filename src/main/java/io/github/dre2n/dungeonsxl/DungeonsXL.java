@@ -45,6 +45,7 @@ import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
 import io.github.dre2n.dungeonsxl.sign.DSigns;
 import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
+import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.Triggers;
@@ -81,6 +82,7 @@ public class DungeonsXL extends BRPlugin {
     private BukkitTask worldUnloadTask;
     private BukkitTask lazyUpdateTask;
     private BukkitTask updateTask;
+    private BukkitTask secureModeTask;
 
     private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<EditWorld> editWorlds = new CopyOnWriteArrayList<>();
@@ -144,6 +146,9 @@ public class DungeonsXL extends BRPlugin {
         startWorldUnloadTask(1200L);
         startLazyUpdateTask(20L);
         startUpdateTask(20L);
+        if (mainConfig.isSecureModeEnabled()) {
+            startSecureModeTask(mainConfig.getSecureModeCheckInterval());
+        }
     }
 
     @Override
@@ -478,6 +483,20 @@ public class DungeonsXL extends BRPlugin {
      */
     public void startUpdateTask(long period) {
         updateTask = new UpdateTask().runTaskTimer(this, 0L, period);
+    }
+
+    /**
+     * @return the secureModeTask
+     */
+    public BukkitTask getSecureModeTask() {
+        return secureModeTask;
+    }
+
+    /**
+     * start a new SecureModeTask
+     */
+    public void startSecureModeTask(long period) {
+        updateTask = new SecureModeTask().runTaskTimer(this, 0L, period);
     }
 
     /**

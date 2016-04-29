@@ -46,6 +46,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -56,6 +57,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -312,7 +314,15 @@ public class PlayerListener implements Listener {
     public void onDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
 
-        // Deny dropping things at the lobby
+        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        if (dPlayer == null) {
+            return;
+        }
+
+        if (dPlayer.isEditing() && !plugin.getMainConfig().getDropItems() && !player.hasPermission("dxl.insecure")) {
+            event.setCancelled(true);
+        }
+
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
             return;
@@ -320,11 +330,6 @@ public class PlayerListener implements Listener {
 
         if (!dGroup.isPlaying()) {
             event.setCancelled(true);
-            return;
-        }
-
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
-        if (dPlayer == null) {
             return;
         }
 
@@ -603,8 +608,17 @@ public class PlayerListener implements Listener {
     // Inventory Events
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryOpen(InventoryOpenEvent event) {
-        if (event.getPlayer() instanceof Player) {
-            GameChest.onOpenInventory(event);
+        if (!(event.getPlayer() instanceof Player)) {
+            return;
+        }
+
+        GameChest.onOpenInventory(event);
+
+        if (!plugin.getMainConfig().getOpenInventories() && !event.getPlayer().hasPermission("dxl.insecure")) {
+            World world = event.getPlayer().getWorld();
+            if (event.getInventory().getType() != InventoryType.CREATIVE && EditWorld.getByWorld(world) != null) {
+                event.setCancelled(true);
+            }
         }
     }
 

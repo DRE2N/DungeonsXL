@@ -66,3 +66,5 @@ permissions:
     default: op
   dxl.cmdedit:
     default: op
+  dxl.insecure:
+    default: op

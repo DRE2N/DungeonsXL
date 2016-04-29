@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 2;
+    public static final int CONFIG_VERSION = 3;
 
     private String language = "en";
     private boolean enableEconomy = false;
@@ -40,6 +40,12 @@ public class MainConfig extends BRConfig {
 
     /* Misc */
     private boolean sendFloorTitle = true;
+
+    /* Secure Mode*/
+    private boolean secureModeEnabled = false;
+    private long secureModeCheckInterval = 100;
+    private boolean openInventories = false;
+    private boolean dropItems = false;
     private List<String> editCommandWhitelist = new ArrayList<>();
 
     /* Default Dungeon Settings */
@@ -59,14 +65,6 @@ public class MainConfig extends BRConfig {
      */
     public String getLanguage() {
         return language;
-    }
-
-    /**
-     * @param language
-     * the language to set
-     */
-    public void setLanguage(String language) {
-        this.language = language;
     }
 
     /**
@@ -112,6 +110,34 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @return if the secure mode is enabled
+     */
+    public boolean isSecureModeEnabled() {
+        return secureModeEnabled;
+    }
+
+    /**
+     * @return if players may open inventories while editing; false if secure mode disabled
+     */
+    public boolean getOpenInventories() {
+        return openInventories && secureModeEnabled;
+    }
+
+    /**
+     * @return if players may drop items while editing; false if secure mode disabled
+     */
+    public boolean getDropItems() {
+        return dropItems && secureModeEnabled;
+    }
+
+    /**
+     * @return the interval for the check task
+     */
+    public long getSecureModeCheckInterval() {
+        return secureModeCheckInterval;
+    }
+
+    /**
      * @return the editCommandWhitelist
      */
     public List<String> getEditCommandWhitelist() {
@@ -123,14 +149,6 @@ public class MainConfig extends BRConfig {
      */
     public WorldConfig getDefaultWorldConfig() {
         return defaultWorldConfig;
-    }
-
-    /**
-     * @param defaultWorldConfig
-     * the defaultWorldConfig to set
-     */
-    public void setDefaultWorldConfig(WorldConfig defaultWorldConfig) {
-        this.defaultWorldConfig = defaultWorldConfig;
     }
 
     @Override
@@ -164,8 +182,24 @@ public class MainConfig extends BRConfig {
             config.set("sendFloorTitle", sendFloorTitle);
         }
 
-        if (!config.contains("editCommandWhitelist")) {
-            config.set("editCommandWhitelist", editCommandWhitelist);
+        if (!config.contains("secureMode.enabled")) {
+            config.set("secureMode.enabled", secureModeEnabled);
+        }
+
+        if (!config.contains("secureMode.openInventories")) {
+            config.set("secureMode.openInventories", openInventories);
+        }
+
+        if (!config.contains("secureMode.dropItems")) {
+            config.set("secureMode.dropItems", dropItems);
+        }
+
+        if (!config.contains("secureMode.checkInterval")) {
+            config.set("secureMode.checkInterval", secureModeCheckInterval);
+        }
+
+        if (!config.contains("secureMode.editCommandWhitelist")) {
+            config.set("secureMode.editCommandWhitelist", editCommandWhitelist);
         }
 
         /* Default Dungeon Config */
@@ -207,14 +241,30 @@ public class MainConfig extends BRConfig {
             sendFloorTitle = config.getBoolean("sendFloorTitle");
         }
 
-        if (config.contains("editCommandWhitelist")) {
-            editCommandWhitelist = config.getStringList("editCommandWhitelist");
+        if (config.contains("secureMode.enabled")) {
+            secureModeEnabled = config.getBoolean("secureMode.enabled");
+        }
+
+        if (config.contains("secureMode.openInventories")) {
+            openInventories = config.getBoolean("secureMode.openInventories");
+        }
+
+        if (config.contains("secureMode.dropItems")) {
+            dropItems = config.getBoolean("secureMode.dropItems");
+        }
+
+        if (config.contains("secureMode.checkInterval")) {
+            secureModeCheckInterval = config.getLong("secureMode.checkInterval");
+        }
+
+        if (config.contains("secureMode.editCommandWhitelist")) {
+            editCommandWhitelist = config.getStringList("secureMode.editCommandWhitelist");
         }
 
         /* Default Dungeon Config */
         ConfigurationSection configSection = config.getConfigurationSection("default");
         if (configSection != null) {
-            setDefaultWorldConfig(new WorldConfig(configSection));
+            defaultWorldConfig = new WorldConfig(configSection);
             WorldConfig.defaultConfig = defaultWorldConfig;// TODO
         }
     }

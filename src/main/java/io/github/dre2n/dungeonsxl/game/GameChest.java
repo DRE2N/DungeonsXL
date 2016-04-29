@@ -220,6 +220,7 @@ public class GameChest {
 
     /* Statics */
     /**
+     * @deprecated
      * @param event
      * event.getPlayer() has to be a Player
      */
