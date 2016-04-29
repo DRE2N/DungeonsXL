@@ -17,9 +17,12 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.task.MythicMobSpawnTask;
+import io.github.dre2n.dungeonsxl.mob.ExternalMobPlugin;
+import io.github.dre2n.dungeonsxl.mob.ExternalMobProvider;
+import io.github.dre2n.dungeonsxl.task.ExternalMobSpawnTask;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -31,24 +34,25 @@ import org.bukkit.scheduler.BukkitTask;
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class MythicMobsSign extends DSign implements MobSign {
+public class ExternalMobSign extends DSign implements MobSign {
 
-    private DSignType type = DSignTypeDefault.MYTHIC_MOBS;
+    private DSignType type = DSignTypeDefault.EXTERNAL_MOB;
 
     // Variables
     private String mob;
     private int maxInterval = 1;
     private int interval = 0;
     private int amount = 1;
+    private ExternalMobProvider provider;
     private int initialAmount = 1;
     private boolean initialized;
     private boolean active;
     private BukkitTask task;
     private Location spawnLocation;
-    private LivingEntity mythicMob;
-    private ArrayList<Entity> mythicMobs = new ArrayList<>();
+    private LivingEntity externalMob;
+    private List<Entity> externalMobs = new ArrayList<>();
 
-    public MythicMobsSign(Sign sign, GameWorld gameWorld) {
+    public ExternalMobSign(Sign sign, GameWorld gameWorld) {
         super(sign, gameWorld);
     }
 
@@ -134,7 +138,7 @@ public class MythicMobsSign extends DSign implements MobSign {
 
     @Override
     public void initializeTask() {
-        task = new MythicMobSpawnTask(this).runTaskTimer(plugin, 0L, 20L);
+        task = new ExternalMobSpawnTask(this, provider).runTaskTimer(plugin, 0L, 20L);
     }
 
     /**
@@ -153,33 +157,41 @@ public class MythicMobsSign extends DSign implements MobSign {
     }
 
     /**
-     * @return the mythicMob
+     * @return the external mob
      */
-    public LivingEntity getMythicMob() {
-        return mythicMob;
+    public LivingEntity getExternalMob() {
+        return externalMob;
     }
 
     /**
-     * @param mythicMob
-     * the mythicMob to set
+     * @param externalMob
+     * the external mob to set
      */
-    public void setMythicMob(LivingEntity mythicMob) {
-        this.mythicMob = mythicMob;
+    public void setExternalMob(LivingEntity externalMob) {
+        this.externalMob = externalMob;
     }
 
     /**
-     * @return the mythicMobs
+     * @return the externalMobs
      */
-    public ArrayList<Entity> getMythicMobs() {
-        return mythicMobs;
+    public List<Entity> getExternalMobs() {
+        return externalMobs;
     }
 
     /**
-     * @param mythicMobs
-     * the mythicMobs to set
+     * @param externalMob
+     * the externalMob to add
      */
-    public void setMythicMobs(ArrayList<Entity> mythicMobs) {
-        this.mythicMobs = mythicMobs;
+    public void addExternalMob(Entity externalMob) {
+        externalMobs.add(externalMob);
+    }
+
+    /**
+     * @param externalMob
+     * the external mob to remove
+     */
+    public void removeExternalMob(Entity externalMob) {
+        externalMobs.remove(externalMob);
     }
 
     @Override
@@ -194,7 +206,7 @@ public class MythicMobsSign extends DSign implements MobSign {
         }
 
         String[] atributes = lines[2].split(",");
-        if (atributes.length == 2) {
+        if (atributes.length == 2 || atributes.length == 3) {
             return true;
 
         } else {
@@ -205,19 +217,24 @@ public class MythicMobsSign extends DSign implements MobSign {
     @Override
     public void onInit() {
         String lines[] = getSign().getLines();
-        if (lines[1].isEmpty() || lines[2].isEmpty()) {
-        } else {
-            String mob = lines[1];
-            if (mob != null) {
-                String[] attributes = lines[2].split(",");
-                if (attributes.length == 2) {
-                    this.setMob(mob);
-                    setMaxInterval(NumberUtil.parseInt(attributes[0]));
-                    setAmount(NumberUtil.parseInt(attributes[1]));
-                    initialAmount = amount;
+
+        String mob = lines[1];
+        if (mob != null) {
+            String[] attributes = lines[2].split(",");
+            if (attributes.length >= 2) {
+                this.setMob(mob);
+                setMaxInterval(NumberUtil.parseInt(attributes[0]));
+                setAmount(NumberUtil.parseInt(attributes[1]));
+                initialAmount = amount;
+
+                if (attributes.length == 3) {
+                    provider = plugin.getExternalMobProviders().getByIdentifier(attributes[2]);
+                } else {
+                    provider = ExternalMobPlugin.MYTHIC_MOBS;
                 }
             }
         }
+
         getSign().getBlock().setType(Material.AIR);
 
         initialized = true;
@@ -256,13 +273,13 @@ public class MythicMobsSign extends DSign implements MobSign {
         }
     }
 
-    public void setMythicMobs() {
+    public void setExternalMobs() {
         for (Entity entity : spawnLocation.getChunk().getEntities()) {
             if (entity.getLocation().getX() >= spawnLocation.getX() - 1 && entity.getLocation().getX() <= spawnLocation.getX() + 1 && entity.getLocation().getY() >= spawnLocation.getY() - 1
                     && entity.getLocation().getY() <= spawnLocation.getY() + 1 && entity.getLocation().getZ() >= spawnLocation.getZ() - 1 && entity.getLocation().getZ() <= spawnLocation.getZ() + 1
-                    && !mythicMobs.contains(entity) && !(entity instanceof Player)) {
-                setMythicMob((LivingEntity) entity);
-                mythicMobs.add(entity);
+                    && !externalMobs.contains(entity) && !(entity instanceof Player)) {
+                setExternalMob((LivingEntity) entity);
+                externalMobs.add(entity);
                 return;
             }
         }

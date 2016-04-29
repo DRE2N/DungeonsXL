@@ -17,7 +17,8 @@
 package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.dungeonsxl.mob.DMob;
-import io.github.dre2n.dungeonsxl.sign.MythicMobsSign;
+import io.github.dre2n.dungeonsxl.mob.ExternalMobProvider;
+import io.github.dre2n.dungeonsxl.sign.ExternalMobSign;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -26,12 +27,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class MythicMobSpawnTask extends BukkitRunnable {
+public class ExternalMobSpawnTask extends BukkitRunnable {
 
-    private MythicMobsSign sign;
+    private ExternalMobSign sign;
+    private ExternalMobProvider provider;
 
-    public MythicMobSpawnTask(MythicMobsSign sign) {
+    public ExternalMobSpawnTask(ExternalMobSign sign, ExternalMobProvider provider) {
         this.sign = sign;
+        this.provider = provider;
     }
 
     @Override
@@ -46,12 +49,12 @@ public class MythicMobSpawnTask extends BukkitRunnable {
                 double y = sign.getSpawnLocation().getY();
                 double z = sign.getSpawnLocation().getZ();
 
-                String command = "mythicmobs mobs spawn " + sign.getMob() + " 1 DXL_Game_" + gameWorld.getId() + "," + x + "," + y + "," + z;
+                String command = provider.getCommand(sign.getMob(), "DXL_Game_" + gameWorld.getId(), x, y, z);
                 Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
 
-                sign.setMythicMobs();
-                if (sign.getMythicMob() != null) {
-                    new DMob(sign.getMythicMob(), sign.getGameWorld(), null, sign.getMob());
+                sign.setExternalMobs();
+                if (sign.getExternalMob() != null) {
+                    new DMob(sign.getExternalMob(), sign.getGameWorld(), null, sign.getMob());
                 }
 
                 // Set the amount

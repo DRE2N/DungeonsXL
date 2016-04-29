@@ -36,6 +36,7 @@ import io.github.dre2n.dungeonsxl.listener.EntityListener;
 import io.github.dre2n.dungeonsxl.listener.HangingListener;
 import io.github.dre2n.dungeonsxl.listener.PlayerListener;
 import io.github.dre2n.dungeonsxl.listener.WorldListener;
+import io.github.dre2n.dungeonsxl.mob.ExternalMobProviders;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -78,6 +79,7 @@ public class DungeonsXL extends BRPlugin {
     private Triggers triggers;
     private Dungeons dungeons;
     private GlobalProtections protections;
+    private ExternalMobProviders dMobProviders;
     private DPlayers dPlayers;
 
     private BukkitTask worldUnloadTask;
@@ -133,6 +135,7 @@ public class DungeonsXL extends BRPlugin {
         loadDSigns();
         loadDungeons();
         loadGlobalProtections();
+        loadExternalMobProviders();
         loadDPlayers();
 
         manager.registerEvents(new EntityListener(), this);
@@ -429,6 +432,20 @@ public class DungeonsXL extends BRPlugin {
      */
     public void loadGlobalProtections() {
         protections = new GlobalProtections();
+    }
+
+    /**
+     * @return the loaded instance of ExternalMobProviders
+     */
+    public ExternalMobProviders getExternalMobProviders() {
+        return dMobProviders;
+    }
+
+    /**
+     * load / reload a new instance of ExternalMobProviders
+     */
+    public void loadExternalMobProviders() {
+        dMobProviders = new ExternalMobProviders();
     }
 
     /**

@@ -19,7 +19,9 @@ package io.github.dre2n.dungeonsxl.config;
 import io.github.dre2n.commons.config.BRConfig;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -27,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 4;
+    public static final int CONFIG_VERSION = 5;
 
     private String language = "en";
     private boolean enableEconomy = false;
@@ -40,6 +42,7 @@ public class MainConfig extends BRConfig {
 
     /* Misc */
     private boolean sendFloorTitle = true;
+    private Map<String, Object> externalMobProviders = new HashMap<>();
 
     /* Secure Mode*/
     private boolean secureModeEnabled = false;
@@ -100,6 +103,13 @@ public class MainConfig extends BRConfig {
      */
     public boolean getSendFloorTitle() {
         return sendFloorTitle;
+    }
+
+    /**
+     * @return the custom external mob providers
+     */
+    public Map<String, Object> getExternalMobProviders() {
+        return externalMobProviders;
     }
 
     /**
@@ -182,6 +192,10 @@ public class MainConfig extends BRConfig {
             config.set("sendFloorTitle", sendFloorTitle);
         }
 
+        if (!config.contains("externalMobProviders")) {
+            config.createSection("externalMobProviders");
+        }
+
         if (!config.contains("secureMode.enabled")) {
             config.set("secureMode.enabled", secureModeEnabled);
         }
@@ -239,6 +253,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("sendFloorTitle")) {
             sendFloorTitle = config.getBoolean("sendFloorTitle");
+        }
+
+        if (config.contains("externalMobProviders")) {
+            externalMobProviders = config.getConfigurationSection("externalMobProviders").getValues(false);
         }
 
         if (config.contains("secureMode.enabled")) {
