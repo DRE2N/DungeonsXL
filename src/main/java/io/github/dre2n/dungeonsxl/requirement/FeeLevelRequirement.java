@@ -18,6 +18,8 @@ package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -51,7 +53,13 @@ public class FeeLevelRequirement extends Requirement {
 
     @Override
     public void demand(Player player) {
-        player.setLevel(player.getLevel() - fee);
+        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        if (dPlayer == null) {
+            return;
+        }
+        DSavePlayer dSavePlayer = dPlayer.getSavePlayer();
+        dSavePlayer.setOldLevel(dSavePlayer.getOldLevel() - fee);
+
         MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REQUIREMENT_FEE, fee + " levels"));
     }
 

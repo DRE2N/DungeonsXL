@@ -189,15 +189,19 @@ public class GameChest {
                     if (itemStack.getItemMeta().hasDisplayName()) {
                         name = itemStack.getItemMeta().getDisplayName();
                     }
-
                 }
 
-                if (name == null && Bukkit.getPluginManager().getPlugin("Vault") != null) {
-                    ItemInfo itemInfo = Items.itemByStack(itemStack);
-                    if (itemInfo != null) {
-                        name = itemInfo.getName();
+                if (name == null) {
+                    if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+                        ItemInfo itemInfo = Items.itemByStack(itemStack);
+                        if (itemInfo != null) {
+                            name = itemInfo.getName();
+                        } else {
+                            name = itemStack.getType().name();
+                        }
+
                     } else {
-                        name = itemStack.getType().name();
+                        name = itemStack.getType().toString();
                     }
                 }
 
@@ -209,7 +213,7 @@ public class GameChest {
             }
 
             MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, msg));
-            if (moneyReward != 0) {
+            if (moneyReward != 0 && plugin.getEconomyProvider() != null) {
                 MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
             }
             if (levelReward != 0) {

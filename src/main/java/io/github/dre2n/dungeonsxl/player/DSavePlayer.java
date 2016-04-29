@@ -99,8 +99,7 @@ public class DSavePlayer {
     }
 
     /**
-     * @return
-     * the uuid
+     * @return the uuid
      */
     public UUID getUniqueId() {
         return UUID.fromString(uuid);
@@ -114,10 +113,26 @@ public class DSavePlayer {
     }
 
     /**
+     * @param location
+     * the location to set
+     */
+    public void setOldLocation(Location location) {
+        oldLocation = location;
+    }
+
+    /**
      * @return the items in the old inventory
      */
     public List<ItemStack> getOldInventory() {
         return oldInventory;
+    }
+
+    /**
+     * @param inventory
+     * the inventory to set
+     */
+    public void setOldInventory(List<ItemStack> inventory) {
+        oldInventory = inventory;
     }
 
     /**
@@ -128,10 +143,26 @@ public class DSavePlayer {
     }
 
     /**
+     * @param inventory
+     * the inventory to set
+     */
+    public void setOldArmor(List<ItemStack> inventory) {
+        oldArmor = inventory;
+    }
+
+    /**
      * @return the items in the old off-hand slot
      */
     public ItemStack getOldOffHand() {
         return oldOffHand;
+    }
+
+    /**
+     * @param offHand
+     * the off hand item to set
+     */
+    public void setOldOffHand(ItemStack offHand) {
+        oldOffHand = offHand;
     }
 
     /**
@@ -142,10 +173,26 @@ public class DSavePlayer {
     }
 
     /**
+     * @param level
+     * the level to set
+     */
+    public void setOldLevel(int level) {
+        oldLvl = level;
+    }
+
+    /**
      * @return the old exp
      */
     public int getOldExp() {
         return oldExp;
+    }
+
+    /**
+     * @param exp
+     * the amount of exp to set
+     */
+    public void setOldExp(int exp) {
+        oldExp = exp;
     }
 
     /**
@@ -156,10 +203,26 @@ public class DSavePlayer {
     }
 
     /**
+     * @param health
+     * the health to set
+     */
+    public void setOldHealth(int health) {
+        oldHealth = health;
+    }
+
+    /**
      * @return the old food level
      */
     public int getOldFoodLevel() {
         return oldFoodLevel;
+    }
+
+    /**
+     * @param foodLevel
+     * the food level to set
+     */
+    public void setOldFoodLevel(int foodLevel) {
+        oldFoodLevel = foodLevel;
     }
 
     /**
@@ -170,6 +233,14 @@ public class DSavePlayer {
     }
 
     /**
+     * @param fireTicks
+     * the fire ticks to set
+     */
+    public void setFireTicks(int fireTicks) {
+        oldFireTicks = fireTicks;
+    }
+
+    /**
      * @return the old GameMode
      */
     public GameMode getOldGameMode() {
@@ -177,10 +248,26 @@ public class DSavePlayer {
     }
 
     /**
+     * @param gameMode
+     * the GameMode to set
+     */
+    public void setOldGameMode(GameMode gameMode) {
+        oldGameMode = gameMode;
+    }
+
+    /**
      * @return the old potion effects
      */
     public Collection<PotionEffect> getOldPotionEffects() {
         return oldPotionEffects;
+    }
+
+    /**
+     * @param potionEffects
+     * the potion effects to set
+     */
+    public void setOldPotionEffects(Collection<PotionEffect> potionEffects) {
+        oldPotionEffects = potionEffects;
     }
 
     /* Actions */

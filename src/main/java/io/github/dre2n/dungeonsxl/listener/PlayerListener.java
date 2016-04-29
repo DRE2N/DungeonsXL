@@ -666,7 +666,7 @@ public class PlayerListener implements Listener {
         if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
                 && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(-1, 0, 0).getType() != Material.PORTAL
                 && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
-            inventory.setInventoryView(inventory.getPlayer().openInventory(inventory.getInventory()));
+            inventory.setInventoryView(player.openInventory(inventory.getInventory()));
             inventory.setTime(System.currentTimeMillis());
         }
     }

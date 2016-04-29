@@ -492,6 +492,9 @@ public class DPlayer extends DGlobalPlayer {
             savePlayer.reset(false);
         }
 
+        GameWorld gameWorld = GameWorld.getByWorld(world);
+        DGroup dGroup = DGroup.getByPlayer(getPlayer());
+
         if (editing) {
             EditWorld editWorld = EditWorld.getByWorld(world);
             if (editWorld != null) {
@@ -499,16 +502,15 @@ public class DPlayer extends DGlobalPlayer {
             }
 
         } else {
-            GameWorld gameWorld = GameWorld.getByWorld(world);
-            DGroup dGroup = DGroup.getByPlayer(getPlayer());
+            Game game = Game.getByGameWorld(gameWorld);
             if (dGroup != null) {
                 dGroup.removePlayer(getPlayer());
             }
 
             // Belohnung
-            if (gameWorld.getGame() != null) {
+            if (game != null) {
                 if (finished) {
-                    if (gameWorld.getGame().getType().hasRewards()) {
+                    if (game.getType().hasRewards()) {
                         for (Reward reward : gameWorld.getConfig().getRewards()) {
                             reward.giveTo(getPlayer());
                         }
