@@ -14,17 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.game;
+package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
-import io.github.dre2n.dungeonsxl.reward.LevelReward;
-import io.github.dre2n.dungeonsxl.reward.MoneyReward;
-import io.github.dre2n.dungeonsxl.reward.Reward;
-import io.github.dre2n.dungeonsxl.reward.RewardTypeDefault;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;
@@ -40,7 +36,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class GameChest {
+public class RewardChest {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
 
@@ -51,7 +47,7 @@ public class GameChest {
     private double moneyReward;
     private int levelReward;
 
-    public GameChest(Block chest, GameWorld gameWorld, double moneyReward, int levelReward) {
+    public RewardChest(Block chest, GameWorld gameWorld, double moneyReward, int levelReward) {
         if (!(chest.getState() instanceof Chest)) {
             return;
         }
@@ -61,11 +57,11 @@ public class GameChest {
         this.moneyReward = moneyReward;
         this.levelReward = levelReward;
 
-        gameWorld.getGameChests().add(this);
+        gameWorld.getRewardChests().add(this);
     }
 
     /**
-     * @return if the GameChest is used
+     * @return if the RewardChest is used
      */
     public boolean isUsed() {
         return used;
@@ -243,20 +239,20 @@ public class GameChest {
 
         Chest chest = (Chest) inventory.getTopInventory().getHolder();
 
-        for (GameChest gameChest : gameWorld.getGameChests()) {
-            if (!gameChest.chest.equals(chest)) {
+        for (RewardChest rewardChest : gameWorld.getRewardChests()) {
+            if (!rewardChest.chest.equals(chest)) {
                 continue;
             }
 
-            if (gameChest.used) {
+            if (rewardChest.used) {
                 MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), plugin.getMessageConfig().getMessage(DMessages.ERROR_CHEST_IS_OPENED));
                 event.setCancelled(true);
                 continue;
             }
 
-            if (gameChest.chest.getLocation().distance(chest.getLocation()) < 1) {
-                gameChest.addTreasure(DGroup.getByPlayer((Player) event.getPlayer()));
-                gameChest.used = true;
+            if (rewardChest.chest.getLocation().distance(chest.getLocation()) < 1) {
+                rewardChest.addTreasure(DGroup.getByPlayer((Player) event.getPlayer()));
+                rewardChest.used = true;
                 event.setCancelled(true);
             }
         }

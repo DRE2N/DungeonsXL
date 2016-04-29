@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.game.GameChest;
+import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -57,15 +57,15 @@ public class ChestSign extends DSign {
 
         for (int i = -1; i <= 1; i++) {
             if (getSign().getBlock().getRelative(i, 0, 0).getType() == Material.CHEST) {
-                new GameChest(getSign().getBlock().getRelative(i, 0, 0), getGameWorld(), moneyReward, levelReward);
+                new RewardChest(getSign().getBlock().getRelative(i, 0, 0), getGameWorld(), moneyReward, levelReward);
             }
 
             if (getSign().getBlock().getRelative(0, 0, i).getType() == Material.CHEST) {
-                new GameChest(getSign().getBlock().getRelative(0, 0, i), getGameWorld(), moneyReward, levelReward);
+                new RewardChest(getSign().getBlock().getRelative(0, 0, i), getGameWorld(), moneyReward, levelReward);
             }
 
             if (getSign().getBlock().getRelative(0, i, 0).getType() == Material.CHEST) {
-                new GameChest(getSign().getBlock().getRelative(0, i, 0), getGameWorld(), moneyReward, levelReward);
+                new RewardChest(getSign().getBlock().getRelative(0, i, 0), getGameWorld(), moneyReward, levelReward);
             }
         }
 

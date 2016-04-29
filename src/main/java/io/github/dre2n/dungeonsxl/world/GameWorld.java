@@ -27,13 +27,13 @@ import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.game.GameChest;
 import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
+import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
@@ -82,7 +82,7 @@ public class GameWorld {
     private CopyOnWriteArrayList<Sign> signClass = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<>();
     // TODO: Killed mobs
-    private CopyOnWriteArrayList<GameChest> gameChests = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<RewardChest> rewardChests = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<>();
     private WorldConfig worldConfig;
 
@@ -310,18 +310,18 @@ public class GameWorld {
     }
 
     /**
-     * @return the gameChests
+     * @return the rewardChests
      */
-    public CopyOnWriteArrayList<GameChest> getGameChests() {
-        return gameChests;
+    public CopyOnWriteArrayList<RewardChest> getRewardChests() {
+        return rewardChests;
     }
 
     /**
-     * @param gameChests
-     * the gameChests to set
+     * @param rewardChests
+     * the rewardChests to set
      */
-    public void setGameChests(CopyOnWriteArrayList<GameChest> gameChests) {
-        this.gameChests = gameChests;
+    public void setRewardChests(CopyOnWriteArrayList<RewardChest> rewardChests) {
+        this.rewardChests = rewardChests;
     }
 
     /**
