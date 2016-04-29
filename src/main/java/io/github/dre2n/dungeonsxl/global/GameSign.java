@@ -195,7 +195,7 @@ public class GameSign extends GlobalProtection {
             }
 
             // Set Signs
-            if (game != null) {
+            if (game != null && game.getDGroups().size() > 0) {
                 if (game.getDGroups().get(0).isPlaying()) {
                     sign.setLine(0, IS_PLAYING);
 
@@ -341,6 +341,24 @@ public class GameSign extends GlobalProtection {
             }
 
             return gameSign;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param game
+     * the game to check
+     */
+    public static GameSign getByGame(Game game) {
+        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(GameSign.class)) {
+            GameSign gameSign = (GameSign) protection;
+
+            for (Game signGame : gameSign.games) {
+                if (signGame == game) {
+                    return gameSign;
+                }
+            }
         }
 
         return null;
@@ -521,29 +539,6 @@ public class GameSign extends GlobalProtection {
         }
 
         return true;
-    }
-
-    @Deprecated
-    public static void updatePerGame(Game gameSearch) {
-        for (GlobalProtection protection : protections.getProtections(GameSign.class)) {
-            GameSign gameSign = (GameSign) protection;
-
-            int i = 0;
-            for (Game game : gameSign.games) {
-                if (game == null) {
-                    continue;
-                }
-
-                if (game == gameSearch) {
-                    if (gameSearch.isEmpty()) {
-                        gameSign.games[i] = null;
-                    }
-                    gameSign.update();
-                }
-
-                i++;
-            }
-        }
     }
 
     @Deprecated

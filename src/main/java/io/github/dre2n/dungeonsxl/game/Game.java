@@ -20,6 +20,7 @@ import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
+import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
@@ -91,6 +92,10 @@ public class Game {
      */
     public void removeDGroup(DGroup dGroup) {
         dGroups.remove(dGroup);
+
+        if (dGroups.isEmpty()) {
+            delete();
+        }
     }
 
     /**
@@ -252,6 +257,19 @@ public class Game {
     }
 
     /* Actions */
+    /**
+     * Remove the Game from the List
+     */
+    public void delete() {
+        GameSign gameSign = GameSign.getByGame(this);
+
+        plugin.getGames().remove(this);
+
+        if (gameSign != null) {
+            gameSign.update();
+        }
+    }
+
     /**
      * @param mobCountIncreaseRate
      * the new mob count will be increased by this rate

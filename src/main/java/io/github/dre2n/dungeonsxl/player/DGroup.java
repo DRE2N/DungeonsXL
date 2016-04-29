@@ -29,7 +29,6 @@ import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
-import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -431,17 +430,18 @@ public class DGroup {
      * Remove the group from the List
      */
     public void delete() {
+        Game game = Game.getByDGroup(this);
+
         plugin.getDGroups().remove(this);
+
+        if (game != null) {
+            game.removeDGroup(this);
+        }
 
         if (timeIsRunningTask != null) {
             timeIsRunningTask.cancel();
         }
 
-        if (Game.getByDGroup(this) != null) {
-            Game.getByDGroup(this).removeDGroup(this);
-        }
-
-        GameSign.updatePerGame(Game.getByDGroup(this));
         GroupSign.updatePerGroup(this);
     }
 
