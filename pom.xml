@@ -74,6 +74,12 @@
             <artifactId>commandsxl</artifactId>
             <version>2.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>net.citizensnpcs</groupId>
+            <artifactId>citizensapi</artifactId>
+            <version>2.0.17-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -87,6 +93,10 @@
         <repository>
             <id>dre2n-repo</id>
             <url>http://feuerstern.bplaced.net/repo/</url>
+        </repository>
+        <repository>
+            <id>citizens-repo</id>
+            <url>http://repo.citizensnpcs.co/</url>
         </repository>
     </repositories>
 </project>

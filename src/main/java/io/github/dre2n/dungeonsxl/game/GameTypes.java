@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.block.Sign;
@@ -35,7 +35,7 @@ public class GameTypes {
                     Class.forName("com.massivecraft.factions.Patch");
 
                 } catch (ClassNotFoundException exception) {
-                    DungeonsXL.getInstance().getLogger().info("Could not find compatible Factions plugin. The game type PVP_FACTIONS_BATTLEFIELD will not get enabled...");
+                    MessageUtil.log("Could not find compatible Factions plugin. The game type PVP_FACTIONS_BATTLEFIELD will not get enabled...");
                     continue;
                 }
             }

@@ -20,7 +20,6 @@ import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProvider;
 import io.github.dre2n.dungeonsxl.sign.ExternalMobSign;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -45,12 +44,8 @@ public class ExternalMobSpawnTask extends BukkitRunnable {
 
             if (gameWorld != null) {
                 sign.setSpawnLocation(sign.getSign().getLocation().add(0.5, 0, 0.5));
-                double x = sign.getSpawnLocation().getX();
-                double y = sign.getSpawnLocation().getY();
-                double z = sign.getSpawnLocation().getZ();
 
-                String command = provider.getCommand(sign.getMob(), "DXL_Game_" + gameWorld.getId(), x, y, z);
-                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+                provider.summon(sign.getMob(), sign.getSpawnLocation());
 
                 sign.setExternalMobs();
                 if (sign.getExternalMob() != null) {

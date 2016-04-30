@@ -16,11 +16,13 @@
  */
 package io.github.dre2n.dungeonsxl.mob;
 
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.bukkit.Bukkit;
 
 /**
  * @author Daniel Saukel
@@ -32,6 +34,11 @@ public class ExternalMobProviders {
     public ExternalMobProviders() {
         // Supported providers
         providers.addAll(Arrays.asList(ExternalMobPlugin.values()));
+        if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+            providers.add(new CitizensMobProvider());
+        } else {
+            MessageUtil.log("Could not find compatible Citizens plugin. The mob provider Citizens (\"CI\") will not get enabled...");
+        }
 
         // Custom providers
         for (Entry<String, Object> customExternalMobProvider : DungeonsXL.getInstance().getMainConfig().getExternalMobProviders().entrySet()) {
@@ -58,6 +65,19 @@ public class ExternalMobProviders {
      */
     public Set<ExternalMobProvider> getProviders() {
         return providers;
+    }
+
+    /**
+     * @return the Citizens provider
+     */
+    public CitizensMobProvider getCitizensMobProvider() {
+        for (ExternalMobProvider provider : providers) {
+            if (provider instanceof CitizensMobProvider) {
+                return (CitizensMobProvider) provider;
+            }
+        }
+
+        return null;
     }
 
     /**

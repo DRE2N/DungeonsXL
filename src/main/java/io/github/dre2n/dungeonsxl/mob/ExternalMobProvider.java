@@ -16,6 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.mob;
 
+import org.bukkit.Location;
+
 /**
  * @author Daniel Saukel
  */
@@ -45,5 +47,13 @@ public interface ExternalMobProvider {
      * @return the command with replaced variables
      */
     public String getCommand(String mob, String world, double x, double y, double z);
+
+    /**
+     * @param mob
+     * the mob identifier
+     * @param location
+     * the location where the mob will be spawned
+     */
+    public void summon(String mob, Location location);
 
 }

@@ -33,6 +33,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
+import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
@@ -898,8 +899,7 @@ public class DPlayer extends DGlobalPlayer {
                 }
             }
 
-        } else if (gameWorld
-                != null) {
+        } else if (gameWorld != null) {
             // Update Wolf
             if (getWolf() != null) {
                 if (getWolf().isDead()) {
@@ -910,6 +910,11 @@ public class DPlayer extends DGlobalPlayer {
                         setWolfRespawnTime(30);
                     }
                     wolfRespawnTime--;
+                }
+
+                DMob dMob = DMob.getByEntity(getWolf());
+                if (dMob != null) {
+                    gameWorld.removeDMob(dMob);
                 }
             }
 

@@ -31,11 +31,7 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.global.GlobalProtections;
-import io.github.dre2n.dungeonsxl.listener.BlockListener;
-import io.github.dre2n.dungeonsxl.listener.EntityListener;
-import io.github.dre2n.dungeonsxl.listener.HangingListener;
-import io.github.dre2n.dungeonsxl.listener.PlayerListener;
-import io.github.dre2n.dungeonsxl.listener.WorldListener;
+import io.github.dre2n.dungeonsxl.listener.*;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProviders;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
@@ -143,6 +139,9 @@ public class DungeonsXL extends BRPlugin {
         manager.registerEvents(new BlockListener(), this);
         manager.registerEvents(new WorldListener(), this);
         manager.registerEvents(new HangingListener(), this);
+        if (manager.getPlugin("Citizens") != null) {
+            manager.registerEvents(new CitizensListener(), this);
+        }
 
         // Load All
         loadAll();

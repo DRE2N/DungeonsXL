@@ -31,7 +31,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -88,13 +87,10 @@ public class EntityListener implements Listener {
             GameWorld gameWorld = GameWorld.getByWorld(world);
             if (gameWorld != null) {
                 if (gameWorld.isPlaying()) {
-                    if (entity.getType() != EntityType.PLAYER) {
+                    DMob dMob = DMob.getByEntity(entity);
+                    if (dMob != null) {
                         event.getDrops().clear();
-
-                        DMob dMob = DMob.getByEntity(entity);
-                        if (dMob != null) {
-                            dMob.onDeath(event);
-                        }
+                        dMob.onDeath(event);
                     }
                 }
             }

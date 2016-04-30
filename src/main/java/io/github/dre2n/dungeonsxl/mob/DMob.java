@@ -46,11 +46,14 @@ public class DMob {
         this.type = type;
 
         /* Remove DropChance of equipment */
-        this.entity.getEquipment().setHelmetDropChance(0);
-        this.entity.getEquipment().setChestplateDropChance(0);
-        this.entity.getEquipment().setLeggingsDropChance(0);
-        this.entity.getEquipment().setBootsDropChance(0);
-        this.entity.getEquipment().setItemInHandDropChance(0);
+        try {
+            this.entity.getEquipment().setHelmetDropChance(0);
+            this.entity.getEquipment().setChestplateDropChance(0);
+            this.entity.getEquipment().setLeggingsDropChance(0);
+            this.entity.getEquipment().setBootsDropChance(0);
+            this.entity.getEquipment().setItemInHandDropChance(0);
+        } catch (UnsupportedOperationException exception) {
+        }
     }
 
     public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type, String trigger) {
@@ -59,10 +62,6 @@ public class DMob {
     }
 
     public void onDeath(EntityDeathEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity)) {
-            return;
-        }
-
         LivingEntity victim = event.getEntity();
         GameWorld gameWorld = GameWorld.getByWorld(victim.getWorld());
         String name = null;
@@ -95,9 +94,9 @@ public class DMob {
             name = victim.getType().getName();
         }
 
-        MobTrigger mobTriger = MobTrigger.get(name, gameWorld);
-        if (mobTriger != null) {
-            mobTriger.onTrigger();
+        MobTrigger mobTrigger = MobTrigger.get(name, gameWorld);
+        if (mobTrigger != null) {
+            mobTrigger.onTrigger();
         }
 
         Set<WaveTrigger> waveTriggers = WaveTrigger.getByGameWorld(gameWorld);
