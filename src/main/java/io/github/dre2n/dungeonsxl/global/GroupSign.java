@@ -265,7 +265,7 @@ public class GroupSign extends GlobalProtection {
 
     @Override
     public void save(FileConfiguration config) {
-        String preString = "groupsign." + getWorld().getName() + "." + getId();
+        String preString = "protections.groupSigns." + getWorld().getName() + "." + getId();
 
         config.set(preString + ".x", startSign.getX());
         config.set(preString + ".y", startSign.getY());

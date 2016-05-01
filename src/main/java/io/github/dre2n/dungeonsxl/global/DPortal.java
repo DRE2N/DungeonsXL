@@ -222,7 +222,7 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
-        String preString = "portal." + getWorld().getName() + "." + getId();
+        String preString = "protections.portals." + getWorld().getName() + "." + getId();
         // Location1
         configFile.set(preString + ".loc1.x", block1.getX());
         configFile.set(preString + ".loc1.y", block1.getY());

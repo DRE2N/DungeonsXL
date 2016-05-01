@@ -24,7 +24,7 @@ import java.io.File;
  */
 public class DataConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 1;
+    public static final int CONFIG_VERSION = 2;
 
     public DataConfig(File file) {
         super(file, CONFIG_VERSION);

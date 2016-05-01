@@ -69,7 +69,7 @@ public class LeaveSign extends GlobalProtection {
 
     @Override
     public void save(FileConfiguration config) {
-        String preString = "leavesign." + sign.getWorld().getName() + "." + getId();
+        String preString = "protections.leaveSigns." + sign.getWorld().getName() + "." + getId();
         config.set(preString + ".x", sign.getX());
         config.set(preString + ".y", sign.getY());
         config.set(preString + ".z", sign.getZ());

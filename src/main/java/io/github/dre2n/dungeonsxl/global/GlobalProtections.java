@@ -102,6 +102,7 @@ public class GlobalProtections {
      * the config to save all protections to
      */
     public void saveAll(FileConfiguration config) {
+        config.set("protections", null);
         for (GlobalProtection protection : protections) {
             protection.save(config);
         }
@@ -147,13 +148,13 @@ public class GlobalProtections {
 
         for (World world : plugin.getServer().getWorlds()) {
             // GameSigns
-            if (data.contains("gamesign." + world.getName())) {
+            if (data.contains("protections.gameSigns." + world.getName())) {
                 int id = 0;
                 String preString;
 
                 do {
                     id++;
-                    preString = "gamesign." + world.getName() + "." + id + ".";
+                    preString = "protections.gameSigns." + world.getName() + "." + id + ".";
                     if (data.contains(preString)) {
                         String mapName = data.getString(preString + ".dungeon");
                         int maxGames = data.getInt(preString + ".maxGames");
@@ -171,13 +172,13 @@ public class GlobalProtections {
             }
 
             // GroupSigns
-            if (data.contains("groupsign." + world.getName())) {
+            if (data.contains("protections.groupSigns." + world.getName())) {
                 int id = 0;
                 String preString;
 
                 do {
                     id++;
-                    preString = "groupsign." + world.getName() + "." + id + ".";
+                    preString = "protections.groupSigns." + world.getName() + "." + id + ".";
                     if (data.contains(preString)) {
                         String mapName = data.getString(preString + ".dungeon");
                         int maxGroups = data.getInt(preString + ".maxGroups");
@@ -193,14 +194,14 @@ public class GlobalProtections {
                 } while (data.contains(preString));
             }
 
-            if (data.contains("leavesign." + world.getName())) {
+            if (data.contains("protections.leaveSigns." + world.getName())) {
 
                 int id = 0;
                 String preString;
 
                 do {
                     id++;
-                    preString = "leavesign." + world.getName() + "." + id + ".";
+                    preString = "protections.leaveSigns." + world.getName() + "." + id + ".";
                     if (data.contains(preString)) {
                         Block block = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
                         if (block.getState() instanceof Sign) {
@@ -213,13 +214,13 @@ public class GlobalProtections {
             }
 
             // DPortals
-            if (data.contains("portal." + world.getName())) {
+            if (data.contains("protections.portals." + world.getName())) {
                 int id = 0;
                 String preString;
 
                 do {
                     id++;
-                    preString = "portal." + world.getName() + "." + id + ".";
+                    preString = "protections.portals." + world.getName() + "." + id + ".";
 
                     if (data.contains(preString)) {
                         Block block1 = world.getBlockAt(data.getInt(preString + "loc1.x"), data.getInt(preString + "loc1.y"), data.getInt(preString + "loc1.z"));
