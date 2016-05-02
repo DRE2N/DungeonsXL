@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
@@ -33,13 +32,12 @@ import org.bukkit.command.CommandSender;
 public class HelpCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public HelpCommand() {
         setCommand("help");
         setMinArgs(0);
         setMaxArgs(1);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_HELP));
+        setHelp(DMessages.HELP_CMD_HELP.getMessage());
         setPermission(DPermissions.HELP.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);

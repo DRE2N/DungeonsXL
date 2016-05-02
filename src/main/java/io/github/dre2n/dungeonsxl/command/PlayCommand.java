@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -25,7 +24,6 @@ import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -41,13 +39,12 @@ import org.bukkit.entity.Player;
 public class PlayCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public PlayCommand() {
         setCommand("play");
         setMinArgs(1);
         setMaxArgs(2);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_PLAY));
+        setHelp(DMessages.HELP_CMD_PLAY.getMessage());
         setPermission(DPermissions.PLAY.getNode());
         setPlayerCommand(true);
     }
@@ -58,7 +55,7 @@ public class PlayCommand extends BRCommand {
         DPlayer dPlayer = DPlayer.getByPlayer(player);
 
         if (dPlayer != null) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
+            MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 
@@ -90,7 +87,7 @@ public class PlayCommand extends BRCommand {
         }
 
         if (!multiFloor && !EditWorld.exists(identifier)) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_DUNGEON_NOT_EXIST, identifier));
+            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(identifier));
             return;
         }
 
@@ -101,14 +98,14 @@ public class PlayCommand extends BRCommand {
                 WorldConfig confReader = new WorldConfig(file);
 
                 if (confReader != null) {
-                    MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_COOLDOWN, "" + confReader.getTimeToNextPlay()));
+                    MessageUtil.sendMessage(player, DMessages.ERROR_COOLDOWN.getMessage(String.valueOf(confReader.getTimeToNextPlay())));
                 }
             }
             return;
         }
 
         if (!GameWorld.checkRequirements(mapName, player)) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_REQUIREMENTS));
+            MessageUtil.sendMessage(player, DMessages.ERROR_REQUIREMENTS.getMessage());
             return;
         }
 
@@ -116,7 +113,7 @@ public class PlayCommand extends BRCommand {
 
         if (dGroup != null) {
             if (!dGroup.getCaptain().equals(player) && !DPermissions.hasPermission(player, DPermissions.BYPASS)) {
-                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_CAPTAIN));
+                MessageUtil.sendMessage(player, DMessages.ERROR_NOT_CAPTAIN.getMessage());
             }
 
             if (dGroup.getMapName() == null) {
@@ -137,7 +134,7 @@ public class PlayCommand extends BRCommand {
                 }
 
             } else {
-                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_GROUP));
+                MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_GROUP.getMessage());
                 return;
             }
 
@@ -161,7 +158,7 @@ public class PlayCommand extends BRCommand {
         }
 
         if (dGroup.getGameWorld() == null) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_SAVED, DGroup.getByPlayer(player).getMapName()));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_SAVED.getMessage(DGroup.getByPlayer(player).getMapName()));
             dGroup.delete();
             return;
         }

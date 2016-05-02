@@ -17,12 +17,10 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -35,13 +33,12 @@ import org.bukkit.entity.Player;
 public class EnterCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public EnterCommand() {
         setMinArgs(1);
         setMaxArgs(2);
         setCommand("enter");
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_ENTER));
+        setHelp(DMessages.HELP_CMD_ENTER.getMessage());
         setPermission(DPermissions.ENTER.getNode());
         setPlayerCommand(true);
     }
@@ -55,18 +52,18 @@ public class EnterCommand extends BRCommand {
         DGroup target = DGroup.getByName(targetName);
 
         if (target == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_GROUP, targetName));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_GROUP.getMessage(targetName));
             return;
         }
 
         Game game = Game.getByDGroup(target);
         if (game == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_IN_GAME, targetName));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_IN_GAME.getMessage(targetName));
             return;
         }
 
         if (Game.getByDGroup(joining) != null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_LEAVE_GAME));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_GAME.getMessage());
             return;
         }
 
@@ -75,13 +72,13 @@ public class EnterCommand extends BRCommand {
         }
 
         if (joining.getCaptain() != captain && !DPermissions.hasPermission(sender, DPermissions.BYPASS)) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_CAPTAIN));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_CAPTAIN.getMessage());
             return;
         }
 
         joining.setGameWorld(game.getWorld());
         game.addDGroup(joining);
-        joining.sendMessage(messageConfig.getMessage(DMessages.CMD_ENTER_SUCCESS, joining.getName(), targetName));
+        joining.sendMessage(DMessages.CMD_ENTER_SUCCESS.getMessage(joining.getName(), targetName));
 
         for (Player player : joining.getPlayers()) {
             new DPlayer(player, game.getWorld()).ready();

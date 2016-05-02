@@ -17,11 +17,9 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -35,13 +33,12 @@ import org.bukkit.entity.Player;
 public class EditCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public EditCommand() {
         setCommand("edit");
         setMinArgs(1);
         setMaxArgs(1);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_EDIT));
+        setHelp(DMessages.HELP_CMD_EDIT.getMessage());
         setPlayerCommand(true);
     }
 
@@ -55,22 +52,22 @@ public class EditCommand extends BRCommand {
         DPlayer dPlayer = DPlayer.getByPlayer(player);
 
         if (!(EditWorld.isInvitedPlayer(mapName, player.getUniqueId(), player.getName()) || DPermissions.hasPermission(player, DPermissions.EDIT))) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NO_PERMISSIONS));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NO_PERMISSIONS.getMessage());
             return;
         }
 
         if (dPlayer != null) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
+            MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 
         if (dGroup != null) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_GROUP));
+            MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_GROUP.getMessage());
             return;
         }
 
         if (editWorld == null) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_DUNGEON_NOT_EXIST, mapName));
+            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(mapName));
             return;
         }
 

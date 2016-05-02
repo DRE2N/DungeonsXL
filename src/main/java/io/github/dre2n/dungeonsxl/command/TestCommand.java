@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -36,13 +35,12 @@ import org.bukkit.entity.Player;
 public class TestCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public TestCommand() {
         setCommand("test");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_TEST));
+        setHelp(DMessages.HELP_CMD_TEST.getMessage());
         setPermission(DPermissions.TEST.getNode());
         setPlayerCommand(true);
     }
@@ -53,24 +51,24 @@ public class TestCommand extends BRCommand {
 
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
         if (!dGroup.getCaptain().equals(player)) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_CAPTAIN));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_CAPTAIN.getMessage());
             return;
         }
 
         GameWorld gameWorld = dGroup.getGameWorld();
         if (gameWorld == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
             return;
         }
 
         Game game = gameWorld.getGame();
         if (game != null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 

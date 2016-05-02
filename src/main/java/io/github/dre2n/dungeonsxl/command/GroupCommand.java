@@ -17,14 +17,12 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
-import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
@@ -37,13 +35,12 @@ import org.bukkit.entity.Player;
 public class GroupCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public GroupCommand() {
         setCommand("group");
         setMinArgs(0);
         setMaxArgs(2);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_GROUP));
+        setHelp(DMessages.HELP_CMD_GROUP.getMessage());
         setPermission(DPermissions.GROUP.getNode());
         setPlayerCommand(true);
     }
@@ -120,11 +117,11 @@ public class GroupCommand extends BRCommand {
                 dGroup = null;
 
             } else {
-                MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.GROUP_CREATED, sender.getName(), args[2]));
+                MessageUtil.sendMessage(sender, DMessages.GROUP_CREATED.getMessage(sender.getName(), args[2]));
             }
 
         } else {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_LEAVE_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_GROUP.getMessage());
         }
     }
 
@@ -134,18 +131,18 @@ public class GroupCommand extends BRCommand {
 
             if (!event.isCancelled()) {
                 dGroup.delete();
-                MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.GROUP_DISBANDED, sender.getName(), dGroup.getName()));
+                MessageUtil.sendMessage(sender, DMessages.GROUP_DISBANDED.getMessage(sender.getName(), dGroup.getName()));
                 dGroup = null;
             }
 
         } else {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_GROUP.getMessage());
         }
     }
 
     public void invitePlayer(DGroup dGroup) {
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
@@ -155,13 +152,13 @@ public class GroupCommand extends BRCommand {
             dGroup.addInvitedPlayer(toInvite, false);
 
         } else {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_PLAYER, args[2]));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_PLAYER.getMessage(args[2]));
         }
     }
 
     public void uninvitePlayer(DGroup dGroup) {
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
@@ -174,27 +171,27 @@ public class GroupCommand extends BRCommand {
                 dGroup.removeInvitedPlayer(toUninvite, false);
 
             } else {
-                MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_IN_GROUP, args[2]));
+                MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_IN_GROUP.getMessage(args[2]));
             }
 
         } else {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_PLAYER, args[2]));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_PLAYER.getMessage(args[2]));
         }
     }
 
     public void joinGroup(DGroup dGroup) {
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_GROUP, args[2]));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_GROUP.getMessage(args[2]));
             return;
         }
 
         if (DGroup.getByPlayer(player) != null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_LEAVE_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_GROUP.getMessage());
             return;
         }
 
         if (!dGroup.getInvitedPlayers().contains(player) && !DPermissions.hasPermission(player, DPermissions.BYPASS)) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_INVITED, args[2]));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_INVITED.getMessage(args[2]));
             return;
         }
 
@@ -204,7 +201,7 @@ public class GroupCommand extends BRCommand {
 
     public void kickPlayer(DGroup dGroup) {
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_JOIN_GROUP.getMessage());
         }
 
         Player toKick = plugin.getServer().getPlayer(args[2]);
@@ -214,25 +211,25 @@ public class GroupCommand extends BRCommand {
             if (!event.isCancelled()) {
                 if (dGroup.getPlayers().contains(toKick)) {
                     dGroup.removePlayer(toKick);
-                    MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.GROUP_KICKED_PLAYER, sender.getName(), args[2], dGroup.getName()));
+                    MessageUtil.sendMessage(sender, DMessages.GROUP_KICKED_PLAYER.getMessage(sender.getName(), args[2], dGroup.getName()));
 
                 } else {
-                    MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NOT_IN_GROUP, args[2], dGroup.getName()));
+                    MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_IN_GROUP.getMessage(args[2], dGroup.getName()));
                 }
             }
 
         } else {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_PLAYER, args[2]));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_PLAYER.getMessage(args[2]));
         }
     }
 
     public void showGroup(DGroup dGroup) {
         if (dGroup == null) {
             if (args.length == 3) {
-                MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_SUCH_GROUP, args[2]));
+                MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_GROUP.getMessage(args[2]));
 
             } else if (args.length == 2) {
-                MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
+                MessageUtil.sendMessage(sender, DMessages.ERROR_JOIN_GROUP.getMessage());
             }
 
             return;
@@ -254,16 +251,16 @@ public class GroupCommand extends BRCommand {
         switch (page) {
             default:
                 MessageUtil.sendCenteredMessage(sender, "&4&l[ &61-5 &4/ &67 &4| &61 &4&l]");
-                MessageUtil.sendMessage(sender, "&bcreate" + "&7 - " + messageConfig.getMessage(DMessages.HELP_CMD_GROUP_CREATE));
-                MessageUtil.sendMessage(sender, "&bdisband" + "&7 - " + messageConfig.getMessage(DMessages.HELP_CMD_GROUP_DISBAND));
-                MessageUtil.sendMessage(sender, "&binvite" + "&7 - " + messageConfig.getMessage(DMessages.HELP_CMD_GROUP_INVITE));
-                MessageUtil.sendMessage(sender, "&buninvite" + "&7 - " + messageConfig.getMessage(DMessages.HELP_CMD_GROUP_UNINVITE));
-                MessageUtil.sendMessage(sender, "&bjoin" + "&7 - " + messageConfig.getMessage(DMessages.HELP_CMD_GROUP_JOIN));
+                MessageUtil.sendMessage(sender, "&bcreate" + "&7 - " + DMessages.HELP_CMD_GROUP_CREATE.getMessage());
+                MessageUtil.sendMessage(sender, "&bdisband" + "&7 - " + DMessages.HELP_CMD_GROUP_DISBAND.getMessage());
+                MessageUtil.sendMessage(sender, "&binvite" + "&7 - " + DMessages.HELP_CMD_GROUP_INVITE.getMessage());
+                MessageUtil.sendMessage(sender, "&buninvite" + "&7 - " + DMessages.HELP_CMD_GROUP_UNINVITE.getMessage());
+                MessageUtil.sendMessage(sender, "&bjoin" + "&7 - " + DMessages.HELP_CMD_GROUP_JOIN.getMessage());
                 break;
             case "2":
                 MessageUtil.sendCenteredMessage(sender, "&4&l[ &66-10 &4/ &67 &4| &62 &4&l]");
-                MessageUtil.sendMessage(sender, "&bkick" + "&7 - " + messageConfig.getMessage(DMessages.HELP_CMD_GROUP_KICK));
-                MessageUtil.sendMessage(sender, "&bshow" + "&7 - " + messageConfig.getMessage(DMessages.HELP_CMD_GROUP_SHOW));
+                MessageUtil.sendMessage(sender, "&bkick" + "&7 - " + DMessages.HELP_CMD_GROUP_KICK.getMessage());
+                MessageUtil.sendMessage(sender, "&bshow" + "&7 - " + DMessages.HELP_CMD_GROUP_SHOW.getMessage());
                 break;
         }
 

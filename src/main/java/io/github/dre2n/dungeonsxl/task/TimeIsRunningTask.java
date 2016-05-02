@@ -58,7 +58,7 @@ public class TimeIsRunningTask extends BukkitRunnable {
 
         } finally {
             for (Player player : dGroup.getPlayers()) {
-                MessageUtil.sendActionBarMessage(player, messageConfig.getMessage(DMessages.PLAYER_TIME_LEFT, color, String.valueOf(timeLeft)));
+                MessageUtil.sendActionBarMessage(player, DMessages.PLAYER_TIME_LEFT.getMessage(color, String.valueOf(timeLeft)));
 
                 DPlayer dPlayer = DPlayer.getByPlayer(player);
                 if (timeLeft > 0) {
@@ -68,7 +68,7 @@ public class TimeIsRunningTask extends BukkitRunnable {
                 DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.TIME_EXPIRED);
 
                 if (!dPlayerKickEvent.isCancelled()) {
-                    MessageUtil.broadcastMessage(messageConfig.getMessage(DMessages.PLAYER_TIME_KICK, player.getName()));
+                    MessageUtil.broadcastMessage(DMessages.PLAYER_TIME_KICK.getMessage(player.getName()));
                     dPlayer.leave();
                     if (dGroup.getGameWorld().getConfig().getKeepInventoryOnEscape()) {
                         dPlayer.applyRespawnInventory();
@@ -80,4 +80,5 @@ public class TimeIsRunningTask extends BukkitRunnable {
         }
 
     }
+
 }

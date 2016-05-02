@@ -19,7 +19,6 @@ package io.github.dre2n.dungeonsxl.command;
 import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Internals;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -35,13 +34,12 @@ import org.bukkit.plugin.PluginManager;
 public class ReloadCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public ReloadCommand() {
         setCommand("reload");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_RELOAD));
+        setHelp(DMessages.HELP_CMD_RELOAD.getMessage());
         setPermission(DPermissions.RELOAD.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -86,9 +84,9 @@ public class ReloadCommand extends BRCommand {
         plugin.loadDungeons();
 
         MessageUtil.sendPluginTag(sender, plugin);
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_RELOAD_DONE));
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_MAIN_LOADED, String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, messageConfig.getMessage(DMessages.CMD_MAIN_COMPATIBILITY, String.valueOf(internals), vault, mythicMobs));
+        MessageUtil.sendCenteredMessage(sender, DMessages.CMD_RELOAD_DONE.getMessage());
+        MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
+        MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, mythicMobs));
     }
 
 }

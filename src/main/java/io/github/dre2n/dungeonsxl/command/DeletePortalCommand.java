@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -34,7 +33,6 @@ import org.bukkit.entity.Player;
 public class DeletePortalCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public DeletePortalCommand() {
         setCommand("deleteportal");
@@ -52,10 +50,10 @@ public class DeletePortalCommand extends BRCommand {
 
         if (dPortal != null) {
             dPortal.delete();
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
+            MessageUtil.sendMessage(player, DMessages.PLAYER_PROTECTED_BLOCK_DELETED.getMessage());
 
         } else {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NO_PROTECTED_BLOCK));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NO_PROTECTED_BLOCK.getMessage());
         }
     }
 

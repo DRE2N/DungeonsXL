@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -36,13 +35,12 @@ import org.bukkit.inventory.ItemStack;
 public class PortalCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public PortalCommand() {
         setCommand("portal");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_PORTAL));
+        setHelp(DMessages.HELP_CMD_PORTAL.getMessage());
         setPermission(DPermissions.PORTAL.getNode());
         setPlayerCommand(true);
     }
@@ -53,7 +51,7 @@ public class PortalCommand extends BRCommand {
         DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
 
         if (dGlobalPlayer instanceof DPlayer) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
+            MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 
@@ -64,12 +62,12 @@ public class PortalCommand extends BRCommand {
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PORTAL_INTRODUCTION));
+            MessageUtil.sendMessage(player, DMessages.PLAYER_PORTAL_INTRODUCTION.getMessage());
 
         } else {
             dPortal.delete();
             dGlobalPlayer.setCreatingPortal(null);
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.PLAYER_PORTAL_ABORT));
+            MessageUtil.sendMessage(player, DMessages.PLAYER_PORTAL_ABORT.getMessage());
         }
     }
 

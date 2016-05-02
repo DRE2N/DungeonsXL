@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
@@ -36,13 +35,12 @@ import org.bukkit.entity.Player;
 public class MsgCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public MsgCommand() {
         setMinArgs(-1);
         setMaxArgs(-1);
         setCommand("msg");
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_MSG));
+        setHelp(DMessages.HELP_CMD_MSG.getMessage());
         setPermission(DPermissions.MESSAGE.getNode());
         setPlayerCommand(true);
     }
@@ -53,7 +51,7 @@ public class MsgCommand extends BRCommand {
         EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
 
         if (editWorld == null) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
             return;
         }
 
@@ -74,7 +72,7 @@ public class MsgCommand extends BRCommand {
                     MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
 
                 } else {
-                    MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_MSG_ID_NOT_EXIST, "" + id));
+                    MessageUtil.sendMessage(player, DMessages.ERROR_MSG_ID_NOT_EXIST.getMessage(String.valueOf(id)));
                 }
 
             } else {
@@ -93,22 +91,22 @@ public class MsgCommand extends BRCommand {
                     msg = splitMsg[1];
                     String old = confreader.getMsg(id, false);
                     if (old == null) {
-                        MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_MSG_ADDED, "" + id));
+                        MessageUtil.sendMessage(player, DMessages.CMD_MSG_ADDED.getMessage(String.valueOf(id)));
 
                     } else {
-                        MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_MSG_UPDATED, "" + id));
+                        MessageUtil.sendMessage(player, DMessages.CMD_MSG_UPDATED.getMessage(String.valueOf(id)));
                     }
 
                     confreader.setMsg(msg, id);
                     confreader.save();
 
                 } else {
-                    MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_MSG_FORMAT));
+                    MessageUtil.sendMessage(player, DMessages.ERROR_MSG_FORMAT.getMessage());
                 }
             }
 
         } catch (NumberFormatException e) {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_MSG_NO_INT));
+            MessageUtil.sendMessage(player, DMessages.ERROR_MSG_NO_INT.getMessage());
         }
 
     }

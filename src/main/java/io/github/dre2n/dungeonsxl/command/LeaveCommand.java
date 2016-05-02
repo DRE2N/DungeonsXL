@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -36,13 +35,12 @@ import org.bukkit.entity.Player;
 public class LeaveCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public LeaveCommand() {
         setCommand("leave");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_LEAVE));
+        setHelp(DMessages.HELP_CMD_LEAVE.getMessage());
         setPermission(DPermissions.LEAVE.getNode());
         setPlayerCommand(true);
     }
@@ -54,7 +52,7 @@ public class LeaveCommand extends BRCommand {
 
         if (GameWorld.getByWorld(player.getWorld()) != null) {
             if (GameWorld.getByWorld(player.getWorld()).isTutorial()) {
-                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NO_LEAVE_IN_TUTORIAL));
+                MessageUtil.sendMessage(player, DMessages.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
                 return;
             }
         }
@@ -70,17 +68,17 @@ public class LeaveCommand extends BRCommand {
             }
 
             dPlayer.leave();
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_LEAVE_SUCCESS));
+            MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
 
         } else {
             DGroup dGroup = DGroup.getByPlayer(player);
             if (dGroup != null) {
                 dGroup.removePlayer(player);
-                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_LEAVE_SUCCESS));
+                MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
                 return;
             }
 
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
         }
     }
 

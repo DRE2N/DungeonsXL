@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -34,13 +33,12 @@ import org.bukkit.entity.Player;
 public class GameCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public GameCommand() {
         setCommand("game");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_GAME));
+        setHelp(DMessages.HELP_CMD_GAME.getMessage());
         setPermission(DPermissions.GAME.getNode());
         setPlayerCommand(true);
     }
@@ -50,19 +48,19 @@ public class GameCommand extends BRCommand {
         Player player = (Player) sender;
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
         GameWorld gameWorld = dGroup.getGameWorld();
         if (gameWorld == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_GAME));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_GAME.getMessage());
             return;
         }
 
         Game game = gameWorld.getGame();
         if (game == null) {
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.ERROR_NO_GAME));
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_GAME.getMessage());
             return;
         }
 

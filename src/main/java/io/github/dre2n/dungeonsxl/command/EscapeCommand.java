@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -34,13 +33,12 @@ import org.bukkit.entity.Player;
 public class EscapeCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public EscapeCommand() {
         setCommand("escape");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_ESCAPE));
+        setHelp(DMessages.HELP_CMD_ESCAPE.getMessage());
         setPermission(DPermissions.ESCAPE.getNode());
         setPlayerCommand(true);
     }
@@ -52,7 +50,7 @@ public class EscapeCommand extends BRCommand {
         if (dPlayer != null) {
 
             if (!dPlayer.isEditing()) {
-                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_LEAVE_DUNGEON));
+                MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
                 return;
             }
 
@@ -71,10 +69,10 @@ public class EscapeCommand extends BRCommand {
             DGroup dGroup = DGroup.getByPlayer(player);
             if (dGroup != null) {
                 dGroup.removePlayer(player);
-                MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_LEAVE_SUCCESS));
+                MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
                 return;
             }
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
         }
     }
 

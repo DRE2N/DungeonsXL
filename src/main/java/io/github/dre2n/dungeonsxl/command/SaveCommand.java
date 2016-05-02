@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -32,13 +31,12 @@ import org.bukkit.entity.Player;
 public class SaveCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public SaveCommand() {
         setCommand("save");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_SAVE));
+        setHelp(DMessages.HELP_CMD_SAVE.getMessage());
         setPermission(DPermissions.SAVE.getNode());
         setPlayerCommand(true);
     }
@@ -49,10 +47,10 @@ public class SaveCommand extends BRCommand {
         EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
         if (editWorld != null) {
             editWorld.save();
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.CMD_SAVE_SUCCESS));
+            MessageUtil.sendMessage(player, DMessages.CMD_SAVE_SUCCESS.getMessage());
 
         } else {
-            MessageUtil.sendMessage(player, messageConfig.getMessage(DMessages.ERROR_NOT_IN_DUNGEON));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
         }
     }
 

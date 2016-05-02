@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -32,13 +31,12 @@ import org.bukkit.entity.Player;
 public class BreakCommand extends BRCommand {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static MessageConfig messageConfig = plugin.getMessageConfig();
 
     public BreakCommand() {
         setCommand("break");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(messageConfig.getMessage(DMessages.HELP_CMD_BREAK));
+        setHelp(DMessages.HELP_CMD_BREAK.getMessage());
         setPermission(DPermissions.BREAK.getNode());
         setPlayerCommand(true);
     }
@@ -50,11 +48,11 @@ public class BreakCommand extends BRCommand {
 
         if (dGlobalPlayer.isInBreakMode()) {
             dGlobalPlayer.setInBreakMode(false);
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.CMD_BREAK_PROTECTED_MODE));
+            MessageUtil.sendMessage(sender, DMessages.CMD_BREAK_PROTECTED_MODE.getMessage());
 
         } else {
             dGlobalPlayer.setInBreakMode(true);
-            MessageUtil.sendMessage(sender, messageConfig.getMessage(DMessages.CMD_BREAK_BREAK_MODE));
+            MessageUtil.sendMessage(sender, DMessages.CMD_BREAK_BREAK_MODE.getMessage());
         }
     }
 
