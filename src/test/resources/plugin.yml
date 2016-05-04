@@ -1,0 +1,6 @@
+name: DXLTest
+main: io.github.dre2n.dungeonsxl.DXLTest
+version: TEST
+author: Daniel Saukel
+description: Test
+depend: [DungeonsXL]
