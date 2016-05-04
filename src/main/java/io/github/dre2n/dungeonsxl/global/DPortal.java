@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -210,7 +211,11 @@ public class DPortal extends GlobalProtection {
     @Override
     public Set<Block> getBlocks() {
         if (blocks == null) {
-            blocks = BlockUtil.getBlocksBetween(block1, block2);
+            if (block1 != null && block2 != null) {
+                blocks = BlockUtil.getBlocksBetween(block1, block2);
+            } else {
+                blocks = new HashSet<>();
+            }
         }
 
         return blocks;
