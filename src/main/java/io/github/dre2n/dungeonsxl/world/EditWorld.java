@@ -158,9 +158,9 @@ public class EditWorld {
     }
 
     /**
-     * @return the lobby
+     * @return the location of the lobby
      */
-    public Location getLobby() {
+    public Location getLobbyLocation() {
         return lobby;
     }
 

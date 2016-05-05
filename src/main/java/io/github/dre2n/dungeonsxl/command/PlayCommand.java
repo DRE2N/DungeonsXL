@@ -163,7 +163,7 @@ public class PlayCommand extends BRCommand {
             return;
         }
 
-        if (dGroup.getGameWorld().getLocLobby() == null) {
+        if (dGroup.getGameWorld().getLobbyLocation() == null) {
             for (Player groupPlayer : dGroup.getPlayers()) {
                 new DGamePlayer(groupPlayer, dGroup.getGameWorld());
             }

@@ -38,7 +38,7 @@ public class LobbySign extends DSign {
 
     @Override
     public void onInit() {
-        getGameWorld().setLocLobby(getSign().getLocation());
+        getGameWorld().setLobbyLocation(getSign().getLocation());
         getSign().getBlock().setType(Material.AIR);
     }
 

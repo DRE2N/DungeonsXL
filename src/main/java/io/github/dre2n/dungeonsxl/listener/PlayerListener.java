@@ -364,11 +364,11 @@ public class PlayerListener implements Listener {
                 return;
             }
 
-            if (editWorld.getLobby() == null) {
+            if (editWorld.getLobbyLocation() == null) {
                 event.setRespawnLocation(editWorld.getWorld().getSpawnLocation());
 
             } else {
-                event.setRespawnLocation(editWorld.getLobby());
+                event.setRespawnLocation(editWorld.getLobbyLocation());
             }
 
         } else {
@@ -383,11 +383,11 @@ public class PlayerListener implements Listener {
             Location respawn = dPlayer.getCheckpoint();
 
             if (respawn == null) {
-                respawn = dGroup.getGameWorld().getLocStart();
+                respawn = dGroup.getGameWorld().getStartLocation();
             }
 
             if (respawn == null) {
-                respawn = dGroup.getGameWorld().getLocLobby();
+                respawn = dGroup.getGameWorld().getLobbyLocation();
             }
 
             if (respawn == null) {

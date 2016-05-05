@@ -114,7 +114,7 @@ public class DGamePlayer extends DGlobalPlayer {
         if (this.editing) {
             this.getPlayer().setGameMode(GameMode.CREATIVE);
             clearPlayerData();
-            teleport = EditWorld.getByWorld(world).getLobby();
+            teleport = EditWorld.getByWorld(world).getLobbyLocation();
 
         } else {
             WorldConfig worldConfig = GameWorld.getByWorld(world).getConfig();
@@ -127,7 +127,7 @@ public class DGamePlayer extends DGlobalPlayer {
             }
             initialLives = worldConfig.getInitialLives();
             lives = initialLives;
-            teleport = GameWorld.getByWorld(world).getLocLobby();
+            teleport = GameWorld.getByWorld(world).getLobbyLocation();
         }
 
         if (teleport == null) {
@@ -621,11 +621,11 @@ public class DGamePlayer extends DGlobalPlayer {
         Location respawn = checkpoint;
 
         if (respawn == null) {
-            respawn = dGroup.getGameWorld().getLocStart();
+            respawn = dGroup.getGameWorld().getStartLocation();
         }
 
         if (respawn == null) {
-            respawn = dGroup.getGameWorld().getLocLobby();
+            respawn = dGroup.getGameWorld().getLobbyLocation();
         }
 
         if (respawn == null) {
@@ -712,7 +712,7 @@ public class DGamePlayer extends DGlobalPlayer {
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);
             dPlayer.setWorld(gameWorld.getWorld());
-            dPlayer.setCheckpoint(dGroup.getGameWorld().getLocStart());
+            dPlayer.setCheckpoint(dGroup.getGameWorld().getStartLocation());
             if (dPlayer.getWolf() != null) {
                 dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
             }
@@ -860,10 +860,10 @@ public class DGamePlayer extends DGlobalPlayer {
 
                 if (isEditing()) {
                     if (editWorld != null) {
-                        if (editWorld.getLobby() == null) {
+                        if (editWorld.getLobbyLocation() == null) {
                             teleportLocation = editWorld.getWorld().getSpawnLocation();
                         } else {
-                            teleportLocation = editWorld.getLobby();
+                            teleportLocation = editWorld.getLobbyLocation();
                         }
                     }
 
@@ -873,11 +873,11 @@ public class DGamePlayer extends DGlobalPlayer {
                     teleportLocation = getCheckpoint();
 
                     if (teleportLocation == null) {
-                        teleportLocation = dGroup.getGameWorld().getLocStart();
+                        teleportLocation = dGroup.getGameWorld().getStartLocation();
                     }
 
                     if (teleportLocation == null) {
-                        teleportLocation = dGroup.getGameWorld().getLocLobby();
+                        teleportLocation = dGroup.getGameWorld().getLobbyLocation();
                     }
 
                     if (teleportLocation == null) {

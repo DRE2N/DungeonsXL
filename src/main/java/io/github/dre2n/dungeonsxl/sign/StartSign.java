@@ -38,7 +38,7 @@ public class StartSign extends DSign {
 
     @Override
     public void onInit() {
-        getGameWorld().setLocStart(getSign().getLocation());
+        getGameWorld().setStartLocation(getSign().getLocation());
         getSign().getBlock().setType(Material.AIR);
     }
 

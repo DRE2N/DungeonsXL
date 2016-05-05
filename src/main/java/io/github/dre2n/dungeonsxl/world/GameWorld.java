@@ -182,33 +182,33 @@ public class GameWorld {
     }
 
     /**
-     * @return the locLobby
+     * @return the location of the lobby
      */
-    public Location getLocLobby() {
+    public Location getLobbyLocation() {
         return locLobby;
     }
 
     /**
-     * @param locLobby
-     * the locLobby to set
+     * @param location
+     * the location of the lobby to set
      */
-    public void setLocLobby(Location locLobby) {
-        this.locLobby = locLobby;
+    public void setLobbyLocation(Location location) {
+        this.locLobby = location;
     }
 
     /**
-     * @return the locStart
+     * @return the start location
      */
-    public Location getLocStart() {
+    public Location getStartLocation() {
         return locStart;
     }
 
     /**
-     * @param locStart
-     * the locStart to set
+     * @param location
+     * the location to start to set
      */
-    public void setLocStart(Location locStart) {
-        this.locStart = locStart;
+    public void setStartLocation(Location location) {
+        this.locStart = location;
     }
 
     /**
