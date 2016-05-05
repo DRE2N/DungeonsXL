@@ -31,7 +31,7 @@ import io.github.dre2n.dungeonsxl.global.LeaveSign;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
@@ -76,14 +76,13 @@ import org.bukkit.inventory.meta.BookMeta;
  */
 public class PlayerListener implements Listener {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
-
-    protected static DPlayers dPlayers = plugin.getDPlayers();
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    DPlayers dPlayers = plugin.getDPlayers();
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         GameWorld gameWorld = GameWorld.getByWorld(player.getLocation().getWorld());
         if (gameWorld == null) {
@@ -215,7 +214,7 @@ public class PlayerListener implements Listener {
             if (EditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     if (item.getType() == Material.STICK) {
-                        DPlayer dPlayer = DPlayer.getByPlayer(player);
+                        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                         if (dPlayer != null) {
                             dPlayer.poke(clickedBlock);
                             event.setCancelled(true);
@@ -274,7 +273,7 @@ public class PlayerListener implements Listener {
                     event.setCancelled(true);
                 }
 
-                DPlayer dPlayer = DPlayer.getByPlayer(player);
+                DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                 if (dPlayer != null) {
 
                     // Check GameWorld Signs
@@ -314,7 +313,7 @@ public class PlayerListener implements Listener {
     public void onDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
 
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
         }
@@ -354,7 +353,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         plugin.getDPlayers().getByPlayer(player).applyRespawnInventory();
 
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
         }
@@ -415,7 +414,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         if (dPlayer == null) {
             return;
@@ -433,7 +432,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
         }
@@ -447,7 +446,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         if (dPlayer == null) {
             dPlayers.removePlayer(dPlayer);
@@ -484,7 +483,7 @@ public class PlayerListener implements Listener {
         new DGlobalPlayer(player);
 
         // Check dPlayers
-        DPlayer dPlayer = DPlayer.getByName(player.getName());
+        DGamePlayer dPlayer = DGamePlayer.getByName(player.getName());
         if (dPlayer != null) {
             DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
             if (dGroup != null) {
@@ -514,7 +513,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (DPlayer.getByPlayer(player) != null) {
+        if (DGamePlayer.getByPlayer(player) != null) {
             return;
         }
 
@@ -553,7 +552,7 @@ public class PlayerListener implements Listener {
                 continue;
             }
 
-            new DPlayer(player, dGroup.getGameWorld());
+            new DGamePlayer(player, dGroup.getGameWorld());
         }
     }
 
@@ -564,7 +563,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        DPlayer dPlayer = DPlayer.getByPlayer(event.getPlayer());
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(event.getPlayer());
         if (dPlayer == null) {
             return;
         }

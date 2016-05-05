@@ -30,7 +30,7 @@ import org.bukkit.command.CommandSender;
  */
 public class UninviteCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public UninviteCommand() {
         setCommand("uninvite");

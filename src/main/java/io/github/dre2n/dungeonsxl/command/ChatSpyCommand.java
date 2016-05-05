@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
  */
 public class ChatSpyCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public ChatSpyCommand() {
         setCommand("chatspy");

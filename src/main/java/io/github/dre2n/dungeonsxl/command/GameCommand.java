@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
  */
 public class GameCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public GameCommand() {
         setCommand("game");

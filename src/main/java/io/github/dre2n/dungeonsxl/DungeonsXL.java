@@ -33,23 +33,24 @@ import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.global.GlobalProtections;
 import io.github.dre2n.dungeonsxl.listener.*;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProviders;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
-import io.github.dre2n.dungeonsxl.sign.DSigns;
+import io.github.dre2n.dungeonsxl.sign.DSignTypes;
 import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
 import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
-import io.github.dre2n.dungeonsxl.trigger.Triggers;
+import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitTask;
@@ -68,11 +69,11 @@ public class DungeonsXL extends BRPlugin {
     private MessageConfig messageConfig;
 
     private BRCommands dCommands;
-    private DSigns dSigns;
+    private DSignTypes dSigns;
     private GameTypes gameTypes;
     private RequirementTypes requirementTypes;
     private RewardTypes rewardTypes;
-    private Triggers triggers;
+    private TriggerTypes triggers;
     private Dungeons dungeons;
     private GlobalProtections protections;
     private ExternalMobProviders dMobProviders;
@@ -161,8 +162,8 @@ public class DungeonsXL extends BRPlugin {
         saveData();
         messageConfig.save();
 
-        // DPlayer leaves World
-        for (DPlayer dPlayer : dPlayers.getDPlayers()) {
+        // DGamePlayer leaves World
+        for (DGamePlayer dPlayer : dPlayers.getDGamePlayers()) {
             dPlayer.leave();
         }
 
@@ -338,15 +339,15 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the dSigns
      */
-    public DSigns getDSigns() {
+    public DSignTypes getDSigns() {
         return dSigns;
     }
 
     /**
-     * load / reload a new instance of DSigns
+     * load / reload a new instance of DSignTypes
      */
     public void loadDSigns() {
-        dSigns = new DSigns();
+        dSigns = new DSignTypes();
     }
 
     /**
@@ -394,15 +395,15 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the triggers
      */
-    public Triggers getTriggers() {
+    public TriggerTypes getTriggers() {
         return triggers;
     }
 
     /**
-     * load / reload a new instance of Triggers
+     * load / reload a new instance of TriggerTypes
      */
     public void loadTriggers() {
-        triggers = new Triggers();
+        triggers = new TriggerTypes();
     }
 
     /**
@@ -520,14 +521,14 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the dLootInventories
      */
-    public CopyOnWriteArrayList<DLootInventory> getDLootInventories() {
+    public List<DLootInventory> getDLootInventories() {
         return dLootInventories;
     }
 
     /**
      * @return the editWorlds
      */
-    public CopyOnWriteArrayList<EditWorld> getEditWorlds() {
+    public List<EditWorld> getEditWorlds() {
         return editWorlds;
     }
 
@@ -541,21 +542,21 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the gameWorlds
      */
-    public CopyOnWriteArrayList<GameWorld> getGameWorlds() {
+    public List<GameWorld> getGameWorlds() {
         return gameWorlds;
     }
 
     /**
      * @return the games
      */
-    public CopyOnWriteArrayList<Game> getGames() {
+    public List<Game> getGames() {
         return games;
     }
 
     /**
      * @return the dGroups
      */
-    public CopyOnWriteArrayList<DGroup> getDGroups() {
+    public List<DGroup> getDGroups() {
         return dGroups;
     }
 

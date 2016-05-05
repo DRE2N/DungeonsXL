@@ -23,21 +23,21 @@ import java.util.List;
 /**
  * @author Daniel Saukel
  */
-public class Triggers {
+public class TriggerTypes {
 
-    private List<TriggerType> triggers = new ArrayList<>();
+    private List<TriggerType> types = new ArrayList<>();
 
-    public Triggers() {
-        triggers.addAll(Arrays.asList(TriggerTypeDefault.values()));
+    public TriggerTypes() {
+        types.addAll(Arrays.asList(TriggerTypeDefault.values()));
     }
 
     /**
      * @return the trigger which has the identifier
      */
     public TriggerType getByIdentifier(String identifier) {
-        for (TriggerType trigger : triggers) {
-            if (trigger.getIdentifier().equalsIgnoreCase(identifier)) {
-                return trigger;
+        for (TriggerType type : types) {
+            if (type.getIdentifier().equalsIgnoreCase(identifier)) {
+                return type;
             }
         }
 
@@ -45,26 +45,26 @@ public class Triggers {
     }
 
     /**
-     * @return the triggers
+     * @return the trigger types
      */
     public List<TriggerType> getTriggers() {
-        return triggers;
+        return types;
     }
 
     /**
-     * @param trigger
-     * the triggers to add
+     * @param type
+     * the type to add
      */
-    public void addTrigger(TriggerType trigger) {
-        triggers.add(trigger);
+    public void addTrigger(TriggerType type) {
+        types.add(type);
     }
 
     /**
-     * @param trigger
-     * the trigger to remove
+     * @param type
+     * the type to remove
      */
-    public void removeTrigger(TriggerType trigger) {
-        triggers.remove(trigger);
+    public void removeTrigger(TriggerType type) {
+        types.remove(type);
     }
 
 }

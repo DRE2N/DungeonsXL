@@ -22,7 +22,7 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.ChatColor;
@@ -92,7 +92,7 @@ public class ReadySign extends DSign {
 
     @Override
     public boolean onPlayerTrigger(Player player) {
-        ready(DPlayer.getByPlayer(player));
+        ready(DGamePlayer.getByPlayer(player));
         return true;
     }
 
@@ -100,12 +100,12 @@ public class ReadySign extends DSign {
     public void onTrigger() {
         for (DGroup dGroup : Game.getByGameWorld(getGameWorld()).getDGroups()) {
             for (Player player : dGroup.getPlayers()) {
-                ready(DPlayer.getByPlayer(player));
+                ready(DGamePlayer.getByPlayer(player));
             }
         }
     }
 
-    private void ready(DPlayer dPlayer) {
+    private void ready(DGamePlayer dPlayer) {
         if (dPlayer == null) {
             return;
         }

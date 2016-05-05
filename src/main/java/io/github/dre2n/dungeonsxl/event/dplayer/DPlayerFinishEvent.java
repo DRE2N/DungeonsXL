@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -31,7 +31,7 @@ public class DPlayerFinishEvent extends DPlayerEvent implements Cancellable {
     private boolean first;
     private boolean hasToWait;
 
-    public DPlayerFinishEvent(DPlayer dPlayer, boolean first, boolean hasToWait) {
+    public DPlayerFinishEvent(DGamePlayer dPlayer, boolean first, boolean hasToWait) {
         super(dPlayer);
         this.first = first;
         this.hasToWait = hasToWait;

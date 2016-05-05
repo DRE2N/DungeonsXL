@@ -20,7 +20,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;
@@ -38,7 +38,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardChest {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     // Variables
     private boolean used = false;
@@ -166,7 +166,7 @@ public class RewardChest {
         }
 
         for (Player player : dGroup.getPlayers()) {
-            DPlayer dPlayer = DPlayer.getByPlayer(player);
+            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             if (dPlayer == null) {
                 continue;
             }
@@ -245,7 +245,7 @@ public class RewardChest {
             }
 
             if (rewardChest.used) {
-                MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), plugin.getMessageConfig().getMessage(DMessages.ERROR_CHEST_IS_OPENED));
+                MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), DMessages.ERROR_CHEST_IS_OPENED.getMessage());
                 event.setCancelled(true);
                 continue;
             }

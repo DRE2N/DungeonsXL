@@ -31,7 +31,7 @@ import org.bukkit.command.CommandSender;
  */
 public class HelpCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public HelpCommand() {
         setCommand("help");

@@ -48,7 +48,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class WorldConfig {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     @Deprecated
     public static WorldConfig defaultConfig = new WorldConfig();

@@ -25,7 +25,7 @@ import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class GroupCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public GroupCommand() {
         setCommand("group");
@@ -206,7 +206,7 @@ public class GroupCommand extends BRCommand {
 
         Player toKick = plugin.getServer().getPlayer(args[2]);
         if (toKick != null) {
-            DPlayerKickEvent event = new DPlayerKickEvent(DPlayer.getByPlayer(toKick.getPlayer()), DPlayerKickEvent.Cause.COMMAND);
+            DPlayerKickEvent event = new DPlayerKickEvent(DGamePlayer.getByPlayer(toKick.getPlayer()), DPlayerKickEvent.Cause.COMMAND);
 
             if (!event.isCancelled()) {
                 if (dGroup.getPlayers().contains(toKick)) {

@@ -26,8 +26,8 @@ import org.bukkit.entity.Player;
  */
 public class DPlayers {
 
-    private List<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
-    private List<DSavePlayer> dSavePlayers = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<DSavePlayer> dSavePlayers = new CopyOnWriteArrayList<>();
 
     /**
      * @return the DGlobalPlayer which represents the player
@@ -45,18 +45,18 @@ public class DPlayers {
     /**
      * @return the dGlobalPlayers
      */
-    public List<DGlobalPlayer> getPlayers() {
+    public List<DGlobalPlayer> getDGlobalPlayers() {
         return dGlobalPlayers;
     }
 
     /**
-     * @return the dGlobalPlayers that are an instance of DPlayer
+     * @return the dGlobalPlayers that are an instance of DGamePlayer
      */
-    public List<DPlayer> getDPlayers() {
-        List<DPlayer> dPlayers = new CopyOnWriteArrayList<>();
+    public List<DGamePlayer> getDGamePlayers() {
+        List<DGamePlayer> dPlayers = new CopyOnWriteArrayList<>();
         for (DGlobalPlayer player : dGlobalPlayers) {
-            if (player instanceof DPlayer) {
-                dPlayers.add((DPlayer) player);
+            if (player instanceof DGamePlayer) {
+                dPlayers.add((DGamePlayer) player);
             }
         }
         return dPlayers;

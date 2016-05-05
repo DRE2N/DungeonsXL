@@ -28,7 +28,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DGlobalPlayer {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     protected Player player;
 

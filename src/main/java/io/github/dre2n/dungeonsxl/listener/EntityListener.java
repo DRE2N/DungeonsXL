@@ -23,7 +23,7 @@ import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.List;
@@ -201,7 +201,7 @@ public class EntityListener implements Listener {
 
             // Check Dogs
             if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
-                for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
+                for (DGamePlayer dPlayer : DGamePlayer.getByWorld(gameWorld.getWorld())) {
                     if (dPlayer.getWolf() != null) {
                         if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
                             event.setCancelled(true);
@@ -211,7 +211,7 @@ public class EntityListener implements Listener {
                 }
             }
 
-            for (DPlayer dPlayer : DPlayer.getByWorld(gameWorld.getWorld())) {
+            for (DGamePlayer dPlayer : DGamePlayer.getByWorld(gameWorld.getWorld())) {
                 if (dPlayer.getWolf() != null) {
                     if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
                         if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {

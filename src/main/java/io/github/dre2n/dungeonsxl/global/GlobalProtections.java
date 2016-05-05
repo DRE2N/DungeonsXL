@@ -21,7 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class GlobalProtections {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Set<GlobalProtection> protections = new HashSet<>();
 

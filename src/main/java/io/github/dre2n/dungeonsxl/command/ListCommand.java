@@ -36,7 +36,7 @@ import org.bukkit.entity.Player;
  */
 public class ListCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public ListCommand() {
         setCommand("list");

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.event.Event;
 
 /**
@@ -24,16 +24,16 @@ import org.bukkit.event.Event;
  */
 public abstract class DPlayerEvent extends Event {
 
-    protected DPlayer dPlayer;
+    protected DGamePlayer dPlayer;
 
-    public DPlayerEvent(DPlayer dPlayer) {
+    public DPlayerEvent(DGamePlayer dPlayer) {
         this.dPlayer = dPlayer;
     }
 
     /**
      * @return the dPlayer
      */
-    public DPlayer getDPlayer() {
+    public DGamePlayer getDPlayer() {
         return dPlayer;
     }
 
@@ -41,7 +41,7 @@ public abstract class DPlayerEvent extends Event {
      * @param dPlayer
      * the dPlayer to set
      */
-    public void setDPlayer(DPlayer dPlayer) {
+    public void setDPlayer(DGamePlayer dPlayer) {
         this.dPlayer = dPlayer;
     }
 

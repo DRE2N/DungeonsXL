@@ -18,10 +18,9 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
@@ -34,8 +33,6 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann
  */
 public class LeaveSign extends GlobalProtection {
-
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Sign sign;
     private Set<Block> blocks;
@@ -102,7 +99,7 @@ public class LeaveSign extends GlobalProtection {
             return false;
         }
 
-        DPlayer dplayer = DPlayer.getByPlayer(player);
+        DGamePlayer dplayer = DGamePlayer.getByPlayer(player);
 
         if (dplayer != null) {
             dplayer.leave();

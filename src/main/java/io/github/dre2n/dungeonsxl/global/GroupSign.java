@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
@@ -40,9 +39,6 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class GroupSign extends GlobalProtection {
-
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static GlobalProtections protections = plugin.getGlobalProtections();
 
     // Sign Labels
     public static final String IS_PLAYING = ChatColor.DARK_RED + "Is Playing";

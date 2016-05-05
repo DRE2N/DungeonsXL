@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class MsgCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public MsgCommand() {
         setMinArgs(-1);

@@ -73,6 +73,6 @@ public class DPlayerListener implements Listener {
     @EventHandler
     public void onUpdate(DPlayerUpdateEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
-        MessageUtil.log(plugin, "DPlayer: " + event.getDPlayer().getPlayer().getName());
+        MessageUtil.log(plugin, "DGamePlayer: " + event.getDPlayer().getPlayer().getName());
     }*/
 }

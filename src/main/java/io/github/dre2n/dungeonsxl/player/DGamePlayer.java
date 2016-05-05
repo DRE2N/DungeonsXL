@@ -64,7 +64,7 @@ import org.bukkit.potion.PotionEffect;
  *
  * @author Frank Baumann, Tobias Schmitz, Milan Albrecht, Daniel Saukel
  */
-public class DPlayer extends DGlobalPlayer {
+public class DGamePlayer extends DGlobalPlayer {
 
     // Variables
     private World world;
@@ -88,12 +88,12 @@ public class DPlayer extends DGlobalPlayer {
     private int initialLives = -1;
     private int lives;
 
-    public DPlayer(Player player, GameWorld gameWorld) {
+    public DGamePlayer(Player player, GameWorld gameWorld) {
         this(player, gameWorld.getWorld(), false);
     }
 
     @Deprecated
-    public DPlayer(Player player, World world, boolean editing) {
+    public DGamePlayer(Player player, World world, boolean editing) {
         super(player);
 
         this.world = world;
@@ -659,7 +659,7 @@ public class DPlayer extends DGlobalPlayer {
         }
 
         for (Player player : dGroup.getPlayers()) {
-            DPlayer dPlayer = getByPlayer(player);
+            DGamePlayer dPlayer = getByPlayer(player);
             if (!dPlayer.finished) {
                 MessageUtil.sendMessage(this.getPlayer(), DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
                 return;
@@ -673,7 +673,7 @@ public class DPlayer extends DGlobalPlayer {
         }
 
         for (Player player : dGroup.getPlayers()) {
-            DPlayer dPlayer = getByPlayer(player);
+            DGamePlayer dPlayer = getByPlayer(player);
 
             if (invalid) {
                 dPlayer.finish(false);
@@ -710,7 +710,7 @@ public class DPlayer extends DGlobalPlayer {
         GameWorld gameWorld = GameWorld.load(newFloor);
         dGroup.setGameWorld(gameWorld);
         for (Player player : dGroup.getPlayers()) {
-            DPlayer dPlayer = getByPlayer(player);
+            DGamePlayer dPlayer = getByPlayer(player);
             dPlayer.setWorld(gameWorld.getWorld());
             dPlayer.setCheckpoint(dGroup.getGameWorld().getLocStart());
             if (dPlayer.getWolf() != null) {
@@ -743,7 +743,7 @@ public class DPlayer extends DGlobalPlayer {
         boolean hasToWait = false;
 
         for (Player player : dGroup.getPlayers()) {
-            DPlayer dPlayer = getByPlayer(player);
+            DGamePlayer dPlayer = getByPlayer(player);
             if (!dPlayer.finished) {
                 if (message) {
                     MessageUtil.sendMessage(this.getPlayer(), DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
@@ -775,7 +775,7 @@ public class DPlayer extends DGlobalPlayer {
         Game.getByDGroup(dGroup).resetWaveKills();
 
         for (Player player : dGroup.getPlayers()) {
-            DPlayer dPlayer = getByPlayer(player);
+            DGamePlayer dPlayer = getByPlayer(player);
             dPlayer.leave();
 
             for (Reward reward : dGroup.getRewards()) {
@@ -788,7 +788,7 @@ public class DPlayer extends DGlobalPlayer {
         if (editing) {
             EditWorld editWorld = EditWorld.getByWorld(world);
             editWorld.sendMessage(message);
-            for (DGlobalPlayer player : plugin.getDPlayers().getPlayers()) {
+            for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
                 if (player.isInChatSpyMode()) {
                     if (!editWorld.getWorld().getPlayers().contains(player.getPlayer())) {
                         MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
@@ -799,7 +799,7 @@ public class DPlayer extends DGlobalPlayer {
         } else {
             GameWorld gameWorld = GameWorld.getByWorld(world);
             gameWorld.sendMessage(message);
-            for (DGlobalPlayer player : plugin.getDPlayers().getPlayers()) {
+            for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
                 if (player.isInChatSpyMode()) {
                     if (!gameWorld.getWorld().getPlayers().contains(player.getPlayer())) {
                         MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
@@ -959,7 +959,7 @@ public class DPlayer extends DGlobalPlayer {
     }
 
     /**
-     * Delete this DPlayer. Creates a DGlobalPlayer to replace it!
+     * Delete this DGamePlayer. Creates a DGlobalPlayer to replace it!
      */
     public void delete() {
         if (player.isOnline()) {
@@ -972,8 +972,8 @@ public class DPlayer extends DGlobalPlayer {
     }
 
     /* Statics */
-    public static DPlayer getByPlayer(Player player) {
-        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
+    public static DGamePlayer getByPlayer(Player player) {
+        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             if (dPlayer.getPlayer().equals(player)) {
                 return dPlayer;
             }
@@ -981,8 +981,8 @@ public class DPlayer extends DGlobalPlayer {
         return null;
     }
 
-    public static DPlayer getByName(String name) {
-        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
+    public static DGamePlayer getByName(String name) {
+        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             if (dPlayer.getPlayer().getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
@@ -990,10 +990,10 @@ public class DPlayer extends DGlobalPlayer {
         return null;
     }
 
-    public static CopyOnWriteArrayList<DPlayer> getByWorld(World world) {
-        CopyOnWriteArrayList<DPlayer> dPlayers = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<DGamePlayer> getByWorld(World world) {
+        CopyOnWriteArrayList<DGamePlayer> dPlayers = new CopyOnWriteArrayList<>();
 
-        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
+        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             if (dPlayer.world == world) {
                 dPlayers.add(dPlayer);
             }

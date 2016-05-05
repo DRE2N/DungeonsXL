@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.ChatColor;
@@ -73,7 +73,7 @@ public class FloorSign extends DSign {
 
     @Override
     public boolean onPlayerTrigger(Player player) {
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return true;
         }
@@ -88,7 +88,7 @@ public class FloorSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DPlayer dPlayer : plugin.getDPlayers().getDPlayers()) {
+        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             dPlayer.finishFloor(floor);
         }
     }

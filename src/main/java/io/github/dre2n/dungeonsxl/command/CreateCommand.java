@@ -21,7 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
  */
 public class CreateCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public CreateCommand() {
         setMinArgs(1);
@@ -71,7 +71,7 @@ public class CreateCommand extends BRCommand {
         } else if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (DPlayer.getByPlayer(player) != null) {
+            if (DGamePlayer.getByPlayer(player) != null) {
                 MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
                 return;
             }
@@ -90,7 +90,7 @@ public class CreateCommand extends BRCommand {
                 MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());
 
                 // Tp Player
-                new DPlayer(player, editWorld.getWorld(), true);
+                new DGamePlayer(player, editWorld.getWorld(), true);
 
             } else {
                 MessageUtil.sendMessage(player, DMessages.ERROR_NAME_TO_LONG.getMessage());

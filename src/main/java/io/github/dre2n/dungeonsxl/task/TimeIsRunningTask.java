@@ -22,7 +22,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,7 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class TimeIsRunningTask extends BukkitRunnable {
 
-    protected static MessageConfig messageConfig = DungeonsXL.getInstance().getMessageConfig();
+    MessageConfig messageConfig = DungeonsXL.getInstance().getMessageConfig();
 
     private DGroup dGroup;
     private int time;
@@ -60,7 +60,7 @@ public class TimeIsRunningTask extends BukkitRunnable {
             for (Player player : dGroup.getPlayers()) {
                 MessageUtil.sendActionBarMessage(player, DMessages.PLAYER_TIME_LEFT.getMessage(color, String.valueOf(timeLeft)));
 
-                DPlayer dPlayer = DPlayer.getByPlayer(player);
+                DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                 if (timeLeft > 0) {
                     continue;
                 }

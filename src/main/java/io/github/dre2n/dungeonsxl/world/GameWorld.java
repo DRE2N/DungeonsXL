@@ -31,7 +31,7 @@ import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.DSign;
@@ -64,7 +64,7 @@ import org.bukkit.entity.Spider;
  */
 public class GameWorld {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     // Variables
     private boolean tutorial;
@@ -427,7 +427,7 @@ public class GameWorld {
     }
 
     public void sendMessage(String message) {
-        for (DPlayer dPlayer : DPlayer.getByWorld(world)) {
+        for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
             MessageUtil.sendMessage(dPlayer.getPlayer(), message);
         }
     }

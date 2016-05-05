@@ -26,7 +26,7 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
@@ -38,7 +38,7 @@ import org.bukkit.entity.Player;
  */
 public class PlayCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public PlayCommand() {
         setCommand("play");
@@ -52,7 +52,7 @@ public class PlayCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         if (dPlayer != null) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
@@ -165,12 +165,12 @@ public class PlayCommand extends BRCommand {
 
         if (dGroup.getGameWorld().getLocLobby() == null) {
             for (Player groupPlayer : dGroup.getPlayers()) {
-                new DPlayer(groupPlayer, dGroup.getGameWorld());
+                new DGamePlayer(groupPlayer, dGroup.getGameWorld());
             }
 
         } else {
             for (Player groupPlayer : dGroup.getPlayers()) {
-                new DPlayer(groupPlayer, dGroup.getGameWorld());
+                new DGamePlayer(groupPlayer, dGroup.getGameWorld());
             }
         }
     }

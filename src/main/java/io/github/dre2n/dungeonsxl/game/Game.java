@@ -41,7 +41,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class Game {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;

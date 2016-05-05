@@ -22,7 +22,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
  */
 public class EditCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public EditCommand() {
         setCommand("edit");
@@ -49,7 +49,7 @@ public class EditCommand extends BRCommand {
         String mapName = args[1];
         EditWorld editWorld = EditWorld.load(mapName);
         DGroup dGroup = DGroup.getByPlayer(player);
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         if (!(EditWorld.isInvitedPlayer(mapName, player.getUniqueId(), player.getName()) || DPermissions.hasPermission(player, DPermissions.EDIT))) {
             MessageUtil.sendMessage(player, DMessages.ERROR_NO_PERMISSIONS.getMessage());
@@ -71,7 +71,7 @@ public class EditCommand extends BRCommand {
             return;
         }
 
-        new DPlayer(player, editWorld.getWorld(), true);
+        new DGamePlayer(player, editWorld.getWorld(), true);
 
     }
 

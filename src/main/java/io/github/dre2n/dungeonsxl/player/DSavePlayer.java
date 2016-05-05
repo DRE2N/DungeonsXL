@@ -45,8 +45,8 @@ import org.bukkit.potion.PotionEffect;
  */
 public class DSavePlayer {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static DPlayers dPlayers = plugin.getDPlayers();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DPlayers dPlayers = plugin.getDPlayers();
 
     // Variables
     private String name;

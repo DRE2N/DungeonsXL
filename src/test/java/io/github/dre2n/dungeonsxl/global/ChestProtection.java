@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.global;
 
-import io.github.dre2n.dungeonsxl.global.GlobalProtection;
 import java.util.Arrays;
 import java.util.Collection;
 import org.bukkit.block.Block;

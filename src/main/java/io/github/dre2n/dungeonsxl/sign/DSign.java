@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.dsign.DSignRegistrationEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
@@ -33,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class DSign {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Sign sign;
     private GameWorld gameWorld;
@@ -181,9 +182,9 @@ public abstract class DSign {
                 dSign = constructor.newInstance(sign, gameWorld);
 
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-                plugin.getLogger().info("An error occurred while accessing the handler class of the sign " + type.getName() + ": " + exception.getClass().getSimpleName());
+                MessageUtil.log("An error occurred while accessing the handler class of the sign " + type.getName() + ": " + exception.getClass().getSimpleName());
                 if (!(type instanceof DSignTypeDefault)) {
-                    plugin.getLogger().info("Please note that this sign is an unsupported feature added by an addon!");
+                    MessageUtil.log("Please note that this sign is an unsupported feature added by an addon!");
                 }
             }
         }

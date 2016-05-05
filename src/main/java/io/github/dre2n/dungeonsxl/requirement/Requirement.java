@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.requirement;
 
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementRegistrationEvent;
 import java.lang.reflect.Constructor;
@@ -27,7 +28,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class Requirement {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public static Requirement create(RequirementType type) {
         Requirement requirement = null;
@@ -37,9 +38,9 @@ public abstract class Requirement {
             requirement = constructor.newInstance();
 
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            plugin.getLogger().info("An error occurred while accessing the handler class of the requirement " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
+            MessageUtil.log("An error occurred while accessing the handler class of the requirement " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
             if (!(type instanceof RequirementTypeDefault)) {
-                plugin.getLogger().info("Please note that this requirement is an unsupported feature added by an addon!");
+                MessageUtil.log("Please note that this requirement is an unsupported feature added by an addon!");
             }
         }
 

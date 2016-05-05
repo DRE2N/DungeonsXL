@@ -23,35 +23,35 @@ import java.util.List;
 /**
  * @author Daniel Saukel
  */
-public class DSigns {
+public class DSignTypes {
 
-    private List<DSignType> dSigns = new ArrayList<>();
+    private List<DSignType> types = new ArrayList<>();
 
-    public DSigns() {
-        dSigns.addAll(Arrays.asList(DSignTypeDefault.values()));
+    public DSignTypes() {
+        types.addAll(Arrays.asList(DSignTypeDefault.values()));
     }
 
     /**
-     * @return the dSigns
+     * @return the DSign types
      */
     public List<DSignType> getDSigns() {
-        return dSigns;
+        return types;
     }
 
     /**
-     * @param dSign
-     * the dSigns to add
+     * @param type
+     * the type to add
      */
-    public void addDSign(DSignType dSign) {
-        dSigns.add(dSign);
+    public void addDSign(DSignType type) {
+        types.add(type);
     }
 
     /**
-     * @param dSign
-     * the dSigns to remove
+     * @param type
+     * the type to remove
      */
-    public void removeDSign(DSignType dSign) {
-        dSigns.remove(dSign);
+    public void removeDSign(DSignType type) {
+        types.remove(type);
     }
 
 }

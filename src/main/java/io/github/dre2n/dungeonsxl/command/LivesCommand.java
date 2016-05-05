@@ -21,7 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +31,7 @@ import org.bukkit.entity.Player;
  */
 public class LivesCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public LivesCommand() {
         setCommand("lives");
@@ -60,7 +60,7 @@ public class LivesCommand extends BRCommand {
             return;
         }
 
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer != null) {
             MessageUtil.sendMessage(player, DMessages.CMD_LIVES.getMessage(player.getName(), String.valueOf(dPlayer.getLives())));
 

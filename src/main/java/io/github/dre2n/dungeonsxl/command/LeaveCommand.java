@@ -24,7 +24,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class LeaveCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public LeaveCommand() {
         setCommand("leave");
@@ -48,7 +48,7 @@ public class LeaveCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DPlayer dPlayer = DPlayer.getByPlayer(player);
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         if (GameWorld.getByWorld(player.getWorld()) != null) {
             if (GameWorld.getByWorld(player.getWorld()).isTutorial()) {

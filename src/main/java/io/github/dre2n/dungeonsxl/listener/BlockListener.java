@@ -55,8 +55,8 @@ import org.bukkit.event.block.SignChangeEvent;
  */
 public class BlockListener implements Listener {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static DPlayers dPlayers = plugin.getDPlayers();
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    DPlayers dPlayers = plugin.getDPlayers();
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPhysics(BlockPhysicsEvent event) {

@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Material;
@@ -34,7 +34,7 @@ public class CheckpointSign extends DSign {
 
     // Variables
     private boolean initialized;
-    private CopyOnWriteArrayList<DPlayer> done = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<DGamePlayer> done = new CopyOnWriteArrayList<>();
 
     public CheckpointSign(Sign sign, GameWorld gameWorld) {
         super(sign, gameWorld);
@@ -58,7 +58,7 @@ public class CheckpointSign extends DSign {
             return;
         }
 
-        for (DPlayer dplayer : DPlayer.getByWorld(getGameWorld().getWorld())) {
+        for (DGamePlayer dplayer : DGamePlayer.getByWorld(getGameWorld().getWorld())) {
             dplayer.setCheckpoint(getSign().getLocation());
             MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.PLAYER_CHECKPOINT_REACHED));
         }
@@ -72,7 +72,7 @@ public class CheckpointSign extends DSign {
             return true;
         }
 
-        DPlayer dplayer = DPlayer.getByPlayer(player);
+        DGamePlayer dplayer = DGamePlayer.getByPlayer(player);
         if (dplayer != null) {
             if (!done.contains(dplayer)) {
                 done.add(dplayer);
@@ -81,7 +81,7 @@ public class CheckpointSign extends DSign {
             }
         }
 
-        if (done.size() >= DPlayer.getByWorld(getGameWorld().getWorld()).size()) {
+        if (done.size() >= DGamePlayer.getByWorld(getGameWorld().getWorld()).size()) {
             remove();
         }
 

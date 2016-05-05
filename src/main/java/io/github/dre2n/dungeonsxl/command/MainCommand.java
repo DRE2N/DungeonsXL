@@ -34,7 +34,7 @@ import org.bukkit.plugin.PluginManager;
  */
 public class MainCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public MainCommand() {
         setCommand("main");
@@ -51,7 +51,7 @@ public class MainCommand extends BRCommand {
         int maps = new File(plugin.getDataFolder() + "/maps").listFiles().length;
         int dungeons = new File(plugin.getDataFolder() + "/dungeons").listFiles().length;
         int loaded = plugin.getEditWorlds().size() + plugin.getGameWorlds().size();
-        int players = plugin.getDPlayers().getDPlayers().size();
+        int players = plugin.getDPlayers().getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {

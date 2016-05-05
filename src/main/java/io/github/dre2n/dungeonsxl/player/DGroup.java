@@ -47,11 +47,11 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class DGroup {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private String name;
     private Player captain;
-    private List<Player> players = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Player> players = new CopyOnWriteArrayList<>();
     private List<UUID> invitedPlayers = new ArrayList<>();
     private String dungeonName;
     private String mapName;
@@ -81,7 +81,7 @@ public class DGroup {
         this(name, player, new CopyOnWriteArrayList<>(Arrays.asList(player)), identifier, multiFloor);
     }
 
-    public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
+    public DGroup(String name, Player captain, CopyOnWriteArrayList<Player> players, String identifier, boolean multiFloor) {
         plugin.getDGroups().add(this);
         this.name = name;
 
@@ -454,9 +454,9 @@ public class DGroup {
             }
 
             for (Player player : dGroup.getPlayers()) {
-                DPlayer dPlayer = DPlayer.getByPlayer(player);
+                DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                 if (dPlayer == null) {
-                    new DPlayer(player, gameWorld);
+                    new DGamePlayer(player, gameWorld);
                 }
 
                 if (!dPlayer.isReady()) {
@@ -482,7 +482,7 @@ public class DGroup {
         floorCount++;
 
         for (Player player : getPlayers()) {
-            DPlayer dPlayer = DPlayer.getByPlayer(player);
+            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             if (dPlayer == null) {
                 continue;
             }

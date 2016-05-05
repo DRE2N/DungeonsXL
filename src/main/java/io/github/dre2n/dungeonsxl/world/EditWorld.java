@@ -24,7 +24,7 @@ import io.github.dre2n.dungeonsxl.event.editworld.EditWorldGenerateEvent;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldLoadEvent;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldSaveEvent;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldUnloadEvent;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ import org.bukkit.entity.Player;
  */
 public class EditWorld {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     // Variables
     private World world;
@@ -263,7 +263,7 @@ public class EditWorld {
 
         plugin.getEditWorlds().remove(this);
         for (Player player : world.getPlayers()) {
-            DPlayer dPlayer = DPlayer.getByPlayer(player);
+            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             dPlayer.leave();
         }
 
@@ -283,7 +283,7 @@ public class EditWorld {
 
         plugin.getEditWorlds().remove(this);
         for (Player player : world.getPlayers()) {
-            DPlayer dPlayer = DPlayer.getByPlayer(player);
+            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             dPlayer.leave();
         }
 
@@ -295,7 +295,7 @@ public class EditWorld {
     }
 
     public void sendMessage(String message) {
-        for (DPlayer dPlayer : DPlayer.getByWorld(world)) {
+        for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
             MessageUtil.sendMessage(dPlayer.getPlayer(), message);
         }
     }
@@ -441,7 +441,7 @@ public class EditWorld {
         // Kick Player
         EditWorld editWorld = EditWorld.getByName(editWorldName);
         if (editWorld != null) {
-            DPlayer player = DPlayer.getByName(name);
+            DGamePlayer player = DGamePlayer.getByName(name);
 
             if (player != null) {
                 if (editWorld.world.getPlayers().contains(player.getPlayer())) {

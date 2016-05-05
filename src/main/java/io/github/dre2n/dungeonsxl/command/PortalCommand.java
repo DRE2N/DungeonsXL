@@ -23,7 +23,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class PortalCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public PortalCommand() {
         setCommand("portal");
@@ -50,7 +50,7 @@ public class PortalCommand extends BRCommand {
         Player player = (Player) sender;
         DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
 
-        if (dGlobalPlayer instanceof DPlayer) {
+        if (dGlobalPlayer instanceof DGamePlayer) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }

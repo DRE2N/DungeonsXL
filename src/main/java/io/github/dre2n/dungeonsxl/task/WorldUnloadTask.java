@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,13 +27,13 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class WorldUnloadTask extends BukkitRunnable {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     @Override
     public void run() {
         for (GameWorld gameWorld : plugin.getGameWorlds()) {
             if (gameWorld.getWorld().getPlayers().isEmpty()) {
-                if (DPlayer.getByWorld(gameWorld.getWorld()).isEmpty()) {
+                if (DGamePlayer.getByWorld(gameWorld.getWorld()).isEmpty()) {
                     gameWorld.delete();
                 }
             }

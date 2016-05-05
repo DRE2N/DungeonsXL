@@ -20,7 +20,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -38,7 +38,7 @@ public class SecureModeTask extends BukkitRunnable {
                 dGlobalPlayer = new DGlobalPlayer(player);
             }
 
-            if (!(dGlobalPlayer instanceof DPlayer || dGlobalPlayer instanceof DEditPlayer)) {
+            if (!(dGlobalPlayer instanceof DGamePlayer || dGlobalPlayer instanceof DEditPlayer)) {
                 if (player.getWorld().getName().startsWith("DXL_Game_") | player.getWorld().getName().startsWith("DXL_Edit_") && !DPermissions.hasPermission(player, DPermissions.INSECURE)) {
                     player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
                 }

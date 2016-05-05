@@ -23,7 +23,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
  */
 public class EnterCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public EnterCommand() {
         setMinArgs(1);
@@ -81,7 +81,7 @@ public class EnterCommand extends BRCommand {
         joining.sendMessage(DMessages.CMD_ENTER_SUCCESS.getMessage(joining.getName(), targetName));
 
         for (Player player : joining.getPlayers()) {
-            new DPlayer(player, game.getWorld()).ready();
+            new DGamePlayer(player, game.getWorld()).ready();
         }
     }
 

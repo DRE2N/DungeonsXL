@@ -30,7 +30,7 @@ import org.bukkit.command.CommandSender;
  */
 public class InviteCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public InviteCommand() {
         setMinArgs(2);

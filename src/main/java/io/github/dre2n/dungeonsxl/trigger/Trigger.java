@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.commons.util.NumberUtil;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerRegistrationEvent;
 import io.github.dre2n.dungeonsxl.sign.DSign;
@@ -32,10 +33,10 @@ import org.bukkit.entity.Player;
  */
 public abstract class Trigger {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private boolean triggered;
-    private Player player; // Holds Player for Player specific Triggers
+    private Player player; // Holds Player for Player specific TriggerTypes
 
     private Set<DSign> dSigns = new HashSet<>();
 
@@ -180,9 +181,9 @@ public abstract class Trigger {
                 trigger = (Trigger) method.invoke(value, dSign.getGameWorld());
 
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-                plugin.getLogger().info("An error occurred while accessing the handler class of the sign " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
+                MessageUtil.log("An error occurred while accessing the handler class of the sign " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
                 if (!(type instanceof TriggerTypeDefault)) {
-                    plugin.getLogger().info("Please note that this trigger is an unsupported feature added by an addon!");
+                    MessageUtil.log("Please note that this trigger is an unsupported feature added by an addon!");
                 }
             }
 

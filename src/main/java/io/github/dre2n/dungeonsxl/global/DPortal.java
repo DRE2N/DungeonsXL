@@ -18,11 +18,10 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,9 +36,6 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Daniel Saukel
  */
 public class DPortal extends GlobalProtection {
-
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static GlobalProtections protections = plugin.getGlobalProtections();
 
     private Block block1;
     private Block block2;
@@ -205,7 +201,7 @@ public class DPortal extends GlobalProtection {
 
         dGroup.setGameWorld(target);
 
-        new DPlayer(player, target);
+        new DGamePlayer(player, target);
     }
 
     @Override

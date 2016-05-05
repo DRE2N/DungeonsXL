@@ -24,7 +24,7 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class TestCommand extends BRCommand {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public TestCommand() {
         setCommand("test");
@@ -73,7 +73,7 @@ public class TestCommand extends BRCommand {
         }
 
         for (Player groupPlayer : dGroup.getPlayers()) {
-            DPlayer.getByPlayer(groupPlayer).ready(GameTypeDefault.TEST);
+            DGamePlayer.getByPlayer(groupPlayer).ready(GameTypeDefault.TEST);
         }
     }
 

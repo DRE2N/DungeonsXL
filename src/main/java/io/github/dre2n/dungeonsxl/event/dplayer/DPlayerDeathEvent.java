@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
-import io.github.dre2n.dungeonsxl.player.DPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -32,7 +32,7 @@ public class DPlayerDeathEvent extends DPlayerEvent implements Cancellable {
     private PlayerDeathEvent bukkitEvent;
     private int lostLives;
 
-    public DPlayerDeathEvent(DPlayer dPlayer, PlayerDeathEvent bukkitEvent, int lostLives) {
+    public DPlayerDeathEvent(DGamePlayer dPlayer, PlayerDeathEvent bukkitEvent, int lostLives) {
         super(dPlayer);
         this.bukkitEvent = bukkitEvent;
         this.lostLives = lostLives;
