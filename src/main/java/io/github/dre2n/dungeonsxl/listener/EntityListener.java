@@ -38,7 +38,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -71,9 +70,12 @@ public class EntityListener implements Listener {
         GameWorld gameWorld = GameWorld.getByWorld(world);
 
         if (editWorld != null || gameWorld != null) {
-            if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.BREEDING || event.getSpawnReason() == SpawnReason.NATURAL
-                    || event.getSpawnReason() == SpawnReason.DEFAULT) {
-                event.setCancelled(true);
+            switch (event.getSpawnReason()) {
+                case CHUNK_GEN:
+                case JOCKEY:
+                case MOUNT:
+                case NATURAL:
+                    event.setCancelled(true);
             }
         }
     }
