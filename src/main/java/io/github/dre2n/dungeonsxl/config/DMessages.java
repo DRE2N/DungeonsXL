@@ -64,6 +64,7 @@ public enum DMessages implements Messages {
     ERROR_MSG_ID_NOT_EXIST("Error_MsgIdNotExist", "&4Messages with Id &6&v1&4 does not exist!"),
     ERROR_MSG_FORMAT("Error_MsgFormat", "&4The Messages has to be between \"!"),
     ERROR_MSG_NO_INT("Error_MsgNoInt", "&4Argument <id> has to include a number!"),
+    ERROR_NAME_IN_USE("Error_NameInUse", "&4The name &6&v1 &4is already in use."),
     ERROR_NAME_TO_LONG("Error_NameToLong", "&4The name may not be longer than 15 characters!"),
     ERROR_NO_CONSOLE_COMMAND("Error_NoConsoleCommand", "&6/dxl &v1&4 cannot be executed as console!"),
     ERROR_NO_GAME("Error_NoGame", "&4You currently do not take part in a game."),

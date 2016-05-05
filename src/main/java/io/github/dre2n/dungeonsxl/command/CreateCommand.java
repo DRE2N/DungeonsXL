@@ -20,9 +20,10 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
+import java.io.File;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -48,25 +49,30 @@ public class CreateCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         String name = args[1];
 
+        if (new File(plugin.getDataFolder(), "/maps/" + name).exists()) {
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_IN_USE.getMessage(name));
+            return;
+        }
+
+        if (name.length() > 15) {
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_TO_LONG.getMessage());
+            return;
+        }
+
         if (sender instanceof ConsoleCommandSender) {
-            if (name.length() <= 15) {
-                // Msg create
-                MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
-                MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
+            // Msg create
+            MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
+            MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
-                // Create World
-                EditWorld editWorld = new EditWorld();
-                editWorld.generate();
-                editWorld.setMapName(name);
-                editWorld.save();
-                editWorld.delete();
+            // Create World
+            EditWorld editWorld = new EditWorld();
+            editWorld.generate();
+            editWorld.setMapName(name);
+            editWorld.save();
+            editWorld.delete();
 
-                // MSG Done
-                MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());
-
-            } else {
-                MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_TO_LONG.getMessage());
-            }
+            // MSG Done
+            MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());
 
         } else if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -76,25 +82,20 @@ public class CreateCommand extends BRCommand {
                 return;
             }
 
-            if (name.length() <= 15) {
-                // Msg create
-                MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
-                MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
+            // Msg create
+            MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
+            MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
-                // Create World
-                EditWorld editWorld = new EditWorld();
-                editWorld.generate();
-                editWorld.setMapName(name);
+            // Create World
+            EditWorld editWorld = new EditWorld();
+            editWorld.generate();
+            editWorld.setMapName(name);
 
-                // MSG Done
-                MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());
+            // MSG Done
+            MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());
 
-                // Tp Player
-                new DGamePlayer(player, editWorld.getWorld(), true);
-
-            } else {
-                MessageUtil.sendMessage(player, DMessages.ERROR_NAME_TO_LONG.getMessage());
-            }
+            // Tp Player
+            new DGamePlayer(player, editWorld.getWorld(), true);
         }
     }
 

@@ -16,9 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.reward;
 
-import io.github.dre2n.dungeonsxl.reward.Reward;
-import io.github.dre2n.dungeonsxl.reward.RewardType;
-
 /**
  * @author Daniel Saukel
  */

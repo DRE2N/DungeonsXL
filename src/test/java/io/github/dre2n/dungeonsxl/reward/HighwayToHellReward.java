@@ -18,8 +18,6 @@ package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.reward.Reward;
-import io.github.dre2n.dungeonsxl.reward.RewardType;
 import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

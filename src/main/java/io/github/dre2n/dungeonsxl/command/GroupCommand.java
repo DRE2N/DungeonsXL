@@ -23,9 +23,9 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -108,20 +108,25 @@ public class GroupCommand extends BRCommand {
     }
 
     public void createGroup() {
-        if (DGroup.getByPlayer(player) == null && DGroup.getByName(args[2]) == null) {
-            DGroup dGroup = new DGroup(args[2], player);
-            DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
+        if (DGroup.getByPlayer(player) != null) {
+            MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_GROUP.getMessage());
+            return;
+        }
 
-            if (event.isCancelled()) {
-                dGroup.delete();
-                dGroup = null;
+        if (DGroup.getByName(args[2]) == null) {
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_IN_USE.getMessage(args[2]));
+            return;
+        }
 
-            } else {
-                MessageUtil.sendMessage(sender, DMessages.GROUP_CREATED.getMessage(sender.getName(), args[2]));
-            }
+        DGroup dGroup = new DGroup(args[2], player);
+        DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
+
+        if (event.isCancelled()) {
+            dGroup.delete();
+            dGroup = null;
 
         } else {
-            MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_GROUP.getMessage());
+            MessageUtil.sendMessage(sender, DMessages.GROUP_CREATED.getMessage(sender.getName(), args[2]));
         }
     }
 

@@ -16,9 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.requirement;
 
-import io.github.dre2n.dungeonsxl.requirement.Requirement;
-import io.github.dre2n.dungeonsxl.requirement.RequirementType;
-
 /**
  * @author Daniel Saukel
  */

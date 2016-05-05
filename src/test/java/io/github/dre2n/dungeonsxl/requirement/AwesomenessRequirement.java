@@ -17,8 +17,6 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.requirement.Requirement;
-import io.github.dre2n.dungeonsxl.requirement.RequirementType;
 import org.bukkit.entity.Player;
 
 /**

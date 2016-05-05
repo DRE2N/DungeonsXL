@@ -300,7 +300,7 @@ public class EditWorld {
         }
     }
 
-    // Static
+    /* Statics */
     public static EditWorld getByWorld(World world) {
         for (EditWorld editWorld : plugin.getEditWorlds()) {
             if (editWorld.world.equals(world)) {

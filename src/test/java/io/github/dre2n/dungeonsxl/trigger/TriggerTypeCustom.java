@@ -16,9 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.trigger;
 
-import io.github.dre2n.dungeonsxl.trigger.Trigger;
-import io.github.dre2n.dungeonsxl.trigger.TriggerType;
-
 /**
  * @author Daniel Saukel
  */

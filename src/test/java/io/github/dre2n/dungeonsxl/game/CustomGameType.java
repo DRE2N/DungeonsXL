@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
-import io.github.dre2n.dungeonsxl.game.GameType;
 import org.bukkit.GameMode;
 
 /**
