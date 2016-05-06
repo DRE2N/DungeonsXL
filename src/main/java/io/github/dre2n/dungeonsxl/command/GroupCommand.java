@@ -113,7 +113,7 @@ public class GroupCommand extends BRCommand {
             return;
         }
 
-        if (DGroup.getByName(args[2]) == null) {
+        if (DGroup.getByName(args[2]) != null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_IN_USE.getMessage(args[2]));
             return;
         }
