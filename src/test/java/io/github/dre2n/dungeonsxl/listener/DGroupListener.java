@@ -40,7 +40,7 @@ public class DGroupListener implements Listener {
     public void onDisband(DGroupDisbandEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
         MessageUtil.log(plugin, "Cause: " + event.getCause());
-        MessageUtil.log(plugin, "Creator: " + event.getDisbander().getName());
+        MessageUtil.log(plugin, "Disbander: " + event.getDisbander().getName());
     }
 
     @EventHandler

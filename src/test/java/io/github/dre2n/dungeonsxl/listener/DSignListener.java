@@ -32,7 +32,7 @@ public class DSignListener implements Listener {
     @EventHandler
     public void onRegistration(DSignRegistrationEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
-        MessageUtil.log(plugin, "GameWorld (ID): " + event.getGameWorld().getId());
+        MessageUtil.log(plugin, "GameWorld (ID): " + (event.getGameWorld() == null ? "" : event.getGameWorld().getId()));
         MessageUtil.log(plugin, "DSign: " + event.getDSign().getType());
     }
 

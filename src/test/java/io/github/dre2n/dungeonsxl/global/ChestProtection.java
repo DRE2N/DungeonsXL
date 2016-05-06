@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.global;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.util.Arrays;
 import java.util.Collection;
 import org.bukkit.block.Block;
@@ -29,7 +30,7 @@ public class ChestProtection extends GlobalProtection {
     private Block chest;
 
     public ChestProtection(Block chest) {
-        super(chest.getWorld(), plugin.getGlobalProtections().generateId(ChestProtection.class, chest.getWorld()));
+        super(chest.getWorld(), DungeonsXL.getInstance().getGlobalProtections().generateId(ChestProtection.class, chest.getWorld()));
         this.chest = chest;
     }
 

@@ -66,7 +66,7 @@ public class DPlayerListener implements Listener {
     public void onLeaveDGroup(DPlayerLeaveDGroupEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
         MessageUtil.log(plugin, "DPlayer: " + event.getDPlayer().getPlayer().getName());
-        MessageUtil.log(plugin, "DGroup: " + event.getDGroup().getName());
+        MessageUtil.log(plugin, "DGroup: " + (event.getDGroup() == null ? "" : event.getDGroup().getName()));
     }
 
     /*This would cause waaay too much console spam...
