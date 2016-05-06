@@ -20,6 +20,7 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
@@ -71,7 +72,7 @@ public class EditCommand extends BRCommand {
             return;
         }
 
-        new DGamePlayer(player, editWorld.getWorld(), true);
+        new DEditPlayer(player, editWorld.getWorld());
 
     }
 

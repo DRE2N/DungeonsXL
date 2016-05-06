@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
@@ -50,10 +51,23 @@ public class DPlayers {
     }
 
     /**
+     * @return the dGlobalPlayers that are an instance of DInstancePlayer
+     */
+    public List<DInstancePlayer> getDInstancePlayers() {
+        List<DInstancePlayer> dInstancePlayers = new ArrayList<>();
+        for (DGlobalPlayer player : dGlobalPlayers) {
+            if (player instanceof DInstancePlayer) {
+                dInstancePlayers.add((DInstancePlayer) player);
+            }
+        }
+        return dInstancePlayers;
+    }
+
+    /**
      * @return the dGlobalPlayers that are an instance of DGamePlayer
      */
     public List<DGamePlayer> getDGamePlayers() {
-        List<DGamePlayer> dPlayers = new CopyOnWriteArrayList<>();
+        List<DGamePlayer> dPlayers = new ArrayList<>();
         for (DGlobalPlayer player : dGlobalPlayers) {
             if (player instanceof DGamePlayer) {
                 dPlayers.add((DGamePlayer) player);
@@ -66,7 +80,7 @@ public class DPlayers {
      * @return the dGlobalPlayers that are an instance of DEditPlayer
      */
     public List<DEditPlayer> getDEditPlayers() {
-        List<DEditPlayer> dEditPlayers = new CopyOnWriteArrayList<>();
+        List<DEditPlayer> dEditPlayers = new ArrayList<>();
         for (DGlobalPlayer player : dGlobalPlayers) {
             if (player instanceof DEditPlayer) {
                 dEditPlayers.add((DEditPlayer) player);

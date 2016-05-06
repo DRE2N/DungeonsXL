@@ -16,8 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
@@ -37,7 +35,6 @@ import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
 import java.io.IOException;
@@ -47,15 +44,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
-import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -65,15 +59,9 @@ import org.bukkit.potion.PotionEffect;
  *
  * @author Frank Baumann, Tobias Schmitz, Milan Albrecht, Daniel Saukel
  */
-public class DGamePlayer extends DGlobalPlayer {
+public class DGamePlayer extends DInstancePlayer {
 
     // Variables
-    private World world;
-
-    private DSavePlayer savePlayer;
-
-    private boolean editing;
-    private boolean inDungeonChat = false;
     private boolean ready = false;
     private boolean finished = false;
 
@@ -82,7 +70,6 @@ public class DGamePlayer extends DGlobalPlayer {
     private Wolf wolf;
     private int wolfRespawnTime = 30;
     private long offlineTime;
-    private String[] linesCopy;
 
     private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, DMessages.PLAYER_TREASURES.getMessage());
 
@@ -90,62 +77,31 @@ public class DGamePlayer extends DGlobalPlayer {
     private int lives;
 
     public DGamePlayer(Player player, GameWorld gameWorld) {
-        this(player, gameWorld.getWorld(), false);
+        this(player, gameWorld.getWorld());
     }
 
-    @Deprecated
-    public DGamePlayer(Player player, World world, boolean editing) {
-        super(player);
+    public DGamePlayer(Player player, World world) {
+        super(player, world);
 
-        this.world = world;
+        WorldConfig worldConfig = GameWorld.getByWorld(world).getConfig();
+        player.setGameMode(GameMode.SURVIVAL);
 
-        if (!Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
-            savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), null, player.getLevel(),
-                    player.getTotalExperience(), player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
-
-        } else {
-            savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getInventory().getItemInOffHand(), player.getLevel(),
-                    player.getTotalExperience(), player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
-        }
-        this.editing = editing;
-
-        Location teleport;
-        if (this.editing) {
-            this.getPlayer().setGameMode(GameMode.CREATIVE);
+        if (!worldConfig.getKeepInventoryOnEnter()) {
             clearPlayerData();
-            teleport = EditWorld.getByWorld(world).getLobbyLocation();
-
-        } else {
-            WorldConfig worldConfig = GameWorld.getByWorld(world).getConfig();
-            this.getPlayer().setGameMode(GameMode.SURVIVAL);
-            if (!worldConfig.getKeepInventoryOnEnter()) {
-                clearPlayerData();
-            }
-            if (worldConfig.isLobbyDisabled()) {
-                ready();
-            }
-            initialLives = worldConfig.getInitialLives();
-            lives = initialLives;
-            teleport = GameWorld.getByWorld(world).getLobbyLocation();
         }
 
+        if (worldConfig.isLobbyDisabled()) {
+            ready();
+        }
+
+        initialLives = worldConfig.getInitialLives();
+        lives = initialLives;
+
+        Location teleport = GameWorld.getByWorld(world).getLobbyLocation();
         if (teleport == null) {
             PlayerUtil.secureTeleport(player, world.getSpawnLocation());
-
         } else {
             PlayerUtil.secureTeleport(player, teleport);
-        }
-    }
-
-    public void clearPlayerData() {
-        getPlayer().getInventory().clear();
-        getPlayer().getInventory().setArmorContents(null);
-        getPlayer().setTotalExperience(0);
-        getPlayer().setLevel(0);
-        getPlayer().setHealth(20);
-        getPlayer().setFoodLevel(20);
-        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
-            getPlayer().removePotionEffect(effect.getType());
         }
     }
 
@@ -156,36 +112,6 @@ public class DGamePlayer extends DGlobalPlayer {
      */
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-    /**
-     * @return the world
-     */
-    public World getWorld() {
-        return world;
-    }
-
-    /**
-     * @param world
-     * the world to set
-     */
-    public void setWorld(World world) {
-        this.world = world;
-    }
-
-    /**
-     * @return the savePlayer
-     */
-    public DSavePlayer getSavePlayer() {
-        return savePlayer;
-    }
-
-    /**
-     * @param savePlayer
-     * the savePlayer to set
-     */
-    public void setSavePlayer(DSavePlayer savePlayer) {
-        this.savePlayer = savePlayer;
     }
 
     /**
@@ -213,31 +139,6 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         return false;
-    }
-
-    @Deprecated
-    public boolean isEditing() {
-        return editing;
-    }
-
-    @Deprecated
-    public void setEditing(boolean editing) {
-        this.editing = editing;
-    }
-
-    /**
-     * @return the inDungeonChat
-     */
-    public boolean isInDungeonChat() {
-        return inDungeonChat;
-    }
-
-    /**
-     * @param inDungeonChat
-     * the inDungeonChat to set
-     */
-    public void setInDungeonChat(boolean inDungeonChat) {
-        this.inDungeonChat = inDungeonChat;
     }
 
     /**
@@ -299,7 +200,7 @@ public class DGamePlayer extends DGlobalPlayer {
                 }
 
                 if (dClass.hasDog()) {
-                    wolf = (Wolf) world.spawnEntity(getPlayer().getLocation(), EntityType.WOLF);
+                    wolf = (Wolf) getWorld().spawnEntity(getPlayer().getLocation(), EntityType.WOLF);
                     wolf.setTamed(true);
                     wolf.setOwner(getPlayer());
 
@@ -409,21 +310,6 @@ public class DGamePlayer extends DGlobalPlayer {
     }
 
     /**
-     * @return the linesCopy
-     */
-    public String[] getLinesCopy() {
-        return linesCopy;
-    }
-
-    /**
-     * @param linesCopy
-     * the linesCopy to set
-     */
-    public void setLinesCopy(String[] linesCopy) {
-        this.linesCopy = linesCopy;
-    }
-
-    /**
      * @return the treasureInv
      */
     public Inventory getTreasureInv() {
@@ -469,116 +355,99 @@ public class DGamePlayer extends DGlobalPlayer {
     }
 
     /* Actions */
-    public void escape() {
-        delete();
-        savePlayer.reset(false);
-    }
-
+    @Override
     public void leave() {
         delete();
 
-        if (!editing) {
-            WorldConfig dConfig = GameWorld.getByWorld(world).getConfig();
-            if (finished) {
-                savePlayer.reset(dConfig.getKeepInventoryOnFinish());
-            } else {
-                savePlayer.reset(dConfig.getKeepInventoryOnEscape());
-            }
-
+        WorldConfig dConfig = GameWorld.getByWorld(getWorld()).getConfig();
+        if (finished) {
+            getSavePlayer().reset(dConfig.getKeepInventoryOnFinish());
         } else {
-            savePlayer.reset(false);
+            getSavePlayer().reset(dConfig.getKeepInventoryOnEscape());
         }
 
-        GameWorld gameWorld = GameWorld.getByWorld(world);
+        GameWorld gameWorld = GameWorld.getByWorld(getWorld());
         DGroup dGroup = DGroup.getByPlayer(getPlayer());
 
-        if (editing) {
-            EditWorld editWorld = EditWorld.getByWorld(world);
-            if (editWorld != null) {
-                editWorld.save();
-            }
+        Game game = Game.getByGameWorld(gameWorld);
+        if (dGroup != null) {
+            dGroup.removePlayer(getPlayer());
+        }
 
-        } else {
-            Game game = Game.getByGameWorld(gameWorld);
-            if (dGroup != null) {
-                dGroup.removePlayer(getPlayer());
-            }
+        // Belohnung
+        if (game != null) {
+            if (finished) {
+                if (game.getType().hasRewards()) {
+                    for (Reward reward : gameWorld.getConfig().getRewards()) {
+                        reward.giveTo(getPlayer());
+                    }
 
-            // Belohnung
-            if (game != null) {
-                if (finished) {
-                    if (game.getType().hasRewards()) {
-                        for (Reward reward : gameWorld.getConfig().getRewards()) {
-                            reward.giveTo(getPlayer());
-                        }
+                    addTreasure();
 
-                        addTreasure();
+                    // Set Time
+                    File file = new File(plugin.getDataFolder() + "/maps/" + gameWorld.getMapName(), "players.yml");
 
-                        // Set Time
-                        File file = new File(plugin.getDataFolder() + "/maps/" + gameWorld.getMapName(), "players.yml");
-
-                        if (!file.exists()) {
-                            try {
-                                file.createNewFile();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-
-                        playerConfig.set(getPlayer().getUniqueId().toString(), System.currentTimeMillis());
-
+                    if (!file.exists()) {
                         try {
-                            playerConfig.save(file);
+                            file.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                        } catch (IOException exception) {
-                            exception.printStackTrace();
+                    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
+
+                    playerConfig.set(getPlayer().getUniqueId().toString(), System.currentTimeMillis());
+
+                    try {
+                        playerConfig.save(file);
+
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+
+                    // Tutorial Permissions
+                    if (gameWorld.isTutorial()) {
+                        String endGroup = plugin.getMainConfig().getTutorialEndGroup();
+                        if (plugin.isGroupEnabled(endGroup)) {
+                            plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
                         }
 
-                        // Tutorial Permissions
-                        if (gameWorld.isTutorial()) {
-                            String endGroup = plugin.getMainConfig().getTutorialEndGroup();
-                            if (plugin.isGroupEnabled(endGroup)) {
-                                plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
-                            }
-
-                            String startGroup = plugin.getMainConfig().getTutorialStartGroup();
-                            if (plugin.isGroupEnabled(startGroup)) {
-                                plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
-                            }
+                        String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+                        if (plugin.isGroupEnabled(startGroup)) {
+                            plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
                         }
                     }
                 }
             }
+        }
 
-            if (dGroup != null) {
-                // Give Secure Objects other Players
-                if (!dGroup.isEmpty()) {
-                    int i = 0;
-                    Player groupPlayer;
-                    do {
-                        groupPlayer = dGroup.getPlayers().get(i);
-                        if (groupPlayer != null) {
-                            for (ItemStack itemStack : getPlayer().getInventory()) {
-                                if (itemStack != null) {
-                                    if (gameWorld.getSecureObjects().contains(itemStack.getType())) {
-                                        groupPlayer.getInventory().addItem(itemStack);
-                                    }
+        if (dGroup != null) {
+            // Give Secure Objects other Players
+            if (!dGroup.isEmpty()) {
+                int i = 0;
+                Player groupPlayer;
+                do {
+                    groupPlayer = dGroup.getPlayers().get(i);
+                    if (groupPlayer != null) {
+                        for (ItemStack itemStack : getPlayer().getInventory()) {
+                            if (itemStack != null) {
+                                if (gameWorld.getSecureObjects().contains(itemStack.getType())) {
+                                    groupPlayer.getInventory().addItem(itemStack);
                                 }
                             }
                         }
-                        i++;
-                    } while (groupPlayer == null);
-                }
+                    }
+                    i++;
+                } while (groupPlayer == null);
+            }
 
-                if (dGroup.getCaptain().equals(getPlayer()) && dGroup.getPlayers().size() > 0) {
-                    // Captain here!
-                    Player newCaptain = dGroup.getPlayers().get(0);
-                    dGroup.setCaptain(newCaptain);
-                    MessageUtil.sendMessage(newCaptain, DMessages.PLAYER_NEW_CAPTAIN.getMessage());
-                    // ...*flies away*
-                }
+            if (dGroup.getCaptain().equals(getPlayer()) && dGroup.getPlayers().size() > 0) {
+                // Captain here!
+                Player newCaptain = dGroup.getPlayers().get(0);
+                dGroup.setCaptain(newCaptain);
+                MessageUtil.sendMessage(newCaptain, DMessages.PLAYER_NEW_CAPTAIN.getMessage());
+                // ...*flies away*
             }
         }
     }
@@ -628,7 +497,7 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         if (respawn == null) {
-            respawn = world.getSpawnLocation();
+            respawn = getWorld().getSpawnLocation();
         }
 
         PlayerUtil.secureTeleport(getPlayer(), respawn);
@@ -639,7 +508,7 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         // Respawn Items
-        if (GameWorld.getByWorld(world).getConfig().getKeepInventoryOnDeath()) {
+        if (GameWorld.getByWorld(getWorld()).getConfig().getKeepInventoryOnDeath()) {
             applyRespawnInventory();
         }
     }
@@ -697,7 +566,6 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(dGroup, dGroup.getGameWorld(), newFloor);
-        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -756,7 +624,6 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         DPlayerFinishEvent dPlayerFinishEvent = new DPlayerFinishEvent(this, first, hasToWait);
-        plugin.getServer().getPluginManager().callEvent(dPlayerFinishEvent);
 
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
@@ -768,7 +635,6 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dGroup);
-        plugin.getServer().getPluginManager().callEvent(dGroupFinishDungeonEvent);
 
         if (dGroupFinishDungeonEvent.isCancelled()) {
             return;
@@ -790,57 +656,17 @@ public class DGamePlayer extends DGlobalPlayer {
         }
     }
 
+    @Override
     public void sendMessage(String message) {
-        if (editing) {
-            EditWorld editWorld = EditWorld.getByWorld(world);
-            editWorld.sendMessage(message);
-            for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
-                if (player.isInChatSpyMode()) {
-                    if (!editWorld.getWorld().getPlayers().contains(player.getPlayer())) {
-                        MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
-                    }
-                }
-            }
+        GameWorld gameWorld = GameWorld.getByWorld(getWorld());
+        gameWorld.sendMessage(message);
 
-        } else {
-            GameWorld gameWorld = GameWorld.getByWorld(world);
-            gameWorld.sendMessage(message);
-            for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
-                if (player.isInChatSpyMode()) {
-                    if (!gameWorld.getWorld().getPlayers().contains(player.getPlayer())) {
-                        MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
-                    }
+        for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
+            if (player.isInChatSpyMode()) {
+                if (!gameWorld.getWorld().getPlayers().contains(player.getPlayer())) {
+                    MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
                 }
             }
-        }
-    }
-
-    public void poke(Block block) {
-        if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
-            String[] lines = sign.getLines();
-            if (lines[0].isEmpty() && lines[1].isEmpty() && lines[2].isEmpty() && lines[3].isEmpty()) {
-                if (linesCopy != null) {
-                    SignChangeEvent event = new SignChangeEvent(block, getPlayer(), linesCopy);
-                    plugin.getServer().getPluginManager().callEvent(event);
-                    if (!event.isCancelled()) {
-                        sign.setLine(0, event.getLine(0));
-                        sign.setLine(1, event.getLine(1));
-                        sign.setLine(2, event.getLine(2));
-                        sign.setLine(3, event.getLine(3));
-                        sign.update();
-                    }
-                }
-            } else {
-                linesCopy = lines;
-                MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_SIGN_COPIED.getMessage());
-            }
-        } else {
-            String info = "" + block.getType();
-            if (block.getData() != 0) {
-                info = info + "," + block.getData();
-            }
-            MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_BLOCK_INFO.getMessage(info));
         }
     }
 
@@ -848,6 +674,7 @@ public class DGamePlayer extends DGlobalPlayer {
         new DLootInventory(getPlayer(), treasureInv.getContents());
     }
 
+    @Override
     public void update(boolean updateSecond) {
         boolean locationValid = true;
         Location teleportLocation = player.getLocation();
@@ -858,22 +685,12 @@ public class DGamePlayer extends DGlobalPlayer {
         boolean triggerAllInDistance = false;
 
         GameWorld gameWorld = GameWorld.getByWorld(getWorld());
-        EditWorld editWorld = EditWorld.getByWorld(getWorld());
 
         if (!updateSecond) {
             if (!getPlayer().getWorld().equals(getWorld())) {
                 locationValid = false;
 
-                if (isEditing()) {
-                    if (editWorld != null) {
-                        if (editWorld.getLobbyLocation() == null) {
-                            teleportLocation = editWorld.getWorld().getSpawnLocation();
-                        } else {
-                            teleportLocation = editWorld.getLobbyLocation();
-                        }
-                    }
-
-                } else if (gameWorld != null) {
+                if (gameWorld != null) {
                     DGroup dGroup = DGroup.getByPlayer(getPlayer());
 
                     teleportLocation = getCheckpoint();
@@ -954,7 +771,6 @@ public class DGamePlayer extends DGlobalPlayer {
 
         if (kick) {
             DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.OFFLINE);
-            plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
 
             if (!dPlayerKickEvent.isCancelled()) {
                 leave();
@@ -963,19 +779,6 @@ public class DGamePlayer extends DGlobalPlayer {
 
         if (triggerAllInDistance) {
             DistanceTrigger.triggerAllInDistance(getPlayer(), gameWorld);
-        }
-    }
-
-    /**
-     * Delete this DGamePlayer. Creates a DGlobalPlayer to replace it!
-     */
-    public void delete() {
-        if (player.isOnline()) {
-            // Create a new DGlobalPlayer (outside a dungeon)
-            new DGlobalPlayer(this);
-
-        } else {
-            plugin.getDPlayers().removePlayer(this);
         }
     }
 
@@ -1002,7 +805,7 @@ public class DGamePlayer extends DGlobalPlayer {
         CopyOnWriteArrayList<DGamePlayer> dPlayers = new CopyOnWriteArrayList<>();
 
         for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
-            if (dPlayer.world == world) {
+            if (dPlayer.getWorld() == world) {
                 dPlayers.add(dPlayer);
             }
         }
