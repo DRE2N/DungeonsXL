@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -27,7 +27,7 @@ public class UpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDGamePlayers()) {
+        for (DInstancePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDInstancePlayers()) {
             dPlayer.update(false);
         }
     }
