@@ -548,6 +548,13 @@ public class DGroup {
                     }
                 }
             }
+
+            // Permission bridge
+            if (plugin.getPermissionProvider() != null) {
+                for (String permission : gameWorld.getConfig().getGamePermissions()) {
+                    plugin.getPermissionProvider().playerRemoveTransient(gameWorld.getWorld().getName(), player, permission);
+                }
+            }
         }
 
         GroupSign.updatePerGroup(this);

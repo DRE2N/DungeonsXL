@@ -22,8 +22,8 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.command.CommandSender;
@@ -48,7 +48,13 @@ public class LeaveCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+
+        if (!(plugin.getDPlayers().getByPlayer(player) instanceof DInstancePlayer)) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
+            return;
+        }
+
+        DInstancePlayer dPlayer = (DInstancePlayer) plugin.getDPlayers().getByPlayer(player);
 
         if (GameWorld.getByWorld(player.getWorld()) != null) {
             if (GameWorld.getByWorld(player.getWorld()).isTutorial()) {
@@ -77,10 +83,7 @@ public class LeaveCommand extends BRCommand {
             if (dGroup != null) {
                 dGroup.removePlayer(player);
                 MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
-                return;
             }
-
-            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
         }
     }
 

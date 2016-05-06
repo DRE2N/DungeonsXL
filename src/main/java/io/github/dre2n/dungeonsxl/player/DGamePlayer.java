@@ -369,6 +369,13 @@ public class DGamePlayer extends DInstancePlayer {
         GameWorld gameWorld = GameWorld.getByWorld(getWorld());
         DGroup dGroup = DGroup.getByPlayer(getPlayer());
 
+        // Permission bridge
+        if (plugin.getPermissionProvider() != null) {
+            for (String permission : gameWorld.getConfig().getGamePermissions()) {
+                plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
+            }
+        }
+
         Game game = Game.getByGameWorld(gameWorld);
         if (dGroup != null) {
             dGroup.removePlayer(getPlayer());

@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 5;
+    public static final int CONFIG_VERSION = 6;
 
     private String language = "en";
     private boolean enableEconomy = false;
@@ -44,12 +44,15 @@ public class MainConfig extends BRConfig {
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
 
-    /* Secure Mode*/
+    /* Secure Mode */
     private boolean secureModeEnabled = false;
     private double secureModeCheckInterval = 5;
     private boolean openInventories = false;
     private boolean dropItems = false;
     private List<String> editCommandWhitelist = new ArrayList<>();
+
+    /* Permissions bridge */
+    private List<String> editPermissions = new ArrayList<>();
 
     /* Default Dungeon Settings */
     private WorldConfig defaultWorldConfig;
@@ -155,6 +158,13 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @return the edit mode permissions
+     */
+    public List<String> getEditPermissions() {
+        return editPermissions;
+    }
+
+    /**
      * @return the defaultWorldConfig
      */
     public WorldConfig getDefaultWorldConfig() {
@@ -214,6 +224,10 @@ public class MainConfig extends BRConfig {
 
         if (!config.contains("secureMode.editCommandWhitelist")) {
             config.set("secureMode.editCommandWhitelist", editCommandWhitelist);
+        }
+
+        if (!config.contains("editPermissions")) {
+            config.set("editPermissions", editPermissions);
         }
 
         /* Default Dungeon Config */
@@ -277,6 +291,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("secureMode.editCommandWhitelist")) {
             editCommandWhitelist = config.getStringList("secureMode.editCommandWhitelist");
+        }
+
+        if (config.contains("editPermissions")) {
+            editPermissions = config.getStringList("editPermissions");
         }
 
         /* Default Dungeon Config */
