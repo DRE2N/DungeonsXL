@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.mob;
 
 import io.github.dre2n.dungeonsxl.event.dmob.DMobDeathEvent;
+import io.github.dre2n.dungeonsxl.event.dmob.DMobSpawnEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.trigger.MobTrigger;
 import io.github.dre2n.dungeonsxl.trigger.WaveTrigger;
@@ -54,6 +55,13 @@ public class DMob {
             this.entity.getEquipment().setBootsDropChance(0);
             this.entity.getEquipment().setItemInHandDropChance(0);
         } catch (UnsupportedOperationException exception) {
+        }
+
+        DMobSpawnEvent event = new DMobSpawnEvent(this, entity);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            gameWorld.removeDMob(this);
         }
     }
 

@@ -17,9 +17,9 @@
 package io.github.dre2n.dungeonsxl.event.dmob;
 
 import io.github.dre2n.dungeonsxl.mob.DMob;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 
 /**
  * @author Daniel Saukel
@@ -29,26 +29,18 @@ public class DMobSpawnEvent extends DMobEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private CreatureSpawnEvent bukkitEvent;
+    private LivingEntity entity;
 
-    public DMobSpawnEvent(DMob dMob, CreatureSpawnEvent bukkitEvent) {
+    public DMobSpawnEvent(DMob dMob, LivingEntity entity) {
         super(dMob);
-        this.bukkitEvent = bukkitEvent;
+        this.entity = entity;
     }
 
     /**
-     * @return the bukkitEvent
+     * @return the mob
      */
-    public CreatureSpawnEvent getBukkitEvent() {
-        return bukkitEvent;
-    }
-
-    /**
-     * @param bukkitEvent
-     * the bukkitEvent to set
-     */
-    public void setBukkitEvent(CreatureSpawnEvent bukkitEvent) {
-        this.bukkitEvent = bukkitEvent;
+    public LivingEntity getEntity() {
+        return entity;
     }
 
     @Override

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -28,7 +28,7 @@ public class DPlayerEscapeEvent extends DPlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    public DPlayerEscapeEvent(DGamePlayer dPlayer) {
+    public DPlayerEscapeEvent(DGlobalPlayer dPlayer) {
         super(dPlayer);
     }
 

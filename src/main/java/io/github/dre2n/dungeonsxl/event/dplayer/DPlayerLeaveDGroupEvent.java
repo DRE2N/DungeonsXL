@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -31,7 +31,7 @@ public class DPlayerLeaveDGroupEvent extends DPlayerEvent implements Cancellable
 
     private DGroup dGroup;
 
-    public DPlayerLeaveDGroupEvent(DGamePlayer dPlayer, DGroup dGroup) {
+    public DPlayerLeaveDGroupEvent(DGlobalPlayer dPlayer, DGroup dGroup) {
         super(dPlayer);
         this.dGroup = dGroup;
     }

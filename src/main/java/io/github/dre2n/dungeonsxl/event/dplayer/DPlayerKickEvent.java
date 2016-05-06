@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -40,7 +40,7 @@ public class DPlayerKickEvent extends DPlayerEvent implements Cancellable {
 
     private Cause cause;
 
-    public DPlayerKickEvent(DGamePlayer dPlayer, Cause cause) {
+    public DPlayerKickEvent(DGlobalPlayer dPlayer, Cause cause) {
         super(dPlayer);
         this.cause = cause;
     }

@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.requirement.*;
+import io.github.dre2n.dungeonsxl.requirement.AwesomenessRequirement;
+import io.github.dre2n.dungeonsxl.requirement.RequirementTypeCustom;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -45,6 +47,11 @@ public class RequirementListener implements Listener {
     public void onRegistration(RequirementRegistrationEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
         MessageUtil.log(plugin, "Requirement: " + event.getRequirement().getType());
+
+        if (event.getRequirement().getType() == RequirementTypeCustom.AWESOMENESS) {
+            MessageUtil.log(plugin, "Registering an " + RequirementTypeCustom.AWESOMENESS + " requirement.");
+            ((AwesomenessRequirement) event.getRequirement()).setAwesomenessLevel(5);
+        }
     }
 
 }

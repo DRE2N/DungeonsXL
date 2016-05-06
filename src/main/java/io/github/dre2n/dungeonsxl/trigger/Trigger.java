@@ -115,36 +115,37 @@ public abstract class Trigger {
 
     public static Trigger getOrCreate(String identifier, String value, DSign dSign) {
         TriggerType type = plugin.getTriggers().getByIdentifier(identifier);
+        Trigger trigger = null;
 
         if (type == TriggerTypeDefault.REDSTONE) {
 
-            return RedstoneTrigger.getOrCreate(dSign.getSign(), dSign.getGameWorld());
+            trigger = RedstoneTrigger.getOrCreate(dSign.getSign(), dSign.getGameWorld());
 
         } else if (type == TriggerTypeDefault.DISTANCE) {
 
             if (value != null) {
-                return new DistanceTrigger(NumberUtil.parseInt(value), dSign.getSign().getLocation());
+                trigger = new DistanceTrigger(NumberUtil.parseInt(value), dSign.getSign().getLocation());
 
             } else {
-                return new DistanceTrigger(dSign.getSign().getLocation());
+                trigger = new DistanceTrigger(dSign.getSign().getLocation());
             }
 
         } else if (type == TriggerTypeDefault.SIGN) {
 
             if (value != null) {
-                return SignTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
+                trigger = SignTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
             }
 
         } else if (type == TriggerTypeDefault.INTERACT) {
 
             if (value != null) {
-                return InteractTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
+                trigger = InteractTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
             }
 
         } else if (type == TriggerTypeDefault.MOB) {
 
             if (value != null) {
-                return MobTrigger.getOrCreate(value, dSign.getGameWorld());
+                trigger = MobTrigger.getOrCreate(value, dSign.getGameWorld());
             }
 
         } else if (type == TriggerTypeDefault.PROGRESS) {
@@ -153,27 +154,26 @@ public abstract class Trigger {
                 if (value.matches("[0-99]/[0-999]")) {
                     int floorCount = NumberUtil.parseInt(value.split("/")[0]);
                     int waveCount = NumberUtil.parseInt(value.split("/")[1]);
-                    return ProgressTrigger.getOrCreate(floorCount, waveCount, dSign.getGameWorld());
+                    trigger = ProgressTrigger.getOrCreate(floorCount, waveCount, dSign.getGameWorld());
 
                 } else {
-                    return ProgressTrigger.getOrCreate(value, dSign.getGameWorld());
+                    trigger = ProgressTrigger.getOrCreate(value, dSign.getGameWorld());
                 }
             }
 
         } else if (type == TriggerTypeDefault.USE_ITEM) {
 
             if (value != null) {
-                return UseItemTrigger.getOrCreate(value, dSign.getGameWorld());
+                trigger = UseItemTrigger.getOrCreate(value, dSign.getGameWorld());
             }
 
         } else if (type == TriggerTypeDefault.WAVE) {
 
             if (value != null) {
-                return WaveTrigger.getOrCreate(NumberUtil.parseDouble(value, 1), dSign.getGameWorld());
+                trigger = WaveTrigger.getOrCreate(NumberUtil.parseDouble(value, 1), dSign.getGameWorld());
             }
 
         } else if (type != null) {
-            Trigger trigger = null;
 
             Method method;
             try {
@@ -186,18 +186,16 @@ public abstract class Trigger {
                     MessageUtil.log("Please note that this trigger is an unsupported feature added by an addon!");
                 }
             }
-
-            TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
-            plugin.getServer().getPluginManager().callEvent(event);
-
-            if (event.isCancelled()) {
-                return null;
-            }
-
-            return trigger;
         }
 
-        return null;
+        TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return null;
+        }
+
+        return trigger;
     }
 
     /* Abstracts */

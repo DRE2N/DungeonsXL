@@ -189,11 +189,13 @@ public abstract class DSign {
             }
         }
 
-        DSignRegistrationEvent event = new DSignRegistrationEvent(sign, gameWorld, dSign);
-        plugin.getServer().getPluginManager().callEvent(event);
+        if (gameWorld != null) {
+            DSignRegistrationEvent event = new DSignRegistrationEvent(sign, gameWorld, dSign);
+            plugin.getServer().getPluginManager().callEvent(event);
 
-        if (event.isCancelled()) {
-            return null;
+            if (event.isCancelled()) {
+                return null;
+            }
         }
 
         if (!(dSign != null && gameWorld != null)) {

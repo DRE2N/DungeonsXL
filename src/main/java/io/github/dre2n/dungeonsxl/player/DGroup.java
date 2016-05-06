@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
@@ -78,15 +79,24 @@ public class DGroup {
     }
 
     public DGroup(String name, Player player, String identifier, boolean multiFloor) {
-        this(name, player, new CopyOnWriteArrayList<>(Arrays.asList(player)), identifier, multiFloor);
+        this(name, player, new ArrayList<Player>(), identifier, multiFloor);
     }
 
-    public DGroup(String name, Player captain, CopyOnWriteArrayList<Player> players, String identifier, boolean multiFloor) {
+    public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
         plugin.getDGroups().add(this);
         this.name = name;
 
-        this.captain = captain;
-        this.players = players;
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayers().getByPlayer(captain), true, this);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (!event.isCancelled()) {
+            this.captain = captain;
+            this.players.add(captain);
+        }
+
+        for (Player player : players) {
+            addPlayer(player);
+        }
 
         Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
         if (multiFloor && dungeon != null) {
@@ -144,10 +154,15 @@ public class DGroup {
      * the player to add
      */
     public void addPlayer(Player player) {
-        sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_PLAYER_JOINED, player.getName()));
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_JOIN_GROUP));
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(DGamePlayer.getByPlayer(player), false, this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
-        players.add(player);
+        if (!event.isCancelled()) {
+            sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_PLAYER_JOINED, player.getName()));
+            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_JOIN_GROUP));
+
+            players.add(player);
+        }
     }
 
     /**

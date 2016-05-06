@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import java.util.Arrays;
 import org.bukkit.ChatColor;
@@ -58,7 +59,7 @@ public class HighwayToHellReward extends Reward {
     public void giveTo(Player player) {
         // This is called when all rewards are given to the players. Each group member gets one item.
         player.getInventory().addItem(RECORD);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REWARD_GENERAL, "1 Highway To Hell album"));
+        MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessages.REWARD_GENERAL, "1 Highway To Hell album"));
     }
 
     @Override

@@ -19,6 +19,10 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.dgroup.*;
+import io.github.dre2n.dungeonsxl.reward.HighwayToHellReward;
+import io.github.dre2n.dungeonsxl.reward.Reward;
+import io.github.dre2n.dungeonsxl.reward.RewardTypeCustom;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -46,6 +50,12 @@ public class DGroupListener implements Listener {
     @EventHandler
     public void onFinishDungeon(DGroupFinishDungeonEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
+
+        MessageUtil.log("Giving one " + RewardTypeCustom.HIGHWAY_TO_HELL + " to all group members!");
+        Reward reward = new HighwayToHellReward();
+        for (Player Player : event.getDGroup().getPlayers()) {
+            reward.giveTo(Player);
+        }
     }
 
     @EventHandler

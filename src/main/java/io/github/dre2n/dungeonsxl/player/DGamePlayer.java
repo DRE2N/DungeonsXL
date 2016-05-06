@@ -26,6 +26,7 @@ import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
@@ -777,12 +778,16 @@ public class DGamePlayer extends DGlobalPlayer {
 
         Game.getByDGroup(dGroup).resetWaveKills();
 
+        DGroupRewardEvent dGroupRewardEvent = new DGroupRewardEvent(dGroup);
+        plugin.getServer().getPluginManager().callEvent(dGroupRewardEvent);
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);
             dPlayer.leave();
 
-            for (Reward reward : dGroup.getRewards()) {
-                reward.giveTo(player);
+            if (!dGroupRewardEvent.isCancelled()) {
+                for (Reward reward : dGroup.getRewards()) {
+                    reward.giveTo(player);
+                }
             }
         }
     }
