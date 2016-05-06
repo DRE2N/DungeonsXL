@@ -398,6 +398,7 @@ public class GameWorld {
 
     public void startGame() {
         GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, getGame());
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -434,6 +435,7 @@ public class GameWorld {
 
     public void delete() {
         GameWorldUnloadEvent event = new GameWorldUnloadEvent(this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -471,6 +473,7 @@ public class GameWorld {
     /* Statics */
     public static GameWorld load(String name) {
         GameWorldLoadEvent event = new GameWorldLoadEvent(name);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return null;
@@ -632,6 +635,8 @@ public class GameWorld {
 
         for (Requirement requirement : worldConfig.getRequirements()) {
             RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
+            plugin.getServer().getPluginManager().callEvent(event);
+
             if (event.isCancelled()) {
                 continue;
             }

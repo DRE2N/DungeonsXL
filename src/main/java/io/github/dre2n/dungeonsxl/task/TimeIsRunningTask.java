@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -66,6 +67,7 @@ public class TimeIsRunningTask extends BukkitRunnable {
                 }
 
                 DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.TIME_EXPIRED);
+                Bukkit.getServer().getPluginManager().callEvent(dPlayerKickEvent);
 
                 if (!dPlayerKickEvent.isCancelled()) {
                     MessageUtil.broadcastMessage(DMessages.PLAYER_TIME_KICK.getMessage(player.getName()));

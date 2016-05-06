@@ -21,6 +21,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.reward.RewardRegistrationEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -45,6 +46,7 @@ public abstract class Reward {
         }
 
         RewardRegistrationEvent event = new RewardRegistrationEvent(reward);
+        Bukkit.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return null;

@@ -143,6 +143,7 @@ public class PlayCommand extends BRCommand {
         }
 
         DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             plugin.getDGroups().remove(dGroup);

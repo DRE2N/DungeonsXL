@@ -65,6 +65,7 @@ public class LeaveSign extends DSign {
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer != null) {
             DPlayerEscapeEvent event = new DPlayerEscapeEvent(dPlayer);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 return false;
@@ -80,6 +81,7 @@ public class LeaveSign extends DSign {
     public void onTrigger() {
         for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             DPlayerEscapeEvent event = new DPlayerEscapeEvent(dPlayer);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 return;

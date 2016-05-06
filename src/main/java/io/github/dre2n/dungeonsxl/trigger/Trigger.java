@@ -188,6 +188,7 @@ public abstract class Trigger {
             }
 
             TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 return null;

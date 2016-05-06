@@ -698,6 +698,7 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(dGroup, dGroup.getGameWorld(), newFloor);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -756,6 +757,7 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         DPlayerFinishEvent dPlayerFinishEvent = new DPlayerFinishEvent(this, first, hasToWait);
+        plugin.getServer().getPluginManager().callEvent(dPlayerFinishEvent);
 
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
@@ -767,6 +769,7 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dGroup);
+        plugin.getServer().getPluginManager().callEvent(dGroupFinishDungeonEvent);
 
         if (dGroupFinishDungeonEvent.isCancelled()) {
             return;
@@ -928,6 +931,7 @@ public class DGamePlayer extends DGlobalPlayer {
         }
 
         DPlayerUpdateEvent event = new DPlayerUpdateEvent(this, locationValid, teleportWolf, respawnInventory, offline, kick, triggerAllInDistance);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -947,6 +951,7 @@ public class DGamePlayer extends DGlobalPlayer {
 
         if (kick) {
             DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.OFFLINE);
+            plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
 
             if (!dPlayerKickEvent.isCancelled()) {
                 leave();

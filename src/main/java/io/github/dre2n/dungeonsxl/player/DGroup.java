@@ -164,6 +164,7 @@ public class DGroup {
         // Check group
         if (isEmpty()) {
             DGroupDisbandEvent event = new DGroupDisbandEvent(this, player, DGroupDisbandEvent.Cause.GROUP_IS_EMPTY);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 delete();
@@ -385,6 +386,7 @@ public class DGroup {
      */
     public void addReward(Reward reward) {
         RewardAdditionEvent event = new RewardAdditionEvent(reward, this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -466,6 +468,7 @@ public class DGroup {
         }
 
         DGroupStartFloorEvent event = new DGroupStartFloorEvent(this, gameWorld);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -502,6 +505,7 @@ public class DGroup {
             if (config != null) {
                 for (Requirement requirement : config.getRequirements()) {
                     RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
+                    plugin.getServer().getPluginManager().callEvent(event);
 
                     if (requirementDemandEvent.isCancelled()) {
                         continue;

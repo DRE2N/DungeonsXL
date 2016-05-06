@@ -39,6 +39,7 @@ public class SignTrigger extends Trigger {
 
     public void onTrigger(boolean enable) {
         TriggerActionEvent event = new TriggerActionEvent(this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;

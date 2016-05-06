@@ -46,6 +46,7 @@ public class UseItemTrigger extends Trigger {
 
     public void onTrigger(Player player) {
         TriggerActionEvent event = new TriggerActionEvent(this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;

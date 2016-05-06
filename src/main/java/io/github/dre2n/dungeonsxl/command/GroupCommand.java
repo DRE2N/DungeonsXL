@@ -120,6 +120,7 @@ public class GroupCommand extends BRCommand {
 
         DGroup dGroup = new DGroup(args[2], player);
         DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             dGroup.delete();
@@ -133,6 +134,7 @@ public class GroupCommand extends BRCommand {
     public void disbandGroup(DGroup dGroup) {
         if (dGroup != null) {
             DGroupDisbandEvent event = new DGroupDisbandEvent(dGroup, player, DGroupDisbandEvent.Cause.COMMAND);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 dGroup.delete();
@@ -212,6 +214,7 @@ public class GroupCommand extends BRCommand {
         Player toKick = plugin.getServer().getPlayer(args[2]);
         if (toKick != null) {
             DPlayerKickEvent event = new DPlayerKickEvent(DGamePlayer.getByPlayer(toKick.getPlayer()), DPlayerKickEvent.Cause.COMMAND);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 if (dGroup.getPlayers().contains(toKick)) {

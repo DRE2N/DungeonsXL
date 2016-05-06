@@ -95,6 +95,7 @@ public class ProgressTrigger extends Trigger {
     /* Actions */
     public void onTrigger() {
         TriggerActionEvent event = new TriggerActionEvent(this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;

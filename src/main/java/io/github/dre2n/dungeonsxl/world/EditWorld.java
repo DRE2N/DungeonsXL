@@ -208,6 +208,7 @@ public class EditWorld {
         creator.generateStructures(false);
 
         EditWorldGenerateEvent event = new EditWorldGenerateEvent(this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -218,6 +219,7 @@ public class EditWorld {
 
     public void save() {
         EditWorldSaveEvent event = new EditWorldSaveEvent(this);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -256,6 +258,7 @@ public class EditWorld {
 
     public void delete() {
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -276,6 +279,7 @@ public class EditWorld {
 
     public void deleteNoSave() {
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, false);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -329,6 +333,7 @@ public class EditWorld {
 
     public static EditWorld load(String name) {
         EditWorldLoadEvent event = new EditWorldLoadEvent(name);
+        plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return null;

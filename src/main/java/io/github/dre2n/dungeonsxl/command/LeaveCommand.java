@@ -61,7 +61,9 @@ public class LeaveCommand extends BRCommand {
             DGroup dGroup = DGroup.getByPlayer(player);
 
             DPlayerEscapeEvent dPlayerEscapeEvent = new DPlayerEscapeEvent(dPlayer);
+            plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
             DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
+            plugin.getServer().getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
 
             if (dPlayerEscapeEvent.isCancelled() || dPlayerLeaveDGroupEvent.isCancelled()) {
                 return;

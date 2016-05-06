@@ -96,6 +96,7 @@ public class PlayerListener implements Listener {
         }
 
         DPlayerDeathEvent dPlayerDeathEvent = new DPlayerDeathEvent(dPlayer, event, 1);
+        plugin.getServer().getPluginManager().callEvent(dPlayerDeathEvent);
 
         if (dPlayerDeathEvent.isCancelled()) {
             return;
@@ -128,6 +129,7 @@ public class PlayerListener implements Listener {
 
         if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
             DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
+            plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
 
             if (!dPlayerKickEvent.isCancelled()) {
                 MessageUtil.broadcastMessage(DMessages.PLAYER_DEATH_KICK.getMessage(player.getName()));
@@ -533,6 +535,7 @@ public class PlayerListener implements Listener {
             DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
 
             DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
+            plugin.getServer().getPluginManager().callEvent(createEvent);
 
             if (createEvent.isCancelled()) {
                 dGroup = null;

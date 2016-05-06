@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.trigger.WaveTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.util.Random;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -71,6 +72,7 @@ public class DMob {
         }
 
         DMobDeathEvent dMobDeathEvent = new DMobDeathEvent(this, event);
+        Bukkit.getServer().getPluginManager().callEvent(dMobDeathEvent);
 
         if (dMobDeathEvent.isCancelled()) {
             return;
