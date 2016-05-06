@@ -96,6 +96,7 @@ public class WorldConfig {
     private Set<DMobType> mobTypes = new HashSet<>();
 
     private List<String> gameCommandWhitelist = new ArrayList<>();
+    private List<String> gamePermissions = new ArrayList<>();
 
     public WorldConfig() {
     }
@@ -357,6 +358,12 @@ public class WorldConfig {
             gameCommandWhitelist = configFile.getStringList("gameCommandWhitelist");
         } else {
             gameCommandWhitelist = plugin.getDefaultConfig().gameCommandWhitelist;
+        }
+
+        if (configFile.contains("gamePermissions")) {
+            gamePermissions = configFile.getStringList("gamePermissions");
+        } else {
+            gamePermissions = plugin.getDefaultConfig().gamePermissions;
         }
 
         if (configFile.contains("forcedGameType")) {
@@ -665,6 +672,13 @@ public class WorldConfig {
      */
     public List<String> getGameCommandWhitelist() {
         return gameCommandWhitelist;
+    }
+
+    /**
+     * @return the gamePermissions
+     */
+    public List<String> getGamePermissions() {
+        return gamePermissions;
     }
 
     /**

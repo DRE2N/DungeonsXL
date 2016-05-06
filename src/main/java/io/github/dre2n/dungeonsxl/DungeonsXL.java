@@ -243,7 +243,7 @@ public class DungeonsXL extends BRPlugin {
         }
     }
 
-    // Getters & loaders
+    /* Getters and loaders */
     /**
      * @return the plugin instance
      */

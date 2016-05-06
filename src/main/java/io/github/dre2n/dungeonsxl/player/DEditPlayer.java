@@ -57,6 +57,13 @@ public class DEditPlayer extends DInstancePlayer {
         } else {
             PlayerUtil.secureTeleport(player, teleport);
         }
+
+        // Permission bridge
+        if (plugin.getPermissionProvider() != null) {
+            for (String permission : plugin.getMainConfig().getEditPermissions()) {
+                plugin.getPermissionProvider().playerAddTransient(world.getName(), player, permission);
+            }
+        }
     }
 
     /* Getters and setters */
@@ -76,6 +83,18 @@ public class DEditPlayer extends DInstancePlayer {
     }
 
     /* Actions */
+    @Override
+    public void delete() {
+        // Permission bridge
+        if (plugin.getPermissionProvider() != null) {
+            for (String permission : plugin.getMainConfig().getEditPermissions()) {
+                plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
+            }
+        }
+
+        super.delete();
+    }
+
     /**
      * Escape the EditWorld without saving.
      */
@@ -115,6 +134,8 @@ public class DEditPlayer extends DInstancePlayer {
 
     @Override
     public void leave() {
+        delete();
+
         getSavePlayer().reset(false);
 
         EditWorld editWorld = EditWorld.getByWorld(getWorld());
@@ -141,13 +162,12 @@ public class DEditPlayer extends DInstancePlayer {
     public void update(boolean updateSecond) {
         boolean locationValid = true;
         Location teleportLocation = player.getLocation();
-        boolean teleportWolf = false;
-        boolean respawnInventory = false;
-        boolean offline = false;
-        boolean kick = false;
-        boolean triggerAllInDistance = false;
 
         EditWorld editWorld = EditWorld.getByWorld(getWorld());
+
+        if (!getPlayer().getWorld().equals(getWorld())) {
+            locationValid = false;
+        }
 
         if (editWorld != null) {
             if (editWorld.getLobbyLocation() == null) {
@@ -157,8 +177,16 @@ public class DEditPlayer extends DInstancePlayer {
             }
         }
 
-        DPlayerUpdateEvent event = new DPlayerUpdateEvent(this, locationValid, teleportWolf, respawnInventory, offline, kick, triggerAllInDistance);
+        DPlayerUpdateEvent event = new DPlayerUpdateEvent(this, locationValid, false, false, false, false, false);
         plugin.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!locationValid) {
+            PlayerUtil.secureTeleport(getPlayer(), teleportLocation);
+        }
     }
 
     /* Statics */
