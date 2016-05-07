@@ -361,7 +361,7 @@ public class GameWorld {
      */
     public WorldConfig getConfig() {
         if (worldConfig == null) {
-            return plugin.getDefaultConfig();
+            return plugin.getMainConfig().getDefaultWorldConfig();
         }
 
         return worldConfig;

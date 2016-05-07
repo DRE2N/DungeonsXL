@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.game;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -47,6 +49,7 @@ public class Game {
     private boolean started;
     private GameType type;
     private GameWorld world;
+    private GameRules rules;
     private int waveCount;
     private Map<String, Integer> gameKills = new HashMap<>();
     private Map<String, Integer> waveKills = new HashMap<>();
@@ -136,11 +139,69 @@ public class Game {
     }
 
     /**
-     * @param gameWorld
+     * @param world
      * the GameWorld to connect to the Game
      */
     public void setWorld(GameWorld world) {
         this.world = world;
+    }
+
+    /**
+     * @return the GameRules
+     */
+    public GameRules getRules() {
+        return rules;
+    }
+
+    /**
+     * @param rules
+     * the GameRules to set
+     */
+    public void setRules(GameRules rules) {
+        this.rules = rules;
+    }
+
+    /**
+     * Fetchs the rules with the following priority:
+     * 1. Game type
+     * 2. Dungeon config: Override values
+     * 3. Floor config
+     * 4. Dungeon config: Default values
+     * 5. Main config: Default values
+     * 6. The default values
+     */
+    public void fetchRules() {
+        DungeonConfig dungeonConfig = null;
+        if (getDungeon() != null) {
+            dungeonConfig = getDungeon().getConfig();
+        }
+
+        WorldConfig floorConfig = null;
+        if (world != null) {
+            floorConfig = world.getConfig();
+        }
+
+        GameRules finalRules = new GameRules();
+
+        if (type != null) {
+            finalRules.apply(type);
+        }
+
+        if (dungeonConfig != null) {
+            finalRules.apply(dungeonConfig.getOverrideValues());
+        }
+
+        if (floorConfig != null) {
+            finalRules.apply(floorConfig);
+        }
+
+        if (getDungeon() != null) {
+            finalRules.apply(dungeonConfig.getDefaultValues());
+        }
+
+        finalRules.apply(plugin.getMainConfig().getDefaultWorldConfig());
+
+        finalRules.apply(GameRules.DEFAULT_VALUES);
     }
 
     /**
