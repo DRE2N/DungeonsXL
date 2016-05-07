@@ -301,7 +301,6 @@ public class MainConfig extends BRConfig {
         ConfigurationSection configSection = config.getConfigurationSection("default");
         if (configSection != null) {
             defaultWorldConfig = new WorldConfig(configSection);
-            WorldConfig.defaultConfig = defaultWorldConfig;// TODO
         }
     }
 

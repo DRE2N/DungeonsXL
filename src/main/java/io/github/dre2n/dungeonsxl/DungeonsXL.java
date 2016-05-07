@@ -26,7 +26,6 @@ import io.github.dre2n.dungeonsxl.command.*;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DataConfig;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
@@ -530,13 +529,6 @@ public class DungeonsXL extends BRPlugin {
      */
     public List<EditWorld> getEditWorlds() {
         return editWorlds;
-    }
-
-    /**
-     * @return the defaultConfig
-     */
-    public WorldConfig getDefaultConfig() {
-        return WorldConfig.defaultConfig;// TODO
     }
 
     /**
