@@ -21,7 +21,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
@@ -29,6 +28,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.mob.DMob;
@@ -83,18 +83,18 @@ public class DGamePlayer extends DInstancePlayer {
     public DGamePlayer(Player player, World world) {
         super(player, world);
 
-        WorldConfig worldConfig = GameWorld.getByWorld(world).getConfig();
+        GameRules rules = Game.getByWorld(world).getRules();
         player.setGameMode(GameMode.SURVIVAL);
 
-        if (!worldConfig.getKeepInventoryOnEnter()) {
+        if (!rules.getKeepInventoryOnEnter()) {
             clearPlayerData();
         }
 
-        if (worldConfig.isLobbyDisabled()) {
+        if (rules.isLobbyDisabled()) {
             ready();
         }
 
-        initialLives = worldConfig.getInitialLives();
+        initialLives = rules.getInitialLives();
         lives = initialLives;
 
         Location teleport = GameWorld.getByWorld(world).getLobbyLocation();
@@ -183,12 +183,12 @@ public class DGamePlayer extends DInstancePlayer {
      * the dClass to set
      */
     public void setDClass(String className) {
-        GameWorld gameWorld = GameWorld.getByWorld(getPlayer().getWorld());
-        if (gameWorld == null) {
+        Game game = Game.getByWorld(getPlayer().getWorld());
+        if (game == null) {
             return;
         }
 
-        DClass dClass = gameWorld.getConfig().getClass(className);
+        DClass dClass = game.getRules().getClass(className);
         if (dClass != null) {
             if (this.dClass != dClass) {
                 this.dClass = dClass;
@@ -359,11 +359,11 @@ public class DGamePlayer extends DInstancePlayer {
     public void leave() {
         delete();
 
-        WorldConfig dConfig = GameWorld.getByWorld(getWorld()).getConfig();
+        GameRules rules = Game.getByWorld(getWorld()).getRules();
         if (finished) {
-            getSavePlayer().reset(dConfig.getKeepInventoryOnFinish());
+            getSavePlayer().reset(rules.getKeepInventoryOnFinish());
         } else {
-            getSavePlayer().reset(dConfig.getKeepInventoryOnEscape());
+            getSavePlayer().reset(rules.getKeepInventoryOnEscape());
         }
 
         GameWorld gameWorld = GameWorld.getByWorld(getWorld());
@@ -371,7 +371,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
-            for (String permission : gameWorld.getConfig().getGamePermissions()) {
+            for (String permission : rules.getGamePermissions()) {
                 plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
             }
         }
@@ -385,7 +385,7 @@ public class DGamePlayer extends DInstancePlayer {
         if (game != null) {
             if (finished) {
                 if (game.getType().hasRewards()) {
-                    for (Reward reward : gameWorld.getConfig().getRewards()) {
+                    for (Reward reward : rules.getRewards()) {
                         reward.giveTo(getPlayer());
                     }
 
@@ -515,7 +515,7 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         // Respawn Items
-        if (GameWorld.getByWorld(getWorld()).getConfig().getKeepInventoryOnDeath()) {
+        if (Game.getByWorld(getWorld()).getRules().getKeepInventoryOnDeath()) {
             applyRespawnInventory();
         }
     }

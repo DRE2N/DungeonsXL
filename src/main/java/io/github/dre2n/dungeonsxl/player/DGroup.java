@@ -19,7 +19,6 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
@@ -27,6 +26,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
@@ -521,9 +521,9 @@ public class DGroup {
                 }
             }
 
-            WorldConfig config = gameWorld.getConfig();
-            if (config != null) {
-                for (Requirement requirement : config.getRequirements()) {
+            GameRules rules = gameWorld.getGame().getRules();
+            if (rules != null) {
+                for (Requirement requirement : rules.getRequirements()) {
                     RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
                     plugin.getServer().getPluginManager().callEvent(event);
 
@@ -536,22 +536,22 @@ public class DGroup {
 
                 GameType gameType = game.getType();
                 if (gameType == GameTypeDefault.DEFAULT) {
-                    player.setGameMode(config.getGameMode());
-                    if (config.isTimeIsRunning()) {
-                        timeIsRunningTask = new TimeIsRunningTask(this, config.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
+                    player.setGameMode(rules.getGameMode());
+                    if (rules.isTimeIsRunning()) {
+                        timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
                     }
 
                 } else {
                     player.setGameMode(gameType.getGameMode());
                     if (gameType.getShowTime()) {
-                        timeIsRunningTask = new TimeIsRunningTask(this, config.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
+                        timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
                     }
                 }
             }
 
             // Permission bridge
             if (plugin.getPermissionProvider() != null) {
-                for (String permission : gameWorld.getConfig().getGamePermissions()) {
+                for (String permission : rules.getGamePermissions()) {
                     plugin.getPermissionProvider().playerRemoveTransient(gameWorld.getWorld().getName(), player, permission);
                 }
             }

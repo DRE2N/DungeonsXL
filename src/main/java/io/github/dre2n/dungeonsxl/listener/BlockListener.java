@@ -20,6 +20,7 @@ import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
@@ -107,10 +108,11 @@ public class BlockListener implements Listener {
                 }
             }
 
-            if (gameWorld.getGame() != null) {
-                GameType gameType = gameWorld.getGame().getType();
-                if (gameType == GameTypeDefault.DEFAULT && gameWorld.getConfig() != null) {
-                    event.setCancelled(!gameWorld.getConfig().canBuild());
+            Game game = gameWorld.getGame();
+            if (game != null) {
+                GameType gameType = game.getType();
+                if (gameType == GameTypeDefault.DEFAULT) {
+                    event.setCancelled(!game.getRules().canBuild());
 
                 } else if (!gameType.canBuild()) {
                     event.setCancelled(true);
@@ -132,8 +134,11 @@ public class BlockListener implements Listener {
             return;
         }
 
-        if (gameWorld.getConfig().canBuild() || GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gameWorld)) {
-            return;
+        Game game = gameWorld.getGame();
+        if (game != null) {
+            if (game.getRules().canBuild() || GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gameWorld)) {
+                return;
+            }
         }
 
         // Workaround for a bug that would allow 3-Block-high jumping

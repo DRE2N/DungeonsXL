@@ -19,10 +19,10 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GlobalProtection;
@@ -84,15 +84,18 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         GameWorld gameWorld = GameWorld.getByWorld(player.getLocation().getWorld());
         if (gameWorld == null) {
             return;
         }
 
-        WorldConfig dConfig = gameWorld.getConfig();
+        Game game = Game.getByGameWorld(gameWorld);
+        if (game == null) {
+            return;
+        }
 
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
         }
@@ -117,14 +120,12 @@ public class PlayerListener implements Listener {
         if (dPlayer.getLives() != -1) {
             MessageUtil.sendMessage(player, DMessages.PLAYER_DEATH.getMessage(String.valueOf(dPlayer.getLives())));
 
-            if (dConfig != null) {
-                if (dConfig.getKeepInventoryOnDeath()) {
-                    dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
-                    dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
-                    // Delete all drops
-                    for (ItemStack item : event.getDrops()) {
-                        item.setType(Material.AIR);
-                    }
+            if (game.getRules().getKeepInventoryOnDeath()) {
+                dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
+                dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
+                // Delete all drops
+                for (ItemStack item : event.getDrops()) {
+                    item.setType(Material.AIR);
                 }
             }
         }
@@ -136,7 +137,7 @@ public class PlayerListener implements Listener {
             if (!dPlayerKickEvent.isCancelled()) {
                 MessageUtil.broadcastMessage(DMessages.PLAYER_DEATH_KICK.getMessage(player.getName()));
                 dPlayer.leave();
-                if (gameWorld.getConfig().getKeepInventoryOnEscape()) {
+                if (game.getRules().getKeepInventoryOnEscape()) {
                     dPlayer.applyRespawnInventory();
                 }
             }
@@ -347,9 +348,9 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        GameWorld gameWorld = GameWorld.getByWorld(gamePlayer.getWorld());
+        Game game = Game.getByWorld(gamePlayer.getWorld());
 
-        for (Material material : gameWorld.getConfig().getSecureObjects()) {
+        for (Material material : game.getRules().getSecureObjects()) {
             if (material == event.getItemDrop().getItemStack().getType()) {
                 event.setCancelled(true);
                 MessageUtil.sendMessage(player, DMessages.ERROR_DROP.getMessage());
@@ -471,9 +472,9 @@ public class PlayerListener implements Listener {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         // Check GameWorld
-        GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
-        if (gameWorld != null) {
-            int timeUntilKickOfflinePlayer = gameWorld.getConfig().getTimeUntilKickOfflinePlayer();
+        Game game = Game.getByWorld(player.getWorld());
+        if (game != null) {
+            int timeUntilKickOfflinePlayer = game.getRules().getTimeUntilKickOfflinePlayer();
 
             if (timeUntilKickOfflinePlayer == 0) {
                 dPlayer.leave();
@@ -587,7 +588,7 @@ public class PlayerListener implements Listener {
         String command = event.getMessage().toLowerCase();
         ArrayList<String> commandWhitelist = new ArrayList<>();
 
-        GameWorld gameWorld = GameWorld.getByWorld(dPlayer.getWorld());
+        Game game = Game.getByWorld(dPlayer.getWorld());
 
         if (dPlayer instanceof DEditPlayer) {
             if (DPermissions.hasPermission(event.getPlayer(), DPermissions.CMD_EDIT)) {
@@ -597,9 +598,9 @@ public class PlayerListener implements Listener {
                 commandWhitelist.addAll(plugin.getMainConfig().getEditCommandWhitelist());
             }
 
-        } else if (gameWorld != null) {
-            if (gameWorld.getConfig() != null) {
-                commandWhitelist.addAll(gameWorld.getConfig().getGameCommandWhitelist());
+        } else if (game != null) {
+            if (game.getRules() != null) {
+                commandWhitelist.addAll(game.getRules().getGameCommandWhitelist());
             }
         }
 

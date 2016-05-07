@@ -42,7 +42,7 @@ public class ClassesSign extends DSign {
 
     @Override
     public void onInit() {
-        if (getGameWorld().getConfig().isLobbyDisabled()) {
+        if (getGame().getRules().isLobbyDisabled()) {
             getSign().getBlock().setType(Material.AIR);
             return;
         }
@@ -52,7 +52,7 @@ public class ClassesSign extends DSign {
         int directionZ = direction[1];
 
         int xx = 0, zz = 0;
-        for (DClass dclass : getGameWorld().getConfig().getClasses()) {
+        for (DClass dclass : getGame().getRules().getClasses()) {
 
             // Check existing signs
             boolean isContinued = true;
