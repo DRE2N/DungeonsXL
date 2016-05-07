@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -348,7 +349,7 @@ public class Game {
             }
         }
 
-        int delay = world.getConfig().getTimeToNextWave();
+        int delay = rules.getTimeToNextWave();
         sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));
 
         new BukkitRunnable() {
@@ -408,6 +409,15 @@ public class Game {
         }
 
         return null;
+    }
+
+    public static Game getByWorld(World world) {
+        GameWorld gameWorld = GameWorld.getByWorld(world);
+        if (gameWorld != null) {
+            return getByGameWorld(gameWorld);
+        } else {
+            return null;
+        }
     }
 
 }

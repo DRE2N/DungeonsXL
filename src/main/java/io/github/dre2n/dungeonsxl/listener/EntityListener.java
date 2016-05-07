@@ -17,10 +17,7 @@
 package io.github.dre2n.dungeonsxl.listener;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.game.GameType;
-import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -158,16 +155,8 @@ public class EntityListener implements Listener {
             return;
         }
 
-        WorldConfig config = gameWorld.getConfig();
-        GameType type = game.getType();
-
-        boolean pvp = config.isPlayerVersusPlayer();
-        boolean friendlyFire = config.isFriendlyFire();
-
-        if (type != GameTypeDefault.DEFAULT) {
-            pvp = type.isPlayerVersusPlayer();
-            friendlyFire = type.isFriendlyFire();
-        }
+        boolean pvp = game.getRules().isPlayerVersusPlayer();
+        boolean friendlyFire = game.getRules().isFriendlyFire();
 
         Entity attackerEntity = event.getDamager();
         Entity attackedEntity = event.getEntity();

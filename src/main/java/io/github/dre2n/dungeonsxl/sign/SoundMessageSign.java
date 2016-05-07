@@ -53,7 +53,7 @@ public class SoundMessageSign extends DSign {
         String lines[] = getSign().getLines();
 
         if (!lines[1].isEmpty()) {
-            String msg = getGameWorld().getConfig().getMsg(NumberUtil.parseInt(lines[1]), true);
+            String msg = getGame().getRules().getMsg(NumberUtil.parseInt(lines[1]), true);
             if (msg != null) {
                 this.msg = msg;
                 getSign().getBlock().setType(Material.AIR);
