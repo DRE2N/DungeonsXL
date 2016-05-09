@@ -191,14 +191,15 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
+            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(DGroup.getByPlayer(player).getMapName()));
             return;
         }
 
-        if (game != null) {
-            game.setWorld(target);
+        if (game == null) {
+            game = new Game(dGroup);
         }
 
+        game.setWorld(target);
         dGroup.setGameWorld(target);
 
         new DGamePlayer(player, target);

@@ -58,8 +58,14 @@ public class Game {
     public Game(DGroup dGroup) {
         dGroups.add(dGroup);
         started = false;
+        fetchRules();
 
         plugin.getGames().add(this);
+    }
+
+    public Game(DGroup dGroup, GameWorld world) {
+        this(dGroup);
+        this.world = world;
     }
 
     public Game(DGroup dGroup, GameType type, GameWorld world) {
@@ -71,6 +77,7 @@ public class Game {
         this.type = type;
         this.world = world;
         this.started = true;
+        fetchRules();
 
         plugin.getGames().add(this);
     }
@@ -196,13 +203,15 @@ public class Game {
             finalRules.apply(floorConfig);
         }
 
-        if (getDungeon() != null) {
+        if (dungeonConfig != null) {
             finalRules.apply(dungeonConfig.getDefaultValues());
         }
 
         finalRules.apply(plugin.getMainConfig().getDefaultWorldConfig());
 
         finalRules.apply(GameRules.DEFAULT_VALUES);
+
+        rules = finalRules;
     }
 
     /**

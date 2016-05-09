@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
@@ -164,6 +165,7 @@ public class PlayCommand extends BRCommand {
             return;
         }
 
+        new Game(dGroup, dGroup.getGameWorld());
         if (dGroup.getGameWorld().getLobbyLocation() == null) {
             for (Player groupPlayer : dGroup.getPlayers()) {
                 new DGamePlayer(groupPlayer, dGroup.getGameWorld());
