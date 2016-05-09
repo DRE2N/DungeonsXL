@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 
@@ -363,10 +362,8 @@ public class GameRules {
     /**
      * @return the objects to get passed to another player of the group when this player leaves
      */
-    public CopyOnWriteArrayList<Material> getSecureObjects() {
-        CopyOnWriteArrayList<Material> tmpSecureObjects = new CopyOnWriteArrayList<>();
-        tmpSecureObjects.addAll(secureObjects);
-        return tmpSecureObjects;
+    public List<Material> getSecureObjects() {
+        return secureObjects;
     }
 
     /* Actions */

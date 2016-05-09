@@ -42,6 +42,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -76,7 +78,7 @@ public class GameWorld {
     private Location locStart;
     private boolean isPlaying = false;
     private int id;
-    private CopyOnWriteArrayList<Material> secureObjects = new CopyOnWriteArrayList<>();
+    private List<Material> secureObjects = new ArrayList<>();
     private CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<>();
 
     private CopyOnWriteArrayList<Sign> signClass = new CopyOnWriteArrayList<>();
@@ -244,7 +246,7 @@ public class GameWorld {
     /**
      * @return the secureObjects
      */
-    public CopyOnWriteArrayList<Material> getSecureObjects() {
+    public List<Material> getSecureObjects() {
         return secureObjects;
     }
 
@@ -252,7 +254,7 @@ public class GameWorld {
      * @param secureObjects
      * the secureObjects to set
      */
-    public void setSecureObjects(CopyOnWriteArrayList<Material> secureObjects) {
+    public void setSecureObjects(List<Material> secureObjects) {
         this.secureObjects = secureObjects;
     }
 

@@ -83,7 +83,12 @@ public class DGamePlayer extends DInstancePlayer {
     public DGamePlayer(Player player, World world) {
         super(player, world);
 
-        GameRules rules = Game.getByWorld(world).getRules();
+        Game game = Game.getByWorld(world);
+        if (game == null) {
+            game = new Game(DGroup.getByPlayer(player));
+        }
+
+        GameRules rules = game.getRules();
         player.setGameMode(GameMode.SURVIVAL);
 
         if (!rules.getKeepInventoryOnEnter()) {
