@@ -35,7 +35,7 @@ public enum DMessages implements Messages {
     CMD_ENTER_SUCCESS("Cmd_Enter", "&6The group &4&v1 &6successfully entered the game of the group &4&v2&6."),
     CMD_INVITE_SUCCESS("Cmd_Invite_Success", "&6Player &4&v1&6 was successfully invited to edit the Dungeon &4&v2&6!"),
     CMD_LEAVE_SUCCESS("Cmd_Leave_Success", "&6You have successfully left your group!"),
-    CMD_LIVES("Cmd_Lives", "&4v1&6 has &4v2 &6lives left."),
+    CMD_LIVES("Cmd_Lives", "&4&v1&6 has &4&v2 &6lives left."),
     CMD_MAIN_WELCOME("Cmd_Main_Welcome", "&7Welcome to &4Dungeons&fXL"),
     CMD_MAIN_LOADED("Cmd_Main_Loaded", "&eMaps: &o[&v1] &eDungeons: &o[&v2] &eLoaded: &o[&v3] &ePlayers: &o[&v4]"),
     CMD_MAIN_COMPATIBILITY("Cmd_Main_Compatibility", "&eInternals: &o[&v1] &eVault: &o[&v2] &eMythicMobs: &o[&v3]"),
