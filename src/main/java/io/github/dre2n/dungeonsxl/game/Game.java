@@ -195,7 +195,7 @@ public class Game {
             finalRules.apply(type);
         }
 
-        if (dungeonConfig != null) {
+        if (dungeonConfig != null && dungeonConfig.getOverrideValues() != null) {
             finalRules.apply(dungeonConfig.getOverrideValues());
         }
 
@@ -203,7 +203,7 @@ public class Game {
             finalRules.apply(floorConfig);
         }
 
-        if (dungeonConfig != null) {
+        if (dungeonConfig != null && dungeonConfig.getDefaultValues() != null) {
             finalRules.apply(dungeonConfig.getDefaultValues());
         }
 
