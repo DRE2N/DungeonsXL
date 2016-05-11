@@ -464,6 +464,7 @@ public class DGroup {
         if (game == null) {
             return;
         }
+        game.fetchRules();
 
         for (DGroup dGroup : game.getDGroups()) {
             if (dGroup == null) {
@@ -521,31 +522,30 @@ public class DGroup {
                 }
             }
 
-            GameRules rules = gameWorld.getGame().getRules();
-            if (rules != null) {
-                for (Requirement requirement : rules.getRequirements()) {
-                    RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
-                    plugin.getServer().getPluginManager().callEvent(event);
+            GameRules rules = game.getRules();
 
-                    if (requirementDemandEvent.isCancelled()) {
-                        continue;
-                    }
+            for (Requirement requirement : rules.getRequirements()) {
+                RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
+                plugin.getServer().getPluginManager().callEvent(event);
 
-                    requirement.demand(player);
+                if (requirementDemandEvent.isCancelled()) {
+                    continue;
                 }
 
-                GameType gameType = game.getType();
-                if (gameType == GameTypeDefault.DEFAULT) {
-                    player.setGameMode(rules.getGameMode());
-                    if (rules.isTimeIsRunning()) {
-                        timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
-                    }
+                requirement.demand(player);
+            }
 
-                } else {
-                    player.setGameMode(gameType.getGameMode());
-                    if (gameType.getShowTime()) {
-                        timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
-                    }
+            GameType gameType = game.getType();
+            if (gameType == GameTypeDefault.DEFAULT) {
+                player.setGameMode(rules.getGameMode());
+                if (rules.isTimeIsRunning()) {
+                    timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
+                }
+
+            } else {
+                player.setGameMode(gameType.getGameMode());
+                if (gameType.getShowTime()) {
+                    timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
                 }
             }
 

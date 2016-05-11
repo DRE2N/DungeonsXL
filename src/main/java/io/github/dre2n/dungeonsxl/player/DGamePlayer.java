@@ -520,7 +520,9 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         // Respawn Items
-        if (Game.getByWorld(getWorld()).getRules().getKeepInventoryOnDeath()) {
+        Game game = Game.getByWorld(getWorld());
+
+        if (game != null && game.getRules().getKeepInventoryOnDeath()) {
             applyRespawnInventory();
         }
     }
