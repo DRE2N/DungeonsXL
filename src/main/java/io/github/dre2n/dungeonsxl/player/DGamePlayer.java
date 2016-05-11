@@ -362,9 +362,9 @@ public class DGamePlayer extends DInstancePlayer {
     /* Actions */
     @Override
     public void leave() {
+        GameRules rules = Game.getByWorld(getWorld()).getRules();
         delete();
 
-        GameRules rules = Game.getByWorld(getWorld()).getRules();
         if (finished) {
             getSavePlayer().reset(rules.getKeepInventoryOnFinish());
         } else {
