@@ -53,8 +53,6 @@ public class Announcers {
                 announcers.add(new Announcer(name, description, worlds, identifier, multiFloor, maxGroupsPerGame, maxPlayersPerGroup));
             }
         }
-
-        new AnnouncerTask(this).runTaskTimer(DungeonsXL.getInstance(), 0, 200);
     }
 
     /**

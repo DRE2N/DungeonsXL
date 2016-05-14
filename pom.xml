@@ -67,7 +67,7 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>commons</artifactId>
-            <version>0.6.2</version>
+            <version>0.6.3</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
