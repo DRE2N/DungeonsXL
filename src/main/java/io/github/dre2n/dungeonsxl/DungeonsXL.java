@@ -42,6 +42,7 @@ import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
 import io.github.dre2n.dungeonsxl.sign.DSignTypes;
+import io.github.dre2n.dungeonsxl.task.AnnouncerTask;
 import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
 import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
@@ -85,6 +86,7 @@ public class DungeonsXL extends BRPlugin {
     private DPlayers dPlayers;
     private Announcers announcers;
 
+    private BukkitTask announcerTask;
     private BukkitTask worldUnloadTask;
     private BukkitTask lazyUpdateTask;
     private BukkitTask updateTask;
@@ -155,6 +157,7 @@ public class DungeonsXL extends BRPlugin {
         loadAll();
 
         // Tasks
+        startAnnouncerTsak(200L);
         startWorldUnloadTask(1200L);
         startLazyUpdateTask(20L);
         startUpdateTask(20L);
@@ -499,6 +502,20 @@ public class DungeonsXL extends BRPlugin {
      */
     public BukkitTask getWorldUnloadTask() {
         return worldUnloadTask;
+    }
+
+    /**
+     * start a new AnnouncerTask
+     */
+    public void startAnnouncerTask(long period) {
+        announcerTask = new AnnouncerTask(announcers).runTaskTimer(this, 0L, period);
+    }
+
+    /**
+     * @return the AnnouncerTask
+     */
+    public BukkitTask getAnnouncerTask() {
+        return announcerTask;
     }
 
     /**
