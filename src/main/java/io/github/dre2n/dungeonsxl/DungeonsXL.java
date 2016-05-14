@@ -157,7 +157,7 @@ public class DungeonsXL extends BRPlugin {
         loadAll();
 
         // Tasks
-        startAnnouncerTsak(200L);
+        startAnnouncerTask(200L);
         startWorldUnloadTask(1200L);
         startLazyUpdateTask(20L);
         startUpdateTask(20L);
