@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Daniel Saukel
+ * Copyright (C) 2012-2016 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +33,8 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +60,45 @@ public class Announcer {
 
     private List<DGroup> dGroups;
     private List<ItemStack> buttons;
+
+    /**
+     * @param file
+     * the script file
+     */
+    public Announcer(File file) {
+        this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
+    }
+
+    /**
+     * @param name
+     * the name of the Announcer
+     * @param config
+     * the config that stores the information
+     */
+    public Announcer(String name, FileConfiguration config) {
+        this.name = name;
+
+        description = config.getStringList("description");
+        worlds = config.getStringList("worlds");
+
+        String identifier = config.getString("identifier");
+        boolean multiFloor = config.getBoolean("multiFloor");
+        if (multiFloor) {
+            dungeonName = identifier;
+
+            Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+            if (dungeon != null) {
+                mapName = dungeon.getConfig().getStartFloor();
+            }
+
+        } else {
+            mapName = identifier;
+        }
+
+        maxGroupsPerGame = (short) config.getInt("maxGroupsPerGame");
+        dGroups = new ArrayList<>(Collections.nCopies(maxGroupsPerGame + 1, (DGroup) null));
+        maxPlayersPerGroup = config.getInt("maxPlayersPerGroup");
+    }
 
     /**
      * @param name

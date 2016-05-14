@@ -16,7 +16,12 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import io.github.dre2n.dungeonsxl.util.ItemUtil;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -24,29 +29,29 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DClass {
 
-    private CopyOnWriteArrayList<ItemStack> items = new CopyOnWriteArrayList<>();
     private String name;
+
+    private List<ItemStack> items = new ArrayList<>();
     private boolean dog;
 
-    public DClass(String name, CopyOnWriteArrayList<ItemStack> items, boolean dog) {
+    public DClass(File file) {
+        this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
+    }
+
+    public DClass(String name, FileConfiguration config) {
+        if (config.contains("items")) {
+            items = ItemUtil.fromConfig(config);
+        }
+
+        if (config.contains("dog")) {
+            dog = config.getBoolean("dog");
+        }
+    }
+
+    public DClass(String name, List<ItemStack> items, boolean dog) {
         this.items = items;
         this.name = name;
         this.dog = dog;
-    }
-
-    /**
-     * @return the items
-     */
-    public CopyOnWriteArrayList<ItemStack> getItems() {
-        return items;
-    }
-
-    /**
-     * @param itemStack
-     * the ItemStack to add
-     */
-    public void setItems(ItemStack itemStack) {
-        items.add(itemStack);
     }
 
     /**
@@ -57,11 +62,26 @@ public class DClass {
     }
 
     /**
-     * @param name
-     * the name to set
+     * @return the items
      */
-    public void setName(String name) {
-        this.name = name;
+    public List<ItemStack> getItems() {
+        return items;
+    }
+
+    /**
+     * @param itemStack
+     * the ItemStack to add
+     */
+    public void addItem(ItemStack itemStack) {
+        items.add(itemStack);
+    }
+
+    /**
+     * @param itemStack
+     * the ItemStack to remove
+     */
+    public void removeItem(ItemStack itemStack) {
+        items.remove(itemStack);
     }
 
     /**

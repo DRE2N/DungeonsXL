@@ -193,7 +193,7 @@ public class DGamePlayer extends DInstancePlayer {
             return;
         }
 
-        DClass dClass = game.getRules().getClass(className);
+        DClass dClass = plugin.getDClasses().getByName(className);
         if (dClass != null) {
             if (this.dClass != dClass) {
                 this.dClass = dClass;
