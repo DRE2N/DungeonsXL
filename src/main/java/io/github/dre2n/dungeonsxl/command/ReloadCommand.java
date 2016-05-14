@@ -82,6 +82,7 @@ public class ReloadCommand extends BRCommand {
         plugin.loadTriggers();
         plugin.loadDSigns();
         plugin.loadDungeons();
+        plugin.loadAnnouncers(DungeonsXL.ANNOUNCERS);
 
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessages.CMD_RELOAD_DONE.getMessage());

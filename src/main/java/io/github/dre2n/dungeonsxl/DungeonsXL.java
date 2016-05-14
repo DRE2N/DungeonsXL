@@ -22,6 +22,7 @@ import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
 import io.github.dre2n.commons.util.FileUtil;
+import io.github.dre2n.dungeonsxl.announcer.Announcers;
 import io.github.dre2n.dungeonsxl.command.*;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DataConfig;
@@ -62,6 +63,11 @@ public class DungeonsXL extends BRPlugin {
     private static DungeonsXL instance;
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
+    public static File DUNGEONS;
+    public static File LANGUAGES;
+    public static File MAPS;
+    public static File SCRIPTS;
+    public static File ANNOUNCERS;
 
     private DataConfig dataConfig;
     private MainConfig mainConfig;
@@ -77,6 +83,7 @@ public class DungeonsXL extends BRPlugin {
     private GlobalProtections protections;
     private ExternalMobProviders dMobProviders;
     private DPlayers dPlayers;
+    private Announcers announcers;
 
     private BukkitTask worldUnloadTask;
     private BukkitTask lazyUpdateTask;
@@ -95,7 +102,7 @@ public class DungeonsXL extends BRPlugin {
          * ####~BRPluginSettings~####
          * ##########################
          * #~Internals~##~~v1_7_R3+~#
-         * #~SpigotAPI~##~~~false~~~#
+         * #~SpigotAPI~##~~~~true~~~#
          * #~~~~UUID~~~##~~~~true~~~#
          * #~~Economy~~##~~~~true~~~#
          * #Permissions##~~~~true~~~#
@@ -103,7 +110,7 @@ public class DungeonsXL extends BRPlugin {
          * ##########################
          */
 
-        settings = new BRPluginSettings(false, true, true, true, true, Internals.andHigher(Internals.v1_7_R3));
+        settings = new BRPluginSettings(true, true, true, true, true, Internals.andHigher(Internals.v1_7_R3));
     }
 
     @Override
@@ -112,7 +119,6 @@ public class DungeonsXL extends BRPlugin {
 
         instance = this;
 
-        // InitFolders
         initFolders();
 
         // Load Language
@@ -121,7 +127,7 @@ public class DungeonsXL extends BRPlugin {
         loadDataConfig(new File(getDataFolder(), "data.yml"));
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
-        loadMessageConfig(new File(getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
+        loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
         loadDCommands();
         DPermissions.register();
         loadGameTypes();
@@ -133,8 +139,10 @@ public class DungeonsXL extends BRPlugin {
         loadGlobalProtections();
         loadExternalMobProviders();
         loadDPlayers();
+        loadAnnouncers(ANNOUNCERS);
 
         manager.registerEvents(new EntityListener(), this);
+        manager.registerEvents(new GUIListener(), this);
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new BlockListener(), this);
         manager.registerEvents(new WorldListener(), this);
@@ -189,19 +197,29 @@ public class DungeonsXL extends BRPlugin {
             getDataFolder().mkdir();
         }
 
-        File dungeons = new File(getDataFolder() + "/dungeons");
-        if (!dungeons.exists()) {
-            dungeons.mkdir();
+        DUNGEONS = new File(getDataFolder(), "dungeons");
+        if (!DUNGEONS.exists()) {
+            DUNGEONS.mkdir();
         }
 
-        File languages = new File(getDataFolder() + "/languages");
-        if (!languages.exists()) {
-            languages.mkdir();
+        LANGUAGES = new File(getDataFolder(), "languages");
+        if (!LANGUAGES.exists()) {
+            LANGUAGES.mkdir();
         }
 
-        File maps = new File(getDataFolder() + "/maps");
-        if (!maps.exists()) {
-            maps.mkdir();
+        MAPS = new File(getDataFolder(), "maps");
+        if (!MAPS.exists()) {
+            MAPS.mkdir();
+        }
+
+        SCRIPTS = new File(getDataFolder(), "scripts");
+        if (!SCRIPTS.exists()) {
+            SCRIPTS.mkdir();
+        }
+
+        ANNOUNCERS = new File(SCRIPTS, "announcers");
+        if (!ANNOUNCERS.exists()) {
+            ANNOUNCERS.mkdir();
         }
     }
 
@@ -317,6 +335,7 @@ public class DungeonsXL extends BRPlugin {
                 new GameCommand(),
                 new GroupCommand(),
                 new InviteCommand(),
+                new JoinCommand(),
                 new EnterCommand(),
                 new LeaveCommand(),
                 new ListCommand(),
@@ -459,6 +478,20 @@ public class DungeonsXL extends BRPlugin {
      */
     public void loadDPlayers() {
         dPlayers = new DPlayers();
+    }
+
+    /**
+     * @return the loaded instance of Announcers
+     */
+    public Announcers getAnnouncers() {
+        return announcers;
+    }
+
+    /**
+     * load / reload a new instance of Announcers
+     */
+    public void loadAnnouncers(File file) {
+        announcers = new Announcers(file);
     }
 
     /**

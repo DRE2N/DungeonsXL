@@ -4,6 +4,7 @@
 [![Wiki](http://feuerstern.bplaced.net/ressourcen/buttons/Wiki.png)](../../wiki/)
 [![Issues](http://feuerstern.bplaced.net/ressourcen/buttons/Issues.png)](../../issues/)
 [![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://feuerstern.bplaced.net/javadocs/dxl/)
+[![MCStats](http://feuerstern.bplaced.net/ressourcen/buttons/MCStats.png)](http://mcstats.org/plugin/DungeonsXL/)
 
 ![Doge](https://i.imgflip.com/vtpyi.jpg)
 
@@ -30,6 +31,7 @@ DungeonsXL also provides custom game mechanics to make these worlds interesting.
 * A built-in custom mob system and support for MythicMobs. [Read more...](../../wiki/signs#mob)
 * A powerful API: [Read more...](../../wiki/api-tutorial)
 * Different game types allow you to use your maps dynamically for different purposes. [Read more...](../../wiki/game-types)
+* Announcements sothat users can join the next match easily. [Read more...](../../wiki/announcements)
 * ...and many more!
 
 
@@ -67,7 +69,7 @@ Instead of referencing the internals of the implementation directly, DungeonsXL 
 The shaded version of DXL (standard version) contains this library, while the original version needs it as an external plugin.
 Have a look at the [installation instructions](../../wiki/getting-started#installation) for detailed information.
 
-DungeonsXL currently uses BRCommons 0.5.2.
+DungeonsXL currently uses BRCommons 0.6.2.
 
 ### Java
 7 and higher
