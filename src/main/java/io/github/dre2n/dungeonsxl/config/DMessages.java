@@ -26,6 +26,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public enum DMessages implements Messages {
 
+    ANNOUNCER_CMD("Announcer_Cmd", "&4&l=> &6USE &4/DXL JOIN &v1 &6TO JOIN &4&l<="),
+    ANNOUNCER_CLICK("Announcer_Click", "&4&l=> &6CLICK HERE TO JOIN &4&l<="),
     CMD_BREAK_PROTECTED_MODE("Cmd_Break_ProtectedMode", "&6You may not break blocks protected by DungeonsXL anymore."),
     CMD_BREAK_BREAK_MODE("Cmd_Break_BreakMode", "&6You may break a block protected by DungeonsXL."),
     CMD_CHAT_DUNGEON_CHAT("Cmd_Chat_DungeonChat", "&6You have entered the Dungeon-chat"),
@@ -101,6 +103,7 @@ public enum DMessages implements Messages {
     HELP_CMD_GROUP_SHOW("Help_Cmd_GroupShow", "/dxl group show [group] - Shows a group"),
     HELP_CMD_HELP("Help_Cmd_Help", "/dxl help <page> - Shows the help page"),
     HELP_CMD_INVITE("Help_Cmd_Invite", "/dxl invite <player> <dungeon> - Invite a player to edit a dungeon"),
+    HELP_CMD_JOIN("Help_Cmd_Join", "/dxl join [announcement] - Opens the GUI to join a group in an upcoming game"),
     HELP_CMD_ENTER("Help_Cmd_Enter", "/dxl enter ([joining group]) [target group] - Let the joining group enter the game of the target group"),
     HELP_CMD_LEAVE("Help_Cmd_Leave", "/dxl leave - Leaves the current dungeon"),
     HELP_CMD_LIST("Help_Cmd_List", "/dxl list ([dungeon|map|loaded]) ([dungeon]) - Lists all dungeons"),

@@ -63,6 +63,10 @@ public class DGroup {
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
 
+    public DGroup(Player player) {
+        this("Group_" + plugin.getDGroups().size(), player);
+    }
+
     public DGroup(String name, Player player) {
         plugin.getDGroups().add(this);
         this.name = name;
@@ -438,6 +442,13 @@ public class DGroup {
      */
     public boolean isEmpty() {
         return players.isEmpty();
+    }
+
+    /**
+     * @return if the group has been customized with a command
+     */
+    public boolean isCustom() {
+        return !name.matches("Group_[0-9]{1,}");
     }
 
     /* Actions */

@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.config;
 import io.github.dre2n.commons.config.BRConfig;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 6;
+    public static final int CONFIG_VERSION = 7;
 
     private String language = "en";
     private boolean enableEconomy = false;
@@ -43,6 +44,7 @@ public class MainConfig extends BRConfig {
     /* Misc */
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
+    private List<Short> groupColorPriority = new ArrayList<>(Arrays.asList((short) 11, (short) 14, (short) 4, (short) 5, (short) 10, (short) 1, (short) 0, (short) 15));
 
     /* Secure Mode */
     private boolean secureModeEnabled = false;
@@ -113,6 +115,13 @@ public class MainConfig extends BRConfig {
      */
     public Map<String, Object> getExternalMobProviders() {
         return externalMobProviders;
+    }
+
+    /**
+     * @return the group colors
+     */
+    public List<Short> getGroupColorPriority() {
+        return groupColorPriority;
     }
 
     /**
@@ -206,6 +215,10 @@ public class MainConfig extends BRConfig {
             config.createSection("externalMobProviders");
         }
 
+        if (!config.contains("groupColorPriority")) {
+            config.set("groupColorPriority", groupColorPriority);
+        }
+
         if (!config.contains("secureMode.enabled")) {
             config.set("secureMode.enabled", secureModeEnabled);
         }
@@ -271,6 +284,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("externalMobProviders")) {
             externalMobProviders = config.getConfigurationSection("externalMobProviders").getValues(false);
+        }
+
+        if (config.contains("groupColorPriority")) {
+            groupColorPriority = config.getShortList("groupColorPriority");
         }
 
         if (config.contains("secureMode.enabled")) {

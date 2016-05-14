@@ -49,6 +49,7 @@ public enum DPermissions {
     IGNORE_TIME_LIMIT("ignoretimelimit", OP),
     INVITE("invite", OP),
     INSECURE("insecure", OP),
+    JOIN("join", TRUE),
     LEAVE("leave", TRUE),
     LIST("list", OP),
     LIVES("lives", TRUE),
@@ -65,7 +66,7 @@ public enum DPermissions {
     ADMINISTRATOR("*", OP),
     HALF_EDITOR("halfeditor", OP, ESCAPE, LIST, MESSAGE, SAVE),
     FULL_EDITOR("fulleditor", OP, HALF_EDITOR, EDIT, PLAY, SIGN, TEST),
-    HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, LEAVE, LIVES, MAIN),
+    HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, JOIN, LEAVE, LIVES, MAIN),
     FULL_PLAYER("fullplayer", OP, HALF_PLAYER, GROUP);
 
     public static final String PREFIX = "dxl.";

@@ -28,6 +28,7 @@ public class DGroupCreateEvent extends DGroupEvent implements Cancellable {
 
     public enum Cause {
 
+        ANNOUNCER,
         COMMAND,
         GROUP_SIGN,
         CUSTOM
