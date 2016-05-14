@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Daniel Saukel
+ * Copyright (C) 2012-2016 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,12 @@
 package io.github.dre2n.dungeonsxl.game;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.mob.DMobType;
-import io.github.dre2n.dungeonsxl.player.DClass;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 
@@ -68,10 +64,6 @@ public class GameRules {
         DEFAULT_VALUES.finishedAll = null;
         DEFAULT_VALUES.rewards = new ArrayList<>();
 
-        /* Scripts */
-        DEFAULT_VALUES.dClasses = new ArrayList<>();
-        DEFAULT_VALUES.mobTypes = new HashSet<>();
-
         /* Commands and permissions */
         DEFAULT_VALUES.gameCommandWhitelist = new ArrayList<>();
         DEFAULT_VALUES.gamePermissions = new ArrayList<>();
@@ -111,10 +103,6 @@ public class GameRules {
     protected List<String> finishedAll;
     protected List<Reward> rewards;
 
-    /* Scripts */
-    protected List<DClass> dClasses;
-    protected Set<DMobType> mobTypes;
-
     /* Commands and permissions */
     protected List<String> gameCommandWhitelist;
     protected List<String> gamePermissions;
@@ -124,33 +112,6 @@ public class GameRules {
     protected List<Material> secureObjects;
 
     /* Getters and setters */
-    /**
-     * @return the classes
-     */
-    public List<DClass> getClasses() {
-        if (dClasses != null) {
-            if (!dClasses.isEmpty()) {
-                return dClasses;
-            }
-        }
-
-        return new ArrayList<>();
-    }
-
-    /**
-     * @param name
-     * the name of the class
-     */
-    public DClass getClass(String name) {
-        for (DClass dClass : dClasses) {
-            if (dClass.getName().equals(name)) {
-                return dClass;
-            }
-        }
-
-        return null;
-    }
-
     // keepInventory
     /**
      * @return if the inventory shall be kept when the player enters the dungeon
@@ -305,14 +266,6 @@ public class GameRules {
      */
     public List<Reward> getRewards() {
         return rewards;
-    }
-
-    // Scripts
-    /**
-     * @return the mobTypes
-     */
-    public Set<DMobType> getMobTypes() {
-        return mobTypes;
     }
 
     // Commands and permissions
@@ -481,19 +434,6 @@ public class GameRules {
 
         if (rewards == null) {
             rewards = defaultValues.rewards;
-        }
-
-        /* Scripts */
-        if (dClasses == null) {
-            dClasses = defaultValues.dClasses;
-        } else if (defaultValues.dClasses != null) {
-            dClasses.addAll(defaultValues.dClasses);
-        }
-
-        if (mobTypes == null) {
-            mobTypes = defaultValues.mobTypes;
-        } else if (defaultValues.mobTypes != null) {
-            mobTypes.addAll(defaultValues.mobTypes);
         }
 
         /* Commands and permissions */

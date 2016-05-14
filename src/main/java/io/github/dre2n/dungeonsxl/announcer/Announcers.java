@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Daniel Saukel
+ * Copyright (C) 2012-2016 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,10 @@
 package io.github.dre2n.dungeonsxl.announcer;
 
 import io.github.dre2n.commons.util.FileUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.task.AnnouncerTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -37,20 +33,7 @@ public class Announcers {
     public Announcers(File file) {
         if (file.isDirectory()) {
             for (File script : FileUtil.getFilesForFolder(file)) {
-                FileConfiguration config = YamlConfiguration.loadConfiguration(script);
-
-                String name = script.getName().substring(0, script.getName().length() - 4);
-                String identifier = config.getString("identifier");
-                List<String> description = config.getStringList("description");
-                List<String> worlds = null;
-                if (config.contains("worlds")) {
-                    worlds = config.getStringList("worlds");
-                }
-                boolean multiFloor = config.getBoolean("multiFloor");
-                short maxGroupsPerGame = (short) config.getInt("maxGroupsPerGame");
-                int maxPlayersPerGroup = config.getInt("maxPlayersPerGroup");
-
-                announcers.add(new Announcer(name, description, worlds, identifier, multiFloor, maxGroupsPerGame, maxPlayersPerGroup));
+                announcers.add(new Announcer(script));
             }
         }
     }

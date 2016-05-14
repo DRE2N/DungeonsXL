@@ -21,8 +21,6 @@ import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
-import io.github.dre2n.dungeonsxl.mob.DMobType;
-import io.github.dre2n.dungeonsxl.player.DClass;
 import io.github.dre2n.dungeonsxl.requirement.FeeLevelRequirement;
 import io.github.dre2n.dungeonsxl.requirement.FeeMoneyRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
@@ -37,8 +35,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -69,59 +65,6 @@ public class WorldConfig extends GameRules {
 
     // Load & Save
     public void load(ConfigurationSection configFile) {
-        /* Classes */
-        ConfigurationSection configSectionClasses = configFile.getConfigurationSection("classes");
-        if (configSectionClasses != null) {
-            Set<String> list = configSectionClasses.getKeys(false);
-            for (String className : list) {
-                String name = className;
-                boolean hasDog = configSectionClasses.getBoolean(className + ".dog");
-                /* Items */
-                List<String> items = configSectionClasses.getStringList(className + ".items");
-                CopyOnWriteArrayList<ItemStack> itemStacks = new CopyOnWriteArrayList<>();
-
-                for (String item : items) {
-                    String[] itemSplit = item.split(",");
-                    if (itemSplit.length > 0) {
-                        int itemId = 0, itemData = 0, itemSize = 1, itemLvlEnchantment = 1;
-                        Enchantment itemEnchantment = null;
-                        // Check Id & Data
-                        String[] idAndData = itemSplit[0].split("/");
-                        itemId = NumberUtil.parseInt(idAndData[0]);
-
-                        if (idAndData.length > 1) {
-                            itemData = NumberUtil.parseInt(idAndData[1]);
-                        }
-
-                        // Size
-                        if (itemSplit.length > 1) {
-                            itemSize = NumberUtil.parseInt(itemSplit[1]);
-                        }
-                        // Enchantment
-                        if (itemSplit.length > 2) {
-                            String[] enchantmentSplit = itemSplit[2].split("/");
-
-                            itemEnchantment = Enchantment.getByName(enchantmentSplit[0]);
-
-                            if (enchantmentSplit.length > 1) {
-                                itemLvlEnchantment = NumberUtil.parseInt(enchantmentSplit[1]);
-                            }
-                        }
-
-                        // Add Item to Stacks
-                        ItemStack itemStack = new ItemStack(itemId, itemSize, (short) itemData);
-                        if (itemEnchantment != null) {
-                            itemStack.addEnchantment(itemEnchantment, itemLvlEnchantment);
-                        }
-                        itemStacks.add(itemStack);
-                    }
-                }
-
-                /* Create Class */
-                dClasses.add(new DClass(name, itemStacks, hasDog));
-            }
-        }
-
         /* Messages */
         ConfigurationSection configSectionMessages = configFile.getConfigurationSection("message");
         if (configSectionMessages != null) {
@@ -267,10 +210,6 @@ public class WorldConfig extends GameRules {
         if (configFile.contains("timeLastPlayed")) {
             timeLastPlayed = configFile.getInt("timeLastPlayed");
         }
-
-        /* Mobtypes */
-        configSectionMessages = configFile.getConfigurationSection("mobTypes");
-        mobTypes = DMobType.load(configSectionMessages);
 
         if (configFile.contains("gameCommandWhitelist")) {
             gameCommandWhitelist = configFile.getStringList("gameCommandWhitelist");

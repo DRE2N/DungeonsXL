@@ -32,7 +32,9 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.global.GlobalProtections;
 import io.github.dre2n.dungeonsxl.listener.*;
+import io.github.dre2n.dungeonsxl.mob.DMobTypes;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProviders;
+import io.github.dre2n.dungeonsxl.player.DClasses;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
@@ -69,6 +71,8 @@ public class DungeonsXL extends BRPlugin {
     public static File MAPS;
     public static File SCRIPTS;
     public static File ANNOUNCERS;
+    public static File CLASSES;
+    public static File MOBS;
 
     private DataConfig dataConfig;
     private MainConfig mainConfig;
@@ -85,6 +89,8 @@ public class DungeonsXL extends BRPlugin {
     private ExternalMobProviders dMobProviders;
     private DPlayers dPlayers;
     private Announcers announcers;
+    private DClasses dClasses;
+    private DMobTypes dMobTypes;
 
     private BukkitTask announcerTask;
     private BukkitTask worldUnloadTask;
@@ -142,6 +148,8 @@ public class DungeonsXL extends BRPlugin {
         loadExternalMobProviders();
         loadDPlayers();
         loadAnnouncers(ANNOUNCERS);
+        loadDClasses(CLASSES);
+        loadDMobTypes(MOBS);
 
         manager.registerEvents(new EntityListener(), this);
         manager.registerEvents(new GUIListener(), this);
@@ -223,6 +231,16 @@ public class DungeonsXL extends BRPlugin {
         ANNOUNCERS = new File(SCRIPTS, "announcers");
         if (!ANNOUNCERS.exists()) {
             ANNOUNCERS.mkdir();
+        }
+
+        CLASSES = new File(CLASSES, "classes");
+        if (!CLASSES.exists()) {
+            CLASSES.mkdir();
+        }
+
+        MOBS = new File(MOBS, "mobs");
+        if (!MOBS.exists()) {
+            MOBS.mkdir();
         }
     }
 
@@ -495,6 +513,34 @@ public class DungeonsXL extends BRPlugin {
      */
     public void loadAnnouncers(File file) {
         announcers = new Announcers(file);
+    }
+
+    /**
+     * @return the loaded instance of DClasses
+     */
+    public DClasses getDClasses() {
+        return dClasses;
+    }
+
+    /**
+     * load / reload a new instance of DClasses
+     */
+    public void loadDClasses(File file) {
+        dClasses = new DClasses(file);
+    }
+
+    /**
+     * @return the loaded instance of DMobTypes
+     */
+    public DMobTypes getDMobTypes() {
+        return dMobTypes;
+    }
+
+    /**
+     * load / reload a new instance of DMobTypes
+     */
+    public void loadDMobTypes(File file) {
+        dMobTypes = new DMobTypes(file);
     }
 
     /**
