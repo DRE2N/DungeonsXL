@@ -39,6 +39,8 @@ public class DClass {
     }
 
     public DClass(String name, FileConfiguration config) {
+        this.name = name;
+
         if (config.contains("items")) {
             items = ItemUtil.fromConfig(config);
         }
