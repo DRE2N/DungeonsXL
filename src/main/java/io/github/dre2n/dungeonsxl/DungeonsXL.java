@@ -233,12 +233,12 @@ public class DungeonsXL extends BRPlugin {
             ANNOUNCERS.mkdir();
         }
 
-        CLASSES = new File(CLASSES, "classes");
+        CLASSES = new File(SCRIPTS, "classes");
         if (!CLASSES.exists()) {
             CLASSES.mkdir();
         }
 
-        MOBS = new File(MOBS, "mobs");
+        MOBS = new File(SCRIPTS, "mobs");
         if (!MOBS.exists()) {
             MOBS.mkdir();
         }
