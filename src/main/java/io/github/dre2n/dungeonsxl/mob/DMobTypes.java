@@ -41,7 +41,7 @@ public class DMobTypes {
      */
     public DMobType getByName(String name) {
         for (DMobType dMobType : dMobTypes) {
-            if (dMobType.getName().equals(name)) {
+            if (dMobType.getName().equalsIgnoreCase(name)) {
                 return dMobType;
             }
         }

@@ -43,7 +43,7 @@ public class Announcers {
      */
     public Announcer getByName(String name) {
         for (Announcer announcer : announcers) {
-            if (announcer.getName().equals(name)) {
+            if (announcer.getName().equalsIgnoreCase(name)) {
                 return announcer;
             }
         }
