@@ -41,7 +41,7 @@ public class DClasses {
      */
     public DClass getByName(String name) {
         for (DClass dClass : dClasses) {
-            if (dClass.getName().equals(name)) {
+            if (dClass.getName().equalsIgnoreCase(name)) {
                 return dClass;
             }
         }
