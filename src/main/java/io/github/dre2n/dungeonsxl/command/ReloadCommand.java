@@ -32,9 +32,9 @@ import org.bukkit.plugin.PluginManager;
  * @author Frank Baumann, Daniel Saukel
  */
 public class ReloadCommand extends BRCommand {
-
+    
     DungeonsXL plugin = DungeonsXL.getInstance();
-
+    
     public ReloadCommand() {
         setCommand("reload");
         setMinArgs(0);
@@ -44,11 +44,11 @@ public class ReloadCommand extends BRCommand {
         setPlayerCommand(true);
         setConsoleCommand(true);
     }
-
+    
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         PluginManager plugins = Bukkit.getServer().getPluginManager();
-
+        
         int maps = new File(plugin.getDataFolder() + "/maps").listFiles().length;
         int dungeons = new File(plugin.getDataFolder() + "/dungeons").listFiles().length;
         int loaded = plugin.getEditWorlds().size() + plugin.getGameWorlds().size();
@@ -83,11 +83,13 @@ public class ReloadCommand extends BRCommand {
         plugin.loadDSigns();
         plugin.loadDungeons();
         plugin.loadAnnouncers(DungeonsXL.ANNOUNCERS);
-
+        plugin.loadDClasses(DungeonsXL.CLASSES);
+        plugin.loadDMobTypes(DungeonsXL.MOBS);
+        
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessages.CMD_RELOAD_DONE.getMessage());
         MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, mythicMobs));
     }
-
+    
 }

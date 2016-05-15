@@ -560,7 +560,7 @@ public class PlayerListener implements Listener {
             }
 
             if (dGroup.getGameWorld() == null) {
-                dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
+                dGroup.setGameWorld(new GameWorld(DGroup.getByPlayer(player).getMapName()));
                 dGroup.getGameWorld().setTutorial(true);
             }
 

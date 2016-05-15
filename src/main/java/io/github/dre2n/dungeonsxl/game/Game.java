@@ -64,8 +64,23 @@ public class Game {
     }
 
     public Game(DGroup dGroup, GameWorld world) {
-        this(dGroup);
+        dGroups.add(dGroup);
+        started = false;
         this.world = world;
+        fetchRules();
+
+        plugin.getGames().add(this);
+    }
+
+    public Game(DGroup dGroup, String worldName) {
+        plugin.getGames().add(this);
+
+        dGroups.add(dGroup);
+        started = false;
+        world = new GameWorld();
+        dGroup.setGameWorld(world);
+        fetchRules();
+        world.load(worldName);
     }
 
     public Game(DGroup dGroup, GameType type, GameWorld world) {
