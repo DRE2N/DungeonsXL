@@ -83,7 +83,7 @@ public class DMobType {
         this.name = name;
 
         // Read Mobs
-        EntityType type = EntityType.fromName(config.getString("type"));
+        type = EntityType.fromName(config.getString("type"));
 
         // Load MaxHealth
         if (config.contains("maxHealth")) {

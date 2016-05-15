@@ -109,6 +109,11 @@ public class GameWorld {
         }
     }
 
+    public GameWorld(String name) {
+        this();
+        load(name);
+    }
+
     /**
      * @return
      * the Game connected to the GameWorld
@@ -472,20 +477,18 @@ public class GameWorld {
         }
     }
 
-    /* Statics */
-    public static GameWorld load(String name) {
+    public void load(String name) {
         GameWorldLoadEvent event = new GameWorldLoadEvent(name);
         plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            return null;
+            return;
         }
 
         File file = new File(plugin.getDataFolder(), "/maps/" + name);
 
         if (file.exists()) {
-            GameWorld gameWorld = new GameWorld();
-            gameWorld.mapName = name;
+            mapName = name;
 
             // Unload empty editWorlds
             for (EditWorld editWorld : plugin.getEditWorlds()) {
@@ -495,55 +498,52 @@ public class GameWorld {
             }
 
             // Config einlesen
-            gameWorld.worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName, "config.yml"));
+            worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + mapName, "config.yml"));
 
             // Secure Objects
-            gameWorld.secureObjects = gameWorld.worldConfig.getSecureObjects();
+            secureObjects = worldConfig.getSecureObjects();
 
-            if (Bukkit.getWorld("DXL_Game_" + gameWorld.id) == null) {
+            if (Bukkit.getWorld("DXL_Game_" + id) == null) {
 
                 // World
-                FileUtil.copyDirectory(file, new File("DXL_Game_" + gameWorld.id), DungeonsXL.EXCLUDED_FILES);
+                FileUtil.copyDirectory(file, new File("DXL_Game_" + id), DungeonsXL.EXCLUDED_FILES);
 
                 // Id File
-                File idFile = new File("DXL_Game_" + gameWorld.id + "/.id_" + name);
+                File idFile = new File("DXL_Game_" + id + "/.id_" + name);
                 try {
                     idFile.createNewFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                gameWorld.world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + gameWorld.id));
+                world = plugin.getServer().createWorld(WorldCreator.name("DXL_Game_" + id));
 
                 ObjectInputStream os;
                 try {
-                    os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + gameWorld.mapName + "/DXLData.data")));
+                    os = new ObjectInputStream(new FileInputStream(new File(plugin.getDataFolder() + "/maps/" + mapName + "/DXLData.data")));
 
                     int length = os.readInt();
                     for (int i = 0; i < length; i++) {
                         int x = os.readInt();
                         int y = os.readInt();
                         int z = os.readInt();
-                        Block block = gameWorld.world.getBlockAt(x, y, z);
-                        gameWorld.checkSign(block);
+                        Block block = world.getBlockAt(x, y, z);
+                        checkSign(block);
                     }
 
                     os.close();
 
                 } catch (FileNotFoundException exception) {
-                    plugin.getLogger().info("Could not find any sign data for the world \"" + name + "\"!");
+                    MessageUtil.log(plugin, "Could not find any sign data for the world \"" + name + "\"!");
 
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
             }
-
-            return gameWorld;
         }
-
-        return null;
     }
 
+    /* Statics */
     public static GameWorld getByWorld(World world) {
         for (GameWorld gameWorld : plugin.getGameWorlds()) {
             if (gameWorld.getWorld() == null) {

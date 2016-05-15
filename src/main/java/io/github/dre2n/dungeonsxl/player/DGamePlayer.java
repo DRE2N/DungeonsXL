@@ -589,7 +589,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         dGroup.removeUnplayedFloor(dGroup.getMapName());
         dGroup.setMapName(newFloor);
-        GameWorld gameWorld = GameWorld.load(newFloor);
+        GameWorld gameWorld = new GameWorld(newFloor);
         dGroup.setGameWorld(gameWorld);
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);

@@ -75,7 +75,7 @@ public class MobSpawnTask extends BukkitRunnable {
                 DMobType mobType = DungeonsXL.getInstance().getDMobTypes().getByName(sign.getMob());
 
                 if (mobType != null) {
-                    mobType.spawn(GameWorld.getByWorld(world), spawnLoc);
+                    mobType.spawn(gameWorld, spawnLoc);
                 }
 
                 // Set the amount
