@@ -470,15 +470,20 @@ public class DGroup {
                 continue;
             }
 
+            boolean ready = true;
             for (Player player : dGroup.getPlayers()) {
                 DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                 if (dPlayer == null) {
-                    new DGamePlayer(player, gameWorld);
+                    dPlayer = new DGamePlayer(player, gameWorld);
                 }
 
                 if (!dPlayer.isReady()) {
-                    return;
+                    ready = false;
                 }
+            }
+
+            if (!ready) {
+                return;
             }
         }
 
