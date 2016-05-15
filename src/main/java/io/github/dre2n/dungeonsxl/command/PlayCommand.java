@@ -156,7 +156,7 @@ public class PlayCommand extends BRCommand {
         }
 
         if (dGroup.getGameWorld() == null) {
-            dGroup.setGameWorld(GameWorld.load(DGroup.getByPlayer(player).getMapName()));
+            new Game(dGroup, dGroup.getMapName());
         }
 
         if (dGroup.getGameWorld() == null) {
@@ -165,7 +165,6 @@ public class PlayCommand extends BRCommand {
             return;
         }
 
-        new Game(dGroup, dGroup.getGameWorld());
         if (dGroup.getGameWorld().getLobbyLocation() == null) {
             for (Player groupPlayer : dGroup.getPlayers()) {
                 new DGamePlayer(groupPlayer, dGroup.getGameWorld());

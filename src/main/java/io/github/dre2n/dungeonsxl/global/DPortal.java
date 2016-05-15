@@ -186,7 +186,7 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null) {
-            target = GameWorld.load(dGroup.getMapName());
+            target = new GameWorld(dGroup.getMapName());
             dGroup.setGameWorld(target);
         }
 

@@ -33,6 +33,7 @@ public class ClassesSign extends DSign {
 
     public ClassesSign(Sign sign, GameWorld gameWorld) {
         super(sign, gameWorld);
+        dClass = plugin.getDClasses().getByName(sign.getLine(1));
     }
 
     /* Getters and setters */
@@ -55,8 +56,7 @@ public class ClassesSign extends DSign {
     @Override
     public boolean check() {
         String[] lines = getSign().getLines();
-        dClass = plugin.getDClasses().getByName(lines[1]);
-        return dClass != null;
+        return plugin.getDClasses().getByName(lines[1]) != null;
     }
 
     @Override
@@ -73,7 +73,6 @@ public class ClassesSign extends DSign {
         getSign().update();
 
         getGameWorld().getSignClass().add(getSign());
-
     }
 
     @Override
