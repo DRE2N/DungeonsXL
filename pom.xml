@@ -42,6 +42,17 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
+                                    <include>org.mcstats.*:*</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>io.github.dre2n.commons</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <artifactSet>
+                                <includes>
                                     <include>io.github.dre2n:commons</include>
                                 </includes>
                             </artifactSet>
@@ -67,7 +78,7 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>commons</artifactId>
-            <version>0.6.3</version>
+            <version>0.7</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
