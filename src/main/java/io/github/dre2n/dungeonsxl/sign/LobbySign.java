@@ -27,8 +27,8 @@ public class LobbySign extends DSign {
 
     private DSignType type = DSignTypeDefault.LOBBY;
 
-    public LobbySign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public LobbySign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

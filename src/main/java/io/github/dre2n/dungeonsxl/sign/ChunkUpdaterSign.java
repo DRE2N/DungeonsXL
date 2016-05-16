@@ -29,8 +29,8 @@ public class ChunkUpdaterSign extends DSign {
 
     private DSignType type = DSignTypeDefault.CHUNK_UPDATER;
 
-    public ChunkUpdaterSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ChunkUpdaterSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
@@ -40,7 +40,6 @@ public class ChunkUpdaterSign extends DSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
         Chunk chunk = getGameWorld().getWorld().getChunkAt(getSign().getBlock());
 
         if (!lines[1].isEmpty()) {

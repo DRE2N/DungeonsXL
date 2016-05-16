@@ -44,6 +44,7 @@ import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
 import io.github.dre2n.dungeonsxl.sign.DSignTypes;
+import io.github.dre2n.dungeonsxl.sign.SignScripts;
 import io.github.dre2n.dungeonsxl.task.AnnouncerTask;
 import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
 import io.github.dre2n.dungeonsxl.task.SecureModeTask;
@@ -73,6 +74,7 @@ public class DungeonsXL extends BRPlugin {
     public static File ANNOUNCERS;
     public static File CLASSES;
     public static File MOBS;
+    public static File SIGNS;
 
     private DataConfig dataConfig;
     private MainConfig mainConfig;
@@ -91,6 +93,7 @@ public class DungeonsXL extends BRPlugin {
     private Announcers announcers;
     private DClasses dClasses;
     private DMobTypes dMobTypes;
+    private SignScripts signScripts;
 
     private BukkitTask announcerTask;
     private BukkitTask worldUnloadTask;
@@ -150,6 +153,7 @@ public class DungeonsXL extends BRPlugin {
         loadAnnouncers(ANNOUNCERS);
         loadDClasses(CLASSES);
         loadDMobTypes(MOBS);
+        loadSignScripts(SIGNS);
 
         manager.registerEvents(new EntityListener(), this);
         manager.registerEvents(new GUIListener(), this);
@@ -241,6 +245,11 @@ public class DungeonsXL extends BRPlugin {
         MOBS = new File(SCRIPTS, "mobs");
         if (!MOBS.exists()) {
             MOBS.mkdir();
+        }
+
+        SIGNS = new File(SCRIPTS, "signs");
+        if (!SIGNS.exists()) {
+            SIGNS.mkdir();
         }
     }
 
@@ -541,6 +550,20 @@ public class DungeonsXL extends BRPlugin {
      */
     public void loadDMobTypes(File file) {
         dMobTypes = new DMobTypes(file);
+    }
+
+    /**
+     * @return the loaded instance of SignScripts
+     */
+    public SignScripts getSignScripts() {
+        return signScripts;
+    }
+
+    /**
+     * load / reload a new instance of SignScripts
+     */
+    public void loadSignScripts(File file) {
+        signScripts = new SignScripts(file);
     }
 
     /**

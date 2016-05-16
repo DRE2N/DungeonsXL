@@ -42,8 +42,8 @@ public class RedstoneSign extends DSign {
     private int repeat = 1;
     private int repeatsToDo = 1;
 
-    public RedstoneSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public RedstoneSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     /**
