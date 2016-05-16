@@ -40,8 +40,8 @@ public class DMobSign extends DSign implements MobSign {
     private boolean active;
     private BukkitTask task;
 
-    public DMobSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public DMobSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

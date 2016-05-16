@@ -27,8 +27,8 @@ public class CustomSign extends DSign {
 
     private DSignType type = DSignTypeCustom.CUSTOM;
 
-    public CustomSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public CustomSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

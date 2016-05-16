@@ -33,8 +33,8 @@ public class ChestSign extends DSign {
     private double moneyReward;
     private int levelReward;
 
-    public ChestSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ChestSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

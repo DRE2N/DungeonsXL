@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
@@ -28,8 +29,9 @@ public class ScriptSign extends DSign {
 
     private String name;
 
-    public ScriptSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ScriptSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
+        name = lines[1];
     }
 
     /**
@@ -48,8 +50,16 @@ public class ScriptSign extends DSign {
     public void onInit() {
         SignScript script = plugin.getSignScripts().getByName(name);
         for (String[] lines : script.getSigns()) {
-            getGameWorld().getDSigns().add(DSign.create(getSign(), lines, getGameWorld()));
+            DSign dSign = DSign.create(getSign(), lines, getGameWorld());
+            getGameWorld().getDSigns().add(dSign);
+
+            dSign.onInit();
+            if (!dSign.hasTriggers()) {
+                dSign.onTrigger();
+            }
         }
+
+        getSign().getBlock().setType(Material.AIR);
     }
 
     @Override

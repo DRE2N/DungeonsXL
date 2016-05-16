@@ -33,7 +33,7 @@ public class SignScript {
 
     private String name;
 
-    private List<String[]> signs = new ArrayList<>();
+    private List<String[]> signs;
 
     /**
      * @param file
@@ -51,13 +51,13 @@ public class SignScript {
      */
     public SignScript(String name, FileConfiguration config) {
         this.name = name;
+        signs = new ArrayList<>(config.getKeys(false).size());
 
-        int i = 0;
         for (String key : config.getKeys(false)) {
             int index = NumberUtil.parseInt(key);
-            String[] lines = config.getStringList(key).toArray(signs.get(i));
-            signs.set(index, lines);
-            i++;
+            String[] lines = new String[]{};
+            lines = config.getStringList(key).toArray(lines);
+            signs.add(index, lines);
         }
     }
 

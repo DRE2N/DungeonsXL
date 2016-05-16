@@ -36,8 +36,8 @@ public class CheckpointSign extends DSign {
     private boolean initialized;
     private CopyOnWriteArrayList<DGamePlayer> done = new CopyOnWriteArrayList<>();
 
-    public CheckpointSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public CheckpointSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

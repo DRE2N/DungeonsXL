@@ -27,8 +27,8 @@ public class StartSign extends DSign {
 
     private DSignType type = DSignTypeDefault.START;
 
-    public StartSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public StartSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
