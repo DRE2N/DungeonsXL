@@ -39,7 +39,6 @@ public class PlaceSign extends DSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
         getGameWorld().getPlaceableBlocks().add(new GamePlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
         getSign().getBlock().setType(Material.AIR);
     }

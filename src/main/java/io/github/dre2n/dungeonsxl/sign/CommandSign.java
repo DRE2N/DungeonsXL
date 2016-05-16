@@ -50,7 +50,6 @@ public class CommandSign extends DSign {
 
     @Override
     public boolean check() {
-        String lines[] = getSign().getLines();
         if (lines[1].isEmpty() || lines[2].isEmpty()) {
             return false;
         }
@@ -70,7 +69,6 @@ public class CommandSign extends DSign {
 
     @Override
     public void onInit() {
-        String[] lines = getSign().getLines();
         String[] attributes = lines[2].split(",");
 
         command = lines[1];

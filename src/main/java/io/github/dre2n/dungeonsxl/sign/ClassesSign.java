@@ -55,7 +55,6 @@ public class ClassesSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        String[] lines = getSign().getLines();
         return plugin.getDClasses().getByName(lines[1]) != null;
     }
 

@@ -47,7 +47,6 @@ public class BlockSign extends DSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
         if (!lines[1].isEmpty()) {
             String line1[] = lines[1].split(",");
             Material offBlock = Material.matchMaterial(line1[0]);

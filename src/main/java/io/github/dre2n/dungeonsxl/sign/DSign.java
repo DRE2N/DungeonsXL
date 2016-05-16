@@ -37,13 +37,15 @@ public abstract class DSign {
     static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Sign sign;
+    protected String[] lines;
     private GameWorld gameWorld;
 
     // List of Triggers
     private Set<Trigger> triggers = new HashSet<>();
 
     public DSign(Sign sign, GameWorld gameWorld) {
-        this.setSign(sign);
+        this.sign = sign;
+        this.lines = sign.getLines();
         this.gameWorld = gameWorld;
 
         // Check Trigger
@@ -86,6 +88,21 @@ public abstract class DSign {
      */
     public void setSign(Sign sign) {
         this.sign = sign;
+    }
+
+    /**
+     * @return the sign lines
+     */
+    public String[] getLines() {
+        return lines;
+    }
+
+    /**
+     * @param lines
+     * the sign lines to set
+     */
+    public void setLines(String[] lines) {
+        this.lines = lines;
     }
 
     /**
@@ -169,7 +186,10 @@ public abstract class DSign {
     }
 
     public static DSign create(Sign sign, GameWorld gameWorld) {
-        String[] lines = sign.getLines();
+        return create(sign, sign.getLines(), gameWorld);
+    }
+
+    public static DSign create(Sign sign, String[] lines, GameWorld gameWorld) {
         DSign dSign = null;
 
         for (DSignType type : plugin.getDSigns().getDSigns()) {

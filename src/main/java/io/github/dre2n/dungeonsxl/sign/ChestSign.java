@@ -44,7 +44,6 @@ public class ChestSign extends DSign {
 
     @Override
     public void onInit() {
-        String[] lines = getSign().getLines();
         if (!lines[1].isEmpty()) {
             String[] attributes = lines[1].split(",");
             if (attributes.length >= 1) {

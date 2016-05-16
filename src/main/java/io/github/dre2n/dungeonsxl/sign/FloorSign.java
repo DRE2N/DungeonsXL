@@ -44,7 +44,6 @@ public class FloorSign extends DSign {
 
     @Override
     public void onInit() {
-        String[] lines = getSign().getLines();
         if (!lines[1].isEmpty()) {
             floor = lines[1];
         }
