@@ -16,48 +16,40 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * @author Daniel Saukel
  */
-public class ChunkUpdaterSign extends DSign {
+public class ScriptSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.CHUNK_UPDATER;
+    private DSignType type = DSignTypeDefault.SCRIPT;
 
-    public ChunkUpdaterSign(Sign sign, GameWorld gameWorld) {
+    private String name;
+
+    public ScriptSign(Sign sign, GameWorld gameWorld) {
         super(sign, gameWorld);
+    }
+
+    /**
+     * @return the name of the script
+     */
+    public String getName() {
+        return name;
     }
 
     @Override
     public boolean check() {
-        return true;
+        return plugin.getSignScripts().getByName(lines[1]) != null;
     }
 
     @Override
     public void onInit() {
-        Chunk chunk = getGameWorld().getWorld().getChunkAt(getSign().getBlock());
-
-        if (!lines[1].isEmpty()) {
-            Integer radius = NumberUtil.parseInt(lines[1]);
-            for (int x = -radius; x < radius; x++) {
-                for (int z = -radius; z < radius; z++) {
-                    Chunk chunk1 = getGameWorld().getWorld().getChunkAt(chunk.getX() - x, chunk.getZ() - z);
-                    chunk1.load();
-                    getGameWorld().getLoadedChunks().add(chunk1);
-                }
-            }
-
-        } else {
-            chunk.load();
-            getGameWorld().getLoadedChunks().add(chunk);
+        SignScript script = plugin.getSignScripts().getByName(name);
+        for (String[] lines : script.getSigns()) {
+            getGameWorld().getDSigns().add(DSign.create(getSign(), lines, getGameWorld()));
         }
-
-        getSign().getBlock().setType(Material.AIR);
     }
 
     @Override

@@ -131,7 +131,6 @@ public class DMobSign extends DSign implements MobSign {
 
     @Override
     public boolean check() {
-        String lines[] = getSign().getLines();
         if (lines[1].isEmpty() || lines[2].isEmpty()) {
             return false;
         }
@@ -151,7 +150,6 @@ public class DMobSign extends DSign implements MobSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
         if (!lines[1].isEmpty() && !lines[2].isEmpty()) {
             String mob = lines[1];
             if (mob != null) {

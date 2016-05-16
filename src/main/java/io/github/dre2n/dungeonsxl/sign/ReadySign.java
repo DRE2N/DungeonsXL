@@ -65,8 +65,8 @@ public class ReadySign extends DSign {
 
     @Override
     public void onInit() {
-        if (plugin.getGameTypes().getBySign(getSign()) != null) {
-            gameType = plugin.getGameTypes().getBySign(getSign());
+        if (plugin.getGameTypes().getBySign(this) != null) {
+            gameType = plugin.getGameTypes().getBySign(this);
 
         } else {
             gameType = GameTypeDefault.DEFAULT;
