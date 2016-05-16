@@ -132,18 +132,23 @@ public class GroupCommand extends BRCommand {
     }
 
     public void disbandGroup(DGroup dGroup) {
-        if (dGroup != null) {
-            DGroupDisbandEvent event = new DGroupDisbandEvent(dGroup, player, DGroupDisbandEvent.Cause.COMMAND);
-            plugin.getServer().getPluginManager().callEvent(event);
-
-            if (!event.isCancelled()) {
-                dGroup.delete();
-                MessageUtil.sendMessage(sender, DMessages.GROUP_DISBANDED.getMessage(sender.getName(), dGroup.getName()));
-                dGroup = null;
-            }
-
-        } else {
+        if (dGroup == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_GROUP.getMessage());
+            return;
+        }
+
+        if (dGroup.isPlaying()) {
+            MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
+            return;
+        }
+
+        DGroupDisbandEvent event = new DGroupDisbandEvent(dGroup, player, DGroupDisbandEvent.Cause.COMMAND);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (!event.isCancelled()) {
+            dGroup.delete();
+            MessageUtil.sendMessage(sender, DMessages.GROUP_DISBANDED.getMessage(sender.getName(), dGroup.getName()));
+            dGroup = null;
         }
     }
 

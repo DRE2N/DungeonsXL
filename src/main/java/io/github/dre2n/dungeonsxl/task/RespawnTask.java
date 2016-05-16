@@ -38,7 +38,7 @@ public class RespawnTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (player.getLocation().distance(location) > 2) {
+        if (player.getWorld() != location.getWorld() || player.getLocation().distance(location) > 2) {
             PlayerUtil.secureTeleport(player, location);
         }
 
