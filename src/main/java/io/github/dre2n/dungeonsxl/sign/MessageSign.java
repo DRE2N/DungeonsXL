@@ -36,8 +36,8 @@ public class MessageSign extends DSign {
     private boolean initialized;
     private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<>();
 
-    public MessageSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public MessageSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

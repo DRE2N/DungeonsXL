@@ -31,8 +31,8 @@ public class ClassesSign extends DSign {
 
     private DClass dClass;
 
-    public ClassesSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ClassesSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
         dClass = plugin.getDClasses().getByName(sign.getLine(1));
     }
 

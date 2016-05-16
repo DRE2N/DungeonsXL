@@ -44,8 +44,8 @@ public class CommandSign extends DSign {
     private String executor;
     private boolean initialized;
 
-    public CommandSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public CommandSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

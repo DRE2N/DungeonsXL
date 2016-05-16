@@ -43,9 +43,9 @@ public abstract class DSign {
     // List of Triggers
     private Set<Trigger> triggers = new HashSet<>();
 
-    public DSign(Sign sign, GameWorld gameWorld) {
+    public DSign(Sign sign, String[] lines, GameWorld gameWorld) {
         this.sign = sign;
-        this.lines = sign.getLines();
+        this.lines = lines;
         this.gameWorld = gameWorld;
 
         // Check Trigger
@@ -53,7 +53,7 @@ public abstract class DSign {
             return;
         }
 
-        String line3 = sign.getLine(3).replaceAll("\\s", "");
+        String line3 = lines[3].replaceAll("\\s", "");
         String[] triggerTypes = line3.split(",");
 
         for (String triggerString : triggerTypes) {
@@ -198,8 +198,8 @@ public abstract class DSign {
             }
 
             try {
-                Constructor<? extends DSign> constructor = type.getHandler().getConstructor(Sign.class, GameWorld.class);
-                dSign = constructor.newInstance(sign, gameWorld);
+                Constructor<? extends DSign> constructor = type.getHandler().getConstructor(Sign.class, String[].class, GameWorld.class);
+                dSign = constructor.newInstance(sign, lines, gameWorld);
 
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
                 MessageUtil.log("An error occurred while accessing the handler class of the sign " + type.getName() + ": " + exception.getClass().getSimpleName());

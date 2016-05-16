@@ -35,8 +35,8 @@ public class SoundMessageSign extends DSign {
     private String msg;
     private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<>();
 
-    public SoundMessageSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public SoundMessageSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

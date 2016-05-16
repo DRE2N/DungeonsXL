@@ -32,8 +32,8 @@ public class LeaveSign extends DSign {
 
     private DSignType type = DSignTypeDefault.LEAVE;
 
-    public LeaveSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public LeaveSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

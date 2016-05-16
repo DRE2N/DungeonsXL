@@ -34,8 +34,8 @@ public class WaveSign extends DSign {
     private double mobCountIncreaseRate;
     private boolean teleport;
 
-    public WaveSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public WaveSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     /**

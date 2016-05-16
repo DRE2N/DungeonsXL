@@ -39,8 +39,8 @@ public class ReadySign extends DSign {
 
     private GameType gameType;
 
-    public ReadySign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ReadySign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     /**

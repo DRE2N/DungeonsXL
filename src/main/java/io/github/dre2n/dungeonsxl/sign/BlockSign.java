@@ -36,8 +36,8 @@ public class BlockSign extends DSign {
     private byte offBlockData = 0x0;
     private byte onBlockData = 0x0;
 
-    public BlockSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public BlockSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

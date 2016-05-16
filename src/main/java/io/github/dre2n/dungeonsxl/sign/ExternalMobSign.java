@@ -52,8 +52,8 @@ public class ExternalMobSign extends DSign implements MobSign {
     private LivingEntity externalMob;
     private List<Entity> externalMobs = new ArrayList<>();
 
-    public ExternalMobSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ExternalMobSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

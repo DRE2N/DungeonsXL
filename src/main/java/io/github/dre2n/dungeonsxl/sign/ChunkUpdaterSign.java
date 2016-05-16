@@ -29,8 +29,8 @@ public class ChunkUpdaterSign extends DSign {
 
     private DSignType type = DSignTypeDefault.CHUNK_UPDATER;
 
-    public ChunkUpdaterSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ChunkUpdaterSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

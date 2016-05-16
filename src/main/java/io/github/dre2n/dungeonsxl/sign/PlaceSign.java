@@ -28,8 +28,8 @@ public class PlaceSign extends DSign {
 
     private DSignType type = DSignTypeDefault.PLACE;
 
-    public PlaceSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public PlaceSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
