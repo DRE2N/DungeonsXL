@@ -84,7 +84,7 @@ public enum DMessages implements Messages {
     ERROR_NOT_SAVED("Error_NotSaved", "&4The map &6&v1&4 has not been saved to the &6DungeonsXL/maps/ &4folder yet!"),
     ERROR_TUTORIAL_NOT_EXIST("Error_TutorialNotExist", "&4Tutorial dungeon does not exist!"),
     ERROR_READY("Error_Ready", "&4Choose your class first!"),
-    ERROR_REQUIREMENTS("Error_Requirements", "&4You don't fulfill the requirements for this Dungeon!"),
+    ERROR_REQUIREMENTS("Error_Requirements", "&4You don't fulfill the requirements for this dungeon!"),
     ERROR_SIGN_WRONG_FORMAT("Error_SignWrongFormat", "&4The sign is not written correctly!"),
     HELP_CMD_BREAK("Help_Cmd_Break", "/dxl break - Break a block protected by DungeonsXL"),
     HELP_CMD_CHAT("Help_Cmd_Chat", "/dxl chat - Change the chat mode"),

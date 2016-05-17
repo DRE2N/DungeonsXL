@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.requirement.FeeLevelRequirement;
 import io.github.dre2n.dungeonsxl.requirement.FeeMoneyRequirement;
+import io.github.dre2n.dungeonsxl.requirement.GroupSizeRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import java.io.File;
 import java.io.IOException;
@@ -189,6 +190,10 @@ public class WorldConfig extends GameRules {
 
                 } else if (requirement instanceof FeeLevelRequirement) {
                     ((FeeLevelRequirement) requirement).setFee(configFile.getInt("requirements.feeLevel"));
+
+                } else if (requirement instanceof GroupSizeRequirement) {
+                    ((GroupSizeRequirement) requirement).setMinimum(configFile.getInt("requirements.groupSize.minimum"));
+                    ((GroupSizeRequirement) requirement).setMaximum(configFile.getInt("requirements.groupSize.maximum"));
                 }
 
                 requirements.add(requirement);
