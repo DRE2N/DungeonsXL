@@ -20,7 +20,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.block.Sign;
 
 /**
  * @author Daniel Saukel

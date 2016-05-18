@@ -25,7 +25,7 @@ import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.announcer.Announcers;
 import io.github.dre2n.dungeonsxl.command.*;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.DataConfig;
+import io.github.dre2n.dungeonsxl.config.GlobalData;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.game.Game;
@@ -70,13 +70,14 @@ public class DungeonsXL extends BRPlugin {
     public static File DUNGEONS;
     public static File LANGUAGES;
     public static File MAPS;
+    public static File PLAYERS;
     public static File SCRIPTS;
     public static File ANNOUNCERS;
     public static File CLASSES;
     public static File MOBS;
     public static File SIGNS;
 
-    private DataConfig dataConfig;
+    private GlobalData globalData;
     private MainConfig mainConfig;
     private MessageConfig messageConfig;
 
@@ -135,7 +136,7 @@ public class DungeonsXL extends BRPlugin {
         // Load Language
         loadMessageConfig(new File(getDataFolder(), "languages/en.yml"));
         // Load Config
-        loadDataConfig(new File(getDataFolder(), "data.yml"));
+        loadGlobalData(new File(getDataFolder(), "data.yml"));
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
         loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
@@ -227,6 +228,11 @@ public class DungeonsXL extends BRPlugin {
             MAPS.mkdir();
         }
 
+        PLAYERS = new File(getDataFolder(), "players");
+        if (!PLAYERS.exists()) {
+            PLAYERS.mkdir();
+        }
+
         SCRIPTS = new File(getDataFolder(), "scripts");
         if (!SCRIPTS.exists()) {
             SCRIPTS.mkdir();
@@ -299,17 +305,17 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the loaded instance of DataConfig
+     * @return the loaded instance of GlobalData
      */
-    public DataConfig getDataConfig() {
-        return dataConfig;
+    public GlobalData getGlobalData() {
+        return globalData;
     }
 
     /**
-     * load / reload a new instance of MainConfig
+     * load / reload a new instance of GlobalData
      */
-    public void loadDataConfig(File file) {
-        dataConfig = new DataConfig(file);
+    public void loadGlobalData(File file) {
+        globalData = new GlobalData(file);
     }
 
     /**

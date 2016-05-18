@@ -54,6 +54,7 @@ public class DGroup {
     private Player captain;
     private CopyOnWriteArrayList<Player> players = new CopyOnWriteArrayList<>();
     private List<UUID> invitedPlayers = new ArrayList<>();
+    private Dungeon dungeon;
     private String dungeonName;
     private String mapName;
     private List<String> unplayedFloors = new ArrayList<>();
@@ -110,7 +111,9 @@ public class DGroup {
 
         } else {
             mapName = identifier;
+            dungeon = new Dungeon(identifier);
         }
+
         playing = false;
         floorCount = 0;
     }
@@ -308,10 +311,10 @@ public class DGroup {
     }
 
     /**
-     * @return the dungeon (saved by name only)
+     * @return the dungeon
      */
     public Dungeon getDungeon() {
-        return plugin.getDungeons().getDungeon(dungeonName);
+        return dungeon;
     }
 
     /**
@@ -569,6 +572,34 @@ public class DGroup {
         }
 
         GroupSign.updatePerGroup(this);
+    }
+
+    public boolean checkTime(Game game) {
+        if (DPermissions.hasPermission(captain, DPermissions.IGNORE_TIME_LIMIT)) {
+            return true;
+        }
+
+        for (Player player : players) {
+            if (!DGamePlayer.getByPlayer(player).checkTime(game)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean checkRequirements(Game game) {
+        if (DPermissions.hasPermission(captain, DPermissions.IGNORE_REQUIREMENTS)) {
+            return true;
+        }
+
+        for (Player player : players) {
+            if (!DGamePlayer.getByPlayer(player).checkRequirements(game)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
@@ -27,11 +28,13 @@ import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
+import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.mob.DMob;
+import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
@@ -396,27 +399,7 @@ public class DGamePlayer extends DInstancePlayer {
 
                     addTreasure();
 
-                    // Set Time
-                    File file = new File(plugin.getDataFolder() + "/maps/" + gameWorld.getMapName(), "players.yml");
-
-                    if (!file.exists()) {
-                        try {
-                            file.createNewFile();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-
-                    playerConfig.set(getPlayer().getUniqueId().toString(), System.currentTimeMillis());
-
-                    try {
-                        playerConfig.save(file);
-
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
+                    getData().logTimeLastPlayed(dGroup.getDungeon().getName());
 
                     // Tutorial Permissions
                     if (gameWorld.isTutorial()) {
@@ -464,6 +447,103 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
+    public boolean checkRequirements(Game game) {
+        if (DPermissions.hasPermission(player, DPermissions.IGNORE_REQUIREMENTS)) {
+            return true;
+        }
+
+        GameRules rules = Game.getByPlayer(player).getRules();
+
+        if (!checkTime(game)) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlay())));
+            return false;
+        }
+
+        for (Requirement requirement : rules.getRequirements()) {
+            RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
+            plugin.getServer().getPluginManager().callEvent(event);
+
+            if (event.isCancelled()) {
+                continue;
+            }
+
+            if (!requirement.check(player)) {
+                return false;
+            }
+        }
+
+        if (rules.getFinished() != null && rules.getFinishedAll() != null) {
+            if (!rules.getFinished().isEmpty()) {
+
+                long bestTime = 0;
+                int numOfNeeded = 0;
+                boolean doneTheOne = false;
+
+                if (rules.getFinished().size() == rules.getFinishedAll().size()) {
+                    doneTheOne = true;
+                }
+
+                for (String played : rules.getFinished()) {
+                    for (String dungeonName : DungeonsXL.MAPS.list()) {
+                        if (new File(DungeonsXL.MAPS, dungeonName).isDirectory()) {
+                            if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
+
+                                Long time = getData().getTimeLastPlayed(dungeonName);
+                                if (time != -1) {
+                                    if (rules.getFinishedAll().contains(played)) {
+                                        numOfNeeded++;
+                                    } else {
+                                        doneTheOne = true;
+                                    }
+                                    if (bestTime < time) {
+                                        bestTime = time;
+                                    }
+                                }
+                                break;
+
+                            }
+                        }
+                    }
+                }
+
+                if (bestTime == 0) {
+                    return false;
+
+                } else if (rules.getTimeLastPlayed() != 0) {
+                    if (System.currentTimeMillis() - bestTime > rules.getTimeLastPlayed() * (long) 3600000) {
+                        return false;
+                    }
+                }
+
+                if (numOfNeeded < rules.getFinishedAll().size() || !doneTheOne) {
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
+
+    public boolean checkTime(Game game) {
+        if (DPermissions.hasPermission(player, DPermissions.IGNORE_TIME_LIMIT)) {
+            return true;
+        }
+
+        GameRules rules = game.getRules();
+
+        if (rules.getTimeToNextPlay() != 0) {
+            // read PlayerConfig
+            long time = getData().getTimeLastPlayed(game.getDungeon().getName());
+            if (time != -1) {
+                if (time + rules.getTimeToNextPlay() * 1000 * 60 * 60 > System.currentTimeMillis()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public void ready() {
         ready(GameTypeDefault.DEFAULT);
     }
@@ -483,6 +563,11 @@ public class DGamePlayer extends DInstancePlayer {
 
         } else {
             game.setType(gameType);
+        }
+
+        if (!checkRequirements(game)) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_REQUIREMENTS.getMessage());
+            return;
         }
 
         for (DGroup gameGroup : game.getDGroups()) {
