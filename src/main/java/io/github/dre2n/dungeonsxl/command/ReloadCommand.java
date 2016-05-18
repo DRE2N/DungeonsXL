@@ -71,7 +71,7 @@ public class ReloadCommand extends BRCommand {
         // Load Language
         plugin.loadMessageConfig(new File(plugin.getDataFolder(), "languages/en.yml"));
         // Load Config
-        plugin.loadDataConfig(new File(plugin.getDataFolder(), "data.yml"));
+        plugin.loadGlobalData(new File(plugin.getDataFolder(), "data.yml"));
         plugin.loadMainConfig(new File(plugin.getDataFolder(), "config.yml"));
         // Load Language 2
         plugin.loadMessageConfig(new File(plugin.getDataFolder(), "languages/" + plugin.getMainConfig().getLanguage() + ".yml"));

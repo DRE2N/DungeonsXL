@@ -86,7 +86,7 @@ public class GlobalProtections {
      * Save all protections to the default file
      */
     public void saveAll() {
-        saveAll(plugin.getDataConfig().getConfig());
+        saveAll(plugin.getGlobalData().getConfig());
     }
 
     /**
@@ -107,7 +107,7 @@ public class GlobalProtections {
             protection.save(config);
         }
 
-        plugin.getDataConfig().save();
+        plugin.getGlobalData().save();
     }
 
     /**
@@ -144,7 +144,7 @@ public class GlobalProtections {
     /* SUBJECT TO CHANGE */
     @Deprecated
     public void loadAll() {
-        FileConfiguration data = plugin.getDataConfig().getConfig();
+        FileConfiguration data = plugin.getGlobalData().getConfig();
 
         for (World world : plugin.getServer().getWorlds()) {
             // GameSigns

@@ -22,11 +22,11 @@ import java.io.File;
 /**
  * @author Daniel Saukel
  */
-public class DataConfig extends BRConfig {
+public class GlobalData extends BRConfig {
 
     public static final int CONFIG_VERSION = 2;
 
-    public DataConfig(File file) {
+    public GlobalData(File file) {
         super(file, CONFIG_VERSION);
 
         if (initialize) {

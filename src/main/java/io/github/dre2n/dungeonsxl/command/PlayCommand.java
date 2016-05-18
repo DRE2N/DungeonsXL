@@ -21,7 +21,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
@@ -29,8 +28,6 @@ import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
-import java.io.File;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -89,24 +86,6 @@ public class PlayCommand extends BRCommand {
 
         if (!multiFloor && !EditWorld.exists(identifier)) {
             MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(identifier));
-            return;
-        }
-
-        if (!GameWorld.canPlayDungeon(identifier, player)) {
-            File file = new File(plugin.getDataFolder() + "/maps/" + identifier + "/config.yml");
-
-            if (file.exists()) {
-                WorldConfig confReader = new WorldConfig(file);
-
-                if (confReader != null) {
-                    MessageUtil.sendMessage(player, DMessages.ERROR_COOLDOWN.getMessage(String.valueOf(confReader.getTimeToNextPlay())));
-                }
-            }
-            return;
-        }
-
-        if (!GameWorld.checkRequirements(mapName, player)) {
-            MessageUtil.sendMessage(player, DMessages.ERROR_REQUIREMENTS.getMessage());
             return;
         }
 

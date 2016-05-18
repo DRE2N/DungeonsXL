@@ -25,14 +25,10 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldLoadEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
-import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
-import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
@@ -53,12 +49,9 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 
 /**
@@ -561,157 +554,6 @@ public class GameWorld {
         for (GameWorld gameWorld : plugin.getGameWorlds()) {
             gameWorld.delete();
         }
-    }
-
-    public static boolean canPlayDungeon(String map, Player player) {
-        if (DPermissions.hasPermission(player, DPermissions.IGNORE_TIME_LIMIT)) {
-            return true;
-        }
-
-        if (new File(plugin.getDataFolder() + "/maps/" + map).isDirectory()) {
-            WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + map, "config.yml"));
-
-            if (worldConfig.getTimeToNextPlay() != 0) {
-                // read PlayerConfig
-                long time = getPlayerTime(map, player);
-                if (time != -1) {
-                    if (time + worldConfig.getTimeToNextPlay() * 1000 * 60 * 60 > System.currentTimeMillis()) {
-                        return false;
-                    }
-                }
-            }
-
-        } else {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean canPlayDungeon(String dungeon, DGroup dGroup) {
-        if (DPermissions.hasPermission(dGroup.getCaptain(), DPermissions.IGNORE_TIME_LIMIT)) {
-            return true;
-        }
-
-        for (Player player : dGroup.getPlayers()) {
-            if (!canPlayDungeon(dungeon, player)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public static long getPlayerTime(String dungeon, Player player) {
-        File file = new File(plugin.getDataFolder() + "/maps/" + dungeon, "players.yml");
-
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
-
-        FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
-        if (playerConfig.contains(player.getUniqueId().toString())) {
-            return playerConfig.getLong(player.getUniqueId().toString());
-        }
-        if (playerConfig.contains(player.getName())) {
-            return playerConfig.getLong(player.getName());
-        }
-        return -1;
-    }
-
-    public static boolean checkRequirements(String map, Player player) {
-        if (DPermissions.hasPermission(player, DPermissions.IGNORE_REQUIREMENTS)) {
-            return true;
-        }
-
-        if (new File(plugin.getDataFolder() + "/maps/" + map).isDirectory() == false) {
-            return false;
-        }
-
-        WorldConfig worldConfig = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + map, "config.yml"));
-
-        for (Requirement requirement : worldConfig.getRequirements()) {
-            RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
-            plugin.getServer().getPluginManager().callEvent(event);
-
-            if (event.isCancelled()) {
-                continue;
-            }
-
-            if (!requirement.check(player)) {
-                return false;
-            }
-        }
-
-        if (worldConfig.getFinished() != null && worldConfig.getFinishedAll() != null) {
-            if (!worldConfig.getFinished().isEmpty()) {
-
-                long bestTime = 0;
-                int numOfNeeded = 0;
-                boolean doneTheOne = false;
-
-                if (worldConfig.getFinished().size() == worldConfig.getFinishedAll().size()) {
-                    doneTheOne = true;
-                }
-
-                for (String played : worldConfig.getFinished()) {
-                    for (String dungeonName : new File(plugin.getDataFolder() + "/maps").list()) {
-                        if (new File(plugin.getDataFolder() + "/maps/" + dungeonName).isDirectory()) {
-                            if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
-
-                                Long time = getPlayerTime(dungeonName, player);
-                                if (time != -1) {
-                                    if (worldConfig.getFinishedAll().contains(played)) {
-                                        numOfNeeded++;
-                                    } else {
-                                        doneTheOne = true;
-                                    }
-                                    if (bestTime < time) {
-                                        bestTime = time;
-                                    }
-                                }
-                                break;
-
-                            }
-                        }
-                    }
-                }
-
-                if (bestTime == 0) {
-                    return false;
-
-                } else if (worldConfig.getTimeLastPlayed() != 0) {
-                    if (System.currentTimeMillis() - bestTime > worldConfig.getTimeLastPlayed() * (long) 3600000) {
-                        return false;
-                    }
-                }
-
-                if (numOfNeeded < worldConfig.getFinishedAll().size() || !doneTheOne) {
-                    return false;
-                }
-
-            }
-        }
-        return true;
-    }
-
-    public static boolean checkRequirements(String map, DGroup dGroup) {
-        if (DPermissions.hasPermission(dGroup.getCaptain(), DPermissions.IGNORE_REQUIREMENTS)) {
-            return true;
-        }
-
-        for (Player player : dGroup.getPlayers()) {
-            if (!checkRequirements(map, player)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
 }

@@ -17,7 +17,9 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.PlayerData;
 import io.github.dre2n.dungeonsxl.global.DPortal;
+import java.io.File;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,6 +34,8 @@ public class DGlobalPlayer {
 
     protected Player player;
 
+    private PlayerData data;
+
     private boolean breakMode;
     private boolean chatSpyMode;
     private DPortal creatingPortal;
@@ -41,6 +45,7 @@ public class DGlobalPlayer {
 
     public DGlobalPlayer(Player player) {
         this.player = player;
+        loadPlayerData(new File(DungeonsXL.PLAYERS, player.getUniqueId().toString() + ".yml"));
 
         plugin.getDPlayers().addPlayer(this);
     }
@@ -61,6 +66,20 @@ public class DGlobalPlayer {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * @return the saved data
+     */
+    public PlayerData getData() {
+        return data;
+    }
+
+    /**
+     * Load / reload a new instance of PlayerData
+     */
+    public void loadPlayerData(File file) {
+        data = new PlayerData(file);
     }
 
     /**

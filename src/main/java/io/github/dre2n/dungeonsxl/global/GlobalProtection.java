@@ -19,7 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public abstract class GlobalProtection {
 
     static DungeonsXL plugin = DungeonsXL.getInstance();
-    static FileConfiguration config = plugin.getDataConfig().getConfig();
+    static FileConfiguration config = plugin.getGlobalData().getConfig();
     static GlobalProtections protections = plugin.getGlobalProtections();
 
     private World world;

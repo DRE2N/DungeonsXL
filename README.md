@@ -69,8 +69,6 @@ Instead of referencing the internals of the implementation directly, DungeonsXL 
 The shaded version of DXL (standard version) contains this library, while the original version needs it as an external plugin.
 Have a look at the [installation instructions](../../wiki/getting-started#installation) for detailed information.
 
-DungeonsXL currently uses BRCommons 0.6.3.
-
 ### Java
 7 and higher
 

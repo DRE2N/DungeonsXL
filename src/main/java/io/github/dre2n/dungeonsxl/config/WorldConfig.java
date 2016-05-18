@@ -181,6 +181,10 @@ public class WorldConfig extends GameRules {
 
         /* Dungeon Requirements */
         if (configFile.contains("requirements")) {
+            if (requirements == null) {
+                requirements = new ArrayList<>();
+            }
+
             for (String identifier : configFile.getConfigurationSection("requirements").getKeys(false)) {
                 Requirement requirement = Requirement.create(plugin.getRequirementTypes().getByIdentifier(identifier));
 
@@ -225,13 +229,7 @@ public class WorldConfig extends GameRules {
         }
 
         if (configFile.contains("forcedGameType")) {
-            GameType gameType = plugin.getGameTypes().getByName(configFile.getString("forcedGameType"));
-            if (gameType != null) {
-                forcedGameType = gameType;
-
-            } else {
-                forcedGameType = null;
-            }
+            forcedGameType = plugin.getGameTypes().getByName(configFile.getString("forcedGameType"));
         }
     }
 
