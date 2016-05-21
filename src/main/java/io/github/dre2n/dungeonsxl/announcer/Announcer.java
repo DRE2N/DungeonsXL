@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.announcer;
 
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.util.guiutil.GUIUtil;
+import io.github.dre2n.commons.util.messageutil.DefaultFontInfo;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -26,6 +27,7 @@ import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -251,7 +253,11 @@ public class Announcer {
                 slice.setClickEvent(onClick);
             }
 
-            player.spigot().sendMessage(message);
+            TextComponent center = new TextComponent(DefaultFontInfo.center(BaseComponent.toPlainText(message)).replaceAll(BaseComponent.toPlainText(message), ""));
+
+            ArrayList<BaseComponent> toSend = new ArrayList<>(Arrays.asList(message));
+            toSend.add(0, center);
+            player.spigot().sendMessage(toSend.toArray(new BaseComponent[]{}));
 
         } else {
             MessageUtil.sendCenteredMessage(player, DMessages.ANNOUNCER_CMD.getMessage(getName().toUpperCase()));

@@ -46,7 +46,7 @@ public class AnnouncerTask extends BukkitRunnable {
         List<String> worlds = announcer.getWorlds();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!(plugin.getDPlayers().getByPlayer(player) instanceof DInstancePlayer)) {
-                if (worlds == null || worlds.contains(player.getWorld().getName())) {
+                if (worlds.isEmpty() || worlds.contains(player.getWorld().getName())) {
                     announcer.send(player);
                 }
             }
