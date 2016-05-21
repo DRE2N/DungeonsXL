@@ -196,11 +196,11 @@ public class DPortal extends GlobalProtection {
         }
 
         if (game == null) {
-            game = new Game(dGroup);
+            game = new Game(dGroup, target);
+        } else {
+            game.setWorld(target);
+            dGroup.setGameWorld(target);
         }
-
-        game.setWorld(target);
-        dGroup.setGameWorld(target);
 
         new DGamePlayer(player, target);
     }
