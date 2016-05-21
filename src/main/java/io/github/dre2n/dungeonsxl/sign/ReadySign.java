@@ -117,10 +117,10 @@ public class ReadySign extends DSign {
         if (getGameWorld().getSignClass().isEmpty() || dPlayer.getDClass() != null) {
             GameType forced = getGameWorld().getConfig().getForcedGameType();
             dPlayer.ready(forced == null ? gameType : forced);
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.PLAYER_READY));
+        }
 
-        } else {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.ERROR_READY));
+        if (dPlayer.isReady()) {
+            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(dPlayer.isReady() ? DMessages.PLAYER_READY : DMessages.ERROR_READY));
         }
     }
 

@@ -40,15 +40,12 @@ import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -452,7 +449,7 @@ public class DGamePlayer extends DInstancePlayer {
             return true;
         }
 
-        GameRules rules = Game.getByPlayer(player).getRules();
+        GameRules rules = game.getRules();
 
         if (!checkTime(game)) {
             MessageUtil.sendMessage(player, DMessages.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlay())));
@@ -521,6 +518,7 @@ public class DGamePlayer extends DInstancePlayer {
 
             }
         }
+
         return true;
     }
 
@@ -540,7 +538,6 @@ public class DGamePlayer extends DInstancePlayer {
                 }
             }
         }
-
         return true;
     }
 
@@ -549,8 +546,6 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public void ready(GameType gameType) {
-        ready = true;
-
         DGroup dGroup = DGroup.getByPlayer(getPlayer());
 
         if (dGroup == null) {
@@ -564,11 +559,14 @@ public class DGamePlayer extends DInstancePlayer {
         } else {
             game.setType(gameType);
         }
+        game.fetchRules();
 
         if (!checkRequirements(game)) {
             MessageUtil.sendMessage(player, DMessages.ERROR_REQUIREMENTS.getMessage());
             return;
         }
+
+        ready = true;
 
         for (DGroup gameGroup : game.getDGroups()) {
             if (!gameGroup.isPlaying()) {
@@ -633,11 +631,7 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        boolean invalid = false;
-
-        if (dGroup.getDungeon() == null) {
-            invalid = true;
-        }
+        boolean invalid = !dGroup.getDungeon().isMultiFloor();
 
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);

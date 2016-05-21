@@ -79,8 +79,8 @@ public class Game {
         started = false;
         world = new GameWorld();
         dGroup.setGameWorld(world);
-        fetchRules();
         world.load(worldName);
+        fetchRules();
     }
 
     public Game(DGroup dGroup, GameType type, GameWorld world) {

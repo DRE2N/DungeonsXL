@@ -129,6 +129,7 @@ public enum DMessages implements Messages {
     LOG_ERROR_NO_CONSOLE_COMMAND("Log_Error_NoConsoleCommand", "&6/dxl &v1&4 can not be executed as Console!"),
     LOG_GENERATE_NEW_WORLD("Log_GenerateNewWorld", "&6Generate new world..."),
     LOG_NEW_DUNGEON("Log_NewDungeon", "&6New Dungeon"),
+    LOG_NEW_PLAYER_DATA("Log_NewPlayerData", "&6A new player data file has been created and saved as &v1."),
     LOG_WORLD_GENERATION_FINISHED("Log_WorldGenerationFinished", "&6World generation finished!"),
     PLAYER_BLOCK_INFO("Player_BlockInfo", "&6Block-ID: &2&v1"),
     PLAYER_CHECKPOINT_REACHED("Player_CheckpointReached", "&6Checkpoint reached!"),

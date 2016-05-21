@@ -17,10 +17,14 @@
 package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.commons.config.BRConfig;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Daniel Saukel
@@ -55,7 +59,7 @@ public class PlayerData extends BRConfig {
      * @return the time when the player finished the dungeon for the last time
      */
     public long getTimeLastPlayed(String dungeon) {
-        Long time = timeLastPlayed.get(dungeon);
+        Long time = timeLastPlayed.get(dungeon.toLowerCase());
         if (time == null) {
             return -1;
         } else {
@@ -70,7 +74,7 @@ public class PlayerData extends BRConfig {
      * the time when the dungeon was finished
      */
     public void setTimeLastPlayed(String dungeon, long time) {
-        timeLastPlayed.put(dungeon, time);
+        timeLastPlayed.put(dungeon.toLowerCase(), time);
         save();
     }
 
@@ -79,7 +83,7 @@ public class PlayerData extends BRConfig {
      * the finished dungeon
      */
     public void logTimeLastPlayed(String dungeon) {
-        timeLastPlayed.put(dungeon, System.currentTimeMillis());
+        timeLastPlayed.put(dungeon.toLowerCase(), System.currentTimeMillis());
         save();
     }
 
@@ -89,16 +93,30 @@ public class PlayerData extends BRConfig {
             config.createSection("timeLastPlayed");
         }
 
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                MessageUtil.log(plugin, DMessages.LOG_NEW_PLAYER_DATA.getMessage(file.getName()));
+            } catch (IOException exception) {
+            }
+        }
+
         save();
     }
 
     @Override
     public void load() {
-        if (config.contains("timeLastPlayed")) {
+        if (config.isConfigurationSection("timeLastPlayed")) {
             for (String key : config.getConfigurationSection("timeLastPlayed").getKeys(false)) {
-                timeLastPlayed.put(key, config.getLong(key));
+                timeLastPlayed.put(key, config.getLong("timeLastPlayed." + key));
             }
         }
+    }
+
+    @Override
+    public void save() {
+        config.set("timeLastPlayed", timeLastPlayed);
+        super.save();
     }
 
 }

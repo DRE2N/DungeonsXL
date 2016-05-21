@@ -103,9 +103,9 @@ public class DGroup {
             addPlayer(player);
         }
 
-        Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+        dungeon = plugin.getDungeons().getDungeon(identifier);
         if (multiFloor && dungeon != null) {
-            dungeonName = identifier;
+            dungeonName = dungeon.getName();
             mapName = dungeon.getConfig().getStartFloor();
             unplayedFloors = dungeon.getConfig().getFloors();
 
@@ -296,6 +296,21 @@ public class DGroup {
     }
 
     /**
+     * @return the dungeon
+     */
+    public Dungeon getDungeon() {
+        return dungeon;
+    }
+
+    /**
+     * @param dungeon
+     * the dungeon to set
+     */
+    public void setDungeon(Dungeon dungeon) {
+        this.dungeon = dungeon;
+    }
+
+    /**
      * @return the dungeonName
      */
     public String getDungeonName() {
@@ -308,21 +323,6 @@ public class DGroup {
      */
     public void setDungeonName(String dungeonName) {
         this.dungeonName = dungeonName;
-    }
-
-    /**
-     * @return the dungeon
-     */
-    public Dungeon getDungeon() {
-        return dungeon;
-    }
-
-    /**
-     * @param dungeon
-     * the dungeon to set (saved by name only)
-     */
-    public void setDungeon(Dungeon dungeon) {
-        dungeonName = dungeon.getName();
     }
 
     /**
