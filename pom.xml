@@ -2,11 +2,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.12-SNAPSHOT</version>
+    <version>0.12-SNAPSHOT${buildNo}</version>
     <packaging>jar</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
     <description>Create custom dungeons and adventure maps with ease!</description>
+    <properties>
+        <skipTests>true</skipTests>
+    </properties>
     <build>
         <finalName>dungeonsxl-${project.version}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
