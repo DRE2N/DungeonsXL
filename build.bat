@@ -1,1 +1,1 @@
-mvn clean package -DSkipTests
+mvn clean package -DbuildNo=""
