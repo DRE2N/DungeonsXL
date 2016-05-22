@@ -58,13 +58,13 @@ public class DSavePlayer {
     private ItemStack oldOffHand;
     private int oldLvl;
     private int oldExp;
-    private int oldHealth;
+    private double oldHealth;
     private int oldFoodLevel;
     private int oldFireTicks;
     private GameMode oldGameMode;
     private Collection<PotionEffect> oldPotionEffects;
 
-    public DSavePlayer(String name, UUID uuid, Location oldLocation, ArrayList<ItemStack> oldInventory, ArrayList<ItemStack> oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
+    public DSavePlayer(String name, UUID uuid, Location oldLocation, ArrayList<ItemStack> oldInventory, ArrayList<ItemStack> oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, double oldHealth, int oldFoodLevel, int oldFireTicks,
             GameMode oldGameMode, Collection<PotionEffect> oldPotionEffects) {
         this.name = name;
         this.uuid = uuid.toString();
@@ -85,7 +85,7 @@ public class DSavePlayer {
         dPlayers.addDSavePlayer(this);
     }
 
-    public DSavePlayer(String name, UUID uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, int oldHealth, int oldFoodLevel, int oldFireTicks,
+    public DSavePlayer(String name, UUID uuid, Location oldLocation, ItemStack[] oldInventory, ItemStack[] oldArmor, ItemStack oldOffHand, int oldLvl, int oldExp, double oldHealth, int oldFoodLevel, int oldFireTicks,
             GameMode oldGameMode, Collection<PotionEffect> oldPotionEffects) {
         this(name, uuid, oldLocation, new ArrayList<>(Arrays.asList(oldInventory)), new ArrayList<>(Arrays.asList(oldArmor)), oldOffHand, oldLvl, oldExp, oldHealth, oldFoodLevel, oldFireTicks, oldGameMode, oldPotionEffects);
     }
@@ -198,7 +198,7 @@ public class DSavePlayer {
     /**
      * @return the old health
      */
-    public int getOldHealth() {
+    public double getOldHealth() {
         return oldHealth;
     }
 
@@ -206,7 +206,7 @@ public class DSavePlayer {
      * @param health
      * the health to set
      */
-    public void setOldHealth(int health) {
+    public void setOldHealth(double health) {
         oldHealth = health;
     }
 

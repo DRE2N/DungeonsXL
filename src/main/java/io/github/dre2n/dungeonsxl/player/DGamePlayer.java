@@ -99,15 +99,13 @@ public class DGamePlayer extends DGlobalPlayer {
 
         this.world = world;
 
-        double health = player.getHealth();
-
         if (!Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
             savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), null, player.getLevel(),
-                    player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
+                    player.getTotalExperience(), player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
 
         } else {
             savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getInventory().getItemInOffHand(), player.getLevel(),
-                    player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
+                    player.getTotalExperience(), player.getHealth(), player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
         }
         this.editing = editing;
 
