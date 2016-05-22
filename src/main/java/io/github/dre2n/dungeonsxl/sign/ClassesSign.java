@@ -60,11 +60,6 @@ public class ClassesSign extends DSign {
 
     @Override
     public void onInit() {
-        if (getGame().getRules().isLobbyDisabled()) {
-            getSign().getBlock().setType(Material.AIR);
-            return;
-        }
-
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
         getSign().setLine(1, ChatColor.DARK_GREEN + dClass.getName());
         getSign().setLine(2, "");

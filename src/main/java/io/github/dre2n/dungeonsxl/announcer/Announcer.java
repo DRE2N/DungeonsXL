@@ -242,7 +242,7 @@ public class Announcer {
      */
     public void send(Player player) {
         for (String message : description) {
-            MessageUtil.broadcastCenteredMessage(message);
+            MessageUtil.sendCenteredMessage(player, message);
         }
 
         if (CompatibilityHandler.getInstance().isSpigot()) {
