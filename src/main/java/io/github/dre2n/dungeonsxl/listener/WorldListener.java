@@ -42,11 +42,7 @@ public class WorldListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWeatherChange(WeatherChangeEvent event) {
-        World world = event.getWorld();
         if (EditWorld.getByWorld(event.getWorld()) != null) {
-            world.setStorm(false);
-            world.setThundering(false);
-
             if (event.toWeatherState()) {
                 event.setCancelled(true);
             }
