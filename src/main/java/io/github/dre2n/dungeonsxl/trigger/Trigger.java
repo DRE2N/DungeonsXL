@@ -108,7 +108,7 @@ public abstract class Trigger {
     }
 
     public void updateDSigns() {
-        for (DSign dSign : dSigns) {
+        for (DSign dSign : dSigns.toArray(new DSign[dSigns.size()])) {
             dSign.onUpdate();
         }
     }
