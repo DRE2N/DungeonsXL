@@ -506,6 +506,11 @@ public class GameSign extends GlobalProtection {
             return true;
         }
 
+        if (plugin.getGameWorlds().size() >= plugin.getMainConfig().getMaxDungeons()) {
+            MessageUtil.sendMessage(player, "&cEs gibt bereits zu viele laufende Dungeons!");
+            return true;
+        }
+
         int sx1 = gameSign.startSign.getX(), sy1 = gameSign.startSign.getY(), sz1 = gameSign.startSign.getZ();
 
         Block topBlock = block.getRelative(0, sy1 - y, 0);

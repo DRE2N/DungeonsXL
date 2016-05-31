@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
@@ -68,6 +69,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -556,6 +558,36 @@ public class PlayerListener implements Listener {
             }
 
             new DGamePlayer(player, dGroup.getGameWorld());
+            return;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        Player player = event.getPlayer();
+
+        MainConfig config = plugin.getMainConfig();
+        if (!config.isTutorialActivated()) {
+            return;
+        }
+        if (DGamePlayer.getByPlayer(player) != null) {
+            return;
+        }
+        if (plugin.getPermissionProvider() == null) {
+            return;
+        }
+        if ((config.getTutorialDungeon() == null || config.getTutorialStartGroup() == null || config.getTutorialEndGroup() == null)) {
+            return;
+        }
+        for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
+            if (!config.getTutorialStartGroup().equalsIgnoreCase(group)) {
+                continue;
+            }
+            if (plugin.getGameWorlds().size() >= config.getMaxDungeons()) {
+                event.setResult(PlayerLoginEvent.Result.KICK_FULL);
+                event.setKickMessage("Es laufen bereits zu viele Tutorials, bitte warte eine Weile!");
+            }
+            return;
         }
     }
 

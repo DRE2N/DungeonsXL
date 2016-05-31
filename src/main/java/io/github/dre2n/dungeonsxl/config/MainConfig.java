@@ -39,6 +39,7 @@ public class MainConfig extends BRConfig {
     private String tutorialDungeon = "tutorial";
     private String tutorialStartGroup = "default";
     private String tutorialEndGroup = "player";
+    private int maxDungeons = 10;
 
     /* Misc */
     private boolean sendFloorTitle = true;
@@ -96,6 +97,13 @@ public class MainConfig extends BRConfig {
      */
     public String getTutorialStartGroup() {
         return tutorialStartGroup;
+    }
+
+    /**
+     * @return the maxDungeons
+     */
+    public int getMaxDungeons() {
+        return maxDungeons;
     }
 
     /**
@@ -188,6 +196,10 @@ public class MainConfig extends BRConfig {
             config.set("tutorial.endgroup", tutorialEndGroup);
         }
 
+        if (!config.contains("maxDungeons")) {
+            config.set("maxDungeons", maxDungeons);
+        }
+
         if (!config.contains("sendFloorTitle")) {
             config.set("sendFloorTitle", sendFloorTitle);
         }
@@ -249,6 +261,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("tutorial.endgroup")) {
             tutorialEndGroup = config.getString("tutorial.endgroup");
+        }
+
+        if (config.contains("maxDungeons")) {
+            maxDungeons = config.getInt("maxDungeons");
         }
 
         if (config.contains("sendFloorTitle")) {
