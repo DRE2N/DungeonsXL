@@ -250,8 +250,12 @@ public class RedstoneSign extends DSign {
 
         unpower();
 
-        enableTask.cancel();
-        disableTask.cancel();
+        if (enableTask != null) {
+            enableTask.cancel();
+        }
+        if (disableTask != null) {
+            disableTask.cancel();
+        }
 
         active = false;
     }
