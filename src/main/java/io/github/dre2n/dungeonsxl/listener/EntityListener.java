@@ -88,7 +88,6 @@ public class EntityListener implements Listener {
                 if (gameWorld.isPlaying()) {
                     DMob dMob = DMob.getByEntity(entity);
                     if (dMob != null) {
-                        event.getDrops().clear();
                         dMob.onDeath(event);
                     }
                 }
