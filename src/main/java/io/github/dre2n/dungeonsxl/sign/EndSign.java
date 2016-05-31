@@ -77,7 +77,7 @@ public class EndSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DGamePlayer.getByWorld(getGameWorld().getWorld())) {
             dPlayer.finish();
         }
     }
