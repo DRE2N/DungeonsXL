@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl;
 
+import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.config.MessageConfig;
@@ -53,6 +54,7 @@ import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -76,6 +78,8 @@ public class DungeonsXL extends BRPlugin {
     public static File CLASSES;
     public static File MOBS;
     public static File SIGNS;
+
+    private CaliburnAPI caliburn;
 
     private GlobalData globalData;
     private MainConfig mainConfig;
@@ -302,6 +306,24 @@ public class DungeonsXL extends BRPlugin {
      */
     public static DungeonsXL getInstance() {
         return instance;
+    }
+
+    /**
+     * @return the loaded instance of CaliburnAPI
+     */
+    public CaliburnAPI getCaliburnAPI() {
+        return caliburn;
+    }
+
+    /**
+     * load / reload a new instance of CaliburnAPI
+     */
+    public void loadCaliburnAPI() {
+        if (manager.isPluginEnabled("ItemsXL")) {
+            this.caliburn = ItemsXL.getInstance().getAPI();
+        } else {
+            this.caliburn = new CaliburnAPI(this);
+        }
     }
 
     /**

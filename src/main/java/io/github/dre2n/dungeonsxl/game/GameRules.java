@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
+import io.github.dre2n.caliburn.item.UniversalItem;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Daniel Saukel
@@ -109,7 +110,7 @@ public class GameRules {
 
     /* Misc */
     protected Map<Integer, String> msgs;
-    protected List<Material> secureObjects;
+    protected List<ItemStack> secureObjects;
 
     /* Getters and setters */
     // keepInventory
@@ -315,7 +316,7 @@ public class GameRules {
     /**
      * @return the objects to get passed to another player of the group when this player leaves
      */
-    public List<Material> getSecureObjects() {
+    public List<ItemStack> getSecureObjects() {
         return secureObjects;
     }
 

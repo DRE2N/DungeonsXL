@@ -17,21 +17,21 @@
 package io.github.dre2n.dungeonsxl.util;
 
 import io.github.dre2n.commons.util.NumberUtil;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Deprecated deserialization methods for compatibility with 1.7.8-1.8.x
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 @Deprecated
-public class ItemUtil {
+public class DeserialisazionUtil {
 
-    public static List<ItemStack> fromConfig(ConfigurationSection configSectionClasses) {
-        List<String> items = configSectionClasses.getStringList("items");
-        CopyOnWriteArrayList<ItemStack> itemStacks = new CopyOnWriteArrayList<>();
+    public static List<ItemStack> deserializeStackList(List<String> items) {
+        List<ItemStack> itemStacks = new ArrayList<>();
 
         for (String item : items) {
             String[] itemSplit = item.split(",");

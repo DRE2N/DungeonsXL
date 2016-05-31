@@ -350,8 +350,8 @@ public class PlayerListener implements Listener {
 
         Game game = Game.getByWorld(gamePlayer.getWorld());
 
-        for (Material material : game.getRules().getSecureObjects()) {
-            if (material == event.getItemDrop().getItemStack().getType()) {
+        for (ItemStack item : game.getRules().getSecureObjects()) {
+            if (event.getItemDrop().getItemStack().isSimilar(item)) {
                 event.setCancelled(true);
                 MessageUtil.sendMessage(player, DMessages.ERROR_DROP.getMessage());
                 return;

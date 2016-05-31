@@ -16,6 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
@@ -25,6 +27,7 @@ import io.github.dre2n.dungeonsxl.requirement.FeeLevelRequirement;
 import io.github.dre2n.dungeonsxl.requirement.FeeMoneyRequirement;
 import io.github.dre2n.dungeonsxl.requirement.GroupSizeRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
+import io.github.dre2n.dungeonsxl.util.DeserialisazionUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,10 +35,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -43,6 +46,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class WorldConfig extends GameRules {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private File file;
 
@@ -79,13 +83,10 @@ public class WorldConfig extends GameRules {
         /* Secure Objects */
         if (configFile.contains("secureObjects")) {
             List<String> secureObjectList = configFile.getStringList("secureObjects");
-            for (String id : secureObjectList) {
-                if (Material.getMaterial(NumberUtil.parseInt(id)) != null) {
-                    secureObjects.add(Material.getMaterial(NumberUtil.parseInt(id)));
-
-                } else if (Material.getMaterial(id) != null) {
-                    secureObjects.add(Material.getMaterial(id));
-                }
+            if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
+                secureObjects = plugin.getCaliburnAPI().getItems().deserializeStackList(secureObjectList);
+            } else {
+                secureObjects = DeserialisazionUtil.deserializeStackList(secureObjectList);
             }
         }
 
@@ -244,14 +245,13 @@ public class WorldConfig extends GameRules {
             configFile.set("message." + msgs, this.msgs.get(msgs));
         }
 
-        // Secure Objects
-        CopyOnWriteArrayList<Integer> secureObjectsids = new CopyOnWriteArrayList<>();
+        List<String> secureObjectIds = new ArrayList<>();
 
-        for (Material mat : secureObjects) {
-            secureObjectsids.add(mat.getId());
+        for (ItemStack item : secureObjects) {
+            secureObjectIds.add(plugin.getCaliburnAPI().getItems().getCustomItemId(item));
         }
 
-        configFile.set("secureObjects", secureObjectsids);
+        configFile.set("secureObjects", secureObjectIds);
 
         // Invited Players
         configFile.set("invitedPlayers", invitedPlayers);

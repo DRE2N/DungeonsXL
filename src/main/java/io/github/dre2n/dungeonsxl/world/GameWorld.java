@@ -44,7 +44,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
@@ -53,6 +52,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Spider;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -71,7 +71,7 @@ public class GameWorld {
     private Location locStart;
     private boolean isPlaying = false;
     private int id;
-    private List<Material> secureObjects = new ArrayList<>();
+    private List<ItemStack> secureObjects = new ArrayList<>();
     private CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<>();
 
     private CopyOnWriteArrayList<Sign> signClass = new CopyOnWriteArrayList<>();
@@ -244,7 +244,7 @@ public class GameWorld {
     /**
      * @return the secureObjects
      */
-    public List<Material> getSecureObjects() {
+    public List<ItemStack> getSecureObjects() {
         return secureObjects;
     }
 
@@ -252,7 +252,7 @@ public class GameWorld {
      * @param secureObjects
      * the secureObjects to set
      */
-    public void setSecureObjects(List<Material> secureObjects) {
+    public void setSecureObjects(List<ItemStack> secureObjects) {
         this.secureObjects = secureObjects;
     }
 
@@ -539,10 +539,7 @@ public class GameWorld {
     /* Statics */
     public static GameWorld getByWorld(World world) {
         for (GameWorld gameWorld : plugin.getGameWorlds()) {
-            if (gameWorld.getWorld() == null) {
-                continue;
-
-            } else if (gameWorld.getWorld().equals(world)) {
+            if (gameWorld.getWorld() != null && gameWorld.getWorld().equals(world)) {
                 return gameWorld;
             }
         }

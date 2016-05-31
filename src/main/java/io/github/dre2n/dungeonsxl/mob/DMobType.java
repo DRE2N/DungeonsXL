@@ -19,7 +19,6 @@ package io.github.dre2n.dungeonsxl.mob;
 import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import java.io.File;
@@ -45,8 +44,6 @@ import org.bukkit.inventory.meta.ItemMeta;
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class DMobType {
-
-    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private String name;
     private EntityType type;
@@ -75,7 +72,7 @@ public class DMobType {
 
     /**
      * @param name
-     * the name of the Announcer
+     * the name of the DMobType
      * @param config
      * the config that stores the information
      */
@@ -178,7 +175,7 @@ public class DMobType {
 
                 /* Add Item to the drops map */
                 item.setItemMeta(itemMeta);
-                getDrops().put(item, chance);
+                drops.put(item, chance);
             }
         }
     }

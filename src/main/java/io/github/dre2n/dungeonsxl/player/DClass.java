@@ -16,7 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.dungeonsxl.util.ItemUtil;
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Version;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.util.DeserialisazionUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,9 @@ import org.bukkit.inventory.ItemStack;
  * @author Frank Baumann, Daniel Saukel
  */
 public class DClass {
+
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private String name;
 
@@ -42,7 +48,13 @@ public class DClass {
         this.name = name;
 
         if (config.contains("items")) {
-            items = ItemUtil.fromConfig(config);
+            List<String> itemList = config.getStringList("items");
+
+            if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
+                items = plugin.getCaliburnAPI().getItems().deserializeStackList(itemList);
+            } else {
+                items = DeserialisazionUtil.deserializeStackList(itemList);
+            }
         }
 
         if (config.contains("dog")) {

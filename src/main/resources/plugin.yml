@@ -4,7 +4,7 @@ version: ${project.version}
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 description: ${project.description}
 website: ${project.url}
-softdepend: [BlueRoseCommons, CommandsXL, Vault, CustomMobs, InsaneMobs, MythicMobs]
+softdepend: [BlueRoseCommons, CommandsXL, ItemsXL, Vault, CustomMobs, InsaneMobs, MythicMobs]
 commands:
   dungeonsxl:
     description: Reference command for DungeonsXL.
