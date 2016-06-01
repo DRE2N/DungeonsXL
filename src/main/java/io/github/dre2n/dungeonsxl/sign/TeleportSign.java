@@ -22,9 +22,7 @@ public class TeleportSign extends DSign {
 		String lines[] = getSign().getLines();
 		for (int i = 1; i <= 2; i++) {
 			if (!lines[i].isEmpty()) {
-				if (lines[i].equalsIgnoreCase("N") || lines[i].equalsIgnoreCase("E") || lines[i].equalsIgnoreCase("S") || lines[i].equalsIgnoreCase("W")) {
-					continue;
-				} else {
+				if (letterToYaw(lines[i].charAt(0)) == -1) {
 					String[] loc = lines[i].split(",");
 					if (loc.length != 3) {
 						return false;
@@ -45,17 +43,13 @@ public class TeleportSign extends DSign {
 	@Override
 	public void onInit() {
 		location = getSign().getLocation().add(0.5, 0, 0.5);
+		location.setYaw(letterToYaw(((org.bukkit.material.Sign) getSign().getData()).getFacing().getOppositeFace().name().charAt(0)));
 		String lines[] = getSign().getLines();
 		for (int i = 1; i <= 2; i++) {
 			if (!lines[i].isEmpty()) {
-				if (lines[i].equalsIgnoreCase("S")) {
-					location.setYaw(0);
-				} else if (lines[i].equalsIgnoreCase("W")) {
-					location.setYaw(90);
-				} else if (lines[i].equalsIgnoreCase("N")) {
-					location.setYaw(180);
-				} else if (lines[i].equalsIgnoreCase("E")) {
-					location.setYaw(-90);
+				int yaw = letterToYaw(lines[i].charAt(0));
+				if (yaw != -1) {
+					location.setYaw(yaw);
 				} else {
 					String[] loc = lines[i].split(",");
 					if (loc.length == 3) {
@@ -105,5 +99,26 @@ public class TeleportSign extends DSign {
 	@Override
 	public DSignType getType() {
 		return type;
+	}
+
+	public static int letterToYaw(char c) {
+		switch (c) {
+			case 'S':
+			case 's':
+				return 0;
+			case 'W':
+			case 'w':
+				return 90;
+			case 'N':
+			case 'n':
+				return 180;
+			case 'E':
+			case 'e':
+			case 'O':
+			case 'o':
+				return -90;
+			default:
+				return -1;
+		}
 	}
 }
