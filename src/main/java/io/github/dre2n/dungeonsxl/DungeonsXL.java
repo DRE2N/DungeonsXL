@@ -134,6 +134,7 @@ public class DungeonsXL extends BRPlugin {
         super.onEnable();
 
         instance = this;
+        loadCaliburnAPI();
 
         initFolders();
 
