@@ -606,7 +606,9 @@ public class DungeonsXL extends BRPlugin {
      * start a new AnnouncerTask
      */
     public void startAnnouncerTask(long period) {
-        announcerTask = new AnnouncerTask(announcers).runTaskTimer(this, 0L, period);
+        if (!announcers.getAnnouncers().isEmpty()) {
+            announcerTask = new AnnouncerTask(announcers).runTaskTimer(this, 0L, period);
+        }
     }
 
     /**
