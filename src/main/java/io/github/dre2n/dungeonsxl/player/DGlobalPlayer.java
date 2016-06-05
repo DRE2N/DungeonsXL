@@ -39,6 +39,7 @@ public class DGlobalPlayer {
     private boolean breakMode;
     private boolean chatSpyMode;
     private DPortal creatingPortal;
+    private boolean announcerEnabled;
 
     private ItemStack[] respawnInventory;
     private ItemStack[] respawnArmor;
@@ -55,6 +56,7 @@ public class DGlobalPlayer {
         breakMode = dPlayer.isInBreakMode();
         chatSpyMode = dPlayer.isInChatSpyMode();
         creatingPortal = dPlayer.getPortal();
+        announcerEnabled = dPlayer.isAnnouncerEnabled();
         respawnInventory = dPlayer.getRespawnInventory();
         respawnArmor = dPlayer.getRespawnArmor();
 
@@ -132,6 +134,21 @@ public class DGlobalPlayer {
      */
     public void setCreatingPortal(DPortal dPortal) {
         creatingPortal = dPortal;
+    }
+
+    /**
+     * @return if the players receives announcer messages
+     */
+    public boolean isAnnouncerEnabled() {
+        return announcerEnabled;
+    }
+
+    /**
+     * @param enabled
+     * set if the players receives announcer messages
+     */
+    public void setAnnouncerEnabled(boolean enabled) {
+        announcerEnabled = enabled;
     }
 
     /**

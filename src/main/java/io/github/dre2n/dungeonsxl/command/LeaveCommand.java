@@ -83,7 +83,6 @@ public class LeaveCommand extends BRCommand {
         }
 
         MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
-
     }
 
 }

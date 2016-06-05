@@ -93,6 +93,12 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
         this.inDungeonChat = inDungeonChat;
     }
 
+    // Players in dungeons never get announcer messages
+    @Override
+    public boolean isAnnouncerEnabled() {
+        return false;
+    }
+
     /* Actions */
     /**
      * Clear the player's inventory, potion effects etc.

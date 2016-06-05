@@ -19,7 +19,6 @@ package io.github.dre2n.dungeonsxl.task;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.announcer.Announcer;
 import io.github.dre2n.dungeonsxl.announcer.Announcers;
-import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,7 +32,7 @@ public class AnnouncerTask extends BukkitRunnable {
     DungeonsXL plugin = DungeonsXL.getInstance();
 
     private List<Announcer> announcers;
-    int index;
+    private int index;
 
     public AnnouncerTask(Announcers announcers) {
         this.announcers = announcers.getAnnouncers();
@@ -45,7 +44,7 @@ public class AnnouncerTask extends BukkitRunnable {
         Announcer announcer = announcers.get(index);
         List<String> worlds = announcer.getWorlds();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!(plugin.getDPlayers().getByPlayer(player) instanceof DInstancePlayer)) {
+            if (plugin.getDPlayers().getByPlayer(player).isAnnouncerEnabled()) {
                 if (worlds.isEmpty() || worlds.contains(player.getWorld().getName())) {
                     announcer.send(player);
                 }
