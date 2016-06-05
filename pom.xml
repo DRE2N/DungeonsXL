@@ -8,6 +8,7 @@
     <url>https://dre2n.github.io</url>
     <description>Create custom dungeons and adventure maps with ease!</description>
     <properties>
+        <buildNo></buildNo>
         <skipTests>true</skipTests>
     </properties>
     <build>
