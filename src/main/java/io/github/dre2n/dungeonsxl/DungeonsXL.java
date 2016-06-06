@@ -123,10 +123,12 @@ public class DungeonsXL extends BRPlugin {
          * #~~Economy~~##~~~~true~~~#
          * #Permissions##~~~~true~~~#
          * #~~Metrics~~##~~~~true~~~#
+         * #Resource ID##~~~~9488~~~#
          * ##########################
          */
 
         settings = new BRPluginSettings(true, true, true, true, true, Internals.andHigher(Internals.v1_7_R3));
+        settings = new BRPluginSettings(true, true, true, true, true, 9488, Internals.andHigher(Internals.v1_7_R3));
     }
 
     @Override
