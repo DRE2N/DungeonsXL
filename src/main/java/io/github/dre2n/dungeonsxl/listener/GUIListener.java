@@ -19,6 +19,9 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.guiutil.ButtonClickEvent;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.announcer.Announcer;
+import io.github.dre2n.dungeonsxl.config.DMessages;
+import java.util.Locale;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -33,15 +36,30 @@ public class GUIListener implements Listener {
 
     @EventHandler
     public void onButtonClick(ButtonClickEvent event) {
+        Player player = event.getPlayer();
+
         Inventory gui = event.getGUI();
         if (!plugin.getGUIs().contains(gui)) {
             return;
         }
 
-        ItemStack button = event.getGUI().getItem(event.getSlot());
+        ItemStack button = gui.getItem(event.getSlot());
         Announcer announcer = plugin.getAnnouncers().getByGUI(gui);
+
         if (announcer != null) {
-            announcer.clickGroupButton(event.getPlayer(), button);
+            announcer.clickGroupButton(player, button);
+
+        } else if (gui.getTitle().startsWith(DMessages.SETTINGS_TITLE.getMessage())) {
+            if (gui.getTitle().equals(DMessages.SETTINGS_TITLE.getMessage() + DMessages.SETTINGS_TITLE_EDIT.getMessage())) {
+                plugin.getEditSettings().clickButton(player, button);
+
+            } else if (gui.getTitle().equals(DMessages.SETTINGS_TITLE.getMessage() + DMessages.SETTINGS_TITLE_GLOBAL.getMessage())) {
+                plugin.getGlobalSettings().clickButton(player, button);
+
+            } else if (gui.getTitle().equals(DMessages.SETTINGS_TITLE.getMessage() + DMessages.SETTINGS_TITLE_PLAYER.getMessage())) {
+                plugin.getPlayerSettings().clickButton(player, button);
+
+            }
         }
     }
 

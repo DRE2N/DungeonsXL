@@ -39,7 +39,7 @@ public class DGlobalPlayer {
     private boolean breakMode;
     private boolean chatSpyMode;
     private DPortal creatingPortal;
-    private boolean announcerEnabled;
+    private boolean announcerEnabled = true;
 
     private ItemStack[] respawnInventory;
     private ItemStack[] respawnArmor;

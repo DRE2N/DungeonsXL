@@ -16,6 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl;
 
+import io.github.dre2n.dungeonsxl.settings.ToggleAnnouncementsButton;
+import io.github.dre2n.dungeonsxl.settings.ToggleBreakButton;
+import io.github.dre2n.dungeonsxl.settings.ToggleChatSpyButton;
 import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.compatibility.Internals;
@@ -44,6 +47,7 @@ import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
+import io.github.dre2n.dungeonsxl.settings.Settings;
 import io.github.dre2n.dungeonsxl.sign.DSignTypes;
 import io.github.dre2n.dungeonsxl.sign.SignScripts;
 import io.github.dre2n.dungeonsxl.task.AnnouncerTask;
@@ -95,6 +99,9 @@ public class DungeonsXL extends BRPlugin {
     private GlobalProtections protections;
     private ExternalMobProviders dMobProviders;
     private DPlayers dPlayers;
+    private Settings editSettings;
+    private Settings globalSettings;
+    private Settings playerSettings;
     private Announcers announcers;
     private DClasses dClasses;
     private DMobTypes dMobTypes;
@@ -127,7 +134,6 @@ public class DungeonsXL extends BRPlugin {
          * ##########################
          */
 
-        settings = new BRPluginSettings(true, true, true, true, true, Internals.andHigher(Internals.v1_7_R3));
         settings = new BRPluginSettings(true, true, true, true, true, 9488, Internals.andHigher(Internals.v1_7_R3));
     }
 
@@ -162,6 +168,7 @@ public class DungeonsXL extends BRPlugin {
         loadDClasses(CLASSES);
         loadDMobTypes(MOBS);
         loadSignScripts(SIGNS);
+        loadSettings();
 
         manager.registerEvents(new EntityListener(), this);
         manager.registerEvents(new GUIListener(), this);
@@ -409,6 +416,7 @@ public class DungeonsXL extends BRPlugin {
                 new DeletePortalCommand(),
                 new ReloadCommand(),
                 new SaveCommand(),
+                new SettingsCommand(),
                 new TestCommand()
         );
 
@@ -539,6 +547,40 @@ public class DungeonsXL extends BRPlugin {
      */
     public void loadDPlayers() {
         dPlayers = new DPlayers();
+    }
+
+    /**
+     * @return the settings that represent main config defaults, dungeon config and floor config
+     */
+    public Settings getEditSettings() {
+        return editSettings;
+    }
+
+    /**
+     * @return the settings that represents main config
+     */
+    public Settings getGlobalSettings() {
+        return globalSettings;
+    }
+
+    /**
+     * @return the settings that represent transient and persistent player data
+     */
+    public Settings getPlayerSettings() {
+        return playerSettings;
+    }
+
+    /**
+     * load / reload new instances of Settings
+     */
+    public void loadSettings() {
+        editSettings = new Settings(DMessages.SETTINGS_TITLE_EDIT.getMessage());
+        globalSettings = new Settings(DMessages.SETTINGS_TITLE_GLOBAL.getMessage());
+        playerSettings = new Settings(DMessages.SETTINGS_TITLE_PLAYER.getMessage(),
+                new ToggleAnnouncementsButton(),
+                new ToggleBreakButton(),
+                new ToggleChatSpyButton()
+        );
     }
 
     /**

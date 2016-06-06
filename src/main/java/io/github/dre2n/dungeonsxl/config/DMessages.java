@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.commons.config.Messages;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -114,6 +115,7 @@ public enum DMessages implements Messages {
     HELP_CMD_PORTAL("Help_Cmd_Portal", "/dxl portal - Creates a portal that leads into a dungeon"),
     HELP_CMD_RELOAD("Help_Cmd_Reload", "/dxl reload - Reloads the plugin"),
     HELP_CMD_SAVE("Help_Cmd_Save", "/dxl save - Saves the current dungeon"),
+    HELP_CMD_SETTINGS("Help_Cmd_Settings", "/dxl settings ([edit|global|player])- Opens the settings menu"),
     HELP_CMD_TEST("Help_Cmd_Test", "/dxl test - Starts the game in test mode"),
     HELP_CMD_UNINVITE("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon"),
     GROUP_CREATED("Group_Created", "&4&v1&6 created the group &4&v2&6!"),
@@ -159,7 +161,17 @@ public enum DMessages implements Messages {
     PLAYER_TREASURES("Player_Treasures", "&1Treasures"),
     PLAYER_WAIT_FOR_OTHER_PLAYERS("Player_WaitForOtherPlayers", "&6Waiting for teammates..."),
     REQUIREMENT_FEE("Requirement_Fee", "&6You have been charged &4&v1 &6for entering the dungeon."),
-    REWARD_GENERAL("Reward_General", "&6You received &4&v1 &6for finishing the dungeon.");
+    REWARD_GENERAL("Reward_General", "&6You received &4&v1 &6for finishing the dungeon."),
+    SETTINGS_ANNOUNCEMENTS_1("Settings_Announcements1", "&fToggles personal"),
+    SETTINGS_ANNOUNCEMENTS_2("Settings_Announcements2", "&fgame announcements."),
+    SETTINGS_BREAK_1("Settings_Break1", "&fAllows you to break blocks"),
+    SETTINGS_BREAK_2("Settings_Break2", "&fprotected by DungeonsXL."),
+    SETTINGS_CHAT_SPY1("Settings_ChatSpy1", "&fAllows you to receive"),
+    SETTINGS_CHAT_SPY2("Settings_ChatSpy2", "&fall dungeon chat messages."),
+    SETTINGS_TITLE("Settings_Title", "&4Settings: &o"),
+    SETTINGS_TITLE_EDIT("Settings_Title_Edit", "Dungeon Setup"),
+    SETTINGS_TITLE_GLOBAL("Settings_Title_Global", "Global Configuration"),
+    SETTINGS_TITLE_PLAYER("Settings_Title_Player", "Player");
 
     private String identifier;
     private String message;
@@ -176,7 +188,7 @@ public enum DMessages implements Messages {
 
     @Override
     public String getMessage() {
-        return message;
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     @Override

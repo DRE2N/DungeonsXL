@@ -57,6 +57,9 @@ public class Announcer {
     private String dungeonName;
     private String mapName;
 
+    private int minGroupsPerGame;
+    private int minPlayersPerGroup;
+
     private short maxGroupsPerGame;
     private int maxPlayersPerGroup;
 
@@ -96,6 +99,9 @@ public class Announcer {
         } else {
             mapName = identifier;
         }
+
+        minGroupsPerGame = config.getInt("minGroupsPerGame");
+        minPlayersPerGroup = config.getInt("minPlayersPerGroup");
 
         maxGroupsPerGame = (short) config.getInt("maxGroupsPerGame");
         dGroups = new ArrayList<>(Collections.nCopies(maxGroupsPerGame + 1, (DGroup) null));
@@ -208,6 +214,36 @@ public class Announcer {
     }
 
     /**
+     * @return the minimum amount of filled groups per game
+     */
+    public int getMinGroupsPerGame() {
+        return minGroupsPerGame;
+    }
+
+    /**
+     * @param amount
+     * the amount to set
+     */
+    public void setMinGroupsPerGame(int amount) {
+        minGroupsPerGame = amount;
+    }
+
+    /**
+     * @return the minimum amount of filled groups per game
+     */
+    public int getMinPlayersPerGroup() {
+        return minPlayersPerGroup;
+    }
+
+    /**
+     * @param amount
+     * the amount to set
+     */
+    public void setMinPlayersPerGroup(int amount) {
+        minPlayersPerGroup = amount;
+    }
+
+    /**
      * @return the maximum amount of groups per game
      */
     public short getMaxGroupsPerGame() {
@@ -314,6 +350,17 @@ public class Announcer {
         }
 
         showGUI(player);
+
+        int i = 0;
+        for (DGroup group : dGroups) {
+            if (group != null && group.getPlayers().size() >= minPlayersPerGroup) {
+                i++;
+            }
+        }
+
+        if (i >= minGroupsPerGame) {
+
+        }
     }
 
     /**
