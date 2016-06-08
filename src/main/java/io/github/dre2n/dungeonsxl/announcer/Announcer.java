@@ -25,6 +25,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.task.AnnouncerStartGameTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,6 +66,8 @@ public class Announcer {
 
     private List<DGroup> dGroups;
     private List<ItemStack> buttons;
+
+    private AnnouncerStartGameTask startTask;
 
     /**
      * @param file
@@ -266,11 +269,40 @@ public class Announcer {
     }
 
     /**
+     * @return the DGroups
+     */
+    public List<DGroup> getDGroups() {
+        return dGroups;
+    }
+
+    /**
+     * @return the buttons that represent the DGroups
+     */
+    public List<ItemStack> getButtons() {
+        return buttons;
+    }
+
+    /**
      * @param amount
      * the amount to set
      */
     public void setMaxPlayersPerGroup(int amount) {
         maxPlayersPerGroup = amount;
+    }
+
+    /**
+     * @return the start task
+     */
+    public AnnouncerStartGameTask getStartTask() {
+        return startTask;
+    }
+
+    /**
+     * Cancels the start task and sets it to null.
+     */
+    public void endStartTask() {
+        startTask.cancel();
+        startTask = null;
     }
 
     /**
@@ -359,7 +391,12 @@ public class Announcer {
         }
 
         if (i >= minGroupsPerGame) {
-
+            if (startTask == null) {
+                startTask = new AnnouncerStartGameTask(this);
+                startTask.runTaskLater(plugin, 20 * 30L);
+            } else {
+                startTask.getProgressBar().addPlayer(player);
+            }
         }
     }
 
