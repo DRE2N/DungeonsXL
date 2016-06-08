@@ -469,6 +469,11 @@ public class GameSign extends GlobalProtection {
             return false;
         }
 
+        if (plugin.getGameWorlds().size() >= plugin.getMainConfig().getMaxInstances()) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_TOO_MANY_INSTANCES.getMessage());
+            return true;
+        }
+
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup == null) {

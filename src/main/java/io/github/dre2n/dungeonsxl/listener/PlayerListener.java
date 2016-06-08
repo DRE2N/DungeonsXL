@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
@@ -65,6 +66,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -570,6 +572,36 @@ public class PlayerListener implements Listener {
             }
 
             new DGamePlayer(player, dGroup.getGameWorld());
+            return;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        Player player = event.getPlayer();
+
+        MainConfig config = plugin.getMainConfig();
+        if (!config.isTutorialActivated()) {
+            return;
+        }
+        if (DGamePlayer.getByPlayer(player) != null) {
+            return;
+        }
+        if (plugin.getPermissionProvider() == null) {
+            return;
+        }
+        if ((config.getTutorialDungeon() == null || config.getTutorialStartGroup() == null || config.getTutorialEndGroup() == null)) {
+            return;
+        }
+        for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
+            if (!config.getTutorialStartGroup().equalsIgnoreCase(group)) {
+                continue;
+            }
+            if (plugin.getGameWorlds().size() >= config.getMaxInstances()) {
+                event.setResult(PlayerLoginEvent.Result.KICK_FULL);
+                event.setKickMessage(DMessages.ERROR_TOO_MANY_TUTORIALS.getMessage());
+            }
+            return;
         }
     }
 

@@ -30,7 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 7;
+    public static final int CONFIG_VERSION = 8;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -45,6 +45,7 @@ public class MainConfig extends BRConfig {
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
     private List<Short> groupColorPriority = new ArrayList<>(Arrays.asList((short) 11, (short) 14, (short) 4, (short) 5, (short) 10, (short) 1, (short) 0, (short) 15));
+    private int maxInstances = 10;
 
     /* Secure Mode */
     private boolean secureModeEnabled = false;
@@ -136,6 +137,8 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * <<<<<<< HEAD
+     *
      * @param group
      * the group the player gets when he plays the tutorial
      */
@@ -193,6 +196,21 @@ public class MainConfig extends BRConfig {
      */
     public void setGroupColorPriority(List<Short> dataValues) {
         groupColorPriority = dataValues;
+    }
+
+    /**
+     * @return the maximum amount of worlds to instantiate at once
+     */
+    public int getMaxInstances() {
+        return maxInstances;
+    }
+
+    /**
+     * @param maxInstances
+     * the maximum amount of worlds to instantiate at once
+     */
+    public void setMaxInstances(int maxInstances) {
+        this.maxInstances = maxInstances;
     }
 
     /**
@@ -254,7 +272,7 @@ public class MainConfig extends BRConfig {
     public void setSecureModeCheckInterval(double interval) {
         secureModeCheckInterval = interval;
     }
-    
+
     /**
      * @return the editCommandWhitelist
      */
@@ -313,6 +331,10 @@ public class MainConfig extends BRConfig {
 
         if (!config.contains("groupColorPriority")) {
             config.set("groupColorPriority", groupColorPriority);
+        }
+
+        if (!config.contains("maxInstances")) {
+            config.set("maxInstances", maxInstances);
         }
 
         if (!config.contains("secureMode.enabled")) {
@@ -384,6 +406,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("groupColorPriority")) {
             groupColorPriority = config.getShortList("groupColorPriority");
+        }
+
+        if (config.contains("maxInstances")) {
+            maxInstances = config.getInt("maxInstances");
         }
 
         if (config.contains("secureMode.enabled")) {
