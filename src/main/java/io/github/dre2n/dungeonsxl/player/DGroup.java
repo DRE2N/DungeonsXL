@@ -527,7 +527,7 @@ public class DGroup {
 
             dPlayer.respawn();
 
-            if (plugin.getMainConfig().getSendFloorTitle()) {
+            if (plugin.getMainConfig().isSendFloorTitleEnabled()) {
                 if (dungeonName != null) {
                     MessageUtil.sendTitleMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", " "));
 

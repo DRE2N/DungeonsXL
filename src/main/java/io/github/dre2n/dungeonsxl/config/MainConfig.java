@@ -32,7 +32,7 @@ public class MainConfig extends BRConfig {
 
     public static final int CONFIG_VERSION = 7;
 
-    private String language = "en";
+    private String language = "english";
     private boolean enableEconomy = false;
 
     /* Tutorial */
@@ -76,24 +76,56 @@ public class MainConfig extends BRConfig {
     }
 
     /**
-     * @return the enableEconomy
+     * @param language
+     * the language to set
      */
-    public boolean enableEconomy() {
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    /**
+     * @return if DungeonsXL should use economy features provided by Vault
+     */
+    public boolean isEconomyEnabled() {
         return enableEconomy;
     }
 
     /**
-     * @return the tutorialActivated
+     * @param enabled
+     * if DungeonsXL should use economy features provided by Vault
+     */
+    public void setEconomyEnabled(boolean enabled) {
+        enableEconomy = enabled;
+    }
+
+    /**
+     * @return if the tutorial is activated
      */
     public boolean isTutorialActivated() {
         return tutorialActivated;
     }
 
     /**
-     * @return the tutorialDungeon
+     * @param activated
+     * if new players start in a tutorial
+     */
+    public void setTutorialActivated(boolean activated) {
+        tutorialActivated = activated;
+    }
+
+    /**
+     * @return the tutorial dungeon
      */
     public String getTutorialDungeon() {
         return tutorialDungeon;
+    }
+
+    /**
+     * @param dungeon
+     * the tutorial dungeon to set
+     */
+    public void setTutorialDungeon(String dungeon) {
+        tutorialDungeon = dungeon;
     }
 
     /**
@@ -104,10 +136,41 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @param group
+     * the group the player gets when he plays the tutorial
+     */
+    public void setTutorialStartGroup(String group) {
+        tutorialStartGroup = group;
+    }
+
+    /**
+     * @return the tutorialEndGroup
+     */
+    public String getTutorialEndGroup() {
+        return tutorialEndGroup;
+    }
+
+    /**
+     * @param group
+     * the group the player gets when he finshs the tutorial
+     */
+    public void setTutorialEndGroup(String group) {
+        tutorialEndGroup = group;
+    }
+
+    /**
      * @return if the floor title shall be sent
      */
-    public boolean getSendFloorTitle() {
+    public boolean isSendFloorTitleEnabled() {
         return sendFloorTitle;
+    }
+
+    /**
+     * @param enabled
+     * if the floor title shall be sent
+     */
+    public void setSendFloorTitleEnabled(boolean enabled) {
+        sendFloorTitle = enabled;
     }
 
     /**
@@ -125,10 +188,11 @@ public class MainConfig extends BRConfig {
     }
 
     /**
-     * @return the tutorialEndGroup
+     * @param dataValues
+     * wool data values
      */
-    public String getTutorialEndGroup() {
-        return tutorialEndGroup;
+    public void setGroupColorPriority(List<Short> dataValues) {
+        groupColorPriority = dataValues;
     }
 
     /**
@@ -139,10 +203,26 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @param enabled
+     * if the secure mode is enabled
+     */
+    public void setSecureModeEnabled(boolean enabled) {
+        secureModeEnabled = enabled;
+    }
+
+    /**
      * @return if players may open inventories while editing; false if secure mode disabled
      */
     public boolean getOpenInventories() {
         return openInventories && secureModeEnabled;
+    }
+
+    /**
+     * @param openInventories
+     * if inventories can be opened in edit mode
+     */
+    public void setOpenInventories(boolean openInventories) {
+        this.openInventories = openInventories;
     }
 
     /**
@@ -153,12 +233,28 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @param dropItems
+     * if items may be dropped in edit mode
+     */
+    public void setDropItems(boolean dropItems) {
+        this.dropItems = dropItems;
+    }
+
+    /**
      * @return the interval for the check task
      */
     public long getSecureModeCheckInterval() {
         return (long) (secureModeCheckInterval * 20);
     }
 
+    /**
+     * @param interval
+     * the interval for the check task
+     */
+    public void setSecureModeCheckInterval(double interval) {
+        secureModeCheckInterval = interval;
+    }
+    
     /**
      * @return the editCommandWhitelist
      */

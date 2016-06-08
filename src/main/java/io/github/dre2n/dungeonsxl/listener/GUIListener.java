@@ -20,7 +20,6 @@ import io.github.dre2n.commons.util.guiutil.ButtonClickEvent;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.announcer.Announcer;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import java.util.Locale;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,18 +47,6 @@ public class GUIListener implements Listener {
 
         if (announcer != null) {
             announcer.clickGroupButton(player, button);
-
-        } else if (gui.getTitle().startsWith(DMessages.SETTINGS_TITLE.getMessage())) {
-            if (gui.getTitle().equals(DMessages.SETTINGS_TITLE.getMessage() + DMessages.SETTINGS_TITLE_EDIT.getMessage())) {
-                plugin.getEditSettings().clickButton(player, button);
-
-            } else if (gui.getTitle().equals(DMessages.SETTINGS_TITLE.getMessage() + DMessages.SETTINGS_TITLE_GLOBAL.getMessage())) {
-                plugin.getGlobalSettings().clickButton(player, button);
-
-            } else if (gui.getTitle().equals(DMessages.SETTINGS_TITLE.getMessage() + DMessages.SETTINGS_TITLE_PLAYER.getMessage())) {
-                plugin.getPlayerSettings().clickButton(player, button);
-
-            }
         }
     }
 

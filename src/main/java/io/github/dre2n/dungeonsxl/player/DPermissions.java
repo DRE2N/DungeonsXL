@@ -59,7 +59,22 @@ public enum DPermissions {
     PORTAL("portal", OP),
     RELOAD("reload", OP),
     SAVE("save", OP),
+    /**
+     * Allows to open the settings menu.
+     */
     SETTINGS("settings", TRUE),
+    /**
+     * Allows to modify dungeon settings unless they have an own node.
+     */
+    SETTINGS_EDIT("settings.edit", OP),
+    /**
+     * Allows to modify global settings.
+     */
+    SETTINGS_GLOBAL("settings.global", OP),
+    /**
+     * Allows to modify player settings unless they have an own node.
+     */
+    SETTINGS_PLAYER("settings.player", TRUE),
     SIGN("sign", OP),
     TEST("test", OP),
     UNINVITE("uninvite", OP),
@@ -67,7 +82,7 @@ public enum DPermissions {
     ADMINISTRATOR("*", OP),
     HALF_EDITOR("halfeditor", OP, ESCAPE, LIST, MESSAGE, SAVE),
     FULL_EDITOR("fulleditor", OP, HALF_EDITOR, EDIT, PLAY, SIGN, TEST),
-    HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, JOIN, LEAVE, LIVES, MAIN, SETTINGS),
+    HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, JOIN, LEAVE, LIVES, MAIN, SETTINGS, SETTINGS_PLAYER),
     FULL_PLAYER("fullplayer", OP, HALF_PLAYER, GROUP);
 
     public static final String PREFIX = "dxl.";
