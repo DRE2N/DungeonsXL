@@ -46,7 +46,8 @@ public enum DSignTypeDefault implements DSignType {
     SOUND_MESSAGE("SoundMSG", "soundmsg", false, SoundMessageSign.class),
     START("Start", "start", true, StartSign.class),
     TRIGGER("Trigger", "trigger", true, TriggerSign.class),
-    WAVE("Wave", "wave", false, WaveSign.class);
+    WAVE("Wave", "wave", false, WaveSign.class),
+    TELEPORT("Teleport", "teleport", false, TeleportSign.class);
 
     private String name;
     private String buildPermission;
