@@ -311,6 +311,25 @@ public class DGroup {
     }
 
     /**
+     * Sets up all dungeon-related fields.
+     *
+     * @param name
+     * the name of the dungeon
+     */
+    public void setDungeon(String name) {
+        dungeon = plugin.getDungeons().getDungeon(name);
+        if (dungeon != null) {
+            dungeonName = dungeon.getName();
+            mapName = dungeon.getConfig().getStartFloor();
+            unplayedFloors = dungeon.getConfig().getFloors();
+
+        } else {
+            mapName = name;
+            dungeon = new Dungeon(name);
+        }
+    }
+
+    /**
      * @return the dungeonName
      */
     public String getDungeonName() {

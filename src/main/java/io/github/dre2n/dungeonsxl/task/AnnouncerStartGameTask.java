@@ -39,6 +39,9 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
 
         HashSet<Player> players = new HashSet<>();
         for (DGroup dGroup : announcer.getDGroups()) {
+            if (dGroup == null) {
+                continue;
+            }
             for (Player player : dGroup.getPlayers()) {
                 players.add(player);
             }
@@ -56,10 +59,21 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        Game game = new Game(announcer.getDGroups().get(0), announcer.getMapName());
+        Game game = null;
 
         for (DGroup dGroup : announcer.getDGroups()) {
-            game.getDGroups().set(announcer.getDGroups().indexOf(dGroup), dGroup);
+            if (dGroup == null) {
+                continue;
+            }
+
+            if (game == null) {
+                game = new Game(dGroup, announcer.getMapName());
+            } else {
+                game.getDGroups().add(dGroup);
+            }
+
+            dGroup.setDungeon(announcer.getDungeonName() == null ? announcer.getMapName() : announcer.getDungeonName());
+            dGroup.setGameWorld(game.getWorld());
         }
 
         for (Player player : game.getPlayers()) {
