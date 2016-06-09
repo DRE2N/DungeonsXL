@@ -223,8 +223,8 @@ public enum DMessages implements Messages {
      */
     public static FileConfiguration toConfig() {
         FileConfiguration config = new YamlConfiguration();
-        for (Messages message : values()) {
-            config.set(message.getIdentifier(), message.getMessage());
+        for (DMessages message : values()) {
+            config.set(message.getIdentifier(), message.message);
         }
 
         return config;
