@@ -30,7 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 8;
+    public static final int CONFIG_VERSION = 9;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -41,10 +41,22 @@ public class MainConfig extends BRConfig {
     private String tutorialStartGroup = "default";
     private String tutorialEndGroup = "player";
 
+    /* Announcers */
+    private List<Short> groupColorPriority = new ArrayList<>(Arrays.asList(
+            (short) 11,
+            (short) 14,
+            (short) 4,
+            (short) 5,
+            (short) 10,
+            (short) 1,
+            (short) 0,
+            (short) 15
+    ));
+    private double announcementInterval = 30;
+
     /* Misc */
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
-    private List<Short> groupColorPriority = new ArrayList<>(Arrays.asList((short) 11, (short) 14, (short) 4, (short) 5, (short) 10, (short) 1, (short) 0, (short) 15));
     private int maxInstances = 10;
 
     /* Secure Mode */
@@ -137,8 +149,6 @@ public class MainConfig extends BRConfig {
     }
 
     /**
-     * <<<<<<< HEAD
-     *
      * @param group
      * the group the player gets when he plays the tutorial
      */
@@ -162,6 +172,36 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @return the group colors
+     */
+    public List<Short> getGroupColorPriority() {
+        return groupColorPriority;
+    }
+
+    /**
+     * @param dataValues
+     * wool data values
+     */
+    public void setGroupColorPriority(List<Short> dataValues) {
+        groupColorPriority = dataValues;
+    }
+
+    /**
+     * @return the announcement interval
+     */
+    public long getAnnouncmentInterval() {
+        return (long) (announcementInterval * 20);
+    }
+
+    /**
+     * @param interval
+     * the interval to set
+     */
+    public void setAnnouncementInterval(double interval) {
+        announcementInterval = interval;
+    }
+
+    /**
      * @return if the floor title shall be sent
      */
     public boolean isSendFloorTitleEnabled() {
@@ -181,21 +221,6 @@ public class MainConfig extends BRConfig {
      */
     public Map<String, Object> getExternalMobProviders() {
         return externalMobProviders;
-    }
-
-    /**
-     * @return the group colors
-     */
-    public List<Short> getGroupColorPriority() {
-        return groupColorPriority;
-    }
-
-    /**
-     * @param dataValues
-     * wool data values
-     */
-    public void setGroupColorPriority(List<Short> dataValues) {
-        groupColorPriority = dataValues;
     }
 
     /**
@@ -321,16 +346,20 @@ public class MainConfig extends BRConfig {
             config.set("tutorial.endgroup", tutorialEndGroup);
         }
 
+        if (!config.contains("groupColorPriority")) {
+            config.set("groupColorPriority", groupColorPriority);
+        }
+
+        if (!config.contains("announcementInterval")) {
+            config.set("announcementInterval", announcementInterval);
+        }
+
         if (!config.contains("sendFloorTitle")) {
             config.set("sendFloorTitle", sendFloorTitle);
         }
 
         if (!config.contains("externalMobProviders")) {
             config.createSection("externalMobProviders");
-        }
-
-        if (!config.contains("groupColorPriority")) {
-            config.set("groupColorPriority", groupColorPriority);
         }
 
         if (!config.contains("maxInstances")) {
@@ -396,16 +425,20 @@ public class MainConfig extends BRConfig {
             tutorialEndGroup = config.getString("tutorial.endgroup");
         }
 
+        if (config.contains("groupColorPriority")) {
+            groupColorPriority = config.getShortList("groupColorPriority");
+        }
+
+        if (config.contains("announcementInterval")) {
+            announcementInterval = config.getDouble("announcementInterval");
+        }
+
         if (config.contains("sendFloorTitle")) {
             sendFloorTitle = config.getBoolean("sendFloorTitle");
         }
 
         if (config.contains("externalMobProviders")) {
             externalMobProviders = config.getConfigurationSection("externalMobProviders").getValues(false);
-        }
-
-        if (config.contains("groupColorPriority")) {
-            groupColorPriority = config.getShortList("groupColorPriority");
         }
 
         if (config.contains("maxInstances")) {
