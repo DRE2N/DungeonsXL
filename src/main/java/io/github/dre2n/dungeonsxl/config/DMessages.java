@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.commons.config.Messages;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
