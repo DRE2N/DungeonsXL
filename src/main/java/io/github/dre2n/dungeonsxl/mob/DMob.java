@@ -48,13 +48,12 @@ public class DMob {
         this.type = type;
 
         /* Remove DropChance of equipment */
-        try {
+        if (!isExternalMob()) {
             this.entity.getEquipment().setHelmetDropChance(0);
             this.entity.getEquipment().setChestplateDropChance(0);
             this.entity.getEquipment().setLeggingsDropChance(0);
             this.entity.getEquipment().setBootsDropChance(0);
             this.entity.getEquipment().setItemInHandDropChance(0);
-        } catch (UnsupportedOperationException exception) {
         }
 
         DMobSpawnEvent event = new DMobSpawnEvent(this, entity);
@@ -70,6 +69,36 @@ public class DMob {
         this.trigger = trigger;
     }
 
+    /* Getters */
+    /**
+     * @return the represented LivingEntity
+     */
+    public LivingEntity getEntity() {
+        return entity;
+    }
+
+    /**
+     * @return the DMobType or null if the mob is an external mob
+     */
+    public DMobType getType() {
+        return type;
+    }
+
+    /**
+     * @return if the mob is spawned by an external plugin
+     */
+    public boolean isExternalMob() {
+        return type == null;
+    }
+
+    /**
+     * @return the trigger String
+     */
+    public String getTrigger() {
+        return trigger;
+    }
+
+    /* Actions */
     public void onDeath(EntityDeathEvent event) {
         LivingEntity victim = event.getEntity();
         GameWorld gameWorld = GameWorld.getByWorld(victim.getWorld());
@@ -87,6 +116,8 @@ public class DMob {
         }
 
         if (type != null) {
+            event.getDrops().clear();
+
             for (ItemStack itemStack : type.getDrops().keySet()) {
                 Random randomGenerator = new Random();
                 int random = randomGenerator.nextInt(100);
@@ -95,9 +126,10 @@ public class DMob {
                     event.getDrops().add(itemStack);
                 }
             }
+
             name = type.getName();
 
-        } else if (type == null && trigger != null) {// <=MythicMobs mob
+        } else if (isExternalMob() && trigger != null) {
             name = trigger;
 
         } else {

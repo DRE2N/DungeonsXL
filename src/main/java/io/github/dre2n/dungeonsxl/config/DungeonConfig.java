@@ -16,57 +16,33 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
+import io.github.dre2n.commons.config.BRConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Daniel Saukel
  */
-public class DungeonConfig extends WorldConfig {
+public class DungeonConfig extends BRConfig {
+
+    public static final int CONFIG_VERSION = 1;
 
     private String startFloor;
     private String endFloor;
     private List<String> floors = new ArrayList<>();
     private int floorCount;
     private boolean removeWhenPlayed;
+    private WorldConfig overrideValues;
+    private WorldConfig defaultValues;
 
     public DungeonConfig(File file) {
-        super(file);
-        load(YamlConfiguration.loadConfiguration(file));
-    }
+        super(file, CONFIG_VERSION);
 
-    public DungeonConfig(ConfigurationSection configFile) {
-        super(configFile);
-        load(configFile);
-    }
-
-    @Override
-    public void load(ConfigurationSection configFile) {
-        super.load(configFile);
-
-        /* Floors */
-        if (configFile.contains("floors")) {
-            floors = configFile.getStringList("floors");
+        if (initialize) {
+            initialize();
         }
-
-        if (configFile.contains("startFloor")) {
-            startFloor = configFile.getString("startFloor");
-        }
-
-        if (configFile.contains("endFloor")) {
-            endFloor = configFile.getString("endFloor");
-        }
-
-        if (configFile.contains("floorCount")) {
-            floorCount = configFile.getInt("floorCount");
-        }
-
-        if (configFile.contains("removeWhenPlayed")) {
-            removeWhenPlayed = configFile.getBoolean("removeWhenPlayed");
-        }
+        load();
     }
 
     /**
@@ -150,6 +126,107 @@ public class DungeonConfig extends WorldConfig {
      */
     public void setRemoveWhenPlayed(boolean removeWhenPlayed) {
         this.removeWhenPlayed = removeWhenPlayed;
+    }
+
+    /**
+     * The values from this WorldConfig will override all values of the
+     * WorldConfigs of inherited maps.
+     *
+     * @return the override values
+     */
+    public WorldConfig getOverrideValues() {
+        return overrideValues;
+    }
+
+    /**
+     * @param worldConfig
+     * the WorldConfig to set
+     */
+    public void setOverrideValues(WorldConfig worldConfig) {
+        overrideValues = worldConfig;
+    }
+
+    /**
+     * The values from this WorldConfig will get overriden by values of the
+     * WorldConfigs of inherited maps.
+     * They will still override the values from the main config, though.
+     *
+     * @return the default values
+     */
+    public WorldConfig getDefaultValues() {
+        return defaultValues;
+    }
+
+    /**
+     * @param worldConfig
+     * the WorldConfig to set
+     */
+    public void setDefaultValues(WorldConfig worldConfig) {
+        defaultValues = worldConfig;
+    }
+
+    @Override
+    public void initialize() {
+        if (!config.contains("floors")) {
+            config.set("floors", floors);
+        }
+
+        if (!config.contains("startFloor")) {
+            config.set("startFloor", startFloor);
+        }
+
+        if (!config.contains("endFloor")) {
+            config.set("endFloor", endFloor);
+        }
+
+        if (!config.contains("floorCount")) {
+            config.set("floorCount", floorCount);
+        }
+
+        if (!config.contains("removeWhenPlayed")) {
+            config.set("removeWhenPlayed", removeWhenPlayed);
+        }
+
+        if (!config.contains("overrideValues")) {
+            config.createSection("overrideValues");
+        }
+
+        if (!config.contains("defaultValues")) {
+            config.createSection("defaultValues");
+        }
+
+        save();
+    }
+
+    @Override
+    public void load() {
+        if (config.contains("floors")) {
+            floors = config.getStringList("floors");
+        }
+
+        if (config.contains("startFloor")) {
+            startFloor = config.getString("startFloor");
+        }
+
+        if (config.contains("endFloor")) {
+            endFloor = config.getString("endFloor");
+        }
+
+        if (config.contains("floorCount")) {
+            floorCount = config.getInt("floorCount");
+        }
+
+        if (config.contains("removeWhenPlayed")) {
+            removeWhenPlayed = config.getBoolean("removeWhenPlayed");
+        }
+
+        if (config.contains("overrideValues")) {
+            overrideValues = new WorldConfig(config.getConfigurationSection("overrideValues"));
+        }
+
+        if (config.contains("defaultValues")) {
+            defaultValues = new WorldConfig(config.getConfigurationSection("defaultValues"));
+        }
     }
 
 }

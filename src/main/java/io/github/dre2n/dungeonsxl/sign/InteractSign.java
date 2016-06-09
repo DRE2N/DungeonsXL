@@ -35,8 +35,8 @@ public class InteractSign extends DSign {
 
     private DSignType type = DSignTypeDefault.INTERACT;
 
-    public InteractSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public InteractSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

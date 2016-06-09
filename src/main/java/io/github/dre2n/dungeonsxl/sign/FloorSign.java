@@ -33,8 +33,8 @@ public class FloorSign extends DSign {
 
     private String floor;
 
-    public FloorSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public FloorSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
@@ -44,7 +44,6 @@ public class FloorSign extends DSign {
 
     @Override
     public void onInit() {
-        String[] lines = getSign().getLines();
         if (!lines[1].isEmpty()) {
             floor = lines[1];
         }

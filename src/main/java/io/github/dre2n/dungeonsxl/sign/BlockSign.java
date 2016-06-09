@@ -36,8 +36,8 @@ public class BlockSign extends DSign {
     private byte offBlockData = 0x0;
     private byte onBlockData = 0x0;
 
-    public BlockSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public BlockSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
@@ -47,7 +47,6 @@ public class BlockSign extends DSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
         if (!lines[1].isEmpty()) {
             String line1[] = lines[1].split(",");
             Material offBlock = Material.matchMaterial(line1[0]);

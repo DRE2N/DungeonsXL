@@ -39,8 +39,8 @@ public class ReadySign extends DSign {
 
     private GameType gameType;
 
-    public ReadySign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ReadySign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     /**
@@ -65,8 +65,8 @@ public class ReadySign extends DSign {
 
     @Override
     public void onInit() {
-        if (plugin.getGameTypes().getBySign(getSign()) != null) {
-            gameType = plugin.getGameTypes().getBySign(getSign());
+        if (plugin.getGameTypes().getBySign(this) != null) {
+            gameType = plugin.getGameTypes().getBySign(this);
 
         } else {
             gameType = GameTypeDefault.DEFAULT;
@@ -117,10 +117,10 @@ public class ReadySign extends DSign {
         if (getGameWorld().getSignClass().isEmpty() || dPlayer.getDClass() != null) {
             GameType forced = getGameWorld().getConfig().getForcedGameType();
             dPlayer.ready(forced == null ? gameType : forced);
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.PLAYER_READY));
+        }
 
-        } else {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.ERROR_READY));
+        if (dPlayer.isReady()) {
+            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(dPlayer.isReady() ? DMessages.PLAYER_READY : DMessages.ERROR_READY));
         }
     }
 

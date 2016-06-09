@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Daniel Saukel
+ * Copyright (C) 2012-2016 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ public enum DPermissions {
     IGNORE_TIME_LIMIT("ignoretimelimit", OP),
     INVITE("invite", OP),
     INSECURE("insecure", OP),
+    JOIN("join", TRUE),
     LEAVE("leave", TRUE),
     LIST("list", OP),
     LIVES("lives", TRUE),
@@ -58,6 +59,22 @@ public enum DPermissions {
     PORTAL("portal", OP),
     RELOAD("reload", OP),
     SAVE("save", OP),
+    /**
+     * Allows to open the settings menu.
+     */
+    SETTINGS("settings", TRUE),
+    /**
+     * Allows to modify dungeon settings unless they have an own node.
+     */
+    SETTINGS_EDIT("settings.edit", OP),
+    /**
+     * Allows to modify global settings.
+     */
+    SETTINGS_GLOBAL("settings.global", OP),
+    /**
+     * Allows to modify player settings unless they have an own node.
+     */
+    SETTINGS_PLAYER("settings.player", TRUE),
     SIGN("sign", OP),
     TEST("test", OP),
     UNINVITE("uninvite", OP),
@@ -65,7 +82,7 @@ public enum DPermissions {
     ADMINISTRATOR("*", OP),
     HALF_EDITOR("halfeditor", OP, ESCAPE, LIST, MESSAGE, SAVE),
     FULL_EDITOR("fulleditor", OP, HALF_EDITOR, EDIT, PLAY, SIGN, TEST),
-    HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, LEAVE, LIVES, MAIN),
+    HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, JOIN, LEAVE, LIVES, MAIN, SETTINGS, SETTINGS_PLAYER),
     FULL_PLAYER("fullplayer", OP, HALF_PLAYER, GROUP);
 
     public static final String PREFIX = "dxl.";

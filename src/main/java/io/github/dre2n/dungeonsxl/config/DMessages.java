@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.commons.config.Messages;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -26,6 +27,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public enum DMessages implements Messages {
 
+    ANNOUNCER_CMD("Announcer_Cmd", "&4&l=> &6USE &4/DXL JOIN &v1 &6TO JOIN &4&l<="),
+    ANNOUNCER_CLICK("Announcer_Click", "&4&l=> &6CLICK HERE TO JOIN &4&l<="),
     CMD_BREAK_PROTECTED_MODE("Cmd_Break_ProtectedMode", "&6You may not break blocks protected by DungeonsXL anymore."),
     CMD_BREAK_BREAK_MODE("Cmd_Break_BreakMode", "&6You may break a block protected by DungeonsXL."),
     CMD_CHAT_DUNGEON_CHAT("Cmd_Chat_DungeonChat", "&6You have entered the Dungeon-chat"),
@@ -80,10 +83,12 @@ public enum DMessages implements Messages {
     ERROR_NOT_IN_GROUP("Error_NotInGroup", "&4The player &6&v1&4 is not member of the group &6&v2&v4."),
     ERROR_NOT_INVITED("Error_NotInvited", "&4You are not invited to the group &6&v1&4."),
     ERROR_NOT_SAVED("Error_NotSaved", "&4The map &6&v1&4 has not been saved to the &6DungeonsXL/maps/ &4folder yet!"),
-    ERROR_TUTORIAL_NOT_EXIST("Error_TutorialNotExist", "&4Tutorial dungeon does not exist!"),
     ERROR_READY("Error_Ready", "&4Choose your class first!"),
-    ERROR_REQUIREMENTS("Error_Requirements", "&4You don't fulfill the requirements for this Dungeon!"),
+    ERROR_REQUIREMENTS("Error_Requirements", "&4You don't fulfill the requirements for this dungeon!"),
     ERROR_SIGN_WRONG_FORMAT("Error_SignWrongFormat", "&4The sign is not written correctly!"),
+    ERROR_TOO_MANY_INSTANCES("Error_TooManyInstances", "&4There are currently too many maps instantiated. Try it again in a few minutes!"),
+    ERROR_TOO_MANY_TUTORIALS("Error_TooManyTutorials", "&4There are currently too many tutorials running. Try it again in a few minutes!"),
+    ERROR_TUTORIAL_NOT_EXIST("Error_TutorialNotExist", "&4Tutorial dungeon does not exist!"),
     HELP_CMD_BREAK("Help_Cmd_Break", "/dxl break - Break a block protected by DungeonsXL"),
     HELP_CMD_CHAT("Help_Cmd_Chat", "/dxl chat - Change the chat mode"),
     HELP_CMD_CHATSPY("Help_Cmd_Chatspy", "/dxl chatspy - Dis/enables the spymode"),
@@ -101,6 +106,7 @@ public enum DMessages implements Messages {
     HELP_CMD_GROUP_SHOW("Help_Cmd_GroupShow", "/dxl group show [group] - Shows a group"),
     HELP_CMD_HELP("Help_Cmd_Help", "/dxl help <page> - Shows the help page"),
     HELP_CMD_INVITE("Help_Cmd_Invite", "/dxl invite <player> <dungeon> - Invite a player to edit a dungeon"),
+    HELP_CMD_JOIN("Help_Cmd_Join", "/dxl join [announcement] - Opens the GUI to join a group in an upcoming game"),
     HELP_CMD_ENTER("Help_Cmd_Enter", "/dxl enter ([joining group]) [target group] - Let the joining group enter the game of the target group"),
     HELP_CMD_LEAVE("Help_Cmd_Leave", "/dxl leave - Leaves the current dungeon"),
     HELP_CMD_LIST("Help_Cmd_List", "/dxl list ([dungeon|map|loaded]) ([dungeon]) - Lists all dungeons"),
@@ -111,6 +117,7 @@ public enum DMessages implements Messages {
     HELP_CMD_PORTAL("Help_Cmd_Portal", "/dxl portal - Creates a portal that leads into a dungeon"),
     HELP_CMD_RELOAD("Help_Cmd_Reload", "/dxl reload - Reloads the plugin"),
     HELP_CMD_SAVE("Help_Cmd_Save", "/dxl save - Saves the current dungeon"),
+    HELP_CMD_SETTINGS("Help_Cmd_Settings", "/dxl settings ([edit|global|player])- Opens the settings menu"),
     HELP_CMD_TEST("Help_Cmd_Test", "/dxl test - Starts the game in test mode"),
     HELP_CMD_UNINVITE("Help_Cmd_Uninvite", "/dxl uninvite <player> <dungeon> - Uninvite a player to edit a dungeon"),
     GROUP_CREATED("Group_Created", "&4&v1&6 created the group &4&v2&6!"),
@@ -126,6 +133,7 @@ public enum DMessages implements Messages {
     LOG_ERROR_NO_CONSOLE_COMMAND("Log_Error_NoConsoleCommand", "&6/dxl &v1&4 can not be executed as Console!"),
     LOG_GENERATE_NEW_WORLD("Log_GenerateNewWorld", "&6Generate new world..."),
     LOG_NEW_DUNGEON("Log_NewDungeon", "&6New Dungeon"),
+    LOG_NEW_PLAYER_DATA("Log_NewPlayerData", "&6A new player data file has been created and saved as &v1."),
     LOG_WORLD_GENERATION_FINISHED("Log_WorldGenerationFinished", "&6World generation finished!"),
     PLAYER_BLOCK_INFO("Player_BlockInfo", "&6Block-ID: &2&v1"),
     PLAYER_CHECKPOINT_REACHED("Player_CheckpointReached", "&6Checkpoint reached!"),
@@ -155,7 +163,17 @@ public enum DMessages implements Messages {
     PLAYER_TREASURES("Player_Treasures", "&1Treasures"),
     PLAYER_WAIT_FOR_OTHER_PLAYERS("Player_WaitForOtherPlayers", "&6Waiting for teammates..."),
     REQUIREMENT_FEE("Requirement_Fee", "&6You have been charged &4&v1 &6for entering the dungeon."),
-    REWARD_GENERAL("Reward_General", "&6You received &4&v1 &6for finishing the dungeon.");
+    REWARD_GENERAL("Reward_General", "&6You received &4&v1 &6for finishing the dungeon."),
+    SETTINGS_ANNOUNCEMENTS_1("Settings_Announcements1", "&fToggles personal"),
+    SETTINGS_ANNOUNCEMENTS_2("Settings_Announcements2", "&fgame announcements."),
+    SETTINGS_BREAK_1("Settings_Break1", "&fAllows you to break blocks"),
+    SETTINGS_BREAK_2("Settings_Break2", "&fprotected by DungeonsXL."),
+    SETTINGS_CHAT_SPY1("Settings_ChatSpy1", "&fAllows you to receive"),
+    SETTINGS_CHAT_SPY2("Settings_ChatSpy2", "&fall dungeon chat messages."),
+    SETTINGS_TITLE("Settings_Title", "&4Settings: &o"),
+    SETTINGS_TITLE_EDIT("Settings_Title_Edit", "Dungeon Setup"),
+    SETTINGS_TITLE_GLOBAL("Settings_Title_Global", "Global Configuration"),
+    SETTINGS_TITLE_PLAYER("Settings_Title_Player", "Player");
 
     private String identifier;
     private String message;
@@ -172,7 +190,7 @@ public enum DMessages implements Messages {
 
     @Override
     public String getMessage() {
-        return message;
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     @Override

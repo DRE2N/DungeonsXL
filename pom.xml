@@ -2,11 +2,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.11.4</version>
+    <version>0.12-SNAPSHOT${buildNo}</version>
     <packaging>jar</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
     <description>Create custom dungeons and adventure maps with ease!</description>
+    <properties>
+        <buildNo></buildNo>
+        <skipTests>true</skipTests>
+    </properties>
     <build>
         <finalName>dungeonsxl-${project.version}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -40,9 +44,20 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>io.github.dre2n.commons</pattern>
+                                    <shadedPattern>io.github.dre2n.util.commons</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>io.github.dre2n.caliburn</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.caliburn</shadedPattern>
+                                </relocation>
+                            </relocations>
                             <artifactSet>
                                 <includes>
                                     <include>io.github.dre2n:commons</include>
+                                    <include>io.github.dre2n:caliburn</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -53,9 +68,9 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.10-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -67,7 +82,17 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>commons</artifactId>
-            <version>0.5.2</version>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>caliburn</artifactId>
+            <version>0.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>itemsxl</artifactId>
+            <version>0.1.5</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
@@ -77,7 +102,7 @@
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>2.0.17-SNAPSHOT</version>
+            <version>2.0.18-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

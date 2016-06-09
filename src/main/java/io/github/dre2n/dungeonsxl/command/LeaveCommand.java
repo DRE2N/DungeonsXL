@@ -22,8 +22,10 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DEditPlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.command.CommandSender;
@@ -48,7 +50,8 @@ public class LeaveCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+
+        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
 
         if (GameWorld.getByWorld(player.getWorld()) != null) {
             if (GameWorld.getByWorld(player.getWorld()).isTutorial()) {
@@ -57,31 +60,29 @@ public class LeaveCommand extends BRCommand {
             }
         }
 
-        if (dPlayer != null) {
-            DGroup dGroup = DGroup.getByPlayer(player);
+        DGroup dGroup = DGroup.getByPlayer(player);
 
-            DPlayerEscapeEvent dPlayerEscapeEvent = new DPlayerEscapeEvent(dPlayer);
-            plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
-            DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
-            plugin.getServer().getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
-
-            if (dPlayerEscapeEvent.isCancelled() || dPlayerLeaveDGroupEvent.isCancelled()) {
-                return;
-            }
-
-            dPlayer.leave();
-            MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
-
-        } else {
-            DGroup dGroup = DGroup.getByPlayer(player);
-            if (dGroup != null) {
-                dGroup.removePlayer(player);
-                MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
-                return;
-            }
-
-            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
+        if (dGroup == null && !(dPlayer instanceof DEditPlayer)) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_JOIN_GROUP.getMessage());
+            return;
         }
+
+        DPlayerEscapeEvent dPlayerEscapeEvent = new DPlayerEscapeEvent(dPlayer);
+        plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
+        DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
+        plugin.getServer().getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
+
+        if (dPlayerEscapeEvent.isCancelled() || dPlayerLeaveDGroupEvent.isCancelled()) {
+            return;
+        }
+
+        if (dPlayer instanceof DInstancePlayer) {
+            ((DInstancePlayer) dPlayer).leave();
+        } else {
+            dGroup.removePlayer(player);
+        }
+
+        MessageUtil.sendMessage(player, DMessages.CMD_LEAVE_SUCCESS.getMessage());
     }
 
 }

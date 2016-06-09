@@ -186,20 +186,21 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null) {
-            target = GameWorld.load(dGroup.getMapName());
+            target = new GameWorld(dGroup.getMapName());
             dGroup.setGameWorld(target);
         }
 
         if (target == null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_DUNGEON_NOT_EXIST, DGroup.getByPlayer(player).getMapName()));
+            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(DGroup.getByPlayer(player).getMapName()));
             return;
         }
 
-        if (game != null) {
+        if (game == null) {
+            game = new Game(dGroup, target);
+        } else {
             game.setWorld(target);
+            dGroup.setGameWorld(target);
         }
-
-        dGroup.setGameWorld(target);
 
         new DGamePlayer(player, target);
     }

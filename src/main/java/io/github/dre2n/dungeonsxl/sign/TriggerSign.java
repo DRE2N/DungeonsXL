@@ -38,8 +38,8 @@ public class TriggerSign extends DSign {
     private int triggerId;
     private boolean initialized;
 
-    public TriggerSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public TriggerSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

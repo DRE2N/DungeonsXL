@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Daniel Saukel
+ * Copyright (C) 2012-2016 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,9 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.PlayerData;
 import io.github.dre2n.dungeonsxl.global.DPortal;
+import java.io.File;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,15 +34,19 @@ public class DGlobalPlayer {
 
     protected Player player;
 
+    private PlayerData data;
+
     private boolean breakMode;
     private boolean chatSpyMode;
     private DPortal creatingPortal;
+    private boolean announcerEnabled = true;
 
     private ItemStack[] respawnInventory;
     private ItemStack[] respawnArmor;
 
     public DGlobalPlayer(Player player) {
         this.player = player;
+        loadPlayerData(new File(DungeonsXL.PLAYERS, player.getUniqueId().toString() + ".yml"));
 
         plugin.getDPlayers().addPlayer(this);
     }
@@ -50,6 +56,7 @@ public class DGlobalPlayer {
         breakMode = dPlayer.isInBreakMode();
         chatSpyMode = dPlayer.isInChatSpyMode();
         creatingPortal = dPlayer.getPortal();
+        announcerEnabled = dPlayer.isAnnouncerEnabled();
         respawnInventory = dPlayer.getRespawnInventory();
         respawnArmor = dPlayer.getRespawnArmor();
 
@@ -61,6 +68,20 @@ public class DGlobalPlayer {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * @return the saved data
+     */
+    public PlayerData getData() {
+        return data;
+    }
+
+    /**
+     * Load / reload a new instance of PlayerData
+     */
+    public void loadPlayerData(File file) {
+        data = new PlayerData(file);
     }
 
     /**
@@ -113,6 +134,21 @@ public class DGlobalPlayer {
      */
     public void setCreatingPortal(DPortal dPortal) {
         creatingPortal = dPortal;
+    }
+
+    /**
+     * @return if the players receives announcer messages
+     */
+    public boolean isAnnouncerEnabled() {
+        return announcerEnabled;
+    }
+
+    /**
+     * @param enabled
+     * set if the players receives announcer messages
+     */
+    public void setAnnouncerEnabled(boolean enabled) {
+        announcerEnabled = enabled;
     }
 
     /**

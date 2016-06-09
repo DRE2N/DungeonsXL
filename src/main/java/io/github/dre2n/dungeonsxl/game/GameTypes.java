@@ -17,9 +17,9 @@
 package io.github.dre2n.dungeonsxl.game;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.sign.DSign;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.block.Sign;
 
 /**
  * @author Daniel Saukel
@@ -60,7 +60,7 @@ public class GameTypes {
     /**
      * @return the game type which has the enum value sign text in the second line of the sign
      */
-    public GameType getBySign(Sign sign) {
+    public GameType getBySign(DSign sign) {
         String[] lines = sign.getLines();
 
         for (GameType type : types) {

@@ -20,6 +20,7 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
@@ -95,7 +96,7 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());
 
             // Tp Player
-            new DGamePlayer(player, editWorld.getWorld(), true);
+            new DEditPlayer(player, editWorld.getWorld());
         }
     }
 

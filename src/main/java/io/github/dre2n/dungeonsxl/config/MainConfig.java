@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.config;
 import io.github.dre2n.commons.config.BRConfig;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,9 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 5;
+    public static final int CONFIG_VERSION = 8;
 
-    private String language = "en";
+    private String language = "english";
     private boolean enableEconomy = false;
 
     /* Tutorial */
@@ -43,13 +44,18 @@ public class MainConfig extends BRConfig {
     /* Misc */
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
+    private List<Short> groupColorPriority = new ArrayList<>(Arrays.asList((short) 11, (short) 14, (short) 4, (short) 5, (short) 10, (short) 1, (short) 0, (short) 15));
+    private int maxInstances = 10;
 
-    /* Secure Mode*/
+    /* Secure Mode */
     private boolean secureModeEnabled = false;
     private double secureModeCheckInterval = 5;
     private boolean openInventories = false;
     private boolean dropItems = false;
     private List<String> editCommandWhitelist = new ArrayList<>();
+
+    /* Permissions bridge */
+    private List<String> editPermissions = new ArrayList<>();
 
     /* Default Dungeon Settings */
     private WorldConfig defaultWorldConfig;
@@ -71,24 +77,56 @@ public class MainConfig extends BRConfig {
     }
 
     /**
-     * @return the enableEconomy
+     * @param language
+     * the language to set
      */
-    public boolean enableEconomy() {
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    /**
+     * @return if DungeonsXL should use economy features provided by Vault
+     */
+    public boolean isEconomyEnabled() {
         return enableEconomy;
     }
 
     /**
-     * @return the tutorialActivated
+     * @param enabled
+     * if DungeonsXL should use economy features provided by Vault
+     */
+    public void setEconomyEnabled(boolean enabled) {
+        enableEconomy = enabled;
+    }
+
+    /**
+     * @return if the tutorial is activated
      */
     public boolean isTutorialActivated() {
         return tutorialActivated;
     }
 
     /**
-     * @return the tutorialDungeon
+     * @param activated
+     * if new players start in a tutorial
+     */
+    public void setTutorialActivated(boolean activated) {
+        tutorialActivated = activated;
+    }
+
+    /**
+     * @return the tutorial dungeon
      */
     public String getTutorialDungeon() {
         return tutorialDungeon;
+    }
+
+    /**
+     * @param dungeon
+     * the tutorial dungeon to set
+     */
+    public void setTutorialDungeon(String dungeon) {
+        tutorialDungeon = dungeon;
     }
 
     /**
@@ -99,17 +137,13 @@ public class MainConfig extends BRConfig {
     }
 
     /**
-     * @return if the floor title shall be sent
+     * <<<<<<< HEAD
+     *
+     * @param group
+     * the group the player gets when he plays the tutorial
      */
-    public boolean getSendFloorTitle() {
-        return sendFloorTitle;
-    }
-
-    /**
-     * @return the custom external mob providers
-     */
-    public Map<String, Object> getExternalMobProviders() {
-        return externalMobProviders;
+    public void setTutorialStartGroup(String group) {
+        tutorialStartGroup = group;
     }
 
     /**
@@ -120,10 +154,78 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @param group
+     * the group the player gets when he finshs the tutorial
+     */
+    public void setTutorialEndGroup(String group) {
+        tutorialEndGroup = group;
+    }
+
+    /**
+     * @return if the floor title shall be sent
+     */
+    public boolean isSendFloorTitleEnabled() {
+        return sendFloorTitle;
+    }
+
+    /**
+     * @param enabled
+     * if the floor title shall be sent
+     */
+    public void setSendFloorTitleEnabled(boolean enabled) {
+        sendFloorTitle = enabled;
+    }
+
+    /**
+     * @return the custom external mob providers
+     */
+    public Map<String, Object> getExternalMobProviders() {
+        return externalMobProviders;
+    }
+
+    /**
+     * @return the group colors
+     */
+    public List<Short> getGroupColorPriority() {
+        return groupColorPriority;
+    }
+
+    /**
+     * @param dataValues
+     * wool data values
+     */
+    public void setGroupColorPriority(List<Short> dataValues) {
+        groupColorPriority = dataValues;
+    }
+
+    /**
+     * @return the maximum amount of worlds to instantiate at once
+     */
+    public int getMaxInstances() {
+        return maxInstances;
+    }
+
+    /**
+     * @param maxInstances
+     * the maximum amount of worlds to instantiate at once
+     */
+    public void setMaxInstances(int maxInstances) {
+        this.maxInstances = maxInstances;
+    }
+
+    /**
      * @return if the secure mode is enabled
      */
     public boolean isSecureModeEnabled() {
         return secureModeEnabled;
+    }
+
+    /**
+     * @param enabled
+     * if the secure mode is enabled
+     */
+    public void setSecureModeEnabled(boolean enabled) {
+        secureModeEnabled = enabled;
     }
 
     /**
@@ -134,10 +236,26 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @param openInventories
+     * if inventories can be opened in edit mode
+     */
+    public void setOpenInventories(boolean openInventories) {
+        this.openInventories = openInventories;
+    }
+
+    /**
      * @return if players may drop items while editing; false if secure mode disabled
      */
     public boolean getDropItems() {
         return dropItems && secureModeEnabled;
+    }
+
+    /**
+     * @param dropItems
+     * if items may be dropped in edit mode
+     */
+    public void setDropItems(boolean dropItems) {
+        this.dropItems = dropItems;
     }
 
     /**
@@ -148,10 +266,25 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @param interval
+     * the interval for the check task
+     */
+    public void setSecureModeCheckInterval(double interval) {
+        secureModeCheckInterval = interval;
+    }
+
+    /**
      * @return the editCommandWhitelist
      */
     public List<String> getEditCommandWhitelist() {
         return editCommandWhitelist;
+    }
+
+    /**
+     * @return the edit mode permissions
+     */
+    public List<String> getEditPermissions() {
+        return editPermissions;
     }
 
     /**
@@ -196,6 +329,14 @@ public class MainConfig extends BRConfig {
             config.createSection("externalMobProviders");
         }
 
+        if (!config.contains("groupColorPriority")) {
+            config.set("groupColorPriority", groupColorPriority);
+        }
+
+        if (!config.contains("maxInstances")) {
+            config.set("maxInstances", maxInstances);
+        }
+
         if (!config.contains("secureMode.enabled")) {
             config.set("secureMode.enabled", secureModeEnabled);
         }
@@ -214,6 +355,10 @@ public class MainConfig extends BRConfig {
 
         if (!config.contains("secureMode.editCommandWhitelist")) {
             config.set("secureMode.editCommandWhitelist", editCommandWhitelist);
+        }
+
+        if (!config.contains("editPermissions")) {
+            config.set("editPermissions", editPermissions);
         }
 
         /* Default Dungeon Config */
@@ -259,6 +404,14 @@ public class MainConfig extends BRConfig {
             externalMobProviders = config.getConfigurationSection("externalMobProviders").getValues(false);
         }
 
+        if (config.contains("groupColorPriority")) {
+            groupColorPriority = config.getShortList("groupColorPriority");
+        }
+
+        if (config.contains("maxInstances")) {
+            maxInstances = config.getInt("maxInstances");
+        }
+
         if (config.contains("secureMode.enabled")) {
             secureModeEnabled = config.getBoolean("secureMode.enabled");
         }
@@ -279,11 +432,14 @@ public class MainConfig extends BRConfig {
             editCommandWhitelist = config.getStringList("secureMode.editCommandWhitelist");
         }
 
+        if (config.contains("editPermissions")) {
+            editPermissions = config.getStringList("editPermissions");
+        }
+
         /* Default Dungeon Config */
         ConfigurationSection configSection = config.getConfigurationSection("default");
         if (configSection != null) {
             defaultWorldConfig = new WorldConfig(configSection);
-            WorldConfig.defaultConfig = defaultWorldConfig;// TODO
         }
     }
 

@@ -44,13 +44,12 @@ public class CommandSign extends DSign {
     private String executor;
     private boolean initialized;
 
-    public CommandSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public CommandSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
     public boolean check() {
-        String lines[] = getSign().getLines();
         if (lines[1].isEmpty() || lines[2].isEmpty()) {
             return false;
         }
@@ -70,7 +69,6 @@ public class CommandSign extends DSign {
 
     @Override
     public void onInit() {
-        String[] lines = getSign().getLines();
         String[] attributes = lines[2].split(",");
 
         command = lines[1];

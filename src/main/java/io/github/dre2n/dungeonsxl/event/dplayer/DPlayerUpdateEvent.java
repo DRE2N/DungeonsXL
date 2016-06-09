@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer;
 
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -35,7 +35,7 @@ public class DPlayerUpdateEvent extends DPlayerEvent implements Cancellable {
     private boolean kick;
     private boolean triggerAllInDistance;
 
-    public DPlayerUpdateEvent(DGamePlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean respawnInventory, boolean offline, boolean kick, boolean triggerAllInDistance) {
+    public DPlayerUpdateEvent(DInstancePlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean respawnInventory, boolean offline, boolean kick, boolean triggerAllInDistance) {
         super(dPlayer);
         this.locationValid = locationValid;
         this.teleportWolf = teleportWolf;

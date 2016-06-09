@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Daniel Saukel
+ * Copyright (C) 2012-2016 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import org.bukkit.Bukkit;
@@ -72,7 +73,7 @@ public class TimeIsRunningTask extends BukkitRunnable {
                 if (!dPlayerKickEvent.isCancelled()) {
                     MessageUtil.broadcastMessage(DMessages.PLAYER_TIME_KICK.getMessage(player.getName()));
                     dPlayer.leave();
-                    if (dGroup.getGameWorld().getConfig().getKeepInventoryOnEscape()) {
+                    if (Game.getByDGroup(dGroup).getRules().getKeepInventoryOnEscape()) {
                         dPlayer.applyRespawnInventory();
                     }
                 }

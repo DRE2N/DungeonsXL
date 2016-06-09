@@ -18,8 +18,8 @@ package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
  * @author Milan Albrecht, Daniel Saukel
  */
 public class EscapeCommand extends BRCommand {
-
-    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public EscapeCommand() {
         setCommand("escape");
@@ -46,14 +44,12 @@ public class EscapeCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
-        if (dPlayer != null) {
+        DEditPlayer dPlayer = DEditPlayer.getByPlayer(player);
 
-            if (!dPlayer.isEditing()) {
-                MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
-                return;
-            }
+        if (DGamePlayer.getByPlayer(player) != null) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
 
+        } else if (dPlayer != null) {
             dPlayer.escape();
 
             EditWorld editWorld = EditWorld.getByWorld(dPlayer.getWorld());

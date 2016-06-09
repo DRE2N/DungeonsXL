@@ -31,8 +31,8 @@ public class EndSign extends DSign {
 
     private DSignType type = DSignTypeDefault.END;
 
-    public EndSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public EndSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override

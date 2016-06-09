@@ -16,23 +16,26 @@
  */
 package io.github.dre2n.dungeonsxl;
 
+import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
 import io.github.dre2n.commons.util.FileUtil;
+import io.github.dre2n.dungeonsxl.announcer.Announcers;
 import io.github.dre2n.dungeonsxl.command.*;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.DataConfig;
+import io.github.dre2n.dungeonsxl.config.GlobalData;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.global.GlobalProtections;
 import io.github.dre2n.dungeonsxl.listener.*;
+import io.github.dre2n.dungeonsxl.mob.DMobTypes;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProviders;
+import io.github.dre2n.dungeonsxl.player.DClasses;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
@@ -42,6 +45,8 @@ import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
 import io.github.dre2n.dungeonsxl.sign.DSignTypes;
+import io.github.dre2n.dungeonsxl.sign.SignScripts;
+import io.github.dre2n.dungeonsxl.task.AnnouncerTask;
 import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
 import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
@@ -49,6 +54,7 @@ import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -63,8 +69,19 @@ public class DungeonsXL extends BRPlugin {
     private static DungeonsXL instance;
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
+    public static File DUNGEONS;
+    public static File LANGUAGES;
+    public static File MAPS;
+    public static File PLAYERS;
+    public static File SCRIPTS;
+    public static File ANNOUNCERS;
+    public static File CLASSES;
+    public static File MOBS;
+    public static File SIGNS;
 
-    private DataConfig dataConfig;
+    private CaliburnAPI caliburn;
+
+    private GlobalData globalData;
     private MainConfig mainConfig;
     private MessageConfig messageConfig;
 
@@ -78,7 +95,12 @@ public class DungeonsXL extends BRPlugin {
     private GlobalProtections protections;
     private ExternalMobProviders dMobProviders;
     private DPlayers dPlayers;
+    private Announcers announcers;
+    private DClasses dClasses;
+    private DMobTypes dMobTypes;
+    private SignScripts signScripts;
 
+    private BukkitTask announcerTask;
     private BukkitTask worldUnloadTask;
     private BukkitTask lazyUpdateTask;
     private BukkitTask updateTask;
@@ -96,15 +118,16 @@ public class DungeonsXL extends BRPlugin {
          * ####~BRPluginSettings~####
          * ##########################
          * #~Internals~##~~v1_7_R3+~#
-         * #~SpigotAPI~##~~~false~~~#
+         * #~SpigotAPI~##~~~~true~~~#
          * #~~~~UUID~~~##~~~~true~~~#
          * #~~Economy~~##~~~~true~~~#
          * #Permissions##~~~~true~~~#
          * #~~Metrics~~##~~~~true~~~#
+         * #Resource ID##~~~~9488~~~#
          * ##########################
          */
 
-        settings = new BRPluginSettings(false, true, true, true, true, Internals.andHigher(Internals.v1_7_R3));
+        settings = new BRPluginSettings(true, true, true, true, true, 9488, Internals.andHigher(Internals.v1_7_R3));
     }
 
     @Override
@@ -112,17 +135,17 @@ public class DungeonsXL extends BRPlugin {
         super.onEnable();
 
         instance = this;
+        loadCaliburnAPI();
 
-        // InitFolders
         initFolders();
 
         // Load Language
-        loadMessageConfig(new File(getDataFolder(), "languages/en.yml"));
+        loadMessageConfig(new File(LANGUAGES, "english.yml"));
         // Load Config
-        loadDataConfig(new File(getDataFolder(), "data.yml"));
+        loadGlobalData(new File(getDataFolder(), "data.yml"));
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
-        loadMessageConfig(new File(getDataFolder(), "languages/" + mainConfig.getLanguage() + ".yml"));
+        loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
         loadDCommands();
         DPermissions.register();
         loadGameTypes();
@@ -134,8 +157,13 @@ public class DungeonsXL extends BRPlugin {
         loadGlobalProtections();
         loadExternalMobProviders();
         loadDPlayers();
+        loadAnnouncers(ANNOUNCERS);
+        loadDClasses(CLASSES);
+        loadDMobTypes(MOBS);
+        loadSignScripts(SIGNS);
 
         manager.registerEvents(new EntityListener(), this);
+        manager.registerEvents(new GUIListener(), this);
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new BlockListener(), this);
         manager.registerEvents(new WorldListener(), this);
@@ -148,6 +176,7 @@ public class DungeonsXL extends BRPlugin {
         loadAll();
 
         // Tasks
+        startAnnouncerTask(200L);
         startWorldUnloadTask(1200L);
         startLazyUpdateTask(20L);
         startUpdateTask(20L);
@@ -190,19 +219,49 @@ public class DungeonsXL extends BRPlugin {
             getDataFolder().mkdir();
         }
 
-        File dungeons = new File(getDataFolder() + "/dungeons");
-        if (!dungeons.exists()) {
-            dungeons.mkdir();
+        DUNGEONS = new File(getDataFolder(), "dungeons");
+        if (!DUNGEONS.exists()) {
+            DUNGEONS.mkdir();
         }
 
-        File languages = new File(getDataFolder() + "/languages");
-        if (!languages.exists()) {
-            languages.mkdir();
+        LANGUAGES = new File(getDataFolder(), "languages");
+        if (!LANGUAGES.exists()) {
+            LANGUAGES.mkdir();
         }
 
-        File maps = new File(getDataFolder() + "/maps");
-        if (!maps.exists()) {
-            maps.mkdir();
+        MAPS = new File(getDataFolder(), "maps");
+        if (!MAPS.exists()) {
+            MAPS.mkdir();
+        }
+
+        PLAYERS = new File(getDataFolder(), "players");
+        if (!PLAYERS.exists()) {
+            PLAYERS.mkdir();
+        }
+
+        SCRIPTS = new File(getDataFolder(), "scripts");
+        if (!SCRIPTS.exists()) {
+            SCRIPTS.mkdir();
+        }
+
+        ANNOUNCERS = new File(SCRIPTS, "announcers");
+        if (!ANNOUNCERS.exists()) {
+            ANNOUNCERS.mkdir();
+        }
+
+        CLASSES = new File(SCRIPTS, "classes");
+        if (!CLASSES.exists()) {
+            CLASSES.mkdir();
+        }
+
+        MOBS = new File(SCRIPTS, "mobs");
+        if (!MOBS.exists()) {
+            MOBS.mkdir();
+        }
+
+        SIGNS = new File(SCRIPTS, "signs");
+        if (!SIGNS.exists()) {
+            SIGNS.mkdir();
         }
     }
 
@@ -243,7 +302,7 @@ public class DungeonsXL extends BRPlugin {
         }
     }
 
-    // Getters & loaders
+    /* Getters and loaders */
     /**
      * @return the plugin instance
      */
@@ -252,17 +311,35 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the loaded instance of DataConfig
+     * @return the loaded instance of CaliburnAPI
      */
-    public DataConfig getDataConfig() {
-        return dataConfig;
+    public CaliburnAPI getCaliburnAPI() {
+        return caliburn;
     }
 
     /**
-     * load / reload a new instance of MainConfig
+     * load / reload a new instance of CaliburnAPI
      */
-    public void loadDataConfig(File file) {
-        dataConfig = new DataConfig(file);
+    public void loadCaliburnAPI() {
+        if (manager.isPluginEnabled("ItemsXL")) {
+            this.caliburn = ItemsXL.getInstance().getAPI();
+        } else {
+            this.caliburn = new CaliburnAPI(this);
+        }
+    }
+
+    /**
+     * @return the loaded instance of GlobalData
+     */
+    public GlobalData getGlobalData() {
+        return globalData;
+    }
+
+    /**
+     * load / reload a new instance of GlobalData
+     */
+    public void loadGlobalData(File file) {
+        globalData = new GlobalData(file);
     }
 
     /**
@@ -318,6 +395,7 @@ public class DungeonsXL extends BRPlugin {
                 new GameCommand(),
                 new GroupCommand(),
                 new InviteCommand(),
+                new JoinCommand(),
                 new EnterCommand(),
                 new LeaveCommand(),
                 new ListCommand(),
@@ -463,10 +541,82 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
+     * @return the loaded instance of Announcers
+     */
+    public Announcers getAnnouncers() {
+        return announcers;
+    }
+
+    /**
+     * load / reload a new instance of Announcers
+     */
+    public void loadAnnouncers(File file) {
+        announcers = new Announcers(file);
+    }
+
+    /**
+     * @return the loaded instance of DClasses
+     */
+    public DClasses getDClasses() {
+        return dClasses;
+    }
+
+    /**
+     * load / reload a new instance of DClasses
+     */
+    public void loadDClasses(File file) {
+        dClasses = new DClasses(file);
+    }
+
+    /**
+     * @return the loaded instance of DMobTypes
+     */
+    public DMobTypes getDMobTypes() {
+        return dMobTypes;
+    }
+
+    /**
+     * load / reload a new instance of DMobTypes
+     */
+    public void loadDMobTypes(File file) {
+        dMobTypes = new DMobTypes(file);
+    }
+
+    /**
+     * @return the loaded instance of SignScripts
+     */
+    public SignScripts getSignScripts() {
+        return signScripts;
+    }
+
+    /**
+     * load / reload a new instance of SignScripts
+     */
+    public void loadSignScripts(File file) {
+        signScripts = new SignScripts(file);
+    }
+
+    /**
      * @return the worldUnloadTask
      */
     public BukkitTask getWorldUnloadTask() {
         return worldUnloadTask;
+    }
+
+    /**
+     * start a new AnnouncerTask
+     */
+    public void startAnnouncerTask(long period) {
+        if (!announcers.getAnnouncers().isEmpty()) {
+            announcerTask = new AnnouncerTask(announcers).runTaskTimer(this, 0L, period);
+        }
+    }
+
+    /**
+     * @return the AnnouncerTask
+     */
+    public BukkitTask getAnnouncerTask() {
+        return announcerTask;
     }
 
     /**
@@ -530,13 +680,6 @@ public class DungeonsXL extends BRPlugin {
      */
     public List<EditWorld> getEditWorlds() {
         return editWorlds;
-    }
-
-    /**
-     * @return the defaultConfig
-     */
-    public WorldConfig getDefaultConfig() {
-        return WorldConfig.defaultConfig;// TODO
     }
 
     /**

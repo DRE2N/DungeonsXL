@@ -52,8 +52,8 @@ public class ExternalMobSign extends DSign implements MobSign {
     private LivingEntity externalMob;
     private List<Entity> externalMobs = new ArrayList<>();
 
-    public ExternalMobSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public ExternalMobSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
@@ -196,7 +196,6 @@ public class ExternalMobSign extends DSign implements MobSign {
 
     @Override
     public boolean check() {
-        String lines[] = getSign().getLines();
         if (lines[1].isEmpty() || lines[2].isEmpty()) {
             return false;
         }
@@ -216,8 +215,6 @@ public class ExternalMobSign extends DSign implements MobSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
-
         String mob = lines[1];
         if (mob != null) {
             String[] attributes = lines[2].split(",");

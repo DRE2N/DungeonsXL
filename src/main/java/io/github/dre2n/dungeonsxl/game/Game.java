@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.game;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
+import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -33,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -47,6 +50,7 @@ public class Game {
     private boolean started;
     private GameType type;
     private GameWorld world;
+    private GameRules rules;
     private int waveCount;
     private Map<String, Integer> gameKills = new HashMap<>();
     private Map<String, Integer> waveKills = new HashMap<>();
@@ -54,8 +58,29 @@ public class Game {
     public Game(DGroup dGroup) {
         dGroups.add(dGroup);
         started = false;
+        fetchRules();
 
         plugin.getGames().add(this);
+    }
+
+    public Game(DGroup dGroup, GameWorld world) {
+        dGroups.add(dGroup);
+        started = false;
+        this.world = world;
+        fetchRules();
+
+        plugin.getGames().add(this);
+    }
+
+    public Game(DGroup dGroup, String worldName) {
+        plugin.getGames().add(this);
+
+        dGroups.add(dGroup);
+        started = false;
+        world = new GameWorld();
+        dGroup.setGameWorld(world);
+        world.load(worldName);
+        fetchRules();
     }
 
     public Game(DGroup dGroup, GameType type, GameWorld world) {
@@ -67,6 +92,7 @@ public class Game {
         this.type = type;
         this.world = world;
         this.started = true;
+        fetchRules();
 
         plugin.getGames().add(this);
     }
@@ -136,11 +162,71 @@ public class Game {
     }
 
     /**
-     * @param gameWorld
+     * @param world
      * the GameWorld to connect to the Game
      */
     public void setWorld(GameWorld world) {
         this.world = world;
+    }
+
+    /**
+     * @return the GameRules
+     */
+    public GameRules getRules() {
+        return rules;
+    }
+
+    /**
+     * @param rules
+     * the GameRules to set
+     */
+    public void setRules(GameRules rules) {
+        this.rules = rules;
+    }
+
+    /**
+     * Fetchs the rules with the following priority:
+     * 1. Game type
+     * 2. Dungeon config: Override values
+     * 3. Floor config
+     * 4. Dungeon config: Default values
+     * 5. Main config: Default values
+     * 6. The default values
+     */
+    public void fetchRules() {
+        DungeonConfig dungeonConfig = null;
+        if (getDungeon() != null) {
+            dungeonConfig = getDungeon().getConfig();
+        }
+
+        WorldConfig floorConfig = null;
+        if (world != null) {
+            floorConfig = world.getConfig();
+        }
+
+        GameRules finalRules = new GameRules();
+
+        if (type != null) {
+            finalRules.apply(type);
+        }
+
+        if (dungeonConfig != null && dungeonConfig.getOverrideValues() != null) {
+            finalRules.apply(dungeonConfig.getOverrideValues());
+        }
+
+        if (floorConfig != null) {
+            finalRules.apply(floorConfig);
+        }
+
+        if (dungeonConfig != null && dungeonConfig.getDefaultValues() != null) {
+            finalRules.apply(dungeonConfig.getDefaultValues());
+        }
+
+        finalRules.apply(plugin.getMainConfig().getDefaultWorldConfig());
+
+        finalRules.apply(GameRules.DEFAULT_VALUES);
+
+        rules = finalRules;
     }
 
     /**
@@ -287,7 +373,7 @@ public class Game {
             }
         }
 
-        int delay = world.getConfig().getTimeToNextWave();
+        int delay = rules.getTimeToNextWave();
         sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));
 
         new BukkitRunnable() {
@@ -347,6 +433,15 @@ public class Game {
         }
 
         return null;
+    }
+
+    public static Game getByWorld(World world) {
+        GameWorld gameWorld = GameWorld.getByWorld(world);
+        if (gameWorld != null) {
+            return getByGameWorld(gameWorld);
+        } else {
+            return null;
+        }
     }
 
 }

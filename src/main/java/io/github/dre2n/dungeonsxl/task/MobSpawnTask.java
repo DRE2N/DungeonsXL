@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.task;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
 import io.github.dre2n.dungeonsxl.sign.DMobSign;
@@ -71,10 +72,10 @@ public class MobSpawnTask extends BukkitRunnable {
                 }
 
                 // Check custom mobs
-                DMobType mobType = DMobType.getByName(sign.getMob(), gameWorld.getConfig().getMobTypes());
+                DMobType mobType = DungeonsXL.getInstance().getDMobTypes().getByName(sign.getMob());
 
                 if (mobType != null) {
-                    mobType.spawn(GameWorld.getByWorld(world), spawnLoc);
+                    mobType.spawn(gameWorld, spawnLoc);
                 }
 
                 // Set the amount

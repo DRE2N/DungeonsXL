@@ -42,8 +42,10 @@ public enum DSignTypeDefault implements DSignType {
     PLACE("Place", "place", false, PlaceSign.class),
     READY("Ready", "ready", true, ReadySign.class),
     REDSTONE("Redstone", "redstone", false, RedstoneSign.class),
+    SCRIPT("Script", "script", false, ScriptSign.class),
     SOUND_MESSAGE("SoundMSG", "soundmsg", false, SoundMessageSign.class),
     START("Start", "start", true, StartSign.class),
+    TELEPORT("Teleport", "teleport", false, TeleportSign.class),
     TRIGGER("Trigger", "trigger", true, TriggerSign.class),
     WAVE("Wave", "wave", false, WaveSign.class);
 

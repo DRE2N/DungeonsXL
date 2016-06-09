@@ -28,8 +28,8 @@ public class PlaceSign extends DSign {
 
     private DSignType type = DSignTypeDefault.PLACE;
 
-    public PlaceSign(Sign sign, GameWorld gameWorld) {
-        super(sign, gameWorld);
+    public PlaceSign(Sign sign, String[] lines, GameWorld gameWorld) {
+        super(sign, lines, gameWorld);
     }
 
     @Override
@@ -39,7 +39,6 @@ public class PlaceSign extends DSign {
 
     @Override
     public void onInit() {
-        String lines[] = getSign().getLines();
         getGameWorld().getPlaceableBlocks().add(new GamePlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
         getSign().getBlock().setType(Material.AIR);
     }

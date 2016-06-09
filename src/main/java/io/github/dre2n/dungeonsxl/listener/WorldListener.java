@@ -16,10 +16,12 @@
  */
 package io.github.dre2n.dungeonsxl.listener;
 
+import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 /**
@@ -32,6 +34,15 @@ public class WorldListener implements Listener {
         GameWorld gameWorld = GameWorld.getByWorld(event.getWorld());
         if (gameWorld != null) {
             if (gameWorld.getLoadedChunks().contains(event.getChunk())) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onWeatherChange(WeatherChangeEvent event) {
+        if (EditWorld.getByWorld(event.getWorld()) != null) {
+            if (event.toWeatherState()) {
                 event.setCancelled(true);
             }
         }
