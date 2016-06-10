@@ -362,6 +362,14 @@ public class DGamePlayer extends DInstancePlayer {
     /* Actions */
     @Override
     public void leave() {
+        leave(true);
+    }
+
+    /**
+     * @param message
+     * if messages should be sent
+     */
+    public void leave(boolean message) {
         GameRules rules = Game.getByWorld(getWorld()).getRules();
         delete();
 
@@ -380,7 +388,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         DGroup dGroup = DGroup.getByPlayer(getPlayer());
         if (dGroup != null) {
-            dGroup.removePlayer(getPlayer());
+            dGroup.removePlayer(getPlayer(), message);
         }
 
         GameWorld gameWorld = GameWorld.getByWorld(getWorld());
@@ -436,7 +444,9 @@ public class DGamePlayer extends DInstancePlayer {
                 // Captain here!
                 Player newCaptain = dGroup.getPlayers().get(0);
                 dGroup.setCaptain(newCaptain);
-                MessageUtil.sendMessage(newCaptain, DMessages.PLAYER_NEW_CAPTAIN.getMessage());
+                if (message) {
+                    MessageUtil.sendMessage(newCaptain, DMessages.PLAYER_NEW_CAPTAIN.getMessage());
+                }
                 // ...*flies away*
             }
         }
@@ -608,6 +618,12 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
+    /**
+     * The DGamePlayer finishs the current floor.
+     *
+     * @param specifiedFloor
+     * the name of the next floor
+     */
     public void finishFloor(String specifiedFloor) {
         MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_DUNGEON.getMessage());
         finished = true;
@@ -679,10 +695,17 @@ public class DGamePlayer extends DInstancePlayer {
         dGroup.startGame(game);
     }
 
+    /**
+     * The DGamePlayer finishs the current game.
+     */
     public void finish() {
         finish(true);
     }
 
+    /**
+     * @param message
+     * if messages should be sent
+     */
     public void finish(boolean message) {
         if (message) {
             MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_DUNGEON.getMessage());
@@ -737,7 +760,7 @@ public class DGamePlayer extends DInstancePlayer {
         plugin.getServer().getPluginManager().callEvent(dGroupRewardEvent);
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);
-            dPlayer.leave();
+            dPlayer.leave(false);
 
             if (!dGroupRewardEvent.isCancelled()) {
                 for (Reward reward : dGroup.getRewards()) {

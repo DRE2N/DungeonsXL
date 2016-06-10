@@ -157,33 +157,59 @@ public class DGroup {
     }
 
     /**
+     * Sends messages by default.
+     *
      * @param player
      * the player to add
      */
     public void addPlayer(Player player) {
+        addPlayer(player, true);
+    }
+
+    /**
+     * @param player
+     * the player to add
+     * @param message
+     * if messages should be sent
+     */
+    public void addPlayer(Player player, boolean message) {
         DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(DGamePlayer.getByPlayer(player), false, this);
         plugin.getServer().getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
-            sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_PLAYER_JOINED, player.getName()));
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_JOIN_GROUP));
+            if (message) {
+                sendMessage(DMessages.GROUP_PLAYER_JOINED.getMessage(player.getName()));
+                MessageUtil.sendMessage(player, DMessages.PLAYER_JOIN_GROUP.getMessage());
+            }
 
             players.add(player);
         }
     }
 
     /**
+     * Sends messages by default.
+     *
      * @param player
      * the player to remove
      */
     public void removePlayer(Player player) {
+        removePlayer(player, true);
+    }
+
+    /**
+     * @param player
+     * the player to remove
+     * @param message
+     * if messages should be sent
+     */
+    public void removePlayer(Player player, boolean message) {
         players.remove(player);
         GroupSign.updatePerGroup(this);
 
-        // Send message
-        sendMessage(plugin.getMessageConfig().getMessage(DMessages.PLAYER_LEFT_GROUP, player.getName()));
+        if (message) {
+            sendMessage(plugin.getMessageConfig().getMessage(DMessages.PLAYER_LEFT_GROUP, player.getName()));
+        }
 
-        // Check group
         if (isEmpty()) {
             DGroupDisbandEvent event = new DGroupDisbandEvent(this, player, DGroupDisbandEvent.Cause.GROUP_IS_EMPTY);
             plugin.getServer().getPluginManager().callEvent(event);
