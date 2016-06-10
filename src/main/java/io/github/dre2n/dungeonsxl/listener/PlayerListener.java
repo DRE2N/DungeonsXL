@@ -461,25 +461,21 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (!(dPlayers.getByPlayer(player) instanceof DInstancePlayer)) {
-            return;
-        }
-        DInstancePlayer dPlayer = (DInstancePlayer) dPlayers.getByPlayer(player);
-
-        if (dPlayer == null) {
-            dPlayers.removePlayer(dPlayer);
-            return;
-        }
-
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
         DGroup dGroup = DGroup.getByPlayer(player);
-
-        // Check GameWorld
         Game game = Game.getByWorld(player.getWorld());
-        if (game != null) {
+
+        if (!(dPlayer instanceof DInstancePlayer)) {
+            dPlayers.removePlayer(dPlayer);
+            if (dGroup != null) {
+                dGroup.removePlayer(player);
+            }
+
+        } else if (game != null) {
             int timeUntilKickOfflinePlayer = game.getRules().getTimeUntilKickOfflinePlayer();
 
             if (timeUntilKickOfflinePlayer == 0) {
-                dPlayer.leave();
+                ((DGamePlayer) dPlayer).leave();
 
             } else if (timeUntilKickOfflinePlayer > 0) {
                 dGroup.sendMessage(DMessages.PLAYER_OFFLINE.getMessage(dPlayer.getPlayer().getName(), String.valueOf(timeUntilKickOfflinePlayer)), player);
@@ -490,10 +486,7 @@ public class PlayerListener implements Listener {
             }
 
         } else if (dPlayer instanceof DEditPlayer) {
-            dPlayer.leave();
-
-        } else if (dGroup != null) {
-            dGroup.removePlayer(player);
+            ((DEditPlayer) dPlayer).leave();
         }
     }
 

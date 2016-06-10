@@ -76,6 +76,11 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             dGroup.setGameWorld(game.getWorld());
         }
 
+        if (game == null) {
+            cancel();
+            return;
+        }
+
         for (Player player : game.getPlayers()) {
             new DGamePlayer(player, game.getWorld());
         }
