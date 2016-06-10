@@ -491,6 +491,9 @@ public class PlayerListener implements Listener {
 
         } else if (dPlayer instanceof DEditPlayer) {
             dPlayer.leave();
+
+        } else if (dGroup != null) {
+            dGroup.removePlayer(player);
         }
     }
 
