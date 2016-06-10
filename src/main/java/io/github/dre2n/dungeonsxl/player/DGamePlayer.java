@@ -371,9 +371,6 @@ public class DGamePlayer extends DInstancePlayer {
             getSavePlayer().reset(rules.getKeepInventoryOnEscape());
         }
 
-        GameWorld gameWorld = GameWorld.getByWorld(getWorld());
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
             for (String permission : rules.getGamePermissions()) {
@@ -381,12 +378,13 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        Game game = Game.getByGameWorld(gameWorld);
+        DGroup dGroup = DGroup.getByPlayer(getPlayer());
         if (dGroup != null) {
             dGroup.removePlayer(getPlayer());
         }
 
-        // Belohnung
+        GameWorld gameWorld = GameWorld.getByWorld(getWorld());
+        Game game = Game.getByGameWorld(gameWorld);
         if (game != null) {
             if (finished) {
                 if (game.getType().hasRewards()) {
@@ -424,7 +422,7 @@ public class DGamePlayer extends DInstancePlayer {
                     if (groupPlayer != null) {
                         for (ItemStack itemStack : getPlayer().getInventory()) {
                             if (itemStack != null) {
-                                if (gameWorld.getSecureObjects().contains(itemStack.getType())) {
+                                if (gameWorld.getSecureObjects().contains(itemStack)) {
                                     groupPlayer.getInventory().addItem(itemStack);
                                 }
                             }
