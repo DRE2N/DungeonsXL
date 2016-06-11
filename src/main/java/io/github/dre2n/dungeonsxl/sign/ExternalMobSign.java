@@ -274,7 +274,7 @@ public class ExternalMobSign extends DSign implements MobSign {
         for (Entity entity : spawnLocation.getChunk().getEntities()) {
             if (entity.getLocation().getX() >= spawnLocation.getX() - 1 && entity.getLocation().getX() <= spawnLocation.getX() + 1 && entity.getLocation().getY() >= spawnLocation.getY() - 1
                     && entity.getLocation().getY() <= spawnLocation.getY() + 1 && entity.getLocation().getZ() >= spawnLocation.getZ() - 1 && entity.getLocation().getZ() <= spawnLocation.getZ() + 1
-                    && !externalMobs.contains(entity) && !(entity instanceof Player)) {
+                    && !externalMobs.contains(entity) && entity instanceof LivingEntity && !(entity instanceof Player)) {
                 setExternalMob((LivingEntity) entity);
                 externalMobs.add(entity);
                 return;
