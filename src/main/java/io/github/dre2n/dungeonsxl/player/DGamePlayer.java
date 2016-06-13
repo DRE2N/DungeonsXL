@@ -421,8 +421,12 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         if (dGroup != null) {
-            // Give Secure Objects other Players
             if (!dGroup.isEmpty()) {
+                if (dGroup.finishIfMembersFinished()) {
+                    return;
+                }
+
+                // Give secure objects to other players
                 int i = 0;
                 Player groupPlayer;
                 do {
@@ -636,6 +640,8 @@ public class DGamePlayer extends DInstancePlayer {
         if (!dGroup.isPlaying()) {
             return;
         }
+
+        dGroup.setNextFloor(specifiedFloor);
 
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);
@@ -852,7 +858,7 @@ public class DGamePlayer extends DInstancePlayer {
                 }
             }
 
-            // Kick offline plugin.getDPlayers()
+            // Kick offline players
             if (getOfflineTime() > 0) {
                 offline = true;
 
