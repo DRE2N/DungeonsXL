@@ -149,6 +149,7 @@ public class Announcer {
         this.maxPlayersPerGroup = maxPlayersPerGroup;
     }
 
+    /* Getters and setters */
     /**
      * @return the name of the announcer
      */
@@ -298,6 +299,20 @@ public class Announcer {
     }
 
     /**
+     * @return whether enough players and groups joined the announced game to start
+     */
+    public boolean areRequirementsFulfilled() {
+        int i = 0;
+        for (DGroup group : dGroups) {
+            if (group != null && group.getPlayers().size() >= minPlayersPerGroup) {
+                i++;
+            }
+        }
+        return i >= minGroupsPerGame;
+    }
+
+    /* Actions */
+    /**
      * Cancels the start task and sets it to null.
      */
     public void endStartTask() {
@@ -383,14 +398,7 @@ public class Announcer {
 
         showGUI(player);
 
-        int i = 0;
-        for (DGroup group : dGroups) {
-            if (group != null && group.getPlayers().size() >= minPlayersPerGroup) {
-                i++;
-            }
-        }
-
-        if (i >= minGroupsPerGame) {
+        if (areRequirementsFulfilled()) {
             if (startTask == null) {
                 startTask = new AnnouncerStartGameTask(this);
                 startTask.runTaskLater(plugin, 20 * 30L);

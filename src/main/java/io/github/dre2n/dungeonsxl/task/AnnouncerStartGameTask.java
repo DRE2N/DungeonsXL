@@ -59,6 +59,11 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (!announcer.areRequirementsFulfilled()) {
+            cancel();
+            return;
+        }
+
         Game game = null;
 
         for (DGroup dGroup : announcer.getDGroups()) {
