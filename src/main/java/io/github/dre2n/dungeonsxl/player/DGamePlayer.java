@@ -405,7 +405,7 @@ public class DGamePlayer extends DInstancePlayer {
                     getData().logTimeLastPlayed(dGroup.getDungeon().getName());
 
                     // Tutorial Permissions
-                    if (gameWorld.isTutorial()) {
+                    if (gameWorld.isTutorial() && plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
                         String endGroup = plugin.getMainConfig().getTutorialEndGroup();
                         if (plugin.isGroupEnabled(endGroup)) {
                             plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);

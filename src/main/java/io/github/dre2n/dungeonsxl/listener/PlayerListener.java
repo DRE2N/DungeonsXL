@@ -531,7 +531,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (plugin.getPermissionProvider() == null) {
+        if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
             return;
         }
 
@@ -575,28 +575,34 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-
         MainConfig config = plugin.getMainConfig();
+
         if (!config.isTutorialActivated()) {
             return;
         }
+
         if (DGamePlayer.getByPlayer(player) != null) {
             return;
         }
-        if (plugin.getPermissionProvider() == null) {
+
+        if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
             return;
         }
+
         if ((config.getTutorialDungeon() == null || config.getTutorialStartGroup() == null || config.getTutorialEndGroup() == null)) {
             return;
         }
+
         for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
             if (!config.getTutorialStartGroup().equalsIgnoreCase(group)) {
                 continue;
             }
+
             if (plugin.getGameWorlds().size() >= config.getMaxInstances()) {
                 event.setResult(PlayerLoginEvent.Result.KICK_FULL);
                 event.setKickMessage(DMessages.ERROR_TOO_MANY_TUTORIALS.getMessage());
             }
+
             return;
         }
     }
