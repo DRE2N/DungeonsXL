@@ -418,6 +418,7 @@ public class Announcer {
         do {
             String name = ChatColor.DARK_GRAY + "EMPTY GROUP";
             int playerCount = 0;
+            List<String> lore = new ArrayList<>();
 
             DGroup dGroup = dGroups.get(groupCount);
             if (!plugin.getDGroups().contains(dGroup)) {
@@ -426,6 +427,9 @@ public class Announcer {
             } else if (dGroup != null) {
                 name = ChatColor.AQUA + dGroup.getName();
                 playerCount = dGroup.getPlayers().size();
+                for (Player player : dGroup.getPlayers()) {
+                    lore.add((dGroup.getCaptain() == player ? ChatColor.GOLD : ChatColor.GRAY) + player.getName());
+                }
             }
 
             boolean full = playerCount >= maxPlayersPerGroup;
@@ -433,6 +437,7 @@ public class Announcer {
             ItemStack button = new ItemStack(Material.WOOL, playerCount, plugin.getMainConfig().getGroupColorPriority().get(groupCount));
             ItemMeta meta = button.getItemMeta();
             meta.setDisplayName(name + (full ? ChatColor.DARK_RED : ChatColor.GREEN) + " [" + playerCount + "/" + maxPlayersPerGroup + "]");
+            meta.setLore(lore);
             button.setItemMeta(meta);
             buttons.add(button);
 
