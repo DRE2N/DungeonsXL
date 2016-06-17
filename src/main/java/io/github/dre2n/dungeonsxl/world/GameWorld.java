@@ -32,7 +32,11 @@ import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
+import io.github.dre2n.dungeonsxl.trigger.MobTrigger;
+import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
+import io.github.dre2n.dungeonsxl.trigger.Trigger;
+import io.github.dre2n.dungeonsxl.trigger.TriggerTypeDefault;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -345,9 +349,18 @@ public class GameWorld {
     public int getMobCount() {
         int mobCount = 0;
 
+        signs:
         for (DSign dSign : dSigns) {
             if (!(dSign instanceof MobSign)) {
                 continue;
+            }
+
+            for (Trigger trigger : dSign.getTriggers()) {
+                if (trigger.getType() == TriggerTypeDefault.PROGRESS) {
+                    if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
+                        break signs;
+                    }
+                }
             }
 
             mobCount += ((MobSign) dSign).getInitialAmount();
