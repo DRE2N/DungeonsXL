@@ -57,9 +57,9 @@ public class MainCommand extends BRCommand {
         if (plugins.getPlugin("Vault") != null) {
             vault = plugins.getPlugin("Vault").getDescription().getVersion();
         }
-        String mythicMobs = "";
-        if (plugins.getPlugin("MythicMobs") != null) {
-            mythicMobs = plugins.getPlugin("MythicMobs").getDescription().getVersion();
+        String itemsxl = "";
+        if (plugins.getPlugin("ItemsXL") != null) {
+            itemsxl = plugins.getPlugin("ItemsXL").getDescription().getVersion();
         }
 
         MessageUtil.sendCenteredMessage(sender, "&4" + D[0] + "&f" + X[0] + L[0]);
@@ -69,7 +69,7 @@ public class MainCommand extends BRCommand {
         MessageUtil.sendCenteredMessage(sender, "&4" + D[4] + "&f" + X[4] + L[4]);
         MessageUtil.sendCenteredMessage(sender, "&b&l###### " + DMessages.CMD_MAIN_WELCOME.getMessage() + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
         MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, mythicMobs));
+        MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, itemsxl));
         MessageUtil.sendCenteredMessage(sender, DMessages.CMD_MAIN_HELP.getMessage());
         MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2016 Frank Baumann & contributors; lcsd. under GPLv3.");
     }
