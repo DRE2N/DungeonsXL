@@ -26,7 +26,9 @@ import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.requirement.FeeLevelRequirement;
 import io.github.dre2n.dungeonsxl.requirement.FeeMoneyRequirement;
 import io.github.dre2n.dungeonsxl.requirement.GroupSizeRequirement;
+import io.github.dre2n.dungeonsxl.requirement.PermissionRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
+import io.github.dre2n.dungeonsxl.requirement.RequirementTypeDefault;
 import io.github.dre2n.dungeonsxl.util.DeserialisazionUtil;
 import java.io.File;
 import java.io.IOException;
@@ -190,15 +192,18 @@ public class WorldConfig extends GameRules {
                 Requirement requirement = Requirement.create(plugin.getRequirementTypes().getByIdentifier(identifier));
 
                 // Check for built-in requirements
-                if (requirement instanceof FeeMoneyRequirement) {
+                if (requirement.getType() == RequirementTypeDefault.FEE_MONEY) {
                     ((FeeMoneyRequirement) requirement).setFee(configFile.getDouble("requirements.feeMoney"));
 
-                } else if (requirement instanceof FeeLevelRequirement) {
+                } else if (requirement.getType() == RequirementTypeDefault.FEE_LEVEL) {
                     ((FeeLevelRequirement) requirement).setFee(configFile.getInt("requirements.feeLevel"));
 
-                } else if (requirement instanceof GroupSizeRequirement) {
+                } else if (requirement.getType() == RequirementTypeDefault.GROUP_SIZE) {
                     ((GroupSizeRequirement) requirement).setMinimum(configFile.getInt("requirements.groupSize.minimum"));
                     ((GroupSizeRequirement) requirement).setMaximum(configFile.getInt("requirements.groupSize.maximum"));
+
+                } else if (requirement.getType() == RequirementTypeDefault.PERMISSION) {
+                    ((PermissionRequirement) requirement).setPermissions(configFile.getStringList("requirements.permission"));
                 }
 
                 requirements.add(requirement);

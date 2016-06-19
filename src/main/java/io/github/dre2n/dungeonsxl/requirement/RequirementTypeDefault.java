@@ -23,7 +23,8 @@ public enum RequirementTypeDefault implements RequirementType {
 
     FEE_LEVEL("feeLevel", FeeLevelRequirement.class),
     FEE_MONEY("feeMoney", FeeMoneyRequirement.class),
-    GROUP_SIZE("groupSize", GroupSizeRequirement.class);
+    GROUP_SIZE("groupSize", GroupSizeRequirement.class),
+    PERMISSION("permission", PermissionRequirement.class);
 
     private String identifier;
     private Class<? extends Requirement> handler;
