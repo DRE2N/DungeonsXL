@@ -398,15 +398,7 @@ public class PlayerListener implements Listener {
             Location respawn = gamePlayer.getCheckpoint();
 
             if (respawn == null) {
-                respawn = dGroup.getGameWorld().getStartLocation();
-            }
-
-            if (respawn == null) {
-                respawn = dGroup.getGameWorld().getLobbyLocation();
-            }
-
-            if (respawn == null) {
-                respawn = dGroup.getGameWorld().getWorld().getSpawnLocation();
+                respawn = dGroup.getGameWorld().getStartLocation(dGroup);
             }
 
             // Because some plugins set another respawn point, DXL teleports a few ticks later.

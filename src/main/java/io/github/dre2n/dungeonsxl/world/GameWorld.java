@@ -29,10 +29,12 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.DSign;
+import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
-import io.github.dre2n.dungeonsxl.trigger.MobTrigger;
+import io.github.dre2n.dungeonsxl.sign.StartSign;
 import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
@@ -203,16 +205,31 @@ public class GameWorld {
     /**
      * @return the start location
      */
-    public Location getStartLocation() {
-        return locStart;
-    }
+    public Location getStartLocation(DGroup dGroup) {
+        int index = getGame().getDGroups().indexOf(dGroup);
 
-    /**
-     * @param location
-     * the location to start to set
-     */
-    public void setStartLocation(Location location) {
-        this.locStart = location;
+        // Try the matching location
+        for (DSign dSign : dSigns) {
+            if (dSign.getType() == DSignTypeDefault.START) {
+                if (((StartSign) dSign).getId() == index) {
+                    return dSign.getSign().getLocation();
+                }
+            }
+        }
+
+        // Try any location
+        for (DSign dSign : dSigns) {
+            if (dSign.getType() == DSignTypeDefault.START) {
+                return dSign.getSign().getLocation();
+            }
+        }
+
+        // Lobby location as fallback
+        if (locLobby != null) {
+            return locLobby;
+        }
+
+        return world.getSpawnLocation();
     }
 
     /**

@@ -381,7 +381,7 @@ public class Game {
             public void run() {
                 if (teleport) {
                     for (Player player : getPlayers()) {
-                        PlayerUtil.secureTeleport(player, world.getStartLocation());
+                        PlayerUtil.secureTeleport(player, world.getStartLocation(DGroup.getByPlayer(player)));
                     }
                 }
 
