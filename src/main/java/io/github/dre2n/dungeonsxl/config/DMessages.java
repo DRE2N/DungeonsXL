@@ -146,6 +146,8 @@ public enum DMessages implements Messages {
     PLAYER_KICKED("Player_Kicked", "&4You have been kicked out of the group &6&v1&4."),
     PLAYER_LEAVE_GROUP("Player_LeaveGroup", "&6You have successfully left your group!"),
     PLAYER_LEFT_GROUP("Player_LeftGroup", "&6Player &4&v1&6 has left the Group!"),
+    PLAYER_LIVES_ADDED("Player_LivesAdded", "&6Received a bonus of &4&v1&6 lives."),
+    PLAYER_LIVES_REMOVED("Player_LivesRemoved", "&6You lost &4&v1&6 lives!"),
     PLAYER_LOOT_ADDED("Player_LootAdded", "&4&v1&6 have been added to your reward inventory!"),
     PLAYER_NEW_CAPTAIN("Player_NewCaptain", "&6You are now the new captain of your group."),
     PLAYER_OFFLINE("Player_Offline", "&Player &4&v1&6 went offline. In &4&v2&6 seconds he will autmatically be kicked from the Dungeon!"),

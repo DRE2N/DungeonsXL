@@ -34,6 +34,7 @@ public enum DSignTypeDefault implements DSignType {
     FLOOR("Floor", "floor", false, FloorSign.class),
     INTERACT("Interact", "interact", true, InteractSign.class),
     LEAVE("Leave", "leave", true, LeaveSign.class),
+    LIVES_MODIFIER("Lives", "lives", false, LivesModifierSign.class),
     LOBBY("Lobby", "lobby", true, LobbySign.class),
     MOB("Mob", "mob", false, DMobSign.class),
     MESSAGE("MSG", "msg", false, MessageSign.class),

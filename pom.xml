@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.12.1-SNAPSHOT${buildNo}</version>
+    <version>0.13-SNAPSHOT${buildNo}</version>
     <packaging>jar</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
