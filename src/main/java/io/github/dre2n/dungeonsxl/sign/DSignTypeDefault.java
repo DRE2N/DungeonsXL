@@ -29,6 +29,7 @@ public enum DSignTypeDefault implements DSignType {
     CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, ChunkUpdaterSign.class),
     CLASSES("Classes", "classes", true, ClassesSign.class),
     COMMAND("CMD", "cmd", false, CommandSign.class),
+    DROP("Drop", "drop", false, DropSign.class),
     END("End", "end", false, EndSign.class),
     EXTERNAL_MOB("ExternalMob", "mob", false, ExternalMobSign.class),
     FLOOR("Floor", "floor", false, FloorSign.class),
