@@ -16,14 +16,14 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.commons.util.EnumUtil;
+import io.github.dre2n.commons.util.NumberUtil;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.itemsxl.util.commons.util.EnumUtil;
-import io.github.dre2n.itemsxl.util.commons.util.NumberUtil;
-import io.github.dre2n.itemsxl.util.commons.util.messageutil.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
