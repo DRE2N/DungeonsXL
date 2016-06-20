@@ -29,7 +29,6 @@ public enum DSignTypeDefault implements DSignType {
     CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, ChunkUpdaterSign.class),
     CLASSES("Classes", "classes", true, ClassesSign.class),
     COMMAND("CMD", "cmd", false, CommandSign.class),
-    DESTINATION("Destination", "warp", false, DestinationSign.class),
     DROP("Drop", "drop", false, DropSign.class),
     END("End", "end", false, EndSign.class),
     EXTERNAL_MOB("ExternalMob", "mob", false, ExternalMobSign.class),
@@ -50,8 +49,7 @@ public enum DSignTypeDefault implements DSignType {
     START("Start", "start", true, StartSign.class),
     TELEPORT("Teleport", "teleport", false, TeleportSign.class),
     TRIGGER("Trigger", "trigger", true, TriggerSign.class),
-    WAVE("Wave", "wave", false, WaveSign.class),
-    WARP("Warp", "warp", false, WarpSign.class);
+    WAVE("Wave", "wave", false, WaveSign.class);
 
     private String name;
     private String buildPermission;
