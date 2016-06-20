@@ -41,6 +41,7 @@ public enum DSignTypeDefault implements DSignType {
     MESSAGE("MSG", "msg", false, MessageSign.class),
     @Deprecated
     MYTHIC_MOBS("MythicMobs", "mob", false, ExternalMobSign.class),
+    OPEN_DOOR("Door", "door", false, OpenDoorSign.class),
     PLACE("Place", "place", false, PlaceSign.class),
     READY("Ready", "ready", true, ReadySign.class),
     REDSTONE("Redstone", "redstone", false, RedstoneSign.class),

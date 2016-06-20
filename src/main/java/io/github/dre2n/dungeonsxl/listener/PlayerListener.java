@@ -39,6 +39,7 @@ import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
+import io.github.dre2n.dungeonsxl.sign.OpenDoorSign;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
@@ -312,6 +313,9 @@ public class PlayerListener implements Listener {
                         }
                     }
                 }
+
+            } else if (OpenDoorSign.isProtected(clickedBlock)) {
+                event.setCancelled(true);
             }
         }
     }
