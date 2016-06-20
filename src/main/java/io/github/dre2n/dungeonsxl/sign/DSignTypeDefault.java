@@ -33,6 +33,7 @@ public enum DSignTypeDefault implements DSignType {
     END("End", "end", false, EndSign.class),
     EXTERNAL_MOB("ExternalMob", "mob", false, ExternalMobSign.class),
     FLOOR("Floor", "floor", false, FloorSign.class),
+    HOLOGRAM("Hologram", "hologram", true, HologramSign.class),
     INTERACT("Interact", "interact", true, InteractSign.class),
     LEAVE("Leave", "leave", true, LeaveSign.class),
     LIVES_MODIFIER("Lives", "lives", false, LivesModifierSign.class),
