@@ -23,6 +23,7 @@ import io.github.dre2n.caliburn.mob.MobCategories;
 import io.github.dre2n.caliburn.mob.Mobs;
 import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.compatibility.Internals;
+import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
@@ -141,7 +142,9 @@ public class DungeonsXL extends BRPlugin {
         super.onEnable();
 
         instance = this;
-        loadCaliburnAPI();
+        if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
+            loadCaliburnAPI();
+        }
 
         initFolders();
 
