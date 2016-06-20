@@ -100,7 +100,7 @@ public class TriggerSign extends DSign {
             return;
         }
 
-        SignTrigger trigger = SignTrigger.get(triggerId, getGameWorld());
+        SignTrigger trigger = SignTrigger.getById(triggerId, getGameWorld());
         if (trigger != null) {
             trigger.onTrigger(true);
         }
@@ -112,7 +112,7 @@ public class TriggerSign extends DSign {
             return;
         }
 
-        SignTrigger trigger = SignTrigger.get(triggerId, getGameWorld());
+        SignTrigger trigger = SignTrigger.getById(triggerId, getGameWorld());
         if (trigger != null) {
             trigger.onTrigger(false);
         }

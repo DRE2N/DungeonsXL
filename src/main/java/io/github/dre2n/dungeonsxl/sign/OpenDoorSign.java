@@ -92,11 +92,9 @@ public class OpenDoorSign extends DSign {
 
         GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
-            for (DSign dSign : gameWorld.getDSigns()) {
-                if (dSign.getType() == DSignTypeDefault.OPEN_DOOR) {
-                    if (((OpenDoorSign) dSign).getBlock().equals(block)) {
-                        return true;
-                    }
+            for (DSign dSign : gameWorld.getDSigns(DSignTypeDefault.OPEN_DOOR)) {
+                if (((OpenDoorSign) dSign).getBlock().equals(block)) {
+                    return true;
                 }
             }
         }

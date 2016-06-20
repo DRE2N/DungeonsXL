@@ -32,12 +32,14 @@ import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.DSign;
+import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
 import io.github.dre2n.dungeonsxl.sign.StartSign;
 import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
+import io.github.dre2n.dungeonsxl.trigger.TriggerType;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypeDefault;
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,7 +76,6 @@ public class GameWorld {
     private World world;
     private String mapName;
     private Location locLobby;
-    private Location locStart;
     private boolean isPlaying = false;
     private int id;
     private List<ItemStack> secureObjects = new ArrayList<>();
@@ -85,6 +86,7 @@ public class GameWorld {
     // TODO: Killed mobs
     private CopyOnWriteArrayList<RewardChest> rewardChests = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Trigger> triggers = new CopyOnWriteArrayList<>();
     private WorldConfig worldConfig;
 
     public GameWorld() {
@@ -353,11 +355,60 @@ public class GameWorld {
     }
 
     /**
+     * @return the triggers with the type
+     */
+    public List<DSign> getDSigns(DSignType type) {
+        List<DSign> dSignsOfType = new ArrayList<>();
+        for (DSign dSign : dSigns) {
+            if (dSign.getType() == type) {
+                dSignsOfType.add(dSign);
+            }
+        }
+        return dSignsOfType;
+    }
+
+    /**
      * @param dSigns
      * the dSigns to set
      */
     public void setDSigns(CopyOnWriteArrayList<DSign> dSigns) {
         this.dSigns = dSigns;
+    }
+
+    /**
+     * @return the triggers
+     */
+    public CopyOnWriteArrayList<Trigger> getTriggers() {
+        return triggers;
+    }
+
+    /**
+     * @return the triggers with the type
+     */
+    public List<Trigger> getTriggers(TriggerType type) {
+        List<Trigger> triggersOfType = new ArrayList<>();
+        for (Trigger trigger : triggers) {
+            if (trigger.getType() == type) {
+                triggersOfType.add(trigger);
+            }
+        }
+        return triggersOfType;
+    }
+
+    /**
+     * @param trigger
+     * the trigger to add
+     */
+    public void addTrigger(Trigger trigger) {
+        triggers.add(trigger);
+    }
+
+    /**
+     * @param trigger
+     * the trigger to remove
+     */
+    public void removeTrigger(Trigger trigger) {
+        triggers.remove(trigger);
     }
 
     /**
@@ -443,11 +494,11 @@ public class GameWorld {
                 }
             }
         }
-        if (RedstoneTrigger.hasTriggers(this)) {
-            for (RedstoneTrigger trigger : RedstoneTrigger.getTriggersArray(this)) {
-                trigger.onTrigger();
-            }
+
+        for (Trigger trigger : getTriggers(TriggerTypeDefault.REDSTONE)) {
+            ((RedstoneTrigger) trigger).onTrigger();
         }
+
         for (DSign dSign : dSigns) {
             if (dSign != null) {
                 if (!dSign.hasTriggers()) {

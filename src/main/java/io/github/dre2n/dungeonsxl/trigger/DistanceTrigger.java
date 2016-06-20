@@ -18,9 +18,6 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -28,8 +25,6 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Daniel Saukel
  */
 public class DistanceTrigger extends Trigger {
-
-    private static Map<GameWorld, ArrayList<DistanceTrigger>> triggers = new HashMap<>();
 
     private TriggerType type = TriggerTypeDefault.DISTANCE;
 
@@ -61,55 +56,22 @@ public class DistanceTrigger extends Trigger {
     }
 
     @Override
-    public void register(GameWorld gameWorld) {
-        if (!hasTriggers(gameWorld)) {
-            ArrayList<DistanceTrigger> list = new ArrayList<>();
-            list.add(this);
-            triggers.put(gameWorld, list);
-
-        } else {
-            triggers.get(gameWorld).add(this);
-        }
-    }
-
-    @Override
-    public void unregister(GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            triggers.get(gameWorld).remove(this);
-        }
-    }
-
-    @Override
     public TriggerType getType() {
         return type;
     }
 
+    /* Statics */
     public static void triggerAllInDistance(Player player, GameWorld gameWorld) {
-        if (!hasTriggers(gameWorld)) {
-            return;
-        }
-
         if (!player.getLocation().getWorld().equals(gameWorld.getWorld())) {
             return;
         }
 
-        for (DistanceTrigger trigger : getTriggersArray(gameWorld)) {
+        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.DISTANCE)) {
+            DistanceTrigger trigger = (DistanceTrigger) uncasted;
             if (player.getLocation().distance(trigger.loc) < trigger.distance) {
                 trigger.onTrigger(player);
             }
         }
-    }
-
-    public static boolean hasTriggers(GameWorld gameWorld) {
-        return !triggers.isEmpty() && triggers.containsKey(gameWorld);
-    }
-
-    public static ArrayList<DistanceTrigger> getTriggers(GameWorld gameWorld) {
-        return triggers.get(gameWorld);
-    }
-
-    public static DistanceTrigger[] getTriggersArray(GameWorld gameWorld) {
-        return getTriggers(gameWorld).toArray(new DistanceTrigger[getTriggers(gameWorld).size()]);
     }
 
 }

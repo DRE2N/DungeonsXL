@@ -235,28 +235,26 @@ public class PlayerListener implements Listener {
             GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
             if (gameWorld != null) {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                    if (UseItemTrigger.hasTriggers(gameWorld)) {
-                        String name = null;
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                name = item.getItemMeta().getDisplayName();
+                    String name = null;
+                    if (item.hasItemMeta()) {
+                        if (item.getItemMeta().hasDisplayName()) {
+                            name = item.getItemMeta().getDisplayName();
 
-                            } else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.BOOK_AND_QUILL) {
-                                if (item.getItemMeta() instanceof BookMeta) {
-                                    BookMeta meta = (BookMeta) item.getItemMeta();
-                                    if (meta.hasTitle()) {
-                                        name = meta.getTitle();
-                                    }
+                        } else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.BOOK_AND_QUILL) {
+                            if (item.getItemMeta() instanceof BookMeta) {
+                                BookMeta meta = (BookMeta) item.getItemMeta();
+                                if (meta.hasTitle()) {
+                                    name = meta.getTitle();
                                 }
                             }
                         }
-                        if (name == null) {
-                            name = item.getType().toString();
-                        }
-                        UseItemTrigger trigger = UseItemTrigger.get(name, gameWorld);
-                        if (trigger != null) {
-                            trigger.onTrigger(player);
-                        }
+                    }
+                    if (name == null) {
+                        name = item.getType().toString();
+                    }
+                    UseItemTrigger trigger = UseItemTrigger.getByName(name, gameWorld);
+                    if (trigger != null) {
+                        trigger.onTrigger(player);
                     }
                 }
             }
@@ -289,7 +287,7 @@ public class PlayerListener implements Listener {
                     if (gameWorld != null) {
 
                         // Trigger InteractTrigger
-                        InteractTrigger trigger = InteractTrigger.get(clickedBlock, gameWorld);
+                        InteractTrigger trigger = InteractTrigger.getByBlock(clickedBlock, gameWorld);
                         if (trigger != null) {
                             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                                 trigger.onTrigger(player);

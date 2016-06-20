@@ -18,18 +18,13 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
 public class WaveTrigger extends Trigger {
-
-    private static Map<GameWorld, ArrayList<WaveTrigger>> triggers = new HashMap<>();
 
     private TriggerType type = TriggerTypeDefault.WAVE;
 
@@ -68,25 +63,6 @@ public class WaveTrigger extends Trigger {
     }
 
     @Override
-    public void register(GameWorld gameWorld) {
-        if (!hasTriggers(gameWorld)) {
-            ArrayList<WaveTrigger> list = new ArrayList<>();
-            list.add(this);
-            triggers.put(gameWorld, list);
-
-        } else {
-            triggers.get(gameWorld).add(this);
-        }
-    }
-
-    @Override
-    public void unregister(GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            triggers.get(gameWorld).remove(this);
-        }
-    }
-
-    @Override
     public TriggerType getType() {
         return type;
     }
@@ -101,17 +77,11 @@ public class WaveTrigger extends Trigger {
      */
     public static Set<WaveTrigger> getByGameWorld(GameWorld gameWorld) {
         Set<WaveTrigger> toReturn = new HashSet<>();
-        if (triggers.get(gameWorld) != null) {
-            for (WaveTrigger trigger : triggers.get(gameWorld)) {
-                toReturn.add(trigger);
-            }
+        for (Trigger trigger : gameWorld.getTriggers()) {
+            toReturn.add((WaveTrigger) trigger);
         }
 
         return toReturn;
-    }
-
-    public static boolean hasTriggers(GameWorld gameWorld) {
-        return !triggers.isEmpty() && triggers.containsKey(gameWorld);
     }
 
 }
