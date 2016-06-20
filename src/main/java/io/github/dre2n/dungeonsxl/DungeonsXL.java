@@ -17,10 +17,6 @@
 package io.github.dre2n.dungeonsxl;
 
 import io.github.dre2n.caliburn.CaliburnAPI;
-import io.github.dre2n.caliburn.item.ItemCategories;
-import io.github.dre2n.caliburn.item.Items;
-import io.github.dre2n.caliburn.mob.MobCategories;
-import io.github.dre2n.caliburn.mob.Mobs;
 import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.compatibility.Version;
@@ -63,8 +59,6 @@ import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -334,8 +328,7 @@ public class DungeonsXL extends BRPlugin {
             caliburn = ItemsXL.getInstance().getAPI();
         } else {
             caliburn = new CaliburnAPI(this);
-            ConfigurationSection placeholder = new YamlConfiguration();
-            caliburn.setup(new Items(caliburn), new Mobs(caliburn), new ItemCategories(caliburn, placeholder), new MobCategories(caliburn, placeholder));
+            caliburn.setupClean();
         }
     }
 
