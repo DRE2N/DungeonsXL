@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.util.ProgressBar;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
@@ -41,6 +42,7 @@ public class ReadySign extends DSign {
 
     private GameType gameType;
     private double autoStart = -1;
+    private boolean triggered = false;
 
     public ReadySign(Sign sign, String[] lines, GameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -116,7 +118,9 @@ public class ReadySign extends DSign {
     public boolean onPlayerTrigger(Player player) {
         ready(DGamePlayer.getByPlayer(player));
 
-        if (autoStart >= 0) {
+        if (!triggered && autoStart >= 0) {
+            triggered = true;
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -124,7 +128,9 @@ public class ReadySign extends DSign {
                 }
             }.runTaskLater(plugin, (long) (autoStart * 20));
 
-            ProgressBar.sendProgressBar(getGame().getPlayers(), (int) Math.ceil(autoStart));
+            if (!DGroup.getByPlayer(player).isPlaying()) {
+                ProgressBar.sendProgressBar(getGame().getPlayers(), (int) Math.ceil(autoStart));
+            }
         }
 
         return true;
