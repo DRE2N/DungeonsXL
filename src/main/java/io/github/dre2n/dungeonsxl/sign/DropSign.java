@@ -18,7 +18,9 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.caliburn.item.UniversalItem;
 import io.github.dre2n.commons.util.NumberUtil;
+import io.github.dre2n.dungeonsxl.task.DropItemTask;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
@@ -31,6 +33,7 @@ public class DropSign extends DSign {
     private DSignType type = DSignTypeDefault.DROP;
 
     private ItemStack item;
+    private double interval = -1;
 
     public DropSign(Sign sign, String[] lines, GameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -61,13 +64,27 @@ public class DropSign extends DSign {
     @Override
     public void onInit() {
         UniversalItem item = plugin.getCaliburnAPI().getItems().getById(lines[1]);
-        this.item = item.toItemStack(NumberUtil.parseInt(lines[2], 1));
+
+        String[] attributes = lines[2].split(",");
+        if (attributes.length >= 1) {
+            this.item = item.toItemStack(NumberUtil.parseInt(attributes[0], 1));
+        }
+        if (attributes.length == 2) {
+            interval = NumberUtil.parseDouble(attributes[1]);
+        }
+
         getSign().getBlock().setType(Material.AIR);
     }
 
     @Override
     public void onTrigger() {
-        getSign().getWorld().dropItem(getSign().getLocation(), item);
+        Location spawnLocation = getSign().getLocation().add(0.5, 0, 0.5);
+        if (interval < 0) {
+            getSign().getWorld().dropItem(spawnLocation, item);
+
+        } else {
+            new DropItemTask(item, spawnLocation).runTaskTimer(plugin, 0, (long) interval * 20);
+        }
     }
 
     @Override
