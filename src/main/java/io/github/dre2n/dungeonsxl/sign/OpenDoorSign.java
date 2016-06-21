@@ -20,8 +20,9 @@ import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.material.Openable;
+import org.bukkit.material.Door;
 
 /**
  * @author Daniel Saukel
@@ -30,7 +31,7 @@ public class OpenDoorSign extends DSign {
 
     private DSignType type = DSignTypeDefault.OPEN_DOOR;
 
-    private Openable block;
+    private Block block;
 
     public OpenDoorSign(Sign sign, String[] lines, GameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -38,17 +39,17 @@ public class OpenDoorSign extends DSign {
 
     /* Getters and setters */
     /**
-     * @return the door / fence gate / ... to open;
+     * @return the door to open;
      */
-    public Openable getBlock() {
+    public Block getBlock() {
         return block;
     }
 
     /**
      * @param block
-     * the door / fence gate / ... to open
+     * the door to open
      */
-    public void setBlock(Openable block) {
+    public void setBlock(Block block) {
         this.block = block;
     }
 
@@ -66,16 +67,24 @@ public class OpenDoorSign extends DSign {
     @Override
     public void onInit() {
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
-        if (block instanceof Openable) {
-            this.block = (Openable) block;
+        if (block.getState().getData() instanceof Door) {
+            if (block.getRelative(BlockFace.DOWN).getType() == block.getType()) {
+                this.block = block.getRelative(BlockFace.DOWN);
+            } else {
+                this.block = block;
+
+            }
         }
 
-        getSign().setType(Material.AIR);
+        getSign().getBlock().setType(Material.AIR);
     }
 
     @Override
     public void onTrigger() {
-        block.setOpen(true);
+        if (block != null) {
+            ((Door) block.getState().getData()).setOpen(true);
+            block.getState().update(true);
+        }
     }
 
     /* Statics */
@@ -86,14 +95,12 @@ public class OpenDoorSign extends DSign {
      * true if the block is openable only with a sign
      */
     public static boolean isProtected(Block block) {
-        if (!(block instanceof Openable)) {
-            return false;
-        }
-
         GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
             for (DSign dSign : gameWorld.getDSigns(DSignTypeDefault.OPEN_DOOR)) {
-                if (((OpenDoorSign) dSign).getBlock().equals(block)) {
+                Block signBlock1 = ((OpenDoorSign) dSign).getBlock();
+                Block signBlock2 = signBlock1.getRelative(BlockFace.UP);
+                if (block.equals(signBlock1) || block.equals(signBlock2)) {
                     return true;
                 }
             }

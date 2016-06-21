@@ -48,7 +48,7 @@ public class Game {
 
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;
-    private GameType type;
+    private GameType type = GameTypeDefault.DEFAULT;
     private GameWorld world;
     private GameRules rules;
     private int waveCount;
