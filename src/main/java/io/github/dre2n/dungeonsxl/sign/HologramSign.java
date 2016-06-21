@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import io.github.dre2n.caliburn.item.UniversalItem;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.util.EnumUtil;
@@ -50,26 +51,32 @@ public class HologramSign extends DSign {
     @Override
     @SuppressWarnings("deprecation")
     public void onInit() {
-        getSign().setType(Material.AIR);
+        getSign().getBlock().setType(Material.AIR);
 
         String[] holoLines = lines[1].split("/");
         Location location = getSign().getLocation();
-        location = location.add(0, NumberUtil.parseDouble(lines[2]), 0);
+        location = location.add(0.5, NumberUtil.parseDouble(lines[2]), 0.5);
 
         hologram = HologramsAPI.createHologram(plugin, location);
         for (String line : holoLines) {
             if (line.startsWith("Item:")) {
                 String id = line.replace("Item:", "");
-                ItemStack item;
+                ItemStack item = null;
 
                 if (Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
-                    item = plugin.getCaliburnAPI().getItems().getById(id).toItemStack(1);
+                    UniversalItem universalItem = plugin.getCaliburnAPI().getItems().getById(id);
+                    if (universalItem != null) {
+                        item = universalItem.toItemStack(1);
+                    }
+                }
 
-                } else if (EnumUtil.isValidEnum(Material.class, id)) {
-                    item = new ItemStack(Material.valueOf(id));
+                if (item == null) {
+                    if (EnumUtil.isValidEnum(Material.class, id)) {
+                        item = new ItemStack(Material.valueOf(id));
 
-                } else {
-                    item = new ItemStack(NumberUtil.parseInt(id));
+                    } else {
+                        item = new ItemStack(NumberUtil.parseInt(id, 1));
+                    }
                 }
 
                 hologram.appendItemLine(item);
