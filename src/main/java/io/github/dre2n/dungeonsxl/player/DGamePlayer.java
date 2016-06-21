@@ -456,6 +456,20 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
+    public void kill() {
+        DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.DEATH);
+        plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
+
+        if (!dPlayerKickEvent.isCancelled()) {
+            MessageUtil.broadcastMessage(DMessages.PLAYER_DEATH_KICK.getMessage(player.getName()));
+            GameRules rules = Game.getByPlayer(player).getRules();
+            leave();
+            if (rules.getKeepInventoryOnEscape() && rules.getKeepInventoryOnDeath()) {
+                applyRespawnInventory();
+            }
+        }
+    }
+
     public boolean checkRequirements(Game game) {
         if (DPermissions.hasPermission(player, DPermissions.IGNORE_REQUIREMENTS)) {
             return true;

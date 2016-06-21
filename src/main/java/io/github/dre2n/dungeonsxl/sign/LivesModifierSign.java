@@ -113,6 +113,10 @@ public class LivesModifierSign extends DSign {
         } else {
             MessageUtil.sendMessage(dPlayer.getPlayer(), DMessages.PLAYER_LIVES_REMOVED.getMessage(String.valueOf(-1 * lives)));
         }
+
+        if (dPlayer.getLives() <= 0) {
+            dPlayer.kill();
+        }
     }
 
     @Override

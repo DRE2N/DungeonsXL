@@ -134,16 +134,7 @@ public class PlayerListener implements Listener {
         }
 
         if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-            DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
-            plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
-
-            if (!dPlayerKickEvent.isCancelled()) {
-                MessageUtil.broadcastMessage(DMessages.PLAYER_DEATH_KICK.getMessage(player.getName()));
-                dPlayer.leave();
-                if (game.getRules().getKeepInventoryOnEscape()) {
-                    dPlayer.applyRespawnInventory();
-                }
-            }
+            dPlayer.kill();
         }
     }
 
