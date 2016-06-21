@@ -19,7 +19,6 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
@@ -138,7 +137,11 @@ public class ReadySign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (Player player : Game.getByGameWorld(getGameWorld()).getPlayers()) {
+        if (getGame() == null) {
+            return;
+        }
+
+        for (Player player : getGame().getPlayers()) {
             ready(DGamePlayer.getByPlayer(player));
         }
     }
