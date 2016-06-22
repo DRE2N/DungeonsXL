@@ -59,6 +59,7 @@ public enum DPermissions {
     PORTAL("portal", OP),
     RELOAD("reload", OP),
     SAVE("save", OP),
+    STATUS("status", OP),
     /**
      * Allows to open the settings menu.
      */

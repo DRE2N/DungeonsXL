@@ -69,7 +69,7 @@ Maven automatically fetches all dependencies and builds DungeonsXL; just run _bu
 [BRCommons](https://github.com/DRE2N/BRCommons) is a util library for common tasks. DungeonsXL contains BRCommons 1.0.
 
 #### Caliburn API
-[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.1.5.
+[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.1.6.
 
 ### Java
 Make sure that your server uses Java 7 or higher.

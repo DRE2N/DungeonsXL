@@ -412,6 +412,7 @@ public class DungeonsXL extends BRPlugin {
                 new DeletePortalCommand(),
                 new ReloadCommand(),
                 new SaveCommand(),
+                new StatusCommand(),
                 new TestCommand()
         );
 
