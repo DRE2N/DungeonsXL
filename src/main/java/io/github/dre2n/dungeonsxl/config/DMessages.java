@@ -63,7 +63,6 @@ public enum DMessages implements Messages {
     ERROR_LEAVE_DUNGEON("Error_LeaveDungeon", "&4You have to leave your current dungeon first!"),
     ERROR_LEAVE_GAME("Error_LeaveGame", "&4You have to leave your current game first!"),
     ERROR_LEAVE_GROUP("Error_LeaveGroup", "&4You have to leave your group first!"),
-    ERROR_LEFT_CLICK("Error_Leftklick", "&4You have to use Left-Click on this sign!"),
     ERROR_MSG_ID_NOT_EXIST("Error_MsgIdNotExist", "&4Messages with Id &6&v1&4 does not exist!"),
     ERROR_MSG_FORMAT("Error_MsgFormat", "&4The Messages has to be between \"!"),
     ERROR_MSG_NO_INT("Error_MsgNoInt", "&4The argument [id] has to include a number!"),

@@ -279,10 +279,8 @@ public class PlayerListener implements Listener {
                         // Trigger InteractTrigger
                         InteractTrigger trigger = InteractTrigger.getByBlock(clickedBlock, gameWorld);
                         if (trigger != null) {
-                            if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                            if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                 trigger.onTrigger(player);
-                            } else {
-                                MessageUtil.sendMessage(player, DMessages.ERROR_LEFT_CLICK.getMessage());
                             }
                         }
 
@@ -290,10 +288,8 @@ public class PlayerListener implements Listener {
                         for (Sign classSign : gameWorld.getSignClass()) {
                             if (classSign != null) {
                                 if (classSign.getLocation().distance(clickedBlock.getLocation()) < 1) {
-                                    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                                    if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                         dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
-                                    } else {
-                                        MessageUtil.sendMessage(player, DMessages.ERROR_LEFT_CLICK.getMessage());
                                     }
                                     return;
                                 }
