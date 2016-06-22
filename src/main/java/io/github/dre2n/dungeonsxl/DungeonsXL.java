@@ -55,6 +55,7 @@ import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.Worlds;
 import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
 import java.util.List;
@@ -100,6 +101,7 @@ public class DungeonsXL extends BRPlugin {
     private DClasses dClasses;
     private DMobTypes dMobTypes;
     private SignScripts signScripts;
+    private Worlds worlds;
 
     private BukkitTask announcerTask;
     private BukkitTask worldUnloadTask;
@@ -108,8 +110,6 @@ public class DungeonsXL extends BRPlugin {
     private BukkitTask secureModeTask;
 
     private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<EditWorld> editWorlds = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<GameWorld> gameWorlds = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
 
@@ -602,10 +602,24 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the worldUnloadTask
+     * @return the loaded instance of Worlds
      */
-    public BukkitTask getWorldUnloadTask() {
-        return worldUnloadTask;
+    public Worlds getWorlds() {
+        return worlds;
+    }
+
+    /**
+     * load / reload a new instance of Worlds
+     */
+    public void loadWorlds(File folder) {
+        worlds = new Worlds(MAPS);
+    }
+
+    /**
+     * @return the AnnouncerTask
+     */
+    public BukkitTask getAnnouncerTask() {
+        return announcerTask;
     }
 
     /**
@@ -618,10 +632,10 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the AnnouncerTask
+     * @return the worldUnloadTask
      */
-    public BukkitTask getAnnouncerTask() {
-        return announcerTask;
+    public BukkitTask getWorldUnloadTask() {
+        return worldUnloadTask;
     }
 
     /**
@@ -678,20 +692,6 @@ public class DungeonsXL extends BRPlugin {
      */
     public List<DLootInventory> getDLootInventories() {
         return dLootInventories;
-    }
-
-    /**
-     * @return the editWorlds
-     */
-    public List<EditWorld> getEditWorlds() {
-        return editWorlds;
-    }
-
-    /**
-     * @return the gameWorlds
-     */
-    public List<GameWorld> getGameWorlds() {
-        return gameWorlds;
     }
 
     /**

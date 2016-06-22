@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
+import io.github.dre2n.commons.util.NumberUtil;
 import java.io.File;
 import java.util.Set;
 
@@ -24,23 +25,68 @@ import java.util.Set;
  */
 public class Worlds {
 
-    /*private Set<ResourceWorld> resourceWorlds;
+    private Set<ResourceWorld> resources;
+    private Set<InstanceWorld> instances;
 
     public Worlds(File folder) {
         for (File file : folder.listFiles()) {
-            resourceWorlds.add(new ResourceWorld());
+            if (file.isDirectory()) {
+                resources.add(new ResourceWorld(file));
+            }
         }
-    }*/
+    }
 
-    @Deprecated
-    public static boolean exists(String name) {
-        for (File world : io.github.dre2n.dungeonsxl.DungeonsXL.MAPS.listFiles()) {
-            if (world.isDirectory() && world.getName().equalsIgnoreCase(name)) {
-                return true;
+    /* Getters and setters */
+    /**
+     * @return the ResourceWorld that has this name
+     */
+    public ResourceWorld getResourceByName(String name) {
+        for (ResourceWorld world : resources) {
+            if (world.getName().equals(name)) {
+                return world;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    /**
+     * @return the InstanceWorld that has this name
+     */
+    public InstanceWorld getInstanceByName(String name) {
+        String[] splitted = name.split("_");
+        if (splitted.length != 3) {
+            return null;
+        }
+
+        return getInstanceById(NumberUtil.parseInt(splitted[2], -1));
+    }
+
+    /**
+     * @return the InstanceWorld that has this ID
+     */
+    public InstanceWorld getInstanceById(int id) {
+        for (InstanceWorld world : instances) {
+            if (world.getId() == id) {
+                return world;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return the ResourceWorlds in the maps folder
+     */
+    public Set<ResourceWorld> getResources() {
+        return resources;
+    }
+
+    /**
+     * @return the loaded InstanceWorlds in the world container
+     */
+    public Set<InstanceWorld> getInstances() {
+        return instances;
     }
 
 }
