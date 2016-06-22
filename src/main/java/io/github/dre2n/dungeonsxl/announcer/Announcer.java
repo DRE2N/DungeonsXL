@@ -94,7 +94,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor();
             }
@@ -135,7 +135,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor();
             }

@@ -75,7 +75,7 @@ public class ListCommand extends BRCommand {
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("dungeons") || args[1].equalsIgnoreCase("d")) {
                 if (args.length >= 3) {
-                    Dungeon dungeon = plugin.getDungeons().getDungeon(args[2]);
+                    Dungeon dungeon = plugin.getDungeons().getByName(args[2]);
                     if (dungeon != null) {
                         MessageUtil.sendPluginTag(sender, plugin);
                         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dungeon.getName() + " &4&l]");

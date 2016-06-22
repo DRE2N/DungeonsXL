@@ -41,25 +41,25 @@ public class Dungeons {
     }
 
     /**
-     * @return the dungeons
-     */
-    public List<Dungeon> getDungeons() {
-        return dungeons;
-    }
-
-    /**
      * @param name
      * the name of the Dungeon
      * @return the Dungeon that has the name
      */
-    public Dungeon getDungeon(String name) {
+    public Dungeon getByName(String name) {
         for (Dungeon dungeon : dungeons) {
-            if (dungeon.getName().equals(name)) {
+            if (dungeon.getName().equalsIgnoreCase(name)) {
                 return dungeon;
             }
         }
 
         return null;
+    }
+
+    /**
+     * @return the dungeons
+     */
+    public List<Dungeon> getDungeons() {
+        return dungeons;
     }
 
     /**

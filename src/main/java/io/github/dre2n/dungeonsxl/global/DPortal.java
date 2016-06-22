@@ -185,13 +185,13 @@ public class DPortal extends GlobalProtection {
             }
         }
 
-        if (target == null) {
+        if (target == null && dGroup.getMapName() != null) {
             target = new GameWorld(dGroup.getMapName());
             dGroup.setGameWorld(target);
         }
 
         if (target == null) {
-            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(DGroup.getByPlayer(player).getMapName()));
+            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage());
             return;
         }
 
