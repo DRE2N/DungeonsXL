@@ -16,19 +16,21 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
+import io.github.dre2n.dungeonsxl.util.ProgressBar;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -38,6 +40,8 @@ public class ReadySign extends DSign {
     private DSignType type = DSignTypeDefault.READY;
 
     private GameType gameType;
+    private double autoStart = -1;
+    private boolean triggered = false;
 
     public ReadySign(Sign sign, String[] lines, GameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -58,6 +62,21 @@ public class ReadySign extends DSign {
         this.gameType = gameType;
     }
 
+    /**
+     * @return the time until the game starts automatically; -1 for no auto start
+     */
+    public double getTimeToAutoStart() {
+        return autoStart;
+    }
+
+    /**
+     * @param time
+     * the time in seconds until the game starts automatically; -1 for no auto start
+     */
+    public void setTimeToAutoStart(double time) {
+        autoStart = time;
+    }
+
     @Override
     public boolean check() {
         return true;
@@ -70,6 +89,10 @@ public class ReadySign extends DSign {
 
         } else {
             gameType = GameTypeDefault.DEFAULT;
+        }
+
+        if (!lines[2].isEmpty()) {
+            autoStart = NumberUtil.parseDouble(lines[2], -1);
         }
 
         if (!getTriggers().isEmpty()) {
@@ -93,15 +116,33 @@ public class ReadySign extends DSign {
     @Override
     public boolean onPlayerTrigger(Player player) {
         ready(DGamePlayer.getByPlayer(player));
+
+        if (!triggered && autoStart >= 0) {
+            triggered = true;
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    onTrigger();
+                }
+            }.runTaskLater(plugin, (long) (autoStart * 20));
+
+            if (!DGroup.getByPlayer(player).isPlaying()) {
+                ProgressBar.sendProgressBar(getGame().getPlayers(), (int) Math.ceil(autoStart));
+            }
+        }
+
         return true;
     }
 
     @Override
     public void onTrigger() {
-        for (DGroup dGroup : Game.getByGameWorld(getGameWorld()).getDGroups()) {
-            for (Player player : dGroup.getPlayers()) {
-                ready(DGamePlayer.getByPlayer(player));
-            }
+        if (getGame() == null) {
+            return;
+        }
+
+        for (Player player : getGame().getPlayers()) {
+            ready(DGamePlayer.getByPlayer(player));
         }
     }
 

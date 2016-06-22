@@ -18,9 +18,6 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -30,8 +27,6 @@ import org.bukkit.block.Sign;
  * @author Frank Baumann, Daniel Saukel
  */
 public class RedstoneTrigger extends Trigger {
-
-    private static Map<GameWorld, ArrayList<RedstoneTrigger>> triggers = new HashMap<>();
 
     private TriggerType type = TriggerTypeDefault.REDSTONE;
 
@@ -62,29 +57,11 @@ public class RedstoneTrigger extends Trigger {
     }
 
     @Override
-    public void register(GameWorld gameWorld) {
-        if (!hasTriggers(gameWorld)) {
-            ArrayList<RedstoneTrigger> list = new ArrayList<>();
-            list.add(this);
-            triggers.put(gameWorld, list);
-
-        } else {
-            triggers.get(gameWorld).add(this);
-        }
-    }
-
-    @Override
-    public void unregister(GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            triggers.get(gameWorld).remove(this);
-        }
-    }
-
-    @Override
     public TriggerType getType() {
         return type;
     }
 
+    /* Statics */
     public static RedstoneTrigger getOrCreate(Sign sign, GameWorld gameWorld) {
         Block rtBlock = null;
         if (sign.getBlock().getType() == Material.WALL_SIGN) {
@@ -108,11 +85,10 @@ public class RedstoneTrigger extends Trigger {
         }
 
         if (rtBlock != null) {
-            if (hasTriggers(gameWorld)) {
-                for (RedstoneTrigger trigger : getTriggers(gameWorld)) {
-                    if (trigger.rtBlock.equals(rtBlock)) {
-                        return trigger;
-                    }
+            for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
+                RedstoneTrigger trigger = (RedstoneTrigger) uncasted;
+                if (trigger.rtBlock.equals(rtBlock)) {
+                    return trigger;
                 }
             }
             return new RedstoneTrigger(rtBlock);
@@ -121,23 +97,9 @@ public class RedstoneTrigger extends Trigger {
     }
 
     public static void updateAll(GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            for (RedstoneTrigger trigger : getTriggersArray(gameWorld)) {
-                trigger.onTrigger();
-            }
+        for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
+            ((RedstoneTrigger) trigger).onTrigger();
         }
-    }
-
-    public static boolean hasTriggers(GameWorld gameWorld) {
-        return !triggers.isEmpty() && triggers.containsKey(gameWorld);
-    }
-
-    public static ArrayList<RedstoneTrigger> getTriggers(GameWorld gameWorld) {
-        return triggers.get(gameWorld);
-    }
-
-    public static RedstoneTrigger[] getTriggersArray(GameWorld gameWorld) {
-        return getTriggers(gameWorld).toArray(new RedstoneTrigger[getTriggers(gameWorld).size()]);
     }
 
 }

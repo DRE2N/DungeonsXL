@@ -18,18 +18,13 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
 public class ProgressTrigger extends Trigger {
-
-    private static Map<GameWorld, ArrayList<ProgressTrigger>> triggers = new HashMap<>();
 
     private TriggerType type = TriggerTypeDefault.PROGRESS;
 
@@ -106,29 +101,11 @@ public class ProgressTrigger extends Trigger {
     }
 
     @Override
-    public void register(GameWorld gameWorld) {
-        if (!hasTriggers(gameWorld)) {
-            ArrayList<ProgressTrigger> list = new ArrayList<>();
-            list.add(this);
-            triggers.put(gameWorld, list);
-
-        } else {
-            triggers.get(gameWorld).add(this);
-        }
-    }
-
-    @Override
-    public void unregister(GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            triggers.get(gameWorld).remove(this);
-        }
-    }
-
-    @Override
     public TriggerType getType() {
         return type;
     }
 
+    /* Statics */
     public static ProgressTrigger getOrCreate(int floorCount, int waveCount, GameWorld gameWorld) {
         if (floorCount == 0 & waveCount == 0 || floorCount < 0 || waveCount < 0) {
             return null;
@@ -142,14 +119,10 @@ public class ProgressTrigger extends Trigger {
 
     public static Set<ProgressTrigger> getByGameWorld(GameWorld gameWorld) {
         Set<ProgressTrigger> toReturn = new HashSet<>();
-        for (ProgressTrigger trigger : triggers.get(gameWorld)) {
-            toReturn.add(trigger);
+        for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.PROGRESS)) {
+            toReturn.add((ProgressTrigger) trigger);
         }
         return toReturn;
-    }
-
-    public static boolean hasTriggers(GameWorld gameWorld) {
-        return !triggers.isEmpty() && triggers.containsKey(gameWorld);
     }
 
 }

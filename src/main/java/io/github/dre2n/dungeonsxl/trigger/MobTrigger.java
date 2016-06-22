@@ -18,16 +18,11 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
 public class MobTrigger extends Trigger {
-
-    private static Map<GameWorld, ArrayList<MobTrigger>> triggers = new HashMap<>();
 
     private TriggerType type = TriggerTypeDefault.MOB;
 
@@ -50,50 +45,27 @@ public class MobTrigger extends Trigger {
     }
 
     @Override
-    public void register(GameWorld gameWorld) {
-        if (!hasTriggers(gameWorld)) {
-            ArrayList<MobTrigger> list = new ArrayList<>();
-            list.add(this);
-            triggers.put(gameWorld, list);
-
-        } else {
-            triggers.get(gameWorld).add(this);
-        }
-    }
-
-    @Override
-    public void unregister(GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            triggers.get(gameWorld).remove(this);
-        }
-    }
-
-    @Override
     public TriggerType getType() {
         return type;
     }
 
+    /* Statics */
     public static MobTrigger getOrCreate(String name, GameWorld gameWorld) {
-        MobTrigger trigger = get(name, gameWorld);
+        MobTrigger trigger = getByName(name, gameWorld);
         if (trigger != null) {
             return trigger;
         }
         return new MobTrigger(name);
     }
 
-    public static MobTrigger get(String name, GameWorld gameWorld) {
-        if (hasTriggers(gameWorld)) {
-            for (MobTrigger trigger : triggers.get(gameWorld)) {
-                if (trigger.name.equalsIgnoreCase(name)) {
-                    return trigger;
-                }
+    public static MobTrigger getByName(String name, GameWorld gameWorld) {
+        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.MOB)) {
+            MobTrigger trigger = (MobTrigger) uncasted;
+            if (trigger.name.equalsIgnoreCase(name)) {
+                return trigger;
             }
         }
         return null;
-    }
-
-    public static boolean hasTriggers(GameWorld gameWorld) {
-        return !triggers.isEmpty() && triggers.containsKey(gameWorld);
     }
 
 }

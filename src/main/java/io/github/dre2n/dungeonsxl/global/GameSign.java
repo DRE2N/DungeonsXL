@@ -63,7 +63,7 @@ public class GameSign extends GlobalProtection {
         this.setMultiFloor(multiFloor);
         if (multiFloor) {
             dungeonName = identifier;
-            Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor();
             } else {
@@ -511,6 +511,8 @@ public class GameSign extends GlobalProtection {
 
         if (topSign.getLine(0).equals(NEW_GAME)) {
             Game game = new Game(dGroup);
+            dGroup.setDungeonName(gameSign.dungeonName);
+            dGroup.setMapName(gameSign.mapName);
             gameSign.games[column] = game;
             gameSign.update();
 

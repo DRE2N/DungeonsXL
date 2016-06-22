@@ -22,7 +22,6 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
@@ -39,6 +38,7 @@ import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
+import io.github.dre2n.dungeonsxl.sign.OpenDoorSign;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
@@ -133,16 +133,7 @@ public class PlayerListener implements Listener {
         }
 
         if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-            DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.DEATH);
-            plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
-
-            if (!dPlayerKickEvent.isCancelled()) {
-                MessageUtil.broadcastMessage(DMessages.PLAYER_DEATH_KICK.getMessage(player.getName()));
-                dPlayer.leave();
-                if (game.getRules().getKeepInventoryOnEscape()) {
-                    dPlayer.applyRespawnInventory();
-                }
-            }
+            dPlayer.kill();
         }
     }
 
@@ -234,28 +225,26 @@ public class PlayerListener implements Listener {
             GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
             if (gameWorld != null) {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                    if (UseItemTrigger.hasTriggers(gameWorld)) {
-                        String name = null;
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                name = item.getItemMeta().getDisplayName();
+                    String name = null;
+                    if (item.hasItemMeta()) {
+                        if (item.getItemMeta().hasDisplayName()) {
+                            name = item.getItemMeta().getDisplayName();
 
-                            } else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.BOOK_AND_QUILL) {
-                                if (item.getItemMeta() instanceof BookMeta) {
-                                    BookMeta meta = (BookMeta) item.getItemMeta();
-                                    if (meta.hasTitle()) {
-                                        name = meta.getTitle();
-                                    }
+                        } else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.BOOK_AND_QUILL) {
+                            if (item.getItemMeta() instanceof BookMeta) {
+                                BookMeta meta = (BookMeta) item.getItemMeta();
+                                if (meta.hasTitle()) {
+                                    name = meta.getTitle();
                                 }
                             }
                         }
-                        if (name == null) {
-                            name = item.getType().toString();
-                        }
-                        UseItemTrigger trigger = UseItemTrigger.get(name, gameWorld);
-                        if (trigger != null) {
-                            trigger.onTrigger(player);
-                        }
+                    }
+                    if (name == null) {
+                        name = item.getType().toString();
+                    }
+                    UseItemTrigger trigger = UseItemTrigger.getByName(name, gameWorld);
+                    if (trigger != null) {
+                        trigger.onTrigger(player);
                     }
                 }
             }
@@ -288,12 +277,10 @@ public class PlayerListener implements Listener {
                     if (gameWorld != null) {
 
                         // Trigger InteractTrigger
-                        InteractTrigger trigger = InteractTrigger.get(clickedBlock, gameWorld);
+                        InteractTrigger trigger = InteractTrigger.getByBlock(clickedBlock, gameWorld);
                         if (trigger != null) {
-                            if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                            if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                 trigger.onTrigger(player);
-                            } else {
-                                MessageUtil.sendMessage(player, DMessages.ERROR_LEFT_CLICK.getMessage());
                             }
                         }
 
@@ -301,10 +288,8 @@ public class PlayerListener implements Listener {
                         for (Sign classSign : gameWorld.getSignClass()) {
                             if (classSign != null) {
                                 if (classSign.getLocation().distance(clickedBlock.getLocation()) < 1) {
-                                    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                                    if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                         dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
-                                    } else {
-                                        MessageUtil.sendMessage(player, DMessages.ERROR_LEFT_CLICK.getMessage());
                                     }
                                     return;
                                 }
@@ -312,6 +297,9 @@ public class PlayerListener implements Listener {
                         }
                     }
                 }
+
+            } else if (OpenDoorSign.isProtected(clickedBlock)) {
+                event.setCancelled(true);
             }
         }
     }
@@ -398,15 +386,7 @@ public class PlayerListener implements Listener {
             Location respawn = gamePlayer.getCheckpoint();
 
             if (respawn == null) {
-                respawn = dGroup.getGameWorld().getStartLocation();
-            }
-
-            if (respawn == null) {
-                respawn = dGroup.getGameWorld().getLobbyLocation();
-            }
-
-            if (respawn == null) {
-                respawn = dGroup.getGameWorld().getWorld().getSpawnLocation();
+                respawn = dGroup.getGameWorld().getStartLocation(dGroup);
             }
 
             // Because some plugins set another respawn point, DXL teleports a few ticks later.

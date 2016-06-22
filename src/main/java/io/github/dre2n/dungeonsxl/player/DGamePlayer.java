@@ -456,6 +456,20 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
+    public void kill() {
+        DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.DEATH);
+        plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
+
+        if (!dPlayerKickEvent.isCancelled()) {
+            MessageUtil.broadcastMessage(DMessages.PLAYER_DEATH_KICK.getMessage(player.getName()));
+            GameRules rules = Game.getByPlayer(player).getRules();
+            leave();
+            if (rules.getKeepInventoryOnEscape() && rules.getKeepInventoryOnDeath()) {
+                applyRespawnInventory();
+            }
+        }
+    }
+
     public boolean checkRequirements(Game game) {
         if (DPermissions.hasPermission(player, DPermissions.IGNORE_REQUIREMENTS)) {
             return true;
@@ -596,11 +610,7 @@ public class DGamePlayer extends DInstancePlayer {
         Location respawn = checkpoint;
 
         if (respawn == null) {
-            respawn = dGroup.getGameWorld().getStartLocation();
-        }
-
-        if (respawn == null) {
-            respawn = dGroup.getGameWorld().getLobbyLocation();
+            respawn = dGroup.getGameWorld().getStartLocation(dGroup);
         }
 
         if (respawn == null) {
@@ -693,7 +703,7 @@ public class DGamePlayer extends DInstancePlayer {
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);
             dPlayer.setWorld(gameWorld.getWorld());
-            dPlayer.setCheckpoint(dGroup.getGameWorld().getStartLocation());
+            dPlayer.setCheckpoint(dGroup.getGameWorld().getStartLocation(dGroup));
             if (dPlayer.getWolf() != null) {
                 dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
             }
@@ -816,15 +826,7 @@ public class DGamePlayer extends DInstancePlayer {
                     teleportLocation = getCheckpoint();
 
                     if (teleportLocation == null) {
-                        teleportLocation = dGroup.getGameWorld().getStartLocation();
-                    }
-
-                    if (teleportLocation == null) {
-                        teleportLocation = dGroup.getGameWorld().getLobbyLocation();
-                    }
-
-                    if (teleportLocation == null) {
-                        teleportLocation = getWorld().getSpawnLocation();
+                        teleportLocation = dGroup.getGameWorld().getStartLocation(dGroup);
                     }
 
                     // Don't forget Doge!

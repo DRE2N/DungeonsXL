@@ -136,7 +136,7 @@ public class DMob {
             name = victim.getType().getName();
         }
 
-        MobTrigger mobTrigger = MobTrigger.get(name, gameWorld);
+        MobTrigger mobTrigger = MobTrigger.getByName(name, gameWorld);
         if (mobTrigger != null) {
             mobTrigger.onTrigger();
         }

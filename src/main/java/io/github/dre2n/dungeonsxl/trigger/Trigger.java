@@ -113,6 +113,14 @@ public abstract class Trigger {
         }
     }
 
+    public void register(GameWorld gameWorld) {
+        gameWorld.addTrigger(this);
+    }
+
+    public void unregister(GameWorld gameWorld) {
+        gameWorld.removeTrigger(this);
+    }
+
     public static Trigger getOrCreate(String identifier, String value, DSign dSign) {
         TriggerType type = plugin.getTriggers().getByIdentifier(identifier);
         Trigger trigger = null;
@@ -199,10 +207,6 @@ public abstract class Trigger {
     }
 
     /* Abstracts */
-    public abstract void register(GameWorld gameWorld);
-
-    public abstract void unregister(GameWorld gameWorld);
-
     public abstract TriggerType getType();
 
 }

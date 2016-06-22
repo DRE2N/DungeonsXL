@@ -34,6 +34,7 @@ import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.task.TimeIsRunningTask;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.Worlds;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -107,7 +108,7 @@ public class DGroup {
             }
         }
 
-        dungeon = plugin.getDungeons().getDungeon(identifier);
+        dungeon = plugin.getDungeons().getByName(identifier);
         if (multiFloor && dungeon != null) {
             dungeonName = dungeon.getName();
             mapName = dungeon.getConfig().getStartFloor();
@@ -376,7 +377,7 @@ public class DGroup {
      * the name of the dungeon
      */
     public void setDungeon(String name) {
-        dungeon = plugin.getDungeons().getDungeon(name);
+        dungeon = plugin.getDungeons().getByName(name);
         if (dungeon != null) {
             dungeonName = dungeon.getName();
             mapName = dungeon.getConfig().getStartFloor();
@@ -396,11 +397,15 @@ public class DGroup {
     }
 
     /**
+     * Will fail if there is no dungeon with this name.
+     *
      * @param dungeonName
      * the dungeonName to set
      */
     public void setDungeonName(String dungeonName) {
-        this.dungeonName = dungeonName;
+        if (plugin.getDungeons().getByName(name) != null) {
+            this.dungeonName = dungeonName;
+        }
     }
 
     /**
@@ -411,11 +416,15 @@ public class DGroup {
     }
 
     /**
+     * Will fail if there is no resource world with this name.
+     *
      * @param name
      * the name to set
      */
     public void setMapName(String name) {
-        mapName = name;
+        if (Worlds.exists(name)) {
+            mapName = name;
+        }
     }
 
     /**

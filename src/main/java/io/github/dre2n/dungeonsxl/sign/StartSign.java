@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -27,10 +28,29 @@ public class StartSign extends DSign {
 
     private DSignType type = DSignTypeDefault.START;
 
+    private int id;
+
     public StartSign(Sign sign, String[] lines, GameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
+    /* Getters and setters */
+    /**
+     * @return the ID
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     * the ID to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /* Actions */
     @Override
     public boolean check() {
         return true;
@@ -38,7 +58,7 @@ public class StartSign extends DSign {
 
     @Override
     public void onInit() {
-        getGameWorld().setStartLocation(getSign().getLocation());
+        id = NumberUtil.parseInt(lines[1]);
         getSign().getBlock().setType(Material.AIR);
     }
 

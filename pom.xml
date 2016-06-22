@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.12.1-SNAPSHOT${buildNo}</version>
+    <version>0.13${buildNo}</version>
     <packaging>jar</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
@@ -47,7 +47,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>io.github.dre2n.commons</pattern>
-                                    <shadedPattern>io.github.dre2n.util.commons</shadedPattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>io.github.dre2n.caliburn</pattern>
@@ -87,12 +87,12 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.1.5</version>
+            <version>0.1.6</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>itemsxl</artifactId>
-            <version>0.1.5</version>
+            <version>0.1.6</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
@@ -104,6 +104,11 @@
             <artifactId>citizensapi</artifactId>
             <version>2.0.18-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gmail.filoghost</groupId>
+            <artifactId>holographicdisplaysapi</artifactId>
+            <version>2.1.7</version>
         </dependency>
     </dependencies>
     <repositories>

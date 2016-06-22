@@ -70,7 +70,7 @@ public class PlayCommand extends BRCommand {
             identifier = args[2];
             mapName = identifier;
             if (args[1].equalsIgnoreCase("dungeon") || args[1].equalsIgnoreCase("d")) {
-                Dungeon dungeon = plugin.getDungeons().getDungeon(args[2]);
+                Dungeon dungeon = plugin.getDungeons().getByName(args[2]);
                 if (dungeon != null) {
                     multiFloor = true;
                     mapName = dungeon.getConfig().getStartFloor();
@@ -102,7 +102,7 @@ public class PlayCommand extends BRCommand {
 
                 } else {
                     dGroup.setDungeonName(identifier);
-                    Dungeon dungeon = plugin.getDungeons().getDungeon(identifier);
+                    Dungeon dungeon = plugin.getDungeons().getByName(identifier);
 
                     if (dungeon != null) {
                         DungeonConfig config = dungeon.getConfig();
