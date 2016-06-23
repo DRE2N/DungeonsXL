@@ -65,7 +65,7 @@ public class ClassesSign extends DSign {
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
 
-        getGameWorld().getSignClass().add(getSign());
+        getGameWorld().getClassesSigns().add(getSign());
     }
 
     @Override

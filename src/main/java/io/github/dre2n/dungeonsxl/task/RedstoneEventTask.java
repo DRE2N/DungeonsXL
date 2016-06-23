@@ -35,7 +35,7 @@ public class RedstoneEventTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (GameWorld gameWorld : DungeonsXL.getInstance().getGameWorlds()) {
+        for (GameWorld gameWorld : DungeonsXL.getInstance().getWorlds().getGameWorlds()) {
             if (block.getWorld() == gameWorld.getWorld()) {
                 RedstoneTrigger.updateAll(gameWorld);
             }

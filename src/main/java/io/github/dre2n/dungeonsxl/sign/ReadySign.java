@@ -155,7 +155,7 @@ public class ReadySign extends DSign {
             return;
         }
 
-        if (getGameWorld().getSignClass().isEmpty() || dPlayer.getDClass() != null) {
+        if (getGameWorld().getClassesSigns().isEmpty() || dPlayer.getDClass() != null) {
             GameType forced = getGameWorld().getConfig().getForcedGameType();
             dPlayer.ready(forced == null ? gameType : forced);
         }

@@ -285,7 +285,7 @@ public class PlayerListener implements Listener {
                         }
 
                         // Class Signs
-                        for (Sign classSign : gameWorld.getSignClass()) {
+                        for (Sign classSign : gameWorld.getClassesSigns()) {
                             if (classSign != null) {
                                 if (classSign.getLocation().distance(clickedBlock.getLocation()) < 1) {
                                     if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -538,7 +538,7 @@ public class PlayerListener implements Listener {
             }
 
             if (dGroup.getGameWorld() == null) {
-                dGroup.setGameWorld(new GameWorld(DGroup.getByPlayer(player).getMapName()));
+                dGroup.setGameWorld(plugin.getWorlds().getResourceByName(DGroup.getByPlayer(player).getMapName()).instantiateAsGameWorld());// TO DO
                 dGroup.getGameWorld().setTutorial(true);
             }
 
@@ -578,7 +578,7 @@ public class PlayerListener implements Listener {
                 continue;
             }
 
-            if (plugin.getGameWorlds().size() >= config.getMaxInstances()) {
+            if (plugin.getWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
                 event.setResult(PlayerLoginEvent.Result.KICK_FULL);
                 event.setKickMessage(DMessages.ERROR_TOO_MANY_TUTORIALS.getMessage());
             }

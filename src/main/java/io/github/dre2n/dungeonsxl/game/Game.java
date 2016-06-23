@@ -28,6 +28,7 @@ import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
 import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.ResourceWorld;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -77,9 +78,10 @@ public class Game {
 
         dGroups.add(dGroup);
         started = false;
-        world = new GameWorld();
+        // TO DO world = new GameWorld();
+        ResourceWorld resource = plugin.getWorlds().getResourceByName(worldName);
         dGroup.setGameWorld(world);
-        world.load(worldName);
+        resource.instantiateAsGameWorld();
         fetchRules();
     }
 

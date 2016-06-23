@@ -20,11 +20,14 @@ import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.SignData;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 
 /**
  * This class represents unloaded worlds.
@@ -34,10 +37,30 @@ import org.bukkit.WorldCreator;
 public class ResourceWorld {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    Worlds worlds = plugin.getWorlds();
 
     private File folder;
     private WorldConfig config;
     private SignData signData;
+
+    public ResourceWorld(String name) {
+        folder = new File(DungeonsXL.MAPS, name);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        File signDataFile = new File(folder, "DXLData.data");
+        if (!signDataFile.exists()) {
+            try {
+                signDataFile.createNewFile();
+
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        signData = new SignData(signDataFile);
+    }
 
     public ResourceWorld(File folder) {
         this.folder = folder;
@@ -90,6 +113,53 @@ public class ResourceWorld {
         return signData;
     }
 
+    /**
+     * @param player
+     * the player to invite
+     */
+    public void addInvitedPlayer(OfflinePlayer player) {
+        if (config == null) {
+            config = new WorldConfig();
+        }
+
+        config.addInvitedPlayer(player.getUniqueId().toString());
+        config.save();
+    }
+
+    /**
+     * @param player
+     * the player to uninvite
+     */
+    public boolean removeInvitedPlayer(OfflinePlayer player) {
+        if (config == null) {
+            return false;
+        }
+
+        config.removeInvitedPlayers(player.getUniqueId().toString(), player.getName().toLowerCase());
+        config.save();
+
+        DEditPlayer editPlayer = DEditPlayer.getByName(player.getName());
+        if (editPlayer != null) {
+            if (EditWorld.getByWorld(editPlayer.getWorld()).getResource() == this) {
+                editPlayer.leave();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param player
+     * the player to check
+     */
+    public boolean isInvitedPlayer(OfflinePlayer player) {
+        if (config == null) {
+            return false;
+        }
+
+        return config.getInvitedPlayers().contains(player.getName().toLowerCase()) || config.getInvitedPlayers().contains(player.getUniqueId().toString());
+    }
+
     /* Actions */
     /**
      * @param game
@@ -97,8 +167,8 @@ public class ResourceWorld {
      * @return an instance of this world
      */
     public InstanceWorld instantiate(boolean game) {
-        int id = plugin.getWorlds().getInstances().size();
-        String name = "DXL_" + (game ? "Game" : "Edit") + "_" + id;
+        int id = worlds.generateId();
+        String name = worlds.generateName(game);
         File instanceFolder = new File(Bukkit.getWorldContainer(), name);
         FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
 
@@ -108,19 +178,14 @@ public class ResourceWorld {
 
         World world = plugin.getServer().createWorld(WorldCreator.name(name));
 
-        File idFile = new File(name, InstanceWorld.ID_FILE_PREFIX + getName());
-        try {
-            idFile.createNewFile();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-
-        InstanceWorld instance = new InstanceWorld(this, world, id);
-
+        InstanceWorld instance = null;
         try {
             if (game) {
+                new GameWorld(this, instanceFolder, world, id);
                 signData.deserializeSigns((GameWorld) instance);
+
             } else {
+                new EditWorld(this, instanceFolder, world, id);
                 signData.deserializeSigns((EditWorld) instance);
             }
 
@@ -143,6 +208,34 @@ public class ResourceWorld {
      */
     public GameWorld instantiateAsGameWorld() {
         return (GameWorld) instantiate(true);
+    }
+
+    /**
+     * Generate a new ResourceWorld.
+     *
+     * @return the automatically created EditWorld instance
+     */
+    public EditWorld generate() {
+        String name = worlds.generateName(false);
+        WorldCreator creator = WorldCreator.name(name);
+        creator.type(WorldType.FLAT);
+        creator.generateStructures(false);
+
+        /*EditWorldGenerateEvent event = new EditWorldGenerateEvent(this);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+         */
+        int id = worlds.generateId();
+        File folder = new File(Bukkit.getWorldContainer(), name);
+        World world = plugin.getServer().createWorld(creator);
+
+        EditWorld editWorld = new EditWorld(this, folder, world, id);
+        editWorld.generateIdFile();
+
+        return editWorld;
     }
 
 }

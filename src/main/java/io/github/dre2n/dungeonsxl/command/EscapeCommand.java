@@ -58,7 +58,7 @@ public class EscapeCommand extends BRCommand {
             }
 
             if (editWorld.getWorld().getPlayers().isEmpty()) {
-                editWorld.deleteNoSave();
+                editWorld.delete(false);
             }
 
         } else {

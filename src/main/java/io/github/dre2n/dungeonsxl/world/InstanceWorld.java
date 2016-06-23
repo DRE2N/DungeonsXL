@@ -16,27 +16,34 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import java.io.File;
+import java.io.IOException;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 /**
  * @author Daniel Saukel
  */
-public class InstanceWorld {
+public abstract class InstanceWorld {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    protected static DungeonsXL plugin = DungeonsXL.getInstance();
 
     public static String ID_FILE_PREFIX = ".id_";
 
     private ResourceWorld resourceWorld;
+    private File folder;
     private World world;
+    private File idFile;
     private int id;
     private Location lobby;
 
-    InstanceWorld(ResourceWorld resourceWorld, World world, int id) {
+    InstanceWorld(ResourceWorld resourceWorld, File folder, World world, int id) {
         this.resourceWorld = resourceWorld;
+        this.folder = folder;
         this.world = world;
         this.id = id;
     }
@@ -57,10 +64,31 @@ public class InstanceWorld {
     }
 
     /**
+     * @return the ResourceWorld of that this world is an instance
+     */
+    public ResourceWorld getResource() {
+        return resourceWorld;
+    }
+
+    /**
+     * @return the folder of the instance
+     */
+    public File getFolder() {
+        return folder;
+    }
+
+    /**
      * @return the instance
      */
     public World getWorld() {
         return world;
+    }
+
+    /**
+     * @return the file that stores the ID
+     */
+    public File getIdFile() {
+        return idFile;
     }
 
     /**
@@ -85,11 +113,35 @@ public class InstanceWorld {
         this.lobby = lobby;
     }
 
+    /* Actions */
     /**
-     * @return the ResourceWorld of that this world is an instance
+     * Sends a message to all players in the instance.
+     *
+     * @param message
+     * the message to send
      */
-    public ResourceWorld getResource() {
-        return resourceWorld;
+    public void sendMessage(String message) {
+        for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
+            MessageUtil.sendMessage(dPlayer.getPlayer(), message);
+        }
     }
+
+    /**
+     * @return the ID file
+     */
+    public void generateIdFile() {
+        try {
+            idFile = new File(getFolder(), ID_FILE_PREFIX + getName());
+            idFile.createNewFile();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /* Abstracts */
+    /**
+     * Deletes this instance.
+     */
+    public abstract void delete();
 
 }

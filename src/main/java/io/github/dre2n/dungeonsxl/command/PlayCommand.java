@@ -84,7 +84,7 @@ public class PlayCommand extends BRCommand {
             }
         }
 
-        if (!multiFloor && !EditWorld.exists(identifier)) {
+        if (!multiFloor && !plugin.getWorlds().exists(identifier)) {
             MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(identifier));
             return;
         }

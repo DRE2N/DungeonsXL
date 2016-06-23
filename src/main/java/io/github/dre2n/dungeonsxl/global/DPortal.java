@@ -186,7 +186,7 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null && dGroup.getMapName() != null) {
-            target = new GameWorld(dGroup.getMapName());
+            target = plugin.getWorlds().getResourceByName(dGroup.getMapName()).instantiateAsGameWorld();//TO DO
             dGroup.setGameWorld(target);
         }
 

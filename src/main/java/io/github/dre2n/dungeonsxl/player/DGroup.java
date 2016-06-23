@@ -34,7 +34,6 @@ import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.task.TimeIsRunningTask;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.dungeonsxl.world.Worlds;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -422,7 +421,7 @@ public class DGroup {
      * the name to set
      */
     public void setMapName(String name) {
-        if (Worlds.exists(name)) {
+        if (plugin.getWorlds().exists(name)) {
             mapName = name;
         }
     }

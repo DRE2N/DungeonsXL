@@ -30,7 +30,7 @@ public class LazyUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (GameWorld gameWorld : plugin.getGameWorlds()) {
+        for (GameWorld gameWorld : plugin.getWorlds().getGameWorlds()) {
             gameWorld.update();
         }
 

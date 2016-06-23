@@ -23,7 +23,6 @@ import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
-import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.announcer.Announcers;
 import io.github.dre2n.dungeonsxl.command.*;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -53,8 +52,6 @@ import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
 import io.github.dre2n.dungeonsxl.world.Worlds;
 import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
@@ -204,10 +201,7 @@ public class DungeonsXL extends BRPlugin {
         dGroups.clear();
 
         // Delete Worlds
-        GameWorld.deleteAll();
-        gameWorlds.clear();
-        EditWorld.deleteAll();
-        editWorlds.clear();
+        worlds.deleteAllInstances();
 
         // Disable listeners
         HandlerList.unregisterAll(this);
@@ -272,38 +266,17 @@ public class DungeonsXL extends BRPlugin {
     public void saveData() {
         protections.saveAll();
         DSavePlayer.save();
-        for (EditWorld editWorld : editWorlds) {
-            editWorld.save();
-        }
+        worlds.saveAll();
     }
 
     public void loadAll() {
         protections.loadAll();
         dPlayers.loadAll();
         DSavePlayer.load();
-        checkWorlds();
+        worlds.check();
     }
 
-    public void checkWorlds() {
-        File serverDir = new File(".");
-
-        for (File file : serverDir.listFiles()) {
-            if (file.getName().contains("DXL_Edit_") && file.isDirectory()) {
-                for (File dungeonFile : file.listFiles()) {
-                    if (dungeonFile.getName().contains(".id_")) {
-                        String dungeonName = dungeonFile.getName().substring(4);
-                        FileUtil.copyDirectory(file, new File(getDataFolder(), "/maps/" + dungeonName), EXCLUDED_FILES);
-                        FileUtil.deleteUnusedFiles(new File(getDataFolder(), "/maps/" + dungeonName));
-                    }
-                }
-
-                FileUtil.removeDirectory(file);
-
-            } else if (file.getName().contains("DXL_Game_") && file.isDirectory()) {
-                FileUtil.removeDirectory(file);
-            }
-        }
-    }
+    
 
     /* Getters and loaders */
     /**

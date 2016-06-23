@@ -39,6 +39,7 @@ import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.ResourceWorld;
 import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.ChatColor;
@@ -698,8 +699,14 @@ public class DGamePlayer extends DInstancePlayer {
 
         dGroup.removeUnplayedFloor(dGroup.getMapName());
         dGroup.setMapName(newFloor);
-        GameWorld gameWorld = new GameWorld(newFloor);
+
+        ResourceWorld resource = plugin.getWorlds().getResourceByName(newFloor);
+        GameWorld gameWorld = null;
+        if (resource != null) {
+            gameWorld = resource.instantiateAsGameWorld();
+        }
         dGroup.setGameWorld(gameWorld);
+
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = getByPlayer(player);
             dPlayer.setWorld(gameWorld.getWorld());

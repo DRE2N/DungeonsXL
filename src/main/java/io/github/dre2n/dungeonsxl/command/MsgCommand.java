@@ -24,7 +24,6 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.EditWorld;
-import java.io.File;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -63,10 +62,10 @@ public class MsgCommand extends BRCommand {
         try {
             int id = NumberUtil.parseInt(args[1]);
 
-            WorldConfig confreader = new WorldConfig(new File(plugin.getDataFolder() + "/maps/" + editWorld.getMapName(), "config.yml"));
+            WorldConfig config = editWorld.getResource().getConfig();
 
             if (args.length == 2) {
-                String msg = confreader.getMsg(id, true);
+                String msg = config.getMsg(id, true);
 
                 if (msg != null) {
                     MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
@@ -89,7 +88,7 @@ public class MsgCommand extends BRCommand {
 
                 if (splitMsg.length > 1) {
                     msg = splitMsg[1];
-                    String old = confreader.getMsg(id, false);
+                    String old = config.getMsg(id, false);
                     if (old == null) {
                         MessageUtil.sendMessage(player, DMessages.CMD_MSG_ADDED.getMessage(String.valueOf(id)));
 
@@ -97,8 +96,8 @@ public class MsgCommand extends BRCommand {
                         MessageUtil.sendMessage(player, DMessages.CMD_MSG_UPDATED.getMessage(String.valueOf(id)));
                     }
 
-                    confreader.setMsg(msg, id);
-                    confreader.save();
+                    config.setMsg(msg, id);
+                    config.save();
 
                 } else {
                     MessageUtil.sendMessage(player, DMessages.ERROR_MSG_FORMAT.getMessage());

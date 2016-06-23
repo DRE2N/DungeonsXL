@@ -16,9 +16,13 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
+import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.commons.util.NumberUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Bukkit;
 
 /**
  * @author Daniel Saukel
@@ -87,6 +91,118 @@ public class Worlds {
      */
     public Set<InstanceWorld> getInstances() {
         return instances;
+    }
+
+    /**
+     * @return the loaded GameWorlds
+     */
+    public Set<GameWorld> getGameWorlds() {
+        Set<GameWorld> gameWorlds = new HashSet<>();
+        for (InstanceWorld instance : instances) {
+            if (instance instanceof GameWorld) {
+                gameWorlds.add((GameWorld) instance);
+            }
+        }
+        return gameWorlds;
+    }
+
+    /**
+     * @return the loaded EditWorlds
+     */
+    public Set<EditWorld> getEditWorlds() {
+        Set<EditWorld> editWorlds = new HashSet<>();
+        for (InstanceWorld instance : instances) {
+            if (instance instanceof GameWorld) {
+                editWorlds.add((EditWorld) instance);
+            }
+        }
+        return editWorlds;
+    }
+
+    /**
+     * @param name
+     * the name of the map; can either be the resource name or the instance name
+     * @return
+     * if a map with this name exists
+     */
+    public boolean exists(String name) {
+        for (ResourceWorld resource : resources) {
+            if (resource.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+
+        for (InstanceWorld instance : instances) {
+            if (instance.getFolder().getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check world container for old, remaining instances and delete them.
+     */
+    public void check() {
+        for (File file : Bukkit.getWorldContainer().listFiles()) {
+            if (file.getName().startsWith("DXL_Edit_") && file.isDirectory()) {
+                for (File mapFile : file.listFiles()) {
+                    if (mapFile.getName().startsWith(".id_")) {
+                        String name = mapFile.getName().substring(4);
+
+                        FileUtil.copyDirectory(file, new File(DungeonsXL.MAPS, name), DungeonsXL.EXCLUDED_FILES);
+                        FileUtil.deleteUnusedFiles(new File(DungeonsXL.MAPS, name));
+
+                        FileUtil.removeDirectory(file);
+                    }
+                }
+
+            } else if (file.getName().startsWith("DXL_Game_") && file.isDirectory()) {
+                FileUtil.removeDirectory(file);
+            }
+        }
+    }
+
+    /**
+     * Clean up all instances.
+     */
+    public void deleteAllInstances() {
+        for (InstanceWorld instance : instances) {
+            instance.delete();
+        }
+    }
+
+    /**
+     * Saves all EditWorlds.
+     */
+    public void saveAll() {
+        for (EditWorld editWorld : getEditWorlds()) {
+            editWorld.save();
+        }
+    }
+
+    /**
+     * @return an ID for the instance
+     */
+    public int generateId() {
+        int id = 0;
+        for (InstanceWorld instance : instances) {
+            if (instance.getId() >= id) {
+                id = instance.getId() + 1;
+            }
+        }
+        return id;
+    }
+
+    /**
+     * @return a name for the instance
+     *
+     * @param game
+     * whether the instance is a GameWorld
+     */
+    public String generateName(boolean game) {
+        return "DXL_" + (game ? "Game" : "Edit") + "_" + generateId();
     }
 
 }

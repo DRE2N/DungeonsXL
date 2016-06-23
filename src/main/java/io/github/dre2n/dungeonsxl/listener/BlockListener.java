@@ -231,7 +231,7 @@ public class BlockListener implements Listener {
                 }
 
                 if (dsign.check()) {
-                    editWorld.checkSign(block);
+                    editWorld.registerSign(block);
                     editWorld.getSigns().add(block);
                     MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_SIGN_CREATED));
 
