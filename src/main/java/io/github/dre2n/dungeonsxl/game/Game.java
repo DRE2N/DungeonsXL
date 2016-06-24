@@ -236,8 +236,8 @@ public class Game {
      *
      * @return the unplayed floors
      */
-    public List<String> getUnplayedFloors() {
-        List<String> unplayedFloors = new ArrayList<>();
+    public List<ResourceWorld> getUnplayedFloors() {
+        List<ResourceWorld> unplayedFloors = new ArrayList<>();
         for (DGroup dGroup : dGroups) {
             if (dGroup.getUnplayedFloors().size() < unplayedFloors.size()) {
                 unplayedFloors = dGroup.getUnplayedFloors();
@@ -376,7 +376,7 @@ public class Game {
         }
 
         int delay = rules.getTimeToNextWave();
-        sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));
+        sendMessage(DMessages.GROUP_WAVE_FINISHED.getMessage(String.valueOf(waveCount), String.valueOf(delay)));
 
         new BukkitRunnable() {
             @Override

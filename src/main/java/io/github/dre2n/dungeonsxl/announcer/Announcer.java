@@ -96,7 +96,7 @@ public class Announcer {
 
             Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor();
+                mapName = dungeon.getConfig().getStartFloor().getName();
             }
 
         } else {
@@ -137,7 +137,7 @@ public class Announcer {
 
             Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor();
+                mapName = dungeon.getConfig().getStartFloor().getName();
             }
 
         } else {

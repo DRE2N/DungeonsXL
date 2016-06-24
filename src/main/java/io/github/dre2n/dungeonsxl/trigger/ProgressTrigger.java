@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.ResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ public class ProgressTrigger extends Trigger {
 
     private TriggerType type = TriggerTypeDefault.PROGRESS;
 
-    private String floor;
+    private ResourceWorld floor;
     private int floorCount;
     private int waveCount;
 
@@ -37,7 +38,7 @@ public class ProgressTrigger extends Trigger {
         this.waveCount = waveCount;
     }
 
-    public ProgressTrigger(String floor) {
+    public ProgressTrigger(ResourceWorld floor) {
         this.floor = floor;
     }
 
@@ -45,7 +46,7 @@ public class ProgressTrigger extends Trigger {
     /**
      * @return the specific floor that must be finished
      */
-    public String getFloor() {
+    public ResourceWorld getFloor() {
         return floor;
     }
 
@@ -53,7 +54,7 @@ public class ProgressTrigger extends Trigger {
      * @param floor
      * the specific floor to set
      */
-    public void setFloor(String floor) {
+    public void setFloor(ResourceWorld floor) {
         this.floor = floor;
     }
 
@@ -114,7 +115,14 @@ public class ProgressTrigger extends Trigger {
     }
 
     public static ProgressTrigger getOrCreate(String floor, GameWorld gameWorld) {
-        return new ProgressTrigger(floor);
+        ResourceWorld resource = plugin.getWorlds().getResourceByName(floor);
+
+        if (resource != null) {
+            return new ProgressTrigger(resource);
+
+        } else {
+            return null;
+        }
     }
 
     public static Set<ProgressTrigger> getByGameWorld(GameWorld gameWorld) {

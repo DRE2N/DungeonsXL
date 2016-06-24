@@ -639,7 +639,7 @@ public class DGamePlayer extends DInstancePlayer {
      * @param specifiedFloor
      * the name of the next floor
      */
-    public void finishFloor(String specifiedFloor) {
+    public void finishFloor(ResourceWorld specifiedFloor) {
         MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_DUNGEON.getMessage());
         finished = true;
 
@@ -681,7 +681,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         DungeonConfig dConfig = dGroup.getDungeon().getConfig();
         int random = NumberUtil.generateRandomInt(0, dConfig.getFloors().size());
-        String newFloor = dGroup.getUnplayedFloors().get(random);
+        ResourceWorld newFloor = dGroup.getUnplayedFloors().get(random);
         if (dConfig.getFloorCount() == dGroup.getFloorCount() - 1) {
             newFloor = dConfig.getEndFloor();
 
@@ -689,21 +689,20 @@ public class DGamePlayer extends DInstancePlayer {
             newFloor = specifiedFloor;
         }
 
-        DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(dGroup, dGroup.getGameWorld(), newFloor);
+        /*DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(dGroup, dGroup.getGameWorld(), newFloor);
 
         if (event.isCancelled()) {
             return;
         }
-
+         */
         Game game = dGroup.getGameWorld().getGame();
 
-        dGroup.removeUnplayedFloor(dGroup.getMapName());
-        dGroup.setMapName(newFloor);
+        dGroup.removeUnplayedFloor(dGroup.getGameWorld().getResource(), false);
+        dGroup.setMapName(newFloor.getName());
 
-        ResourceWorld resource = plugin.getWorlds().getResourceByName(newFloor);
         GameWorld gameWorld = null;
-        if (resource != null) {
-            gameWorld = resource.instantiateAsGameWorld();
+        if (newFloor != null) {
+            gameWorld = newFloor.instantiateAsGameWorld();
         }
         dGroup.setGameWorld(gameWorld);
 

@@ -63,4 +63,11 @@ public class Dungeon {
         return config != null;
     }
 
+    /**
+     * @return false if there are setup errors
+     */
+    public boolean isSetupCorrect() {
+        return config.getStartFloor() == null || config.getEndFloor() == null;
+    }
+
 }

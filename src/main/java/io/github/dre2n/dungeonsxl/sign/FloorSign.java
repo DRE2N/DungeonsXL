@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.ResourceWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -31,10 +32,25 @@ public class FloorSign extends DSign {
 
     private DSignType type = DSignTypeDefault.FLOOR;
 
-    private String floor;
+    private ResourceWorld floor;
 
     public FloorSign(Sign sign, String[] lines, GameWorld gameWorld) {
         super(sign, lines, gameWorld);
+    }
+
+    /**
+     * @return the next floor
+     */
+    public ResourceWorld getFloor() {
+        return floor;
+    }
+
+    /**
+     * @param floor
+     * the floor to set
+     */
+    public void setFloor(ResourceWorld floor) {
+        this.floor = floor;
     }
 
     @Override
@@ -45,7 +61,7 @@ public class FloorSign extends DSign {
     @Override
     public void onInit() {
         if (!lines[1].isEmpty()) {
-            floor = lines[1];
+            floor = plugin.getWorlds().getResourceByName(lines[1]);
         }
 
         if (!getTriggers().isEmpty()) {
@@ -64,7 +80,7 @@ public class FloorSign extends DSign {
         if (floor == null) {
             getSign().setLine(2, ChatColor.DARK_GREEN + "NEXT FLOOR");
         } else {
-            getSign().setLine(2, ChatColor.DARK_GREEN + floor.replaceAll("_", " "));
+            getSign().setLine(2, ChatColor.DARK_GREEN + floor.getName().replaceAll("_", " "));
         }
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();

@@ -36,7 +36,14 @@ public class Dungeons {
         }
 
         for (File file : folder.listFiles()) {
-            dungeons.add(new Dungeon(file));
+            Dungeon dungeon = new Dungeon(file);
+
+            if (dungeon.isSetupCorrect()) {
+                dungeons.add(dungeon);
+
+            } else {
+                // debug
+            }
         }
     }
 

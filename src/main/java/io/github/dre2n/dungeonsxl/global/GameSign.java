@@ -65,7 +65,7 @@ public class GameSign extends GlobalProtection {
             dungeonName = identifier;
             Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor();
+                mapName = dungeon.getConfig().getStartFloor().getName();
             } else {
                 mapName = "invalid";
             }
