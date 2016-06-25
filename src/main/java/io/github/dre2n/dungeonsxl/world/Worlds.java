@@ -35,7 +35,7 @@ public class Worlds {
     public Worlds(File folder) {
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
-                resources.add(new ResourceWorld(file));
+                new ResourceWorld(file);
             }
         }
     }
@@ -87,10 +87,42 @@ public class Worlds {
     }
 
     /**
+     * @param resource
+     * the ResourceWorld to add
+     */
+    public void addResource(ResourceWorld resource) {
+        resources.add(resource);
+    }
+
+    /**
+     * @param resource
+     * the ResourceWorld to remove
+     */
+    public void removeResource(ResourceWorld resource) {
+        resources.remove(resource);
+    }
+
+    /**
      * @return the loaded InstanceWorlds in the world container
      */
     public Set<InstanceWorld> getInstances() {
         return instances;
+    }
+
+    /**
+     * @param instance
+     * the InstanceWorld to add
+     */
+    public void addInstance(InstanceWorld instance) {
+        instances.add(instance);
+    }
+
+    /**
+     * @param instance
+     * the InstanceWorld to remove
+     */
+    public void removeInstance(InstanceWorld instance) {
+        instances.remove(instance);
     }
 
     /**

@@ -60,6 +60,8 @@ public class ResourceWorld {
         }
 
         signData = new SignData(signDataFile);
+
+        worlds.addResource(this);
     }
 
     public ResourceWorld(File folder) {
@@ -74,6 +76,8 @@ public class ResourceWorld {
         if (signData.exists()) {
             this.signData = new SignData(signData);
         }
+
+        worlds.addResource(this);
     }
 
     /* Getters and setters */

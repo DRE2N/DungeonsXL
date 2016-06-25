@@ -17,8 +17,6 @@
 package io.github.dre2n.dungeonsxl.world;
 
 import io.github.dre2n.commons.util.FileUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
@@ -55,8 +53,6 @@ import org.bukkit.inventory.ItemStack;
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class GameWorld extends InstanceWorld {
-
-    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     // Variables
     private boolean tutorial;
@@ -343,8 +339,7 @@ public class GameWorld extends InstanceWorld {
      */
     public Dungeon getDungeon() {
         for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
-            DungeonConfig dungeonConfig = dungeon.getConfig();
-            if (dungeonConfig.getFloors().contains(getName()) || dungeonConfig.getStartFloor().equals(getName()) || dungeonConfig.getEndFloor().equals(getName())) {
+            if (dungeon.getConfig().containsFloor(getResource())) {
                 return dungeon;
             }
         }
@@ -401,6 +396,8 @@ public class GameWorld extends InstanceWorld {
         plugin.getWorlds().getInstances().remove(this);
         plugin.getServer().unloadWorld(getWorld(), true);
         FileUtil.removeDirectory(getFolder());
+
+        worlds.removeInstance(this);
     }
 
     /**

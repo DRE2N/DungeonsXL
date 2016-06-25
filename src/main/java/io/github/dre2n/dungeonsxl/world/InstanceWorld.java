@@ -31,6 +31,7 @@ import org.bukkit.World;
 public abstract class InstanceWorld {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
+    protected static Worlds worlds = plugin.getWorlds();
 
     public static String ID_FILE_PREFIX = ".id_";
 
@@ -46,6 +47,8 @@ public abstract class InstanceWorld {
         this.folder = folder;
         this.world = world;
         this.id = id;
+
+        worlds.addInstance(this);
     }
 
     /* Getters and setters */

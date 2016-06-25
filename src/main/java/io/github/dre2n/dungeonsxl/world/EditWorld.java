@@ -135,6 +135,8 @@ public class EditWorld extends InstanceWorld {
         }
 
         FileUtil.removeDirectory(getFolder());
+
+        worlds.removeInstance(this);
     }
 
     /* Statics */
