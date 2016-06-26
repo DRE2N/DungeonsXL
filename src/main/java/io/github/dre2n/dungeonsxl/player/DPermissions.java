@@ -47,6 +47,7 @@ public enum DPermissions {
     HELP("help", TRUE),
     IGNORE_REQUIREMENTS("ignorerequirements", OP),
     IGNORE_TIME_LIMIT("ignoretimelimit", OP),
+    IMPORT("IMPORT", OP),
     INVITE("invite", OP),
     INSECURE("insecure", OP),
     JOIN("join", TRUE),
