@@ -51,7 +51,7 @@ public class CreateCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         String name = args[1];
 
-        if (new File(plugin.getDataFolder(), "/maps/" + name).exists()) {
+        if (new File(DungeonsXL.MAPS, name).exists()) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_IN_USE.getMessage(name));
             return;
         }
@@ -63,7 +63,7 @@ public class CreateCommand extends BRCommand {
 
         if (sender instanceof ConsoleCommandSender) {
             // Msg create
-            MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
+            MessageUtil.log(plugin, DMessages.LOG_NEW_MAP.getMessage());
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
@@ -84,7 +84,7 @@ public class CreateCommand extends BRCommand {
             }
 
             // Msg create
-            MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
+            MessageUtil.log(plugin, DMessages.LOG_NEW_MAP.getMessage());
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
