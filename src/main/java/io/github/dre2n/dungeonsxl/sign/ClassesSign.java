@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.player.DClass;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 
@@ -30,7 +30,7 @@ public class ClassesSign extends DSign {
 
     private DClass dClass;
 
-    public ClassesSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public ClassesSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
         dClass = plugin.getDClasses().getByName(sign.getLine(1));
     }

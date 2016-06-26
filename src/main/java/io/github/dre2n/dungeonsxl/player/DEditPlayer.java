@@ -20,7 +20,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
 /**
- * Represents a player in an EditWorld.
+ * Represents a player in an DEditWorld.
  *
  * @author Daniel Saukel
  */
@@ -40,7 +40,7 @@ public class DEditPlayer extends DInstancePlayer {
 
     private String[] linesCopy;
 
-    public DEditPlayer(DGlobalPlayer player, EditWorld world) {
+    public DEditPlayer(DGlobalPlayer player, DEditWorld world) {
         this(player.getPlayer(), world.getWorld());
     }
 
@@ -50,7 +50,7 @@ public class DEditPlayer extends DInstancePlayer {
         player.setGameMode(GameMode.CREATIVE);
         clearPlayerData();
 
-        Location teleport = EditWorld.getByWorld(world).getLobbyLocation();
+        Location teleport = DEditWorld.getByWorld(world).getLobbyLocation();
         if (teleport == null) {
             PlayerUtil.secureTeleport(player, world.getSpawnLocation());
         } else {
@@ -95,7 +95,7 @@ public class DEditPlayer extends DInstancePlayer {
     }
 
     /**
-     * Escape the EditWorld without saving.
+     * Escape the DEditWorld without saving.
      */
     public void escape() {
         delete();
@@ -137,7 +137,7 @@ public class DEditPlayer extends DInstancePlayer {
 
         getSavePlayer().reset(false);
 
-        EditWorld editWorld = EditWorld.getByWorld(getWorld());
+        DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
         if (editWorld != null) {
             editWorld.save();
         }
@@ -145,7 +145,7 @@ public class DEditPlayer extends DInstancePlayer {
 
     @Override
     public void sendMessage(String message) {
-        EditWorld editWorld = EditWorld.getByWorld(getWorld());
+        DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
         editWorld.sendMessage(message);
 
         for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
@@ -162,7 +162,7 @@ public class DEditPlayer extends DInstancePlayer {
         boolean locationValid = true;
         Location teleportLocation = player.getLocation();
 
-        EditWorld editWorld = EditWorld.getByWorld(getWorld());
+        DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
 
         if (!getPlayer().getWorld().equals(getWorld())) {
             locationValid = false;

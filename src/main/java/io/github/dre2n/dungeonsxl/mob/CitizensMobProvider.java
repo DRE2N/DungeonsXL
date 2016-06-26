@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.mob;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import net.citizensnpcs.api.CitizensAPI;
@@ -84,7 +84,7 @@ public class CitizensMobProvider implements ExternalMobProvider {
             npc.spawn(location);
             spawnedNPCs.add(npc);
 
-            GameWorld gameWorld = GameWorld.getByWorld(location.getWorld());
+            DGameWorld gameWorld = DGameWorld.getByWorld(location.getWorld());
             new DMob((LivingEntity) npc.getEntity(), gameWorld, null, mob);
         }
     }

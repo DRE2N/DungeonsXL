@@ -42,8 +42,8 @@ import io.github.dre2n.dungeonsxl.sign.OpenDoorSign;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -87,7 +87,7 @@ public class PlayerListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        GameWorld gameWorld = GameWorld.getByWorld(player.getLocation().getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(player.getLocation().getWorld());
         if (gameWorld == null) {
             return;
         }
@@ -149,7 +149,7 @@ public class PlayerListener implements Listener {
 
         if (clickedBlock != null) {
             // Block Enderchests
-            if (GameWorld.getByWorld(player.getWorld()) != null || EditWorld.getByWorld(player.getWorld()) != null) {
+            if (DGameWorld.getByWorld(player.getWorld()) != null || DEditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.ENDER_CHEST) {
                         if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
@@ -167,7 +167,7 @@ public class PlayerListener implements Listener {
             }
 
             // Block Dispensers
-            if (GameWorld.getByWorld(player.getWorld()) != null) {
+            if (DGameWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.DISPENSER) {
                         if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
@@ -209,7 +209,7 @@ public class PlayerListener implements Listener {
             }
 
             // Copy/Paste a Sign and Block-info
-            if (EditWorld.getByWorld(player.getWorld()) != null) {
+            if (DEditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     if (item.getType() == Material.STICK) {
                         DEditPlayer dPlayer = DEditPlayer.getByPlayer(player);
@@ -222,7 +222,7 @@ public class PlayerListener implements Listener {
             }
 
             // Trigger UseItem Signs
-            GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
+            DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
             if (gameWorld != null) {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                     String name = null;
@@ -272,8 +272,8 @@ public class PlayerListener implements Listener {
                 DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                 if (dPlayer != null) {
 
-                    // Check GameWorld Signs
-                    GameWorld gameWorld = GameWorld.getByWorld(player.getWorld());
+                    // Check DGameWorld Signs
+                    DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
                     if (gameWorld != null) {
 
                         // Trigger InteractTrigger
@@ -360,7 +360,7 @@ public class PlayerListener implements Listener {
         }
 
         if (dPlayer instanceof DEditPlayer) {
-            EditWorld editWorld = EditWorld.getByWorld(((DEditPlayer) dPlayer).getWorld());
+            DEditWorld editWorld = DEditWorld.getByWorld(((DEditPlayer) dPlayer).getWorld());
             if (editWorld == null) {
                 return;
             }
@@ -375,7 +375,7 @@ public class PlayerListener implements Listener {
         } else if (dPlayer instanceof DGamePlayer) {
             DGamePlayer gamePlayer = (DGamePlayer) dPlayer;
 
-            GameWorld gameWorld = GameWorld.getByWorld(gamePlayer.getWorld());
+            DGameWorld gameWorld = DGameWorld.getByWorld(gamePlayer.getWorld());
 
             if (gameWorld == null) {
                 return;
@@ -497,7 +497,7 @@ public class PlayerListener implements Listener {
                 target = dSavePlayer.getOldLocation();
             }
 
-            if (EditWorld.getByWorld(player.getWorld()) != null || GameWorld.getByWorld(player.getWorld()) != null) {
+            if (DEditWorld.getByWorld(player.getWorld()) != null || DGameWorld.getByWorld(player.getWorld()) != null) {
                 player.teleport(target);
             }
         }
@@ -538,7 +538,7 @@ public class PlayerListener implements Listener {
             }
 
             if (dGroup.getGameWorld() == null) {
-                dGroup.setGameWorld(plugin.getWorlds().getResourceByName(DGroup.getByPlayer(player).getMapName()).instantiateAsGameWorld());// TO DO
+                dGroup.setGameWorld(plugin.getDWorlds().getResourceByName(DGroup.getByPlayer(player).getMapName()).instantiateAsGameWorld());// TO DO
                 dGroup.getGameWorld().setTutorial(true);
             }
 
@@ -578,7 +578,7 @@ public class PlayerListener implements Listener {
                 continue;
             }
 
-            if (plugin.getWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
+            if (plugin.getDWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
                 event.setResult(PlayerLoginEvent.Result.KICK_FULL);
                 event.setKickMessage(DMessages.ERROR_TOO_MANY_TUTORIALS.getMessage());
             }
@@ -646,7 +646,7 @@ public class PlayerListener implements Listener {
 
         if (!plugin.getMainConfig().getOpenInventories() && !DPermissions.hasPermission(event.getPlayer(), DPermissions.INSECURE)) {
             World world = event.getPlayer().getWorld();
-            if (event.getInventory().getType() != InventoryType.CREATIVE && EditWorld.getByWorld(world) != null) {
+            if (event.getInventory().getType() != InventoryType.CREATIVE && DEditWorld.getByWorld(world) != null) {
                 event.setCancelled(true);
             }
         }

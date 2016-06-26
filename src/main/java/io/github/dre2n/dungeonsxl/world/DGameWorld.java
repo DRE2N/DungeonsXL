@@ -52,7 +52,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class GameWorld extends InstanceWorld {
+public class DGameWorld extends DInstanceWorld {
 
     // Variables
     private boolean tutorial;
@@ -68,13 +68,13 @@ public class GameWorld extends InstanceWorld {
     private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Trigger> triggers = new CopyOnWriteArrayList<>();
 
-    GameWorld(ResourceWorld resourceWorld, File folder, World world, int id) {
+    DGameWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
         super(resourceWorld, folder, world, id);
     }
 
     /**
      * @return
-     * the Game connected to the GameWorld
+     * the Game connected to the DGameWorld
      */
     public Game getGame() {
         for (Game game : plugin.getGames()) {
@@ -95,7 +95,7 @@ public class GameWorld extends InstanceWorld {
 
     /**
      * @param tutorial
-     * if the GameWorld is the tutorial
+     * if the DGameWorld is the tutorial
      */
     public void setTutorial(boolean tutorial) {
         this.tutorial = tutorial;
@@ -335,7 +335,7 @@ public class GameWorld extends InstanceWorld {
     }
 
     /**
-     * @return the Dungeon that contains the GameWorld
+     * @return the Dungeon that contains the DGameWorld
      */
     public Dungeon getDungeon() {
         for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
@@ -393,7 +393,7 @@ public class GameWorld extends InstanceWorld {
             return;
         }
 
-        plugin.getWorlds().getInstances().remove(this);
+        plugin.getDWorlds().getInstances().remove(this);
         plugin.getServer().unloadWorld(getWorld(), true);
         FileUtil.removeDirectory(getFolder());
 
@@ -434,11 +434,11 @@ public class GameWorld extends InstanceWorld {
      * @return
      * the EditWorld that represents the world
      */
-    public static GameWorld getByWorld(World world) {
-        InstanceWorld instance = plugin.getWorlds().getInstanceByName(world.getName());
+    public static DGameWorld getByWorld(World world) {
+        DInstanceWorld instance = plugin.getDWorlds().getInstanceByName(world.getName());
 
-        if (instance instanceof GameWorld) {
-            return (GameWorld) instance;
+        if (instance instanceof DGameWorld) {
+            return (DGameWorld) instance;
 
         } else {
             return null;

@@ -17,8 +17,8 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +29,7 @@ public class ProgressTrigger extends Trigger {
 
     private TriggerType type = TriggerTypeDefault.PROGRESS;
 
-    private ResourceWorld floor;
+    private DResourceWorld floor;
     private int floorCount;
     private int waveCount;
 
@@ -38,7 +38,7 @@ public class ProgressTrigger extends Trigger {
         this.waveCount = waveCount;
     }
 
-    public ProgressTrigger(ResourceWorld floor) {
+    public ProgressTrigger(DResourceWorld floor) {
         this.floor = floor;
     }
 
@@ -46,7 +46,7 @@ public class ProgressTrigger extends Trigger {
     /**
      * @return the specific floor that must be finished
      */
-    public ResourceWorld getFloor() {
+    public DResourceWorld getFloor() {
         return floor;
     }
 
@@ -54,7 +54,7 @@ public class ProgressTrigger extends Trigger {
      * @param floor
      * the specific floor to set
      */
-    public void setFloor(ResourceWorld floor) {
+    public void setFloor(DResourceWorld floor) {
         this.floor = floor;
     }
 
@@ -107,15 +107,15 @@ public class ProgressTrigger extends Trigger {
     }
 
     /* Statics */
-    public static ProgressTrigger getOrCreate(int floorCount, int waveCount, GameWorld gameWorld) {
+    public static ProgressTrigger getOrCreate(int floorCount, int waveCount, DGameWorld gameWorld) {
         if (floorCount == 0 & waveCount == 0 || floorCount < 0 || waveCount < 0) {
             return null;
         }
         return new ProgressTrigger(floorCount, waveCount);
     }
 
-    public static ProgressTrigger getOrCreate(String floor, GameWorld gameWorld) {
-        ResourceWorld resource = plugin.getWorlds().getResourceByName(floor);
+    public static ProgressTrigger getOrCreate(String floor, DGameWorld gameWorld) {
+        DResourceWorld resource = plugin.getDWorlds().getResourceByName(floor);
 
         if (resource != null) {
             return new ProgressTrigger(resource);
@@ -125,7 +125,7 @@ public class ProgressTrigger extends Trigger {
         }
     }
 
-    public static Set<ProgressTrigger> getByGameWorld(GameWorld gameWorld) {
+    public static Set<ProgressTrigger> getByGameWorld(DGameWorld gameWorld) {
         Set<ProgressTrigger> toReturn = new HashSet<>();
         for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.PROGRESS)) {
             toReturn.add((ProgressTrigger) trigger);

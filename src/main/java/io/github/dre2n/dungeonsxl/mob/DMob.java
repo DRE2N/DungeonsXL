@@ -21,7 +21,7 @@ import io.github.dre2n.dungeonsxl.event.dmob.DMobSpawnEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.trigger.MobTrigger;
 import io.github.dre2n.dungeonsxl.trigger.WaveTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.Random;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -41,7 +41,7 @@ public class DMob {
 
     private String trigger;
 
-    public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type) {
+    public DMob(LivingEntity entity, DGameWorld gameWorld, DMobType type) {
         gameWorld.addDMob(this);
 
         this.entity = entity;
@@ -64,7 +64,7 @@ public class DMob {
         }
     }
 
-    public DMob(LivingEntity entity, GameWorld gameWorld, DMobType type, String trigger) {
+    public DMob(LivingEntity entity, DGameWorld gameWorld, DMobType type, String trigger) {
         this(entity, gameWorld, type);
         this.trigger = trigger;
     }
@@ -101,7 +101,7 @@ public class DMob {
     /* Actions */
     public void onDeath(EntityDeathEvent event) {
         LivingEntity victim = event.getEntity();
-        GameWorld gameWorld = GameWorld.getByWorld(victim.getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(victim.getWorld());
         String name = null;
 
         if (gameWorld == null) {
@@ -153,7 +153,7 @@ public class DMob {
 
     /* Statics */
     public static DMob getByEntity(Entity entity) {
-        GameWorld gameWorld = GameWorld.getByWorld(entity.getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(entity.getWorld());
 
         for (DMob dMob : gameWorld.getDMobs()) {
             if (dMob.entity == entity) {

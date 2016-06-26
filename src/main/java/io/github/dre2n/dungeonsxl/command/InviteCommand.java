@@ -21,7 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,7 @@ public class InviteCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        ResourceWorld resource = plugin.getWorlds().getResourceByName(args[2]);
+        DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[2]);
         OfflinePlayer player = Bukkit.getOfflinePlayer(args[2]);
 
         if (resource != null) {

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.gameworld;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -29,7 +29,7 @@ public class GameWorldUnloadEvent extends GameWorldEvent implements Cancellable 
 
     private boolean cancelled;
 
-    public GameWorldUnloadEvent(GameWorld gameWorld) {
+    public GameWorldUnloadEvent(DGameWorld gameWorld) {
         super(gameWorld);
     }
 

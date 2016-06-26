@@ -27,25 +27,25 @@ import org.bukkit.Bukkit;
 /**
  * @author Daniel Saukel
  */
-public class Worlds {
+public class DWorlds {
 
-    private Set<ResourceWorld> resources;
-    private Set<InstanceWorld> instances;
+    private Set<DResourceWorld> resources;
+    private Set<DInstanceWorld> instances;
 
-    public Worlds(File folder) {
+    public DWorlds(File folder) {
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
-                new ResourceWorld(file);
+                new DResourceWorld(file);
             }
         }
     }
 
     /* Getters and setters */
     /**
-     * @return the ResourceWorld that has this name
+     * @return the DResourceWorld that has this name
      */
-    public ResourceWorld getResourceByName(String name) {
-        for (ResourceWorld world : resources) {
+    public DResourceWorld getResourceByName(String name) {
+        for (DResourceWorld world : resources) {
             if (world.getName().equals(name)) {
                 return world;
             }
@@ -55,9 +55,9 @@ public class Worlds {
     }
 
     /**
-     * @return the InstanceWorld that has this name
+     * @return the DInstanceWorld that has this name
      */
-    public InstanceWorld getInstanceByName(String name) {
+    public DInstanceWorld getInstanceByName(String name) {
         String[] splitted = name.split("_");
         if (splitted.length != 3) {
             return null;
@@ -67,10 +67,10 @@ public class Worlds {
     }
 
     /**
-     * @return the InstanceWorld that has this ID
+     * @return the DInstanceWorld that has this ID
      */
-    public InstanceWorld getInstanceById(int id) {
-        for (InstanceWorld world : instances) {
+    public DInstanceWorld getInstanceById(int id) {
+        for (DInstanceWorld world : instances) {
             if (world.getId() == id) {
                 return world;
             }
@@ -82,57 +82,57 @@ public class Worlds {
     /**
      * @return the ResourceWorlds in the maps folder
      */
-    public Set<ResourceWorld> getResources() {
+    public Set<DResourceWorld> getResources() {
         return resources;
     }
 
     /**
      * @param resource
-     * the ResourceWorld to add
+     * the DResourceWorld to add
      */
-    public void addResource(ResourceWorld resource) {
+    public void addResource(DResourceWorld resource) {
         resources.add(resource);
     }
 
     /**
      * @param resource
-     * the ResourceWorld to remove
+     * the DResourceWorld to remove
      */
-    public void removeResource(ResourceWorld resource) {
+    public void removeResource(DResourceWorld resource) {
         resources.remove(resource);
     }
 
     /**
      * @return the loaded InstanceWorlds in the world container
      */
-    public Set<InstanceWorld> getInstances() {
+    public Set<DInstanceWorld> getInstances() {
         return instances;
     }
 
     /**
      * @param instance
-     * the InstanceWorld to add
+     * the DInstanceWorld to add
      */
-    public void addInstance(InstanceWorld instance) {
+    public void addInstance(DInstanceWorld instance) {
         instances.add(instance);
     }
 
     /**
      * @param instance
-     * the InstanceWorld to remove
+     * the DInstanceWorld to remove
      */
-    public void removeInstance(InstanceWorld instance) {
+    public void removeInstance(DInstanceWorld instance) {
         instances.remove(instance);
     }
 
     /**
      * @return the loaded GameWorlds
      */
-    public Set<GameWorld> getGameWorlds() {
-        Set<GameWorld> gameWorlds = new HashSet<>();
-        for (InstanceWorld instance : instances) {
-            if (instance instanceof GameWorld) {
-                gameWorlds.add((GameWorld) instance);
+    public Set<DGameWorld> getGameWorlds() {
+        Set<DGameWorld> gameWorlds = new HashSet<>();
+        for (DInstanceWorld instance : instances) {
+            if (instance instanceof DGameWorld) {
+                gameWorlds.add((DGameWorld) instance);
             }
         }
         return gameWorlds;
@@ -141,11 +141,11 @@ public class Worlds {
     /**
      * @return the loaded EditWorlds
      */
-    public Set<EditWorld> getEditWorlds() {
-        Set<EditWorld> editWorlds = new HashSet<>();
-        for (InstanceWorld instance : instances) {
-            if (instance instanceof GameWorld) {
-                editWorlds.add((EditWorld) instance);
+    public Set<DEditWorld> getEditWorlds() {
+        Set<DEditWorld> editWorlds = new HashSet<>();
+        for (DInstanceWorld instance : instances) {
+            if (instance instanceof DGameWorld) {
+                editWorlds.add((DEditWorld) instance);
             }
         }
         return editWorlds;
@@ -158,13 +158,13 @@ public class Worlds {
      * if a map with this name exists
      */
     public boolean exists(String name) {
-        for (ResourceWorld resource : resources) {
+        for (DResourceWorld resource : resources) {
             if (resource.getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
 
-        for (InstanceWorld instance : instances) {
+        for (DInstanceWorld instance : instances) {
             if (instance.getFolder().getName().equalsIgnoreCase(name)) {
                 return true;
             }
@@ -200,7 +200,7 @@ public class Worlds {
      * Clean up all instances.
      */
     public void deleteAllInstances() {
-        for (InstanceWorld instance : instances) {
+        for (DInstanceWorld instance : instances) {
             instance.delete();
         }
     }
@@ -209,7 +209,7 @@ public class Worlds {
      * Saves all EditWorlds.
      */
     public void saveAll() {
-        for (EditWorld editWorld : getEditWorlds()) {
+        for (DEditWorld editWorld : getEditWorlds()) {
             editWorld.save();
         }
     }
@@ -219,7 +219,7 @@ public class Worlds {
      */
     public int generateId() {
         int id = 0;
-        for (InstanceWorld instance : instances) {
+        for (DInstanceWorld instance : instances) {
             if (instance.getId() >= id) {
                 id = instance.getId() + 1;
             }
@@ -231,7 +231,7 @@ public class Worlds {
      * @return a name for the instance
      *
      * @param game
-     * whether the instance is a GameWorld
+     * whether the instance is a DGameWorld
      */
     public String generateName(boolean game) {
         return "DXL_" + (game ? "Game" : "Edit") + "_" + generateId();

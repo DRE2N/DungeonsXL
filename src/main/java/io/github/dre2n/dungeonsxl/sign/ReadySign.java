@@ -25,7 +25,7 @@ import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.util.ProgressBar;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -43,7 +43,7 @@ public class ReadySign extends DSign {
     private double autoStart = -1;
     private boolean triggered = false;
 
-    public ReadySign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public ReadySign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

@@ -25,9 +25,9 @@ import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
-import io.github.dre2n.dungeonsxl.world.Worlds;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DWorlds;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
 public class EditCommand extends BRCommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    Worlds worlds = plugin.getWorlds();
+    DWorlds worlds = plugin.getDWorlds();
 
     public EditCommand() {
         setCommand("edit");
@@ -57,8 +57,8 @@ public class EditCommand extends BRCommand {
             return;
         }
 
-        ResourceWorld resource = worlds.getResourceByName(mapName);
-        EditWorld editWorld = resource.instantiateAsEditWorld();
+        DResourceWorld resource = worlds.getResourceByName(mapName);
+        DEditWorld editWorld = resource.instantiateAsEditWorld();
         DGroup dGroup = DGroup.getByPlayer(player);
         DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
 

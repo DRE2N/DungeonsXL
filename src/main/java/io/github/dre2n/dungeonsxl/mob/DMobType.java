@@ -20,7 +20,7 @@ import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -358,7 +358,7 @@ public class DMobType {
     }
 
     /* Actions */
-    public void spawn(GameWorld gameWorld, Location loc) {
+    public void spawn(DGameWorld gameWorld, Location loc) {
         if (type == null) {
             return;
         }

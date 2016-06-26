@@ -23,8 +23,8 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -67,8 +67,8 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            ResourceWorld resource = new ResourceWorld(name);
-            EditWorld editWorld = resource.generate();
+            DResourceWorld resource = new DResourceWorld(name);
+            DEditWorld editWorld = resource.generate();
             editWorld.save();
             editWorld.delete();
 
@@ -88,8 +88,8 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            ResourceWorld resource = new ResourceWorld(name);
-            EditWorld editWorld = resource.generate();
+            DResourceWorld resource = new DResourceWorld(name);
+            DEditWorld editWorld = resource.generate();
 
             // MSG Done
             MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());

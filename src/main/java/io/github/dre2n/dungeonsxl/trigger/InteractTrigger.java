@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -55,7 +55,7 @@ public class InteractTrigger extends Trigger {
     }
 
     /* Statics */
-    public static InteractTrigger getOrCreate(int id, GameWorld gameWorld) {
+    public static InteractTrigger getOrCreate(int id, DGameWorld gameWorld) {
         if (id == 0) {
             return null;
         }
@@ -66,7 +66,7 @@ public class InteractTrigger extends Trigger {
         return new InteractTrigger(id, null);
     }
 
-    public static InteractTrigger getOrCreate(int id, Block block, GameWorld gameWorld) {
+    public static InteractTrigger getOrCreate(int id, Block block, DGameWorld gameWorld) {
         InteractTrigger trigger = getById(id, gameWorld);
         if (trigger != null) {
             trigger.interactBlock = block;
@@ -75,7 +75,7 @@ public class InteractTrigger extends Trigger {
         return new InteractTrigger(id, block);
     }
 
-    public static InteractTrigger getByBlock(Block block, GameWorld gameWorld) {
+    public static InteractTrigger getByBlock(Block block, DGameWorld gameWorld) {
         for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.INTERACT)) {
             InteractTrigger trigger = (InteractTrigger) uncasted;
             if (trigger.interactBlock != null) {
@@ -87,7 +87,7 @@ public class InteractTrigger extends Trigger {
         return null;
     }
 
-    public static InteractTrigger getById(int id, GameWorld gameWorld) {
+    public static InteractTrigger getById(int id, DGameWorld gameWorld) {
         if (id != 0) {
             for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.INTERACT)) {
                 InteractTrigger trigger = (InteractTrigger) uncasted;

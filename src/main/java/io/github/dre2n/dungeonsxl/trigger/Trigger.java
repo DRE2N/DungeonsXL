@@ -21,7 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerRegistrationEvent;
 import io.github.dre2n.dungeonsxl.sign.DSign;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -113,11 +113,11 @@ public abstract class Trigger {
         }
     }
 
-    public void register(GameWorld gameWorld) {
+    public void register(DGameWorld gameWorld) {
         gameWorld.addTrigger(this);
     }
 
-    public void unregister(GameWorld gameWorld) {
+    public void unregister(DGameWorld gameWorld) {
         gameWorld.removeTrigger(this);
     }
 
@@ -185,7 +185,7 @@ public abstract class Trigger {
 
             Method method;
             try {
-                method = type.getHandler().getDeclaredMethod("getOrCreate", String.class, GameWorld.class);
+                method = type.getHandler().getDeclaredMethod("getOrCreate", String.class, DGameWorld.class);
                 trigger = (Trigger) method.invoke(value, dSign.getGameWorld());
 
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {

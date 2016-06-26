@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
@@ -36,7 +36,7 @@ public class BlockSign extends DSign {
     private byte offBlockData = 0x0;
     private byte onBlockData = 0x0;
 
-    public BlockSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public BlockSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

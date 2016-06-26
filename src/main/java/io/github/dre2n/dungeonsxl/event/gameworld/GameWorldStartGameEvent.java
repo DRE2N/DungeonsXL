@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.event.gameworld;
 
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -31,7 +31,7 @@ public class GameWorldStartGameEvent extends GameWorldEvent implements Cancellab
 
     private Game game;
 
-    public GameWorldStartGameEvent(GameWorld gameWorld, Game game) {
+    public GameWorldStartGameEvent(DGameWorld gameWorld, Game game) {
         super(gameWorld);
         this.game = game;
     }

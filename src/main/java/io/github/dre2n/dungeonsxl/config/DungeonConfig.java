@@ -18,8 +18,8 @@ package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.commons.config.BRConfig;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
-import io.github.dre2n.dungeonsxl.world.Worlds;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DWorlds;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +29,13 @@ import java.util.List;
  */
 public class DungeonConfig extends BRConfig {
 
-    Worlds worlds = DungeonsXL.getInstance().getWorlds();
+    DWorlds worlds = DungeonsXL.getInstance().getDWorlds();
 
     public static final int CONFIG_VERSION = 1;
 
-    private ResourceWorld startFloor;
-    private ResourceWorld endFloor;
-    private List<ResourceWorld> floors = new ArrayList<>();
+    private DResourceWorld startFloor;
+    private DResourceWorld endFloor;
+    private List<DResourceWorld> floors = new ArrayList<>();
     private int floorCount;
     private boolean removeWhenPlayed;
     private WorldConfig overrideValues;
@@ -53,7 +53,7 @@ public class DungeonConfig extends BRConfig {
     /**
      * @return the startFloor
      */
-    public ResourceWorld getStartFloor() {
+    public DResourceWorld getStartFloor() {
         return startFloor;
     }
 
@@ -61,14 +61,14 @@ public class DungeonConfig extends BRConfig {
      * @param startFloor
      * the startFloor to set
      */
-    public void setStartFloor(ResourceWorld startFloor) {
+    public void setStartFloor(DResourceWorld startFloor) {
         this.startFloor = startFloor;
     }
 
     /**
      * @return the endFloor
      */
-    public ResourceWorld getEndFloor() {
+    public DResourceWorld getEndFloor() {
         return endFloor;
     }
 
@@ -76,14 +76,14 @@ public class DungeonConfig extends BRConfig {
      * @param endFloor
      * the endFloor to set
      */
-    public void setEndFloor(ResourceWorld endFloor) {
+    public void setEndFloor(DResourceWorld endFloor) {
         this.endFloor = endFloor;
     }
 
     /**
      * @return the floors
      */
-    public List<ResourceWorld> getFloors() {
+    public List<DResourceWorld> getFloors() {
         return floors;
     }
 
@@ -91,7 +91,7 @@ public class DungeonConfig extends BRConfig {
      * @param resource
      * the resource to add
      */
-    public void addFloor(ResourceWorld resource) {
+    public void addFloor(DResourceWorld resource) {
         floors.add(resource);
     }
 
@@ -99,7 +99,7 @@ public class DungeonConfig extends BRConfig {
      * @param resource
      * the resource to remove
      */
-    public void removeFloor(ResourceWorld resource) {
+    public void removeFloor(DResourceWorld resource) {
         floors.remove(resource);
     }
 
@@ -172,10 +172,10 @@ public class DungeonConfig extends BRConfig {
 
     /**
      * @param resource
-     * the ResourceWorld to check
+     * the DResourceWorld to check
      * @return true if the floor is either in the list or the start / end floor.
      */
-    public boolean containsFloor(ResourceWorld resource) {
+    public boolean containsFloor(DResourceWorld resource) {
         return floors.contains(resource) || startFloor.equals(resource) || endFloor.equals(resource);
     }
 
@@ -225,7 +225,7 @@ public class DungeonConfig extends BRConfig {
     public void load() {
         if (config.contains("floors")) {
             for (String floor : config.getStringList("floors")) {
-                ResourceWorld resource = worlds.getResourceByName(floor);
+                DResourceWorld resource = worlds.getResourceByName(floor);
                 if (resource != null) {
                     floors.add(resource);
                 }

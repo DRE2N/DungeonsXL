@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -62,7 +62,7 @@ public class RedstoneTrigger extends Trigger {
     }
 
     /* Statics */
-    public static RedstoneTrigger getOrCreate(Sign sign, GameWorld gameWorld) {
+    public static RedstoneTrigger getOrCreate(Sign sign, DGameWorld gameWorld) {
         Block rtBlock = null;
         if (sign.getBlock().getType() == Material.WALL_SIGN) {
             switch (sign.getData().getData()) {
@@ -96,7 +96,7 @@ public class RedstoneTrigger extends Trigger {
         return null;
     }
 
-    public static void updateAll(GameWorld gameWorld) {
+    public static void updateAll(DGameWorld gameWorld) {
         for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
             ((RedstoneTrigger) trigger).onTrigger();
         }

@@ -20,7 +20,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.mob.DMobType;
 import io.github.dre2n.dungeonsxl.sign.DMobSign;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -46,7 +46,7 @@ public class MobSpawnTask extends BukkitRunnable {
     public void run() {
         if (sign.getInterval() <= 0) {
             World world = sign.getSign().getWorld();
-            GameWorld gameWorld = GameWorld.getByWorld(world);
+            DGameWorld gameWorld = DGameWorld.getByWorld(world);
 
             if (gameWorld != null) {
                 Location spawnLoc = sign.getSign().getLocation().add(0.5, 0, 0.5);

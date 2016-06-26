@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.event.dsign;
 
 import io.github.dre2n.dungeonsxl.sign.DSign;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Sign;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -31,9 +31,9 @@ public class DSignRegistrationEvent extends DSignEvent implements Cancellable {
     private boolean cancelled;
 
     private Sign sign;
-    private GameWorld gameWorld;
+    private DGameWorld gameWorld;
 
-    public DSignRegistrationEvent(Sign sign, GameWorld gameWorld, DSign dSign) {
+    public DSignRegistrationEvent(Sign sign, DGameWorld gameWorld, DSign dSign) {
         super(dSign);
         this.sign = sign;
         this.gameWorld = gameWorld;
@@ -57,7 +57,7 @@ public class DSignRegistrationEvent extends DSignEvent implements Cancellable {
     /**
      * @return the gameWorld
      */
-    public GameWorld getGameWorld() {
+    public DGameWorld getGameWorld() {
         return gameWorld;
     }
 
@@ -65,7 +65,7 @@ public class DSignRegistrationEvent extends DSignEvent implements Cancellable {
      * @param gameWorld
      * the gameWorld to set
      */
-    public void setGameWorld(GameWorld gameWorld) {
+    public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 

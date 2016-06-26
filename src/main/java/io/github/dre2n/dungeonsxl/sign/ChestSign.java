@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
@@ -33,7 +33,7 @@ public class ChestSign extends DSign {
     private double moneyReward;
     private int levelReward;
 
-    public ChestSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public ChestSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

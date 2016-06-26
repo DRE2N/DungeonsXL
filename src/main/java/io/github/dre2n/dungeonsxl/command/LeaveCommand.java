@@ -27,7 +27,7 @@ import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -53,8 +53,8 @@ public class LeaveCommand extends BRCommand {
 
         DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
 
-        if (GameWorld.getByWorld(player.getWorld()) != null) {
-            if (GameWorld.getByWorld(player.getWorld()).isTutorial()) {
+        if (DGameWorld.getByWorld(player.getWorld()) != null) {
+            if (DGameWorld.getByWorld(player.getWorld()).isTutorial()) {
                 MessageUtil.sendMessage(player, DMessages.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
                 return;
             }

@@ -28,21 +28,21 @@ import org.bukkit.World;
 /**
  * @author Daniel Saukel
  */
-public abstract class InstanceWorld {
+public abstract class DInstanceWorld {
 
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static Worlds worlds = plugin.getWorlds();
+    protected static DWorlds worlds = plugin.getDWorlds();
 
     public static String ID_FILE_PREFIX = ".id_";
 
-    private ResourceWorld resourceWorld;
+    private DResourceWorld resourceWorld;
     private File folder;
     private World world;
     private File idFile;
     private int id;
     private Location lobby;
 
-    InstanceWorld(ResourceWorld resourceWorld, File folder, World world, int id) {
+    DInstanceWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
         this.resourceWorld = resourceWorld;
         this.folder = folder;
         this.world = world;
@@ -53,7 +53,7 @@ public abstract class InstanceWorld {
 
     /* Getters and setters */
     /**
-     * @return the name of the ResourceWorld
+     * @return the name of the DResourceWorld
      */
     public String getName() {
         return resourceWorld.getName();
@@ -67,9 +67,9 @@ public abstract class InstanceWorld {
     }
 
     /**
-     * @return the ResourceWorld of that this world is an instance
+     * @return the DResourceWorld of that this world is an instance
      */
-    public ResourceWorld getResource() {
+    public DResourceWorld getResource() {
         return resourceWorld;
     }
 

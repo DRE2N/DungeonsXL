@@ -21,7 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,7 +44,7 @@ public class SaveCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
+        DEditWorld editWorld = DEditWorld.getByWorld(player.getWorld());
         if (editWorld != null) {
             editWorld.save();
             MessageUtil.sendMessage(player, DMessages.CMD_SAVE_SUCCESS.getMessage());

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.editworld;
 
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -30,7 +30,7 @@ public class EditWorldUnloadEvent extends EditWorldEvent implements Cancellable 
 
     private boolean save;
 
-    public EditWorldUnloadEvent(EditWorld editWorld, boolean save) {
+    public EditWorldUnloadEvent(DEditWorld editWorld, boolean save) {
         super(editWorld);
         this.save = save;
     }

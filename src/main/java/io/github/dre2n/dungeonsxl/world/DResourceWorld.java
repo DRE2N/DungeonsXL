@@ -34,16 +34,16 @@ import org.bukkit.WorldType;
  *
  * @author Daniel Saukel
  */
-public class ResourceWorld {
+public class DResourceWorld {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    Worlds worlds = plugin.getWorlds();
+    DWorlds worlds = plugin.getDWorlds();
 
     private File folder;
     private WorldConfig config;
     private SignData signData;
 
-    public ResourceWorld(String name) {
+    public DResourceWorld(String name) {
         folder = new File(DungeonsXL.MAPS, name);
         if (!folder.exists()) {
             folder.mkdir();
@@ -64,7 +64,7 @@ public class ResourceWorld {
         worlds.addResource(this);
     }
 
-    public ResourceWorld(File folder) {
+    public DResourceWorld(File folder) {
         this.folder = folder;
 
         File configFile = new File(folder, "config.yml");
@@ -144,7 +144,7 @@ public class ResourceWorld {
 
         DEditPlayer editPlayer = DEditPlayer.getByName(player.getName());
         if (editPlayer != null) {
-            if (EditWorld.getByWorld(editPlayer.getWorld()).getResource() == this) {
+            if (DEditWorld.getByWorld(editPlayer.getWorld()).getResource() == this) {
                 editPlayer.leave();
             }
         }
@@ -167,10 +167,10 @@ public class ResourceWorld {
     /* Actions */
     /**
      * @param game
-     * whether the instance is a GameWorld
+     * whether the instance is a DGameWorld
      * @return an instance of this world
      */
-    public InstanceWorld instantiate(boolean game) {
+    public DInstanceWorld instantiate(boolean game) {
         int id = worlds.generateId();
         String name = worlds.generateName(game);
         File instanceFolder = new File(Bukkit.getWorldContainer(), name);
@@ -182,15 +182,15 @@ public class ResourceWorld {
 
         World world = plugin.getServer().createWorld(WorldCreator.name(name));
 
-        InstanceWorld instance = null;
+        DInstanceWorld instance = null;
         try {
             if (game) {
-                new GameWorld(this, instanceFolder, world, id);
-                signData.deserializeSigns((GameWorld) instance);
+                new DGameWorld(this, instanceFolder, world, id);
+                signData.deserializeSigns((DGameWorld) instance);
 
             } else {
-                new EditWorld(this, instanceFolder, world, id);
-                signData.deserializeSigns((EditWorld) instance);
+                new DEditWorld(this, instanceFolder, world, id);
+                signData.deserializeSigns((DEditWorld) instance);
             }
 
         } catch (IOException exception) {
@@ -203,23 +203,23 @@ public class ResourceWorld {
     /**
      * @return an instance of this world
      */
-    public EditWorld instantiateAsEditWorld() {
-        return (EditWorld) instantiate(false);
+    public DEditWorld instantiateAsEditWorld() {
+        return (DEditWorld) instantiate(false);
     }
 
     /**
      * @return an instance of this world
      */
-    public GameWorld instantiateAsGameWorld() {
-        return (GameWorld) instantiate(true);
+    public DGameWorld instantiateAsGameWorld() {
+        return (DGameWorld) instantiate(true);
     }
 
     /**
-     * Generate a new ResourceWorld.
+     * Generate a new DResourceWorld.
      *
-     * @return the automatically created EditWorld instance
+     * @return the automatically created DEditWorld instance
      */
-    public EditWorld generate() {
+    public DEditWorld generate() {
         String name = worlds.generateName(false);
         WorldCreator creator = WorldCreator.name(name);
         creator.type(WorldType.FLAT);
@@ -236,7 +236,7 @@ public class ResourceWorld {
         File folder = new File(Bukkit.getWorldContainer(), name);
         World world = plugin.getServer().createWorld(creator);
 
-        EditWorld editWorld = new EditWorld(this, folder, world, id);
+        DEditWorld editWorld = new DEditWorld(this, folder, world, id);
         editWorld.generateIdFile();
 
         return editWorld;

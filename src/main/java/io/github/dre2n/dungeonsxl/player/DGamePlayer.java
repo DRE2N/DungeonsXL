@@ -38,8 +38,8 @@ import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.ChatColor;
@@ -56,7 +56,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 /**
- * Represents a player in a GameWorld.
+ * Represents a player in a DGameWorld.
  *
  * @author Frank Baumann, Tobias Schmitz, Milan Albrecht, Daniel Saukel
  */
@@ -77,7 +77,7 @@ public class DGamePlayer extends DInstancePlayer {
     private int initialLives = -1;
     private int lives;
 
-    public DGamePlayer(Player player, GameWorld gameWorld) {
+    public DGamePlayer(Player player, DGameWorld gameWorld) {
         this(player, gameWorld.getWorld());
     }
 
@@ -103,7 +103,7 @@ public class DGamePlayer extends DInstancePlayer {
         initialLives = rules.getInitialLives();
         lives = initialLives;
 
-        Location teleport = GameWorld.getByWorld(world).getLobbyLocation();
+        Location teleport = DGameWorld.getByWorld(world).getLobbyLocation();
         if (teleport == null) {
             PlayerUtil.secureTeleport(player, world.getSpawnLocation());
         } else {
@@ -129,7 +129,7 @@ public class DGamePlayer extends DInstancePlayer {
             return false;
         }
 
-        GameWorld gameWorld = dGroup.getGameWorld();
+        DGameWorld gameWorld = dGroup.getGameWorld();
         if (gameWorld == null) {
             return false;
         }
@@ -392,7 +392,7 @@ public class DGamePlayer extends DInstancePlayer {
             dGroup.removePlayer(getPlayer(), message);
         }
 
-        GameWorld gameWorld = GameWorld.getByWorld(getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(getWorld());
         Game game = Game.getByGameWorld(gameWorld);
         if (game != null) {
             if (finished) {
@@ -639,7 +639,7 @@ public class DGamePlayer extends DInstancePlayer {
      * @param specifiedFloor
      * the name of the next floor
      */
-    public void finishFloor(ResourceWorld specifiedFloor) {
+    public void finishFloor(DResourceWorld specifiedFloor) {
         MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_DUNGEON.getMessage());
         finished = true;
 
@@ -681,7 +681,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         DungeonConfig dConfig = dGroup.getDungeon().getConfig();
         int random = NumberUtil.generateRandomInt(0, dConfig.getFloors().size());
-        ResourceWorld newFloor = dGroup.getUnplayedFloors().get(random);
+        DResourceWorld newFloor = dGroup.getUnplayedFloors().get(random);
         if (dConfig.getFloorCount() == dGroup.getFloorCount() - 1) {
             newFloor = dConfig.getEndFloor();
 
@@ -700,7 +700,7 @@ public class DGamePlayer extends DInstancePlayer {
         dGroup.removeUnplayedFloor(dGroup.getGameWorld().getResource(), false);
         dGroup.setMapName(newFloor.getName());
 
-        GameWorld gameWorld = null;
+        DGameWorld gameWorld = null;
         if (newFloor != null) {
             gameWorld = newFloor.instantiateAsGameWorld();
         }
@@ -794,7 +794,7 @@ public class DGamePlayer extends DInstancePlayer {
 
     @Override
     public void sendMessage(String message) {
-        GameWorld gameWorld = GameWorld.getByWorld(getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(getWorld());
         gameWorld.sendMessage(message);
 
         for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
@@ -820,7 +820,7 @@ public class DGamePlayer extends DInstancePlayer {
         boolean kick = false;
         boolean triggerAllInDistance = false;
 
-        GameWorld gameWorld = GameWorld.getByWorld(getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(getWorld());
 
         if (!updateSecond) {
             if (!getPlayer().getWorld().equals(getWorld())) {

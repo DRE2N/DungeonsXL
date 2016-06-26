@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -30,7 +30,7 @@ public class LazyUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (GameWorld gameWorld : plugin.getWorlds().getGameWorlds()) {
+        for (DGameWorld gameWorld : plugin.getDWorlds().getGameWorlds()) {
             gameWorld.update();
         }
 

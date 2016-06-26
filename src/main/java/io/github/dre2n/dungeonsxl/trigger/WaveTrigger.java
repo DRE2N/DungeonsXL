@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,14 +68,14 @@ public class WaveTrigger extends Trigger {
     }
 
     /* Statics */
-    public static WaveTrigger getOrCreate(double mustKillRate, GameWorld gameWorld) {
+    public static WaveTrigger getOrCreate(double mustKillRate, DGameWorld gameWorld) {
         return new WaveTrigger(mustKillRate);
     }
 
     /**
-     * @return the WaveTriggers in the GameWorld
+     * @return the WaveTriggers in the DGameWorld
      */
-    public static Set<WaveTrigger> getByGameWorld(GameWorld gameWorld) {
+    public static Set<WaveTrigger> getByGameWorld(DGameWorld gameWorld) {
         Set<WaveTrigger> toReturn = new HashSet<>();
         for (Trigger trigger : gameWorld.getTriggers()) {
             toReturn.add((WaveTrigger) trigger);

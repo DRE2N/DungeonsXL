@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.editworld;
 
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -28,7 +28,7 @@ public class EditWorldGenerateEvent extends EditWorldEvent implements Cancellabl
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    public EditWorldGenerateEvent(EditWorld editWorld) {
+    public EditWorldGenerateEvent(DEditWorld editWorld) {
         super(editWorld);
     }
 

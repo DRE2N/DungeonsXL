@@ -18,8 +18,8 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -32,16 +32,16 @@ public class FloorSign extends DSign {
 
     private DSignType type = DSignTypeDefault.FLOOR;
 
-    private ResourceWorld floor;
+    private DResourceWorld floor;
 
-    public FloorSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public FloorSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
     /**
      * @return the next floor
      */
-    public ResourceWorld getFloor() {
+    public DResourceWorld getFloor() {
         return floor;
     }
 
@@ -49,7 +49,7 @@ public class FloorSign extends DSign {
      * @param floor
      * the floor to set
      */
-    public void setFloor(ResourceWorld floor) {
+    public void setFloor(DResourceWorld floor) {
         this.floor = floor;
     }
 
@@ -61,7 +61,7 @@ public class FloorSign extends DSign {
     @Override
     public void onInit() {
         if (!lines[1].isEmpty()) {
-            floor = plugin.getWorlds().getResourceByName(lines[1]);
+            floor = plugin.getDWorlds().getResourceByName(lines[1]);
         }
 
         if (!getTriggers().isEmpty()) {

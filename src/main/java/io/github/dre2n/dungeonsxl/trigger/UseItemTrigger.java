@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -58,7 +58,7 @@ public class UseItemTrigger extends Trigger {
     }
 
     /* Statics */
-    public static UseItemTrigger getOrCreate(String name, GameWorld gameWorld) {
+    public static UseItemTrigger getOrCreate(String name, DGameWorld gameWorld) {
         UseItemTrigger trigger = getByName(name, gameWorld);
         if (trigger != null) {
             return trigger;
@@ -66,7 +66,7 @@ public class UseItemTrigger extends Trigger {
         return new UseItemTrigger(name);
     }
 
-    public static UseItemTrigger getByName(String name, GameWorld gameWorld) {
+    public static UseItemTrigger getByName(String name, DGameWorld gameWorld) {
         for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.USE_ITEM)) {
             UseItemTrigger trigger = (UseItemTrigger) uncasted;
             if (trigger.name.equalsIgnoreCase(name)) {

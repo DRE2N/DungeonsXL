@@ -24,9 +24,9 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.dungeonsxl.world.Worlds;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DWorlds;
 import java.io.File;
 import java.util.ArrayList;
 import org.bukkit.command.CommandSender;
@@ -38,7 +38,7 @@ import org.bukkit.entity.Player;
 public class ListCommand extends BRCommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    Worlds worlds = plugin.getWorlds();
+    DWorlds worlds = plugin.getDWorlds();
 
     public ListCommand() {
         setCommand("list");
@@ -63,10 +63,10 @@ public class ListCommand extends BRCommand {
             mapList.add(file.getName());
         }
         ArrayList<String> loadedList = new ArrayList<>();
-        for (EditWorld editWorld : worlds.getEditWorlds()) {
+        for (DEditWorld editWorld : worlds.getEditWorlds()) {
             loadedList.add(editWorld.getWorld().getWorldFolder().getName());
         }
-        for (GameWorld gameWorld : worlds.getGameWorlds()) {
+        for (DGameWorld gameWorld : worlds.getGameWorlds()) {
             loadedList.add(gameWorld.getWorld().getWorldFolder().getName());
         }
         ArrayList<String> toSend = new ArrayList<>();

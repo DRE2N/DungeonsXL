@@ -17,8 +17,8 @@
 package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.dungeonsxl.sign.DSign;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -50,14 +50,14 @@ public class SignData {
 
     /* Actions */
     /**
-     * Applies all signs from the file to the EditWorld.
-     * Also sets the lobby location of the EditWorld to the location of the lobby sign if one exists.
+     * Applies all signs from the file to the DEditWorld.
+     * Also sets the lobby location of the DEditWorld to the location of the lobby sign if one exists.
      *
      * @param editWorld
-     * the EditWorld where the signs are
+     * the DEditWorld where the signs are
      * @throws IOException
      */
-    public void deserializeSigns(EditWorld editWorld) throws IOException {
+    public void deserializeSigns(DEditWorld editWorld) throws IOException {
         ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
         int length = os.readInt();
 
@@ -81,14 +81,14 @@ public class SignData {
     }
 
     /**
-     * Applies all signs from the file to the GameWorld.
+     * Applies all signs from the file to the DGameWorld.
      *
      * @param gameWorld
-     * the GameWorld where the signs are
+     * the DGameWorld where the signs are
      * @return a Set of all DSign blocks
      * @throws IOException
      */
-    public void deserializeSigns(GameWorld gameWorld) throws IOException {
+    public void deserializeSigns(DGameWorld gameWorld) throws IOException {
         ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
 
         int length = os.readInt();
@@ -108,13 +108,13 @@ public class SignData {
     }
 
     /**
-     * Applies all signs from the EditWorld to the file.
+     * Applies all signs from the DEditWorld to the file.
      *
      * @param editWorld
-     * the EditWorld that contains the signs to serialize
+     * the DEditWorld that contains the signs to serialize
      * @throws IOException
      */
-    public void serializeSigns(EditWorld editWorld) throws IOException {
+    public void serializeSigns(DEditWorld editWorld) throws IOException {
         serializeSigns(editWorld.getSigns());
     }
 

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.editworld;
 
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import org.bukkit.event.Event;
 
 /**
@@ -24,16 +24,16 @@ import org.bukkit.event.Event;
  */
 public abstract class EditWorldEvent extends Event {
 
-    protected EditWorld editWorld;
+    protected DEditWorld editWorld;
 
-    public EditWorldEvent(EditWorld editWorld) {
+    public EditWorldEvent(DEditWorld editWorld) {
         this.editWorld = editWorld;
     }
 
     /**
      * @return the editWorld
      */
-    public EditWorld getEditWorld() {
+    public DEditWorld getEditWorld() {
         return editWorld;
     }
 
@@ -41,7 +41,7 @@ public abstract class EditWorldEvent extends Event {
      * @param editWorld
      * the editWorld to set
      */
-    public void setEditWorld(EditWorld editWorld) {
+    public void setEditWorld(DEditWorld editWorld) {
         this.editWorld = editWorld;
     }
 

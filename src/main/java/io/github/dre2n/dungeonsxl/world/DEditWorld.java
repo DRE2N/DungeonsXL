@@ -32,13 +32,13 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class EditWorld extends InstanceWorld {
+public class DEditWorld extends DInstanceWorld {
 
-    static Worlds worlds = plugin.getWorlds();
+    static DWorlds worlds = plugin.getDWorlds();
 
     private CopyOnWriteArrayList<Block> signs = new CopyOnWriteArrayList<>();
 
-    EditWorld(ResourceWorld resourceWorld, File folder, World world, int id) {
+    DEditWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
         super(resourceWorld, folder, world, id);
     }
 
@@ -144,9 +144,9 @@ public class EditWorld extends InstanceWorld {
      * @param world
      * the instance
      * @return
-     * the EditWorld that represents the world
+     * the DEditWorld that represents the world
      */
-    public static EditWorld getByWorld(World world) {
+    public static DEditWorld getByWorld(World world) {
         return getByName(world.getName());
     }
 
@@ -154,13 +154,13 @@ public class EditWorld extends InstanceWorld {
      * @param world
      * the instance name
      * @return
-     * the EditWorld that represents the world
+     * the DEditWorld that represents the world
      */
-    public static EditWorld getByName(String name) {
-        InstanceWorld instance = worlds.getInstanceByName(name);
+    public static DEditWorld getByName(String name) {
+        DInstanceWorld instance = worlds.getInstanceByName(name);
 
-        if (instance instanceof EditWorld) {
-            return (EditWorld) instance;
+        if (instance instanceof DEditWorld) {
+            return (DEditWorld) instance;
 
         } else {
             return null;

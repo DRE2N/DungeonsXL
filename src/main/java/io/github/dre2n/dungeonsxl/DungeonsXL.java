@@ -52,7 +52,7 @@ import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
-import io.github.dre2n.dungeonsxl.world.Worlds;
+import io.github.dre2n.dungeonsxl.world.DWorlds;
 import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
 import java.util.List;
@@ -98,7 +98,7 @@ public class DungeonsXL extends BRPlugin {
     private DClasses dClasses;
     private DMobTypes dMobTypes;
     private SignScripts signScripts;
-    private Worlds worlds;
+    private DWorlds dWorlds;
 
     private BukkitTask announcerTask;
     private BukkitTask worldUnloadTask;
@@ -200,8 +200,8 @@ public class DungeonsXL extends BRPlugin {
         dLootInventories.clear();
         dGroups.clear();
 
-        // Delete Worlds
-        worlds.deleteAllInstances();
+        // Delete DWorlds
+        dWorlds.deleteAllInstances();
 
         // Disable listeners
         HandlerList.unregisterAll(this);
@@ -266,17 +266,15 @@ public class DungeonsXL extends BRPlugin {
     public void saveData() {
         protections.saveAll();
         DSavePlayer.save();
-        worlds.saveAll();
+        dWorlds.saveAll();
     }
 
     public void loadAll() {
         protections.loadAll();
         dPlayers.loadAll();
         DSavePlayer.load();
-        worlds.check();
+        dWorlds.check();
     }
-
-    
 
     /* Getters and loaders */
     /**
@@ -575,17 +573,17 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the loaded instance of Worlds
+     * @return the loaded instance of DWorlds
      */
-    public Worlds getWorlds() {
-        return worlds;
+    public DWorlds getDWorlds() {
+        return dWorlds;
     }
 
     /**
-     * load / reload a new instance of Worlds
+     * load / reload a new instance of DWorlds
      */
     public void loadWorlds(File folder) {
-        worlds = new Worlds(MAPS);
+        dWorlds = new DWorlds(MAPS);
     }
 
     /**

@@ -34,8 +34,8 @@ import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -91,15 +91,15 @@ public class BlockListener implements Listener {
             return;
         }
 
-        // EditWorld Signs
-        EditWorld editWorld = EditWorld.getByWorld(block.getWorld());
+        // DEditWorld Signs
+        DEditWorld editWorld = DEditWorld.getByWorld(block.getWorld());
         if (editWorld != null) {
             editWorld.getSigns().remove(event.getBlock());
             return;
         }
 
-        // Deny GameWorld block breaking
-        GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
+        // Deny DGameWorld block breaking
+        DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
             for (DSign dSign : gameWorld.getDSigns()) {
                 if (dSign.getSign().equals(block)) {
@@ -128,8 +128,8 @@ public class BlockListener implements Listener {
     public void onPlace(BlockPlaceEvent event) {
         Block block = event.getBlock();
 
-        // Deny GameWorld Blocks
-        GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
+        // Deny DGameWorld Blocks
+        DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
         if (gameWorld == null) {
             return;
         }
@@ -162,7 +162,7 @@ public class BlockListener implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         String[] lines = event.getLines();
-        EditWorld editWorld = EditWorld.getByWorld(player.getWorld());
+        DEditWorld editWorld = DEditWorld.getByWorld(player.getWorld());
 
         // Group Signs
         if (editWorld == null) {
@@ -251,13 +251,13 @@ public class BlockListener implements Listener {
         }
 
         // Check GameWorlds
-        GameWorld gameWorld = GameWorld.getByWorld(event.getBlock().getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(event.getBlock().getWorld());
         if (gameWorld != null) {
             event.setCancelled(true);
         }
 
         // Check EditWorlds
-        EditWorld editWorld = EditWorld.getByWorld(event.getBlock().getWorld());
+        DEditWorld editWorld = DEditWorld.getByWorld(event.getBlock().getWorld());
         if (editWorld != null) {
             event.setCancelled(true);
         }
