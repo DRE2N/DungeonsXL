@@ -49,8 +49,8 @@ public class ReloadCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         PluginManager plugins = Bukkit.getServer().getPluginManager();
 
-        int maps = new File(plugin.getDataFolder() + "/maps").listFiles().length;
-        int dungeons = new File(plugin.getDataFolder() + "/dungeons").listFiles().length;
+        int maps = DungeonsXL.MAPS.listFiles().length;
+        int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
         int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
         int players = plugin.getDPlayers().getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();

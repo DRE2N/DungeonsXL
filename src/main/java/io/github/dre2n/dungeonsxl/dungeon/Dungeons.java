@@ -29,8 +29,10 @@ public class Dungeons {
     private List<Dungeon> dungeons = new ArrayList<>();
 
     public Dungeons() {
-        File folder = new File(DungeonsXL.getInstance().getDataFolder() + "/dungeons");
+        this(DungeonsXL.DUNGEONS);
+    }
 
+    public Dungeons(File folder) {
         if (!folder.exists()) {
             folder.mkdir();
         }

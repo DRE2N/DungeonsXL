@@ -52,14 +52,12 @@ public class ListCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        File dungeonFolder = new File(plugin.getDataFolder() + "/dungeons");
-        File mapFolder = new File(plugin.getDataFolder() + "/maps");
         ArrayList<String> dungeonList = new ArrayList<>();
         for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
             dungeonList.add(dungeon.getName());
         }
         ArrayList<String> mapList = new ArrayList<>();
-        for (File file : mapFolder.listFiles()) {
+        for (File file : DungeonsXL.MAPS.listFiles()) {
             mapList.add(file.getName());
         }
         ArrayList<String> loadedList = new ArrayList<>();
@@ -141,7 +139,7 @@ public class ListCommand extends BRCommand {
             case 1:
                 MessageUtil.sendMessage(sender, "&4Dungeon&7 | &eMap count");
                 for (String dungeon : toSend) {
-                    DungeonConfig dungeonConfig = new DungeonConfig(new File(dungeonFolder, dungeon + ".yml"));
+                    DungeonConfig dungeonConfig = new DungeonConfig(new File(DungeonsXL.DUNGEONS, dungeon + ".yml"));
                     int count = dungeonConfig.getFloors().size() + 2;
                     MessageUtil.sendMessage(sender, "&b" + dungeon + "&7 | &e" + count);
                 }

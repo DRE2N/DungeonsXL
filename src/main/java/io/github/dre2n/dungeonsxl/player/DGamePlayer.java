@@ -23,7 +23,6 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
-import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;

@@ -36,7 +36,7 @@ public class Dungeon {
     public Dungeon(String name) {
         this.name = name;
 
-        File file = new File(DungeonsXL.getInstance().getDataFolder() + "/dungeons", name + ".yml");
+        File file = new File(DungeonsXL.DUNGEONS, name + ".yml");
         if (file.exists()) {
             this.config = new DungeonConfig(file);
         }

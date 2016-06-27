@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
-import io.github.dre2n.caliburn.item.UniversalItem;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
