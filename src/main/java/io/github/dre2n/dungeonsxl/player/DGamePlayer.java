@@ -40,7 +40,8 @@ import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -928,8 +929,8 @@ public class DGamePlayer extends DInstancePlayer {
         return null;
     }
 
-    public static CopyOnWriteArrayList<DGamePlayer> getByWorld(World world) {
-        CopyOnWriteArrayList<DGamePlayer> dPlayers = new CopyOnWriteArrayList<>();
+    public static List<DGamePlayer> getByWorld(World world) {
+        List<DGamePlayer> dPlayers = new ArrayList<>();
 
         for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             if (dPlayer.getWorld() == world) {
