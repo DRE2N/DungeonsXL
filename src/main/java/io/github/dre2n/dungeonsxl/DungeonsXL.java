@@ -146,7 +146,6 @@ public class DungeonsXL extends BRPlugin {
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
         loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
-        loadDCommands();
         DPermissions.register();
         loadGameTypes();
         loadRequirementTypes();
@@ -161,6 +160,8 @@ public class DungeonsXL extends BRPlugin {
         loadDClasses(CLASSES);
         loadDMobTypes(MOBS);
         loadSignScripts(SIGNS);
+        loadDWorlds(MAPS);
+        loadDCommands();
 
         manager.registerEvents(new EntityListener(), this);
         manager.registerEvents(new GUIListener(), this);
@@ -582,7 +583,7 @@ public class DungeonsXL extends BRPlugin {
     /**
      * load / reload a new instance of DWorlds
      */
-    public void loadWorlds(File folder) {
+    public void loadDWorlds(File folder) {
         dWorlds = new DWorlds(MAPS);
     }
 

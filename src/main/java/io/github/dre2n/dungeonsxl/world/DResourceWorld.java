@@ -37,13 +37,15 @@ import org.bukkit.WorldType;
 public class DResourceWorld {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorlds worlds = plugin.getDWorlds();
+    DWorlds worlds;
 
     private File folder;
     private WorldConfig config;
     private SignData signData;
 
-    public DResourceWorld(String name) {
+    public DResourceWorld(DWorlds worlds, String name) {
+        this.worlds = worlds;
+
         folder = new File(DungeonsXL.MAPS, name);
         if (!folder.exists()) {
             folder.mkdir();
@@ -60,11 +62,11 @@ public class DResourceWorld {
         }
 
         signData = new SignData(signDataFile);
-
-        worlds.addResource(this);
     }
 
-    public DResourceWorld(File folder) {
+    public DResourceWorld(DWorlds worlds, File folder) {
+        this.worlds = worlds;
+
         this.folder = folder;
 
         File configFile = new File(folder, "config.yml");
@@ -76,8 +78,6 @@ public class DResourceWorld {
         if (signData.exists()) {
             this.signData = new SignData(signData);
         }
-
-        worlds.addResource(this);
     }
 
     /* Getters and setters */
@@ -185,11 +185,11 @@ public class DResourceWorld {
         DInstanceWorld instance = null;
         try {
             if (game) {
-                new DGameWorld(this, instanceFolder, world, id);
+                instance = new DGameWorld(this, instanceFolder, world, id);
                 signData.deserializeSigns((DGameWorld) instance);
 
             } else {
-                new DEditWorld(this, instanceFolder, world, id);
+                instance = new DEditWorld(this, instanceFolder, world, id);
                 signData.deserializeSigns((DEditWorld) instance);
             }
 

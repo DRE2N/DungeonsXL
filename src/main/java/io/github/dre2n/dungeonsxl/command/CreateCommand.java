@@ -51,7 +51,7 @@ public class CreateCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         String name = args[1];
 
-        if (new File(plugin.getDataFolder(), "/maps/" + name).exists()) {
+        if (new File(DungeonsXL.MAPS, name).exists()) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_IN_USE.getMessage(name));
             return;
         }
@@ -67,7 +67,8 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            DResourceWorld resource = new DResourceWorld(name);
+            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
+            plugin.getDWorlds().addResource(resource);
             DEditWorld editWorld = resource.generate();
             editWorld.save();
             editWorld.delete();
@@ -88,7 +89,8 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            DResourceWorld resource = new DResourceWorld(name);
+            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
+            plugin.getDWorlds().addResource(resource);
             DEditWorld editWorld = resource.generate();
 
             // MSG Done

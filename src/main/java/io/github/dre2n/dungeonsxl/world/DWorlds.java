@@ -29,13 +29,13 @@ import org.bukkit.Bukkit;
  */
 public class DWorlds {
 
-    private Set<DResourceWorld> resources;
-    private Set<DInstanceWorld> instances;
+    private Set<DResourceWorld> resources = new HashSet<>();
+    private Set<DInstanceWorld> instances = new HashSet<>();
 
     public DWorlds(File folder) {
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
-                new DResourceWorld(file);
+                resources.add(new DResourceWorld(this, file));
             }
         }
     }
