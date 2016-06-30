@@ -27,7 +27,6 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -73,7 +72,7 @@ public class PlayCommand extends BRCommand {
                 Dungeon dungeon = plugin.getDungeons().getByName(args[2]);
                 if (dungeon != null) {
                     multiFloor = true;
-                    mapName = dungeon.getConfig().getStartFloor();
+                    mapName = dungeon.getConfig().getStartFloor().getName();
                 } else {
                     displayHelp(player);
                     return;
@@ -84,7 +83,7 @@ public class PlayCommand extends BRCommand {
             }
         }
 
-        if (!multiFloor && !EditWorld.exists(identifier)) {
+        if (!multiFloor && !plugin.getDWorlds().exists(identifier)) {
             MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(identifier));
             return;
         }
@@ -108,7 +107,7 @@ public class PlayCommand extends BRCommand {
                         DungeonConfig config = dungeon.getConfig();
 
                         if (config != null) {
-                            dGroup.setMapName(config.getStartFloor());
+                            dGroup.setMapName(config.getStartFloor().getName());
                         }
                     }
                 }

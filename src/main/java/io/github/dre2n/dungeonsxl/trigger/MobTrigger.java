@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -50,7 +50,7 @@ public class MobTrigger extends Trigger {
     }
 
     /* Statics */
-    public static MobTrigger getOrCreate(String name, GameWorld gameWorld) {
+    public static MobTrigger getOrCreate(String name, DGameWorld gameWorld) {
         MobTrigger trigger = getByName(name, gameWorld);
         if (trigger != null) {
             return trigger;
@@ -58,7 +58,7 @@ public class MobTrigger extends Trigger {
         return new MobTrigger(name);
     }
 
-    public static MobTrigger getByName(String name, GameWorld gameWorld) {
+    public static MobTrigger getByName(String name, DGameWorld gameWorld) {
         for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.MOB)) {
             MobTrigger trigger = (MobTrigger) uncasted;
             if (trigger.name.equalsIgnoreCase(name)) {

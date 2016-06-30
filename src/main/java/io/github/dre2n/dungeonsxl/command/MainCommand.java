@@ -24,7 +24,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -48,9 +47,9 @@ public class MainCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         PluginManager plugins = Bukkit.getServer().getPluginManager();
 
-        int maps = new File(plugin.getDataFolder() + "/maps").listFiles().length;
-        int dungeons = new File(plugin.getDataFolder() + "/dungeons").listFiles().length;
-        int loaded = plugin.getEditWorlds().size() + plugin.getGameWorlds().size();
+        int maps = DungeonsXL.MAPS.listFiles().length;
+        int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
+        int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
         int players = plugin.getDPlayers().getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";

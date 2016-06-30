@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.game;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Material;
@@ -254,7 +254,7 @@ public class GamePlaceableBlock {
     }
 
     // Can build
-    public static boolean canBuildHere(Block block, BlockFace blockFace, Material mat, GameWorld gameWorld) {
+    public static boolean canBuildHere(Block block, BlockFace blockFace, Material mat, DGameWorld gameWorld) {
         for (GamePlaceableBlock gamePlacableBlock : gameWorld.getPlaceableBlocks()) {
             if (gamePlacableBlock.block.getFace(block) != BlockFace.SELF) {
                 continue;

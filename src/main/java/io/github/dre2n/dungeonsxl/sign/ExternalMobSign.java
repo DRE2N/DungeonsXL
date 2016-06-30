@@ -20,7 +20,7 @@ import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobPlugin;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProvider;
 import io.github.dre2n.dungeonsxl.task.ExternalMobSpawnTask;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -52,7 +52,7 @@ public class ExternalMobSign extends DSign implements MobSign {
     private LivingEntity externalMob;
     private List<Entity> externalMobs = new ArrayList<>();
 
-    public ExternalMobSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public ExternalMobSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

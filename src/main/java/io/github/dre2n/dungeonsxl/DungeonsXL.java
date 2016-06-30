@@ -23,7 +23,6 @@ import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
-import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.announcer.Announcers;
 import io.github.dre2n.dungeonsxl.command.*;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -53,8 +52,7 @@ import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DWorlds;
 import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
 import java.util.List;
@@ -100,6 +98,7 @@ public class DungeonsXL extends BRPlugin {
     private DClasses dClasses;
     private DMobTypes dMobTypes;
     private SignScripts signScripts;
+    private DWorlds dWorlds;
 
     private BukkitTask announcerTask;
     private BukkitTask worldUnloadTask;
@@ -108,8 +107,6 @@ public class DungeonsXL extends BRPlugin {
     private BukkitTask secureModeTask;
 
     private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<EditWorld> editWorlds = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<GameWorld> gameWorlds = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
 
@@ -149,7 +146,6 @@ public class DungeonsXL extends BRPlugin {
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
         loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
-        loadDCommands();
         DPermissions.register();
         loadGameTypes();
         loadRequirementTypes();
@@ -164,6 +160,8 @@ public class DungeonsXL extends BRPlugin {
         loadDClasses(CLASSES);
         loadDMobTypes(MOBS);
         loadSignScripts(SIGNS);
+        loadDWorlds(MAPS);
+        loadDCommands();
 
         manager.registerEvents(new EntityListener(), this);
         manager.registerEvents(new GUIListener(), this);
@@ -203,11 +201,8 @@ public class DungeonsXL extends BRPlugin {
         dLootInventories.clear();
         dGroups.clear();
 
-        // Delete Worlds
-        GameWorld.deleteAll();
-        gameWorlds.clear();
-        EditWorld.deleteAll();
-        editWorlds.clear();
+        // Delete DWorlds
+        dWorlds.deleteAllInstances();
 
         // Disable listeners
         HandlerList.unregisterAll(this);
@@ -272,37 +267,14 @@ public class DungeonsXL extends BRPlugin {
     public void saveData() {
         protections.saveAll();
         DSavePlayer.save();
-        for (EditWorld editWorld : editWorlds) {
-            editWorld.save();
-        }
+        dWorlds.saveAll();
     }
 
     public void loadAll() {
         protections.loadAll();
         dPlayers.loadAll();
         DSavePlayer.load();
-        checkWorlds();
-    }
-
-    public void checkWorlds() {
-        File serverDir = new File(".");
-
-        for (File file : serverDir.listFiles()) {
-            if (file.getName().contains("DXL_Edit_") && file.isDirectory()) {
-                for (File dungeonFile : file.listFiles()) {
-                    if (dungeonFile.getName().contains(".id_")) {
-                        String dungeonName = dungeonFile.getName().substring(4);
-                        FileUtil.copyDirectory(file, new File(getDataFolder(), "/maps/" + dungeonName), EXCLUDED_FILES);
-                        FileUtil.deleteUnusedFiles(new File(getDataFolder(), "/maps/" + dungeonName));
-                    }
-                }
-
-                FileUtil.removeDirectory(file);
-
-            } else if (file.getName().contains("DXL_Game_") && file.isDirectory()) {
-                FileUtil.removeDirectory(file);
-            }
-        }
+        dWorlds.check();
     }
 
     /* Getters and loaders */
@@ -602,10 +574,24 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the worldUnloadTask
+     * @return the loaded instance of DWorlds
      */
-    public BukkitTask getWorldUnloadTask() {
-        return worldUnloadTask;
+    public DWorlds getDWorlds() {
+        return dWorlds;
+    }
+
+    /**
+     * load / reload a new instance of DWorlds
+     */
+    public void loadDWorlds(File folder) {
+        dWorlds = new DWorlds(MAPS);
+    }
+
+    /**
+     * @return the AnnouncerTask
+     */
+    public BukkitTask getAnnouncerTask() {
+        return announcerTask;
     }
 
     /**
@@ -618,10 +604,10 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the AnnouncerTask
+     * @return the worldUnloadTask
      */
-    public BukkitTask getAnnouncerTask() {
-        return announcerTask;
+    public BukkitTask getWorldUnloadTask() {
+        return worldUnloadTask;
     }
 
     /**
@@ -678,20 +664,6 @@ public class DungeonsXL extends BRPlugin {
      */
     public List<DLootInventory> getDLootInventories() {
         return dLootInventories;
-    }
-
-    /**
-     * @return the editWorlds
-     */
-    public List<EditWorld> getEditWorlds() {
-        return editWorlds;
-    }
-
-    /**
-     * @return the gameWorlds
-     */
-    public List<GameWorld> getGameWorlds() {
-        return gameWorlds;
     }
 
     /**

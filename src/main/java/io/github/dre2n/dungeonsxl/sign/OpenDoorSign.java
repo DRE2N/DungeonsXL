@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.BlockUtil;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -33,7 +33,7 @@ public class OpenDoorSign extends DSign {
 
     private Block block;
 
-    public OpenDoorSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public OpenDoorSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
@@ -95,7 +95,7 @@ public class OpenDoorSign extends DSign {
      * true if the block is openable only with a sign
      */
     public static boolean isProtected(Block block) {
-        GameWorld gameWorld = GameWorld.getByWorld(block.getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
             for (DSign dSign : gameWorld.getDSigns(DSignTypeDefault.OPEN_DOOR)) {
                 Block signBlock1 = ((OpenDoorSign) dSign).getBlock();

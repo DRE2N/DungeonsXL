@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.event.gameworld;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.event.Event;
 
 /**
@@ -24,16 +24,16 @@ import org.bukkit.event.Event;
  */
 public abstract class GameWorldEvent extends Event {
 
-    protected GameWorld gameWorld;
+    protected DGameWorld gameWorld;
 
-    public GameWorldEvent(GameWorld gameWorld) {
+    public GameWorldEvent(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 
     /**
      * @return the gameWorld
      */
-    public GameWorld getGameWorld() {
+    public DGameWorld getGameWorld() {
         return gameWorld;
     }
 
@@ -41,7 +41,7 @@ public abstract class GameWorldEvent extends Event {
      * @param gameWorld
      * the gameWorld to set
      */
-    public void setGameWorld(GameWorld gameWorld) {
+    public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 

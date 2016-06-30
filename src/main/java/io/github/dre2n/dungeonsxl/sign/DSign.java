@@ -21,7 +21,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.dsign.DSignRegistrationEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -38,12 +38,12 @@ public abstract class DSign {
 
     private Sign sign;
     protected String[] lines;
-    private GameWorld gameWorld;
+    private DGameWorld gameWorld;
 
     // List of Triggers
     private Set<Trigger> triggers = new HashSet<>();
 
-    public DSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public DSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         this.sign = sign;
         this.lines = lines;
         this.gameWorld = gameWorld;
@@ -108,7 +108,7 @@ public abstract class DSign {
     /**
      * @return the gameWorld
      */
-    public GameWorld getGameWorld() {
+    public DGameWorld getGameWorld() {
         return gameWorld;
     }
 
@@ -185,11 +185,11 @@ public abstract class DSign {
         return !triggers.isEmpty();
     }
 
-    public static DSign create(Sign sign, GameWorld gameWorld) {
+    public static DSign create(Sign sign, DGameWorld gameWorld) {
         return create(sign, sign.getLines(), gameWorld);
     }
 
-    public static DSign create(Sign sign, String[] lines, GameWorld gameWorld) {
+    public static DSign create(Sign sign, String[] lines, DGameWorld gameWorld) {
         DSign dSign = null;
 
         for (DSignType type : plugin.getDSigns().getDSigns()) {
@@ -198,7 +198,7 @@ public abstract class DSign {
             }
 
             try {
-                Constructor<? extends DSign> constructor = type.getHandler().getConstructor(Sign.class, String[].class, GameWorld.class);
+                Constructor<? extends DSign> constructor = type.getHandler().getConstructor(Sign.class, String[].class, DGameWorld.class);
                 dSign = constructor.newInstance(sign, lines, gameWorld);
 
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {

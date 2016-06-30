@@ -27,7 +27,8 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
 import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class Game {
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;
     private GameType type = GameTypeDefault.DEFAULT;
-    private GameWorld world;
+    private DGameWorld world;
     private GameRules rules;
     private int waveCount;
     private Map<String, Integer> gameKills = new HashMap<>();
@@ -63,7 +64,7 @@ public class Game {
         plugin.getGames().add(this);
     }
 
-    public Game(DGroup dGroup, GameWorld world) {
+    public Game(DGroup dGroup, DGameWorld world) {
         dGroups.add(dGroup);
         started = false;
         this.world = world;
@@ -77,17 +78,17 @@ public class Game {
 
         dGroups.add(dGroup);
         started = false;
-        world = new GameWorld();
+        DResourceWorld resource = plugin.getDWorlds().getResourceByName(worldName);
+        world = resource.instantiateAsGameWorld();
         dGroup.setGameWorld(world);
-        world.load(worldName);
         fetchRules();
     }
 
-    public Game(DGroup dGroup, GameType type, GameWorld world) {
+    public Game(DGroup dGroup, GameType type, DGameWorld world) {
         this(new ArrayList<>(Arrays.asList(dGroup)), type, world);
     }
 
-    public Game(List<DGroup> dGroups, GameType type, GameWorld world) {
+    public Game(List<DGroup> dGroups, GameType type, DGameWorld world) {
         this.dGroups = dGroups;
         this.type = type;
         this.world = world;
@@ -155,17 +156,17 @@ public class Game {
     }
 
     /**
-     * @return the GameWorld connected to the Game
+     * @return the DGameWorld connected to the Game
      */
-    public GameWorld getWorld() {
+    public DGameWorld getWorld() {
         return world;
     }
 
     /**
      * @param world
-     * the GameWorld to connect to the Game
+     * the DGameWorld to connect to the Game
      */
-    public void setWorld(GameWorld world) {
+    public void setWorld(DGameWorld world) {
         this.world = world;
     }
 
@@ -234,8 +235,8 @@ public class Game {
      *
      * @return the unplayed floors
      */
-    public List<String> getUnplayedFloors() {
-        List<String> unplayedFloors = new ArrayList<>();
+    public List<DResourceWorld> getUnplayedFloors() {
+        List<DResourceWorld> unplayedFloors = new ArrayList<>();
         for (DGroup dGroup : dGroups) {
             if (dGroup.getUnplayedFloors().size() < unplayedFloors.size()) {
                 unplayedFloors = dGroup.getUnplayedFloors();
@@ -374,7 +375,7 @@ public class Game {
         }
 
         int delay = rules.getTimeToNextWave();
-        sendMessage(plugin.getMessageConfig().getMessage(DMessages.GROUP_WAVE_FINISHED, String.valueOf(waveCount), String.valueOf(delay)));
+        sendMessage(DMessages.GROUP_WAVE_FINISHED.getMessage(String.valueOf(waveCount), String.valueOf(delay)));
 
         new BukkitRunnable() {
             @Override
@@ -425,7 +426,7 @@ public class Game {
         return getByDGroup(DGroup.getByPlayer(player));
     }
 
-    public static Game getByGameWorld(GameWorld gameWorld) {
+    public static Game getByGameWorld(DGameWorld gameWorld) {
         for (Game game : plugin.getGames()) {
             if (game.getWorld().equals(gameWorld)) {
                 return game;
@@ -436,7 +437,7 @@ public class Game {
     }
 
     public static Game getByWorld(World world) {
-        GameWorld gameWorld = GameWorld.getByWorld(world);
+        DGameWorld gameWorld = DGameWorld.getByWorld(world);
         if (gameWorld != null) {
             return getByGameWorld(gameWorld);
         } else {

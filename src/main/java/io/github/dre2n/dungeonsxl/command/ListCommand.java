@@ -24,8 +24,9 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DWorlds;
 import java.io.File;
 import java.util.ArrayList;
 import org.bukkit.command.CommandSender;
@@ -37,6 +38,7 @@ import org.bukkit.entity.Player;
 public class ListCommand extends BRCommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    DWorlds worlds = plugin.getDWorlds();
 
     public ListCommand() {
         setCommand("list");
@@ -50,21 +52,19 @@ public class ListCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        File dungeonFolder = new File(plugin.getDataFolder() + "/dungeons");
-        File mapFolder = new File(plugin.getDataFolder() + "/maps");
         ArrayList<String> dungeonList = new ArrayList<>();
         for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
             dungeonList.add(dungeon.getName());
         }
         ArrayList<String> mapList = new ArrayList<>();
-        for (File file : mapFolder.listFiles()) {
+        for (File file : DungeonsXL.MAPS.listFiles()) {
             mapList.add(file.getName());
         }
         ArrayList<String> loadedList = new ArrayList<>();
-        for (EditWorld editWorld : plugin.getEditWorlds()) {
+        for (DEditWorld editWorld : worlds.getEditWorlds()) {
             loadedList.add(editWorld.getWorld().getWorldFolder().getName());
         }
-        for (GameWorld gameWorld : plugin.getGameWorlds()) {
+        for (DGameWorld gameWorld : worlds.getGameWorlds()) {
             loadedList.add(gameWorld.getWorld().getWorldFolder().getName());
         }
         ArrayList<String> toSend = new ArrayList<>();
@@ -130,7 +130,7 @@ public class ListCommand extends BRCommand {
                 for (String map : toSend) {
                     boolean invited = false;
                     if (sender instanceof Player) {
-                        invited = EditWorld.isInvitedPlayer(map, ((Player) sender).getUniqueId(), sender.getName());
+                        invited = worlds.getResourceByName(map).isInvitedPlayer((Player) sender);
                     }
 
                     MessageUtil.sendMessage(sender, "&b" + map + "&7 | &e" + invited);
@@ -139,7 +139,7 @@ public class ListCommand extends BRCommand {
             case 1:
                 MessageUtil.sendMessage(sender, "&4Dungeon&7 | &eMap count");
                 for (String dungeon : toSend) {
-                    DungeonConfig dungeonConfig = new DungeonConfig(new File(dungeonFolder, dungeon + ".yml"));
+                    DungeonConfig dungeonConfig = new DungeonConfig(new File(DungeonsXL.DUNGEONS, dungeon + ".yml"));
                     int count = dungeonConfig.getFloors().size() + 2;
                     MessageUtil.sendMessage(sender, "&b" + dungeon + "&7 | &e" + count);
                 }

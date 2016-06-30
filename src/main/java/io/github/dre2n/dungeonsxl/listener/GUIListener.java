@@ -19,7 +19,6 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.guiutil.ButtonClickEvent;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.announcer.Announcer;
-import io.github.dre2n.dungeonsxl.config.DMessages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

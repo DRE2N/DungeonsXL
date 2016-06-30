@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
  */
 public class CustomTrigger extends Trigger {
 
-    private static Map<GameWorld, ArrayList<CustomTrigger>> triggers = new HashMap<>();
+    private static Map<DGameWorld, ArrayList<CustomTrigger>> triggers = new HashMap<>();
 
     private TriggerType type = TriggerTypeCustom.CUSTOM;
 
@@ -55,7 +55,7 @@ public class CustomTrigger extends Trigger {
     }
 
     @Override
-    public void register(GameWorld gameWorld) {
+    public void register(DGameWorld gameWorld) {
         if (!hasTriggers(gameWorld)) {
             ArrayList<CustomTrigger> list = new ArrayList<>();
             list.add(this);
@@ -67,7 +67,7 @@ public class CustomTrigger extends Trigger {
     }
 
     @Override
-    public void unregister(GameWorld gameWorld) {
+    public void unregister(DGameWorld gameWorld) {
         if (hasTriggers(gameWorld)) {
             triggers.get(gameWorld).remove(this);
         }
@@ -78,7 +78,7 @@ public class CustomTrigger extends Trigger {
         return type;
     }
 
-    public static CustomTrigger getOrCreate(String value, GameWorld gameWorld) {
+    public static CustomTrigger getOrCreate(String value, DGameWorld gameWorld) {
         if (triggers.containsKey(gameWorld)) {
             for (CustomTrigger trigger : triggers.get(gameWorld)) {
                 if (trigger.value.equals(value)) {
@@ -90,7 +90,7 @@ public class CustomTrigger extends Trigger {
         return new CustomTrigger(value);
     }
 
-    public static boolean hasTriggers(GameWorld gameWorld) {
+    public static boolean hasTriggers(DGameWorld gameWorld) {
         return !triggers.isEmpty() && triggers.containsKey(gameWorld);
     }
 

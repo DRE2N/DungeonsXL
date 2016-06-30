@@ -25,7 +25,7 @@ import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -60,7 +60,7 @@ public class TestCommand extends BRCommand {
             return;
         }
 
-        GameWorld gameWorld = dGroup.getGameWorld();
+        DGameWorld gameWorld = dGroup.getGameWorld();
         if (gameWorld == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
             return;

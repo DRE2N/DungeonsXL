@@ -36,7 +36,7 @@ public class Dungeon {
     public Dungeon(String name) {
         this.name = name;
 
-        File file = new File(DungeonsXL.getInstance().getDataFolder() + "/dungeons", name + ".yml");
+        File file = new File(DungeonsXL.DUNGEONS, name + ".yml");
         if (file.exists()) {
             this.config = new DungeonConfig(file);
         }
@@ -61,6 +61,13 @@ public class Dungeon {
      */
     public boolean isMultiFloor() {
         return config != null;
+    }
+
+    /**
+     * @return false if there are setup errors
+     */
+    public boolean isSetupCorrect() {
+        return config.getStartFloor() == null || config.getEndFloor() == null;
     }
 
 }

@@ -19,7 +19,7 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -36,7 +36,7 @@ public class CheckpointSign extends DSign {
     private boolean initialized;
     private CopyOnWriteArrayList<DGamePlayer> done = new CopyOnWriteArrayList<>();
 
-    public CheckpointSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public CheckpointSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -34,7 +34,7 @@ public class WaveSign extends DSign {
     private double mobCountIncreaseRate;
     private boolean teleport;
 
-    public WaveSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public WaveSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

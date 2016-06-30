@@ -21,7 +21,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;
 import org.bukkit.Bukkit;
@@ -43,11 +43,11 @@ public class RewardChest {
     // Variables
     private boolean used = false;
     private Chest chest;
-    private GameWorld gameWorld;
+    private DGameWorld gameWorld;
     private double moneyReward;
     private int levelReward;
 
-    public RewardChest(Block chest, GameWorld gameWorld, double moneyReward, int levelReward) {
+    public RewardChest(Block chest, DGameWorld gameWorld, double moneyReward, int levelReward) {
         if (!(chest.getState() instanceof Chest)) {
             return;
         }
@@ -93,7 +93,7 @@ public class RewardChest {
     /**
      * @return the gameWorld
      */
-    public GameWorld getGameWorld() {
+    public DGameWorld getGameWorld() {
         return gameWorld;
     }
 
@@ -101,7 +101,7 @@ public class RewardChest {
      * @param gameWorld
      * the gameWorld to set
      */
-    public void setGameWorld(GameWorld gameWorld) {
+    public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 
@@ -227,7 +227,7 @@ public class RewardChest {
     public static void onOpenInventory(InventoryOpenEvent event) {
         InventoryView inventory = event.getView();
 
-        GameWorld gameWorld = GameWorld.getByWorld(event.getPlayer().getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(event.getPlayer().getWorld());
 
         if (gameWorld == null) {
             return;

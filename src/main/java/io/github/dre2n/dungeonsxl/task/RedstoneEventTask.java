@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -35,7 +35,7 @@ public class RedstoneEventTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (GameWorld gameWorld : DungeonsXL.getInstance().getGameWorlds()) {
+        for (DGameWorld gameWorld : DungeonsXL.getInstance().getDWorlds().getGameWorlds()) {
             if (block.getWorld() == gameWorld.getWorld()) {
                 RedstoneTrigger.updateAll(gameWorld);
             }

@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -52,7 +52,7 @@ public class SignTrigger extends Trigger {
     }
 
     /* Statics */
-    public static SignTrigger getOrCreate(int id, GameWorld gameWorld) {
+    public static SignTrigger getOrCreate(int id, DGameWorld gameWorld) {
         SignTrigger trigger = getById(id, gameWorld);
         if (trigger != null) {
             return trigger;
@@ -60,7 +60,7 @@ public class SignTrigger extends Trigger {
         return new SignTrigger(id);
     }
 
-    public static SignTrigger getById(int id, GameWorld gameWorld) {
+    public static SignTrigger getById(int id, DGameWorld gameWorld) {
         for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.SIGN)) {
             SignTrigger trigger = (SignTrigger) uncasted;
             if (trigger.stId == id) {

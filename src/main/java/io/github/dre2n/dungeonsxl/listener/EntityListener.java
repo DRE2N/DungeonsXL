@@ -21,8 +21,8 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -52,7 +52,7 @@ public class EntityListener implements Listener {
     // Remove drops from breaking Signs
     @EventHandler(priority = EventPriority.HIGH)
     public void onItemSpawn(ItemSpawnEvent event) {
-        if (GameWorld.getByWorld(event.getLocation().getWorld()) != null) {
+        if (DGameWorld.getByWorld(event.getLocation().getWorld()) != null) {
             if (event.getEntity().getItemStack().getType() == Material.SIGN) {
                 event.setCancelled(true);
             }
@@ -63,8 +63,8 @@ public class EntityListener implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         World world = event.getLocation().getWorld();
 
-        EditWorld editWorld = EditWorld.getByWorld(world);
-        GameWorld gameWorld = GameWorld.getByWorld(world);
+        DEditWorld editWorld = DEditWorld.getByWorld(world);
+        DGameWorld gameWorld = DGameWorld.getByWorld(world);
 
         if (editWorld != null || gameWorld != null) {
             switch (event.getSpawnReason()) {
@@ -83,7 +83,7 @@ public class EntityListener implements Listener {
 
         if (event.getEntity() instanceof LivingEntity) {
             LivingEntity entity = event.getEntity();
-            GameWorld gameWorld = GameWorld.getByWorld(world);
+            DGameWorld gameWorld = DGameWorld.getByWorld(world);
             if (gameWorld != null) {
                 if (gameWorld.isPlaying()) {
                     DMob dMob = DMob.getByEntity(entity);
@@ -98,7 +98,7 @@ public class EntityListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDamage(EntityDamageEvent event) {
         World world = event.getEntity().getWorld();
-        GameWorld gameWorld = GameWorld.getByWorld(world);
+        DGameWorld gameWorld = DGameWorld.getByWorld(world);
 
         if (gameWorld == null) {
             return;
@@ -138,7 +138,7 @@ public class EntityListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
         World world = event.getEntity().getWorld();
-        GameWorld gameWorld = GameWorld.getByWorld(world);
+        DGameWorld gameWorld = DGameWorld.getByWorld(world);
 
         if (gameWorld == null) {
             return;
@@ -223,7 +223,7 @@ public class EntityListener implements Listener {
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
         World world = event.getEntity().getWorld();
 
-        GameWorld gameWorld = GameWorld.getByWorld(world);
+        DGameWorld gameWorld = DGameWorld.getByWorld(world);
         if (gameWorld != null) {
             if (!gameWorld.isPlaying()) {
                 event.setCancelled(true);
@@ -234,7 +234,7 @@ public class EntityListener implements Listener {
     // Zombie/skeleton combustion from the sun.
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCombust(EntityCombustEvent event) {
-        GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
         if (gameWorld != null) {
             event.setCancelled(true);
         }
@@ -243,7 +243,7 @@ public class EntityListener implements Listener {
     // Allow Other combustion
     @EventHandler(priority = EventPriority.HIGH)
     public void onCombustByEntity(EntityCombustByEntityEvent event) {
-        GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
         if (gameWorld != null) {
             if (event.isCancelled()) {
                 event.setCancelled(false);
@@ -254,7 +254,7 @@ public class EntityListener implements Listener {
     // Explosions
     @EventHandler
     public void onExplode(EntityExplodeEvent event) {
-        GameWorld gameWorld = GameWorld.getByWorld(event.getEntity().getWorld());
+        DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
 
         if (gameWorld != null) {
             if (event.getEntity() instanceof LivingEntity) {

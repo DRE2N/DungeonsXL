@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.task.DelayedPowerTask;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -42,7 +42,7 @@ public class RedstoneSign extends DSign {
     private int repeat = 1;
     private int repeatsToDo = 1;
 
-    public RedstoneSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public RedstoneSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

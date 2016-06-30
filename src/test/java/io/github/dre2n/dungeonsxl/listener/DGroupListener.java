@@ -61,13 +61,13 @@ public class DGroupListener implements Listener {
     @EventHandler
     public void onStartFloor(DGroupStartFloorEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
-        MessageUtil.log(plugin, "GameWorld: " + event.getGameWorld().getMapName());
+        MessageUtil.log(plugin, "GameWorld: " + event.getGameWorld().getName());
     }
 
     @EventHandler
     public void onFinishFloor(DGroupFinishFloorEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
-        MessageUtil.log(plugin, "Finished: " + event.getFinished().getMapName());
+        MessageUtil.log(plugin, "Finished: " + event.getFinished().getName());
         MessageUtil.log(plugin, "Next: " + event.getNext());
     }
 

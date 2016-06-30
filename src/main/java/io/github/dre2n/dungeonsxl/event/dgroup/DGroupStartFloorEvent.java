@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.event.dgroup;
 
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -29,9 +29,9 @@ public class DGroupStartFloorEvent extends DGroupEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private GameWorld gameWorld;
+    private DGameWorld gameWorld;
 
-    public DGroupStartFloorEvent(DGroup dGroup, GameWorld gameWorld) {
+    public DGroupStartFloorEvent(DGroup dGroup, DGameWorld gameWorld) {
         super(dGroup);
         this.gameWorld = gameWorld;
     }
@@ -39,7 +39,7 @@ public class DGroupStartFloorEvent extends DGroupEvent implements Cancellable {
     /**
      * @return the gameWorld
      */
-    public GameWorld getGameWorld() {
+    public DGameWorld getGameWorld() {
         return gameWorld;
     }
 
@@ -47,7 +47,7 @@ public class DGroupStartFloorEvent extends DGroupEvent implements Cancellable {
      * @param gameWorld
      * the gameWorld to set
      */
-    public void setGameWorld(GameWorld gameWorld) {
+    public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 

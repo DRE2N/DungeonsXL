@@ -23,7 +23,7 @@ import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,13 +52,13 @@ public class EscapeCommand extends BRCommand {
         } else if (dPlayer != null) {
             dPlayer.escape();
 
-            EditWorld editWorld = EditWorld.getByWorld(dPlayer.getWorld());
+            DEditWorld editWorld = DEditWorld.getByWorld(dPlayer.getWorld());
             if (editWorld == null) {
                 return;
             }
 
             if (editWorld.getWorld().getPlayers().isEmpty()) {
-                editWorld.deleteNoSave();
+                editWorld.delete(false);
             }
 
         } else {

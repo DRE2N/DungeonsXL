@@ -23,7 +23,8 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -50,7 +51,7 @@ public class CreateCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         String name = args[1];
 
-        if (new File(plugin.getDataFolder(), "/maps/" + name).exists()) {
+        if (new File(DungeonsXL.MAPS, name).exists()) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NAME_IN_USE.getMessage(name));
             return;
         }
@@ -66,9 +67,9 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            EditWorld editWorld = new EditWorld();
-            editWorld.generate();
-            editWorld.setMapName(name);
+            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
+            plugin.getDWorlds().addResource(resource);
+            DEditWorld editWorld = resource.generate();
             editWorld.save();
             editWorld.delete();
 
@@ -88,9 +89,9 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            EditWorld editWorld = new EditWorld();
-            editWorld.generate();
-            editWorld.setMapName(name);
+            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
+            plugin.getDWorlds().addResource(resource);
+            DEditWorld editWorld = resource.generate();
 
             // MSG Done
             MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());

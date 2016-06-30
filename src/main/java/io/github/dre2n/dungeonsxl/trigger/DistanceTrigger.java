@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -61,7 +61,7 @@ public class DistanceTrigger extends Trigger {
     }
 
     /* Statics */
-    public static void triggerAllInDistance(Player player, GameWorld gameWorld) {
+    public static void triggerAllInDistance(Player player, DGameWorld gameWorld) {
         if (!player.getLocation().getWorld().equals(gameWorld.getWorld())) {
             return;
         }

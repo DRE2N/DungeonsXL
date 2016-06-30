@@ -19,7 +19,7 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -32,7 +32,7 @@ public class LeaveSign extends DSign {
 
     private DSignType type = DSignTypeDefault.LEAVE;
 
-    public LeaveSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public LeaveSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

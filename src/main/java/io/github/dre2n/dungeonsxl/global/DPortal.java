@@ -22,7 +22,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Location;
@@ -167,7 +167,7 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
-        GameWorld target = dGroup.getGameWorld();
+        DGameWorld target = dGroup.getGameWorld();
         Game game = Game.getByDGroup(dGroup);
 
         if (target == null && game != null) {
@@ -186,7 +186,7 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null && dGroup.getMapName() != null) {
-            target = new GameWorld(dGroup.getMapName());
+            target = plugin.getDWorlds().getResourceByName(dGroup.getMapName()).instantiateAsGameWorld();//TO DO
             dGroup.setGameWorld(target);
         }
 

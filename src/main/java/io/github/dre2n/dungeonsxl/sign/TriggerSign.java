@@ -19,8 +19,8 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.task.SignUpdateTask;
 import io.github.dre2n.dungeonsxl.trigger.SignTrigger;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Material;
@@ -38,14 +38,14 @@ public class TriggerSign extends DSign {
     private int triggerId;
     private boolean initialized;
 
-    public TriggerSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public TriggerSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
     @Override
     public boolean check() {
         Set<Integer> used = new HashSet<>();
-        for (Block block : EditWorld.getByWorld(getSign().getLocation().getWorld()).getSigns()) {
+        for (Block block : DEditWorld.getByWorld(getSign().getLocation().getWorld()).getSigns()) {
             if (block == null) {
                 continue;
             }

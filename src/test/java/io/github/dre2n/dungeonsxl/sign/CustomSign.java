@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -27,7 +27,7 @@ public class CustomSign extends DSign {
 
     private DSignType type = DSignTypeCustom.CUSTOM;
 
-    public CustomSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public CustomSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

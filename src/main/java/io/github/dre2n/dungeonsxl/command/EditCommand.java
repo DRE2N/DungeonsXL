@@ -21,10 +21,13 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.EditWorld;
+import io.github.dre2n.dungeonsxl.world.DEditWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
+import io.github.dre2n.dungeonsxl.world.DWorlds;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,6 +37,7 @@ import org.bukkit.entity.Player;
 public class EditCommand extends BRCommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    DWorlds worlds = plugin.getDWorlds();
 
     public EditCommand() {
         setCommand("edit");
@@ -46,18 +50,24 @@ public class EditCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-
         String mapName = args[1];
-        EditWorld editWorld = EditWorld.load(mapName);
-        DGroup dGroup = DGroup.getByPlayer(player);
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
-        if (!(EditWorld.isInvitedPlayer(mapName, player.getUniqueId(), player.getName()) || DPermissions.hasPermission(player, DPermissions.EDIT))) {
+        if (!worlds.exists(mapName)) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(mapName));
+            return;
+        }
+
+        DResourceWorld resource = worlds.getResourceByName(mapName);
+        DEditWorld editWorld = resource.instantiateAsEditWorld();
+        DGroup dGroup = DGroup.getByPlayer(player);
+        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+
+        if (!(resource.isInvitedPlayer(player) || DPermissions.hasPermission(player, DPermissions.EDIT))) {
             MessageUtil.sendMessage(player, DMessages.ERROR_NO_PERMISSIONS.getMessage());
             return;
         }
 
-        if (dPlayer != null) {
+        if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
@@ -67,13 +77,7 @@ public class EditCommand extends BRCommand {
             return;
         }
 
-        if (editWorld == null) {
-            MessageUtil.sendMessage(player, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(mapName));
-            return;
-        }
-
         new DEditPlayer(player, editWorld.getWorld());
-
     }
 
 }

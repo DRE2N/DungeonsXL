@@ -65,7 +65,7 @@ public class GameSign extends GlobalProtection {
             dungeonName = identifier;
             Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor();
+                mapName = dungeon.getConfig().getStartFloor().getName();
             } else {
                 mapName = "invalid";
             }
@@ -469,7 +469,7 @@ public class GameSign extends GlobalProtection {
             return false;
         }
 
-        if (plugin.getGameWorlds().size() >= plugin.getMainConfig().getMaxInstances()) {
+        if (plugin.getDWorlds().getGameWorlds().size() >= plugin.getMainConfig().getMaxInstances()) {
             MessageUtil.sendMessage(player, DMessages.ERROR_TOO_MANY_INSTANCES.getMessage());
             return true;
         }

@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.task.MobSpawnTask;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitTask;
@@ -40,7 +40,7 @@ public class DMobSign extends DSign implements MobSign {
     private boolean active;
     private BukkitTask task;
 
-    public DMobSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public DMobSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

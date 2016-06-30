@@ -17,7 +17,7 @@
 package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.dungeonsxl.sign.RedstoneSign;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -35,7 +35,7 @@ public class DelayedPowerTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (GameWorld.getByWorld(sign.getBlock().getWorld()) == null) {
+        if (DGameWorld.getByWorld(sign.getBlock().getWorld()) == null) {
             sign.getEnableTask().cancel();
             sign.getDisableTask().cancel();
             return;

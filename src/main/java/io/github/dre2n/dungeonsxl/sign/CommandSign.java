@@ -21,7 +21,7 @@ import io.github.dre2n.commandsxl.command.CCommand;
 import io.github.dre2n.commandsxl.command.CCommandExecutorTask;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -44,7 +44,7 @@ public class CommandSign extends DSign {
     private String executor;
     private boolean initialized;
 
-    public CommandSign(Sign sign, String[] lines, GameWorld gameWorld) {
+    public CommandSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 

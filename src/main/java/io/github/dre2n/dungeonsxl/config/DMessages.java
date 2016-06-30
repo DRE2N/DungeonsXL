@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.commons.config.Messages;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -185,6 +186,7 @@ public enum DMessages implements Messages {
         this.message = message;
     }
 
+    /* Getters and setters */
     @Override
     public String getIdentifier() {
         return identifier;
@@ -203,6 +205,14 @@ public enum DMessages implements Messages {
     @Override
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    /* Actions */
+    /**
+     * Sends the message to the console.
+     */
+    public void debug() {
+        MessageUtil.log(DungeonsXL.getInstance(), getMessage());
     }
 
     /* Statics */

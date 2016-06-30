@@ -33,8 +33,8 @@ import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.task.TimeIsRunningTask;
-import io.github.dre2n.dungeonsxl.world.GameWorld;
-import io.github.dre2n.dungeonsxl.world.Worlds;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -59,13 +59,13 @@ public class DGroup {
     private Dungeon dungeon;
     private String dungeonName;
     private String mapName;
-    private List<String> unplayedFloors = new ArrayList<>();
-    private GameWorld gameWorld;
+    private List<DResourceWorld> unplayedFloors = new ArrayList<>();
+    private DGameWorld gameWorld;
     private boolean playing;
     private int floorCount;
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
-    private String nextFloor;
+    private DResourceWorld nextFloor;
 
     public DGroup(Player player) {
         this("Group_" + plugin.getDGroups().size(), player);
@@ -111,7 +111,7 @@ public class DGroup {
         dungeon = plugin.getDungeons().getByName(identifier);
         if (multiFloor && dungeon != null) {
             dungeonName = dungeon.getName();
-            mapName = dungeon.getConfig().getStartFloor();
+            mapName = dungeon.getConfig().getStartFloor().getName();
             unplayedFloors = dungeon.getConfig().getFloors();
 
         } else {
@@ -343,7 +343,7 @@ public class DGroup {
     /**
      * @return the gameWorld
      */
-    public GameWorld getGameWorld() {
+    public DGameWorld getGameWorld() {
         return gameWorld;
     }
 
@@ -351,7 +351,7 @@ public class DGroup {
      * @param gameWorld
      * the gameWorld to set
      */
-    public void setGameWorld(GameWorld gameWorld) {
+    public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 
@@ -380,7 +380,7 @@ public class DGroup {
         dungeon = plugin.getDungeons().getByName(name);
         if (dungeon != null) {
             dungeonName = dungeon.getName();
-            mapName = dungeon.getConfig().getStartFloor();
+            mapName = dungeon.getConfig().getStartFloor().getName();
             unplayedFloors = dungeon.getConfig().getFloors();
 
         } else {
@@ -422,32 +422,34 @@ public class DGroup {
      * the name to set
      */
     public void setMapName(String name) {
-        if (Worlds.exists(name)) {
+        if (plugin.getDWorlds().exists(name)) {
             mapName = name;
         }
     }
 
     /**
-     * @return the unplayedFloors
+     * @return the unplayed floors
      */
-    public List<String> getUnplayedFloors() {
+    public List<DResourceWorld> getUnplayedFloors() {
         return unplayedFloors;
     }
 
     /**
      * @param unplayedFloor
-     * the unplayedFloor to add
+     * the unplayed floor to add
      */
-    public void addUnplayedFloor(String unplayedFloor) {
+    public void addUnplayedFloor(DResourceWorld unplayedFloor) {
         unplayedFloors.add(unplayedFloor);
     }
 
     /**
      * @param unplayedFloor
-     * the unplayedFloor to add
+     * the unplayed floor to remove
+     * @param force
+     * remove the floor even if removeWhenPlayed is disabled
      */
-    public void removeUnplayedFloor(String unplayedFloor) {
-        if (getDungeon().getConfig().getRemoveWhenPlayed()) {
+    public void removeUnplayedFloor(DResourceWorld unplayedFloor, boolean force) {
+        if (getDungeon().getConfig().getRemoveWhenPlayed() || force) {
             unplayedFloors.remove(unplayedFloor);
         }
     }
@@ -544,7 +546,7 @@ public class DGroup {
     /**
      * @return the next floor the group will enter
      */
-    public String getNextFloor() {
+    public DResourceWorld getNextFloor() {
         return nextFloor;
     }
 
@@ -552,7 +554,7 @@ public class DGroup {
      * @param floor
      * the next floor to set
      */
-    public void setNextFloor(String floor) {
+    public void setNextFloor(DResourceWorld floor) {
         nextFloor = floor;
     }
 
@@ -779,10 +781,10 @@ public class DGroup {
 
     /**
      * @param gameWorld
-     * the GameWorld to check
-     * @return a List of DGroups in this GameWorld
+     * the DGameWorld to check
+     * @return a List of DGroups in this DGameWorld
      */
-    public static List<DGroup> getByGameWorld(GameWorld gameWorld) {
+    public static List<DGroup> getByGameWorld(DGameWorld gameWorld) {
         List<DGroup> dGroups = new ArrayList<>();
         for (DGroup dGroup : plugin.getDGroups()) {
             if (dGroup.getGameWorld().equals(gameWorld)) {
