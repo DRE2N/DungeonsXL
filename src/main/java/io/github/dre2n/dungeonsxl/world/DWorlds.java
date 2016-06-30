@@ -144,7 +144,7 @@ public class DWorlds {
     public Set<DEditWorld> getEditWorlds() {
         Set<DEditWorld> editWorlds = new HashSet<>();
         for (DInstanceWorld instance : instances) {
-            if (instance instanceof DGameWorld) {
+            if (instance instanceof DEditWorld) {
                 editWorlds.add((DEditWorld) instance);
             }
         }
