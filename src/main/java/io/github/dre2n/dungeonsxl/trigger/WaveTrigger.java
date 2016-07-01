@@ -77,10 +77,9 @@ public class WaveTrigger extends Trigger {
      */
     public static Set<WaveTrigger> getByGameWorld(DGameWorld gameWorld) {
         Set<WaveTrigger> toReturn = new HashSet<>();
-        for (Trigger trigger : gameWorld.getTriggers()) {
+        for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.WAVE)) {
             toReturn.add((WaveTrigger) trigger);
         }
-
         return toReturn;
     }
 
