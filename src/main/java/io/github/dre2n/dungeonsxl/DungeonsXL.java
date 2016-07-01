@@ -84,7 +84,7 @@ public class DungeonsXL extends BRPlugin {
     private MainConfig mainConfig;
     private MessageConfig messageConfig;
 
-    private BRCommands dCommands;
+    private DCommands dCommands;
     private DSignTypes dSigns;
     private GameTypes gameTypes;
     private RequirementTypes requirementTypes;
@@ -347,10 +347,10 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the loaded instance of BRCommands
+     * @return the loaded instance of DCommands
      */
     @Override
-    public BRCommands getCommands() {
+    public DCommands getCommands() {
         return dCommands;
     }
 
@@ -358,37 +358,7 @@ public class DungeonsXL extends BRPlugin {
      * load / reload a new instance of DCommands
      */
     public void loadDCommands() {
-        dCommands = new BRCommands(
-                "dungeonsxl",
-                this,
-                new HelpCommand(),
-                new BreakCommand(),
-                new ChatCommand(),
-                new ChatSpyCommand(),
-                new CreateCommand(),
-                new EditCommand(),
-                new EscapeCommand(),
-                new GameCommand(),
-                new GroupCommand(),
-                new ImportCommand(),
-                new InviteCommand(),
-                new JoinCommand(),
-                new EnterCommand(),
-                new LeaveCommand(),
-                new ListCommand(),
-                new LivesCommand(),
-                new MainCommand(),
-                new UninviteCommand(),
-                new MsgCommand(),
-                new PlayCommand(),
-                new PortalCommand(),
-                new DeletePortalCommand(),
-                new ReloadCommand(),
-                new SaveCommand(),
-                new StatusCommand(),
-                new TestCommand()
-        );
-
+        dCommands = new DCommands(this);
         dCommands.register(this);
     }
 
