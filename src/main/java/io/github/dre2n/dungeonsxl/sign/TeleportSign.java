@@ -24,7 +24,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 /**
- * @author Milan Albrecht
+ * @author Milan Albrecht, Daniel Saukel
  */
 public class TeleportSign extends DSign {
 
@@ -38,7 +38,6 @@ public class TeleportSign extends DSign {
 
     @Override
     public boolean check() {
-        String lines[] = getSign().getLines();
         for (int i = 1; i <= 2; i++) {
             if (!lines[i].isEmpty()) {
                 if (letterToYaw(lines[i].charAt(0)) == -1) {
@@ -46,9 +45,6 @@ public class TeleportSign extends DSign {
                     if (loc.length != 3) {
                         return false;
                     }
-                    NumberUtil.parseDouble(loc[0]);
-                    NumberUtil.parseDouble(loc[1]);
-                    NumberUtil.parseDouble(loc[2]);
                 }
             }
         }
@@ -59,7 +55,6 @@ public class TeleportSign extends DSign {
     public void onInit() {
         location = getSign().getLocation().add(0.5, 0, 0.5);
         location.setYaw(letterToYaw(((org.bukkit.material.Sign) getSign().getData()).getFacing().getOppositeFace().name().charAt(0)));
-        String lines[] = getSign().getLines();
         for (int i = 1; i <= 2; i++) {
             if (!lines[i].isEmpty()) {
                 int yaw = letterToYaw(lines[i].charAt(0));
