@@ -22,8 +22,6 @@ import java.util.HashSet;
 import java.util.Set;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.trait.MobType;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
@@ -32,8 +30,16 @@ import org.bukkit.entity.LivingEntity;
  */
 public class CitizensMobProvider implements ExternalMobProvider {
 
+    private DNPCRegistry registry = new DNPCRegistry();
     private String identifier = "CI";
     private Set<NPC> spawnedNPCs = new HashSet<>();
+
+    /**
+     * @return the DungeonsXL NPC registry
+     */
+    public DNPCRegistry getNPCRegistry() {
+        return registry;
+    }
 
     /**
      * @return the spawned Citizens NPCs
@@ -78,7 +84,7 @@ public class CitizensMobProvider implements ExternalMobProvider {
         NPC npc = CitizensAPI.getNPCRegistry().getById(NumberUtil.parseInt(mob));
 
         if (npc != null) {
-            npc = createTransientClone(npc);
+            npc = registry.createTransientClone(npc);
             if (npc.isSpawned()) {
                 npc.despawn();
             }
@@ -89,22 +95,6 @@ public class CitizensMobProvider implements ExternalMobProvider {
             DGameWorld gameWorld = DGameWorld.getByWorld(location.getWorld());
             new DMob((LivingEntity) npc.getEntity(), gameWorld, null, mob);
         }
-    }
-
-    /**
-     * Clones an NPC without spamming the config.
-     *
-     * @param npc
-     * the NPC to clone
-     * @return
-     * a clone of the NPC
-     */
-    public static NPC createTransientClone(NPC npc) {
-        NPC copy = CitizensAPI.getNPCRegistry().createNPC(npc.getTrait(MobType.class).getType(), npc.getFullName());
-        for (Trait trait : copy.getTraits()) {
-            trait.onCopy();
-        }
-        return copy;
     }
 
 }
