@@ -63,7 +63,7 @@ public class CreateCommand extends BRCommand {
 
         if (sender instanceof ConsoleCommandSender) {
             // Msg create
-            MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
+            MessageUtil.log(plugin, DMessages.LOG_NEW_MAP.getMessage());
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
@@ -85,7 +85,7 @@ public class CreateCommand extends BRCommand {
             }
 
             // Msg create
-            MessageUtil.log(plugin, DMessages.LOG_NEW_DUNGEON.getMessage());
+            MessageUtil.log(plugin, DMessages.LOG_NEW_MAP.getMessage());
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
