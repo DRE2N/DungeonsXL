@@ -17,12 +17,12 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
+import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.ResourceWorld;
-import io.github.dre2n.itemsxl.util.commons.util.FileUtil;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -70,7 +70,7 @@ public class ImportCommand extends BRCommand {
 
         FileUtil.copyDirectory(source, target, new String[]{"playerdata", "stats"});
 
-        new ResourceWorld(args[1]);
+        plugin.getDWorlds().addResource(new DResourceWorld(plugin.getDWorlds(), args[1]));
 
         MessageUtil.sendMessage(sender, DMessages.CMD_IMPORT_SUCCESS.getMessage(args[1]));
     }
