@@ -237,7 +237,6 @@ public class DResourceWorld {
         World world = plugin.getServer().createWorld(creator);
 
         DEditWorld editWorld = new DEditWorld(this, folder, world, id);
-        editWorld.generateIdFile();
 
         return editWorld;
     }

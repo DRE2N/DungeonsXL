@@ -36,13 +36,37 @@ public class DEditWorld extends DInstanceWorld {
 
     static DWorlds worlds = plugin.getDWorlds();
 
+    public static String ID_FILE_PREFIX = ".id_";
+
+    private File idFile;
     private CopyOnWriteArrayList<Block> signs = new CopyOnWriteArrayList<>();
 
     DEditWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
         super(resourceWorld, folder, world, id);
+        generateIdFile();
     }
 
     /* Getters and setters */
+    /**
+     * @return the file that stores the ID
+     */
+    public File getIdFile() {
+        return idFile;
+    }
+
+    /**
+     * @return the ID file
+     */
+    public void generateIdFile() {
+        try {
+            idFile = new File(getFolder(), ID_FILE_PREFIX + getName());
+            idFile.createNewFile();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     /**
      * @return the signs
      */
@@ -95,6 +119,7 @@ public class DEditWorld extends DInstanceWorld {
         try {
             getResource().getSignData().serializeSigns(signs);
         } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 

@@ -21,7 +21,6 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import java.io.File;
-import java.io.IOException;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -33,12 +32,9 @@ public abstract class DInstanceWorld {
     protected static DungeonsXL plugin = DungeonsXL.getInstance();
     protected static DWorlds worlds = plugin.getDWorlds();
 
-    public static String ID_FILE_PREFIX = ".id_";
-
     private DResourceWorld resourceWorld;
     private File folder;
     private World world;
-    private File idFile;
     private int id;
     private Location lobby;
 
@@ -88,13 +84,6 @@ public abstract class DInstanceWorld {
     }
 
     /**
-     * @return the file that stores the ID
-     */
-    public File getIdFile() {
-        return idFile;
-    }
-
-    /**
      * @return the unique ID
      */
     public int getId() {
@@ -126,18 +115,6 @@ public abstract class DInstanceWorld {
     public void sendMessage(String message) {
         for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
             MessageUtil.sendMessage(dPlayer.getPlayer(), message);
-        }
-    }
-
-    /**
-     * @return the ID file
-     */
-    public void generateIdFile() {
-        try {
-            idFile = new File(getFolder(), ID_FILE_PREFIX + getName());
-            idFile.createNewFile();
-        } catch (IOException exception) {
-            exception.printStackTrace();
         }
     }
 

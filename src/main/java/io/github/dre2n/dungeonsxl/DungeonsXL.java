@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl;
 
 import io.github.dre2n.caliburn.CaliburnAPI;
-import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.config.MessageConfig;
