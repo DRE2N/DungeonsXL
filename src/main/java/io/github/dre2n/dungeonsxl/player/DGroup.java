@@ -91,6 +91,7 @@ public class DGroup {
     }
 
     public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
+        plugin.debug.start("DGroup#init4");
         plugin.getDGroups().add(this);
         this.name = name;
 
@@ -121,6 +122,7 @@ public class DGroup {
 
         playing = false;
         floorCount = 0;
+        plugin.debug.end("DGroup#init4", true);
     }
 
     // Getters and setters
@@ -579,6 +581,7 @@ public class DGroup {
     }
 
     public void startGame(Game game) {
+        plugin.debug.start("DGroup#startGame");
         if (game == null) {
             return;
         }
@@ -602,6 +605,7 @@ public class DGroup {
             }
 
             if (!ready) {
+                plugin.debug.end("DGroup#startGame", true);
                 return;
             }
         }
@@ -610,6 +614,7 @@ public class DGroup {
         plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
+            plugin.debug.end("DGroup#startGame", true);
             return;
         }
 
@@ -677,6 +682,7 @@ public class DGroup {
 
         GroupSign.updatePerGroup(this);
         nextFloor = null;
+        plugin.debug.end("DGroup#startGame", true);
     }
 
     public boolean checkTime(Game game) {

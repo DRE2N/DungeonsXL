@@ -139,6 +139,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
+        plugin.debug.start("PlayerListener#onInteract");
         Player player = event.getPlayer();
         DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
         Block clickedBlock = event.getClickedBlock();
@@ -291,7 +292,7 @@ public class PlayerListener implements Listener {
                                     if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                         dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
                                     }
-                                    return;
+                                    break;
                                 }
                             }
                         }
@@ -302,6 +303,7 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
             }
         }
+        plugin.debug.end("PlayerListener#onInteract", true);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -440,6 +442,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onQuit(PlayerQuitEvent event) {
+        plugin.debug.start("PlayerListener#onQuit");
         Player player = event.getPlayer();
         DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
         DGroup dGroup = DGroup.getByPlayer(player);
@@ -468,10 +471,12 @@ public class PlayerListener implements Listener {
         } else if (dPlayer instanceof DEditPlayer) {
             ((DEditPlayer) dPlayer).leave();
         }
+        plugin.debug.end("PlayerListener#onQuit", true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onJoin(PlayerJoinEvent event) {
+        plugin.debug.start("PlayerListener#onJoin");
         Player player = event.getPlayer();
 
         new DGlobalPlayer(player);
@@ -504,18 +509,22 @@ public class PlayerListener implements Listener {
 
         // Tutorial Mode
         if (!plugin.getMainConfig().isTutorialActivated()) {
+            plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
 
         if (DGamePlayer.getByPlayer(player) != null) {
+            plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
 
         if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
+            plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
 
         if ((plugin.getMainConfig().getTutorialDungeon() == null || plugin.getMainConfig().getTutorialStartGroup() == null || plugin.getMainConfig().getTutorialEndGroup() == null)) {
+            plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
 
@@ -548,8 +557,10 @@ public class PlayerListener implements Listener {
             }
 
             new DGamePlayer(player, dGroup.getGameWorld());
+            plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
+        plugin.debug.end("PlayerListener#onJoin", true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

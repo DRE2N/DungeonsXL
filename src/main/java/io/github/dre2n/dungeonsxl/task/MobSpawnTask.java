@@ -36,6 +36,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class MobSpawnTask extends BukkitRunnable {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     private DMobSign sign;
 
     public MobSpawnTask(DMobSign sign) {
@@ -44,6 +46,7 @@ public class MobSpawnTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        plugin.debug.start("MobSpawnTask#run");
         if (sign.getInterval() <= 0) {
             World world = sign.getSign().getWorld();
             DGameWorld gameWorld = DGameWorld.getByWorld(world);
@@ -96,6 +99,7 @@ public class MobSpawnTask extends BukkitRunnable {
         }
 
         sign.setInterval(sign.getInterval() - 1);
+        plugin.debug.end("MobSpawnTask#run", true);
     }
 
 }

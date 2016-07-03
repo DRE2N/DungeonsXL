@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.task;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProvider;
 import io.github.dre2n.dungeonsxl.sign.ExternalMobSign;
@@ -28,6 +29,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class ExternalMobSpawnTask extends BukkitRunnable {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    
     private ExternalMobSign sign;
     private ExternalMobProvider provider;
 
@@ -38,6 +41,7 @@ public class ExternalMobSpawnTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        plugin.debug.start("ExternalMobSpawnTask#run");
         if (sign.getInterval() <= 0) {
             World world = sign.getSign().getWorld();
             DGameWorld gameWorld = DGameWorld.getByWorld(world);
@@ -70,6 +74,7 @@ public class ExternalMobSpawnTask extends BukkitRunnable {
         }
 
         sign.setInterval(sign.getInterval() - 1);
+        plugin.debug.end("ExternalMobSpawnTask#run", true);
     }
 
 }

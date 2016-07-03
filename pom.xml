@@ -58,6 +58,7 @@
                                 <includes>
                                     <include>io.github.dre2n:commons</include>
                                     <include>io.github.dre2n:caliburn</include>
+                                    <include>io.github.dre2n:debukkit</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -83,6 +84,11 @@
             <groupId>io.github.dre2n</groupId>
             <artifactId>commons</artifactId>
             <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>debukkit</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
@@ -114,6 +120,11 @@
             <groupId>pl.betoncraft.betonquest</groupId>
             <artifactId>BetonQuest</artifactId>
             <version>1.8.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.boydti</groupId>
+            <artifactId>fawe-api</artifactId>
+            <version>3.5.0-dev</version>
         </dependency>
     </dependencies>
     <repositories>
