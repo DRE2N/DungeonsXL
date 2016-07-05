@@ -22,6 +22,7 @@ package io.github.dre2n.dungeonsxl.trigger;
 public enum TriggerTypeDefault implements TriggerType {
 
     DISTANCE("D", DistanceTrigger.class),
+    FORTUNE("F", FortuneTrigger.class),
     INTERACT("I", InteractTrigger.class),
     MOB("M", MobTrigger.class),
     PROGRESS("P", ProgressTrigger.class),

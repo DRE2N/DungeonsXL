@@ -138,6 +138,12 @@ public abstract class Trigger {
                 trigger = new DistanceTrigger(dSign.getSign().getLocation());
             }
 
+        } else if (type == TriggerTypeDefault.FORTUNE) {
+
+            if (value != null) {
+                trigger = new FortuneTrigger(NumberUtil.parseDouble(value));
+            }
+
         } else if (type == TriggerTypeDefault.SIGN) {
 
             if (value != null) {

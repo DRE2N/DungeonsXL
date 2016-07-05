@@ -30,6 +30,7 @@ import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
 import io.github.dre2n.dungeonsxl.sign.MobSign;
 import io.github.dre2n.dungeonsxl.sign.StartSign;
+import io.github.dre2n.dungeonsxl.trigger.FortuneTrigger;
 import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
 import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
@@ -373,6 +374,10 @@ public class DGameWorld extends DInstanceWorld {
 
         for (Trigger trigger : getTriggers(TriggerTypeDefault.REDSTONE)) {
             ((RedstoneTrigger) trigger).onTrigger();
+        }
+
+        for (Trigger trigger : getTriggers(TriggerTypeDefault.FORTUNE)) {
+            ((FortuneTrigger) trigger).onTrigger();
         }
 
         for (DSign dSign : dSigns) {
