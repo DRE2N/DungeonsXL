@@ -200,6 +200,7 @@ public class DWorlds {
      * Clean up all instances.
      */
     public void deleteAllInstances() {
+        HashSet<DInstanceWorld> instances = new HashSet<>(this.instances);
         for (DInstanceWorld instance : instances) {
             instance.delete();
         }
