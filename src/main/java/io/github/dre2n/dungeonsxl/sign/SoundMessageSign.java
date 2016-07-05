@@ -51,7 +51,7 @@ public class SoundMessageSign extends DSign {
     @Override
     public void onInit() {
         if (!lines[1].isEmpty()) {
-            String msg = getGame().getRules().getMsg(NumberUtil.parseInt(lines[1]), true);
+            String msg = getGame().getRules().getMessage(NumberUtil.parseInt(lines[1]));
             if (msg != null) {
                 this.msg = msg;
                 getSign().getBlock().setType(Material.AIR);

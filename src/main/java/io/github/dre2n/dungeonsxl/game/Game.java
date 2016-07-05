@@ -79,7 +79,9 @@ public class Game {
         dGroups.add(dGroup);
         started = false;
         DResourceWorld resource = plugin.getDWorlds().getResourceByName(worldName);
-        world = resource.instantiateAsGameWorld();
+        if (resource != null) {
+            world = resource.instantiateAsGameWorld();
+        }
         dGroup.setGameWorld(world);
         fetchRules();
     }

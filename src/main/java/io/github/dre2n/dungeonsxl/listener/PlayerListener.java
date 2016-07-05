@@ -139,7 +139,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
-        plugin.debug.start("PlayerListener#onInteract");
         Player player = event.getPlayer();
         DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
         Block clickedBlock = event.getClickedBlock();
@@ -303,7 +302,6 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
             }
         }
-        plugin.debug.end("PlayerListener#onInteract", true);
     }
 
     @EventHandler(priority = EventPriority.HIGH)

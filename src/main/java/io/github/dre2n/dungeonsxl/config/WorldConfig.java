@@ -60,9 +60,7 @@ public class WorldConfig extends GameRules {
 
     public WorldConfig(File file) {
         this.file = file;
-
         FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-
         load(configFile);
     }
 
@@ -78,7 +76,7 @@ public class WorldConfig extends GameRules {
             Set<String> list = configSectionMessages.getKeys(false);
             for (String messagePath : list) {
                 int messageId = NumberUtil.parseInt(messagePath);
-                msgs.put(messageId, configSectionMessages.getString(messagePath));
+                setMessage(messageId, configSectionMessages.getString(messagePath));
             }
         }
 
@@ -252,11 +250,11 @@ public class WorldConfig extends GameRules {
 
         List<String> secureObjectIds = new ArrayList<>();
 
-        for (ItemStack item : secureObjects) {
+        for (ItemStack item : getSecureObjects()) {
             secureObjectIds.add(plugin.getCaliburnAPI().getItems().getCustomItemId(item));
         }
 
-        configFile.set("secureObjects", secureObjectIds);
+        configFile.set("secureObjects", secureObjects);
 
         // Invited Players
         configFile.set("invitedPlayers", invitedPlayers);

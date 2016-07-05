@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
@@ -240,6 +239,9 @@ public class GameRules {
      * @return the requirements
      */
     public List<Requirement> getRequirements() {
+        if (requirements == null) {
+            requirements = new ArrayList<>();
+        }
         return requirements;
     }
 
@@ -247,6 +249,9 @@ public class GameRules {
      * @return all maps needed to be finished to play this map
      */
     public List<String> getFinishedAll() {
+        if (finishedAll == null) {
+            finishedAll = new ArrayList<>();
+        }
         return finishedAll;
     }
 
@@ -255,6 +260,13 @@ public class GameRules {
      * least one has to be finished
      */
     public List<String> getFinished() {
+        if (finishedAll == null) {
+            finishedAll = new ArrayList<>();
+        }
+        if (finishedOne == null) {
+            finishedOne = new ArrayList<>();
+        }
+
         List<String> merge = new ArrayList<>();
         merge.addAll(finishedAll);
         merge.addAll(finishedOne);
@@ -265,6 +277,9 @@ public class GameRules {
      * @return the rewards
      */
     public List<Reward> getRewards() {
+        if (rewards == null) {
+            rewards = new ArrayList<>();
+        }
         return rewards;
     }
 
@@ -273,6 +288,9 @@ public class GameRules {
      * @return the gameCommandWhitelist
      */
     public List<String> getGameCommandWhitelist() {
+        if (gameCommandWhitelist == null) {
+            gameCommandWhitelist = new ArrayList<>();
+        }
         return gameCommandWhitelist;
     }
 
@@ -280,6 +298,9 @@ public class GameRules {
      * @return the gamePermissions
      */
     public List<String> getGamePermissions() {
+        if (gamePermissions == null) {
+            gamePermissions = new ArrayList<>();
+        }
         return gamePermissions;
     }
 
@@ -287,28 +308,24 @@ public class GameRules {
     /**
      * @param id
      * the id of the message
-     * @param returnMainConfig
-     * if a default value shall be returned
      */
-    public String getMsg(int id, boolean returnMainConfig) {
-        String msg = msgs.get(id);
-        if (msg != null) {
-            return msgs.get(id);
+    public String getMessage(int id) {
+        if (msgs == null) {
+            msgs = new HashMap<>();
         }
-        if (returnMainConfig) {
-            return DungeonsXL.getInstance().getMainConfig().getDefaultWorldConfig().msgs.get(id);
-        }
-
-        return null;
+        return msgs.get(id);
     }
 
     /**
-     * @param msg
-     * the message to set
      * @param id
      * the ID of the message
+     * @param msg
+     * the message to set
      */
-    public void setMsg(String msg, int id) {
+    public void setMessage(int id, String msg) {
+        if (msgs == null) {
+            msgs = new HashMap<>();
+        }
         msgs.put(id, msg);
     }
 
@@ -316,6 +333,9 @@ public class GameRules {
      * @return the objects to get passed to another player of the group when this player leaves
      */
     public List<ItemStack> getSecureObjects() {
+        if (secureObjects == null) {
+            secureObjects = new ArrayList<>();
+        }
         return secureObjects;
     }
 
@@ -450,8 +470,17 @@ public class GameRules {
         }
 
         /* Misc */
-        msgs = defaultValues.msgs;
-        secureObjects = defaultValues.secureObjects;
+        if (msgs == null) {
+            msgs = defaultValues.msgs;
+        } else if (defaultValues.msgs != null) {
+            msgs.putAll(defaultValues.msgs);
+        }
+
+        if (secureObjects == null) {
+            secureObjects = defaultValues.secureObjects;
+        } else if (defaultValues.secureObjects != null) {
+            secureObjects.addAll(defaultValues.secureObjects);
+        }
     }
 
 }

@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
-import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
@@ -60,12 +59,12 @@ public class MsgCommand extends BRCommand {
         }
 
         try {
-            int id = NumberUtil.parseInt(args[1]);
+            int id = Integer.parseInt(args[1]);
 
             WorldConfig config = editWorld.getResource().getConfig();
 
             if (args.length == 2) {
-                String msg = config.getMsg(id, true);
+                String msg = config.getMessage(id);
 
                 if (msg != null) {
                     MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
@@ -88,7 +87,7 @@ public class MsgCommand extends BRCommand {
 
                 if (splitMsg.length > 1) {
                     msg = splitMsg[1];
-                    String old = config.getMsg(id, false);
+                    String old = config.getMessage(id);
                     if (old == null) {
                         MessageUtil.sendMessage(player, DMessages.CMD_MSG_ADDED.getMessage(String.valueOf(id)));
 
@@ -96,7 +95,7 @@ public class MsgCommand extends BRCommand {
                         MessageUtil.sendMessage(player, DMessages.CMD_MSG_UPDATED.getMessage(String.valueOf(id)));
                     }
 
-                    config.setMsg(msg, id);
+                    config.setMessage(id, msg);
                     config.save();
 
                 } else {

@@ -67,7 +67,7 @@ public enum DMessages implements Messages {
     ERROR_LEAVE_GAME("Error_LeaveGame", "&4You have to leave your current game first!"),
     ERROR_LEAVE_GROUP("Error_LeaveGroup", "&4You have to leave your group first!"),
     ERROR_MSG_ID_NOT_EXIST("Error_MsgIdNotExist", "&4Messages with Id &6&v1&4 does not exist!"),
-    ERROR_MSG_FORMAT("Error_MsgFormat", "&4The Messages has to be between \"!"),
+    ERROR_MSG_FORMAT("Error_MsgFormat", "&4Please use &6\" &4to mark the beginning and the end of the message!"),
     ERROR_MSG_NO_INT("Error_MsgNoInt", "&4The argument [id] has to include a number!"),
     ERROR_NAME_IN_USE("Error_NameInUse", "&4The name &6&v1 &4is already in use."),
     ERROR_NAME_TO_LONG("Error_NameToLong", "&4The name may not be longer than 15 characters!"),
