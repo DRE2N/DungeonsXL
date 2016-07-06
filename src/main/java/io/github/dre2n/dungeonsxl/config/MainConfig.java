@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.config;
 
 import io.github.dre2n.commons.config.BRConfig;
+import io.github.dre2n.commons.util.EnumUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +31,14 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 9;
+    public enum BackupMode {
+        ON_DISABLE,
+        ON_DISABLE_AND_SAVE,
+        ON_SAVE,
+        NEVER
+    }
+
+    public static final int CONFIG_VERSION = 10;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -65,6 +73,7 @@ public class MainConfig extends BRConfig {
     private boolean openInventories = false;
     private boolean dropItems = false;
     private List<String> editCommandWhitelist = new ArrayList<>();
+    private BackupMode backupMode = BackupMode.ON_DISABLE_AND_SAVE;
 
     /* Permissions bridge */
     private List<String> editPermissions = new ArrayList<>();
@@ -306,6 +315,21 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @return the backup mode
+     */
+    public BackupMode getBackupMode() {
+        return backupMode;
+    }
+
+    /**
+     * @param mode
+     * the BackupMode to set
+     */
+    public void setBackupMode(BackupMode mode) {
+        backupMode = mode;
+    }
+
+    /**
      * @return the edit mode permissions
      */
     public List<String> getEditPermissions() {
@@ -386,6 +410,10 @@ public class MainConfig extends BRConfig {
             config.set("secureMode.editCommandWhitelist", editCommandWhitelist);
         }
 
+        if (!config.contains("backupMode")) {
+            config.set("backupMode", backupMode.toString());
+        }
+
         if (!config.contains("editPermissions")) {
             config.set("editPermissions", editPermissions);
         }
@@ -463,6 +491,13 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("secureMode.editCommandWhitelist")) {
             editCommandWhitelist = config.getStringList("secureMode.editCommandWhitelist");
+        }
+
+        if (config.contains("backupMode")) {
+            String mode = config.getString("backupMode");
+            if (EnumUtil.isValidEnum(BackupMode.class, mode)) {
+                backupMode = BackupMode.valueOf(mode);
+            }
         }
 
         if (config.contains("editPermissions")) {

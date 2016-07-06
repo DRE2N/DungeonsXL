@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.world;
 import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MainConfig.BackupMode;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +29,8 @@ import org.bukkit.Bukkit;
  * @author Daniel Saukel
  */
 public class DWorlds {
+
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Set<DResourceWorld> resources = new HashSet<>();
     private Set<DInstanceWorld> instances = new HashSet<>();
@@ -200,8 +203,13 @@ public class DWorlds {
      * Clean up all instances.
      */
     public void deleteAllInstances() {
+        BackupMode backupMode = plugin.getMainConfig().getBackupMode();
         HashSet<DInstanceWorld> instances = new HashSet<>(this.instances);
         for (DInstanceWorld instance : instances) {
+            if (backupMode == BackupMode.ON_DISABLE | backupMode == BackupMode.ON_DISABLE_AND_SAVE && instance instanceof DEditWorld) {
+                instance.getResource().backup(false);
+            }
+
             instance.delete();
         }
     }

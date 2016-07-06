@@ -21,6 +21,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.SignData;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
+import io.github.dre2n.dungeonsxl.task.BackupResourceTask;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
@@ -28,6 +29,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * This class represents unloaded worlds.
@@ -165,6 +167,21 @@ public class DResourceWorld {
     }
 
     /* Actions */
+    /**
+     * Creates a backup of the resource
+     *
+     * @param async
+     * whether the task shall be performed asyncronously
+     */
+    public void backup(boolean async) {
+        BackupResourceTask task = new BackupResourceTask(this);
+        if (async) {
+            task.runTaskAsynchronously(plugin);
+        } else {
+            task.run();
+        }
+    }
+
     /**
      * @param game
      * whether the instance is a DGameWorld
