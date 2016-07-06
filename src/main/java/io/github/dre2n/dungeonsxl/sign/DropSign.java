@@ -83,7 +83,8 @@ public class DropSign extends DSign {
             getSign().getWorld().dropItem(spawnLocation, item);
 
         } else {
-            new DropItemTask(item, spawnLocation).runTaskTimer(plugin, 0, (long) interval * 20);
+            long period = (long) interval * 20;
+            new DropItemTask(item, spawnLocation).runTaskTimer(plugin, period, period);
         }
     }
 

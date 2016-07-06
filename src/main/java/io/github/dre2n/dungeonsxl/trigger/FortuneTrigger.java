@@ -22,7 +22,7 @@ import static io.github.dre2n.dungeonsxl.trigger.Trigger.plugin;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * @author Daniel Saukel
  */
 public class FortuneTrigger extends Trigger {
 
@@ -35,6 +35,9 @@ public class FortuneTrigger extends Trigger {
     }
 
     /* Getters and setters */
+    /**
+     * @return the chance
+     */
     public double getChance() {
         return chance;
     }

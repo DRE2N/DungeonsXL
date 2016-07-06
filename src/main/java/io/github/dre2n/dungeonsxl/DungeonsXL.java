@@ -67,6 +67,7 @@ public class DungeonsXL extends BRPlugin {
     private static DungeonsXL instance;
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
+    public static File BACKUPS;
     public static File DUNGEONS;
     public static File LANGUAGES;
     public static File MAPS;
@@ -208,7 +209,7 @@ public class DungeonsXL extends BRPlugin {
 
         // Stop shedulers
         getServer().getScheduler().cancelTasks(this);
-        
+
         // DebukkIt
         debug.save();
     }
@@ -217,6 +218,11 @@ public class DungeonsXL extends BRPlugin {
     public void initFolders() {
         if (!getDataFolder().exists()) {
             getDataFolder().mkdir();
+        }
+
+        BACKUPS = new File(getDataFolder(), "backups");
+        if (!BACKUPS.exists()) {
+            BACKUPS.mkdir();
         }
 
         DUNGEONS = new File(getDataFolder(), "dungeons");
@@ -572,7 +578,7 @@ public class DungeonsXL extends BRPlugin {
      */
     public void startAnnouncerTask(long period) {
         if (!announcers.getAnnouncers().isEmpty()) {
-            announcerTask = new AnnouncerTask(announcers).runTaskTimer(this, 0L, period);
+            announcerTask = new AnnouncerTask(announcers).runTaskTimer(this, period, period);
         }
     }
 
@@ -587,7 +593,7 @@ public class DungeonsXL extends BRPlugin {
      * start a new WorldUnloadTask
      */
     public void startWorldUnloadTask(long period) {
-        worldUnloadTask = new WorldUnloadTask().runTaskTimer(this, 0L, period);
+        worldUnloadTask = new WorldUnloadTask().runTaskTimer(this, period, period);
     }
 
     /**
@@ -601,7 +607,7 @@ public class DungeonsXL extends BRPlugin {
      * start a new LazyUpdateTask
      */
     public void startLazyUpdateTask(long period) {
-        lazyUpdateTask = new LazyUpdateTask().runTaskTimer(this, 0L, period);
+        lazyUpdateTask = new LazyUpdateTask().runTaskTimer(this, period, period);
     }
 
     /**
@@ -615,7 +621,7 @@ public class DungeonsXL extends BRPlugin {
      * start a new LazyUpdateTask
      */
     public void startUpdateTask(long period) {
-        updateTask = new UpdateTask().runTaskTimer(this, 0L, period);
+        updateTask = new UpdateTask().runTaskTimer(this, period, period);
     }
 
     /**
@@ -629,7 +635,7 @@ public class DungeonsXL extends BRPlugin {
      * start a new SecureModeTask
      */
     public void startSecureModeTask(long period) {
-        updateTask = new SecureModeTask().runTaskTimer(this, 0L, period);
+        updateTask = new SecureModeTask().runTaskTimer(this, period, period);
     }
 
     /**
