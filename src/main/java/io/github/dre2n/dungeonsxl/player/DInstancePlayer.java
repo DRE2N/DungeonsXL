@@ -31,7 +31,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
     private World world;
     private boolean inDungeonChat = false;
 
-    public DInstancePlayer(Player player, World world) {
+    DInstancePlayer(Player player, World world) {
         super(player);
 
         double health = player.getHealth();

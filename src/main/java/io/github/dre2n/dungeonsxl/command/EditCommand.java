@@ -77,7 +77,7 @@ public class EditCommand extends BRCommand {
             return;
         }
 
-        new DEditPlayer(player, editWorld.getWorld());
+        DEditPlayer.create(player, editWorld);
     }
 
 }

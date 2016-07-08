@@ -202,7 +202,7 @@ public class DPortal extends GlobalProtection {
             dGroup.setGameWorld(target);
         }
 
-        new DGamePlayer(player, target);
+        DGamePlayer.create(player, target);
     }
 
     @Override

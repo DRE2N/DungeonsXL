@@ -38,7 +38,7 @@ public class MainConfig extends BRConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 10;
+    public static final int CONFIG_VERSION = 11;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -65,7 +65,10 @@ public class MainConfig extends BRConfig {
     /* Misc */
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
+
+    /* Performance */
     private int maxInstances = 10;
+    private boolean tweaksEnabled = false;
 
     /* Secure Mode */
     private boolean secureModeEnabled = false;
@@ -248,6 +251,21 @@ public class MainConfig extends BRConfig {
     }
 
     /**
+     * @return if the performance tweaks are enabled
+     */
+    public boolean areTweaksEnabled() {
+        return tweaksEnabled;
+    }
+
+    /**
+     * @param enabled
+     * if the performance tweaks are enabled
+     */
+    public void setTweaksEnabled(boolean enabled) {
+        tweaksEnabled = enabled;
+    }
+
+    /**
      * @return if the secure mode is enabled
      */
     public boolean isSecureModeEnabled() {
@@ -390,6 +408,10 @@ public class MainConfig extends BRConfig {
             config.set("maxInstances", maxInstances);
         }
 
+        if (!config.contains("tweaksEnabled")) {
+            config.set("tweaksEnabled", tweaksEnabled);
+        }
+
         if (!config.contains("secureMode.enabled")) {
             config.set("secureMode.enabled", secureModeEnabled);
         }
@@ -471,6 +493,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("maxInstances")) {
             maxInstances = config.getInt("maxInstances");
+        }
+
+        if (config.contains("tweaksEnabled")) {
+            tweaksEnabled = config.getBoolean("tweaksEnabled");
         }
 
         if (config.contains("secureMode.enabled")) {

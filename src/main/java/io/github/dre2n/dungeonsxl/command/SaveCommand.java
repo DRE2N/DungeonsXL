@@ -20,6 +20,7 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.config.MainConfig.BackupMode;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
@@ -32,6 +33,7 @@ import org.bukkit.entity.Player;
 public class SaveCommand extends BRCommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    MainConfig mainConfig = plugin.getMainConfig();
 
     public SaveCommand() {
         setCommand("save");
@@ -47,9 +49,9 @@ public class SaveCommand extends BRCommand {
         Player player = (Player) sender;
         DEditWorld editWorld = DEditWorld.getByWorld(player.getWorld());
         if (editWorld != null) {
-            BackupMode backupMode = plugin.getMainConfig().getBackupMode();
+            BackupMode backupMode = mainConfig.getBackupMode();
             if (backupMode == BackupMode.ON_SAVE || backupMode == BackupMode.ON_DISABLE_AND_SAVE) {
-                editWorld.getResource().backup(false);
+                editWorld.getResource().backup(mainConfig.areTweaksEnabled());
             }
 
             editWorld.save();

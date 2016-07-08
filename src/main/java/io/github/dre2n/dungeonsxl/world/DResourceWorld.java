@@ -20,13 +20,14 @@ import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.SignData;
 import io.github.dre2n.dungeonsxl.config.WorldConfig;
+import io.github.dre2n.dungeonsxl.event.editworld.EditWorldGenerateEvent;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.task.BackupResourceTask;
+import io.github.dre2n.dungeonsxl.util.WorldLoader;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -187,32 +188,47 @@ public class DResourceWorld {
      * whether the instance is a DGameWorld
      * @return an instance of this world
      */
-    public DInstanceWorld instantiate(boolean game) {
+    public DInstanceWorld instantiate(final boolean game) {
         plugin.debug.start("DResourceWorld#instantiate");
         int id = worlds.generateId();
         String name = worlds.generateName(game);
-        File instanceFolder = new File(Bukkit.getWorldContainer(), name);
-        FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
+        final File instanceFolder = new File(Bukkit.getWorldContainer(), name);
 
         if (Bukkit.getWorld(name) != null) {
             return null;
         }
 
-        World world = plugin.getServer().createWorld(WorldCreator.name(name));
+        final DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
 
-        DInstanceWorld instance = null;
-        try {
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
+            FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
+            instance.world = plugin.getServer().createWorld(WorldCreator.name(name));
+
             if (game) {
-                instance = new DGameWorld(this, instanceFolder, world, id);
                 signData.deserializeSigns((DGameWorld) instance);
-
             } else {
-                instance = new DEditWorld(this, instanceFolder, world, id);
                 signData.deserializeSigns((DEditWorld) instance);
             }
 
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } else {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
+                    instance.world = WorldLoader.createWorld(WorldCreator.name(instanceFolder.getName()));
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (game) {
+                                signData.deserializeSigns((DGameWorld) instance);
+                            } else {
+                                signData.deserializeSigns((DEditWorld) instance);
+                            }
+                        }
+                    }.runTask(plugin);
+                }
+            }.runTaskAsynchronously(plugin);
         }
 
         plugin.debug.end("DResourceWorld#instantiate", true);
@@ -240,23 +256,34 @@ public class DResourceWorld {
      */
     public DEditWorld generate() {
         plugin.debug.start("DResourceWorld#generate");
-        String name = worlds.generateName(false);
-        WorldCreator creator = WorldCreator.name(name);
+        final String name = worlds.generateName(false);
+        int id = worlds.generateId();
+        final File folder = new File(Bukkit.getWorldContainer(), name);
+        final WorldCreator creator = new WorldCreator(name);
         creator.type(WorldType.FLAT);
         creator.generateStructures(false);
 
-        /*EditWorldGenerateEvent event = new EditWorldGenerateEvent(this);
+        final DEditWorld editWorld = new DEditWorld(this, folder, id);
+
+        EditWorldGenerateEvent event = new EditWorldGenerateEvent(editWorld);
         plugin.getServer().getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
-            return;
+            return null;
         }
-         */
-        int id = worlds.generateId();
-        File folder = new File(Bukkit.getWorldContainer(), name);
-        World world = plugin.getServer().createWorld(creator);
 
-        DEditWorld editWorld = new DEditWorld(this, folder, world, id);
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
+            editWorld.world = creator.createWorld();
+
+        } else {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileUtil.copyDirectory(DWorlds.RAW, folder, DungeonsXL.EXCLUDED_FILES);
+                    editWorld.generateIdFile();
+                    editWorld.world = WorldLoader.createWorld(creator);
+                }
+            }.runTaskAsynchronously(plugin);
+        }
 
         plugin.debug.end("DResourceWorld#generate", true);
         return editWorld;

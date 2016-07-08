@@ -19,11 +19,15 @@ package io.github.dre2n.dungeonsxl.world;
 import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.config.MainConfig.BackupMode;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 
 /**
  * @author Daniel Saukel
@@ -31,16 +35,21 @@ import org.bukkit.Bukkit;
 public class DWorlds {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    MainConfig mainConfig = plugin.getMainConfig();
+
+    public static final File RAW = new File(DungeonsXL.MAPS, ".raw");
 
     private Set<DResourceWorld> resources = new HashSet<>();
     private Set<DInstanceWorld> instances = new HashSet<>();
 
     public DWorlds(File folder) {
         for (File file : folder.listFiles()) {
-            if (file.isDirectory()) {
+            if (file.isDirectory() && !file.getName().equals(".raw")) {
                 resources.add(new DResourceWorld(this, file));
             }
         }
+
+        createRaw();
     }
 
     /* Getters and setters */
@@ -203,11 +212,11 @@ public class DWorlds {
      * Clean up all instances.
      */
     public void deleteAllInstances() {
-        BackupMode backupMode = plugin.getMainConfig().getBackupMode();
+        BackupMode backupMode = mainConfig.getBackupMode();
         HashSet<DInstanceWorld> instances = new HashSet<>(this.instances);
         for (DInstanceWorld instance : instances) {
             if (backupMode == BackupMode.ON_DISABLE | backupMode == BackupMode.ON_DISABLE_AND_SAVE && instance instanceof DEditWorld) {
-                instance.getResource().backup(false);
+                instance.getResource().backup(mainConfig.areTweaksEnabled());
             }
 
             instance.delete();
@@ -244,6 +253,20 @@ public class DWorlds {
      */
     public String generateName(boolean game) {
         return "DXL_" + (game ? "Game" : "Edit") + "_" + generateId();
+    }
+
+    /**
+     * Creates a raw, new flat world sothat it can be copied if needed instead of getting generated from scratch.
+     */
+    public void createRaw() {
+        WorldCreator creator = WorldCreator.name(".raw");
+        creator.type(WorldType.FLAT);
+        creator.generateStructures(false);
+        World world = creator.createWorld();
+        File worldFolder = new File(Bukkit.getWorldContainer(), ".raw");
+        FileUtil.copyDirectory(worldFolder, RAW, DungeonsXL.EXCLUDED_FILES);
+        Bukkit.unloadWorld(world, false);
+        FileUtil.removeDirectory(worldFolder);
     }
 
 }

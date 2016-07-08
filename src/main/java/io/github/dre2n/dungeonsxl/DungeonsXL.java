@@ -188,6 +188,7 @@ public class DungeonsXL extends BRPlugin {
 
     @Override
     public void onDisable() {
+        mainConfig.setTweaksEnabled(false);
         // Save
         saveData();
         messageConfig.save();

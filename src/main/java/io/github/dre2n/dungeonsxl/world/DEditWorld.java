@@ -28,6 +28,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -43,7 +44,10 @@ public class DEditWorld extends DInstanceWorld {
 
     DEditWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
         super(resourceWorld, folder, world, id);
-        generateIdFile();
+    }
+
+    DEditWorld(DResourceWorld resourceWorld, File folder, int id) {
+        this(resourceWorld, folder, null, id);
     }
 
     /* Getters and setters */
@@ -113,14 +117,21 @@ public class DEditWorld extends DInstanceWorld {
 
         getWorld().save();
 
-        FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-        FileUtil.deleteUnusedFiles(getResource().getFolder());
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
+            FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+            FileUtil.deleteUnusedFiles(getResource().getFolder());
 
-        try {
-            getResource().getSignData().serializeSigns(signs);
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } else {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                    FileUtil.deleteUnusedFiles(getResource().getFolder());
+                }
+            }.runTaskAsynchronously(plugin);
         }
+
+        getResource().getSignData().serializeSigns(signs);
     }
 
     @Override
@@ -134,7 +145,8 @@ public class DEditWorld extends DInstanceWorld {
      * @param save
      * whether this world should be saved
      */
-    public void delete(boolean save) {
+    public void delete(final boolean save) {
+        plugin.debug.start("DEditWorld#delete");
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
         plugin.getServer().getPluginManager().callEvent(event);
 
@@ -142,26 +154,42 @@ public class DEditWorld extends DInstanceWorld {
             return;
         }
 
-        worlds.getInstances().remove(this);
         for (Player player : getWorld().getPlayers()) {
             DEditPlayer dPlayer = DEditPlayer.getByPlayer(player);
             dPlayer.leave();
         }
 
-        if (save) {
-            plugin.getServer().unloadWorld(getWorld(), true);
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
+            if (save) {
+                plugin.getServer().unloadWorld(getWorld(), true);
+            }
+            FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+            FileUtil.deleteUnusedFiles(getResource().getFolder());
+            if (!save) {
+                plugin.getServer().unloadWorld(getWorld(), true);
+            }
+            FileUtil.removeDirectory(getFolder());
+            worlds.removeInstance(this);
+
+        } else {
+            final DEditWorld editWorld = this;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (save) {
+                        plugin.getServer().unloadWorld(getWorld(), true);
+                    }
+                    FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                    FileUtil.deleteUnusedFiles(getResource().getFolder());
+                    if (!save) {
+                        plugin.getServer().unloadWorld(getWorld(), true);
+                    }
+                    FileUtil.removeDirectory(getFolder());
+                    worlds.removeInstance(editWorld);
+                }
+            }.runTaskAsynchronously(plugin);
         }
-
-        FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-        FileUtil.deleteUnusedFiles(getResource().getFolder());
-
-        if (!save) {
-            plugin.getServer().unloadWorld(getWorld(), true);
-        }
-
-        FileUtil.removeDirectory(getFolder());
-
-        worlds.removeInstance(this);
+        plugin.debug.end("DEditWorld#delete", true);
     }
 
     /* Statics */

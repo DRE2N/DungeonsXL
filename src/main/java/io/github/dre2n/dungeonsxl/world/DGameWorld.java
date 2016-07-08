@@ -49,6 +49,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Spider;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -71,6 +72,10 @@ public class DGameWorld extends DInstanceWorld {
 
     DGameWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
         super(resourceWorld, folder, world, id);
+    }
+
+    DGameWorld(DResourceWorld resourceWorld, File folder, int id) {
+        this(resourceWorld, folder, null, id);
     }
 
     /**
@@ -354,7 +359,6 @@ public class DGameWorld extends DInstanceWorld {
      * Set up the instance for the game
      */
     public void startGame() {
-        plugin.debug.start("DGameWorld#startGame");
         GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, getGame());
         plugin.getServer().getPluginManager().callEvent(event);
 
@@ -387,7 +391,6 @@ public class DGameWorld extends DInstanceWorld {
                 }
             }
         }
-        plugin.debug.end("DGameWorld#startGame", true);
     }
 
     /**
@@ -403,11 +406,22 @@ public class DGameWorld extends DInstanceWorld {
             return;
         }
 
-        plugin.getDWorlds().getInstances().remove(this);
-        plugin.getServer().unloadWorld(getWorld(), true);
-        FileUtil.removeDirectory(getFolder());
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
+            plugin.getServer().unloadWorld(getWorld(), false);
+            FileUtil.removeDirectory(getFolder());
+            worlds.removeInstance(this);
 
-        worlds.removeInstance(this);
+        } else {
+            final DGameWorld gameWorld = this;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    plugin.getServer().unloadWorld(getWorld(), false);
+                    FileUtil.removeDirectory(getFolder());
+                    worlds.removeInstance(gameWorld);
+                }
+            }.runTaskAsynchronously(plugin);
+        }
         plugin.debug.end("DGameWorld#delete", true);
     }
 

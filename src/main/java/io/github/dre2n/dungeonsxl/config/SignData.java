@@ -57,26 +57,31 @@ public class SignData {
      * the DEditWorld where the signs are
      * @throws IOException
      */
-    public void deserializeSigns(DEditWorld editWorld) throws IOException {
-        ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
-        int length = os.readInt();
+    public void deserializeSigns(DEditWorld editWorld) {
+        try {
+            ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
+            int length = os.readInt();
 
-        for (int i = 0; i < length; i++) {
-            int x = os.readInt();
-            int y = os.readInt();
-            int z = os.readInt();
+            for (int i = 0; i < length; i++) {
+                int x = os.readInt();
+                int y = os.readInt();
+                int z = os.readInt();
 
-            Block block = editWorld.getWorld().getBlockAt(x, y, z);
-            editWorld.getSigns().add(block);
+                Block block = editWorld.getWorld().getBlockAt(x, y, z);
+                editWorld.getSigns().add(block);
 
-            if (block.getState() instanceof Sign) {
-                Sign sign = (Sign) block.getState();
-                String[] lines = sign.getLines();
+                if (block.getState() instanceof Sign) {
+                    Sign sign = (Sign) block.getState();
+                    String[] lines = sign.getLines();
 
-                if (lines[0].equalsIgnoreCase("[lobby]")) {
-                    editWorld.setLobbyLocation(block.getLocation());
+                    if (lines[0].equalsIgnoreCase("[lobby]")) {
+                        editWorld.setLobbyLocation(block.getLocation());
+                    }
                 }
             }
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -88,23 +93,28 @@ public class SignData {
      * @return a Set of all DSign blocks
      * @throws IOException
      */
-    public void deserializeSigns(DGameWorld gameWorld) throws IOException {
-        ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
+    public void deserializeSigns(DGameWorld gameWorld) {
+        try {
+            ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
 
-        int length = os.readInt();
-        for (int i = 0; i < length; i++) {
-            int x = os.readInt();
-            int y = os.readInt();
-            int z = os.readInt();
+            int length = os.readInt();
+            for (int i = 0; i < length; i++) {
+                int x = os.readInt();
+                int y = os.readInt();
+                int z = os.readInt();
 
-            Block block = gameWorld.getWorld().getBlockAt(x, y, z);
-            if (block.getState() instanceof Sign) {
-                DSign dSign = DSign.create((Sign) block.getState(), gameWorld);
-                gameWorld.getDSigns().add(dSign);
+                Block block = gameWorld.getWorld().getBlockAt(x, y, z);
+                if (block.getState() instanceof Sign) {
+                    DSign dSign = DSign.create((Sign) block.getState(), gameWorld);
+                    gameWorld.getDSigns().add(dSign);
+                }
             }
-        }
 
-        os.close();
+            os.close();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**
@@ -114,7 +124,7 @@ public class SignData {
      * the DEditWorld that contains the signs to serialize
      * @throws IOException
      */
-    public void serializeSigns(DEditWorld editWorld) throws IOException {
+    public void serializeSigns(DEditWorld editWorld) {
         serializeSigns(editWorld.getSigns());
     }
 
@@ -125,17 +135,22 @@ public class SignData {
      * the signs to serialize
      * @throws IOException
      */
-    public void serializeSigns(List<Block> signs) throws IOException {
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-        out.writeInt(signs.size());
+    public void serializeSigns(List<Block> signs) {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+            out.writeInt(signs.size());
 
-        for (Block sign : signs) {
-            out.writeInt(sign.getX());
-            out.writeInt(sign.getY());
-            out.writeInt(sign.getZ());
+            for (Block sign : signs) {
+                out.writeInt(sign.getX());
+                out.writeInt(sign.getY());
+                out.writeInt(sign.getZ());
+            }
+
+            out.close();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
-
-        out.close();
     }
 
 }

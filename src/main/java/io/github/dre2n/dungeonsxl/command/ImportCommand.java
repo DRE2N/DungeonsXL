@@ -27,6 +27,7 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -47,8 +48,8 @@ public class ImportCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        File target = new File(DungeonsXL.MAPS, args[1]);
-        File source = new File(Bukkit.getWorldContainer(), args[1]);
+        final File target = new File(DungeonsXL.MAPS, args[1]);
+        final File source = new File(Bukkit.getWorldContainer(), args[1]);
 
         if (!source.exists()) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_MAP.getMessage(args[1]));
@@ -68,10 +69,19 @@ public class ImportCommand extends BRCommand {
         MessageUtil.log(plugin, DMessages.LOG_NEW_MAP.getMessage());
         MessageUtil.log(plugin, DMessages.LOG_IMPORT_WORLD.getMessage());
 
-        FileUtil.copyDirectory(source, target, new String[]{"playerdata", "stats"});
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
+            FileUtil.copyDirectory(source, target, new String[]{"playerdata", "stats"});
+
+        } else {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileUtil.copyDirectory(source, target, new String[]{"playerdata", "stats"});
+                }
+            }.runTaskAsynchronously(plugin);
+        }
 
         plugin.getDWorlds().addResource(new DResourceWorld(plugin.getDWorlds(), args[1]));
-
         MessageUtil.sendMessage(sender, DMessages.CMD_IMPORT_SUCCESS.getMessage(args[1]));
     }
 

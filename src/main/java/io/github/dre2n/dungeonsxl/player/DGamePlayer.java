@@ -33,9 +33,11 @@ import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.mob.DMob;
+import static io.github.dre2n.dungeonsxl.player.DGlobalPlayer.plugin;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.Reward;
+import io.github.dre2n.dungeonsxl.task.CreateDInstancePlayerTask;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
@@ -54,6 +56,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Represents a player in a DGameWorld.
@@ -77,15 +80,11 @@ public class DGamePlayer extends DInstancePlayer {
     private int initialLives = -1;
     private int lives;
 
-    public DGamePlayer(Player player, DGameWorld gameWorld) {
-        this(player, gameWorld.getWorld());
-    }
-
-    public DGamePlayer(Player player, World world) {
-        super(player, world);
+    public DGamePlayer(Player player, DGameWorld world) {
+        super(player, world.getWorld());
 
         plugin.debug.start("DGamePlayer#init");
-        Game game = Game.getByWorld(world);
+        Game game = Game.getByGameWorld(world);
         if (game == null) {
             game = new Game(DGroup.getByPlayer(player));
         }
@@ -104,13 +103,35 @@ public class DGamePlayer extends DInstancePlayer {
         initialLives = rules.getInitialLives();
         lives = initialLives;
 
-        Location teleport = DGameWorld.getByWorld(world).getLobbyLocation();
+        Location teleport = world.getLobbyLocation();
         if (teleport == null) {
-            PlayerUtil.secureTeleport(player, world.getSpawnLocation());
+            PlayerUtil.secureTeleport(player, world.getWorld().getSpawnLocation());
         } else {
             PlayerUtil.secureTeleport(player, teleport);
         }
         plugin.debug.end("DGamePlayer#init", true);
+    }
+
+    /**
+     * @param player
+     * the represented Player
+     * @param gameWorld
+     * the player's GameWorld
+     */
+    public static void create(Player player, DGameWorld gameWorld) {
+        create(player, gameWorld, false);
+    }
+
+    /**
+     * @param player
+     * the represented Player
+     * @param gameWorld
+     * the player's GameWorld
+     * @param ready
+     * if the player will be ready from the beginning
+     */
+    public static void create(Player player, DGameWorld gameWorld, boolean ready) {
+        new CreateDInstancePlayerTask(player, gameWorld, ready).runTaskTimer(plugin, 0L, 5L);
     }
 
     /* Getters and setters */

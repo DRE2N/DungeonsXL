@@ -97,7 +97,7 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_WORLD_GENERATION_FINISHED.getMessage());
 
             // Tp Player
-            new DEditPlayer(player, editWorld.getWorld());
+            DEditPlayer.create(player, editWorld);
         }
     }
 

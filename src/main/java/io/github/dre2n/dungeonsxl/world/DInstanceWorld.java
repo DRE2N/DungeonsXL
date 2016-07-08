@@ -34,7 +34,7 @@ public abstract class DInstanceWorld {
 
     private DResourceWorld resourceWorld;
     private File folder;
-    private World world;
+    World world;
     private int id;
     private Location lobby;
 
@@ -81,6 +81,13 @@ public abstract class DInstanceWorld {
      */
     public World getWorld() {
         return world;
+    }
+
+    /**
+     * @return false if this instance does not have a world, yet
+     */
+    public boolean exists() {
+        return world != null;
     }
 
     /**

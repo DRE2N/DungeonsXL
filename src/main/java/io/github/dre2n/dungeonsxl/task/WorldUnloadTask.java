@@ -32,16 +32,20 @@ public class WorldUnloadTask extends BukkitRunnable {
     @Override
     public void run() {
         for (DGameWorld gameWorld : plugin.getDWorlds().getGameWorlds()) {
-            if (gameWorld.getWorld().getPlayers().isEmpty()) {
-                if (DGamePlayer.getByWorld(gameWorld.getWorld()).isEmpty()) {
-                    gameWorld.delete();
+            if (gameWorld.exists()) {
+                if (gameWorld.getWorld().getPlayers().isEmpty()) {
+                    if (DGamePlayer.getByWorld(gameWorld.getWorld()).isEmpty()) {
+                        gameWorld.delete();
+                    }
                 }
             }
         }
 
         for (DEditWorld editWorld : plugin.getDWorlds().getEditWorlds()) {
-            if (editWorld.getWorld().getPlayers().isEmpty()) {
-                editWorld.delete(true);
+            if (editWorld.exists()) {
+                if (editWorld.getWorld().getPlayers().isEmpty()) {
+                    editWorld.delete(true);
+                }
             }
         }
     }

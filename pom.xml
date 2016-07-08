@@ -70,7 +70,7 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <artifactId>spigot</artifactId>
             <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
@@ -120,11 +120,6 @@
             <groupId>pl.betoncraft.betonquest</groupId>
             <artifactId>BetonQuest</artifactId>
             <version>1.8.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.boydti</groupId>
-            <artifactId>fawe-api</artifactId>
-            <version>3.5.0-dev</version>
         </dependency>
     </dependencies>
     <repositories>

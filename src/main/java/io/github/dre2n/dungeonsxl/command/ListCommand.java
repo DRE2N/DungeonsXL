@@ -58,7 +58,9 @@ public class ListCommand extends BRCommand {
         }
         ArrayList<String> mapList = new ArrayList<>();
         for (File file : DungeonsXL.MAPS.listFiles()) {
-            mapList.add(file.getName());
+            if (!file.equals(DWorlds.RAW)) {
+                mapList.add(file.getName());
+            }
         }
         ArrayList<String> loadedList = new ArrayList<>();
         for (DEditWorld editWorld : worlds.getEditWorlds()) {

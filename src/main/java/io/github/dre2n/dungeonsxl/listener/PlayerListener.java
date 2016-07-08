@@ -554,7 +554,7 @@ public class PlayerListener implements Listener {
                 continue;
             }
 
-            new DGamePlayer(player, dGroup.getGameWorld());
+            DGamePlayer.create(player, dGroup.getGameWorld());
             plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
