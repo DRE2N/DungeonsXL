@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.util;
+package io.github.dre2n.dungeonsxl.util.worldloader;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -46,20 +46,18 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
 
 /**
- * A custom thread safe world loader.
- *
  * @author Daniel Saukel
  */
-public class WorldLoader {
+class v1_10_R1 extends InternalsProvider {
 
-    static MinecraftServer console;
-    static CraftServer server = ((CraftServer) Bukkit.getServer());
-    static Map<String, World> worlds;
-    static PluginManager pluginManager = Bukkit.getPluginManager();
-    static File worldContainer = Bukkit.getWorldContainer();
-    static Logger logger = Bukkit.getLogger();
+    MinecraftServer console;
+    CraftServer server = ((CraftServer) Bukkit.getServer());
+    Map<String, World> worlds;
+    PluginManager pluginManager = Bukkit.getPluginManager();
+    File worldContainer = Bukkit.getWorldContainer();
+    Logger logger = Bukkit.getLogger();
 
-    static {
+    v1_10_R1() {
         try {
             Field fConsole = CraftServer.class.getDeclaredField("console");
             fConsole.setAccessible(true);
@@ -74,14 +72,9 @@ public class WorldLoader {
         }
     }
 
-    /**
-     * @param creator
-     * the WorldCreator which stores the information to create the new world
-     * @return
-     * the new World
-     */
     @SuppressWarnings("deprecation")
-    public static World createWorld(WorldCreator creator) {
+    @Override
+    World createWorld(WorldCreator creator) {
         String name = creator.name();
         ChunkGenerator generator = creator.generator();
         File folder = new File(worldContainer, name);

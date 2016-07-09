@@ -1,4 +1,6 @@
-/nb-configuration.xml
-/target
-/dependency-reduced-pom.xml
+nb-configuration.xml
+dependency-reduced-pom.xml
 licenseheader.txt
+*dependency-reduced-pom.xml
+*nb-configuration.xml
+*/target

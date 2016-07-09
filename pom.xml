@@ -3,7 +3,7 @@
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
     <version>0.14-SNAPSHOT${buildNo}</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
     <description>Create custom dungeons and adventure maps with ease!</description>
@@ -11,66 +11,16 @@
         <buildNo></buildNo>
         <skipTests>true</skipTests>
     </properties>
-    <build>
-        <finalName>dungeonsxl-${project.version}</finalName>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>io.github.dre2n.commons</pattern>
-                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>io.github.dre2n.caliburn</pattern>
-                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.caliburn</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <artifactSet>
-                                <includes>
-                                    <include>io.github.dre2n:commons</include>
-                                    <include>io.github.dre2n:caliburn</include>
-                                    <include>io.github.dre2n:debukkit</include>
-                                </includes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <modules>
+        <module>shade</module>
+        <module>core</module>
+        <module>abstract</module>
+        <module>craftbukkit_1_10_R1</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
+            <artifactId>spigot-api</artifactId>
             <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

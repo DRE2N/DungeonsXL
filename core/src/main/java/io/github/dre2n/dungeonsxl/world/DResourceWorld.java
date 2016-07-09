@@ -23,7 +23,7 @@ import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldGenerateEvent;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.task.BackupResourceTask;
-import io.github.dre2n.dungeonsxl.util.WorldLoader;
+import io.github.dre2n.dungeonsxl.util.worldloader.WorldLoader;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
