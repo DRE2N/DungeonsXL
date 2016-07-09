@@ -16,6 +16,8 @@
         <module>core</module>
         <module>abstract</module>
         <module>craftbukkit_1_10_R1</module>
+        <module>craftbukkit_1_9_R2</module>
+        <module>craftbukkit_1_9_R1</module>
     </modules>
     <dependencies>
         <dependency>

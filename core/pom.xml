@@ -47,5 +47,19 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>dungeonsxl-craftbukkit_1_9_R2</artifactId>
+            <version>${parent.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>dungeonsxl-craftbukkit_1_9_R1</artifactId>
+            <version>${parent.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

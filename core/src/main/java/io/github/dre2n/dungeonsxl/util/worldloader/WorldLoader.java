@@ -34,6 +34,12 @@ public class WorldLoader {
             case v1_10_R1:
                 internals = new v1_10_R1();
                 break;
+            case v1_9_R2:
+                internals = new v1_9_R2();
+                break;
+            case v1_9_R1:
+                internals = new v1_9_R1();
+                break;
         }
     }
 
