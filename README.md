@@ -32,6 +32,7 @@ DungeonsXL also provides custom game mechanics to make these worlds interesting.
 * A powerful API: [Read more...](../../wiki/api-tutorial)
 * Different game types allow you to use your maps dynamically for different purposes. [Read more...](../../wiki/game-types)
 * Announcements sothat users can join the next match easily. [Read more...](../../wiki/announcements)
+* Great performance due to a custom, asynchronous world loading and creation method and several other performance tweaks
 * ...and many more!
 
 
@@ -49,7 +50,7 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 DungeonsXL works with 1.7.8 and higher. However, support for 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
 
 Older versions of DungeonsXL support versions since Minecraft 1.3.x, but of course, they are completely unsupported.
-* [1.7.8-1.10](../../tree/master)
+* [1.7.8-1.10.2](../../tree/master)
 * [1.7.5](../../tree/50f772d14281bfe278dba2559d1758cc459c1a30)
 * [1.7.2](../../tree/eccf82b7335dfb0723e3cd37a57df1a968ea7842)
 * [1.6.4](../../tree/780145cf783ea76fe1bfee04cf89216bd4f92e1d)
