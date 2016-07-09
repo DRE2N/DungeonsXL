@@ -2,13 +2,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl-core</artifactId>
-    <version>0.14-SNAPSHOT${buildNo}</version>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
     <name>dungeonsxl-core</name>
     <parent>
         <groupId>io.github.dre2n</groupId>
         <artifactId>dungeonsxl</artifactId>
-        <version>0.14-SNAPSHOT${buildNo}</version>
+        <version>0.14${buildNo}</version>
     </parent>
     <build>
         <resources>

@@ -2,13 +2,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl-shade</artifactId>
-    <version>0.14-SNAPSHOT${buildNo}</version>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
     <name>dungeonsxl-shade</name>
     <parent>
         <groupId>io.github.dre2n</groupId>
         <artifactId>dungeonsxl</artifactId>
-        <version>0.14-SNAPSHOT${buildNo}</version>
+        <version>0.14${buildNo}</version>
     </parent>
     <build>
         <finalName>dungeonsxl-${project.version}</finalName>
@@ -28,10 +28,6 @@
                                 <relocation>
                                     <pattern>io.github.dre2n.commons</pattern>
                                     <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>io.github.dre2n.caliburn</pattern>
-                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.caliburn</shadedPattern>
                                 </relocation>
                             </relocations>
                             <artifactSet>
