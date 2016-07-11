@@ -47,7 +47,7 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with 1.7.8 and higher. However, support for 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
+DungeonsXL works with 1.7.8 and higher. However, support for 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
 
 Older versions of DungeonsXL support versions since Minecraft 1.3.x, but of course, they are completely unsupported.
 * [1.7.8-1.10.2](../../tree/master)
@@ -67,10 +67,10 @@ Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org
 Maven automatically fetches all dependencies and builds DungeonsXL; just run _build.bat_ or enter the command _mvn clean install_.
 
 #### BRCommons
-[BRCommons](https://github.com/DRE2N/BRCommons) is a util library for common tasks. DungeonsXL contains BRCommons 1.0.
+[BRCommons](https://github.com/DRE2N/BRCommons) is a util library for common tasks. DungeonsXL contains BRCommons 1.0.1.
 
 #### Caliburn API
-[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.1.6.
+[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.1.8.
 
 ### Java
 Make sure that your server uses Java 7 or higher.
