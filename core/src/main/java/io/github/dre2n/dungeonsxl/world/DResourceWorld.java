@@ -236,14 +236,20 @@ public class DResourceWorld {
     }
 
     /**
-     * @return an instance of this world
+     * @return an old or a new instance of this world.
      */
     public DEditWorld instantiateAsEditWorld() {
+        for (DEditWorld instance : worlds.getEditWorlds()) {
+            if (instance.getName().equals(getName())) {
+                return instance;
+            }
+        }
+
         return (DEditWorld) instantiate(false);
     }
 
     /**
-     * @return an instance of this world
+     * @return a new instance of this world
      */
     public DGameWorld instantiateAsGameWorld() {
         return (DGameWorld) instantiate(true);

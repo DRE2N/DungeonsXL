@@ -58,6 +58,11 @@ public class EditCommand extends BRCommand {
         }
 
         DResourceWorld resource = worlds.getResourceByName(mapName);
+        if (resource == null) {
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_MAP.getMessage(mapName));
+            return;
+        }
+
         DEditWorld editWorld = resource.instantiateAsEditWorld();
         DGroup dGroup = DGroup.getByPlayer(player);
         DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
