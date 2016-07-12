@@ -1,1 +1,1 @@
-mvn clean package -DbuildNo=""
+mvn clean install

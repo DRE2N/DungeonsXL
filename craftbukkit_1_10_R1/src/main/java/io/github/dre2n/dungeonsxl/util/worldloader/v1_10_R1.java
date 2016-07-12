@@ -48,7 +48,7 @@ import org.bukkit.plugin.PluginManager;
 /**
  * @author Daniel Saukel
  */
-class v1_10_R1 extends InternalsProvider {
+public class v1_10_R1 extends InternalsProvider {
 
     MinecraftServer console;
     CraftServer server = ((CraftServer) Bukkit.getServer());

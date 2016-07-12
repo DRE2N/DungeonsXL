@@ -8,10 +8,10 @@
     <parent>
         <groupId>io.github.dre2n</groupId>
         <artifactId>dungeonsxl</artifactId>
-        <version>0.14${buildNo}</version>
+        <version>0.14.1-SNAPSHOT</version>
     </parent>
     <build>
-        <finalName>dungeonsxl-${project.version}</finalName>
+        <finalName>dungeonsxl-${project.version}${buildNo}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

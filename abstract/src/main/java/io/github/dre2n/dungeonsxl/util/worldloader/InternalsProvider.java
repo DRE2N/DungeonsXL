@@ -22,7 +22,7 @@ import org.bukkit.WorldCreator;
 /**
  * @author Daniel Saukel
  */
-abstract class InternalsProvider {
+public abstract class InternalsProvider {
 
     abstract World createWorld(WorldCreator creator);
 
