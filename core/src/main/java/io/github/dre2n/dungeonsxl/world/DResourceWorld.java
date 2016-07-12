@@ -53,6 +53,11 @@ public class DResourceWorld {
             folder.mkdir();
         }
 
+        File configFile = new File(folder, "config.yml");
+        if (configFile.exists()) {
+            config = new WorldConfig(configFile);
+        }
+
         File signDataFile = new File(folder, "DXLData.data");
         signData = new SignData(signDataFile);
     }
