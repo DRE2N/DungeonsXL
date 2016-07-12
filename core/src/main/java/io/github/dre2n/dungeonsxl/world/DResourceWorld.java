@@ -25,7 +25,6 @@ import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.task.BackupResourceTask;
 import io.github.dre2n.dungeonsxl.util.worldloader.WorldLoader;
 import java.io.File;
-import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.WorldCreator;
@@ -55,15 +54,6 @@ public class DResourceWorld {
         }
 
         File signDataFile = new File(folder, "DXLData.data");
-        if (!signDataFile.exists()) {
-            try {
-                signDataFile.createNewFile();
-
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
-
         signData = new SignData(signDataFile);
     }
 
@@ -77,10 +67,8 @@ public class DResourceWorld {
             config = new WorldConfig(configFile);
         }
 
-        File signData = new File(folder, "DXLData.data");
-        if (signData.exists()) {
-            this.signData = new SignData(signData);
-        }
+        File signDataFile = new File(folder, "DXLData.data");
+        signData = new SignData(signDataFile);
     }
 
     /* Getters and setters */

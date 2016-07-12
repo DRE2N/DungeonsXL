@@ -37,6 +37,14 @@ public class SignData {
     private File file;
 
     public SignData(File file) {
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+
         this.file = file;
     }
 
