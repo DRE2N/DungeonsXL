@@ -33,9 +33,7 @@ import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.mob.DMob;
-import static io.github.dre2n.dungeonsxl.player.DGlobalPlayer.plugin;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
-import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.task.CreateDInstancePlayerTask;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
@@ -53,10 +51,8 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Represents a player in a DGameWorld.
@@ -74,8 +70,6 @@ public class DGamePlayer extends DInstancePlayer {
     private Wolf wolf;
     private int wolfRespawnTime = 30;
     private long offlineTime;
-
-    private Inventory treasureInv = plugin.getServer().createInventory(getPlayer(), 45, DMessages.PLAYER_TREASURES.getMessage());
 
     private int initialLives = -1;
     private int lives;
@@ -342,21 +336,6 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @return the treasureInv
-     */
-    public Inventory getTreasureInv() {
-        return treasureInv;
-    }
-
-    /**
-     * @param treasureInv
-     * the treasureInv to set
-     */
-    public void setTreasureInv(Inventory treasureInv) {
-        this.treasureInv = treasureInv;
-    }
-
-    /**
      * @return the initialLives
      */
     public int getInitialLives() {
@@ -427,8 +406,6 @@ public class DGamePlayer extends DInstancePlayer {
                     for (Reward reward : rules.getRewards()) {
                         reward.giveTo(getPlayer());
                     }
-
-                    addTreasure();
 
                     getData().logTimeLastPlayed(dGroup.getDungeon().getName());
 
@@ -844,10 +821,6 @@ public class DGamePlayer extends DInstancePlayer {
                 }
             }
         }
-    }
-
-    public void addTreasure() {
-        new DLootInventory(getPlayer(), treasureInv.getContents());
     }
 
     @Override

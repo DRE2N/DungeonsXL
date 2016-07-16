@@ -29,8 +29,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -46,8 +44,9 @@ public class RewardChest {
     private DGameWorld gameWorld;
     private double moneyReward;
     private int levelReward;
+    private ItemStack[] itemReward;
 
-    public RewardChest(Block chest, DGameWorld gameWorld, double moneyReward, int levelReward) {
+    public RewardChest(Block chest, DGameWorld gameWorld, double moneyReward, int levelReward, ItemStack[] itemReward) {
         if (!(chest.getState() instanceof Chest)) {
             return;
         }
@@ -56,6 +55,7 @@ public class RewardChest {
         this.gameWorld = gameWorld;
         this.moneyReward = moneyReward;
         this.levelReward = levelReward;
+        this.itemReward = itemReward;
 
         gameWorld.getRewardChests().add(this);
     }
@@ -135,6 +135,23 @@ public class RewardChest {
         this.levelReward = levelReward;
     }
 
+    /* Actions */
+    /**
+     * @param opener
+     * the player who opens the chest
+     */
+    public void onOpen(Player opener) {
+        if (used) {
+            MessageUtil.sendMessage(plugin.getServer().getPlayer(opener.getUniqueId()), DMessages.ERROR_CHEST_IS_OPENED.getMessage());
+            return;
+        }
+
+        if (chest.getLocation().distance(chest.getLocation()) < 1) {
+            addTreasure(DGroup.getByPlayer(opener));
+            used = true;
+        }
+    }
+
     public void addTreasure(DGroup dGroup) {
         if (dGroup == null) {
             return;
@@ -142,14 +159,20 @@ public class RewardChest {
 
         boolean hasMoneyReward = false;
         boolean hasLevelReward = false;
+        boolean hasItemReward = false;
 
         for (Reward reward : dGroup.getRewards()) {
-            if (reward instanceof MoneyReward) {
+            if (reward.getType() == RewardTypeDefault.MONEY) {
                 hasMoneyReward = true;
                 ((MoneyReward) reward).addMoney(moneyReward);
-            } else if (reward instanceof LevelReward) {
+
+            } else if (reward.getType() == RewardTypeDefault.LEVEL) {
                 hasLevelReward = true;
                 ((LevelReward) reward).addLevels(levelReward);
+
+            } else if (reward.getType() == RewardTypeDefault.ITEM) {
+                hasItemReward = true;
+                ((ItemReward) reward).addItems(itemReward);
             }
         }
 
@@ -165,95 +188,64 @@ public class RewardChest {
             dGroup.addReward(reward);
         }
 
+        if (!hasItemReward) {
+            Reward reward = Reward.create(RewardTypeDefault.ITEM);
+            ((ItemReward) reward).addItems(itemReward);
+            dGroup.addReward(reward);
+        }
+
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             if (dPlayer == null) {
                 continue;
             }
 
-            String msg = "";
-            for (ItemStack itemStack : chest.getInventory().getContents()) {
+            if (itemReward != null) {
+                String msg = "";
+                for (ItemStack itemStack : chest.getInventory().getContents()) {
 
-                if (itemStack == null) {
-                    continue;
-                }
-
-                dPlayer.getTreasureInv().addItem(itemStack);
-                String name = null;
-
-                if (itemStack.hasItemMeta()) {
-                    if (itemStack.getItemMeta().hasDisplayName()) {
-                        name = itemStack.getItemMeta().getDisplayName();
+                    if (itemStack == null) {
+                        continue;
                     }
-                }
 
-                if (name == null) {
-                    if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-                        ItemInfo itemInfo = Items.itemByStack(itemStack);
-                        if (itemInfo != null) {
-                            name = itemInfo.getName();
-                        } else {
-                            name = itemStack.getType().name();
+                    String name = null;
+
+                    if (itemStack.hasItemMeta()) {
+                        if (itemStack.getItemMeta().hasDisplayName()) {
+                            name = itemStack.getItemMeta().getDisplayName();
                         }
-
-                    } else {
-                        name = itemStack.getType().toString();
                     }
+
+                    if (name == null) {
+                        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+                            ItemInfo itemInfo = Items.itemByStack(itemStack);
+                            if (itemInfo != null) {
+                                name = itemInfo.getName();
+                            } else {
+                                name = itemStack.getType().name();
+                            }
+
+                        } else {
+                            name = itemStack.getType().toString();
+                        }
+                    }
+
+                    msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
                 }
 
-                msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
+                if (msg.length() >= 1) {
+                    msg = msg.substring(0, msg.length() - 1);
+                }
+
+                MessageUtil.sendMessage(player, DMessages.PLAYER_LOOT_ADDED.getMessage(msg));
             }
 
-            if (msg.length() >= 1) {
-                msg = msg.substring(0, msg.length() - 1);
-            }
-
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, msg));
             if (moneyReward != 0 && plugin.getEconomyProvider() != null) {
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, plugin.getEconomyProvider().format(moneyReward)));
+                MessageUtil.sendMessage(player, DMessages.PLAYER_LOOT_ADDED.getMessage(plugin.getEconomyProvider().format(moneyReward)));
             }
+
             if (levelReward != 0) {
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LOOT_ADDED, levelReward + " levels"));
-            }
-        }
-    }
-
-    /* Statics */
-    /**
-     * @deprecated
-     * @param event
-     * event.getPlayer() has to be a Player
-     */
-    public static void onOpenInventory(InventoryOpenEvent event) {
-        InventoryView inventory = event.getView();
-
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getPlayer().getWorld());
-
-        if (gameWorld == null) {
-            return;
-        }
-
-        if (!(inventory.getTopInventory().getHolder() instanceof Chest)) {
-            return;
-        }
-
-        Chest chest = (Chest) inventory.getTopInventory().getHolder();
-
-        for (RewardChest rewardChest : gameWorld.getRewardChests()) {
-            if (!rewardChest.chest.equals(chest)) {
-                continue;
-            }
-
-            if (rewardChest.used) {
-                MessageUtil.sendMessage(plugin.getServer().getPlayer(event.getPlayer().getUniqueId()), DMessages.ERROR_CHEST_IS_OPENED.getMessage());
-                event.setCancelled(true);
-                continue;
-            }
-
-            if (rewardChest.chest.getLocation().distance(chest.getLocation()) < 1) {
-                rewardChest.addTreasure(DGroup.getByPlayer((Player) event.getPlayer()));
-                rewardChest.used = true;
-                event.setCancelled(true);
+                MessageUtil.sendMessage(player, DMessages.PLAYER_LOOT_ADDED.getMessage(levelReward + " levels"));
             }
         }
     }

@@ -54,7 +54,7 @@ public class MoneyReward extends Reward {
 
     @Override
     public void giveTo(Player player) {
-        if (plugin.getEconomyProvider() == null) {
+        if (plugin.getEconomyProvider() == null || money == 0) {
             return;
         }
 

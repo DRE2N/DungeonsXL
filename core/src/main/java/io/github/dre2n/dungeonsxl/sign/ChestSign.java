@@ -20,7 +20,10 @@ import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -29,12 +32,100 @@ public class ChestSign extends DSign {
 
     private DSignType type = DSignTypeDefault.CHEST;
 
-    // Variables
+    private Block chest;
+
     private double moneyReward;
     private int levelReward;
+    private ItemStack[] itemReward;
 
     public ChestSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
+    }
+
+    /* Getters and setters */
+    /**
+     * @return the money reward
+     */
+    public double getMoneyReward() {
+        return moneyReward;
+    }
+
+    /**
+     * @param amount
+     * the amount to set
+     */
+    public void setMoneyReward(double amount) {
+        moneyReward = amount;
+    }
+
+    /**
+     * @return the level reward
+     */
+    public int getLevelReward() {
+        return levelReward;
+    }
+
+    /**
+     * @param amount
+     * the amount to set
+     */
+    public void setLevelReward(int amount) {
+        levelReward = amount;
+    }
+
+    /**
+     * @return the item reward
+     */
+    public ItemStack[] getItemReward() {
+        if (itemReward == null) {
+            checkChest();
+        }
+        return itemReward;
+    }
+
+    /**
+     * @param items
+     * the items to set as a reward
+     */
+    public void setItemReward(ItemStack[] items) {
+        itemReward = items;
+    }
+
+    @Override
+    public DSignType getType() {
+        return type;
+    }
+
+    /* Actions */
+    /**
+     * Checks for a chest next to the sign and sets the reward to its contents.
+     */
+    public void checkChest() {
+        Block sign = getSign().getBlock();
+        for (int i = -1; i <= 1; i++) {
+            Block xRelative = sign.getRelative(i, 0, 0);
+            Block yRelative = sign.getRelative(0, i, 0);
+            Block zRelative = sign.getRelative(0, 0, i);
+
+            if (xRelative.getType() == Material.CHEST) {
+                if (itemReward == null) {
+                    itemReward = ((Chest) xRelative.getState()).getBlockInventory().getContents();
+                }
+                chest = xRelative;
+
+            } else if (yRelative.getType() == Material.CHEST) {
+                if (itemReward == null) {
+                    itemReward = ((Chest) yRelative.getState()).getBlockInventory().getContents();
+                }
+                chest = yRelative;
+
+            } else if (zRelative.getType() == Material.CHEST) {
+                if (itemReward == null) {
+                    itemReward = ((Chest) zRelative.getState()).getBlockInventory().getContents();
+                }
+                chest = zRelative;
+            }
+        }
     }
 
     @Override
@@ -54,26 +145,17 @@ public class ChestSign extends DSign {
             }
         }
 
-        for (int i = -1; i <= 1; i++) {
-            if (getSign().getBlock().getRelative(i, 0, 0).getType() == Material.CHEST) {
-                new RewardChest(getSign().getBlock().getRelative(i, 0, 0), getGameWorld(), moneyReward, levelReward);
-            }
-
-            if (getSign().getBlock().getRelative(0, 0, i).getType() == Material.CHEST) {
-                new RewardChest(getSign().getBlock().getRelative(0, 0, i), getGameWorld(), moneyReward, levelReward);
-            }
-
-            if (getSign().getBlock().getRelative(0, i, 0).getType() == Material.CHEST) {
-                new RewardChest(getSign().getBlock().getRelative(0, i, 0), getGameWorld(), moneyReward, levelReward);
-            }
+        if (chest == null) {
+            checkChest();
         }
 
-        getSign().getBlock().setType(Material.AIR);
-    }
+        if (chest != null) {
+            new RewardChest(chest, getGameWorld(), moneyReward, levelReward, itemReward);
+            getSign().getBlock().setType(Material.AIR);
 
-    @Override
-    public DSignType getType() {
-        return type;
+        } else {
+            markAsErroneous();
+        }
     }
 
 }

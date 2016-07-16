@@ -137,6 +137,7 @@ public enum DMessages implements Messages {
     LOG_ERROR_MOB_ENCHANTMENT("Log_Error_MobEnchantment", "&4Error at loading mob.yml: Enchantment &6&v1&4 doesn't exist!"),
     LOG_ERROR_MOBTYPE("Log_Error_MobType", "&4Error at loading mob.yml: Mob &6&v1&4 doesn't exist!"),
     LOG_ERROR_NO_CONSOLE_COMMAND("Log_Error_NoConsoleCommand", "&6/dxl &v1&4 can not be executed as console!"),
+    LOG_ERROR_SIGN_SETUP("Log_Error_SignSetup", "&4A sign at &6&v1&4 is erroneous!"),
     LOG_GENERATE_NEW_WORLD("Log_GenerateNewWorld", "&6Generating new world..."),
     LOG_IMPORT_WORLD("Log_ImportWorld", "&6Importing world..."),
     LOG_NEW_MAP("Log_NewDungeon", "&6Creating new map."),

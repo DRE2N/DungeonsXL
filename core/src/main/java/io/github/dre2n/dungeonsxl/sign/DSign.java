@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dsign.DSignRegistrationEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
@@ -26,6 +27,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -35,6 +37,11 @@ import org.bukkit.entity.Player;
 public abstract class DSign {
 
     static DungeonsXL plugin = DungeonsXL.getInstance();
+
+    public static final String ERROR_0 = ChatColor.DARK_RED + "## ERROR ##";
+    public static final String ERROR_1 = ChatColor.WHITE + "Please";
+    public static final String ERROR_2 = ChatColor.WHITE + "contact an";
+    public static final String ERROR_3 = ChatColor.WHITE + "Admin!";
 
     private Sign sign;
     protected String[] lines;
@@ -75,6 +82,7 @@ public abstract class DSign {
         }
     }
 
+    /* Getters and setters */
     /**
      * @return the sign
      */
@@ -142,6 +150,7 @@ public abstract class DSign {
         triggers.remove(trigger);
     }
 
+    /* Actions */
     public void onInit() {
     }
 
@@ -185,6 +194,20 @@ public abstract class DSign {
         return !triggers.isEmpty();
     }
 
+    /**
+     * Set a placeholder to show that the sign is setup incorrectly.
+     */
+    public void markAsErroneous() {
+        sign.setLine(0, ERROR_0);
+        sign.setLine(1, ERROR_1);
+        sign.setLine(2, ERROR_2);
+        sign.setLine(3, ERROR_3);
+        sign.update();
+        
+        DMessages.LOG_ERROR_SIGN_SETUP.getMessage(sign.getX() + ", " + sign.getY() + ", " + sign.getZ());
+    }
+
+    /* Statics */
     public static DSign create(Sign sign, DGameWorld gameWorld) {
         return create(sign, sign.getLines(), gameWorld);
     }

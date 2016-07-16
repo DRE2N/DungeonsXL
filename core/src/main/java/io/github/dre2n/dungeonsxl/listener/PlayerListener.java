@@ -51,6 +51,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,6 +73,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -651,7 +653,28 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        RewardChest.onOpenInventory(event);
+        InventoryView inventory = event.getView();
+
+        DGameWorld gameWorld = DGameWorld.getByWorld(event.getPlayer().getWorld());
+
+        if (gameWorld == null) {
+            return;
+        }
+
+        if (!(inventory.getTopInventory().getHolder() instanceof Chest)) {
+            return;
+        }
+
+        Chest chest = (Chest) inventory.getTopInventory().getHolder();
+
+        for (RewardChest rewardChest : gameWorld.getRewardChests()) {
+            if (!rewardChest.getChest().equals(chest)) {
+                continue;
+            }
+
+            rewardChest.onOpen((Player) event.getPlayer());
+            event.setCancelled(true);
+        }
 
         if (!plugin.getMainConfig().getOpenInventories() && !DPermissions.hasPermission(event.getPlayer(), DPermissions.INSECURE)) {
             World world = event.getPlayer().getWorld();

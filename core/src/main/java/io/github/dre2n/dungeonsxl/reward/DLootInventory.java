@@ -36,8 +36,6 @@ public class DLootInventory {
     private InventoryView inventoryView;
     private Player player;
 
-    private long time;
-
     public DLootInventory(Player player, ItemStack[] itemStacks) {
         plugin.getDLootInventories().add(this);
 
@@ -50,6 +48,7 @@ public class DLootInventory {
         this.player = player;
     }
 
+    /* Getters and setters */
     /**
      * @return the inventory
      */
@@ -95,6 +94,8 @@ public class DLootInventory {
         this.player = player;
     }
 
+    private long time;
+
     /**
      * @return the time
      */
@@ -110,7 +111,7 @@ public class DLootInventory {
         this.time = time;
     }
 
-    // Static
+    /* Statics */
     /**
      * @param player
      * the player whose DLootIntentory will be returned
