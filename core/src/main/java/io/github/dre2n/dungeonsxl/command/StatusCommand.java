@@ -119,7 +119,7 @@ public class StatusCommand extends BRCommand {
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
         String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
         String commandsxlVersionCorrect = getSymbol(commandsxlVersion.startsWith("2.1"));
-        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals("0.1.6"));
+        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.startsWith("0.2"));
         String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));
         String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
         String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("2."));

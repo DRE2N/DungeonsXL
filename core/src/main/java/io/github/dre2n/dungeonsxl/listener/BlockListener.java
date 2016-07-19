@@ -45,6 +45,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
@@ -266,6 +268,17 @@ public class BlockListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onRedstoneEvent(BlockRedstoneEvent event) {
         new RedstoneEventTask(event.getBlock()).runTaskLater(plugin, 1);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onIgnite(BlockIgniteEvent event) {
+        if (plugin.getDWorlds().getInstanceByName(event.getBlock().getWorld().getName()) == null) {
+            return;
+        }
+
+        if (event.getCause() != IgniteCause.FLINT_AND_STEEL) {
+            event.setCancelled(true);
+        }
     }
 
 }
