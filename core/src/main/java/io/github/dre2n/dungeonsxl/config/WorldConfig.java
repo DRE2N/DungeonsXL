@@ -16,6 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
+import io.github.dre2n.caliburn.CaliburnAPI;
+import io.github.dre2n.caliburn.item.UniversalItemStack;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.util.EnumUtil;
@@ -29,7 +31,7 @@ import io.github.dre2n.dungeonsxl.requirement.GroupSizeRequirement;
 import io.github.dre2n.dungeonsxl.requirement.PermissionRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypeDefault;
-import io.github.dre2n.dungeonsxl.util.DeserialisazionUtil;
+import io.github.dre2n.dungeonsxl.util.DeserializationUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,11 +84,10 @@ public class WorldConfig extends GameRules {
 
         /* Secure Objects */
         if (configFile.contains("secureObjects")) {
-            List<String> secureObjectList = configFile.getStringList("secureObjects");
             if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
-                secureObjects = plugin.getCaliburnAPI().getItems().deserializeStackList(secureObjectList);
+                secureObjects = UniversalItemStack.deserializeList(configFile.getList("secureObjects"));
             } else {
-                secureObjects = DeserialisazionUtil.deserializeStackList(secureObjectList);
+                secureObjects = DeserializationUtil.deserializeStackList(configFile.getStringList("secureObjects"));
             }
         }
 
@@ -251,7 +252,7 @@ public class WorldConfig extends GameRules {
         List<String> secureObjectIds = new ArrayList<>();
 
         for (ItemStack item : getSecureObjects()) {
-            secureObjectIds.add(plugin.getCaliburnAPI().getItems().getCustomItemId(item));
+            secureObjectIds.add(CaliburnAPI.getInstance().getItems().getCustomItemId(item));
         }
 
         configFile.set("secureObjects", secureObjects);

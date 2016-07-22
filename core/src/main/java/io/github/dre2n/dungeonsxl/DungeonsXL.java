@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl;
 
 import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.commons.compatibility.Internals;
-import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
@@ -52,7 +51,6 @@ import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
 import io.github.dre2n.dungeonsxl.world.DWorlds;
-import io.github.dre2n.itemsxl.ItemsXL;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -77,8 +75,6 @@ public class DungeonsXL extends BRPlugin {
     public static File CLASSES;
     public static File MOBS;
     public static File SIGNS;
-
-    private CaliburnAPI caliburn;
 
     private GlobalData globalData;
     private MainConfig mainConfig;
@@ -131,14 +127,10 @@ public class DungeonsXL extends BRPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
-
         instance = this;
-        if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
-            loadCaliburnAPI();
-        }
-
         initFolders();
 
+        loadCaliburnAPI();
         // Load Language
         loadMessageConfig(new File(LANGUAGES, "english.yml"));
         // Load Config
@@ -295,21 +287,11 @@ public class DungeonsXL extends BRPlugin {
     }
 
     /**
-     * @return the loaded instance of CaliburnAPI
+     * load / reload a new instance of CaliburnAPI if none exists
      */
-    public CaliburnAPI getCaliburnAPI() {
-        return caliburn;
-    }
-
-    /**
-     * load / reload a new instance of CaliburnAPI
-     */
-    public void loadCaliburnAPI() {
-        if (manager.isPluginEnabled("ItemsXL")) {
-            caliburn = ItemsXL.getInstance().getAPI();
-        } else {
-            caliburn = new CaliburnAPI(this);
-            caliburn.setupClean();
+    private void loadCaliburnAPI() {
+        if (CaliburnAPI.getInstance() == null) {
+            new CaliburnAPI(this).setupClean();
         }
     }
 

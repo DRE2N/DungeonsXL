@@ -16,10 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.caliburn.item.UniversalItemStack;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.util.DeserialisazionUtil;
+import io.github.dre2n.dungeonsxl.util.DeserializationUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +49,10 @@ public class DClass {
         this.name = name;
 
         if (config.contains("items")) {
-            List<String> itemList = config.getStringList("items");
-
             if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
-                items = plugin.getCaliburnAPI().getItems().deserializeStackList(itemList);
+                items = UniversalItemStack.deserializeList(config.getList("items"));
             } else {
-                items = DeserialisazionUtil.deserializeStackList(itemList);
+                items = DeserializationUtil.deserializeStackList(config.getStringList("items"));
             }
         }
 

@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.caliburn.item.UniversalItem;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Version;
@@ -49,7 +50,6 @@ public class HologramSign extends DSign {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onInit() {
         getSign().getBlock().setType(Material.AIR);
 
@@ -64,7 +64,7 @@ public class HologramSign extends DSign {
                 ItemStack item = null;
 
                 if (Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
-                    UniversalItem universalItem = plugin.getCaliburnAPI().getItems().getById(id);
+                    UniversalItem universalItem = CaliburnAPI.getInstance().getItems().getById(id);
                     if (universalItem != null) {
                         item = universalItem.toItemStack(1);
                     }

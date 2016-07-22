@@ -28,7 +28,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Frank Baumann, Daniel Saukel
  */
 @Deprecated
-public class DeserialisazionUtil {
+public class DeserializationUtil {
 
     public static List<ItemStack> deserializeStackList(List<String> items) {
         List<ItemStack> itemStacks = new ArrayList<>();

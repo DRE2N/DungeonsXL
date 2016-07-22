@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.caliburn.item.UniversalItem;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.task.DropItemTask;
@@ -58,12 +59,12 @@ public class DropSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return plugin.getCaliburnAPI().getItems().getById(lines[1]) != null;
+        return CaliburnAPI.getInstance().getItems().getById(lines[1]) != null;
     }
 
     @Override
     public void onInit() {
-        UniversalItem item = plugin.getCaliburnAPI().getItems().getById(lines[1]);
+        UniversalItem item = CaliburnAPI.getInstance().getItems().getById(lines[1]);
 
         String[] attributes = lines[2].split(",");
         if (attributes.length >= 1) {
