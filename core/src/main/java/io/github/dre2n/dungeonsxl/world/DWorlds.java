@@ -49,7 +49,9 @@ public class DWorlds {
             }
         }
 
-        createRaw();
+        if (!RAW.exists()) {
+            createRaw();
+        }
     }
 
     /* Getters and setters */
