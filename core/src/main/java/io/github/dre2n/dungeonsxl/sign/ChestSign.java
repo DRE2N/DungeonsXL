@@ -17,8 +17,12 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
+import io.github.dre2n.dungeonsxl.loottable.DLootTable;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -36,7 +40,8 @@ public class ChestSign extends DSign {
 
     private double moneyReward;
     private int levelReward;
-    private ItemStack[] itemReward;
+    private ItemStack[] chestContent;
+    private DLootTable lootTable;
 
     public ChestSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -74,21 +79,36 @@ public class ChestSign extends DSign {
     }
 
     /**
-     * @return the item reward
+     * @return the chest contents
      */
-    public ItemStack[] getItemReward() {
-        if (itemReward == null) {
+    public ItemStack[] getChestContents() {
+        if (chestContent == null) {
             checkChest();
         }
-        return itemReward;
+        return chestContent;
     }
 
     /**
      * @param items
-     * the items to set as a reward
+     * the items to set as chest contents
      */
     public void setItemReward(ItemStack[] items) {
-        itemReward = items;
+        chestContent = items;
+    }
+
+    /**
+     * @return the custom loot table
+     */
+    public DLootTable getLootTable() {
+        return lootTable;
+    }
+
+    /**
+     * @param lootTable
+     * the loot table to set
+     */
+    public void setLootTable(DLootTable lootTable) {
+        this.lootTable = lootTable;
     }
 
     @Override
@@ -108,20 +128,20 @@ public class ChestSign extends DSign {
             Block zRelative = sign.getRelative(0, 0, i);
 
             if (xRelative.getType() == Material.CHEST) {
-                if (itemReward == null) {
-                    itemReward = ((Chest) xRelative.getState()).getBlockInventory().getContents();
+                if (chestContent == null) {
+                    chestContent = ((Chest) xRelative.getState()).getBlockInventory().getContents();
                 }
                 chest = xRelative;
 
             } else if (yRelative.getType() == Material.CHEST) {
-                if (itemReward == null) {
-                    itemReward = ((Chest) yRelative.getState()).getBlockInventory().getContents();
+                if (chestContent == null) {
+                    chestContent = ((Chest) yRelative.getState()).getBlockInventory().getContents();
                 }
                 chest = yRelative;
 
             } else if (zRelative.getType() == Material.CHEST) {
-                if (itemReward == null) {
-                    itemReward = ((Chest) zRelative.getState()).getBlockInventory().getContents();
+                if (chestContent == null) {
+                    chestContent = ((Chest) zRelative.getState()).getBlockInventory().getContents();
                 }
                 chest = zRelative;
             }
@@ -145,11 +165,22 @@ public class ChestSign extends DSign {
             }
         }
 
+        if (!lines[2].isEmpty()) {
+            lootTable = plugin.getDLootTables().getByName(lines[2]);
+        }
+
         if (chest == null) {
             checkChest();
         }
 
         if (chest != null) {
+            ItemStack[] itemReward = chestContent;
+            if (lootTable != null) {
+                List<ItemStack> list = new LinkedList<>(Arrays.asList(chestContent));
+                list.addAll(lootTable.generateLootList());
+                itemReward = list.toArray(new ItemStack[list.size()]);
+            }
+
             new RewardChest(chest, getGameWorld(), moneyReward, levelReward, itemReward);
             getSign().getBlock().setType(Material.AIR);
 

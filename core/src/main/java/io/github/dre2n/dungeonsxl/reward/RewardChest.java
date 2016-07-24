@@ -202,7 +202,7 @@ public class RewardChest {
 
             if (itemReward != null) {
                 String msg = "";
-                for (ItemStack itemStack : chest.getInventory().getContents()) {
+                for (ItemStack itemStack : itemReward) {
 
                     if (itemStack == null) {
                         continue;
