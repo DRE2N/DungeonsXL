@@ -31,6 +31,7 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.global.GlobalProtections;
 import io.github.dre2n.dungeonsxl.listener.*;
+import io.github.dre2n.dungeonsxl.loottable.DLootTables;
 import io.github.dre2n.dungeonsxl.mob.DMobTypes;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProviders;
 import io.github.dre2n.dungeonsxl.player.DClasses;
@@ -73,6 +74,7 @@ public class DungeonsXL extends BRPlugin {
     public static File SCRIPTS;
     public static File ANNOUNCERS;
     public static File CLASSES;
+    public static File LOOT_TABLES;
     public static File MOBS;
     public static File SIGNS;
 
@@ -92,6 +94,7 @@ public class DungeonsXL extends BRPlugin {
     private DPlayers dPlayers;
     private Announcers announcers;
     private DClasses dClasses;
+    private DLootTables dLootTables;
     private DMobTypes dMobTypes;
     private SignScripts signScripts;
     private DWorlds dWorlds;
@@ -128,32 +131,9 @@ public class DungeonsXL extends BRPlugin {
     public void onEnable() {
         super.onEnable();
         instance = this;
-        initFolders();
 
-        loadCaliburnAPI();
-        // Load Language
-        loadMessageConfig(new File(LANGUAGES, "english.yml"));
-        // Load Config
-        loadGlobalData(new File(getDataFolder(), "data.yml"));
-        loadMainConfig(new File(getDataFolder(), "config.yml"));
-        // Load Language 2
-        loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
-        DPermissions.register();
-        loadGameTypes();
-        loadRequirementTypes();
-        loadRewardTypes();
-        loadTriggers();
-        loadDSigns();
-        loadDungeons();
-        loadGlobalProtections();
-        loadExternalMobProviders();
-        loadDPlayers();
-        loadAnnouncers(ANNOUNCERS);
-        loadDClasses(CLASSES);
-        loadDMobTypes(MOBS);
-        loadSignScripts(SIGNS);
-        loadDWorlds(MAPS);
-        loadDCommands();
+        initFolders();
+        loadCore();
 
         manager.registerEvents(new EntityListener(), this);
         manager.registerEvents(new GUIListener(), this);
@@ -166,7 +146,7 @@ public class DungeonsXL extends BRPlugin {
         }
 
         // Load All
-        loadAll();
+        loadData();
 
         // Tasks
         startAnnouncerTask(mainConfig.getAnnouncmentInterval());
@@ -253,6 +233,11 @@ public class DungeonsXL extends BRPlugin {
             CLASSES.mkdir();
         }
 
+        LOOT_TABLES = new File(SCRIPTS, "loottables");
+        if (!LOOT_TABLES.exists()) {
+            LOOT_TABLES.mkdir();
+        }
+
         MOBS = new File(SCRIPTS, "mobs");
         if (!MOBS.exists()) {
             MOBS.mkdir();
@@ -264,6 +249,34 @@ public class DungeonsXL extends BRPlugin {
         }
     }
 
+    public void loadCore() {
+        loadCaliburnAPI();
+        // Load Language
+        loadMessageConfig(new File(LANGUAGES, "english.yml"));
+        // Load Config
+        loadGlobalData(new File(getDataFolder(), "data.yml"));
+        loadMainConfig(new File(getDataFolder(), "config.yml"));
+        // Load Language 2
+        loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
+        DPermissions.register();
+        loadGameTypes();
+        loadRequirementTypes();
+        loadRewardTypes();
+        loadTriggers();
+        loadDSigns();
+        loadDungeons();
+        loadGlobalProtections();
+        loadExternalMobProviders();
+        loadDPlayers();
+        loadAnnouncers(ANNOUNCERS);
+        loadDClasses(CLASSES);
+        loadDLootTables(LOOT_TABLES);
+        loadDMobTypes(MOBS);
+        loadSignScripts(SIGNS);
+        loadDWorlds(MAPS);
+        loadDCommands();
+    }
+
     // Save and load
     public void saveData() {
         protections.saveAll();
@@ -271,7 +284,7 @@ public class DungeonsXL extends BRPlugin {
         dWorlds.saveAll();
     }
 
-    public void loadAll() {
+    public void loadData() {
         protections.loadAll();
         dPlayers.loadAll();
         DSavePlayer.load();
@@ -505,6 +518,20 @@ public class DungeonsXL extends BRPlugin {
      */
     public void loadDClasses(File file) {
         dClasses = new DClasses(file);
+    }
+
+    /**
+     * @return the loaded instance of DLootTables
+     */
+    public DLootTables getDLootTables() {
+        return dLootTables;
+    }
+
+    /**
+     * load / reload a new instance of DLootTables
+     */
+    public void loadDLootTables(File file) {
+        dLootTables = new DLootTables(file);
     }
 
     /**
