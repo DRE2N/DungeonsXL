@@ -23,7 +23,7 @@ import org.bukkit.GameMode;
  */
 public enum CustomGameType implements GameType {
 
-    GHOST("My awesome game type", "Identifier", false, false, false, false, false, false, GameMode.SPECTATOR, false);
+    GHOST("My awesome game type", "Identifier", false, false, false, false, false, false, false, false, GameMode.SPECTATOR, false);
 
     private String displayName;
     private String signName;
@@ -32,11 +32,14 @@ public enum CustomGameType implements GameType {
     private boolean mobWaves;
     private boolean rewards;
     private boolean showTime;
-    private boolean build;
+    private boolean breakBlocks;
+    private boolean breakPlacedBlocks;
+    private boolean placeBlocks;
     private GameMode gameMode;
     private boolean lives;
 
-    CustomGameType(String displayName, String signName, boolean playerVersusPlayer, boolean friendlyFire, boolean mobWaves, boolean rewards, boolean showTime, boolean build, GameMode gameMode, boolean lives) {
+    CustomGameType(String displayName, String signName, boolean playerVersusPlayer, boolean friendlyFire, boolean mobWaves, boolean rewards,
+            boolean showTime, boolean breakBlocks, boolean breakPlacedBlocks, boolean placeBlocks, GameMode gameMode, boolean lives) {
         this.displayName = displayName;
         this.signName = signName;
         this.playerVersusPlayer = playerVersusPlayer;
@@ -44,7 +47,9 @@ public enum CustomGameType implements GameType {
         this.mobWaves = mobWaves;
         this.rewards = rewards;
         this.showTime = showTime;
-        this.build = build;
+        this.breakBlocks = breakBlocks;
+        this.breakPlacedBlocks = breakPlacedBlocks;
+        this.placeBlocks = placeBlocks;
         this.gameMode = gameMode;
         this.lives = lives;
     }
@@ -120,13 +125,33 @@ public enum CustomGameType implements GameType {
     }
 
     @Override
-    public boolean canBuild() {
-        return build;
+    public boolean canBreakBlocks() {
+        return breakBlocks;
     }
 
     @Override
-    public void setBuild(boolean build) {
-        this.build = build;
+    public void setBreakBlocks(boolean breakBlocks) {
+        this.breakBlocks = breakBlocks;
+    }
+
+    @Override
+    public boolean canBreakPlacedBlocks() {
+        return breakPlacedBlocks;
+    }
+
+    @Override
+    public void setBreakPlacedBlocks(boolean breakPlacedBlocks) {
+        this.breakPlacedBlocks = breakPlacedBlocks;
+    }
+
+    @Override
+    public boolean canPlaceBlocks() {
+        return placeBlocks;
+    }
+
+    @Override
+    public void setPlaceBlocks(boolean placeBlocks) {
+        this.placeBlocks = placeBlocks;
     }
 
     @Override

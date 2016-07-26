@@ -101,15 +101,37 @@ public interface GameType {
     public void setShowTime(boolean showTime);
 
     /**
-     * @return if players can build
+     * @return if all blocks may be destroyed
      */
-    public boolean canBuild();
+    public boolean canBreakBlocks();
 
     /**
-     * @param build
-     * enable / disable building
+     * @param breakBlocks
+     * if blocks may be destroyed
      */
-    public void setBuild(boolean build);
+    public void setBreakBlocks(boolean breakBlocks);
+
+    /**
+     * @return if blocks placed in game may be destroyed
+     */
+    public boolean canBreakPlacedBlocks();
+
+    /**
+     * @param breakPlacedBlocks
+     * if placed blocks may be destroyed
+     */
+    public void setBreakPlacedBlocks(boolean breakPlacedBlocks);
+
+    /**
+     * @return if blocks may be placed
+     */
+    public boolean canPlaceBlocks();
+
+    /**
+     * @param placeBlocks
+     * if blocks may be placed
+     */
+    public void setPlaceBlocks(boolean placeBlocks);
 
     /**
      * @return the gameMode

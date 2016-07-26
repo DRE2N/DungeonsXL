@@ -23,21 +23,22 @@ import org.bukkit.GameMode;
  */
 public enum GameTypeDefault implements GameType {
 
-    ADVENTURE("Adventure", "Adventure", false, false, false, true, false, true, GameMode.ADVENTURE, true),
-    ADVENTURE_TIME_IS_RUNNING("Adventure - Time is Running", "Adventure TiR", false, false, false, true, true, true, GameMode.ADVENTURE, true),
-    APOCALYPSE_LAST_MAN_STANDING("Apocalypse", "Apocalypse LMS", true, true, true, true, false, false, GameMode.SURVIVAL, true),
-    APOCALYPSE_LIMITED_MOBS("Apocalypse - Limited Mobs", "Apc Limited", true, true, true, true, false, false, GameMode.SURVIVAL, true),
-    APOCALYPSE_TIME_IS_RUNNING("Apocalypse - Time is Running", "Apocalypse TiR", true, true, true, true, true, false, GameMode.SURVIVAL, true),
-    PVE_LAST_MAN_STANDING("Player versus Environment - Last Man Standing", "PvE LMS", false, false, true, true, false, false, GameMode.SURVIVAL, true),
-    PVE_LIMITED_MOBS("Player versus Environment - Limited Mobs", "PvE Limited", false, false, true, true, false, false, GameMode.SURVIVAL, true),
-    PVE_TIME_IS_RUNNING("Player versus Environment - Time is Running", "PvE TiR", false, false, true, true, true, false, GameMode.SURVIVAL, true),
-    PVP_FACTIONS_BATTLEFIELD("Player versus Player - Factions Battlefield", "FactionsPvP", true, false, false, false, false, false, GameMode.SURVIVAL, true),
-    PVP_LAST_MAN_STANDING("Player versus Player - Last Man Standing", "PvP LMS", true, false, false, false, false, false, GameMode.SURVIVAL, true),
-    QUEST("Quest", "Quest", false, false, false, true, false, false, GameMode.SURVIVAL, true),
-    QUEST_TIME_IS_RUNNING("Quest - Time is Running", "Quest TiR", false, false, false, true, true, false, GameMode.SURVIVAL, true),
-    TEST("Test", "Test", false, false, false, false, true, true, GameMode.SURVIVAL, false),
-    TUTORIAL("Tutorial", "Tutorial", false, false, false, true, false, false, GameMode.SURVIVAL, false),
-    DEFAULT("Default", "Default", false, false, false, true, false, false, GameMode.SURVIVAL, true);
+    ADVENTURE("Adventure", "Adventure", false, false, false, true, false, true, true, true, GameMode.ADVENTURE, true),
+    ADVENTURE_TIME_IS_RUNNING("Adventure - Time is Running", "Adventure TiR", false, false, false, true, true, true, true, true, GameMode.ADVENTURE, true),
+    APOCALYPSE_LAST_MAN_STANDING("Apocalypse", "Apocalypse LMS", true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    APOCALYPSE_LIMITED_MOBS("Apocalypse - Limited Mobs", "Apc Limited", true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    APOCALYPSE_TIME_IS_RUNNING("Apocalypse - Time is Running", "Apocalypse TiR", true, true, true, true, true, false, false, false, GameMode.SURVIVAL, true),
+    BEDWARS("Bedwars", "Bedwars", true, false, false, false, false, false, true, true, GameMode.SURVIVAL, true),
+    PVE_LAST_MAN_STANDING("Player versus Environment - Last Man Standing", "PvE LMS", false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    PVE_LIMITED_MOBS("Player versus Environment - Limited Mobs", "PvE Limited", false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    PVE_TIME_IS_RUNNING("Player versus Environment - Time is Running", "PvE TiR", false, false, true, true, true, false, false, false, GameMode.SURVIVAL, true),
+    PVP_FACTIONS_BATTLEFIELD("Player versus Player - Factions Battlefield", "FactionsPvP", true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
+    PVP_LAST_MAN_STANDING("Player versus Player - Last Man Standing", "PvP LMS", true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
+    QUEST("Quest", "Quest", false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
+    QUEST_TIME_IS_RUNNING("Quest - Time is Running", "Quest TiR", false, false, false, true, true, false, false, false, GameMode.SURVIVAL, true),
+    TEST("Test", "Test", false, false, false, false, true, true, true, true, GameMode.SURVIVAL, false),
+    TUTORIAL("Tutorial", "Tutorial", false, false, false, true, false, false, false, false, GameMode.SURVIVAL, false),
+    DEFAULT("Default", "Default", false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true);
 
     private String displayName;
     private String signName;
@@ -46,11 +47,14 @@ public enum GameTypeDefault implements GameType {
     private boolean mobWaves;
     private boolean rewards;
     private boolean showTime;
-    private boolean build;
+    private boolean breakBlocks;
+    private boolean breakPlacedBlocks;
+    private boolean placeBlocks;
     private GameMode gameMode;
     private boolean lives;
 
-    GameTypeDefault(String displayName, String signName, boolean playerVersusPlayer, boolean friendlyFire, boolean mobWaves, boolean rewards, boolean showTime, boolean build, GameMode gameMode, boolean lives) {
+    GameTypeDefault(String displayName, String signName, boolean playerVersusPlayer, boolean friendlyFire, boolean mobWaves, boolean rewards,
+            boolean showTime, boolean breakBlocks, boolean breakPlacedBlocks, boolean placeBlocks, GameMode gameMode, boolean lives) {
         this.displayName = displayName;
         this.signName = signName;
         this.playerVersusPlayer = playerVersusPlayer;
@@ -58,7 +62,9 @@ public enum GameTypeDefault implements GameType {
         this.mobWaves = mobWaves;
         this.rewards = rewards;
         this.showTime = showTime;
-        this.build = build;
+        this.breakBlocks = breakBlocks;
+        this.breakPlacedBlocks = breakPlacedBlocks;
+        this.placeBlocks = placeBlocks;
         this.gameMode = gameMode;
         this.lives = lives;
     }
@@ -134,13 +140,33 @@ public enum GameTypeDefault implements GameType {
     }
 
     @Override
-    public boolean canBuild() {
-        return build;
+    public boolean canBreakBlocks() {
+        return breakBlocks;
     }
 
     @Override
-    public void setBuild(boolean build) {
-        this.build = build;
+    public void setBreakBlocks(boolean breakBlocks) {
+        this.breakBlocks = breakBlocks;
+    }
+
+    @Override
+    public boolean canBreakPlacedBlocks() {
+        return breakPlacedBlocks;
+    }
+
+    @Override
+    public void setBreakPlacedBlocks(boolean breakPlacedBlocks) {
+        this.breakPlacedBlocks = breakPlacedBlocks;
+    }
+
+    @Override
+    public boolean canPlaceBlocks() {
+        return placeBlocks;
+    }
+
+    @Override
+    public void setPlaceBlocks(boolean placeBlocks) {
+        this.placeBlocks = placeBlocks;
     }
 
     @Override

@@ -30,10 +30,14 @@ import io.github.dre2n.dungeonsxl.util.DeserializationUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -121,17 +125,53 @@ public class WorldConfig extends GameRules {
             keepInventoryOnDeath = configFile.getBoolean("keepInventoryOnDeath");
         }
 
-        /* Build */
-        if (configFile.contains("build")) {
-            build = configFile.getBoolean("build");
-        }
-
-        /* GameMode */
+        /* World interaction */
         if (configFile.contains("gameMode")) {
             if (EnumUtil.isValidEnum(GameMode.class, configFile.getString("gameMode").toUpperCase())) {
                 gameMode = GameMode.valueOf(configFile.getString("gameMode"));
             } else {
                 gameMode = GameMode.getByValue(configFile.getInt("gameMode"));
+            }
+        }
+
+        if (configFile.contains("breakBlocks")) {
+            breakBlocks = configFile.getBoolean("breakBlocks");
+        }
+
+        if (configFile.contains("breakPlacedBlocks")) {
+            breakPlacedBlocks = configFile.getBoolean("breakPlacedBlocks");
+        }
+
+        if (configFile.contains("breakWhitelist")) {
+            breakWhitelist = new HashMap<>();
+            for (Entry<String, Object> entry : configFile.getConfigurationSection("breakWhitelist").getValues(true).entrySet()) {
+                Material breakable = Material.matchMaterial(entry.getKey());
+
+                HashSet<Material> tools = new HashSet<>();
+                if (entry.getValue() instanceof List) {
+                    for (String materialString : (List<String>) entry.getValue()) {
+                        Material tool = Material.matchMaterial(materialString);
+                        if (tool != null) {
+                            tools.add(tool);
+                        }
+                    }
+                }
+
+                breakWhitelist.put(breakable, tools);
+            }
+        }
+
+        if (configFile.contains("placeBlocks")) {
+            placeBlocks = configFile.getBoolean("placeBlocks");
+        }
+
+        if (configFile.contains("placeWhitelist")) {
+            placeWhitelist = new HashSet<>();
+            for (String materialString : configFile.getStringList("placeWhitelist")) {
+                Material material = Material.matchMaterial(materialString);
+                if (material != null) {
+                    placeWhitelist.add(material);
+                }
             }
         }
 
