@@ -140,6 +140,7 @@ public enum DMessages implements Messages {
     LOG_ERROR_SIGN_SETUP("Log_Error_SignSetup", "&4A sign at &6&v1&4 is erroneous!"),
     LOG_GENERATE_NEW_WORLD("Log_GenerateNewWorld", "&6Generating new world..."),
     LOG_IMPORT_WORLD("Log_ImportWorld", "&6Importing world..."),
+    LOG_KILLED_CORRUPTED_PLAYER("Log_KilledCorruptedPlayer", "&4Killed player &6&v1 &4because the data to restore his main inventory is corrupted :("),
     LOG_NEW_MAP("Log_NewDungeon", "&6Creating new map."),
     LOG_NEW_PLAYER_DATA("Log_NewPlayerData", "&6A new player data file has been created and saved as &v1."),
     LOG_WORLD_GENERATION_FINISHED("Log_WorldGenerationFinished", "&6World generation finished!"),

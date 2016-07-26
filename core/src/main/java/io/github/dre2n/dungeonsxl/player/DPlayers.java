@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 public class DPlayers {
 
     private CopyOnWriteArrayList<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<DSavePlayer> dSavePlayers = new CopyOnWriteArrayList<>();
 
     /**
      * @return the DGlobalPlayer which represents the player
@@ -109,42 +108,6 @@ public class DPlayers {
      */
     public void removePlayer(DGlobalPlayer player) {
         dGlobalPlayers.remove(player);
-    }
-
-    /**
-     * @return the DSavePlayer that represents the player
-     */
-    public DSavePlayer getDSavePlayerByPlayer(Player player) {
-        for (DSavePlayer dSavePlayer : dSavePlayers) {
-            if (dSavePlayer.getName().equals(player.getName())) {
-                return dSavePlayer;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return the dSavePlayers
-     */
-    public List<DSavePlayer> getDSavePlayers() {
-        return dSavePlayers;
-    }
-
-    /**
-     * @param dSavePlayer
-     * the dSavePlayer to add
-     */
-    public void addDSavePlayer(DSavePlayer dSavePlayer) {
-        dSavePlayers.add(dSavePlayer);
-    }
-
-    /**
-     * @param dSavePlayer
-     * the dSavePlayer to remove
-     */
-    public void removeDSavePlayer(DSavePlayer dSavePlayer) {
-        dSavePlayers.remove(dSavePlayer);
     }
 
     /**

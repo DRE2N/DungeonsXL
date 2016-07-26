@@ -106,7 +106,7 @@ public class DEditPlayer extends DInstancePlayer {
      */
     public void escape() {
         delete();
-        getSavePlayer().reset(false);
+        reset(false);
     }
 
     public void poke(Block block) {
@@ -142,7 +142,7 @@ public class DEditPlayer extends DInstancePlayer {
     public void leave() {
         delete();
 
-        getSavePlayer().reset(false);
+        reset(false);
 
         DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
         if (editWorld != null) {

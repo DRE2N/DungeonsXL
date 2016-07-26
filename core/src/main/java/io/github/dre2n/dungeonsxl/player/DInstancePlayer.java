@@ -16,8 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Version;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -27,41 +25,16 @@ import org.bukkit.potion.PotionEffect;
  */
 public abstract class DInstancePlayer extends DGlobalPlayer {
 
-    private DSavePlayer savePlayer;
     private World world;
     private boolean inDungeonChat = false;
 
     DInstancePlayer(Player player, World world) {
-        super(player);
-
-        double health = player.getHealth();
-        if (!Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
-            savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), null, player.getLevel(),
-                    player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
-        } else {
-            savePlayer = new DSavePlayer(player.getName(), player.getUniqueId(), player.getLocation(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getInventory().getItemInOffHand(), player.getLevel(),
-                    player.getTotalExperience(), (int) health, player.getFoodLevel(), player.getFireTicks(), player.getGameMode(), player.getActivePotionEffects());
-        }
-
+        super(player, false);
         this.world = world;
+        getData().savePlayerState(player);
     }
 
     /* Getters and setters */
-    /**
-     * @return the savePlayer
-     */
-    public DSavePlayer getSavePlayer() {
-        return savePlayer;
-    }
-
-    /**
-     * @param savePlayer
-     * the savePlayer to set
-     */
-    public void setSavePlayer(DSavePlayer savePlayer) {
-        this.savePlayer = savePlayer;
-    }
-
     /**
      * @return
      * the instance

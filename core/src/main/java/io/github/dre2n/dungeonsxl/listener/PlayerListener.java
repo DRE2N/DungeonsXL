@@ -35,7 +35,6 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
-import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.OpenDoorSign;
@@ -45,7 +44,6 @@ import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.ArrayList;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -486,25 +484,13 @@ public class PlayerListener implements Listener {
         if (dPlayer != null) {
             DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
             if (dGroup != null) {
-                dGroup.getPlayers().remove(dPlayer.getPlayer());
-                dGroup.getPlayers().add(player);
+                dGroup.removePlayer(dPlayer.getPlayer());
+                dGroup.addPlayer(player);
             }
             dPlayer.setPlayer(player);
 
             // Check offlineTime
             dPlayer.setOfflineTime(0);
-
-        } else {
-            DSavePlayer dSavePlayer = dPlayers.getDSavePlayerByPlayer(player);
-
-            Location target = Bukkit.getServer().getWorlds().get(0).getSpawnLocation();
-            if (dSavePlayer != null) {
-                target = dSavePlayer.getOldLocation();
-            }
-
-            if (DEditWorld.getByWorld(player.getWorld()) != null || DGameWorld.getByWorld(player.getWorld()) != null) {
-                player.teleport(target);
-            }
         }
 
         // Tutorial Mode
@@ -547,7 +533,7 @@ public class PlayerListener implements Listener {
             }
 
             if (dGroup.getGameWorld() == null) {
-                dGroup.setGameWorld(plugin.getDWorlds().getResourceByName(DGroup.getByPlayer(player).getMapName()).instantiateAsGameWorld());// TO DO
+                dGroup.setGameWorld(plugin.getDWorlds().getResourceByName(DGroup.getByPlayer(player).getMapName()).instantiateAsGameWorld());
                 dGroup.getGameWorld().setTutorial(true);
             }
 

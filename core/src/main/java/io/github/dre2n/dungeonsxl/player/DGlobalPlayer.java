@@ -16,12 +16,19 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Version;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.PlayerData;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import java.io.File;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 /**
  * Represents a player in the non-DXL worlds of the server.
@@ -45,8 +52,16 @@ public class DGlobalPlayer {
     private ItemStack[] respawnArmor;
 
     public DGlobalPlayer(Player player) {
+        this(player, false);
+    }
+
+    public DGlobalPlayer(Player player, boolean reset) {
         this.player = player;
+
         loadPlayerData(new File(DungeonsXL.PLAYERS, player.getUniqueId().toString() + ".yml"));
+        if (reset && data.wasInGame()) {
+            reset(false);
+        }
 
         plugin.getDPlayers().addPlayer(this);
     }
@@ -63,6 +78,7 @@ public class DGlobalPlayer {
         plugin.getDPlayers().addPlayer(this);
     }
 
+    /* Getters and setters */
     /**
      * @return the Bukkit player
      */
@@ -211,6 +227,49 @@ public class DGlobalPlayer {
      */
     public boolean hasPermission(String permission) {
         return DPermissions.hasPermission(player, permission);
+    }
+
+    /* Actions */
+    /**
+     * Respawns the player at his old position before he was in a dungeon
+     */
+    public void reset(boolean keepInventory) {
+        try {
+            if (!keepInventory) {
+                while (data.getOldInventory().size() > 36) {
+                    data.getOldInventory().remove(36);
+                }
+                player.getInventory().setContents(data.getOldInventory().toArray(new ItemStack[36]));
+                player.getInventory().setArmorContents(data.getOldArmor().toArray(new ItemStack[4]));
+                if (Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
+                    player.getInventory().setItemInOffHand(data.getOldOffHand());
+                }
+                player.setLevel(data.getOldLevel());
+                player.setExp(data.getOldExp());
+                player.setHealth(data.getOldHealth());
+                player.setFoodLevel(data.getOldFoodLevel());
+                player.setGameMode(data.getOldGameMode());
+                player.setFireTicks(data.getOldFireTicks());
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+
+                player.addPotionEffects(data.getOldPotionEffects());
+            }
+
+            if (data.getOldLocation().getWorld() != null) {
+                PlayerUtil.secureTeleport(player, data.getOldLocation());
+            } else {
+                PlayerUtil.secureTeleport(player, Bukkit.getWorlds().get(0).getSpawnLocation());
+            }
+
+        } catch (NullPointerException exception) {
+            exception.printStackTrace();
+            player.setHealth(0);
+            MessageUtil.log(plugin, DMessages.LOG_KILLED_CORRUPTED_PLAYER.getMessage(player.getName()));
+        }
+
+        data.clearPlayerState();
     }
 
 }

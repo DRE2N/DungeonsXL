@@ -381,9 +381,9 @@ public class DGamePlayer extends DInstancePlayer {
         delete();
 
         if (finished) {
-            getSavePlayer().reset(rules.getKeepInventoryOnFinish());
+            reset(rules.getKeepInventoryOnFinish());
         } else {
-            getSavePlayer().reset(rules.getKeepInventoryOnEscape());
+            reset(rules.getKeepInventoryOnEscape());
         }
 
         // Permission bridge

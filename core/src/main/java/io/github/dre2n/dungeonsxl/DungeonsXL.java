@@ -39,7 +39,6 @@ import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
-import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
@@ -280,14 +279,12 @@ public class DungeonsXL extends BRPlugin {
     // Save and load
     public void saveData() {
         protections.saveAll();
-        DSavePlayer.save();
         dWorlds.saveAll();
     }
 
     public void loadData() {
         protections.loadAll();
         dPlayers.loadAll();
-        DSavePlayer.load();
         dWorlds.check();
     }
 
