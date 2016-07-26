@@ -22,6 +22,7 @@ import io.github.dre2n.dungeonsxl.event.requirement.RequirementRegistrationEvent
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
@@ -56,6 +57,8 @@ public abstract class Requirement {
     }
 
     /* Abstracts */
+    public abstract void setup(ConfigurationSection config);
+
     public abstract boolean check(Player player);
 
     public abstract void demand(Player player);

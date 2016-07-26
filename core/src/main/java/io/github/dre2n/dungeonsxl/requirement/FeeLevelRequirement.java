@@ -20,6 +20,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DSavePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
@@ -31,6 +32,7 @@ public class FeeLevelRequirement extends Requirement {
 
     private int fee;
 
+    /* Getters and setters */
     /**
      * @return the fee
      */
@@ -44,6 +46,17 @@ public class FeeLevelRequirement extends Requirement {
      */
     public void setFee(int fee) {
         this.fee = fee;
+    }
+
+    @Override
+    public RequirementType getType() {
+        return type;
+    }
+
+    /* Actions */
+    @Override
+    public void setup(ConfigurationSection config) {
+        fee = config.getInt("feeLevel");
     }
 
     @Override
@@ -61,11 +74,6 @@ public class FeeLevelRequirement extends Requirement {
         dSavePlayer.setOldLevel(dSavePlayer.getOldLevel() - fee);
 
         MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REQUIREMENT_FEE, fee + " levels"));
-    }
-
-    @Override
-    public RequirementType getType() {
-        return type;
     }
 
 }
