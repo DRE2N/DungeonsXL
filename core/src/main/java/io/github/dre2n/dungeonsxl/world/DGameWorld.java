@@ -38,11 +38,15 @@ import io.github.dre2n.dungeonsxl.trigger.TriggerType;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypeDefault;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -470,12 +474,31 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         Game game = getGame();
-        if (game != null) {
-            GameRules rules = game.getRules();
-            if (rules.canBreakBlocks()) {
-                return (false);
-            } else if (rules.canBreakPlacedBlocks()) {
+        if (game == null) {
+            return true;
+        }
+
+        GameRules rules = game.getRules();
+        if (!rules.canBreakBlocks() && !rules.canBreakPlacedBlocks()) {
+            return true;
+        }
+
+        Map<Material, HashSet<Material>> whitelist = rules.getBreakWhitelist();
+        Material material = block.getType();
+        Material breakTool = player.getItemInHand().getType();
+
+        if (whitelist == null) {
+            if (rules.canBreakPlacedBlocks()) {
                 return (!placedBlocks.contains(block));
+            } else if (rules.canBreakBlocks()) {
+                return false;
+            }
+
+        } else if (whitelist.containsKey(material) && whitelist.get(material) == null | whitelist.get(material).isEmpty() | whitelist.get(material).contains(breakTool)) {
+            if (rules.canBreakPlacedBlocks()) {
+                return (!placedBlocks.contains(block));
+            } else if (rules.canBreakBlocks()) {
+                return false;
             }
         }
 
@@ -501,7 +524,13 @@ public class DGameWorld extends DInstanceWorld {
             return true;
         }
 
-        if (game.getRules().canPlaceBlocks() || GamePlaceableBlock.canBuildHere(block, block.getFace(against), hand.getType(), this)) {
+        GameRules rules = game.getRules();
+        if (!rules.canPlaceBlocks() && !GamePlaceableBlock.canBuildHere(block, block.getFace(against), hand.getType(), this)) {
+            return true;
+        }
+
+        Set<Material> whitelist = rules.getPlaceWhitelist();
+        if (whitelist == null || whitelist.contains(block.getType())) {
             placedBlocks.add(block);
             return false;
         }
