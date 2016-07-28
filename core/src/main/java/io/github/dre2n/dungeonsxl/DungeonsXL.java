@@ -66,13 +66,13 @@ public class DungeonsXL extends BRPlugin {
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
     public static File BACKUPS;
-    public static File DUNGEONS;
     public static File LANGUAGES;
     public static File MAPS;
     public static File PLAYERS;
     public static File SCRIPTS;
     public static File ANNOUNCERS;
     public static File CLASSES;
+    public static File DUNGEONS;
     public static File LOOT_TABLES;
     public static File MOBS;
     public static File SIGNS;
@@ -198,11 +198,6 @@ public class DungeonsXL extends BRPlugin {
             BACKUPS.mkdir();
         }
 
-        DUNGEONS = new File(getDataFolder(), "dungeons");
-        if (!DUNGEONS.exists()) {
-            DUNGEONS.mkdir();
-        }
-
         LANGUAGES = new File(getDataFolder(), "languages");
         if (!LANGUAGES.exists()) {
             LANGUAGES.mkdir();
@@ -231,6 +226,11 @@ public class DungeonsXL extends BRPlugin {
         CLASSES = new File(SCRIPTS, "classes");
         if (!CLASSES.exists()) {
             CLASSES.mkdir();
+        }
+
+        DUNGEONS = new File(SCRIPTS, "dungeons");
+        if (!DUNGEONS.exists()) {
+            DUNGEONS.mkdir();
         }
 
         LOOT_TABLES = new File(SCRIPTS, "loottables");
