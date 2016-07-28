@@ -658,18 +658,9 @@ public class DGroup {
                 requirement.demand(player);
             }
 
-            GameType gameType = game.getType();
-            if (gameType == GameTypeDefault.DEFAULT) {
-                player.setGameMode(rules.getGameMode());
-                if (rules.isTimeIsRunning()) {
-                    timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
-                }
-
-            } else {
-                player.setGameMode(gameType.getGameMode());
-                if (gameType.getShowTime()) {
-                    timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
-                }
+            player.setGameMode(rules.getGameMode());
+            if (rules.isTimeIsRunning()) {
+                timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
             }
 
             // Permission bridge

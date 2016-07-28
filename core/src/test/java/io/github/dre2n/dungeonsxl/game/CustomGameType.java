@@ -27,19 +27,19 @@ public enum CustomGameType implements GameType {
 
     private String displayName;
     private String signName;
-    private boolean playerVersusPlayer;
-    private boolean friendlyFire;
-    private boolean mobWaves;
-    private boolean rewards;
-    private boolean showTime;
-    private boolean breakBlocks;
-    private boolean breakPlacedBlocks;
-    private boolean placeBlocks;
+    private Boolean playerVersusPlayer;
+    private Boolean friendlyFire;
+    private Boolean mobWaves;
+    private Boolean rewards;
+    private Boolean showTime;
+    private Boolean breakBlocks;
+    private Boolean breakPlacedBlocks;
+    private Boolean placeBlocks;
     private GameMode gameMode;
-    private boolean lives;
+    private Boolean lives;
 
-    CustomGameType(String displayName, String signName, boolean playerVersusPlayer, boolean friendlyFire, boolean mobWaves, boolean rewards,
-            boolean showTime, boolean breakBlocks, boolean breakPlacedBlocks, boolean placeBlocks, GameMode gameMode, boolean lives) {
+    CustomGameType(String displayName, String signName, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean mobWaves, Boolean rewards,
+            Boolean showTime, Boolean breakBlocks, Boolean breakPlacedBlocks, Boolean placeBlocks, GameMode gameMode, Boolean lives) {
         this.displayName = displayName;
         this.signName = signName;
         this.playerVersusPlayer = playerVersusPlayer;
@@ -75,82 +75,82 @@ public enum CustomGameType implements GameType {
     }
 
     @Override
-    public boolean isPlayerVersusPlayer() {
+    public Boolean isPlayerVersusPlayer() {
         return playerVersusPlayer;
     }
 
     @Override
-    public void setPlayerVersusPlayer(boolean playerVersusPlayer) {
+    public void setPlayerVersusPlayer(Boolean playerVersusPlayer) {
         this.playerVersusPlayer = playerVersusPlayer;
     }
 
     @Override
-    public boolean isFriendlyFire() {
+    public Boolean isFriendlyFire() {
         return friendlyFire;
     }
 
     @Override
-    public void setFriendlyFire(boolean friendlyFire) {
+    public void setFriendlyFire(Boolean friendlyFire) {
         this.friendlyFire = friendlyFire;
     }
 
     @Override
-    public boolean hasMobWaves() {
+    public Boolean hasMobWaves() {
         return mobWaves;
     }
 
     @Override
-    public void setMobWaves(boolean mobWaves) {
+    public void setMobWaves(Boolean mobWaves) {
         this.mobWaves = mobWaves;
     }
 
     @Override
-    public boolean hasRewards() {
+    public Boolean hasRewards() {
         return rewards;
     }
 
     @Override
-    public void setRewards(boolean rewards) {
+    public void setRewards(Boolean rewards) {
         this.rewards = rewards;
     }
 
     @Override
-    public boolean getShowTime() {
+    public Boolean getShowTime() {
         return showTime;
     }
 
     @Override
-    public void setShowTime(boolean showTime) {
+    public void setShowTime(Boolean showTime) {
         this.showTime = showTime;
     }
 
     @Override
-    public boolean canBreakBlocks() {
+    public Boolean canBreakBlocks() {
         return breakBlocks;
     }
 
     @Override
-    public void setBreakBlocks(boolean breakBlocks) {
+    public void setBreakBlocks(Boolean breakBlocks) {
         this.breakBlocks = breakBlocks;
     }
 
     @Override
-    public boolean canBreakPlacedBlocks() {
+    public Boolean canBreakPlacedBlocks() {
         return breakPlacedBlocks;
     }
 
     @Override
-    public void setBreakPlacedBlocks(boolean breakPlacedBlocks) {
+    public void setBreakPlacedBlocks(Boolean breakPlacedBlocks) {
         this.breakPlacedBlocks = breakPlacedBlocks;
     }
 
     @Override
-    public boolean canPlaceBlocks() {
+    public Boolean canPlaceBlocks() {
         return placeBlocks;
     }
 
     @Override
-    public void setPlaceBlocks(boolean placeBlocks) {
+    public void setPlaceBlocks(Boolean placeBlocks) {
         this.placeBlocks = placeBlocks;
     }
 
@@ -165,12 +165,12 @@ public enum CustomGameType implements GameType {
     }
 
     @Override
-    public boolean hasLives() {
+    public Boolean hasLives() {
         return lives;
     }
 
     @Override
-    public void setLives(boolean lives) {
+    public void setLives(Boolean lives) {
         this.lives = lives;
     }
 

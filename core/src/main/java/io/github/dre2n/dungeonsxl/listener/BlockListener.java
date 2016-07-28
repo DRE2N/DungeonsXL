@@ -20,9 +20,6 @@ import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.game.GameType;
-import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GlobalProtection;
@@ -35,8 +32,6 @@ import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
-import io.github.dre2n.dungeonsxl.world.GamePlaceableBlock;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -80,16 +75,9 @@ public class BlockListener implements Listener {
 
         GlobalProtection protection = plugin.getGlobalProtections().getByBlock(event.getBlock());
         if (protection != null) {
-            if (dGlobalPlayer.isInBreakMode()) {
-                protection.delete();
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.CMD_BREAK_PROTECTED_MODE));
-                dGlobalPlayer.setInBreakMode(false);
-
-            } else {
+            if (protection.onBreak(dGlobalPlayer)) {
                 event.setCancelled(true);
             }
-
             return;
         }
 
@@ -103,24 +91,7 @@ public class BlockListener implements Listener {
         // Deny DGameWorld block breaking
         DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
-            for (DSign dSign : gameWorld.getDSigns()) {
-                if (dSign.getSign().equals(block)) {
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-
-            Game game = gameWorld.getGame();
-            if (game != null) {
-                GameType gameType = game.getType();
-                if (gameType == GameTypeDefault.DEFAULT) {
-                    event.setCancelled(!game.getRules().canBuild());
-
-                } else if (!gameType.canBuild()) {
-                    event.setCancelled(true);
-                }
-
-            } else {
+            if (gameWorld.onBreak(player, block)) {
                 event.setCancelled(true);
             }
         }
@@ -136,27 +107,9 @@ public class BlockListener implements Listener {
             return;
         }
 
-        Game game = gameWorld.getGame();
-        if (game != null) {
-            if (game.getRules().canBuild() || GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gameWorld)) {
-                return;
-            }
+        if (gameWorld.onPlace(event.getPlayer(), block, event.getBlockAgainst(), event.getItemInHand())) {
+            event.setCancelled(true);
         }
-
-        // Workaround for a bug that would allow 3-Block-high jumping
-        Location loc = event.getPlayer().getLocation();
-        if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
-            if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
-                if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
-                    loc.setX(block.getX() + 0.5);
-                    loc.setY(block.getY());
-                    loc.setZ(block.getZ() + 0.5);
-                    event.getPlayer().teleport(loc);
-                }
-            }
-        }
-
-        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

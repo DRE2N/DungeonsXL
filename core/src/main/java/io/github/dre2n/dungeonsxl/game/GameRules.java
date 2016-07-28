@@ -392,7 +392,7 @@ public class GameRules {
             friendlyFire = defaultValues.isFriendlyFire();
         }
 
-        if (timeToFinish == null) {
+        if (timeToFinish == null && defaultValues.getShowTime() != null) {
             timeToFinish = defaultValues.getShowTime() ? null : -1;
         }
 
