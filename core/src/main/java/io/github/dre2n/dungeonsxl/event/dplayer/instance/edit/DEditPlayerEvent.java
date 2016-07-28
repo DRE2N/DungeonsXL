@@ -14,41 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.event.dplayer;
+package io.github.dre2n.dungeonsxl.event.dplayer.instance.edit;
 
-import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEvent;
+import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 
 /**
  * @author Daniel Saukel
  */
-public class DPlayerEscapeEvent extends DPlayerEvent implements Cancellable {
+public abstract class DEditPlayerEvent extends DPlayerEvent {
 
-    private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled;
-
-    public DPlayerEscapeEvent(DGlobalPlayer dPlayer) {
+    public DEditPlayerEvent(DEditPlayer dPlayer) {
         super(dPlayer);
     }
 
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
+    public DEditPlayer getDPlayer() {
+        return (DEditPlayer) dPlayer;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    public void setDPlayer(DEditPlayer dPlayer) {
+        this.dPlayer = dPlayer;
     }
 
 }

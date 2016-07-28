@@ -14,74 +14,57 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.event.dgroup;
+package io.github.dre2n.dungeonsxl.event.dplayer.instance.game;
 
-import io.github.dre2n.dungeonsxl.player.DGroup;
-import org.bukkit.entity.Player;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
  * @author Daniel Saukel
  */
-public class DGroupDisbandEvent extends DGroupEvent implements Cancellable {
-
-    public enum Cause {
-
-        COMMAND,
-        DUNGEON_FINISHED,
-        GROUP_IS_EMPTY,
-        LOST,
-        CUSTOM
-
-    }
+public class DGamePlayerFinishEvent extends DGamePlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Player disbander;
+    private boolean first;
+    private boolean hasToWait;
 
-    private Cause cause;
-
-    public DGroupDisbandEvent(DGroup dGroup, Cause cause) {
-        super(dGroup);
-        this.cause = cause;
-    }
-
-    public DGroupDisbandEvent(DGroup dGroup, Player disbander, Cause cause) {
-        super(dGroup);
-        this.disbander = disbander;
-        this.cause = cause;
+    public DGamePlayerFinishEvent(DGamePlayer dPlayer, boolean first, boolean hasToWait) {
+        super(dPlayer);
+        this.first = first;
+        this.hasToWait = hasToWait;
     }
 
     /**
-     * @return the disbander
+     * @return the first
      */
-    public Player getDisbander() {
-        return disbander;
+    public boolean isFirst() {
+        return first;
     }
 
     /**
-     * @param disbander
-     * the disbander to set
+     * @param first
+     * the first to set
      */
-    public void setDisbander(Player disbander) {
-        this.disbander = disbander;
+    public void setFirst(boolean first) {
+        this.first = first;
     }
 
     /**
-     * @return the cause
+     * @return the hasToWait
      */
-    public Cause getCause() {
-        return cause;
+    public boolean getHasToWait() {
+        return hasToWait;
     }
 
     /**
-     * @param cause
-     * the cause to set
+     * @param hasToWait
+     * the hasToWait to set
      */
-    public void setCause(Cause cause) {
-        this.cause = cause;
+    public void setHasToWait(boolean hasToWait) {
+        this.hasToWait = hasToWait;
     }
 
     @Override

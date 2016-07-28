@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.event.dplayer;
+package io.github.dre2n.dungeonsxl.event.dplayer.instance.game;
 
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEvent;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -24,7 +25,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 /**
  * @author Daniel Saukel
  */
-public class DPlayerDeathEvent extends DPlayerEvent implements Cancellable {
+public class DGamePlayerDeathEvent extends DPlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
@@ -32,7 +33,7 @@ public class DPlayerDeathEvent extends DPlayerEvent implements Cancellable {
     private PlayerDeathEvent bukkitEvent;
     private int lostLives;
 
-    public DPlayerDeathEvent(DGamePlayer dPlayer, PlayerDeathEvent bukkitEvent, int lostLives) {
+    public DGamePlayerDeathEvent(DGamePlayer dPlayer, PlayerDeathEvent bukkitEvent, int lostLives) {
         super(dPlayer);
         this.bukkitEvent = bukkitEvent;
         this.lostLives = lostLives;

@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.event.dplayer;
+package io.github.dre2n.dungeonsxl.event.dplayer.instance;
 
+import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEvent;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -23,7 +24,7 @@ import org.bukkit.event.HandlerList;
 /**
  * @author Daniel Saukel
  */
-public class DPlayerUpdateEvent extends DPlayerEvent implements Cancellable {
+public class DInstancePlayerUpdateEvent extends DPlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
@@ -35,7 +36,7 @@ public class DPlayerUpdateEvent extends DPlayerEvent implements Cancellable {
     private boolean kick;
     private boolean triggerAllInDistance;
 
-    public DPlayerUpdateEvent(DInstancePlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean respawnInventory, boolean offline, boolean kick, boolean triggerAllInDistance) {
+    public DInstancePlayerUpdateEvent(DInstancePlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean respawnInventory, boolean offline, boolean kick, boolean triggerAllInDistance) {
         super(dPlayer);
         this.locationValid = locationValid;
         this.teleportWolf = teleportWolf;

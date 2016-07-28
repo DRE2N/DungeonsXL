@@ -20,8 +20,8 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.edit.DEditPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -67,7 +67,7 @@ public class LeaveCommand extends BRCommand {
             return;
         }
 
-        DPlayerEscapeEvent dPlayerEscapeEvent = new DPlayerEscapeEvent(dPlayer);
+        DEditPlayerEscapeEvent dPlayerEscapeEvent = new DEditPlayerEscapeEvent((DEditPlayer) dPlayer);
         plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
         DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
         plugin.getServer().getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
