@@ -131,6 +131,7 @@ public class DungeonsXL extends BRPlugin {
         super.onEnable();
         instance = this;
 
+        DPermissions.register();
         initFolders();
         loadCore();
 
@@ -257,7 +258,6 @@ public class DungeonsXL extends BRPlugin {
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
         loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
-        DPermissions.register();
         loadGameTypes();
         loadRequirementTypes();
         loadRewardTypes();
