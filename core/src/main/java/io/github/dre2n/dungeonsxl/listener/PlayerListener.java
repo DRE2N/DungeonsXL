@@ -21,7 +21,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerDeathEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
@@ -36,7 +36,7 @@ import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
-import io.github.dre2n.dungeonsxl.reward.RewardChest;
+import io.github.dre2n.dungeonsxl.world.block.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.OpenDoorSign;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
@@ -102,7 +102,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        DPlayerDeathEvent dPlayerDeathEvent = new DPlayerDeathEvent(dPlayer, event, 1);
+        DGamePlayerDeathEvent dPlayerDeathEvent = new DGamePlayerDeathEvent(dPlayer, event, 1);
         plugin.getServer().getPluginManager().callEvent(dPlayerDeathEvent);
 
         if (dPlayerDeathEvent.isCancelled()) {

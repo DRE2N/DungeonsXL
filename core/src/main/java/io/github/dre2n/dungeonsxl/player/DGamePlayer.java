@@ -24,9 +24,9 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameRules;
@@ -773,7 +773,7 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        DPlayerFinishEvent dPlayerFinishEvent = new DPlayerFinishEvent(this, first, hasToWait);
+        DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, first, hasToWait);
 
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
@@ -891,7 +891,7 @@ public class DGamePlayer extends DInstancePlayer {
             triggerAllInDistance = true;
         }
 
-        DPlayerUpdateEvent event = new DPlayerUpdateEvent(this, locationValid, teleportWolf, respawnInventory, offline, kick, triggerAllInDistance);
+        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, teleportWolf, respawnInventory, offline, kick, triggerAllInDistance);
         plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {

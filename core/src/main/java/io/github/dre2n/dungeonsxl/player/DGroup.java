@@ -27,8 +27,6 @@ import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameRules;
-import io.github.dre2n.dungeonsxl.game.GameType;
-import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
