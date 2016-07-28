@@ -264,8 +264,9 @@ public class PlayerListener implements Listener {
                     event.setCancelled(true);
                 }
 
-                // Leave Sign
-                if (LeaveSign.playerInteract(event.getClickedBlock(), player)) {
+                LeaveSign leaveSign = LeaveSign.getByBlock(clickedBlock);
+                if (leaveSign != null) {
+                    leaveSign.onPlayerInteract(player);
                     event.setCancelled(true);
                 }
 
