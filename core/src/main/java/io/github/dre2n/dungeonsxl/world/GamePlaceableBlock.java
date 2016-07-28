@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.game;
+package io.github.dre2n.dungeonsxl.world;
 
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Material;

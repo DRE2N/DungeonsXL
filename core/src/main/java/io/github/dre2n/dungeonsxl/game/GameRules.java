@@ -20,9 +20,12 @@ import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -42,7 +45,11 @@ public class GameRules {
 
         /* World interaction */
         DEFAULT_VALUES.gameMode = GameMode.SURVIVAL;
-        DEFAULT_VALUES.build = false;
+        DEFAULT_VALUES.breakBlocks = false;
+        DEFAULT_VALUES.breakPlacedBlocks = false;
+        DEFAULT_VALUES.breakWhitelist = null;
+        DEFAULT_VALUES.placeBlocks = false;
+        DEFAULT_VALUES.placeWhitelist = null;
 
         /* Fighting */
         DEFAULT_VALUES.playerVersusPlayer = false;
@@ -81,7 +88,11 @@ public class GameRules {
 
     /* World interaction */
     protected GameMode gameMode;
-    protected Boolean build;
+    protected Boolean breakBlocks;
+    protected Boolean breakPlacedBlocks;
+    protected Map<Material, HashSet<Material>> breakWhitelist;
+    protected Boolean placeBlocks;
+    protected Set<Material> placeWhitelist;
 
     /* Fighting */
     protected Boolean playerVersusPlayer;
@@ -156,10 +167,38 @@ public class GameRules {
     }
 
     /**
-     * @return if players may build
+     * @return if all blocks may be destroyed
      */
-    public boolean canBuild() {
-        return build;
+    public boolean canBreakBlocks() {
+        return breakBlocks;
+    }
+
+    /**
+     * @return if blocks placed in game may be destroyed
+     */
+    public boolean canBreakPlacedBlocks() {
+        return breakPlacedBlocks;
+    }
+
+    /**
+     * @return the destroyable materials and the materials that may be used to break them or null if any
+     */
+    public Map<Material, HashSet<Material>> getBreakWhitelist() {
+        return breakWhitelist;
+    }
+
+    /**
+     * @return if blocks may be placed
+     */
+    public boolean canPlaceBlocks() {
+        return placeBlocks;
+    }
+
+    /**
+     * @return the placeable materials
+     */
+    public Set<Material> getPlaceWhitelist() {
+        return placeWhitelist;
     }
 
     // Fight
@@ -353,12 +392,20 @@ public class GameRules {
             friendlyFire = defaultValues.isFriendlyFire();
         }
 
-        if (timeToFinish == null) {
+        if (timeToFinish == null && defaultValues.getShowTime() != null) {
             timeToFinish = defaultValues.getShowTime() ? null : -1;
         }
 
-        if (build == null) {
-            build = defaultValues.canBuild();
+        if (breakBlocks == null) {
+            breakBlocks = defaultValues.canBreakBlocks();
+        }
+
+        if (breakPlacedBlocks == null) {
+            breakPlacedBlocks = defaultValues.canBreakPlacedBlocks();
+        }
+
+        if (placeBlocks == null) {
+            placeBlocks = defaultValues.canPlaceBlocks();
         }
 
         if (gameMode == null) {
@@ -397,8 +444,24 @@ public class GameRules {
             gameMode = defaultValues.gameMode;
         }
 
-        if (build == null) {
-            build = defaultValues.build;
+        if (breakBlocks == null) {
+            breakBlocks = defaultValues.breakBlocks;
+        }
+
+        if (breakPlacedBlocks == null) {
+            breakPlacedBlocks = defaultValues.breakPlacedBlocks;
+        }
+
+        if (breakWhitelist == null) {
+            breakWhitelist = defaultValues.breakWhitelist;
+        }
+
+        if (placeBlocks == null) {
+            placeBlocks = defaultValues.placeBlocks;
+        }
+
+        if (placeWhitelist == null) {
+            placeWhitelist = defaultValues.placeWhitelist;
         }
 
         /* Fighting */

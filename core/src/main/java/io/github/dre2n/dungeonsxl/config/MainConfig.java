@@ -16,8 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.config.BRConfig;
 import io.github.dre2n.commons.util.EnumUtil;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -496,7 +499,12 @@ public class MainConfig extends BRConfig {
         }
 
         if (config.contains("tweaksEnabled")) {
-            tweaksEnabled = config.getBoolean("tweaksEnabled");
+            if (Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals())) {
+                tweaksEnabled = config.getBoolean("tweaksEnabled");
+            } else {
+                tweaksEnabled = false;
+                MessageUtil.log(DMessages.LOG_DISABLED_TWEAKS.getMessage());
+            }
         }
 
         if (config.contains("secureMode.enabled")) {

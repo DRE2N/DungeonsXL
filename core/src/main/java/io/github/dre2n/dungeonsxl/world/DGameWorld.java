@@ -21,7 +21,7 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
+import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.reward.RewardChest;
@@ -38,15 +38,22 @@ import io.github.dre2n.dungeonsxl.trigger.TriggerType;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypeDefault;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -61,6 +68,7 @@ public class DGameWorld extends DInstanceWorld {
     private boolean isPlaying = false;
 
     // TO DO: Which lists actually need to be CopyOnWriteArrayLists?
+    private List<Block> placedBlocks = new LinkedList<>();
     private CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks = new CopyOnWriteArrayList<>();
     private List<ItemStack> secureObjects = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<>();
@@ -450,6 +458,84 @@ public class DGameWorld extends DInstanceWorld {
                 }
             }
         }
+    }
+
+    public boolean onBreak(Player player, Block block) {
+        for (DSign dSign : dSigns) {
+            if (dSign.getSign().getBlock().equals(block)) {
+                return true;
+            }
+        }
+
+        for (RewardChest rChest : rewardChests) {
+            if (rChest.getChest().getBlock().equals(block)) {
+                return true;
+            }
+        }
+
+        Game game = getGame();
+        if (game == null) {
+            return true;
+        }
+
+        GameRules rules = game.getRules();
+        if (!rules.canBreakBlocks() && !rules.canBreakPlacedBlocks()) {
+            return true;
+        }
+
+        Map<Material, HashSet<Material>> whitelist = rules.getBreakWhitelist();
+        Material material = block.getType();
+        Material breakTool = player.getItemInHand().getType();
+
+        if (whitelist == null) {
+            if (rules.canBreakPlacedBlocks()) {
+                return (!placedBlocks.contains(block));
+            } else if (rules.canBreakBlocks()) {
+                return false;
+            }
+
+        } else if (whitelist.containsKey(material) && whitelist.get(material) == null | whitelist.get(material).isEmpty() | whitelist.get(material).contains(breakTool)) {
+            if (rules.canBreakPlacedBlocks()) {
+                return (!placedBlocks.contains(block));
+            } else if (rules.canBreakBlocks()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean onPlace(Player player, Block block, Block against, ItemStack hand) {
+        // Workaround for a bug that would allow 3-Block-high jumping
+        Location loc = player.getLocation();
+        if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
+            if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
+                if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
+                    loc.setX(block.getX() + 0.5);
+                    loc.setY(block.getY());
+                    loc.setZ(block.getZ() + 0.5);
+                    player.teleport(loc);
+                }
+            }
+        }
+
+        Game game = getGame();
+        if (game == null) {
+            return true;
+        }
+
+        GameRules rules = game.getRules();
+        if (!rules.canPlaceBlocks() && !GamePlaceableBlock.canBuildHere(block, block.getFace(against), hand.getType(), this)) {
+            return true;
+        }
+
+        Set<Material> whitelist = rules.getPlaceWhitelist();
+        if (whitelist == null || whitelist.contains(block.getType())) {
+            placedBlocks.add(block);
+            return false;
+        }
+
+        return true;
     }
 
     /* Statics */

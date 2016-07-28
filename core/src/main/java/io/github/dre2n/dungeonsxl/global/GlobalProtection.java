@@ -5,7 +5,10 @@
  */
 package io.github.dre2n.dungeonsxl.global;
 
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import java.io.File;
 import java.util.Collection;
 import org.bukkit.World;
@@ -54,6 +57,7 @@ public abstract class GlobalProtection {
         return id;
     }
 
+    /* Actions */
     /**
      * Delete this protection.
      */
@@ -61,7 +65,6 @@ public abstract class GlobalProtection {
         protections.removeProtection(this);
     }
 
-    /* Abstracts */
     /**
      * Save the data to the default file
      */
@@ -77,6 +80,20 @@ public abstract class GlobalProtection {
         save(YamlConfiguration.loadConfiguration(file));
     }
 
+    public boolean onBreak(DGlobalPlayer dPlayer) {
+        if (dPlayer.isInBreakMode()) {
+            delete();
+            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.CMD_BREAK_PROTECTED_MODE));
+            dPlayer.setInBreakMode(false);
+            return false;
+
+        } else {
+            return true;
+        }
+    }
+
+    /* Abstracts */
     /**
      * @param config
      * the config to save the protection to

@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.GamePlaceableBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
