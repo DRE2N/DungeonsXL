@@ -176,12 +176,12 @@ public class PlayerListener implements Listener {
                         }
                     }
                 }
-            }
 
-            for (LockedDoor door : dGameWorld.getLockedDoors()) {
-                if (clickedBlock.equals(door.getBlock()) || clickedBlock.equals(door.getAttachedBlock())) {
-                    event.setCancelled(true);
-                    return;
+                for (LockedDoor door : dGameWorld.getLockedDoors()) {
+                    if (clickedBlock.equals(door.getBlock()) || clickedBlock.equals(door.getAttachedBlock())) {
+                        event.setCancelled(true);
+                        return;
+                    }
                 }
             }
         }
