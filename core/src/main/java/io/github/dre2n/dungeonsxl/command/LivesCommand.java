@@ -62,10 +62,10 @@ public class LivesCommand extends BRCommand {
 
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer != null) {
-            MessageUtil.sendMessage(player, DMessages.CMD_LIVES.getMessage(player.getName(), String.valueOf(dPlayer.getLives())));
+            MessageUtil.sendMessage(sender, DMessages.CMD_LIVES.getMessage(player.getName(), String.valueOf(dPlayer.getLives())));
 
         } else {
-            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
         }
     }
 
