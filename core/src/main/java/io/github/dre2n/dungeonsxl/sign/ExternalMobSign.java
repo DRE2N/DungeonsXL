@@ -229,6 +229,11 @@ public class ExternalMobSign extends DSign implements MobSign {
                 } else {
                     provider = ExternalMobPlugin.MYTHIC_MOBS;
                 }
+
+                if (provider == null) {
+                    markAsErroneous();
+                    return;
+                }
             }
         }
 
