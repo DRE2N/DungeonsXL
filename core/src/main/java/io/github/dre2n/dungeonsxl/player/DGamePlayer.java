@@ -74,6 +74,8 @@ public class DGamePlayer extends DInstancePlayer {
     private int initialLives = -1;
     private int lives;
 
+    private DGroup stealing;
+
     public DGamePlayer(Player player, DGameWorld world) {
         super(player, world.getWorld());
 
@@ -363,6 +365,28 @@ public class DGamePlayer extends DInstancePlayer {
      */
     public void setLives(int lives) {
         this.lives = lives;
+    }
+
+    /**
+     * @return if the player is stealing a flag
+     */
+    public boolean isStealing() {
+        return stealing != null;
+    }
+
+    /**
+     * @return the group whose flag is stolen
+     */
+    public DGroup getRobbedGroup() {
+        return stealing;
+    }
+
+    /**
+     * @param dGroup
+     * the group whose flag is stolen
+     */
+    public void setRobbedGroup(DGroup dGroup) {
+        stealing = dGroup;
     }
 
     /* Actions */

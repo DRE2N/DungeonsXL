@@ -91,7 +91,7 @@ public class BlockListener implements Listener {
         // Deny DGameWorld block breaking
         DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
-            if (gameWorld.onBreak(player, block)) {
+            if (gameWorld.onBreak(event)) {
                 event.setCancelled(true);
             }
         }

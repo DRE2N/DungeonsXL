@@ -24,7 +24,6 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
@@ -36,6 +35,13 @@ import io.github.dre2n.dungeonsxl.trigger.RedstoneTrigger;
 import io.github.dre2n.dungeonsxl.trigger.Trigger;
 import io.github.dre2n.dungeonsxl.trigger.TriggerType;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypeDefault;
+import io.github.dre2n.dungeonsxl.world.block.GameBlock;
+import io.github.dre2n.dungeonsxl.world.block.LockedDoor;
+import io.github.dre2n.dungeonsxl.world.block.MultiBlock;
+import io.github.dre2n.dungeonsxl.world.block.PlaceableBlock;
+import io.github.dre2n.dungeonsxl.world.block.RewardChest;
+import io.github.dre2n.dungeonsxl.world.block.TeamBed;
+import io.github.dre2n.dungeonsxl.world.block.TeamFlag;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -55,6 +61,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -69,12 +76,18 @@ public class DGameWorld extends DInstanceWorld {
 
     // TO DO: Which lists actually need to be CopyOnWriteArrayLists?
     private List<Block> placedBlocks = new LinkedList<>();
-    private CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks = new CopyOnWriteArrayList<>();
+
+    private Set<GameBlock> gameBlocks = new HashSet<>();
+    private Set<LockedDoor> lockedDoors = new HashSet<>();
+    private Set<PlaceableBlock> placeableBlocks = new HashSet<>();
+    private Set<RewardChest> rewardChests = new HashSet<>();
+    private Set<TeamBed> teamBeds = new HashSet<>();
+    private Set<TeamFlag> teamFlags = new HashSet<>();
+
     private List<ItemStack> secureObjects = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Sign> classesSigns = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<RewardChest> rewardChests = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Trigger> triggers = new CopyOnWriteArrayList<>();
 
@@ -163,16 +176,83 @@ public class DGameWorld extends DInstanceWorld {
     /**
      * @return the placeableBlocks
      */
-    public CopyOnWriteArrayList<GamePlaceableBlock> getPlaceableBlocks() {
+    public Set<GameBlock> getGameBlocks() {
+        return gameBlocks;
+    }
+
+    /**
+     * @param gameBlock
+     * the gameBlock to add
+     */
+    public void addGameBlock(GameBlock gameBlock) {
+        gameBlocks.add(gameBlock);
+
+        if (gameBlock instanceof LockedDoor) {
+            lockedDoors.add((LockedDoor) gameBlock);
+        } else if (gameBlock instanceof PlaceableBlock) {
+            placeableBlocks.add((PlaceableBlock) gameBlock);
+        } else if (gameBlock instanceof RewardChest) {
+            rewardChests.add((RewardChest) gameBlock);
+        } else if (gameBlock instanceof TeamBed) {
+            teamBeds.add((TeamBed) gameBlock);
+        } else if (gameBlock instanceof TeamFlag) {
+            teamFlags.add((TeamFlag) gameBlock);
+        }
+    }
+
+    /**
+     * @param gameBlock
+     * the gameBlock to remove
+     */
+    public void removeGameBlock(GameBlock gameBlock) {
+        gameBlocks.remove(gameBlock);
+
+        if (gameBlock instanceof LockedDoor) {
+            lockedDoors.remove((LockedDoor) gameBlock);
+        } else if (gameBlock instanceof PlaceableBlock) {
+            placeableBlocks.remove((PlaceableBlock) gameBlock);
+        } else if (gameBlock instanceof RewardChest) {
+            rewardChests.remove((RewardChest) gameBlock);
+        } else if (gameBlock instanceof TeamBed) {
+            teamBeds.remove((TeamBed) gameBlock);
+        } else if (gameBlock instanceof TeamFlag) {
+            teamFlags.remove((TeamFlag) gameBlock);
+        }
+    }
+
+    /**
+     * @return the rewardChests
+     */
+    public Set<RewardChest> getRewardChests() {
+        return rewardChests;
+    }
+
+    /**
+     * @return the locked doors
+     */
+    public Set<LockedDoor> getLockedDoors() {
+        return lockedDoors;
+    }
+
+    /**
+     * @return the placeable blocks
+     */
+    public Set<PlaceableBlock> getPlaceableBlocks() {
         return placeableBlocks;
     }
 
     /**
-     * @param placeableBlocks
-     * the placeableBlocks to set
+     * @return the team beds
      */
-    public void setPlaceableBlocks(CopyOnWriteArrayList<GamePlaceableBlock> placeableBlocks) {
-        this.placeableBlocks = placeableBlocks;
+    public Set<TeamBed> getTeamBeds() {
+        return teamBeds;
+    }
+
+    /**
+     * @return the team flags
+     */
+    public Set<TeamFlag> getTeamFlags() {
+        return teamFlags;
     }
 
     /**
@@ -241,21 +321,6 @@ public class DGameWorld extends DInstanceWorld {
      */
     public void removeDMob(DMob dMob) {
         dMobs.remove(dMob);
-    }
-
-    /**
-     * @return the rewardChests
-     */
-    public CopyOnWriteArrayList<RewardChest> getRewardChests() {
-        return rewardChests;
-    }
-
-    /**
-     * @param rewardChests
-     * the rewardChests to set
-     */
-    public void setRewardChests(CopyOnWriteArrayList<RewardChest> rewardChests) {
-        this.rewardChests = rewardChests;
     }
 
     /**
@@ -460,16 +525,34 @@ public class DGameWorld extends DInstanceWorld {
         }
     }
 
-    public boolean onBreak(Player player, Block block) {
+    /**
+     * Handles what happens when a player breaks a block.
+     *
+     * @param event
+     * the passed Bukkit event
+     * @return if the event is cancelled
+     */
+    public boolean onBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
         for (DSign dSign : dSigns) {
-            if (dSign.getSign().getBlock().equals(block)) {
+            if (block.equals(dSign.getSign().getBlock()) && dSign.getType().isProtected()) {
                 return true;
             }
         }
 
-        for (RewardChest rChest : rewardChests) {
-            if (rChest.getChest().getBlock().equals(block)) {
-                return true;
+        for (GameBlock gameBlock : gameBlocks) {
+            if (block.equals(gameBlock.getBlock())) {
+                if (gameBlock.onBreak(event)) {
+                    return true;
+                }
+
+            } else if (gameBlock instanceof MultiBlock) {
+                if (block.equals(((MultiBlock) gameBlock).getAttachedBlock())) {
+                    if (gameBlock.onBreak(event)) {
+                        return true;
+                    }
+                }
             }
         }
 
@@ -505,6 +588,16 @@ public class DGameWorld extends DInstanceWorld {
         return true;
     }
 
+    /**
+     * Handles what happens when a player places a block.
+     *
+     * @param player
+     * @param block
+     * @param against
+     * @param hand
+     * the event parameters.
+     * @return if the event is cancelled
+     */
     public boolean onPlace(Player player, Block block, Block against, ItemStack hand) {
         // Workaround for a bug that would allow 3-Block-high jumping
         Location loc = player.getLocation();
@@ -525,7 +618,7 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         GameRules rules = game.getRules();
-        if (!rules.canPlaceBlocks() && !GamePlaceableBlock.canBuildHere(block, block.getFace(against), hand.getType(), this)) {
+        if (!rules.canPlaceBlocks() && !PlaceableBlock.canBuildHere(block, block.getFace(against), hand.getType(), this)) {
             return true;
         }
 

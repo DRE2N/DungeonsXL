@@ -14,36 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.sign;
+package io.github.dre2n.dungeonsxl.world.block;
+
+import org.bukkit.block.Block;
 
 /**
+ * In some cases, a "game block" might actually be a structure with multiple blocks,
+ * like a bed or a door with two halfs. These GameBlocks implement MultiBlock.
+ *
  * @author Daniel Saukel
  */
-public interface DSignType {
+public interface MultiBlock {
 
-    /**
-     * @return the name
-     */
-    public String getName();
-
-    /**
-     * @return the buildPermission
-     */
-    public String getBuildPermission();
-
-    /**
-     * @return if the sign gets initialized when the dungeon is loaded instead of when the game starts
-     */
-    public boolean isOnDungeonInit();
-
-    /**
-     * @return if the sign block should be destroyable after the initialization
-     */
-    public boolean isProtected();
-
-    /**
-     * @return the handler
-     */
-    public Class<? extends DSign> getHandler();
+    public Block getAttachedBlock();
 
 }

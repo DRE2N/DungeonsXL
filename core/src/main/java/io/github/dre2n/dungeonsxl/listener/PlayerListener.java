@@ -36,13 +36,13 @@ import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
-import io.github.dre2n.dungeonsxl.world.block.RewardChest;
-import io.github.dre2n.dungeonsxl.sign.OpenDoorSign;
 import io.github.dre2n.dungeonsxl.task.RespawnTask;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.block.LockedDoor;
+import io.github.dre2n.dungeonsxl.world.block.RewardChest;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -117,9 +117,8 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
-
         if (dPlayer.getLives() != -1) {
+            dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
             MessageUtil.sendMessage(player, DMessages.PLAYER_DEATH.getMessage(String.valueOf(dPlayer.getLives())));
 
             if (game.getRules().getKeepInventoryOnDeath()) {
@@ -142,6 +141,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
         Block clickedBlock = event.getClickedBlock();
+        DGameWorld dGameWorld = DGameWorld.getByWorld(player.getWorld());
 
         if (dGlobalPlayer.isInBreakMode()) {
             return;
@@ -149,7 +149,7 @@ public class PlayerListener implements Listener {
 
         if (clickedBlock != null) {
             // Block Enderchests
-            if (DGameWorld.getByWorld(player.getWorld()) != null || DEditWorld.getByWorld(player.getWorld()) != null) {
+            if (dGameWorld != null || DEditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.ENDER_CHEST) {
                         if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
@@ -167,7 +167,7 @@ public class PlayerListener implements Listener {
             }
 
             // Block Dispensers
-            if (DGameWorld.getByWorld(player.getWorld()) != null) {
+            if (dGameWorld != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.DISPENSER) {
                         if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
@@ -175,6 +175,13 @@ public class PlayerListener implements Listener {
                             event.setCancelled(true);
                         }
                     }
+                }
+            }
+
+            for (LockedDoor door : dGameWorld.getLockedDoors()) {
+                if (clickedBlock.equals(door.getBlock()) || clickedBlock.equals(door.getAttachedBlock())) {
+                    event.setCancelled(true);
+                    return;
                 }
             }
         }
@@ -298,9 +305,6 @@ public class PlayerListener implements Listener {
                         }
                     }
                 }
-
-            } else if (OpenDoorSign.isProtected(clickedBlock)) {
-                event.setCancelled(true);
             }
         }
     }

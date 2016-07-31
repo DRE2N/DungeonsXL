@@ -16,22 +16,30 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
-import io.github.dre2n.dungeonsxl.world.block.PlaceableBlock;
+import io.github.dre2n.dungeonsxl.world.block.ProtectedBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * @author Daniel Saukel
  */
-public class PlaceSign extends DSign {
+public class ProtectionSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.PLACE;
+    private DSignType type = DSignTypeDefault.PROTECTION;
 
-    public PlaceSign(Sign sign, String[] lines, DGameWorld gameWorld) {
+    public ProtectionSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
+    /* Getters and setters */
+    @Override
+    public DSignType getType() {
+        return type;
+    }
+
+    /* Actions */
     @Override
     public boolean check() {
         return true;
@@ -39,13 +47,8 @@ public class PlaceSign extends DSign {
 
     @Override
     public void onInit() {
-        getGameWorld().addGameBlock(new PlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
+        getGameWorld().addGameBlock(new ProtectedBlock(BlockUtil.getAttachedBlock(getSign().getBlock())));
         getSign().getBlock().setType(Material.AIR);
-    }
-
-    @Override
-    public DSignType getType() {
-        return type;
     }
 
 }

@@ -22,7 +22,9 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.edit.DEditPlayerEscapeEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
@@ -67,12 +69,17 @@ public class LeaveCommand extends BRCommand {
             return;
         }
 
-        DEditPlayerEscapeEvent dPlayerEscapeEvent = new DEditPlayerEscapeEvent((DEditPlayer) dPlayer);
-        plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
+        if (dPlayer instanceof DGamePlayer) {
+            DGamePlayerEscapeEvent dPlayerEscapeEvent = new DGamePlayerEscapeEvent((DGamePlayer) dPlayer);
+            plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
+            if (dPlayerEscapeEvent.isCancelled()) {
+                return;
+            }
+        }
+
         DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
         plugin.getServer().getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
-
-        if (dPlayerEscapeEvent.isCancelled() || dPlayerLeaveDGroupEvent.isCancelled()) {
+        if (dPlayerLeaveDGroupEvent.isCancelled()) {
             return;
         }
 

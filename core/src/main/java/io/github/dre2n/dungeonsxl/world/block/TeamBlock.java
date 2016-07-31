@@ -14,36 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.sign;
+package io.github.dre2n.dungeonsxl.world.block;
+
+import io.github.dre2n.dungeonsxl.player.DGroup;
+import org.bukkit.block.Block;
 
 /**
  * @author Daniel Saukel
  */
-public interface DSignType {
+public abstract class TeamBlock extends GameBlock {
+
+    protected DGroup owner;
+
+    public TeamBlock(Block block, DGroup owner) {
+        super(block);
+        this.owner = owner;
+    }
+
+    /* Getters and setters */
+    /**
+     * @return the group that owns the flag
+     */
+    public DGroup getOwner() {
+        return owner;
+    }
 
     /**
-     * @return the name
+     * @param owner
+     * the owner group to set
      */
-    public String getName();
-
-    /**
-     * @return the buildPermission
-     */
-    public String getBuildPermission();
-
-    /**
-     * @return if the sign gets initialized when the dungeon is loaded instead of when the game starts
-     */
-    public boolean isOnDungeonInit();
-
-    /**
-     * @return if the sign block should be destroyable after the initialization
-     */
-    public boolean isProtected();
-
-    /**
-     * @return the handler
-     */
-    public Class<? extends DSign> getHandler();
+    public void setOwner(DGroup owner) {
+        this.owner = owner;
+    }
 
 }

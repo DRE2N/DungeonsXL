@@ -14,36 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.sign;
+package io.github.dre2n.dungeonsxl.world.block;
+
+import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 
 /**
  * @author Daniel Saukel
  */
-public interface DSignType {
+public class ProtectedBlock extends GameBlock {
 
-    /**
-     * @return the name
-     */
-    public String getName();
+    public ProtectedBlock(Block block) {
+        super(block);
+    }
 
-    /**
-     * @return the buildPermission
-     */
-    public String getBuildPermission();
-
-    /**
-     * @return if the sign gets initialized when the dungeon is loaded instead of when the game starts
-     */
-    public boolean isOnDungeonInit();
-
-    /**
-     * @return if the sign block should be destroyable after the initialization
-     */
-    public boolean isProtected();
-
-    /**
-     * @return the handler
-     */
-    public Class<? extends DSign> getHandler();
+    /* Actions */
+    @Override
+    public boolean onBreak(BlockBreakEvent event) {
+        return true;
+    }
 
 }

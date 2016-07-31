@@ -17,43 +17,27 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.BlockUtil;
+import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
-import io.github.dre2n.dungeonsxl.world.block.LockedDoor;
+import io.github.dre2n.dungeonsxl.world.block.TeamBed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.material.Door;
 
 /**
  * @author Daniel Saukel
  */
-public class OpenDoorSign extends DSign {
+public class BedSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.OPEN_DOOR;
+    private DSignType type = DSignTypeDefault.BED;
 
-    private LockedDoor door;
+    private int team;
 
-    public OpenDoorSign(Sign sign, String[] lines, DGameWorld gameWorld) {
+    public BedSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
     /* Getters and setters */
-    /**
-     * @return the door to open;
-     */
-    public LockedDoor getDoor() {
-        return door;
-    }
-
-    /**
-     * @param door
-     * the door to open
-     */
-    public void setDoor(LockedDoor door) {
-        this.door = door;
-    }
-
     @Override
     public DSignType getType() {
         return type;
@@ -62,31 +46,19 @@ public class OpenDoorSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return true;
+        return NumberUtil.parseInt(lines[1], -1) != -1;
     }
 
     @Override
     public void onInit() {
+        this.team = NumberUtil.parseInt(lines[1]);
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
-        if (block.getState().getData() instanceof Door) {
-            if (block.getRelative(BlockFace.DOWN).getType() == block.getType()) {
-                door = new LockedDoor(block.getRelative(BlockFace.DOWN));
-            } else {
-                door = new LockedDoor(block);
-            }
-            getGameWorld().addGameBlock(door);
 
+        if (block.getType() == Material.BED_BLOCK) {
+            getGameWorld().addGameBlock(new TeamBed(block, getGame().getDGroups().get(team)));
             getSign().getBlock().setType(Material.AIR);
-
         } else {
             markAsErroneous();
-        }
-    }
-
-    @Override
-    public void onTrigger() {
-        if (door != null) {
-            door.open();
         }
     }
 

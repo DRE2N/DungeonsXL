@@ -16,36 +16,40 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
-import io.github.dre2n.dungeonsxl.world.block.PlaceableBlock;
-import org.bukkit.Material;
+import io.github.dre2n.dungeonsxl.world.block.TeamFlag;
 import org.bukkit.block.Sign;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * @author Daniel Saukel
  */
-public class PlaceSign extends DSign {
+public class FlagSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.PLACE;
+    private DSignType type = DSignTypeDefault.FLAG;
 
-    public PlaceSign(Sign sign, String[] lines, DGameWorld gameWorld) {
+    private int team;
+
+    public FlagSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
+    /* Getters and setters */
+    @Override
+    public DSignType getType() {
+        return type;
+    }
+
+    /* Actions */
     @Override
     public boolean check() {
-        return true;
+        return NumberUtil.parseInt(lines[1], -1) != -1;
     }
 
     @Override
     public void onInit() {
-        getGameWorld().addGameBlock(new PlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
-        getSign().getBlock().setType(Material.AIR);
-    }
-
-    @Override
-    public DSignType getType() {
-        return type;
+        this.team = NumberUtil.parseInt(lines[1]);
+        getGameWorld().addGameBlock(new TeamFlag(getSign().getBlock(), team, getGame().getDGroups().get(team)));
     }
 
 }
