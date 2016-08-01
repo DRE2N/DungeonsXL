@@ -33,8 +33,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.material.Directional;
-import org.bukkit.material.MaterialData;
 
 /**
  * @author Frank Baumann, Daniel Saukel

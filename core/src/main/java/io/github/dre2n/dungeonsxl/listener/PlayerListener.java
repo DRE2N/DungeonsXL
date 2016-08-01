@@ -702,25 +702,27 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+
         DLootInventory inventory = DLootInventory.getByPlayer(player);
-
-        DPortal dPortal = DPortal.getByLocation(player.getEyeLocation());
-        //TODO: Fix chat spam
-        if (dPortal != null) {
-            dPortal.teleport(player);
-            return;
-        }
-
-        if (inventory == null) {
-            return;
-        }
-
-        if (player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
+        if (inventory != null && player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
                 && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(-1, 0, 0).getType() != Material.PORTAL
                 && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
             inventory.setInventoryView(player.openInventory(inventory.getInventory()));
             inventory.setTime(System.currentTimeMillis());
         }
+
+        DPortal dPortal = DPortal.getByLocation(player.getEyeLocation());
+        if (dPortal == null) {
+            return;
+        }
+
+        Block blockFrom = event.getFrom().getBlock();
+        Block blockTo = event.getTo().getBlock();
+        if (blockFrom.equals(blockTo)) {
+            return;
+        }
+
+        dPortal.teleport(player);
     }
 
 }
