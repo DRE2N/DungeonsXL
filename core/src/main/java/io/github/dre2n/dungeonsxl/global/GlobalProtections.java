@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -225,8 +226,9 @@ public class GlobalProtections {
                     if (data.contains(preString)) {
                         Block block1 = world.getBlockAt(data.getInt(preString + "loc1.x"), data.getInt(preString + "loc1.y"), data.getInt(preString + "loc1.z"));
                         Block block2 = world.getBlockAt(data.getInt(preString + "loc2.x"), data.getInt(preString + "loc2.y"), data.getInt(preString + "loc2.z"));
-                        DPortal dPortal = new DPortal(id, block1, block2, true);
-                        dPortal.create();
+                        Material material = Material.getMaterial(data.getString(preString + "material"));
+                        DPortal dPortal = new DPortal(id, block1, block2, material != null ? material : Material.PORTAL, true);
+                        dPortal.create(null);
                     }
 
                 } while (data.contains(preString));

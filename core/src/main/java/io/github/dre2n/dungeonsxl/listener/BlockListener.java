@@ -32,6 +32,7 @@ import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DInstanceWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -58,10 +59,6 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPhysics(BlockPhysicsEvent event) {
-        if (event.getBlock().getType() != Material.PORTAL) {
-            return;
-        }
-
         if (DPortal.getByBlock(event.getBlock()) != null) {
             event.setCancelled(true);
         }
@@ -199,21 +196,13 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSpread(BlockSpreadEvent event) {
-        Block block = event.getBlock();
-        // Block the Spread off Vines
-        if (block.getType() != Material.VINE) {
-            return;
-        }
+        Block block = event.getSource();
 
-        // Check GameWorlds
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getBlock().getWorld());
-        if (gameWorld != null) {
+        DInstanceWorld instance = plugin.getDWorlds().getInstanceByName(block.getWorld().getName());
+        if (instance != null && block.getType() == Material.VINE) {
             event.setCancelled(true);
-        }
 
-        // Check EditWorlds
-        DEditWorld editWorld = DEditWorld.getByWorld(event.getBlock().getWorld());
-        if (editWorld != null) {
+        } else if (DPortal.getByBlock(block) != null) {
             event.setCancelled(true);
         }
     }

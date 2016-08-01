@@ -204,7 +204,7 @@ public class PlayerListener implements Listener {
                                     } else if (dPortal.getBlock2() == null) {
                                         dPortal.setBlock2(event.getClickedBlock());
                                         dPortal.setActive(true);
-                                        dPortal.create();
+                                        dPortal.create(dGlobalPlayer);
                                         MessageUtil.sendMessage(player, DMessages.PLAYER_PORTAL_CREATED.getMessage());
                                     }
                                     event.setCancelled(true);
