@@ -19,7 +19,6 @@ package io.github.dre2n.dungeonsxl.world.block;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.material.Door;
 
 /**
  * @author Daniel Saukel
@@ -54,8 +53,7 @@ public class LockedDoor extends GameBlock implements MultiBlock {
      * Opens the door.
      */
     public void open() {
-        ((Door) block.getState().getData()).setOpen(true);
-        block.getState().update(true);
+        block.setData((byte) (block.getData() + 4));
     }
 
 }

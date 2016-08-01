@@ -33,6 +33,7 @@ public class OpenDoorSign extends DSign {
     private DSignType type = DSignTypeDefault.OPEN_DOOR;
 
     private LockedDoor door;
+    private boolean active = true;
 
     public OpenDoorSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -52,6 +53,21 @@ public class OpenDoorSign extends DSign {
      */
     public void setDoor(LockedDoor door) {
         this.door = door;
+    }
+
+    /**
+     * @return if the sign is active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active
+     * toggle the sign active
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -85,8 +101,9 @@ public class OpenDoorSign extends DSign {
 
     @Override
     public void onTrigger() {
-        if (door != null) {
+        if (door != null && active) {
             door.open();
+            active = false;
         }
     }
 
