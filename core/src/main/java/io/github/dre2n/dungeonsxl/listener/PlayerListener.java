@@ -49,6 +49,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -406,7 +407,12 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPortal(PlayerPortalEvent event) {
-        if (DPortal.getByLocation(event.getFrom()) != null) {
+        Block block1 = event.getFrom().getBlock();
+        Block block2 = block1.getRelative(BlockFace.WEST);
+        Block block3 = block1.getRelative(BlockFace.NORTH);
+        Block block4 = block1.getRelative(BlockFace.EAST);
+        Block block5 = block1.getRelative(BlockFace.SOUTH);
+        if (DPortal.getByBlock(block1) != null || DPortal.getByBlock(block2) != null || DPortal.getByBlock(block3) != null || DPortal.getByBlock(block4) != null || DPortal.getByBlock(block5) != null) {
             event.setCancelled(true);
         }
     }
