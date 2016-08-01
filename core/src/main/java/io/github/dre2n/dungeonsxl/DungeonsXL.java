@@ -64,7 +64,7 @@ public class DungeonsXL extends BRPlugin {
 
     private static DungeonsXL instance;
 
-    public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
+    public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
     public static File BACKUPS;
     public static File LANGUAGES;
     public static File MAPS;
