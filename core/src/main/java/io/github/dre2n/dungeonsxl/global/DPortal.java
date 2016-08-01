@@ -33,6 +33,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.material.Directional;
+import org.bukkit.material.MaterialData;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -119,7 +121,6 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
-        
         int x1 = block1.getX(), y1 = block1.getY(), z1 = block1.getZ();
         int x2 = block2.getX(), y2 = block2.getY(), z2 = block2.getZ();
         int xcount = 0, ycount = 0, zcount = 0;
@@ -150,7 +151,12 @@ public class DPortal extends GlobalProtection {
                 do {
                     Material type = getWorld().getBlockAt(xx, yy, zz).getType();
                     if (!type.isSolid()) {
-                        getWorld().getBlockAt(xx, yy, zz).setType(material, false);
+                        Block block = getWorld().getBlockAt(xx, yy, zz);
+                        block.setType(material, false);
+                        if (player != null && material == Material.PORTAL) {
+                            float yaw = player.getPlayer().getLocation().getYaw();
+                            block.setData((yaw >= -135 & yaw < -45 || yaw >= -315 & yaw < -225) ? (byte) 2 : 1, false);
+                        }
                     }
 
                     zz = zz + zcount;
