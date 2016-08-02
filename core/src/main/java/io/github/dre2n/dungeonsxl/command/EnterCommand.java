@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,6 +51,13 @@ public class EnterCommand extends BRCommand {
 
         DGroup joining = args.length == 3 ? DGroup.getByName(args[1]) : DGroup.getByPlayer(captain);
         DGroup target = DGroup.getByName(targetName);
+
+        if (target == null) {
+            Player targetPlayer = Bukkit.getPlayer(targetName);
+            if (targetPlayer != null) {
+                target = DGroup.getByPlayer(targetPlayer);
+            }
+        }
 
         if (target == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_GROUP.getMessage(targetName));
