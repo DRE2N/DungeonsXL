@@ -422,7 +422,9 @@ public class GameRules {
         }
 
         if (initialLives == null) {
-            initialLives = defaultValues.hasLives() ? null : -1;
+            if (defaultValues.hasLives() != null) {
+                initialLives = defaultValues.hasLives() ? null : -1;
+            }
         }
     }
 
