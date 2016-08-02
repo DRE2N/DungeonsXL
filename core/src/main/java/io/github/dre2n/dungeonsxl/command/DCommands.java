@@ -48,6 +48,7 @@ public class DCommands extends BRCommands {
     public static PlayCommand PLAY = new PlayCommand();
     public static PortalCommand PORTAL = new PortalCommand();
     public static ReloadCommand RELOAD = new ReloadCommand();
+    public static RewardsCommand REWARDS = new RewardsCommand();
     public static SaveCommand SAVE = new SaveCommand();
     public static StatusCommand STATUS = new StatusCommand();
     public static TestCommand TEST = new TestCommand();
@@ -77,6 +78,7 @@ public class DCommands extends BRCommands {
                 PLAY,
                 PORTAL,
                 RELOAD,
+                REWARDS,
                 SAVE,
                 STATUS,
                 TEST,

@@ -25,6 +25,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.PlayerData;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import java.io.File;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -50,6 +51,7 @@ public class DGlobalPlayer {
 
     private ItemStack[] respawnInventory;
     private ItemStack[] respawnArmor;
+    private List<ItemStack> rewardItems;
 
     public DGlobalPlayer(Player player) {
         this(player, false);
@@ -225,6 +227,28 @@ public class DGlobalPlayer {
      */
     public boolean hasPermission(DPermissions permission) {
         return DPermissions.hasPermission(player, permission);
+    }
+
+    /**
+     * @return the reward items
+     */
+    public List<ItemStack> getRewardItems() {
+        return rewardItems;
+    }
+
+    /**
+     * @return if the player has reward items left
+     */
+    public boolean hasRewardItemsLeft() {
+        return rewardItems != null;
+    }
+
+    /**
+     * @param rewardItems
+     * the reward items to set
+     */
+    public void setRewardItems(List<ItemStack> rewardItems) {
+        this.rewardItems = rewardItems;
     }
 
     /**

@@ -59,6 +59,7 @@ public enum DPermissions {
     PLAY("play", OP),
     PORTAL("portal", OP),
     RELOAD("reload", OP),
+    REWARDS("rewards", TRUE),
     SAVE("save", OP),
     STATUS("status", OP),
     /**
