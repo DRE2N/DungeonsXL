@@ -26,6 +26,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -99,7 +100,12 @@ public class GroupCommand extends BRCommand {
                 return;
 
             } else if (args[1].equalsIgnoreCase("show") && DPermissions.hasPermission(sender, DPermissions.GROUP_ADMIN)) {
-                showGroup(DGroup.getByName(args[2]));
+                DGroup group = DGroup.getByName(args[2]);
+                Player player = Bukkit.getPlayer(args[2]);
+                if (group == null && player != null) {
+                    group = DGroup.getByPlayer(player);
+                }
+                showGroup(group);
                 return;
             }
         }
