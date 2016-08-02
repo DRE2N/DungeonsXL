@@ -25,6 +25,7 @@ public enum DSignTypeDefault implements DSignType {
 
     BED("Bed", "bed", false, false, BedSign.class),
     BLOCK("Block", "block", false, true, BlockSign.class),
+    BOSS_SHOP("BossShop", "bossshop", false, true, BossShopSign.class),
     CHECKPOINT("Checkpoint", "checkpoint", false, false, CheckpointSign.class),
     CHEST("Chest", "chest", false, false, ChestSign.class),
     CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, false, ChunkUpdaterSign.class),

@@ -68,6 +68,12 @@
             <artifactId>BetonQuest</artifactId>
             <version>1.8.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>BossShop</artifactId>
+            <version>2.6.9</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
