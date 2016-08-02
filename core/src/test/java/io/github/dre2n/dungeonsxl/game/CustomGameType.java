@@ -23,10 +23,11 @@ import org.bukkit.GameMode;
  */
 public enum CustomGameType implements GameType {
 
-    GHOST("My awesome game type", "Identifier", false, false, false, false, false, false, false, false, GameMode.SPECTATOR, false);
+    GHOST("My awesome game type", "Identifier", false, false, false, false, false, false, false, false, false, GameMode.SPECTATOR, false);
 
     private String displayName;
     private String signName;
+    private Boolean lastManStanding;
     private Boolean playerVersusPlayer;
     private Boolean friendlyFire;
     private Boolean mobWaves;
@@ -38,10 +39,11 @@ public enum CustomGameType implements GameType {
     private GameMode gameMode;
     private Boolean lives;
 
-    CustomGameType(String displayName, String signName, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean mobWaves, Boolean rewards,
+    CustomGameType(String displayName, String signName, Boolean lastManStanding, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean mobWaves, Boolean rewards,
             Boolean showTime, Boolean breakBlocks, Boolean breakPlacedBlocks, Boolean placeBlocks, GameMode gameMode, Boolean lives) {
         this.displayName = displayName;
         this.signName = signName;
+        this.lastManStanding = lastManStanding;
         this.playerVersusPlayer = playerVersusPlayer;
         this.friendlyFire = friendlyFire;
         this.mobWaves = mobWaves;
@@ -72,6 +74,16 @@ public enum CustomGameType implements GameType {
     @Override
     public void setSignName(String signName) {
         this.signName = signName;
+    }
+
+    @Override
+    public Boolean isLastManStanding() {
+        return lastManStanding;
+    }
+
+    @Override
+    public void setLastManStanding(Boolean lastManStanding) {
+        this.lastManStanding = lastManStanding;
     }
 
     @Override

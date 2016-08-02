@@ -54,7 +54,8 @@ public class GameRules {
         /* Fighting */
         DEFAULT_VALUES.playerVersusPlayer = false;
         DEFAULT_VALUES.friendlyFire = false;
-        DEFAULT_VALUES.initialLives = 3;
+        DEFAULT_VALUES.initialLives = -1;
+        DEFAULT_VALUES.initialGroupLives = -1;
 
         /* Timer */
         DEFAULT_VALUES.timeLastPlayed = 0;
@@ -98,6 +99,7 @@ public class GameRules {
     protected Boolean playerVersusPlayer;
     protected Boolean friendlyFire;
     protected Integer initialLives;
+    protected Integer initialGroupLives;
 
     /* Timer */
     protected Integer timeLastPlayed;
@@ -221,6 +223,13 @@ public class GameRules {
      */
     public int getInitialLives() {
         return initialLives;
+    }
+
+    /**
+     * @return the initial amount of group lives
+     */
+    public int getInitialGroupLives() {
+        return initialGroupLives;
     }
 
     // Timer
@@ -411,6 +420,10 @@ public class GameRules {
         if (gameMode == null) {
             gameMode = defaultValues.getGameMode();
         }
+
+        if (initialLives == null) {
+            initialLives = defaultValues.hasLives() ? null : -1;
+        }
     }
 
     /**
@@ -475,6 +488,10 @@ public class GameRules {
 
         if (initialLives == null) {
             initialLives = defaultValues.initialLives;
+        }
+
+        if (initialGroupLives == null) {
+            initialGroupLives = defaultValues.initialGroupLives;
         }
 
         /* Timer */

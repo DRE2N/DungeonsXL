@@ -23,26 +23,27 @@ import org.bukkit.GameMode;
  */
 public enum GameTypeDefault implements GameType {
 
-    ADVENTURE("Adventure", "Adventure", false, false, false, true, false, true, true, true, GameMode.ADVENTURE, true),
-    ADVENTURE_TIME_IS_RUNNING("Adventure - Time is Running", "Adventure TiR", false, false, false, true, true, true, true, true, GameMode.ADVENTURE, true),
-    APOCALYPSE_LAST_MAN_STANDING("Apocalypse", "Apocalypse LMS", true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    APOCALYPSE_LIMITED_MOBS("Apocalypse - Limited Mobs", "Apc Limited", true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    APOCALYPSE_TIME_IS_RUNNING("Apocalypse - Time is Running", "Apocalypse TiR", true, true, true, true, true, false, false, false, GameMode.SURVIVAL, true),
-    BEDWARS("Bedwars", "Bedwars", true, false, false, false, false, false, true, true, GameMode.SURVIVAL, true),
-    PVE_LAST_MAN_STANDING("Player versus Environment - Last Man Standing", "PvE LMS", false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    PVE_LIMITED_MOBS("Player versus Environment - Limited Mobs", "PvE Limited", false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    PVE_TIME_IS_RUNNING("Player versus Environment - Time is Running", "PvE TiR", false, false, true, true, true, false, false, false, GameMode.SURVIVAL, true),
-    PVP_FACTIONS_BATTLEFIELD("Player versus Player - Factions Battlefield", "FactionsPvP", true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
-    PVP_LAST_MAN_STANDING("Player versus Player - Last Man Standing", "PvP LMS", true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
-    QUEST("Quest", "Quest", false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
-    QUEST_TIME_IS_RUNNING("Quest - Time is Running", "Quest TiR", false, false, false, true, true, false, false, false, GameMode.SURVIVAL, true),
-    TEST("Test", "Test", false, false, false, false, true, true, true, true, GameMode.SURVIVAL, false),
-    TUTORIAL("Tutorial", "Tutorial", false, false, false, true, false, false, false, false, GameMode.SURVIVAL, false),
-    DEFAULT("Default", "Default", false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
+    ADVENTURE("Adventure", "Adventure", false, false, false, false, true, false, true, true, true, GameMode.ADVENTURE, true),
+    ADVENTURE_TIME_IS_RUNNING("Adventure - Time is Running", "Adventure TiR", false, false, false, false, true, true, true, true, true, GameMode.ADVENTURE, true),
+    APOCALYPSE_LAST_MAN_STANDING("Apocalypse", "Apocalypse LMS", true, true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    APOCALYPSE_LIMITED_MOBS("Apocalypse - Limited Mobs", "Apc Limited", false, true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    APOCALYPSE_TIME_IS_RUNNING("Apocalypse - Time is Running", "Apocalypse TiR", false, true, true, true, true, true, false, false, false, GameMode.SURVIVAL, true),
+    BEDWARS("Bedwars", "Bedwars", true, true, false, false, false, false, false, true, true, GameMode.SURVIVAL, false),
+    PVE_LAST_MAN_STANDING("Player versus Environment - Last Man Standing", "PvE LMS", true, false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    PVE_LIMITED_MOBS("Player versus Environment - Limited Mobs", "PvE Limited", false, false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    PVE_TIME_IS_RUNNING("Player versus Environment - Time is Running", "PvE TiR", false, false, false, true, true, true, false, false, false, GameMode.SURVIVAL, true),
+    PVP_FACTIONS_BATTLEFIELD("Player versus Player - Factions Battlefield", "FactionsPvP", true, true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
+    PVP_LAST_MAN_STANDING("Player versus Player - Last Man Standing", "PvP LMS", true, true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
+    QUEST("Quest", "Quest", false, false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
+    QUEST_TIME_IS_RUNNING("Quest - Time is Running", "Quest TiR", false, false, false, false, true, true, false, false, false, GameMode.SURVIVAL, true),
+    TEST("Test", "Test", false, false, false, false, false, true, true, true, true, GameMode.SURVIVAL, false),
+    TUTORIAL("Tutorial", "Tutorial", false, false, false, false, true, false, false, false, false, GameMode.SURVIVAL, false),
+    DEFAULT("Default", "Default", false, false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
     CUSTOM("Custom", "Custom");
 
     private String displayName;
     private String signName;
+    private Boolean lastManStanding;
     private Boolean playerVersusPlayer;
     private Boolean friendlyFire;
     private Boolean mobWaves;
@@ -54,10 +55,11 @@ public enum GameTypeDefault implements GameType {
     private GameMode gameMode;
     private Boolean lives;
 
-    GameTypeDefault(String displayName, String signName, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean mobWaves, Boolean rewards,
+    GameTypeDefault(String displayName, String signName, Boolean lastManStanding, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean mobWaves, Boolean rewards,
             Boolean showTime, Boolean breakBlocks, Boolean breakPlacedBlocks, Boolean placeBlocks, GameMode gameMode, Boolean lives) {
         this.displayName = displayName;
         this.signName = signName;
+        this.lastManStanding = lastManStanding;
         this.playerVersusPlayer = playerVersusPlayer;
         this.friendlyFire = friendlyFire;
         this.mobWaves = mobWaves;
@@ -73,6 +75,16 @@ public enum GameTypeDefault implements GameType {
     GameTypeDefault(String displayName, String signName) {
         this.displayName = displayName;
         this.signName = signName;
+    }
+
+    @Override
+    public Boolean isLastManStanding() {
+        return lastManStanding;
+    }
+
+    @Override
+    public void setLastManStanding(Boolean lastManStanding) {
+        this.lastManStanding = lastManStanding;
     }
 
     @Override

@@ -35,11 +35,8 @@ public class TeamFlag extends TeamBlock {
 
     public static final int WOOL = 35;
 
-    private byte teamId;
-
-    public TeamFlag(Block block, int teamId, DGroup owner) {
+    public TeamFlag(Block block, DGroup owner) {
         super(block, owner);
-        this.teamId = plugin.getMainConfig().getGroupColorPriority().get(teamId).byteValue();
         reset();
     }
 
@@ -48,7 +45,7 @@ public class TeamFlag extends TeamBlock {
      * Reset a team flag when the capturer dies.
      */
     public void reset() {
-        block.setTypeIdAndData(WOOL, teamId, false);
+        block.setTypeIdAndData(WOOL, owner.getDColor().getWoolData(), false);
     }
 
     @Override

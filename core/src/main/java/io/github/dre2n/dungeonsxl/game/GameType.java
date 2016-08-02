@@ -24,6 +24,17 @@ import org.bukkit.GameMode;
 public interface GameType {
 
     /**
+     * @return if the game ends when one group is left
+     */
+    public Boolean isLastManStanding();
+
+    /**
+     * @param lastManStanding
+     * set if the game ends when one group is left
+     */
+    public void setLastManStanding(Boolean lastManStanding);
+
+    /**
      * @return the displayName
      */
     public String getDisplayName();

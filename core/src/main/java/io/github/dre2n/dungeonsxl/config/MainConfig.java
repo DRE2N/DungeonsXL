@@ -21,6 +21,8 @@ import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.config.BRConfig;
 import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.DColor;
+import static io.github.dre2n.dungeonsxl.util.DColor.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +43,7 @@ public class MainConfig extends BRConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 11;
+    public static final int CONFIG_VERSION = 12;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -53,15 +55,22 @@ public class MainConfig extends BRConfig {
     private String tutorialEndGroup = "player";
 
     /* Announcers */
-    private List<Short> groupColorPriority = new ArrayList<>(Arrays.asList(
-            (short) 11,
-            (short) 14,
-            (short) 4,
-            (short) 5,
-            (short) 10,
-            (short) 1,
-            (short) 0,
-            (short) 15
+    private List<DColor> groupColorPriority = new ArrayList<>(Arrays.asList(
+            DARK_BLUE,
+            LIGHT_RED,
+            YELLOW,
+            LIGHT_GREEN,
+            PURPLE,
+            ORANGE,
+            WHITE,
+            BLACK,
+            LIGHT_BLUE,
+            DARK_GREEN,
+            DARK_RED,
+            LIGHT_GRAY,
+            CYAN,
+            MAGENTA,
+            DARK_GRAY
     ));
     private double announcementInterval = 30;
 
@@ -189,16 +198,16 @@ public class MainConfig extends BRConfig {
     /**
      * @return the group colors
      */
-    public List<Short> getGroupColorPriority() {
+    public List<DColor> getGroupColorPriority() {
         return groupColorPriority;
     }
 
     /**
-     * @param dataValues
-     * wool data values
+     * @param colors
+     * the colors to set
      */
-    public void setGroupColorPriority(List<Short> dataValues) {
-        groupColorPriority = dataValues;
+    public void setGroupColorPriority(List<DColor> colors) {
+        groupColorPriority = colors;
     }
 
     /**
@@ -392,7 +401,11 @@ public class MainConfig extends BRConfig {
         }
 
         if (!config.contains("groupColorPriority")) {
-            config.set("groupColorPriority", groupColorPriority);
+            ArrayList<String> strings = new ArrayList<>();
+            for (DColor color : groupColorPriority) {
+                strings.add(color.toString());
+            }
+            config.set("groupColorPriority", strings);
         }
 
         if (!config.contains("announcementInterval")) {
@@ -479,7 +492,12 @@ public class MainConfig extends BRConfig {
         }
 
         if (config.contains("groupColorPriority")) {
-            groupColorPriority = config.getShortList("groupColorPriority");
+            groupColorPriority.clear();
+            for (String color : config.getStringList("groupColorPriority")) {
+                if (EnumUtil.isValidEnum(DColor.class, color)) {
+                    groupColorPriority.add(DColor.valueOf(color));
+                }
+            }
         }
 
         if (config.contains("announcementInterval")) {

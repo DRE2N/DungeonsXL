@@ -49,7 +49,7 @@ public class FlagSign extends DSign {
     @Override
     public void onInit() {
         this.team = NumberUtil.parseInt(lines[1]);
-        getGameWorld().addGameBlock(new TeamFlag(getSign().getBlock(), team, getGame().getDGroups().get(team)));
+        getGameWorld().addGameBlock(new TeamFlag(getSign().getBlock(), getGame().getDGroups().get(team)));
     }
 
 }

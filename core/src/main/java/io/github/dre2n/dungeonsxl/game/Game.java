@@ -57,33 +57,44 @@ public class Game {
     private Map<String, Integer> waveKills = new HashMap<>();
 
     public Game(DGroup dGroup) {
-        dGroups.add(dGroup);
-        started = false;
-        fetchRules();
-
         plugin.getGames().add(this);
+
+        started = false;
+
+        dGroups.add(dGroup);
+        dGroup.setGameWorld(world);
+        fetchRules();
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
     }
 
     public Game(DGroup dGroup, DGameWorld world) {
-        dGroups.add(dGroup);
+        plugin.getGames().add(this);
+
         started = false;
         this.world = world;
-        fetchRules();
 
-        plugin.getGames().add(this);
+        dGroups.add(dGroup);
+        dGroup.setGameWorld(world);
+        fetchRules();
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
     }
 
     public Game(DGroup dGroup, String worldName) {
         plugin.getGames().add(this);
 
-        dGroups.add(dGroup);
         started = false;
         DResourceWorld resource = plugin.getDWorlds().getResourceByName(worldName);
         if (resource != null) {
             world = resource.instantiateAsGameWorld();
         }
+
+        dGroups.add(dGroup);
         dGroup.setGameWorld(world);
         fetchRules();
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
     }
 
     public Game(DGroup dGroup, GameType type, DGameWorld world) {
@@ -91,13 +102,19 @@ public class Game {
     }
 
     public Game(List<DGroup> dGroups, GameType type, DGameWorld world) {
+        plugin.getGames().add(this);
+
         this.dGroups = dGroups;
         this.type = type;
         this.world = world;
         this.started = true;
-        fetchRules();
 
-        plugin.getGames().add(this);
+        for (DGroup dGroup : dGroups) {
+            dGroup.setGameWorld(world);
+            fetchRules();
+            dGroup.setInitialLives(rules.getInitialGroupLives());
+            dGroup.setLives(rules.getInitialGroupLives());
+        }
     }
 
     /**
@@ -113,6 +130,10 @@ public class Game {
      */
     public void addDGroup(DGroup dGroup) {
         dGroups.add(dGroup);
+
+        dGroup.setGameWorld(world);
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
     }
 
     /**

@@ -80,6 +80,13 @@ public class DGlobalPlayer {
 
     /* Getters and setters */
     /**
+     * @return the player's name
+     */
+    public String getName() {
+        return player.getName();
+    }
+
+    /**
      * @return the Bukkit player
      */
     public Player getPlayer() {

@@ -190,6 +190,10 @@ public class WorldConfig extends GameRules {
             initialLives = configFile.getInt("initialLives");
         }
 
+        if (configFile.contains("initialGroupLives")) {
+            initialGroupLives = configFile.getInt("initialGroupLives");
+        }
+
         /* Lobby */
         if (configFile.contains("isLobbyDisabled")) {
             lobbyDisabled = configFile.getBoolean("isLobbyDisabled");

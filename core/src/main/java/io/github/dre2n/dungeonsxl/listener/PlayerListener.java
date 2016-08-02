@@ -21,7 +21,6 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
@@ -87,54 +86,11 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-
-        DGameWorld gameWorld = DGameWorld.getByWorld(player.getLocation().getWorld());
-        if (gameWorld == null) {
-            return;
-        }
-
-        Game game = Game.getByGameWorld(gameWorld);
-        if (game == null) {
-            return;
-        }
-
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
         }
-
-        DGamePlayerDeathEvent dPlayerDeathEvent = new DGamePlayerDeathEvent(dPlayer, event, 1);
-        plugin.getServer().getPluginManager().callEvent(dPlayerDeathEvent);
-
-        if (dPlayerDeathEvent.isCancelled()) {
-            return;
-        }
-
-        if (gameWorld.getGame() != null) {
-            if (!gameWorld.getGame().getType().hasLives()) {
-                return;
-            }
-        } else {
-            return;
-        }
-
-        if (dPlayer.getLives() != -1) {
-            dPlayer.setLives(dPlayer.getLives() - dPlayerDeathEvent.getLostLives());
-            MessageUtil.sendMessage(player, DMessages.PLAYER_DEATH.getMessage(String.valueOf(dPlayer.getLives())));
-
-            if (game.getRules().getKeepInventoryOnDeath()) {
-                dPlayer.setRespawnInventory(event.getEntity().getInventory().getContents());
-                dPlayer.setRespawnArmor(event.getEntity().getInventory().getArmorContents());
-                // Delete all drops
-                for (ItemStack item : event.getDrops()) {
-                    item.setType(Material.AIR);
-                }
-            }
-        }
-
-        if (dPlayer.getLives() == 0 && dPlayer.isReady()) {
-            dPlayer.kill();
-        }
+        dPlayer.onDeath(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -470,11 +426,11 @@ public class PlayerListener implements Listener {
                 ((DGamePlayer) dPlayer).leave();
 
             } else if (timeUntilKickOfflinePlayer > 0) {
-                dGroup.sendMessage(DMessages.PLAYER_OFFLINE.getMessage(dPlayer.getPlayer().getName(), String.valueOf(timeUntilKickOfflinePlayer)), player);
+                dGroup.sendMessage(DMessages.PLAYER_OFFLINE.getMessage(dPlayer.getName(), String.valueOf(timeUntilKickOfflinePlayer)), player);
                 ((DGamePlayer) dPlayer).setOfflineTime(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
 
             } else {
-                dGroup.sendMessage(DMessages.PLAYER_OFFLINE_NEVER.getMessage(dPlayer.getPlayer().getName()), player);
+                dGroup.sendMessage(DMessages.PLAYER_OFFLINE_NEVER.getMessage(dPlayer.getName()), player);
             }
 
         } else if (dPlayer instanceof DEditPlayer) {

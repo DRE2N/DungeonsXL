@@ -21,6 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -61,11 +62,15 @@ public class LivesCommand extends BRCommand {
         }
 
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        DGroup dGroup = dPlayer != null ? dPlayer.getDGroup() : DGroup.getByName(args[1]);
         if (dPlayer != null) {
-            MessageUtil.sendMessage(sender, DMessages.CMD_LIVES.getMessage(player.getName(), String.valueOf(dPlayer.getLives())));
+            MessageUtil.sendMessage(sender, DMessages.CMD_LIVES_PLAYER.getMessage(dPlayer.getName(), String.valueOf(dPlayer.getLives() == -1 ? "UNLIMITED" : dPlayer.getLives())));
+
+        } else if (dGroup != null) {
+            MessageUtil.sendMessage(sender, DMessages.CMD_LIVES_GROUP.getMessage(dGroup.getName(), String.valueOf(dGroup.getLives() == -1 ? "UNLIMITED" : dPlayer.getLives())));
 
         } else {
-            MessageUtil.sendMessage(sender, DMessages.ERROR_NOT_IN_DUNGEON.getMessage());
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));
         }
     }
 

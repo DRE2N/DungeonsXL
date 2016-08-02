@@ -26,6 +26,7 @@ import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
@@ -39,6 +40,7 @@ import io.github.dre2n.dungeonsxl.task.CreateDInstancePlayerTask;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
+import io.github.dre2n.dungeonsxl.world.block.TeamFlag;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
@@ -62,6 +65,8 @@ import org.bukkit.potion.PotionEffect;
 public class DGamePlayer extends DInstancePlayer {
 
     // Variables
+    private DGroup dGroup;
+
     private boolean ready = false;
     private boolean finished = false;
 
@@ -131,6 +136,25 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /* Getters and setters */
+    @Override
+    public String getName() {
+        String name = player.getName();
+        if (getDGroup() != null && dGroup.getDColor() != null) {
+            name = getDGroup().getDColor().getChatColor() + name;
+        }
+        return name;
+    }
+
+    /**
+     * @return the DGroup of this player
+     */
+    public DGroup getDGroup() {
+        if (dGroup == null) {
+            dGroup = DGroup.getByPlayer(player);
+        }
+        return dGroup;
+    }
+
     /**
      * @param player
      * the player to set
@@ -143,8 +167,7 @@ public class DGamePlayer extends DInstancePlayer {
      * @return if the player is in test mode
      */
     public boolean isInTestMode() {
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-        if (dGroup == null) {
+        if (getDGroup() == null) {
             return false;
         }
 
@@ -386,6 +409,10 @@ public class DGamePlayer extends DInstancePlayer {
      * the group whose flag is stolen
      */
     public void setRobbedGroup(DGroup dGroup) {
+        if (dGroup != null) {
+            player.getInventory().getHelmet().setType(Material.WOOL);
+        }
+
         stealing = dGroup;
     }
 
@@ -400,7 +427,6 @@ public class DGamePlayer extends DInstancePlayer {
      * if messages should be sent
      */
     public void leave(boolean message) {
-        plugin.debug.start("DGamePlayer#leave");
         GameRules rules = Game.getByWorld(getWorld()).getRules();
         delete();
 
@@ -417,8 +443,7 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-        if (dGroup != null) {
+        if (getDGroup() != null) {
             dGroup.removePlayer(getPlayer(), message);
         }
 
@@ -431,7 +456,7 @@ public class DGamePlayer extends DInstancePlayer {
                         reward.giveTo(getPlayer());
                     }
 
-                    getData().logTimeLastPlayed(dGroup.getDungeon().getName());
+                    getData().logTimeLastPlayed(getDGroup().getDungeon().getName());
 
                     // Tutorial Permissions
                     if (gameWorld.isTutorial() && plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
@@ -449,7 +474,7 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        if (dGroup != null) {
+        if (getDGroup() != null) {
             if (!dGroup.isEmpty()) {
                 if (dGroup.finishIfMembersFinished()) {
                     return;
@@ -483,7 +508,6 @@ public class DGamePlayer extends DInstancePlayer {
                 // ...*flies away*
             }
         }
-        plugin.debug.end("DGamePlayer#leave", true);
     }
 
     public void kill() {
@@ -491,7 +515,13 @@ public class DGamePlayer extends DInstancePlayer {
         plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
 
         if (!dPlayerKickEvent.isCancelled()) {
-            MessageUtil.broadcastMessage(DMessages.PLAYER_DEATH_KICK.getMessage(player.getName()));
+            DGameWorld gameWorld = getDGroup().getGameWorld();
+            if (lives != -1) {
+                gameWorld.sendMessage(DMessages.PLAYER_DEATH_KICK.getMessage(getName()));
+            } else if (getDGroup().getLives() != -1) {
+                gameWorld.sendMessage(DMessages.GROUP_DEATH_KICK.getMessage(getName(), dGroup.getName()));
+            }
+
             GameRules rules = Game.getByPlayer(player).getRules();
             leave();
             if (rules.getKeepInventoryOnEscape() && rules.getKeepInventoryOnDeath()) {
@@ -602,9 +632,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public void ready(GameType gameType) {
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-
-        if (dGroup == null) {
+        if (getDGroup() == null) {
             return;
         }
 
@@ -635,12 +663,10 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public void respawn() {
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-
         Location respawn = checkpoint;
 
         if (respawn == null) {
-            respawn = dGroup.getGameWorld().getStartLocation(dGroup);
+            respawn = getDGroup().getGameWorld().getStartLocation(dGroup);
         }
 
         if (respawn == null) {
@@ -669,18 +695,14 @@ public class DGamePlayer extends DInstancePlayer {
      * the name of the next floor
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
-        plugin.debug.start("DGamePlayer#finishFloor");
         MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_DUNGEON.getMessage());
         finished = true;
 
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-        if (dGroup == null) {
-            plugin.debug.end("DGamePlayer#finishFloor", true);
+        if (getDGroup() == null) {
             return;
         }
 
         if (!dGroup.isPlaying()) {
-            plugin.debug.end("DGamePlayer#finishFloor", true);
             return;
         }
 
@@ -764,20 +786,16 @@ public class DGamePlayer extends DInstancePlayer {
      * if messages should be sent
      */
     public void finish(boolean message) {
-        plugin.debug.start("DGamePlayer#finish");
         if (message) {
             MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_DUNGEON.getMessage());
         }
         finished = true;
 
-        DGroup dGroup = DGroup.getByPlayer(getPlayer());
-        if (dGroup == null) {
-            plugin.debug.end("DGamePlayer#finish", true);
+        if (getDGroup() == null) {
             return;
         }
 
         if (!dGroup.isPlaying()) {
-            plugin.debug.end("DGamePlayer#finish", true);
             return;
         }
 
@@ -801,12 +819,10 @@ public class DGamePlayer extends DInstancePlayer {
 
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
-            plugin.debug.end("DGamePlayer#finish", true);
             return;
         }
 
         if (hasToWait) {
-            plugin.debug.end("DGamePlayer#finish", true);
             return;
         }
 
@@ -847,6 +863,72 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
+    public void onDeath(PlayerDeathEvent event) {
+        DGameWorld gameWorld = DGameWorld.getByWorld(player.getLocation().getWorld());
+        if (gameWorld == null) {
+            return;
+        }
+
+        Game game = Game.getByGameWorld(gameWorld);
+        if (game == null) {
+            return;
+        }
+
+        DGamePlayerDeathEvent dPlayerDeathEvent = new DGamePlayerDeathEvent(this, event, 1);
+        plugin.getServer().getPluginManager().callEvent(dPlayerDeathEvent);
+
+        if (dPlayerDeathEvent.isCancelled()) {
+            return;
+        }
+
+        if (lives != -1) {
+            lives = lives - dPlayerDeathEvent.getLostLives();
+
+            DGamePlayer killer = DGamePlayer.getByPlayer(player.getKiller());
+            if (killer != null) {
+                gameWorld.sendMessage(DMessages.PLAYER_KILLED.getMessage(getName(), killer.getName(), String.valueOf(lives)));
+            } else {
+                gameWorld.sendMessage(DMessages.PLAYER_DEATH.getMessage(getName(), String.valueOf(lives)));
+            }
+
+            if (game.getRules().getKeepInventoryOnDeath()) {
+                setRespawnInventory(event.getEntity().getInventory().getContents());
+                setRespawnArmor(event.getEntity().getInventory().getArmorContents());
+                // Delete all drops
+                for (ItemStack item : event.getDrops()) {
+                    item.setType(Material.AIR);
+                }
+            }
+
+        } else if (getDGroup() != null && dGroup.getLives() != -1) {
+            dGroup.setLives(dGroup.getLives() - 1);
+            MessageUtil.broadcastMessage(DMessages.GROUP_DEATH.getMessage(player.getName(), String.valueOf(lives)));
+        }
+
+        if (isStealing()) {
+            for (TeamFlag teamFlag : gameWorld.getTeamFlags()) {
+                if (teamFlag.getOwner().equals(stealing)) {
+                    teamFlag.reset();
+                    gameWorld.sendMessage(DMessages.GROUP_FLAG_LOST.getMessage(player.getName(), stealing.getName()));
+                    stealing = null;
+                }
+            }
+        }
+
+        if (lives == 0 && ready) {
+            kill();
+        }
+
+        GameType gameType = game.getType();
+        if (gameType != null && gameType != GameTypeDefault.CUSTOM) {
+            if (gameType.isLastManStanding()) {
+                if (game.getDGroups().size() == 1) {
+                    game.getDGroups().get(0).winGame();
+                }
+            }
+        }
+    }
+
     @Override
     public void update(boolean updateSecond) {
         boolean locationValid = true;
@@ -864,12 +946,10 @@ public class DGamePlayer extends DInstancePlayer {
                 locationValid = false;
 
                 if (gameWorld != null) {
-                    DGroup dGroup = DGroup.getByPlayer(getPlayer());
-
                     teleportLocation = getCheckpoint();
 
                     if (teleportLocation == null) {
-                        teleportLocation = dGroup.getGameWorld().getStartLocation(dGroup);
+                        teleportLocation = getDGroup().getGameWorld().getStartLocation(getDGroup());
                     }
 
                     // Don't forget Doge!
@@ -959,10 +1039,11 @@ public class DGamePlayer extends DInstancePlayer {
 
     public static DGamePlayer getByName(String name) {
         for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
-            if (dPlayer.getPlayer().getName().equalsIgnoreCase(name)) {
+            if (dPlayer.getPlayer().getName().equalsIgnoreCase(name) || dPlayer.getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
         }
+
         return null;
     }
 

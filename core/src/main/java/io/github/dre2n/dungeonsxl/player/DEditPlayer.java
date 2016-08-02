@@ -207,7 +207,7 @@ public class DEditPlayer extends DInstancePlayer {
 
     public static DEditPlayer getByName(String name) {
         for (DEditPlayer dPlayer : plugin.getDPlayers().getDEditPlayers()) {
-            if (dPlayer.getPlayer().getName().equalsIgnoreCase(name)) {
+            if (dPlayer.getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
         }

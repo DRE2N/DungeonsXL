@@ -80,8 +80,9 @@ public class TeamBed extends TeamBlock implements MultiBlock {
         for (DGamePlayer player : owner.getDGamePlayers()) {
             player.setLives(1);
         }
+        owner.setLives(0);
 
-        owner.getGameWorld().sendMessage(DMessages.GROUP_BED_DESTROYED.getMessage(owner.getName(), breaker.getName()));
+        owner.getGameWorld().sendMessage(DMessages.GROUP_BED_DESTROYED.getMessage(owner.getName(), DGamePlayer.getByPlayer(breaker).getName()));
         Block block1 = event.getBlock();
         if (((Bed) block1.getState().getData()).isHeadOfBed()) {
             Block block2 = getAttachedBlock(block1);
