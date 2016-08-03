@@ -263,6 +263,8 @@ public class GroupCommand extends BRCommand {
         MessageUtil.sendMessage(sender, "&bPlayers: &e" + players);
         MessageUtil.sendMessage(sender, "&bDungeon: &e" + (dGroup.getDungeonName() == null ? "N/A" : dGroup.getDungeonName()));
         MessageUtil.sendMessage(sender, "&bMap: &e" + (dGroup.getMapName() == null ? "N/A" : dGroup.getMapName()));
+        MessageUtil.sendMessage(sender, "&bScore: &e" + (dGroup.getScore() == 0 ? "N/A" : dGroup.getScore()));
+        MessageUtil.sendMessage(sender, "&bLives: &e" + (dGroup.getLives() == -1 ? "N/A" : dGroup.getLives()));
     }
 
     public void showHelp(String page) {

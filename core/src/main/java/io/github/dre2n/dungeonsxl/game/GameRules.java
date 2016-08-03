@@ -56,6 +56,8 @@ public class GameRules {
         DEFAULT_VALUES.friendlyFire = false;
         DEFAULT_VALUES.initialLives = -1;
         DEFAULT_VALUES.initialGroupLives = -1;
+        DEFAULT_VALUES.initialScore = 3;
+        DEFAULT_VALUES.scoreGoal = -1;
 
         /* Timer */
         DEFAULT_VALUES.timeLastPlayed = 0;
@@ -100,6 +102,8 @@ public class GameRules {
     protected Boolean friendlyFire;
     protected Integer initialLives;
     protected Integer initialGroupLives;
+    protected Integer initialScore;
+    protected Integer scoreGoal;
 
     /* Timer */
     protected Integer timeLastPlayed;
@@ -230,6 +234,20 @@ public class GameRules {
      */
     public int getInitialGroupLives() {
         return initialGroupLives;
+    }
+
+    /**
+     * @return the initial score
+     */
+    public int getInitialScore() {
+        return initialScore;
+    }
+
+    /**
+     * @return the score goal
+     */
+    public int getScoreGoal() {
+        return scoreGoal;
     }
 
     // Timer
@@ -494,6 +512,14 @@ public class GameRules {
 
         if (initialGroupLives == null) {
             initialGroupLives = defaultValues.initialGroupLives;
+        }
+
+        if (initialScore == null) {
+            initialScore = defaultValues.initialScore;
+        }
+
+        if (scoreGoal == null) {
+            scoreGoal = defaultValues.scoreGoal;
         }
 
         /* Timer */

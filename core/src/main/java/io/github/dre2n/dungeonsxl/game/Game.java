@@ -66,6 +66,7 @@ public class Game {
         fetchRules();
         dGroup.setInitialLives(rules.getInitialGroupLives());
         dGroup.setLives(rules.getInitialGroupLives());
+        dGroup.setScore(rules.getInitialScore());
     }
 
     public Game(DGroup dGroup, DGameWorld world) {
@@ -79,6 +80,7 @@ public class Game {
         fetchRules();
         dGroup.setInitialLives(rules.getInitialGroupLives());
         dGroup.setLives(rules.getInitialGroupLives());
+        dGroup.setScore(rules.getInitialScore());
     }
 
     public Game(DGroup dGroup, String worldName) {
@@ -95,6 +97,7 @@ public class Game {
         fetchRules();
         dGroup.setInitialLives(rules.getInitialGroupLives());
         dGroup.setLives(rules.getInitialGroupLives());
+        dGroup.setScore(rules.getInitialScore());
     }
 
     public Game(DGroup dGroup, GameType type, DGameWorld world) {
@@ -114,6 +117,7 @@ public class Game {
             fetchRules();
             dGroup.setInitialLives(rules.getInitialGroupLives());
             dGroup.setLives(rules.getInitialGroupLives());
+            dGroup.setScore(rules.getInitialScore());
         }
     }
 

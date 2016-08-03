@@ -66,6 +66,7 @@ public class DGroup {
     private BukkitTask timeIsRunningTask;
     private DResourceWorld nextFloor;
     private DColor color;
+    private int score = 0;
     private int initialLives = -1;
     private int lives = -1;
 
@@ -583,6 +584,21 @@ public class DGroup {
      */
     public void setDColor(DColor color) {
         this.color = color;
+    }
+
+    /**
+     * @return the current score
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * @param score
+     * the score to set
+     */
+    public void setScore(int score) {
+        this.score = score;
     }
 
     /**
