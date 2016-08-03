@@ -55,7 +55,9 @@ public class BedSign extends DSign {
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
 
         if (block.getType() == Material.BED_BLOCK) {
-            getGameWorld().addGameBlock(new TeamBed(block, getGame().getDGroups().get(team)));
+            if (getGame().getDGroups().size() > team) {
+                getGameWorld().addGameBlock(new TeamBed(block, getGame().getDGroups().get(team)));
+            }
             getSign().getBlock().setType(Material.AIR);
         } else {
             markAsErroneous();
