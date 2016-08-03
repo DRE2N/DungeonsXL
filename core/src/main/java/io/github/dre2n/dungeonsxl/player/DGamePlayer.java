@@ -30,6 +30,7 @@ import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEv
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementCheckEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameGoal;
 import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
@@ -79,6 +80,7 @@ public class DGamePlayer extends DInstancePlayer {
     private int initialLives = -1;
     private int lives;
 
+    private ItemStack oldHelmet;
     private DGroup stealing;
 
     public DGamePlayer(Player player, DGameWorld world) {
@@ -410,13 +412,49 @@ public class DGamePlayer extends DInstancePlayer {
      */
     public void setRobbedGroup(DGroup dGroup) {
         if (dGroup != null) {
-            player.getInventory().getHelmet().setType(Material.WOOL);
+            oldHelmet = player.getInventory().getHelmet();
+            player.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, getDGroup().getDColor().getWoolData()));
         }
 
         stealing = dGroup;
     }
 
     /* Actions */
+    public void captureFlag() {
+        if (stealing == null) {
+            return;
+        }
+
+        Game game = Game.getByWorld(getWorld());
+        if (game == null) {
+            return;
+        }
+
+        game.sendMessage(DMessages.GROUP_FLAG_CAPTURED.getMessage(getName(), stealing.getName()));
+
+        GameRules rules = game.getRules();
+
+        getDGroup().setScore(getDGroup().getScore() + 1);
+        if (rules.getScoreGoal() == dGroup.getScore()) {
+            dGroup.winGame();
+        }
+
+        stealing.setScore(stealing.getScore() - 1);
+        if (stealing.getScore() == -1) {
+            for (DGamePlayer member : stealing.getDGamePlayers()) {
+                member.kill();
+            }
+            game.sendMessage(DMessages.GROUP_DEFEATED.getMessage(stealing.getName()));
+        }
+
+        stealing = null;
+        player.getInventory().setHelmet(oldHelmet);
+
+        if (game.getDGroups().size() == 1) {
+            dGroup.winGame();
+        }
+    }
+
     @Override
     public void leave() {
         leave(true);
@@ -921,6 +959,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         GameType gameType = game.getType();
         if (gameType != null && gameType != GameTypeDefault.CUSTOM) {
+            if (gameType.getGameGoal() == GameGoal.LAST_MAN_STANDING) {
                 if (game.getDGroups().size() == 1) {
                     game.getDGroups().get(0).winGame();
                 }

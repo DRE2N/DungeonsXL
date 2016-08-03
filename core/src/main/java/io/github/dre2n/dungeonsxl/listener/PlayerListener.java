@@ -664,6 +664,16 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
+        DGamePlayer gamePlayer = DGamePlayer.getByPlayer(player);
+        if (gameWorld != null && gamePlayer != null && gamePlayer.isStealing()) {
+            DGroup group = gamePlayer.getDGroup();
+            Location startLocation = gameWorld.getStartLocation(group);
+
+            if (startLocation.distance(player.getLocation()) < 3) {
+                gamePlayer.captureFlag();
+            }
+        }
 
         DLootInventory inventory = DLootInventory.getByPlayer(player);
         if (inventory != null && player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
