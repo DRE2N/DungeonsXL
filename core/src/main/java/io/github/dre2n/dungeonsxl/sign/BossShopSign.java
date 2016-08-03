@@ -17,8 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.black_ixx.bossshop.BossShop;
@@ -38,10 +37,29 @@ public class BossShopSign extends DSign {
 
     private DSignType type = DSignTypeDefault.BOSS_SHOP;
 
+    private String shopName;
+
     public BossShopSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
     }
 
+    /* Getters and setters*/
+    /**
+     * @return the name of the shop
+     */
+    public String getShopName() {
+        return shopName;
+    }
+
+    /**
+     * @param name
+     * the name of the shop
+     */
+    public void setShopName(String name) {
+        shopName = name;
+    }
+
+    /* Actions */
     @Override
     public boolean check() {
         return true;
@@ -53,6 +71,8 @@ public class BossShopSign extends DSign {
             markAsErroneous();
             return;
         }
+
+        shopName = lines[1];
 
         if (!getTriggers().isEmpty()) {
             getSign().getBlock().setType(Material.AIR);
@@ -88,7 +108,7 @@ public class BossShopSign extends DSign {
         if (shop != null) {
             bossShop.getAPI().openShop(player, shop);
         } else {
-            MessageUtil.sendMessage(player, ChatColor.RED + "Shop " + shopName + " not found...");
+            MessageUtil.sendMessage(player, DMessages.ERROR_NO_SUCH_SHOP.getMessage(shopName));
         }
     }
 
