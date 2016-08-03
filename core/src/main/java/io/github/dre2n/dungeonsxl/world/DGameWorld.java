@@ -70,6 +70,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DGameWorld extends DInstanceWorld {
 
+    Game game;
+
     // Variables
     private boolean tutorial;
     private boolean isPlaying = false;
@@ -104,13 +106,15 @@ public class DGameWorld extends DInstanceWorld {
      * the Game connected to the DGameWorld
      */
     public Game getGame() {
-        for (Game game : plugin.getGames()) {
-            if (game.getWorld() == this) {
-                return game;
+        if (game == null) {
+            for (Game game : plugin.getGames()) {
+                if (game.getWorld() == this) {
+                    this.game = game;
+                }
             }
         }
 
-        return null;
+        return game;
     }
 
     /**
@@ -599,19 +603,6 @@ public class DGameWorld extends DInstanceWorld {
      * @return if the event is cancelled
      */
     public boolean onPlace(Player player, Block block, Block against, ItemStack hand) {
-        // Workaround for a bug that would allow 3-Block-high jumping
-        Location loc = player.getLocation();
-        if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
-            if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
-                if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
-                    loc.setX(block.getX() + 0.5);
-                    loc.setY(block.getY());
-                    loc.setZ(block.getZ() + 0.5);
-                    player.teleport(loc);
-                }
-            }
-        }
-
         Game game = getGame();
         if (game == null) {
             return true;
@@ -619,6 +610,19 @@ public class DGameWorld extends DInstanceWorld {
 
         GameRules rules = game.getRules();
         if (!rules.canPlaceBlocks() && !PlaceableBlock.canBuildHere(block, block.getFace(against), hand.getType(), this)) {
+            // Workaround for a bug that would allow 3-Block-high jumping
+            Location loc = player.getLocation();
+            if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
+                if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
+                    if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
+                        loc.setX(block.getX() + 0.5);
+                        loc.setY(block.getY());
+                        loc.setZ(block.getZ() + 0.5);
+                        player.teleport(loc);
+                    }
+                }
+            }
+
             return true;
         }
 
