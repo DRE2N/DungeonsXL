@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.game;
 
+import static io.github.dre2n.dungeonsxl.game.GameGoal.*;
 import org.bukkit.GameMode;
 
 /**
@@ -23,30 +24,30 @@ import org.bukkit.GameMode;
  */
 public enum GameTypeDefault implements GameType {
 
-    ADVENTURE("Adventure", "Adventure", false, false, false, false, true, false, true, true, true, GameMode.ADVENTURE, true),
-    ADVENTURE_TIME_IS_RUNNING("Adventure - Time is Running", "Adventure TiR", false, false, false, false, true, true, true, true, true, GameMode.ADVENTURE, true),
-    APOCALYPSE_LAST_MAN_STANDING("Apocalypse", "Apocalypse LMS", true, true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    APOCALYPSE_LIMITED_MOBS("Apocalypse - Limited Mobs", "Apc Limited", false, true, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    APOCALYPSE_TIME_IS_RUNNING("Apocalypse - Time is Running", "Apocalypse TiR", false, true, true, true, true, true, false, false, false, GameMode.SURVIVAL, true),
-    BEDWARS("Bedwars", "Bedwars", true, true, false, false, false, false, false, true, true, GameMode.SURVIVAL, false),
-    PVE_LAST_MAN_STANDING("Player versus Environment - Last Man Standing", "PvE LMS", true, false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    PVE_LIMITED_MOBS("Player versus Environment - Limited Mobs", "PvE Limited", false, false, false, true, true, false, false, false, false, GameMode.SURVIVAL, true),
-    PVE_TIME_IS_RUNNING("Player versus Environment - Time is Running", "PvE TiR", false, false, false, true, true, true, false, false, false, GameMode.SURVIVAL, true),
-    PVP_FACTIONS_BATTLEFIELD("Player versus Player - Factions Battlefield", "FactionsPvP", true, true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
-    PVP_LAST_MAN_STANDING("Player versus Player - Last Man Standing", "PvP LMS", true, true, false, false, false, false, false, false, false, GameMode.SURVIVAL, true),
-    QUEST("Quest", "Quest", false, false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
-    QUEST_TIME_IS_RUNNING("Quest - Time is Running", "Quest TiR", false, false, false, false, true, true, false, false, false, GameMode.SURVIVAL, true),
-    TEST("Test", "Test", false, false, false, false, false, true, true, true, true, GameMode.SURVIVAL, false),
-    TUTORIAL("Tutorial", "Tutorial", false, false, false, false, true, false, false, false, false, GameMode.SURVIVAL, false),
-    DEFAULT("Default", "Default", false, false, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
+    ADVENTURE("Adventure", "Adventure", END, false, false, true, false, true, true, true, GameMode.ADVENTURE, true),
+    ADVENTURE_TIME_IS_RUNNING("Adventure - Time is Running", "Adventure TiR", TIME_SCORE, false, false, true, true, true, true, true, GameMode.ADVENTURE, true),
+    APOCALYPSE("Apocalypse", "Apocalypse", HIGHSCORE, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    APOCALYPSE_LAST_MAN_STANDING("Apocalypse", "Apocalypse LMS", LAST_MAN_STANDING, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    APOCALYPSE_LIMITED_MOBS("Apocalypse - Limited Mobs", "Apc Limited", END, true, true, true, false, false, false, false, GameMode.SURVIVAL, true),
+    APOCALYPSE_TIME_IS_RUNNING("Apocalypse - Time is Running", "Apocalypse TiR", TIME_SURVIVAL, true, true, true, true, false, false, false, GameMode.SURVIVAL, true),
+    BEDWARS("Bedwars", "Bedwars", LAST_MAN_STANDING, true, false, false, false, false, true, true, GameMode.SURVIVAL, false),
+    PVE_LAST_MAN_STANDING("Player versus Environment - Last Man Standing", "PvE LMS", LAST_MAN_STANDING, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
+    PVE_LIMITED_MOBS("Player versus Environment - Limited Mobs", "PvE Limited", END, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
+    PVE_TIME_IS_RUNNING("Player versus Environment - Time is Running", "PvE TiR", TIME_SURVIVAL, false, false, true, true, false, false, false, GameMode.SURVIVAL, true),
+    PVP_FACTIONS_BATTLEFIELD("Player versus Player - Factions Battlefield", "FactionsPvP", LAST_MAN_STANDING, true, false, false, false, false, false, false, GameMode.SURVIVAL, true),
+    PVP_LAST_MAN_STANDING("Player versus Player - Last Man Standing", "PvP LMS", LAST_MAN_STANDING, true, false, false, false, false, false, false, GameMode.SURVIVAL, true),
+    QUEST("Quest", "Quest", END, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
+    QUEST_TIME_IS_RUNNING("Quest - Time is Running", "Quest TiR", END, false, false, true, true, false, false, false, GameMode.SURVIVAL, true),
+    TEST("Test", "Test", HIGHSCORE, false, false, false, true, true, true, true, GameMode.SURVIVAL, false),
+    TUTORIAL("Tutorial", "Tutorial", END, false, false, true, false, false, false, false, GameMode.SURVIVAL, false),
+    DEFAULT("Default", "Default", END, false, false, true, false, false, false, false, GameMode.SURVIVAL, true),
     CUSTOM("Custom", "Custom");
 
     private String displayName;
     private String signName;
-    private Boolean lastManStanding;
+    private GameGoal gameGoal;
     private Boolean playerVersusPlayer;
     private Boolean friendlyFire;
-    private Boolean mobWaves;
     private Boolean rewards;
     private Boolean showTime;
     private Boolean breakBlocks;
@@ -55,14 +56,13 @@ public enum GameTypeDefault implements GameType {
     private GameMode gameMode;
     private Boolean lives;
 
-    GameTypeDefault(String displayName, String signName, Boolean lastManStanding, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean mobWaves, Boolean rewards,
+    GameTypeDefault(String displayName, String signName, GameGoal gameGoal, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean rewards,
             Boolean showTime, Boolean breakBlocks, Boolean breakPlacedBlocks, Boolean placeBlocks, GameMode gameMode, Boolean lives) {
         this.displayName = displayName;
         this.signName = signName;
-        this.lastManStanding = lastManStanding;
+        this.gameGoal = gameGoal;
         this.playerVersusPlayer = playerVersusPlayer;
         this.friendlyFire = friendlyFire;
-        this.mobWaves = mobWaves;
         this.rewards = rewards;
         this.showTime = showTime;
         this.breakBlocks = breakBlocks;
@@ -78,13 +78,13 @@ public enum GameTypeDefault implements GameType {
     }
 
     @Override
-    public Boolean isLastManStanding() {
-        return lastManStanding;
+    public GameGoal getGameGoal() {
+        return gameGoal;
     }
 
     @Override
-    public void setLastManStanding(Boolean lastManStanding) {
-        this.lastManStanding = lastManStanding;
+    public void setGameGoal(GameGoal gameGoal) {
+        this.gameGoal = gameGoal;
     }
 
     @Override
@@ -125,16 +125,6 @@ public enum GameTypeDefault implements GameType {
     @Override
     public void setFriendlyFire(Boolean friendlyFire) {
         this.friendlyFire = friendlyFire;
-    }
-
-    @Override
-    public Boolean hasMobWaves() {
-        return mobWaves;
-    }
-
-    @Override
-    public void setMobWaves(Boolean mobWaves) {
-        this.mobWaves = mobWaves;
     }
 
     @Override

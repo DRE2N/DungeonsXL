@@ -921,7 +921,6 @@ public class DGamePlayer extends DInstancePlayer {
 
         GameType gameType = game.getType();
         if (gameType != null && gameType != GameTypeDefault.CUSTOM) {
-            if (gameType.isLastManStanding()) {
                 if (game.getDGroups().size() == 1) {
                     game.getDGroups().get(0).winGame();
                 }

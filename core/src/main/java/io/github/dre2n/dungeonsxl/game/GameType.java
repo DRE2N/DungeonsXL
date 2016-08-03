@@ -24,17 +24,6 @@ import org.bukkit.GameMode;
 public interface GameType {
 
     /**
-     * @return if the game ends when one group is left
-     */
-    public Boolean isLastManStanding();
-
-    /**
-     * @param lastManStanding
-     * set if the game ends when one group is left
-     */
-    public void setLastManStanding(Boolean lastManStanding);
-
-    /**
      * @return the displayName
      */
     public String getDisplayName();
@@ -57,6 +46,17 @@ public interface GameType {
     public void setSignName(String signName);
 
     /**
+     * @return the goal of the game
+     */
+    public GameGoal getGameGoal();
+
+    /**
+     * @param gameGoal
+     * the goal of the game to set
+     */
+    public void setGameGoal(GameGoal gameGoal);
+
+    /**
      * @return the playerVersusPlayer
      */
     public Boolean isPlayerVersusPlayer();
@@ -77,17 +77,6 @@ public interface GameType {
      * the friendlyFire to set
      */
     public void setFriendlyFire(Boolean friendlyFire);
-
-    /**
-     * @return the mobWaves
-     */
-    public Boolean hasMobWaves();
-
-    /**
-     * @param mobWaves
-     * enable / disable mob waves
-     */
-    public void setMobWaves(Boolean mobWaves);
 
     /**
      * @return if players get rewards after the dungeon

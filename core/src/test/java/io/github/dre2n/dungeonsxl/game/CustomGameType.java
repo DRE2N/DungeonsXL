@@ -23,14 +23,13 @@ import org.bukkit.GameMode;
  */
 public enum CustomGameType implements GameType {
 
-    GHOST("My awesome game type", "Identifier", false, false, false, false, false, false, false, false, false, GameMode.SPECTATOR, false);
+    GHOST("My awesome game type", "Identifier", GameGoal.HIGHSCORE, false, false, false, false, false, false, false, GameMode.SPECTATOR, false);
 
     private String displayName;
     private String signName;
-    private Boolean lastManStanding;
+    private GameGoal gameGoal;
     private Boolean playerVersusPlayer;
     private Boolean friendlyFire;
-    private Boolean mobWaves;
     private Boolean rewards;
     private Boolean showTime;
     private Boolean breakBlocks;
@@ -39,14 +38,13 @@ public enum CustomGameType implements GameType {
     private GameMode gameMode;
     private Boolean lives;
 
-    CustomGameType(String displayName, String signName, Boolean lastManStanding, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean mobWaves, Boolean rewards,
+    CustomGameType(String displayName, String signName, GameGoal gameGoal, Boolean playerVersusPlayer, Boolean friendlyFire, Boolean rewards,
             Boolean showTime, Boolean breakBlocks, Boolean breakPlacedBlocks, Boolean placeBlocks, GameMode gameMode, Boolean lives) {
         this.displayName = displayName;
         this.signName = signName;
-        this.lastManStanding = lastManStanding;
+        this.gameGoal = gameGoal;
         this.playerVersusPlayer = playerVersusPlayer;
         this.friendlyFire = friendlyFire;
-        this.mobWaves = mobWaves;
         this.rewards = rewards;
         this.showTime = showTime;
         this.breakBlocks = breakBlocks;
@@ -54,6 +52,16 @@ public enum CustomGameType implements GameType {
         this.placeBlocks = placeBlocks;
         this.gameMode = gameMode;
         this.lives = lives;
+    }
+
+    @Override
+    public GameGoal getGameGoal() {
+        return gameGoal;
+    }
+
+    @Override
+    public void setGameGoal(GameGoal gameGoal) {
+        this.gameGoal = gameGoal;
     }
 
     @Override
@@ -77,16 +85,6 @@ public enum CustomGameType implements GameType {
     }
 
     @Override
-    public Boolean isLastManStanding() {
-        return lastManStanding;
-    }
-
-    @Override
-    public void setLastManStanding(Boolean lastManStanding) {
-        this.lastManStanding = lastManStanding;
-    }
-
-    @Override
     public Boolean isPlayerVersusPlayer() {
         return playerVersusPlayer;
     }
@@ -104,16 +102,6 @@ public enum CustomGameType implements GameType {
     @Override
     public void setFriendlyFire(Boolean friendlyFire) {
         this.friendlyFire = friendlyFire;
-    }
-
-    @Override
-    public Boolean hasMobWaves() {
-        return mobWaves;
-    }
-
-    @Override
-    public void setMobWaves(Boolean mobWaves) {
-        this.mobWaves = mobWaves;
     }
 
     @Override
