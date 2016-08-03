@@ -86,7 +86,7 @@ public class EnterCommand extends BRCommand {
 
         joining.setGameWorld(game.getWorld());
         game.addDGroup(joining);
-        joining.sendMessage(DMessages.CMD_ENTER_SUCCESS.getMessage(joining.getName(), targetName));
+        joining.sendMessage(DMessages.CMD_ENTER_SUCCESS.getMessage(joining.getName(), target.getName()));
 
         for (Player player : joining.getPlayers()) {
             DGamePlayer.create(player, game.getWorld(), true);

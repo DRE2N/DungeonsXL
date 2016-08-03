@@ -61,7 +61,7 @@ public class TeamFlag extends TeamBlock {
             return true;
         }
 
-        owner.getGameWorld().sendMessage(DMessages.GROUP_FLAG_STEALING.getMessage(breaker.getName(), owner.getName()));
+        owner.getGameWorld().sendMessage(DMessages.GROUP_FLAG_STEALING.getMessage(gamePlayer.getName(), owner.getName()));
         gamePlayer.setRobbedGroup(owner);
         event.getBlock().setType(Material.AIR);
         return true;
