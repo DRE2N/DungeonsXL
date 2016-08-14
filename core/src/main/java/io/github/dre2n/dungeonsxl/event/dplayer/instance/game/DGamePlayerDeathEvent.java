@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.event.dplayer.instance.game;
 
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEvent;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -25,7 +24,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 /**
  * @author Daniel Saukel
  */
-public class DGamePlayerDeathEvent extends DPlayerEvent implements Cancellable {
+public class DGamePlayerDeathEvent extends DGamePlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
