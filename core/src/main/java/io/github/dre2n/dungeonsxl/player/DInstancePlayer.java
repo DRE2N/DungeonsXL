@@ -77,14 +77,15 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
      * Clear the player's inventory, potion effects etc.
      */
     public void clearPlayerData() {
-        getPlayer().getInventory().clear();
-        getPlayer().getInventory().setArmorContents(null);
-        getPlayer().setTotalExperience(0);
-        getPlayer().setLevel(0);
-        getPlayer().setHealth(20);
-        getPlayer().setFoodLevel(20);
-        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
-            getPlayer().removePotionEffect(effect.getType());
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.setTotalExperience(0);
+        player.setLevel(0);
+        player.setHealthScale(20);
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
         }
     }
 

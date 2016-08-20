@@ -277,6 +277,7 @@ public class DGlobalPlayer {
                 }
                 player.setLevel(data.getOldLevel());
                 player.setExp(data.getOldExp());
+                player.setHealthScale(data.getOldHealthScale());
                 player.setHealth(data.getOldHealth());
                 player.setFoodLevel(data.getOldFoodLevel());
                 player.setGameMode(data.getOldGameMode());

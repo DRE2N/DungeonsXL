@@ -53,6 +53,7 @@ public class PlayerData extends BRConfig {
     private ItemStack oldOffHand;
     private int oldLvl;
     private float oldExp;
+    private double oldHealthScale;
     private double oldHealth;
     private int oldFoodLevel;
     private int oldFireTicks;
@@ -167,6 +168,21 @@ public class PlayerData extends BRConfig {
      */
     public void setOldExp(float exp) {
         oldExp = exp;
+    }
+
+    /**
+     * @return the old health scale
+     */
+    public double getOldHealthScale() {
+        return oldHealthScale;
+    }
+
+    /**
+     * @param healthScale
+     * the healthScale to set
+     */
+    public void setOldHealthScale(double healthScale) {
+        oldHealthScale = healthScale;
     }
 
     /**
@@ -321,7 +337,8 @@ public class PlayerData extends BRConfig {
 
         oldLvl = config.getInt(PREFIX_STATE_PERSISTENCE + "oldLvl");
         oldExp = config.getInt(PREFIX_STATE_PERSISTENCE + "oldExp");
-        oldHealth = config.getInt(PREFIX_STATE_PERSISTENCE + "oldHealth");
+        oldHealthScale = config.getDouble(PREFIX_STATE_PERSISTENCE + "oldHealthScale");
+        oldHealth = config.getDouble(PREFIX_STATE_PERSISTENCE + "oldHealth");
         oldFoodLevel = config.getInt(PREFIX_STATE_PERSISTENCE + "oldFoodLevel");
         oldFireTicks = config.getInt(PREFIX_STATE_PERSISTENCE + "oldFireTicks");
 
@@ -354,6 +371,7 @@ public class PlayerData extends BRConfig {
         oldGameMode = player.getGameMode();
         oldFireTicks = player.getFireTicks();
         oldFoodLevel = player.getFoodLevel();
+        oldHealthScale = player.getHealthScale();
         oldHealth = player.getHealth();
         oldExp = player.getExp();
         oldLvl = player.getLevel();
@@ -366,6 +384,7 @@ public class PlayerData extends BRConfig {
         config.set(PREFIX_STATE_PERSISTENCE + "oldGameMode", oldGameMode.toString());
         config.set(PREFIX_STATE_PERSISTENCE + "oldFireTicks", oldFireTicks);
         config.set(PREFIX_STATE_PERSISTENCE + "oldFoodLevel", oldFoodLevel);
+        config.set(PREFIX_STATE_PERSISTENCE + "oldHealthScale", oldHealthScale);
         config.set(PREFIX_STATE_PERSISTENCE + "oldHealth", oldHealth);
         config.set(PREFIX_STATE_PERSISTENCE + "oldExp", oldExp);
         config.set(PREFIX_STATE_PERSISTENCE + "oldLvl", oldLvl);
@@ -385,6 +404,7 @@ public class PlayerData extends BRConfig {
         oldGameMode = null;
         oldFireTicks = 0;
         oldFoodLevel = 0;
+        oldHealthScale = 0;
         oldHealth = 0;
         oldExp = 0;
         oldLvl = 0;
