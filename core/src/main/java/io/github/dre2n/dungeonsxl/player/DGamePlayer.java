@@ -698,6 +698,8 @@ public class DGamePlayer extends DInstancePlayer {
                 respawn();
             }
         }
+
+        game.setStarted(true);
     }
 
     public void respawn() {
