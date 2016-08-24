@@ -67,7 +67,7 @@ public class BossShopSign extends DSign {
 
     @Override
     public void onInit() {
-        if (bossShop.getAPI().getShop(lines[1]) == null) {
+        if (bossShop == null || bossShop.getAPI().getShop(lines[1]) == null) {
             markAsErroneous();
             return;
         }
