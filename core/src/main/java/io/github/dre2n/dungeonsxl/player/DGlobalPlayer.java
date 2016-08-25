@@ -23,13 +23,18 @@ import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.PlayerData;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Represents a player in the non-DXL worlds of the server.
@@ -302,6 +307,53 @@ public class DGlobalPlayer {
         }
 
         data.clearPlayerState();
+    }
+
+    /**
+     * Starts the tutorial
+     */
+    public void startTutorial() {
+        if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
+            return;
+        }
+
+        final String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+        if ((plugin.getMainConfig().getTutorialDungeon() == null || startGroup == null)) {
+            return;
+        }
+
+        if (plugin.isGroupEnabled(startGroup)) {
+            plugin.getPermissionProvider().playerAddGroup(player, startGroup);
+        }
+
+        DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
+
+        DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
+        plugin.getServer().getPluginManager().callEvent(createEvent);
+
+        if (createEvent.isCancelled()) {
+            dGroup = null;
+        }
+
+        if (dGroup == null) {
+            return;
+        }
+
+        DGameWorld gameWorld = null;
+
+        if (dGroup.getGameWorld() == null) {
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(dGroup.getMapName());
+            if (resource == null) {
+                MessageUtil.sendMessage(player, DMessages.ERROR_TUTORIAL_NOT_EXIST.getMessage());
+                return;
+            }
+
+            gameWorld = resource.instantiateAsGameWorld();
+            dGroup.setGameWorld(gameWorld);
+        }
+
+        new Game(dGroup, gameWorld).setTutorial(true);
+        DGamePlayer.create(player, gameWorld);
     }
 
 }

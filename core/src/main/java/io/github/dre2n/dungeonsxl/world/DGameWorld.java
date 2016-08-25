@@ -73,7 +73,6 @@ public class DGameWorld extends DInstanceWorld {
     Game game;
 
     // Variables
-    private boolean tutorial;
     private boolean isPlaying = false;
 
     // TO DO: Which lists actually need to be CopyOnWriteArrayLists?
@@ -115,21 +114,6 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         return game;
-    }
-
-    /**
-     * @return the tutorial
-     */
-    public boolean isTutorial() {
-        return tutorial;
-    }
-
-    /**
-     * @param tutorial
-     * if the DGameWorld is the tutorial
-     */
-    public void setTutorial(boolean tutorial) {
-        this.tutorial = tutorial;
     }
 
     /**

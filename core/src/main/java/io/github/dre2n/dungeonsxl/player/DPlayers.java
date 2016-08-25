@@ -119,4 +119,28 @@ public class DPlayers {
         }
     }
 
+    /**
+     * Checks if an old DGamePlayer instance of the user exists.
+     * If yes, the old Player of the user is replaced with the new object.
+     *
+     * @param player
+     * the player to check
+     * @return if the player exists
+     */
+    public boolean checkPlayer(Player player) {
+        DGamePlayer dPlayer = DGamePlayer.getByName(player.getName());
+        if (dPlayer == null) {
+            return false;
+        }
+
+        DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
+        if (dGroup != null) {
+            dGroup.removePlayer(dPlayer.getPlayer());
+            dGroup.addPlayer(player);
+        }
+        dPlayer.setPlayer(player);
+        dPlayer.setOfflineTime(0);
+        return true;
+    }
+
 }

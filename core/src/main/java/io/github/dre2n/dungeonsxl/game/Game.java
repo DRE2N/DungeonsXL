@@ -47,6 +47,7 @@ public class Game {
 
     static DungeonsXL plugin = DungeonsXL.getInstance();
 
+    private boolean tutorial;
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;
     private GameType type = GameTypeDefault.DEFAULT;
@@ -59,6 +60,7 @@ public class Game {
     public Game(DGroup dGroup) {
         plugin.getGames().add(this);
 
+        tutorial = false;
         started = false;
 
         dGroups.add(dGroup);
@@ -72,6 +74,7 @@ public class Game {
     public Game(DGroup dGroup, DGameWorld world) {
         plugin.getGames().add(this);
 
+        tutorial = false;
         started = false;
         this.world = world;
 
@@ -86,6 +89,7 @@ public class Game {
     public Game(DGroup dGroup, String worldName) {
         plugin.getGames().add(this);
 
+        tutorial = false;
         started = false;
         DResourceWorld resource = plugin.getDWorlds().getResourceByName(worldName);
         if (resource != null) {
@@ -110,6 +114,7 @@ public class Game {
         this.dGroups = dGroups;
         this.type = type;
         this.world = world;
+        this.tutorial = false;
         this.started = true;
 
         for (DGroup dGroup : dGroups) {
@@ -119,6 +124,21 @@ public class Game {
             dGroup.setLives(rules.getInitialGroupLives());
             dGroup.setScore(rules.getInitialScore());
         }
+    }
+
+    /**
+     * @return the tutorial
+     */
+    public boolean isTutorial() {
+        return tutorial;
+    }
+
+    /**
+     * @param tutorial
+     * if the DGameWorld is the tutorial
+     */
+    public void setTutorial(boolean tutorial) {
+        this.tutorial = tutorial;
     }
 
     /**
@@ -455,7 +475,7 @@ public class Game {
 
     public static Game getByGameWorld(DGameWorld gameWorld) {
         for (Game game : plugin.getGames()) {
-            if (game.getWorld().equals(gameWorld)) {
+            if (gameWorld.equals(game.getWorld())) {
                 return game;
             }
         }

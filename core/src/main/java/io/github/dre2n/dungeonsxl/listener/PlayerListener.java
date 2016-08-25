@@ -20,7 +20,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
-import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
@@ -441,79 +440,25 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onJoin(PlayerJoinEvent event) {
-        plugin.debug.start("PlayerListener#onJoin");
         Player player = event.getPlayer();
-
-        new DGlobalPlayer(player);
-
-        // Check dPlayers
-        DGamePlayer dPlayer = DGamePlayer.getByName(player.getName());
-        if (dPlayer != null) {
-            DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
-            if (dGroup != null) {
-                dGroup.removePlayer(dPlayer.getPlayer());
-                dGroup.addPlayer(player);
-            }
-            dPlayer.setPlayer(player);
-
-            // Check offlineTime
-            dPlayer.setOfflineTime(0);
+        if (dPlayers.checkPlayer(player)) {
+            return;
         }
 
-        // Tutorial Mode
+        DGlobalPlayer dPlayer = new DGlobalPlayer(player);
+        if (player.hasPlayedBefore()) {
+            return;
+        }
+
         if (!plugin.getMainConfig().isTutorialActivated()) {
-            plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
 
         if (DGamePlayer.getByPlayer(player) != null) {
-            plugin.debug.end("PlayerListener#onJoin", true);
             return;
         }
 
-        if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
-            plugin.debug.end("PlayerListener#onJoin", true);
-            return;
-        }
-
-        if ((plugin.getMainConfig().getTutorialDungeon() == null || plugin.getMainConfig().getTutorialStartGroup() == null || plugin.getMainConfig().getTutorialEndGroup() == null)) {
-            plugin.debug.end("PlayerListener#onJoin", true);
-            return;
-        }
-
-        for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
-            if (!plugin.getMainConfig().getTutorialStartGroup().equalsIgnoreCase(group)) {
-                continue;
-            }
-
-            DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
-
-            DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
-            plugin.getServer().getPluginManager().callEvent(createEvent);
-
-            if (createEvent.isCancelled()) {
-                dGroup = null;
-            }
-
-            if (dGroup == null) {
-                continue;
-            }
-
-            if (dGroup.getGameWorld() == null) {
-                dGroup.setGameWorld(plugin.getDWorlds().getResourceByName(DGroup.getByPlayer(player).getMapName()).instantiateAsGameWorld());
-                dGroup.getGameWorld().setTutorial(true);
-            }
-
-            if (dGroup.getGameWorld() == null) {
-                MessageUtil.sendMessage(player, DMessages.ERROR_TUTORIAL_NOT_EXIST.getMessage());
-                continue;
-            }
-
-            DGamePlayer.create(player, dGroup.getGameWorld());
-            plugin.debug.end("PlayerListener#onJoin", true);
-            return;
-        }
-        plugin.debug.end("PlayerListener#onJoin", true);
+        dPlayer.startTutorial();
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

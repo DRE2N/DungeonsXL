@@ -465,7 +465,9 @@ public class DGamePlayer extends DInstancePlayer {
      * if messages should be sent
      */
     public void leave(boolean message) {
-        GameRules rules = Game.getByWorld(getWorld()).getRules();
+        Game game = Game.getByWorld(getWorld());
+        DGameWorld gameWorld = game.getWorld();
+        GameRules rules = game.getRules();
         delete();
 
         if (finished) {
@@ -485,11 +487,9 @@ public class DGamePlayer extends DInstancePlayer {
             dGroup.removePlayer(getPlayer(), message);
         }
 
-        DGameWorld gameWorld = DGameWorld.getByWorld(getWorld());
-        Game game = Game.getByGameWorld(gameWorld);
         if (game != null) {
             if (finished) {
-                if (game.getType().hasRewards()) {
+                if (game.getType() == GameTypeDefault.CUSTOM || game.getType().hasRewards()) {
                     for (Reward reward : rules.getRewards()) {
                         reward.giveTo(getPlayer());
                     }
@@ -497,7 +497,7 @@ public class DGamePlayer extends DInstancePlayer {
                     getData().logTimeLastPlayed(getDGroup().getDungeon().getName());
 
                     // Tutorial Permissions
-                    if (gameWorld.isTutorial() && plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
+                    if (game.isTutorial() && plugin.getPermissionProvider().hasGroupSupport()) {
                         String endGroup = plugin.getMainConfig().getTutorialEndGroup();
                         if (plugin.isGroupEnabled(endGroup)) {
                             plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);

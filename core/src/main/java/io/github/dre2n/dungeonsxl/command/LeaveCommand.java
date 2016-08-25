@@ -22,6 +22,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
@@ -51,14 +52,12 @@ public class LeaveCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-
         DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        Game game = Game.getByPlayer(player);
 
-        if (DGameWorld.getByWorld(player.getWorld()) != null) {
-            if (DGameWorld.getByWorld(player.getWorld()).isTutorial()) {
-                MessageUtil.sendMessage(player, DMessages.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
-                return;
-            }
+        if (game.isTutorial()) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
+            return;
         }
 
         DGroup dGroup = DGroup.getByPlayer(player);
