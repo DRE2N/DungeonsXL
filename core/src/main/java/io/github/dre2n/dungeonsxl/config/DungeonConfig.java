@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Represents a dungeon script. See {@link io.github.dre2n.dungeonsxl.dungeon.Dungeon}.
+ *
  * @author Daniel Saukel
  */
 public class DungeonConfig extends BRConfig {

@@ -26,6 +26,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 /**
+ * ExternalMobProvider implementation for Citizens.
+ *
  * @author Daniel Saukel
  */
 public class CitizensMobProvider implements ExternalMobProvider {

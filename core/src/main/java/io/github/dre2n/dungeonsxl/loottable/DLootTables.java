@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * DLootTable instance manager.
+ *
  * @author Daniel Saukel
  */
 public class DLootTables {

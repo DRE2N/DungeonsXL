@@ -41,6 +41,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
+ * Game mostly stores for which purposes and how a {@link io.github.dre2n.dungeonsxl.dungeon.Dungeon} is used,
+ * the player groups and the progress.
+ *
  * @author Daniel Saukel
  */
 public class Game {

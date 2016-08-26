@@ -20,6 +20,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 
 /**
+ * Links different color types together.
+ *
  * @author Daniel Saukel
  */
 public enum DColor {

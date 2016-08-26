@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 /**
+ * Implement this to create custom trigger types.
+ * 
  * @author Daniel Saukel
  */
 public interface TriggerType {

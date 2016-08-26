@@ -21,6 +21,10 @@ import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import java.io.File;
 
 /**
+ * Represents a dungeon.
+ * While multi floor dungeon scripts are represented by {@link io.github.dre2n.dungeonsxl.config.DungeonConfig},
+ * single floor dungeons also get a dungeon object without a config file as a placeholder.
+ *
  * @author Daniel Saukel
  */
 public class Dungeon {

@@ -35,6 +35,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 /**
+ * Represents a player's persistent data.
+ *
  * @author Daniel Saukel
  */
 public class PlayerData extends BRConfig {

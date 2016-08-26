@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
 /**
- * Represents a player in an DEditWorld.
+ * Represents a player in a DEditWorld.
  *
  * @author Daniel Saukel
  */

@@ -20,6 +20,8 @@ import static io.github.dre2n.dungeonsxl.game.GameGoal.*;
 import org.bukkit.GameMode;
 
 /**
+ * Default implementation of {@link io.github.dre2n.dungeonsxl.game.GameType}.
+ *
  * @author Daniel Saukel
  */
 public enum GameTypeDefault implements GameType {

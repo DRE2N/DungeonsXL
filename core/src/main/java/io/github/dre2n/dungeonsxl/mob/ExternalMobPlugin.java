@@ -20,6 +20,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 /**
+ * Officially supported external mob plugins.
+ *
  * @author Daniel Saukel
  */
 public enum ExternalMobPlugin implements ExternalMobProvider {

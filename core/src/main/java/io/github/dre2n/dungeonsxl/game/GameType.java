@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.game;
 import org.bukkit.GameMode;
 
 /**
+ * Implement this to create custom game types.
+ *
  * @author Daniel Saukel
  */
 public interface GameType {

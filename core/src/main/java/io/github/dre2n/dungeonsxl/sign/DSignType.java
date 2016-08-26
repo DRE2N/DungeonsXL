@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 /**
+ * Implement this to create custom sign types.
+ *
  * @author Daniel Saukel
  */
 public interface DSignType {

@@ -23,6 +23,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
+ * DGlobalPlayer instance manager.
+ *
  * @author Daniel Saukel
  */
 public class DPlayers {

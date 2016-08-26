@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 /**
+ * Implement this to create custom reward types.
+ *
  * @author Daniel Saukel
  */
 public interface RewardType {

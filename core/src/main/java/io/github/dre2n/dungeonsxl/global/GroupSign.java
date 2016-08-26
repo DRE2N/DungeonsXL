@@ -33,6 +33,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
+ * A sign to form a group and to define its dungeon.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class GroupSign extends GlobalProtection {

@@ -20,6 +20,8 @@ import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 
 /**
+ * A block that has a special purpose in a game.
+ *
  * @author Daniel Saukel
  */
 public abstract class GameBlock {

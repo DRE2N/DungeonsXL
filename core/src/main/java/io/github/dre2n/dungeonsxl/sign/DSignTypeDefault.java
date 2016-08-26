@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 
 /**
+ * Default implementation of DSignType.
+ *
  * @author Daniel Saukel
  */
 public enum DSignTypeDefault implements DSignType {

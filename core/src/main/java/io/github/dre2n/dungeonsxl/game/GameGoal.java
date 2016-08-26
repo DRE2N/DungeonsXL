@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.game;
 
 /**
+ * A game goal defines what the players have to do in order to finish the game.
+ *
  * @author Daniel Saukel
  */
 public enum GameGoal {

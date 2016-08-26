@@ -21,6 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
 /**
+ * Represents a player in an instance.
+ *
  * @author Daniel Saukel
  */
 public abstract class DInstancePlayer extends DGlobalPlayer {

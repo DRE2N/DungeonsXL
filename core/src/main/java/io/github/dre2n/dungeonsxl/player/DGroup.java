@@ -44,6 +44,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * Represents a group of players.
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 public class DGroup {

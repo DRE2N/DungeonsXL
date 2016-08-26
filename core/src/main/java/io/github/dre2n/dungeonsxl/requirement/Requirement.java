@@ -26,6 +26,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
+ * Extend this to create a custom Requirement.
+ *
  * @author Daniel Saukel
  */
 public abstract class Requirement {

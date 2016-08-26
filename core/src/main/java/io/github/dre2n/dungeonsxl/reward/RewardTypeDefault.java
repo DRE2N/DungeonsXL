@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 /**
+ * Default implementation of RewardType.
+ *
  * @author Daniel Saukel
  */
 public enum RewardTypeDefault implements RewardType {

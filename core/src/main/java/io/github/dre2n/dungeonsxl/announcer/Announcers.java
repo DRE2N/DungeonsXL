@@ -24,6 +24,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 
 /**
+ * Announcer instance manager.
+ *
  * @author Daniel Saukel
  */
 public class Announcers {

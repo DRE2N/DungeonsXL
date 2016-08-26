@@ -29,6 +29,8 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 
 /**
+ * Extend this to create a custom Trigger.
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 public abstract class Trigger {

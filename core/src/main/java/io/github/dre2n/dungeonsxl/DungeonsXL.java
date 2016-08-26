@@ -58,6 +58,9 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * The main class of DungeonsXL.
+ * It contains several important instances and the actions when the plugin is enabled / disabled.
+ *
  * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
  */
 public class DungeonsXL extends BRPlugin {

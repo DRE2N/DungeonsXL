@@ -44,6 +44,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
+ * Represents a game announcement.
+ *
  * @author Daniel Saukel
  */
 public class Announcer {

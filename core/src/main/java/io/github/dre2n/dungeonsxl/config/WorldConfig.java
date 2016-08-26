@@ -44,6 +44,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * The world configuration is a simple game rule source.
+ * Besides game rules, WorldConfig also stores some map specific data such as the invited players.
+ * It is used directly in dungeon map config.yml files, but also part of dungeon and main config files.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class WorldConfig extends GameRules {

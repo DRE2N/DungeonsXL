@@ -32,6 +32,8 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
+ * Represents the main config.yml.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class MainConfig extends BRConfig {

@@ -24,6 +24,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
+ * An enumeration of all messages.
+ * The values are fetched from the language file.
+ *
  * @author Daniel Saukel
  */
 public enum DMessages implements Messages {

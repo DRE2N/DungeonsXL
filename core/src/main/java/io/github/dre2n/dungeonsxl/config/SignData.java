@@ -30,6 +30,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 /**
+ * Represents the data file of a dungeon map, mainly to store signs.
+ *
  * @author Daniel Saukel
  */
 public class SignData {

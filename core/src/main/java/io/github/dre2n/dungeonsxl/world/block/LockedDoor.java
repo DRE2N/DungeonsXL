@@ -21,6 +21,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.block.BlockBreakEvent;
 
 /**
+ * A locked door that may be opened with a trigger.
+ *
  * @author Daniel Saukel
  */
 public class LockedDoor extends GameBlock implements MultiBlock {

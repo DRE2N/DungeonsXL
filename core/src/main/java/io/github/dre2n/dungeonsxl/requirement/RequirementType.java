@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 /**
+ * Implement this to create custom requirement types.
+ *
  * @author Daniel Saukel
  */
 public interface RequirementType {

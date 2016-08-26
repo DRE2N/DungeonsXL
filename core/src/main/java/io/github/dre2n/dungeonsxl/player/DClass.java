@@ -29,6 +29,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Represents a class and a class script.
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 public class DClass {

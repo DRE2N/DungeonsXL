@@ -30,6 +30,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
+ * A sign to leave a group.
+ *
  * @author Frank Baumann
  */
 public class LeaveSign extends GlobalProtection {

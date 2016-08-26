@@ -66,6 +66,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
+ * A playable resource instance.
+ * There may be any amount of DGameWorlds per DResourceWorld.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class DGameWorld extends DInstanceWorld {

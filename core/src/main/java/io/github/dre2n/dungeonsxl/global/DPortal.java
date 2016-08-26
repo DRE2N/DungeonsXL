@@ -35,6 +35,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
+ * A portal that leads into a dungeon.
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 public class DPortal extends GlobalProtection {

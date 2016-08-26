@@ -29,6 +29,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * See {@link io.github.dre2n.dungeonsxl.config.WorldConfig}
+ *
  * @author Daniel Saukel
  */
 public class GameRules {
