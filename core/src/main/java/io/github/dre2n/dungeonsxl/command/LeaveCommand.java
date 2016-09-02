@@ -53,9 +53,10 @@ public class LeaveCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
         DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        
         Game game = Game.getByPlayer(player);
-
-        if (game.isTutorial()) {
+        //it seems getByPlayer() will return if player is in edit mode.
+        if (game != null && game.isTutorial()) {
             MessageUtil.sendMessage(player, DMessages.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
             return;
         }
