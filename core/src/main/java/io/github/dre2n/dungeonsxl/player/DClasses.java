@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * DClass instance manager.
+ *
  * @author Daniel Saukel
  */
 public class DClasses {

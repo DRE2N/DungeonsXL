@@ -31,6 +31,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
+ * A raw resource world instance to edit the dungeon map.
+ * There is never more than one DEditWorld per DResourceWorld.
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 public class DEditWorld extends DInstanceWorld {

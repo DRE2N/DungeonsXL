@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.trigger;
 
 /**
+ * Default implementation of TriggerType.
+ *
  * @author Daniel Saukel
  */
 public enum TriggerTypeDefault implements TriggerType {

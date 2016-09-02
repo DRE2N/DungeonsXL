@@ -22,8 +22,8 @@ import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.event.DataReloadEvent;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -47,7 +47,13 @@ public class ReloadCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        PluginManager plugins = Bukkit.getServer().getPluginManager();
+        PluginManager plugins = Bukkit.getPluginManager();
+
+        DataReloadEvent event = new DataReloadEvent();
+        plugins.callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
 
         int maps = DungeonsXL.MAPS.listFiles().length;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;

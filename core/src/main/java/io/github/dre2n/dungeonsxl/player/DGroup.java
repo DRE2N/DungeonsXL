@@ -27,12 +27,11 @@ import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
 import io.github.dre2n.dungeonsxl.event.reward.RewardAdditionEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameRules;
-import io.github.dre2n.dungeonsxl.game.GameType;
-import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.task.TimeIsRunningTask;
+import io.github.dre2n.dungeonsxl.util.DColor;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
@@ -45,6 +44,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * Represents a group of players.
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 public class DGroup {
@@ -66,6 +67,10 @@ public class DGroup {
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
     private DResourceWorld nextFloor;
+    private DColor color;
+    private int score = 0;
+    private int initialLives = -1;
+    private int lives = -1;
 
     public DGroup(Player player) {
         this("Group_" + plugin.getDGroups().size(), player);
@@ -91,7 +96,6 @@ public class DGroup {
     }
 
     public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
-        plugin.debug.start("DGroup#init4");
         plugin.getDGroups().add(this);
         this.name = name;
 
@@ -122,14 +126,20 @@ public class DGroup {
 
         playing = false;
         floorCount = 0;
-        plugin.debug.end("DGroup#init4", true);
     }
 
     // Getters and setters
     /**
-     * @return the name
+     * @return the name; formatted
      */
     public String getName() {
+        return (color != null ? color.getChatColor().toString() : new String()) + name;
+    }
+
+    /**
+     * @return the name; not formatted
+     */
+    public String getRawName() {
         return name;
     }
 
@@ -560,6 +570,69 @@ public class DGroup {
         nextFloor = floor;
     }
 
+    /**
+     * @return the color that represents this group
+     */
+    public DColor getDColor() {
+        if (color != null) {
+            return color;
+        } else {
+            return DColor.DEFAULT;
+        }
+    }
+
+    /**
+     * @param color the group color to set
+     */
+    public void setDColor(DColor color) {
+        this.color = color;
+    }
+
+    /**
+     * @return the current score
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * @param score
+     * the score to set
+     */
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    /**
+     * @return the initial group lives
+     */
+    public int getInitialLives() {
+        return initialLives;
+    }
+
+    /**
+     * @param initialLives
+     * the initial group lives to set
+     */
+    public void setInitialLives(int initialLives) {
+        this.initialLives = initialLives;
+    }
+
+    /**
+     * @return the group lives
+     */
+    public int getLives() {
+        return lives;
+    }
+
+    /**
+     * @param lives
+     * the group lives to set
+     */
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
     /* Actions */
     /**
      * Remove the group from the List
@@ -581,11 +654,13 @@ public class DGroup {
     }
 
     public void startGame(Game game) {
-        plugin.debug.start("DGroup#startGame");
         if (game == null) {
             return;
         }
         game.fetchRules();
+        GameRules rules = game.getRules();
+
+        color = plugin.getMainConfig().getGroupColorPriority().get(game.getDGroups().indexOf(this));
 
         for (DGroup dGroup : game.getDGroups()) {
             if (dGroup == null) {
@@ -605,7 +680,6 @@ public class DGroup {
             }
 
             if (!ready) {
-                plugin.debug.end("DGroup#startGame", true);
                 return;
             }
         }
@@ -614,7 +688,6 @@ public class DGroup {
         plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            plugin.debug.end("DGroup#startGame", true);
             return;
         }
 
@@ -645,8 +718,6 @@ public class DGroup {
                 }
             }
 
-            GameRules rules = game.getRules();
-
             for (Requirement requirement : rules.getRequirements()) {
                 RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
                 plugin.getServer().getPluginManager().callEvent(event);
@@ -658,18 +729,9 @@ public class DGroup {
                 requirement.demand(player);
             }
 
-            GameType gameType = game.getType();
-            if (gameType == GameTypeDefault.DEFAULT) {
-                player.setGameMode(rules.getGameMode());
-                if (rules.isTimeIsRunning()) {
-                    timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
-                }
-
-            } else {
-                player.setGameMode(gameType.getGameMode());
-                if (gameType.getShowTime()) {
-                    timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
-                }
+            player.setGameMode(rules.getGameMode());
+            if (rules.isTimeIsRunning()) {
+                timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
             }
 
             // Permission bridge
@@ -682,7 +744,17 @@ public class DGroup {
 
         GroupSign.updatePerGroup(this);
         nextFloor = null;
-        plugin.debug.end("DGroup#startGame", true);
+        initialLives = rules.getInitialGroupLives();
+        lives = initialLives;
+    }
+
+    public void winGame() {
+        String title = DMessages.GROUP_CONGRATS.getMessage();
+        String subtitle = DMessages.GROUP_CONGRATS_SUB.getMessage(getName());
+        for (DGamePlayer player : getDGamePlayers()) {
+            player.leave(false);
+            MessageUtil.sendTitleMessage(player.getPlayer(), title, subtitle, 20, 20, 100);
+        }
     }
 
     public boolean checkTime(Game game) {
@@ -759,7 +831,7 @@ public class DGroup {
     /* Statics */
     public static DGroup getByName(String name) {
         for (DGroup dGroup : plugin.getDGroups()) {
-            if (dGroup.getName().equals(name)) {
+            if (dGroup.getName().equalsIgnoreCase(name) || dGroup.getRawName().equalsIgnoreCase(name)) {
                 return dGroup;
             }
         }

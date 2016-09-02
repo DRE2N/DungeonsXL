@@ -30,6 +30,8 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
 /**
+ * World instance manager.
+ *
  * @author Daniel Saukel
  */
 public class DWorlds {

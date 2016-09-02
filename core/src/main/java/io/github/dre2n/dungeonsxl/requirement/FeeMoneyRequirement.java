@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
@@ -29,6 +30,7 @@ public class FeeMoneyRequirement extends Requirement {
 
     private double fee;
 
+    /* Getters and setters */
     /**
      * @return the fee
      */
@@ -42,6 +44,17 @@ public class FeeMoneyRequirement extends Requirement {
      */
     public void setFee(double fee) {
         this.fee = fee;
+    }
+
+    @Override
+    public RequirementType getType() {
+        return type;
+    }
+
+    /* Actions */
+    @Override
+    public void setup(ConfigurationSection config) {
+        fee = config.getDouble("feeMoney");
     }
 
     @Override
@@ -61,11 +74,6 @@ public class FeeMoneyRequirement extends Requirement {
 
         plugin.getEconomyProvider().withdrawPlayer(player, fee);
         MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REQUIREMENT_FEE, plugin.getEconomyProvider().format(fee)));
-    }
-
-    @Override
-    public RequirementType getType() {
-        return type;
     }
 
 }

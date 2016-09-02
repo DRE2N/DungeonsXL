@@ -19,10 +19,7 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.commons.util.EnumUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
@@ -62,6 +59,7 @@ public enum DPermissions {
     PLAY("play", OP),
     PORTAL("portal", OP),
     RELOAD("reload", OP),
+    REWARDS("rewards", TRUE),
     SAVE("save", OP),
     STATUS("status", OP),
     /**
@@ -204,15 +202,8 @@ public enum DPermissions {
      * Registers the permissions.
      */
     public static void register() {
-    	Set<String> registeredPermissions = new HashSet<String>();
-    	for(Permission temp : Bukkit.getPluginManager().getPermissions())
-    		registeredPermissions.add(temp.getName());
-    		
         for (DPermissions permission : values()) {
-        	Permission p = new Permission(permission.getNode(), permission.isDefault());
-        	
-        	if(!registeredPermissions.contains(p.getName()))
-        		Bukkit.getPluginManager().addPermission(p);
+            Bukkit.getPluginManager().addPermission(new Permission(permission.getNode(), permission.isDefault()));
         }
     }
 

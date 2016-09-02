@@ -25,6 +25,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 /**
+ * An instance of a resource world.
+ *
  * @author Daniel Saukel
  */
 public abstract class DInstanceWorld {

@@ -19,49 +19,57 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 
 /**
+ * Default implementation of DSignType.
+ *
  * @author Daniel Saukel
  */
 public enum DSignTypeDefault implements DSignType {
 
-    BLOCK("Block", "block", false, BlockSign.class),
-    CHECKPOINT("Checkpoint", "checkpoint", false, CheckpointSign.class),
-    CHEST("Chest", "chest", false, ChestSign.class),
-    CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, ChunkUpdaterSign.class),
-    CLASSES("Classes", "classes", true, ClassesSign.class),
-    COMMAND("CMD", "cmd", false, CommandSign.class),
-    DROP("Drop", "drop", false, DropSign.class),
-    END("End", "end", false, EndSign.class),
-    EXTERNAL_MOB("ExternalMob", "mob", false, ExternalMobSign.class),
-    FLOOR("Floor", "floor", false, FloorSign.class),
-    HOLOGRAM("Hologram", "hologram", true, HologramSign.class),
-    INTERACT("Interact", "interact", true, InteractSign.class),
-    LEAVE("Leave", "leave", true, LeaveSign.class),
-    LIVES_MODIFIER("Lives", "lives", false, LivesModifierSign.class),
-    LOBBY("Lobby", "lobby", true, LobbySign.class),
-    MOB("Mob", "mob", false, DMobSign.class),
-    MESSAGE("MSG", "msg", false, MessageSign.class),
+    BED("Bed", "bed", false, false, BedSign.class),
+    BLOCK("Block", "block", false, true, BlockSign.class),
+    BOSS_SHOP("BossShop", "bossshop", false, true, BossShopSign.class),
+    CHECKPOINT("Checkpoint", "checkpoint", false, false, CheckpointSign.class),
+    CHEST("Chest", "chest", false, false, ChestSign.class),
+    CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, false, ChunkUpdaterSign.class),
+    CLASSES("Classes", "classes", true, true, ClassesSign.class),
+    COMMAND("CMD", "cmd", false, false, CommandSign.class),
+    DROP("Drop", "drop", false, false, DropSign.class),
+    END("End", "end", false, true, EndSign.class),
+    EXTERNAL_MOB("ExternalMob", "mob", false, false, ExternalMobSign.class),
+    FLAG("Flag", "flag", false, false, FlagSign.class),
+    FLOOR("Floor", "floor", false, true, FloorSign.class),
+    HOLOGRAM("Hologram", "hologram", true, false, HologramSign.class),
+    INTERACT("Interact", "interact", true, true, InteractSign.class),
+    LEAVE("Leave", "leave", true, true, LeaveSign.class),
+    LIVES_MODIFIER("Lives", "lives", false, false, LivesModifierSign.class),
+    LOBBY("Lobby", "lobby", true, false, LobbySign.class),
+    MOB("Mob", "mob", false, false, DMobSign.class),
+    MESSAGE("MSG", "msg", false, false, MessageSign.class),
     @Deprecated
-    MYTHIC_MOBS("MythicMobs", "mob", false, ExternalMobSign.class),
-    OPEN_DOOR("Door", "door", false, OpenDoorSign.class),
-    PLACE("Place", "place", false, PlaceSign.class),
-    READY("Ready", "ready", true, ReadySign.class),
-    REDSTONE("Redstone", "redstone", false, RedstoneSign.class),
-    SCRIPT("Script", "script", false, ScriptSign.class),
-    SOUND_MESSAGE("SoundMSG", "soundmsg", false, SoundMessageSign.class),
-    START("Start", "start", true, StartSign.class),
-    TELEPORT("Teleport", "teleport", false, TeleportSign.class),
-    TRIGGER("Trigger", "trigger", true, TriggerSign.class),
-    WAVE("Wave", "wave", false, WaveSign.class);
+    MYTHIC_MOBS("MythicMobs", "mob", false, false, ExternalMobSign.class),
+    OPEN_DOOR("Door", "door", false, false, OpenDoorSign.class),
+    PLACE("Place", "place", false, false, PlaceSign.class),
+    PROTECTION("Protection", "protection", false, false, ProtectionSign.class),
+    READY("Ready", "ready", true, true, ReadySign.class),
+    REDSTONE("Redstone", "redstone", false, false, RedstoneSign.class),
+    SCRIPT("Script", "script", false, false, ScriptSign.class),
+    SOUND_MESSAGE("SoundMSG", "soundmsg", false, false, SoundMessageSign.class),
+    START("Start", "start", true, false, StartSign.class),
+    TELEPORT("Teleport", "teleport", false, false, TeleportSign.class),
+    TRIGGER("Trigger", "trigger", true, false, TriggerSign.class),
+    WAVE("Wave", "wave", false, false, WaveSign.class);
 
     private String name;
     private String buildPermission;
     private boolean onDungeonInit;
+    private boolean isProtected;
     private Class<? extends DSign> handler;
 
-    DSignTypeDefault(String name, String buildPermission, boolean onDungeonInit, Class<? extends DSign> handler) {
+    DSignTypeDefault(String name, String buildPermission, boolean onDungeonInit, boolean isProtected, Class<? extends DSign> handler) {
         this.name = name;
         this.buildPermission = buildPermission;
         this.onDungeonInit = onDungeonInit;
+        this.isProtected = isProtected;
         this.handler = handler;
     }
 
@@ -78,6 +86,11 @@ public enum DSignTypeDefault implements DSignType {
     @Override
     public boolean isOnDungeonInit() {
         return onDungeonInit;
+    }
+
+    @Override
+    public boolean isProtected() {
+        return isProtected;
     }
 
     @Override

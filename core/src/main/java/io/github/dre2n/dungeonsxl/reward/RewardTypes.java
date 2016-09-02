@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * RewardType instance manager.
+ *
  * @author Daniel Saukel
  */
 public class RewardTypes {

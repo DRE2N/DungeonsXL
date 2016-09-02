@@ -39,7 +39,7 @@ public class PortalCommand extends BRCommand {
     public PortalCommand() {
         setCommand("portal");
         setMinArgs(0);
-        setMaxArgs(0);
+        setMaxArgs(1);
         setHelp(DMessages.HELP_CMD_PORTAL.getMessage());
         setPermission(DPermissions.PORTAL.getNode());
         setPlayerCommand(true);
@@ -55,10 +55,20 @@ public class PortalCommand extends BRCommand {
             return;
         }
 
+        Material material = null;
+
+        if (args.length == 2) {
+            material = Material.matchMaterial(args[1]);
+        }
+
+        if (material == null) {
+            material = Material.PORTAL;
+        }
+
         DPortal dPortal = dGlobalPlayer.getPortal();
 
         if (dPortal == null) {
-            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), false);
+            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
