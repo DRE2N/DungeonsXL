@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.commons.util.EnumUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -203,11 +204,14 @@ public enum DPermissions {
      * Registers the permissions.
      */
     public static void register() {
-    	Set<Permission> registeredPermissions = Bukkit.getPluginManager().getPermissions();
+    	Set<String> registeredPermissions = new HashSet<String>();
+    	for(Permission temp : Bukkit.getPluginManager().getPermissions())
+    		registeredPermissions.add(temp.getName());
+    		
         for (DPermissions permission : values()) {
         	Permission p = new Permission(permission.getNode(), permission.isDefault());
         	
-        	if(!registeredPermissions.contains(p))
+        	if(!registeredPermissions.contains(p.getName()))
         		Bukkit.getPluginManager().addPermission(p);
         }
     }
