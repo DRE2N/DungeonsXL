@@ -20,6 +20,8 @@ import io.github.dre2n.commons.util.EnumUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
@@ -201,8 +203,12 @@ public enum DPermissions {
      * Registers the permissions.
      */
     public static void register() {
+    	Set<Permission> registeredPermissions = Bukkit.getPluginManager().getPermissions();
         for (DPermissions permission : values()) {
-            Bukkit.getPluginManager().addPermission(new Permission(permission.getNode(), permission.isDefault()));
+        	Permission p = new Permission(permission.getNode(), permission.isDefault());
+        	
+        	if(!registeredPermissions.contains(p))
+        		Bukkit.getPluginManager().addPermission(p);
         }
     }
 
