@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
@@ -28,6 +29,7 @@ public class AwesomenessRequirement extends Requirement {
 
     private int level;
 
+    /* Getters and setters */
     /**
      * @return the awesomeness level
      */
@@ -44,6 +46,17 @@ public class AwesomenessRequirement extends Requirement {
     }
 
     @Override
+    public RequirementType getType() {
+        return type;
+    }
+
+    /* Actions */
+    @Override
+    public void setup(ConfigurationSection config) {
+        this.level = config.getInt("awesomeness");
+    }
+
+    @Override
     public boolean check(Player player) {
         // Code that checks if the player has the requirement
         MessageUtil.sendTitleMessage(player, "&6Are you AWESOME?");
@@ -53,11 +66,6 @@ public class AwesomenessRequirement extends Requirement {
     @Override
     public void demand(Player player) {
         // Code that removes the requirement if it is a fee
-    }
-
-    @Override
-    public RequirementType getType() {
-        return type;
     }
 
 }

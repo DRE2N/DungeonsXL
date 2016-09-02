@@ -23,12 +23,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
+ * DGlobalPlayer instance manager.
+ *
  * @author Daniel Saukel
  */
 public class DPlayers {
 
     private CopyOnWriteArrayList<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<DSavePlayer> dSavePlayers = new CopyOnWriteArrayList<>();
 
     /**
      * @return the DGlobalPlayer which represents the player
@@ -112,48 +113,36 @@ public class DPlayers {
     }
 
     /**
-     * @return the DSavePlayer that represents the player
-     */
-    public DSavePlayer getDSavePlayerByPlayer(Player player) {
-        for (DSavePlayer dSavePlayer : dSavePlayers) {
-            if (dSavePlayer.getName().equals(player.getName())) {
-                return dSavePlayer;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return the dSavePlayers
-     */
-    public List<DSavePlayer> getDSavePlayers() {
-        return dSavePlayers;
-    }
-
-    /**
-     * @param dSavePlayer
-     * the dSavePlayer to add
-     */
-    public void addDSavePlayer(DSavePlayer dSavePlayer) {
-        dSavePlayers.add(dSavePlayer);
-    }
-
-    /**
-     * @param dSavePlayer
-     * the dSavePlayer to remove
-     */
-    public void removeDSavePlayer(DSavePlayer dSavePlayer) {
-        dSavePlayers.remove(dSavePlayer);
-    }
-
-    /**
      * Load all players
      */
     public void loadAll() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             new DGlobalPlayer(player);
         }
+    }
+
+    /**
+     * Checks if an old DGamePlayer instance of the user exists.
+     * If yes, the old Player of the user is replaced with the new object.
+     *
+     * @param player
+     * the player to check
+     * @return if the player exists
+     */
+    public boolean checkPlayer(Player player) {
+        DGamePlayer dPlayer = DGamePlayer.getByName(player.getName());
+        if (dPlayer == null) {
+            return false;
+        }
+
+        DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
+        if (dGroup != null) {
+            dGroup.removePlayer(dPlayer.getPlayer());
+            dGroup.addPlayer(player);
+        }
+        dPlayer.setPlayer(player);
+        dPlayer.setOfflineTime(0);
+        return true;
     }
 
 }

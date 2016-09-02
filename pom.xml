@@ -68,6 +68,18 @@
             <artifactId>BetonQuest</artifactId>
             <version>1.8.5</version>
         </dependency>
+        <dependency>
+        	<groupId>org.bukkit</groupId>
+        	<artifactId>bukkit</artifactId>
+        	<version>1.10.2</version>
+        	<scope>provided</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.bukkit</groupId>
+        	<artifactId>craftbukkit</artifactId>
+        	<version>1.10.2-R0.1-SNAPSHOT</version>
+        	<scope>provided</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>

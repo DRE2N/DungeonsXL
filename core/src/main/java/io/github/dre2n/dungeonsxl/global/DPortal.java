@@ -21,8 +21,10 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Location;
@@ -33,25 +35,35 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
+ * A portal that leads into a dungeon.
+ *
  * @author Frank Baumann, Daniel Saukel
  */
 public class DPortal extends GlobalProtection {
 
     private Block block1;
     private Block block2;
+    private Material material = Material.PORTAL;
     private boolean active;
     private Set<Block> blocks;
 
     public DPortal(int id, World world, boolean active) {
+        this(id, world, Material.PORTAL, active);
+    }
+
+    public DPortal(int id, World world, Material material, boolean active) {
         super(world, id);
+
+        this.material = material;
         this.active = active;
     }
 
-    public DPortal(int id, Block block1, Block block2, boolean active) {
+    public DPortal(int id, Block block1, Block block2, Material material, boolean active) {
         super(block1.getWorld(), id);
 
         this.block1 = block1;
         this.block2 = block2;
+        this.material = material;
         this.active = active;
     }
 
@@ -103,7 +115,7 @@ public class DPortal extends GlobalProtection {
     /**
      * Create a new DPortal
      */
-    public void create() {
+    public void create(DGlobalPlayer player) {
         if (block1 == null || block2 == null) {
             delete();
             return;
@@ -138,11 +150,13 @@ public class DPortal extends GlobalProtection {
 
                 do {
                     Material type = getWorld().getBlockAt(xx, yy, zz).getType();
-                    if (type == Material.AIR || type == Material.WATER || type == Material.STATIONARY_WATER || type == Material.LAVA || type == Material.STATIONARY_LAVA || type == Material.SAPLING
-                            || type == Material.WEB || type == Material.LONG_GRASS || type == Material.DEAD_BUSH || type == Material.PISTON_EXTENSION || type == Material.YELLOW_FLOWER
-                            || type == Material.RED_ROSE || type == Material.BROWN_MUSHROOM || type == Material.RED_MUSHROOM || type == Material.TORCH || type == Material.FIRE
-                            || type == Material.CROPS || type == Material.REDSTONE_WIRE || type == Material.REDSTONE_TORCH_OFF || type == Material.SNOW || type == Material.REDSTONE_TORCH_ON) {
-                        getWorld().getBlockAt(xx, yy, zz).setType(Material.PORTAL);
+                    if (!type.isSolid()) {
+                        Block block = getWorld().getBlockAt(xx, yy, zz);
+                        block.setType(material, false);
+                        if (player != null && material == Material.PORTAL) {
+                            float yaw = player.getPlayer().getLocation().getYaw();
+                            block.setData((yaw >= -135 & yaw < -45 || yaw >= -315 & yaw < -225) ? (byte) 2 : 1, false);
+                        }
                     }
 
                     zz = zz + zcount;
@@ -153,6 +167,10 @@ public class DPortal extends GlobalProtection {
 
             xx = xx + xcount;
         } while (xx != x2 + xcount);
+
+        if (player != null) {
+            player.setCreatingPortal(null);
+        }
     }
 
     /**
@@ -186,8 +204,11 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null && dGroup.getMapName() != null) {
-            target = plugin.getDWorlds().getResourceByName(dGroup.getMapName()).instantiateAsGameWorld();//TO DO
-            dGroup.setGameWorld(target);
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(dGroup.getMapName());
+            if (resource != null) {
+                target = resource.instantiateAsGameWorld();
+                dGroup.setGameWorld(target);
+            }
         }
 
         if (target == null) {
@@ -197,6 +218,7 @@ public class DPortal extends GlobalProtection {
 
         if (game == null) {
             game = new Game(dGroup, target);
+
         } else {
             game.setWorld(target);
             dGroup.setGameWorld(target);
@@ -225,19 +247,25 @@ public class DPortal extends GlobalProtection {
         }
 
         String preString = "protections.portals." + getWorld().getName() + "." + getId();
-        // Location1
+
         configFile.set(preString + ".loc1.x", block1.getX());
         configFile.set(preString + ".loc1.y", block1.getY());
         configFile.set(preString + ".loc1.z", block1.getZ());
-        // Location1
+
         configFile.set(preString + ".loc2.x", block2.getX());
         configFile.set(preString + ".loc2.y", block2.getY());
         configFile.set(preString + ".loc2.z", block2.getZ());
+
+        configFile.set(preString + ".material", material.toString());
     }
 
     @Override
     public void delete() {
         protections.removeProtection(this);
+
+        if (block1 == null || block2 == null) {
+            return;
+        }
 
         int x1 = block1.getX(), y1 = block1.getY(), z1 = block1.getZ();
         int x2 = block2.getX(), y2 = block2.getY(), z2 = block2.getZ();
@@ -269,7 +297,7 @@ public class DPortal extends GlobalProtection {
                 do {
                     Material type = getWorld().getBlockAt(xx, yy, zz).getType();
 
-                    if (type == Material.PORTAL) {
+                    if (type == material) {
                         getWorld().getBlockAt(xx, yy, zz).setType(Material.AIR);
                     }
 

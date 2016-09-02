@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.block.LockedDoor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -31,7 +32,8 @@ public class OpenDoorSign extends DSign {
 
     private DSignType type = DSignTypeDefault.OPEN_DOOR;
 
-    private Block block;
+    private LockedDoor door;
+    private boolean active = true;
 
     public OpenDoorSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -41,16 +43,31 @@ public class OpenDoorSign extends DSign {
     /**
      * @return the door to open;
      */
-    public Block getBlock() {
-        return block;
+    public LockedDoor getDoor() {
+        return door;
     }
 
     /**
-     * @param block
+     * @param door
      * the door to open
      */
-    public void setBlock(Block block) {
-        this.block = block;
+    public void setDoor(LockedDoor door) {
+        this.door = door;
+    }
+
+    /**
+     * @return if the sign is active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active
+     * toggle the sign active
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -69,44 +86,25 @@ public class OpenDoorSign extends DSign {
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
         if (block.getState().getData() instanceof Door) {
             if (block.getRelative(BlockFace.DOWN).getType() == block.getType()) {
-                this.block = block.getRelative(BlockFace.DOWN);
+                door = new LockedDoor(block.getRelative(BlockFace.DOWN));
             } else {
-                this.block = block;
-
+                door = new LockedDoor(block);
             }
-        }
+            getGameWorld().addGameBlock(door);
 
-        getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(Material.AIR);
+
+        } else {
+            markAsErroneous();
+        }
     }
 
     @Override
     public void onTrigger() {
-        if (block != null) {
-            ((Door) block.getState().getData()).setOpen(true);
-            block.getState().update(true);
+        if (door != null && active) {
+            door.open();
+            active = false;
         }
-    }
-
-    /* Statics */
-    /**
-     * @param block
-     * the block to check
-     * @return
-     * true if the block is openable only with a sign
-     */
-    public static boolean isProtected(Block block) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
-        if (gameWorld != null) {
-            for (DSign dSign : gameWorld.getDSigns(DSignTypeDefault.OPEN_DOOR)) {
-                Block signBlock1 = ((OpenDoorSign) dSign).getBlock();
-                Block signBlock2 = signBlock1.getRelative(BlockFace.UP);
-                if (block.equals(signBlock1) || block.equals(signBlock2)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
 }

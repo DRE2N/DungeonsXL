@@ -20,10 +20,6 @@ import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
-import io.github.dre2n.dungeonsxl.game.GameType;
-import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GlobalProtection;
@@ -36,9 +32,10 @@ import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.task.RedstoneEventTask;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
-import org.bukkit.Location;
+import io.github.dre2n.dungeonsxl.world.DInstanceWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -63,15 +60,33 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPhysics(BlockPhysicsEvent event) {
-        if (event.getBlock().getType() != Material.PORTAL) {
-            return;
-        }
-
         if (DPortal.getByBlock(event.getBlock()) != null) {
             event.setCancelled(true);
         }
     }
 
+    @EventHandler
+    public void onBreakWithSignOnIt(BlockBreakEvent event){
+        Block block = event.getBlock();
+        Player player = event.getPlayer();
+        
+        Block blockAbove = block.getRelative(BlockFace.UP);
+        //get the above block and return if there is nothing
+        if(blockAbove == null)
+        	return;
+        
+        //return if above block is not a sign
+        if(blockAbove.getType() != Material.SIGN_POST && blockAbove.getType() != Material.WALL_SIGN)
+        	return;
+        
+        //let onBreak() method to handle the sign
+        BlockBreakEvent bbe = new BlockBreakEvent(blockAbove, player);
+        onBreak(bbe);
+        
+        //follow the onBreak()
+        event.setCancelled(bbe.isCancelled());
+    }
+    
     @EventHandler(priority = EventPriority.HIGH)
     public void onBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
@@ -80,16 +95,9 @@ public class BlockListener implements Listener {
 
         GlobalProtection protection = plugin.getGlobalProtections().getByBlock(event.getBlock());
         if (protection != null) {
-            if (dGlobalPlayer.isInBreakMode()) {
-                protection.delete();
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.CMD_BREAK_PROTECTED_MODE));
-                dGlobalPlayer.setInBreakMode(false);
-
-            } else {
+            if (protection.onBreak(dGlobalPlayer)) {
                 event.setCancelled(true);
             }
-
             return;
         }
 
@@ -103,24 +111,7 @@ public class BlockListener implements Listener {
         // Deny DGameWorld block breaking
         DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
         if (gameWorld != null) {
-            for (DSign dSign : gameWorld.getDSigns()) {
-                if (dSign.getSign().equals(block)) {
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-
-            Game game = gameWorld.getGame();
-            if (game != null) {
-                GameType gameType = game.getType();
-                if (gameType == GameTypeDefault.DEFAULT) {
-                    event.setCancelled(!game.getRules().canBuild());
-
-                } else if (!gameType.canBuild()) {
-                    event.setCancelled(true);
-                }
-
-            } else {
+            if (gameWorld.onBreak(event)) {
                 event.setCancelled(true);
             }
         }
@@ -136,27 +127,9 @@ public class BlockListener implements Listener {
             return;
         }
 
-        Game game = gameWorld.getGame();
-        if (game != null) {
-            if (game.getRules().canBuild() || GamePlaceableBlock.canBuildHere(block, block.getFace(event.getBlockAgainst()), event.getItemInHand().getType(), gameWorld)) {
-                return;
-            }
+        if (gameWorld.onPlace(event.getPlayer(), block, event.getBlockAgainst(), event.getItemInHand())) {
+            event.setCancelled(true);
         }
-
-        // Workaround for a bug that would allow 3-Block-high jumping
-        Location loc = event.getPlayer().getLocation();
-        if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
-            if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
-                if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
-                    loc.setX(block.getX() + 0.5);
-                    loc.setY(block.getY());
-                    loc.setZ(block.getZ() + 0.5);
-                    event.getPlayer().teleport(loc);
-                }
-            }
-        }
-
-        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -246,21 +219,13 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSpread(BlockSpreadEvent event) {
-        Block block = event.getBlock();
-        // Block the Spread off Vines
-        if (block.getType() != Material.VINE) {
-            return;
-        }
+        Block block = event.getSource();
 
-        // Check GameWorlds
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getBlock().getWorld());
-        if (gameWorld != null) {
+        DInstanceWorld instance = plugin.getDWorlds().getInstanceByName(block.getWorld().getName());
+        if (instance != null && block.getType() == Material.VINE) {
             event.setCancelled(true);
-        }
 
-        // Check EditWorlds
-        DEditWorld editWorld = DEditWorld.getByWorld(event.getBlock().getWorld());
-        if (editWorld != null) {
+        } else if (DPortal.getByBlock(block) != null) {
             event.setCancelled(true);
         }
     }

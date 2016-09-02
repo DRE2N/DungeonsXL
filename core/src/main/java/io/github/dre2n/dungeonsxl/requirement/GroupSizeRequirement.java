@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
@@ -60,6 +61,18 @@ public class GroupSizeRequirement extends Requirement {
     }
 
     @Override
+    public RequirementType getType() {
+        return type;
+    }
+
+    /* Actions */
+    @Override
+    public void setup(ConfigurationSection config) {
+        minimum = config.getInt("groupSize.minimum");
+        maximum = config.getInt("groupSize.maximum");
+    }
+
+    @Override
     public boolean check(Player player) {
         DGroup dGroup = DGroup.getByPlayer(player);
         int size = dGroup.getPlayers().size();
@@ -68,11 +81,6 @@ public class GroupSizeRequirement extends Requirement {
 
     @Override
     public void demand(Player player) {
-    }
-
-    @Override
-    public RequirementType getType() {
-        return type;
     }
 
 }

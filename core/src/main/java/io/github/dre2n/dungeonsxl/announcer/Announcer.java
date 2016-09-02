@@ -44,6 +44,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
+ * Represents a game announcement.
+ *
  * @author Daniel Saukel
  */
 public class Announcer {
@@ -434,7 +436,7 @@ public class Announcer {
 
             boolean full = playerCount >= maxPlayersPerGroup;
 
-            ItemStack button = new ItemStack(Material.WOOL, playerCount, plugin.getMainConfig().getGroupColorPriority().get(groupCount));
+            ItemStack button = new ItemStack(Material.WOOL, playerCount, plugin.getMainConfig().getGroupColorPriority().get(groupCount).getWoolData());
             ItemMeta meta = button.getItemMeta();
             meta.setDisplayName(name + (full ? ChatColor.DARK_RED : ChatColor.GREEN) + " [" + playerCount + "/" + maxPlayersPerGroup + "]");
             meta.setLore(lore);
