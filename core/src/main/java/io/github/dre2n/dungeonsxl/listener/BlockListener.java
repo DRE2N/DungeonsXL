@@ -39,6 +39,7 @@ import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,6 +73,28 @@ public class BlockListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onBreakWithSignOnIt(BlockBreakEvent event){
+        Block block = event.getBlock();
+        Player player = event.getPlayer();
+        
+        Block blockAbove = block.getRelative(BlockFace.UP);
+        //get the above block and return if there is nothing
+        if(blockAbove == null)
+        	return;
+        
+        //return if above block is not a sign
+        if(blockAbove.getType() != Material.SIGN_POST && blockAbove.getType() != Material.WALL_SIGN)
+        	return;
+        
+        //let onBreak() method to handle the sign
+        BlockBreakEvent bbe = new BlockBreakEvent(blockAbove, player);
+        onBreak(bbe);
+        
+        //follow the onBreak()
+        event.setCancelled(bbe.isCancelled());
+    }
+    
     @EventHandler(priority = EventPriority.HIGH)
     public void onBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
