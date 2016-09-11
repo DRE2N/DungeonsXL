@@ -52,6 +52,7 @@ public enum DSignTypeDefault implements DSignType {
     PROTECTION("Protection", "protection", false, false, ProtectionSign.class),
     READY("Ready", "ready", true, true, ReadySign.class),
     REDSTONE("Redstone", "redstone", false, false, RedstoneSign.class),
+    RESOURCE_PACK("ResourcePack", "resourcepack", true, true, ResourcePackSign.class),
     SCRIPT("Script", "script", false, false, ScriptSign.class),
     SOUND_MESSAGE("SoundMSG", "soundmsg", false, false, SoundMessageSign.class),
     START("Start", "start", true, false, StartSign.class),
