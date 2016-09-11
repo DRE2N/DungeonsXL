@@ -45,7 +45,7 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.2</version>
+            <version>0.2.1</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
@@ -74,6 +74,11 @@
             <version>2.6.9</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.inventivetalent.resourcepackapi</groupId>
+            <artifactId>api</artifactId>
+            <version>2.2.1</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -91,6 +96,10 @@
         <repository>
             <id>betonquest-repo</id>
             <url>http://betonquest.betoncraft.pl/mvn</url>
+        </repository>
+        <repository>
+            <id>inventive-repo</id>
+            <url>http://repo.inventivetalent.org/content/groups/public/</url>
         </repository>
         <repository>
             <id>dre2n-repo</id>

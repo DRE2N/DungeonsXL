@@ -29,6 +29,10 @@
                                     <pattern>io.github.dre2n.commons</pattern>
                                     <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.inventivetalent.rpapi</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
+                                </relocation>
                             </relocations>
                             <artifactSet>
                                 <includes>
@@ -36,6 +40,7 @@
                                     <include>io.github.dre2n:caliburn</include>
                                     <include>io.github.dre2n:debukkit</include>
                                     <include>io.github.dre2n:dungeonsxl-*</include>
+                                    <include>org.inventivetalent.resourcepackapi:api</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
