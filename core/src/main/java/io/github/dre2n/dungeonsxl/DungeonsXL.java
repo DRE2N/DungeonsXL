@@ -266,7 +266,8 @@ public class DungeonsXL extends BRPlugin {
         loadRewardTypes();
         loadTriggers();
         loadDSigns();
-        loadDungeons();
+        loadDWorlds(MAPS);
+        loadDungeons(DUNGEONS);
         loadGlobalProtections();
         loadExternalMobProviders();
         loadDPlayers();
@@ -275,7 +276,6 @@ public class DungeonsXL extends BRPlugin {
         loadDLootTables(LOOT_TABLES);
         loadDMobTypes(MOBS);
         loadSignScripts(SIGNS);
-        loadDWorlds(MAPS);
         loadDCommands();
     }
 
@@ -446,8 +446,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * load / reload a new instance of Dungeons
      */
-    public void loadDungeons() {
-        dungeons = new Dungeons();
+    public void loadDungeons(File file) {
+        dungeons = new Dungeons(file);
     }
 
     /**
