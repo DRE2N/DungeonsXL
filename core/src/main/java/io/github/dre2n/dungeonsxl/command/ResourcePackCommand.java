@@ -45,6 +45,12 @@ public class ResourcePackCommand extends BRCommand {
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
 
+        if (args[1].equalsIgnoreCase("reset")) {
+            // Placeholder to reset to default
+            ResourcePackAPI.setResourcepack(player, "http://google.com");
+            return;
+        }
+
         String url = (String) plugin.getMainConfig().getResourcePacks().get(args[1]);
         if (url == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_RESOURCE_PACK.getMessage(args[1]));

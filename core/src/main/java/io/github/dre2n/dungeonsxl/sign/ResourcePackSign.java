@@ -61,12 +61,18 @@ public class ResourcePackSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return plugin.getMainConfig().getResourcePacks().get(lines[1]) != null;
+        return plugin.getMainConfig().getResourcePacks().get(lines[1]) != null || lines[1].equalsIgnoreCase("reset");
     }
 
     @Override
     public void onInit() {
-        Object url = plugin.getMainConfig().getResourcePacks().get(lines[1]);
+        Object url = null;
+        if (lines[1].equalsIgnoreCase("reset")) {
+            // Placeholder to reset to default
+            url = "http://google.com";
+        } else {
+            url = plugin.getMainConfig().getResourcePacks().get(lines[1]);
+        }
 
         if (url instanceof String) {
             resourcePack = (String) url;
