@@ -59,6 +59,7 @@ public enum DPermissions {
     PLAY("play", OP),
     PORTAL("portal", OP),
     RELOAD("reload", OP),
+    RESOURCE_PACK("resourcepack", OP),
     REWARDS("rewards", TRUE),
     SAVE("save", OP),
     STATUS("status", OP),

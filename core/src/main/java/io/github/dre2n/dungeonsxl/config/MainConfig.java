@@ -45,7 +45,7 @@ public class MainConfig extends BRConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 12;
+    public static final int CONFIG_VERSION = 13;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -79,6 +79,7 @@ public class MainConfig extends BRConfig {
     /* Misc */
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
+    private Map<String, Object> resourcePacks = new HashMap<>();
 
     /* Performance */
     private int maxInstances = 10;
@@ -247,6 +248,13 @@ public class MainConfig extends BRConfig {
      */
     public Map<String, Object> getExternalMobProviders() {
         return externalMobProviders;
+    }
+
+    /**
+     * @return the resource pack index
+     */
+    public Map<String, Object> getResourcePacks() {
+        return resourcePacks;
     }
 
     /**
@@ -422,6 +430,10 @@ public class MainConfig extends BRConfig {
             config.createSection("externalMobProviders");
         }
 
+        if (!config.contains("resourcePacks")) {
+            config.createSection("resourcePacks");
+        }
+
         if (!config.contains("maxInstances")) {
             config.set("maxInstances", maxInstances);
         }
@@ -512,6 +524,10 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("externalMobProviders")) {
             externalMobProviders = config.getConfigurationSection("externalMobProviders").getValues(false);
+        }
+
+        if (config.contains("resourcePacks")) {
+            resourcePacks = config.getConfigurationSection("resourcePacks").getValues(false);
         }
 
         if (config.contains("maxInstances")) {

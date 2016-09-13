@@ -33,6 +33,7 @@ DungeonsXL also provides custom game mechanics to make these worlds interesting.
 * Different game types allow you to use your maps dynamically for different purposes. [Read more...](../../wiki/game-types)
 * Announcements sothat users can join the next match easily. [Read more...](../../wiki/announcements)
 * Great performance due to a custom, asynchronous world loading and creation method and several other performance tweaks
+* Per dungeon resource packs
 * ...and many more!
 
 
@@ -71,6 +72,9 @@ Maven automatically fetches all dependencies and builds DungeonsXL; just run _bu
 
 #### Caliburn API
 [Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.2.1.
+
+#### ResourcePackAPI
+inventivetalent's [ResourcePackAPI](https://www.spigotmc.org/resources/api-resourcepackapi-1-7-1-8-1-9-1-10.2397/) is an API to set the resourcepack of a player. DungeonsXL contains ResourcePackAPI 2.2.1.
 
 ### Java
 Make sure that your server uses Java 7 or higher.
