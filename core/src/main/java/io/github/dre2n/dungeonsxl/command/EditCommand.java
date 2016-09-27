@@ -63,6 +63,7 @@ public class EditCommand extends BRCommand {
             return;
         }
 
+        org.bukkit.Bukkit.broadcastMessage(resource.getConfig().getInvitedPlayers().toString());
         if (!resource.isInvitedPlayer(player) && !DPermissions.hasPermission(player, DPermissions.EDIT)) {
             MessageUtil.sendMessage(player, DMessages.ERROR_NO_PERMISSIONS.getMessage());
             return;

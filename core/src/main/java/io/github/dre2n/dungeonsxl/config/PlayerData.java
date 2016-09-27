@@ -16,6 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.config.BRConfig;
 import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
@@ -42,6 +44,7 @@ import org.bukkit.potion.PotionEffect;
 public class PlayerData extends BRConfig {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    boolean is1_9 = Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals());
 
     public static final int CONFIG_VERSION = 2;
 
@@ -379,7 +382,9 @@ public class PlayerData extends BRConfig {
         oldLvl = player.getLevel();
         oldArmor = new ArrayList<>(Arrays.asList(player.getInventory().getArmorContents()));
         oldInventory = new ArrayList<>(Arrays.asList(player.getInventory().getContents()));
-        oldOffHand = player.getInventory().getItemInOffHand();
+        if (is1_9) {
+            oldOffHand = player.getInventory().getItemInOffHand();
+        }
         oldLocation = player.getLocation();
         oldPotionEffects = player.getActivePotionEffects();
 
