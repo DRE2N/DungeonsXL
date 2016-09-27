@@ -253,7 +253,9 @@ public class DungeonsXL extends BRPlugin {
     }
 
     public void loadCore() {
-        loadCaliburnAPI();
+        if (Internals.andHigher(Internals.v1_9_R1).contains(compat.getInternals())) {
+            loadCaliburnAPI();
+        }
         // Load Language
         loadMessageConfig(new File(LANGUAGES, "english.yml"));
         // Load Config
