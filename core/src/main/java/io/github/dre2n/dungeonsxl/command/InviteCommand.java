@@ -46,10 +46,11 @@ public class InviteCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[2]);
-        OfflinePlayer player = Bukkit.getOfflinePlayer(args[2]);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
 
         if (resource != null) {
             if (player != null) {
+                resource.addInvitedPlayer(player);
                 MessageUtil.sendMessage(sender, DMessages.CMD_INVITE_SUCCESS.getMessage(args[1], args[2]));
 
             } else {

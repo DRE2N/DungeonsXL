@@ -311,7 +311,9 @@ public class WorldConfig extends GameRules {
      * the player's unique ID
      */
     public void addInvitedPlayer(String uuid) {
-        invitedPlayers.add(uuid);
+        if (!invitedPlayers.contains(uuid)) {
+            invitedPlayers.add(uuid);
+        }
     }
 
     /**
