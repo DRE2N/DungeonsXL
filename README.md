@@ -48,10 +48,10 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with 1.7.8 and higher. However, support for 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
+DungeonsXL works with 1.7.8 and higher. However, support for 1.11 / 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
 
 Older versions of DungeonsXL support versions since Minecraft 1.3.x, but of course, they are completely unsupported.
-* [1.7.8-1.10.2](../../tree/master)
+* [1.7.8-1.11](../../tree/master)
 * [1.7.5](../../tree/50f772d14281bfe278dba2559d1758cc459c1a30)
 * [1.7.2](../../tree/eccf82b7335dfb0723e3cd37a57df1a968ea7842)
 * [1.6.4](../../tree/780145cf783ea76fe1bfee04cf89216bd4f92e1d)
@@ -68,10 +68,10 @@ Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org
 Maven automatically fetches all dependencies and builds DungeonsXL; just run _build.bat_ or enter the command _mvn clean install_.
 
 #### BRCommons
-[BRCommons](https://github.com/DRE2N/BRCommons) is a util library for common tasks. DungeonsXL contains BRCommons 1.0.1.
+[BRCommons](https://github.com/DRE2N/BRCommons) is a util library for common tasks. DungeonsXL contains BRCommons 1.0.2.
 
 #### Caliburn API
-[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.2.1.
+[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.2.2.
 
 #### ResourcePackAPI
 inventivetalent's [ResourcePackAPI](https://www.spigotmc.org/resources/api-resourcepackapi-1-7-1-8-1-9-1-10.2397/) is an API to set the resourcepack of a player. DungeonsXL contains ResourcePackAPI 2.2.1.
