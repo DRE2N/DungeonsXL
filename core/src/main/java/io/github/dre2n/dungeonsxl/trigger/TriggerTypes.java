@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * TriggerType instance manager.
+ *
  * @author Daniel Saukel
  */
 public class TriggerTypes {

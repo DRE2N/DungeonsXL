@@ -20,6 +20,8 @@ import io.github.dre2n.commons.config.BRConfig;
 import java.io.File;
 
 /**
+ * Represents the global data.yml.
+ *
  * @author Daniel Saukel
  */
 public class GlobalData extends BRConfig {

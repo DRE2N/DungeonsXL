@@ -39,7 +39,6 @@ import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayers;
-import io.github.dre2n.dungeonsxl.player.DSavePlayer;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypes;
 import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
@@ -59,21 +58,24 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * The main class of DungeonsXL.
+ * It contains several important instances and the actions when the plugin is enabled / disabled.
+ *
  * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
  */
 public class DungeonsXL extends BRPlugin {
 
     private static DungeonsXL instance;
 
-    public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data"};
+    public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
     public static File BACKUPS;
-    public static File DUNGEONS;
     public static File LANGUAGES;
     public static File MAPS;
     public static File PLAYERS;
     public static File SCRIPTS;
     public static File ANNOUNCERS;
     public static File CLASSES;
+    public static File DUNGEONS;
     public static File LOOT_TABLES;
     public static File MOBS;
     public static File SIGNS;
@@ -132,6 +134,7 @@ public class DungeonsXL extends BRPlugin {
         super.onEnable();
         instance = this;
 
+        DPermissions.register();
         initFolders();
         loadCore();
 
@@ -198,11 +201,6 @@ public class DungeonsXL extends BRPlugin {
             BACKUPS.mkdir();
         }
 
-        DUNGEONS = new File(getDataFolder(), "dungeons");
-        if (!DUNGEONS.exists()) {
-            DUNGEONS.mkdir();
-        }
-
         LANGUAGES = new File(getDataFolder(), "languages");
         if (!LANGUAGES.exists()) {
             LANGUAGES.mkdir();
@@ -233,6 +231,11 @@ public class DungeonsXL extends BRPlugin {
             CLASSES.mkdir();
         }
 
+        DUNGEONS = new File(SCRIPTS, "dungeons");
+        if (!DUNGEONS.exists()) {
+            DUNGEONS.mkdir();
+        }
+
         LOOT_TABLES = new File(SCRIPTS, "loottables");
         if (!LOOT_TABLES.exists()) {
             LOOT_TABLES.mkdir();
@@ -250,7 +253,9 @@ public class DungeonsXL extends BRPlugin {
     }
 
     public void loadCore() {
-        loadCaliburnAPI();
+        if (Internals.andHigher(Internals.v1_9_R1).contains(compat.getInternals())) {
+            loadCaliburnAPI();
+        }
         // Load Language
         loadMessageConfig(new File(LANGUAGES, "english.yml"));
         // Load Config
@@ -258,13 +263,13 @@ public class DungeonsXL extends BRPlugin {
         loadMainConfig(new File(getDataFolder(), "config.yml"));
         // Load Language 2
         loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
-        DPermissions.register();
         loadGameTypes();
         loadRequirementTypes();
         loadRewardTypes();
         loadTriggers();
         loadDSigns();
-        loadDungeons();
+        loadDWorlds(MAPS);
+        loadDungeons(DUNGEONS);
         loadGlobalProtections();
         loadExternalMobProviders();
         loadDPlayers();
@@ -273,21 +278,18 @@ public class DungeonsXL extends BRPlugin {
         loadDLootTables(LOOT_TABLES);
         loadDMobTypes(MOBS);
         loadSignScripts(SIGNS);
-        loadDWorlds(MAPS);
         loadDCommands();
     }
 
     // Save and load
     public void saveData() {
         protections.saveAll();
-        DSavePlayer.save();
         dWorlds.saveAll();
     }
 
     public void loadData() {
         protections.loadAll();
         dPlayers.loadAll();
-        DSavePlayer.load();
         dWorlds.check();
     }
 
@@ -446,8 +448,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * load / reload a new instance of Dungeons
      */
-    public void loadDungeons() {
-        dungeons = new Dungeons();
+    public void loadDungeons(File file) {
+        dungeons = new Dungeons(file);
     }
 
     /**

@@ -25,6 +25,8 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 
 /**
+ * ExternalMobProvider instance manager.
+ *
  * @author Daniel Saukel
  */
 public class ExternalMobProviders {

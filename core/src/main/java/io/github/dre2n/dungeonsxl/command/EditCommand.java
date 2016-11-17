@@ -63,14 +63,14 @@ public class EditCommand extends BRCommand {
             return;
         }
 
-        DEditWorld editWorld = resource.instantiateAsEditWorld();
-        DGroup dGroup = DGroup.getByPlayer(player);
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
-
-        if (!(resource.isInvitedPlayer(player) || DPermissions.hasPermission(player, DPermissions.EDIT))) {
+        if (!resource.isInvitedPlayer(player) && !DPermissions.hasPermission(player, DPermissions.EDIT)) {
             MessageUtil.sendMessage(player, DMessages.ERROR_NO_PERMISSIONS.getMessage());
             return;
         }
+
+        DEditWorld editWorld = resource.instantiateAsEditWorld();
+        DGroup dGroup = DGroup.getByPlayer(player);
+        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
 
         if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());

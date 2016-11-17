@@ -32,6 +32,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 /**
+ * Extend this to create a custom DSign.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public abstract class DSign {
@@ -203,7 +205,7 @@ public abstract class DSign {
         sign.setLine(2, ERROR_2);
         sign.setLine(3, ERROR_3);
         sign.update();
-        
+
         DMessages.LOG_ERROR_SIGN_SETUP.getMessage(sign.getX() + ", " + sign.getY() + ", " + sign.getZ());
     }
 

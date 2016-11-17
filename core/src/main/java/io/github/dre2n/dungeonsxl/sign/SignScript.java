@@ -25,6 +25,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
+ * Representation of a sign script.
+ * Sign scripts allow to merge multiple dungeon signs at one position.
+ *
  * @author Daniel Saukel
  */
 public class SignScript {

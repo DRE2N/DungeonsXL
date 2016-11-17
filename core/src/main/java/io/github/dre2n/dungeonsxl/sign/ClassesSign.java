@@ -59,13 +59,17 @@ public class ClassesSign extends DSign {
 
     @Override
     public void onInit() {
-        getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.DARK_GREEN + dClass.getName());
-        getSign().setLine(2, "");
-        getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-        getSign().update();
+        if (dClass != null) {
+            getSign().setLine(0, ChatColor.DARK_BLUE + "############");
+            getSign().setLine(1, ChatColor.DARK_GREEN + dClass.getName());
+            getSign().setLine(2, "");
+            getSign().setLine(3, ChatColor.DARK_BLUE + "############");
+            getSign().update();
+            getGameWorld().getClassesSigns().add(getSign());
 
-        getGameWorld().getClassesSigns().add(getSign());
+        } else {
+            markAsErroneous();
+        }
     }
 
     @Override

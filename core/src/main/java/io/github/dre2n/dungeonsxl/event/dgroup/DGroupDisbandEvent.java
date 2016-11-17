@@ -31,6 +31,7 @@ public class DGroupDisbandEvent extends DGroupEvent implements Cancellable {
         COMMAND,
         DUNGEON_FINISHED,
         GROUP_IS_EMPTY,
+        LOST,
         CUSTOM
 
     }

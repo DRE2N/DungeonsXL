@@ -93,9 +93,7 @@ public class LivesModifierSign extends DSign {
                 break;
 
             case GROUP:
-                for (DGamePlayer dPlayer : DGroup.getByPlayer(player).getDGamePlayers()) {
-                    modifyLives(dPlayer);
-                }
+                modifyLives(DGroup.getByPlayer(player));
                 break;
 
             case PLAYER:
@@ -116,6 +114,16 @@ public class LivesModifierSign extends DSign {
 
         if (dPlayer.getLives() <= 0) {
             dPlayer.kill();
+        }
+    }
+
+    public void modifyLives(DGroup dGroup) {
+        dGroup.setLives(dGroup.getLives() + lives);
+        if (lives > 0) {
+            dGroup.sendMessage(DMessages.GROUP_LIVES_ADDED.getMessage(String.valueOf(lives)));
+
+        } else {
+            dGroup.sendMessage(DMessages.GROUP_LIVES_REMOVED.getMessage(String.valueOf(-1 * lives)));
         }
     }
 

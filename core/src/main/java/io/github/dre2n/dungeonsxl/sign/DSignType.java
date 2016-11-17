@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 /**
+ * Implement this to create custom sign types.
+ *
  * @author Daniel Saukel
  */
 public interface DSignType {
@@ -32,9 +34,14 @@ public interface DSignType {
     public String getBuildPermission();
 
     /**
-     * @return the onDungeonInit
+     * @return if the sign gets initialized when the dungeon is loaded instead of when the game starts
      */
     public boolean isOnDungeonInit();
+
+    /**
+     * @return if the sign block should be destroyable after the initialization
+     */
+    public boolean isProtected();
 
     /**
      * @return the handler

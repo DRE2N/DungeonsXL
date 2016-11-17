@@ -20,14 +20,15 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
+import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
-import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,14 +51,12 @@ public class LeaveCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-
         DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        Game game = Game.getByPlayer(player);
 
-        if (DGameWorld.getByWorld(player.getWorld()) != null) {
-            if (DGameWorld.getByWorld(player.getWorld()).isTutorial()) {
-                MessageUtil.sendMessage(player, DMessages.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
-                return;
-            }
+        if (game != null && game.isTutorial()) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
+            return;
         }
 
         DGroup dGroup = DGroup.getByPlayer(player);
@@ -67,12 +66,17 @@ public class LeaveCommand extends BRCommand {
             return;
         }
 
-        DPlayerEscapeEvent dPlayerEscapeEvent = new DPlayerEscapeEvent(dPlayer);
-        plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
+        if (dPlayer instanceof DGamePlayer) {
+            DGamePlayerEscapeEvent dPlayerEscapeEvent = new DGamePlayerEscapeEvent((DGamePlayer) dPlayer);
+            plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
+            if (dPlayerEscapeEvent.isCancelled()) {
+                return;
+            }
+        }
+
         DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
         plugin.getServer().getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
-
-        if (dPlayerEscapeEvent.isCancelled() || dPlayerLeaveDGroupEvent.isCancelled()) {
+        if (dPlayerLeaveDGroupEvent.isCancelled()) {
             return;
         }
 

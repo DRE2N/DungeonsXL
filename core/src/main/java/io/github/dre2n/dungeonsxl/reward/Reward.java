@@ -25,6 +25,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
+ * Extend this to create a custom Reward.
+ *
  * @author Daniel Saukel
  */
 public abstract class Reward {

@@ -19,7 +19,7 @@ package io.github.dre2n.dungeonsxl.player;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerUpdateEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.task.CreateDInstancePlayerTask;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
 /**
- * Represents a player in an DEditWorld.
+ * Represents a player in a DEditWorld.
  *
  * @author Daniel Saukel
  */
@@ -106,7 +106,7 @@ public class DEditPlayer extends DInstancePlayer {
      */
     public void escape() {
         delete();
-        getSavePlayer().reset(false);
+        reset(false);
     }
 
     public void poke(Block block) {
@@ -142,7 +142,7 @@ public class DEditPlayer extends DInstancePlayer {
     public void leave() {
         delete();
 
-        getSavePlayer().reset(false);
+        reset(false);
 
         DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
         if (editWorld != null) {
@@ -183,7 +183,7 @@ public class DEditPlayer extends DInstancePlayer {
             }
         }
 
-        DPlayerUpdateEvent event = new DPlayerUpdateEvent(this, locationValid, false, false, false, false, false);
+        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, false, false, false, false, false);
         plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
@@ -207,7 +207,7 @@ public class DEditPlayer extends DInstancePlayer {
 
     public static DEditPlayer getByName(String name) {
         for (DEditPlayer dPlayer : plugin.getDPlayers().getDEditPlayers()) {
-            if (dPlayer.getPlayer().getName().equalsIgnoreCase(name)) {
+            if (dPlayer.getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
         }

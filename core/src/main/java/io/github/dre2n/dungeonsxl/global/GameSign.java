@@ -34,6 +34,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
+ * Basically a GroupSign, but to form a game of multiple groups.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class GameSign extends GlobalProtection {

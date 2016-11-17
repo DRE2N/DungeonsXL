@@ -26,6 +26,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * A loot table for rewards and mob drops.
+ *
  * @author Daniel Saukel
  */
 public class DLootTable {

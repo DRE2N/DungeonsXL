@@ -16,21 +16,20 @@
  */
 package io.github.dre2n.dungeonsxl.dungeon;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Dungeon instance manager.
+ *
  * @author Daniel Saukel
  */
 public class Dungeons {
 
     private List<Dungeon> dungeons = new ArrayList<>();
-
-    public Dungeons() {
-        this(DungeonsXL.DUNGEONS);
-    }
 
     public Dungeons(File folder) {
         if (!folder.exists()) {
@@ -44,7 +43,7 @@ public class Dungeons {
                 dungeons.add(dungeon);
 
             } else {
-                // debug
+                MessageUtil.log(DMessages.LOG_ERROR_DUNGEON_SETUP.getMessage(file.getName()));
             }
         }
     }

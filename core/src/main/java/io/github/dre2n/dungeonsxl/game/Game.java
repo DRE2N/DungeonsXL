@@ -41,12 +41,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
+ * Game mostly stores for which purposes and how a {@link io.github.dre2n.dungeonsxl.dungeon.Dungeon} is used,
+ * the player groups and the progress.
+ *
  * @author Daniel Saukel
  */
 public class Game {
 
     static DungeonsXL plugin = DungeonsXL.getInstance();
 
+    private boolean tutorial;
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;
     private GameType type = GameTypeDefault.DEFAULT;
@@ -57,33 +61,50 @@ public class Game {
     private Map<String, Integer> waveKills = new HashMap<>();
 
     public Game(DGroup dGroup) {
-        dGroups.add(dGroup);
-        started = false;
-        fetchRules();
-
         plugin.getGames().add(this);
+
+        tutorial = false;
+        started = false;
+
+        dGroups.add(dGroup);
+        dGroup.setGameWorld(world);
+        fetchRules();
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
+        dGroup.setScore(rules.getInitialScore());
     }
 
     public Game(DGroup dGroup, DGameWorld world) {
-        dGroups.add(dGroup);
+        plugin.getGames().add(this);
+
+        tutorial = false;
         started = false;
         this.world = world;
-        fetchRules();
 
-        plugin.getGames().add(this);
+        dGroups.add(dGroup);
+        dGroup.setGameWorld(world);
+        fetchRules();
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
+        dGroup.setScore(rules.getInitialScore());
     }
 
     public Game(DGroup dGroup, String worldName) {
         plugin.getGames().add(this);
 
-        dGroups.add(dGroup);
+        tutorial = false;
         started = false;
         DResourceWorld resource = plugin.getDWorlds().getResourceByName(worldName);
         if (resource != null) {
             world = resource.instantiateAsGameWorld();
         }
+
+        dGroups.add(dGroup);
         dGroup.setGameWorld(world);
         fetchRules();
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
+        dGroup.setScore(rules.getInitialScore());
     }
 
     public Game(DGroup dGroup, GameType type, DGameWorld world) {
@@ -91,13 +112,36 @@ public class Game {
     }
 
     public Game(List<DGroup> dGroups, GameType type, DGameWorld world) {
+        plugin.getGames().add(this);
+
         this.dGroups = dGroups;
         this.type = type;
         this.world = world;
+        this.tutorial = false;
         this.started = true;
-        fetchRules();
 
-        plugin.getGames().add(this);
+        for (DGroup dGroup : dGroups) {
+            dGroup.setGameWorld(world);
+            fetchRules();
+            dGroup.setInitialLives(rules.getInitialGroupLives());
+            dGroup.setLives(rules.getInitialGroupLives());
+            dGroup.setScore(rules.getInitialScore());
+        }
+    }
+
+    /**
+     * @return the tutorial
+     */
+    public boolean isTutorial() {
+        return tutorial;
+    }
+
+    /**
+     * @param tutorial
+     * if the DGameWorld is the tutorial
+     */
+    public void setTutorial(boolean tutorial) {
+        this.tutorial = tutorial;
     }
 
     /**
@@ -113,6 +157,10 @@ public class Game {
      */
     public void addDGroup(DGroup dGroup) {
         dGroups.add(dGroup);
+
+        dGroup.setGameWorld(world);
+        dGroup.setInitialLives(rules.getInitialGroupLives());
+        dGroup.setLives(rules.getInitialGroupLives());
     }
 
     /**
@@ -430,7 +478,7 @@ public class Game {
 
     public static Game getByGameWorld(DGameWorld gameWorld) {
         for (Game game : plugin.getGames()) {
-            if (game.getWorld().equals(gameWorld)) {
+            if (gameWorld.equals(game.getWorld())) {
                 return game;
             }
         }

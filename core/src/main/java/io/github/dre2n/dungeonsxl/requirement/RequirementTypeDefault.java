@@ -17,6 +17,8 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 /**
+ * Default implementation of RequirementType.
+ *
  * @author Daniel Saukel
  */
 public enum RequirementTypeDefault implements RequirementType {

@@ -170,49 +170,53 @@ public class EntityListener implements Listener {
         DGroup attackerDGroup = null;
         DGroup attackedDGroup = null;
 
-        if (attackerEntity instanceof LivingEntity && attackedEntity instanceof LivingEntity) {
-            if (attackerEntity instanceof Player && attackedEntity instanceof Player) {
-                attackerPlayer = (Player) attackerEntity;
-                attackedPlayer = (Player) attackedEntity;
+        if (!(attackerEntity instanceof LivingEntity) || !(attackedEntity instanceof LivingEntity)) {
+            return;
+        }
 
-                attackerDGroup = DGroup.getByPlayer(attackerPlayer);
-                attackedDGroup = DGroup.getByPlayer(attackedPlayer);
+        if (attackerEntity instanceof Player && attackedEntity instanceof Player) {
+            attackerPlayer = (Player) attackerEntity;
+            attackedPlayer = (Player) attackedEntity;
 
-                if (!pvp) {
+            attackerDGroup = DGroup.getByPlayer(attackerPlayer);
+            attackedDGroup = DGroup.getByPlayer(attackedPlayer);
+
+            if (!pvp) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (attackerDGroup != null && attackedDGroup != null) {
+                if (!friendlyFire && attackerDGroup.equals(attackedDGroup)) {
                     event.setCancelled(true);
-                }
-
-                if (attackerDGroup != null && attackedDGroup != null) {
-                    if (!friendlyFire && attackerDGroup.equals(attackedDGroup)) {
-                        event.setCancelled(true);
-                    }
+                    return;
                 }
             }
+        }
 
-            // Check Dogs
-            if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
-                for (DGamePlayer dPlayer : DGamePlayer.getByWorld(gameWorld.getWorld())) {
-                    if (dPlayer.getWolf() != null) {
-                        if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
-                            event.setCancelled(true);
-                            return;
-                        }
-                    }
-                }
-            }
-
+        // Check Dogs
+        if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
             for (DGamePlayer dPlayer : DGamePlayer.getByWorld(gameWorld.getWorld())) {
                 if (dPlayer.getWolf() != null) {
-                    if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
-                        if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
-                            event.setCancelled(true);
-                            return;
-                        }
-
-                    } else if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
-                        event.setCancelled(false);
+                    if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
+                        event.setCancelled(true);
                         return;
                     }
+                }
+            }
+        }
+
+        for (DGamePlayer dPlayer : DGamePlayer.getByWorld(gameWorld.getWorld())) {
+            if (dPlayer.getWolf() != null) {
+                if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
+                    if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                } else if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
+                    event.setCancelled(false);
+                    return;
                 }
             }
         }

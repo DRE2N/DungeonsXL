@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.requirement;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
@@ -52,6 +53,11 @@ public class PermissionRequirement extends Requirement {
     }
 
     /* Actions */
+    @Override
+    public void setup(ConfigurationSection config) {
+        permissions = config.getStringList("permission");
+    }
+
     @Override
     public boolean check(Player player) {
         for (String permission : permissions) {

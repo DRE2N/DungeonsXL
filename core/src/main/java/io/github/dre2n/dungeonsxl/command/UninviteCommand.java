@@ -48,6 +48,7 @@ public class UninviteCommand extends BRCommand {
         DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[2]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(args[2]));
+            return;
         }
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);

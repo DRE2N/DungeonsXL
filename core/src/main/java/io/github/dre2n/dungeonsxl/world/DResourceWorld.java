@@ -25,6 +25,7 @@ import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.task.BackupResourceTask;
 import io.github.dre2n.dungeonsxl.util.worldloader.WorldLoader;
 import java.io.File;
+import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.WorldCreator;
@@ -103,6 +104,27 @@ public class DResourceWorld {
      * @return the WorldConfig
      */
     public WorldConfig getConfig() {
+        return getConfig(false);
+    }
+
+    /**
+     * @param generate
+     * if a config should be generated if none exists
+     * @return the WorldConfig
+     */
+    public WorldConfig getConfig(boolean generate) {
+        if (config == null) {
+            File file = new File(folder, "config.yml");
+            if (file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
+            config = new WorldConfig(file);
+        }
+
         return config;
     }
 

@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2012-2016 Frank Baumann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package io.github.dre2n.dungeonsxl.global;
 
@@ -10,6 +21,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -225,8 +237,9 @@ public class GlobalProtections {
                     if (data.contains(preString)) {
                         Block block1 = world.getBlockAt(data.getInt(preString + "loc1.x"), data.getInt(preString + "loc1.y"), data.getInt(preString + "loc1.z"));
                         Block block2 = world.getBlockAt(data.getInt(preString + "loc2.x"), data.getInt(preString + "loc2.y"), data.getInt(preString + "loc2.z"));
-                        DPortal dPortal = new DPortal(id, block1, block2, true);
-                        dPortal.create();
+                        Material material = Material.getMaterial(data.getString(preString + "material"));
+                        DPortal dPortal = new DPortal(id, block1, block2, material != null ? material : Material.PORTAL, true);
+                        dPortal.create(null);
                     }
 
                 } while (data.contains(preString));

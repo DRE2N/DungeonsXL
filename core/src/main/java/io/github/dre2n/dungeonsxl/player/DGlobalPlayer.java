@@ -16,12 +16,24 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Version;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.PlayerData;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
+import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
+import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
+import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 /**
  * Represents a player in the non-DXL worlds of the server.
@@ -43,10 +55,19 @@ public class DGlobalPlayer {
 
     private ItemStack[] respawnInventory;
     private ItemStack[] respawnArmor;
+    private List<ItemStack> rewardItems;
 
     public DGlobalPlayer(Player player) {
+        this(player, false);
+    }
+
+    public DGlobalPlayer(Player player, boolean reset) {
         this.player = player;
+
         loadPlayerData(new File(DungeonsXL.PLAYERS, player.getUniqueId().toString() + ".yml"));
+        if (reset && data.wasInGame()) {
+            reset(false);
+        }
 
         plugin.getDPlayers().addPlayer(this);
     }
@@ -61,6 +82,14 @@ public class DGlobalPlayer {
         respawnArmor = dPlayer.getRespawnArmor();
 
         plugin.getDPlayers().addPlayer(this);
+    }
+
+    /* Getters and setters */
+    /**
+     * @return the player's name
+     */
+    public String getName() {
+        return player.getName();
     }
 
     /**
@@ -205,12 +234,125 @@ public class DGlobalPlayer {
     }
 
     /**
+     * @return the reward items
+     */
+    public List<ItemStack> getRewardItems() {
+        return rewardItems;
+    }
+
+    /**
+     * @return if the player has reward items left
+     */
+    public boolean hasRewardItemsLeft() {
+        return rewardItems != null;
+    }
+
+    /**
+     * @param rewardItems
+     * the reward items to set
+     */
+    public void setRewardItems(List<ItemStack> rewardItems) {
+        this.rewardItems = rewardItems;
+    }
+
+    /**
      * @param permission
      * the permission to check
      * @return if the player has the permission
      */
     public boolean hasPermission(String permission) {
         return DPermissions.hasPermission(player, permission);
+    }
+
+    /* Actions */
+    /**
+     * Respawns the player at his old position before he was in a dungeon
+     */
+    public void reset(boolean keepInventory) {
+        try {
+            if (!keepInventory) {
+                while (data.getOldInventory().size() > 36) {
+                    data.getOldInventory().remove(36);
+                }
+                player.getInventory().setContents(data.getOldInventory().toArray(new ItemStack[36]));
+                player.getInventory().setArmorContents(data.getOldArmor().toArray(new ItemStack[4]));
+                if (Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
+                    player.getInventory().setItemInOffHand(data.getOldOffHand());
+                }
+                player.setLevel(data.getOldLevel());
+                player.setExp(data.getOldExp());
+                player.setHealthScale(data.getOldHealthScale());
+                player.setHealth(data.getOldHealth());
+                player.setFoodLevel(data.getOldFoodLevel());
+                player.setGameMode(data.getOldGameMode());
+                player.setFireTicks(data.getOldFireTicks());
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+
+                player.addPotionEffects(data.getOldPotionEffects());
+            }
+
+            if (data.getOldLocation().getWorld() != null) {
+                PlayerUtil.secureTeleport(player, data.getOldLocation());
+            } else {
+                PlayerUtil.secureTeleport(player, Bukkit.getWorlds().get(0).getSpawnLocation());
+            }
+
+        } catch (NullPointerException exception) {
+            exception.printStackTrace();
+            player.setHealth(0);
+            MessageUtil.log(plugin, DMessages.LOG_KILLED_CORRUPTED_PLAYER.getMessage(player.getName()));
+        }
+
+        data.clearPlayerState();
+    }
+
+    /**
+     * Starts the tutorial
+     */
+    public void startTutorial() {
+        if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
+            return;
+        }
+
+        final String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+        if ((plugin.getMainConfig().getTutorialDungeon() == null || startGroup == null)) {
+            return;
+        }
+
+        if (plugin.isGroupEnabled(startGroup)) {
+            plugin.getPermissionProvider().playerAddGroup(player, startGroup);
+        }
+
+        DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
+
+        DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
+        plugin.getServer().getPluginManager().callEvent(createEvent);
+
+        if (createEvent.isCancelled()) {
+            dGroup = null;
+        }
+
+        if (dGroup == null) {
+            return;
+        }
+
+        DGameWorld gameWorld = null;
+
+        if (dGroup.getGameWorld() == null) {
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(dGroup.getMapName());
+            if (resource == null) {
+                MessageUtil.sendMessage(player, DMessages.ERROR_TUTORIAL_NOT_EXIST.getMessage());
+                return;
+            }
+
+            gameWorld = resource.instantiateAsGameWorld();
+            dGroup.setGameWorld(gameWorld);
+        }
+
+        new Game(dGroup, gameWorld).setTutorial(true);
+        DGamePlayer.create(player, gameWorld);
     }
 
 }

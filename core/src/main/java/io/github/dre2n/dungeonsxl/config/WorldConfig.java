@@ -25,26 +25,29 @@ import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.game.GameRules;
 import io.github.dre2n.dungeonsxl.game.GameType;
-import io.github.dre2n.dungeonsxl.requirement.FeeLevelRequirement;
-import io.github.dre2n.dungeonsxl.requirement.FeeMoneyRequirement;
-import io.github.dre2n.dungeonsxl.requirement.GroupSizeRequirement;
-import io.github.dre2n.dungeonsxl.requirement.PermissionRequirement;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
-import io.github.dre2n.dungeonsxl.requirement.RequirementTypeDefault;
 import io.github.dre2n.dungeonsxl.util.DeserializationUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * The world configuration is a simple game rule source.
+ * Besides game rules, WorldConfig also stores some map specific data such as the invited players.
+ * It is used directly in dungeon map config.yml files, but also part of dungeon and main config files.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class WorldConfig extends GameRules {
@@ -126,17 +129,53 @@ public class WorldConfig extends GameRules {
             keepInventoryOnDeath = configFile.getBoolean("keepInventoryOnDeath");
         }
 
-        /* Build */
-        if (configFile.contains("build")) {
-            build = configFile.getBoolean("build");
-        }
-
-        /* GameMode */
+        /* World interaction */
         if (configFile.contains("gameMode")) {
             if (EnumUtil.isValidEnum(GameMode.class, configFile.getString("gameMode").toUpperCase())) {
                 gameMode = GameMode.valueOf(configFile.getString("gameMode"));
             } else {
                 gameMode = GameMode.getByValue(configFile.getInt("gameMode"));
+            }
+        }
+
+        if (configFile.contains("breakBlocks")) {
+            breakBlocks = configFile.getBoolean("breakBlocks");
+        }
+
+        if (configFile.contains("breakPlacedBlocks")) {
+            breakPlacedBlocks = configFile.getBoolean("breakPlacedBlocks");
+        }
+
+        if (configFile.contains("breakWhitelist")) {
+            breakWhitelist = new HashMap<>();
+            for (Entry<String, Object> entry : configFile.getConfigurationSection("breakWhitelist").getValues(true).entrySet()) {
+                Material breakable = Material.matchMaterial(entry.getKey());
+
+                HashSet<Material> tools = new HashSet<>();
+                if (entry.getValue() instanceof List) {
+                    for (String materialString : (List<String>) entry.getValue()) {
+                        Material tool = Material.matchMaterial(materialString);
+                        if (tool != null) {
+                            tools.add(tool);
+                        }
+                    }
+                }
+
+                breakWhitelist.put(breakable, tools);
+            }
+        }
+
+        if (configFile.contains("placeBlocks")) {
+            placeBlocks = configFile.getBoolean("placeBlocks");
+        }
+
+        if (configFile.contains("placeWhitelist")) {
+            placeWhitelist = new HashSet<>();
+            for (String materialString : configFile.getStringList("placeWhitelist")) {
+                Material material = Material.matchMaterial(materialString);
+                if (material != null) {
+                    placeWhitelist.add(material);
+                }
             }
         }
 
@@ -153,6 +192,10 @@ public class WorldConfig extends GameRules {
         /* Lives */
         if (configFile.contains("initialLives")) {
             initialLives = configFile.getInt("initialLives");
+        }
+
+        if (configFile.contains("initialGroupLives")) {
+            initialGroupLives = configFile.getInt("initialGroupLives");
         }
 
         /* Lobby */
@@ -187,24 +230,10 @@ public class WorldConfig extends GameRules {
                 requirements = new ArrayList<>();
             }
 
+            ConfigurationSection requirementSection = configFile.getConfigurationSection("requirements");
             for (String identifier : configFile.getConfigurationSection("requirements").getKeys(false)) {
                 Requirement requirement = Requirement.create(plugin.getRequirementTypes().getByIdentifier(identifier));
-
-                // Check for built-in requirements
-                if (requirement.getType() == RequirementTypeDefault.FEE_MONEY) {
-                    ((FeeMoneyRequirement) requirement).setFee(configFile.getDouble("requirements.feeMoney"));
-
-                } else if (requirement.getType() == RequirementTypeDefault.FEE_LEVEL) {
-                    ((FeeLevelRequirement) requirement).setFee(configFile.getInt("requirements.feeLevel"));
-
-                } else if (requirement.getType() == RequirementTypeDefault.GROUP_SIZE) {
-                    ((GroupSizeRequirement) requirement).setMinimum(configFile.getInt("requirements.groupSize.minimum"));
-                    ((GroupSizeRequirement) requirement).setMaximum(configFile.getInt("requirements.groupSize.maximum"));
-
-                } else if (requirement.getType() == RequirementTypeDefault.PERMISSION) {
-                    ((PermissionRequirement) requirement).setPermissions(configFile.getStringList("requirements.permission"));
-                }
-
+                requirement.setup(requirementSection);
                 requirements.add(requirement);
             }
         }
@@ -282,7 +311,9 @@ public class WorldConfig extends GameRules {
      * the player's unique ID
      */
     public void addInvitedPlayer(String uuid) {
-        invitedPlayers.add(uuid);
+        if (!invitedPlayers.contains(uuid)) {
+            invitedPlayers.add(uuid);
+        }
     }
 
     /**

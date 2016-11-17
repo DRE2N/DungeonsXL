@@ -14,57 +14,58 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.event.dplayer;
+package io.github.dre2n.dungeonsxl.event.dgroup;
 
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGroup;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
  * @author Daniel Saukel
  */
-public class DPlayerFinishEvent extends DPlayerEvent implements Cancellable {
+public class DGroupScoreEvent extends DGroupEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private boolean first;
-    private boolean hasToWait;
+    private Player scorer;
+    private DGroup loserGroup;
 
-    public DPlayerFinishEvent(DGamePlayer dPlayer, boolean first, boolean hasToWait) {
-        super(dPlayer);
-        this.first = first;
-        this.hasToWait = hasToWait;
+    public DGroupScoreEvent(DGroup dGroup, Player scorer, DGroup loserGroup) {
+        super(dGroup);
+        this.scorer = scorer;
+        this.loserGroup = loserGroup;
     }
 
     /**
-     * @return the first
+     * @return the creator
      */
-    public boolean isFirst() {
-        return first;
+    public Player getScorer() {
+        return scorer;
     }
 
     /**
-     * @param first
-     * the first to set
+     * @param scorer
+     * the scoerer to set
      */
-    public void setFirst(boolean first) {
-        this.first = first;
+    public void setCreator(Player scorer) {
+        this.scorer = scorer;
     }
 
     /**
-     * @return the hasToWait
+     * @return the group that lost a score to the scorers
      */
-    public boolean getHasToWait() {
-        return hasToWait;
+    public DGroup getLoserGroup() {
+        return loserGroup;
     }
 
     /**
-     * @param hasToWait
-     * the hasToWait to set
+     * @param loserGroup
+     * the group that lost a score to the scorers to set
      */
-    public void setHasToWait(boolean hasToWait) {
-        this.hasToWait = hasToWait;
+    public void setLoserGroup(DGroup loserGroup) {
+        this.loserGroup = loserGroup;
     }
 
     @Override

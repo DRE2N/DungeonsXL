@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.dre2n.dungeonsxl.game;
+package io.github.dre2n.dungeonsxl.world.block;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
@@ -23,14 +23,14 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.event.block.BlockBreakEvent;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class GamePlaceableBlock {
+public class PlaceableBlock extends GameBlock {
 
     // Variables
-    private Block block;
     private Set<Material> materials = new HashSet<>();
 
     private boolean onTop = false;
@@ -40,8 +40,8 @@ public class GamePlaceableBlock {
     private boolean onEast = false;
     private boolean onWest = false;
 
-    public GamePlaceableBlock(Block block, String ids, String directions) {
-        this.block = block;
+    public PlaceableBlock(Block block, String ids, String directions) {
+        super(block);
 
         // Split ids
         if (!ids.isEmpty()) {
@@ -253,9 +253,15 @@ public class GamePlaceableBlock {
         }
     }
 
+    /* Actions */
+    @Override
+    public boolean onBreak(BlockBreakEvent event) {
+        return false;
+    }
+
     // Can build
     public static boolean canBuildHere(Block block, BlockFace blockFace, Material mat, DGameWorld gameWorld) {
-        for (GamePlaceableBlock gamePlacableBlock : gameWorld.getPlaceableBlocks()) {
+        for (PlaceableBlock gamePlacableBlock : gameWorld.getPlaceableBlocks()) {
             if (gamePlacableBlock.block.getFace(block) != BlockFace.SELF) {
                 continue;
             }

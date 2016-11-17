@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.game.GamePlaceableBlock;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.block.PlaceableBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
@@ -39,7 +39,7 @@ public class PlaceSign extends DSign {
 
     @Override
     public void onInit() {
-        getGameWorld().getPlaceableBlocks().add(new GamePlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
+        getGameWorld().addGameBlock(new PlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
         getSign().getBlock().setType(Material.AIR);
     }
 

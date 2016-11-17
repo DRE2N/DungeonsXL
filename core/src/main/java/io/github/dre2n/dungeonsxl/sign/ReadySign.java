@@ -88,7 +88,7 @@ public class ReadySign extends DSign {
             gameType = plugin.getGameTypes().getBySign(this);
 
         } else {
-            gameType = GameTypeDefault.DEFAULT;
+            gameType = GameTypeDefault.CUSTOM;
         }
 
         if (!lines[2].isEmpty()) {

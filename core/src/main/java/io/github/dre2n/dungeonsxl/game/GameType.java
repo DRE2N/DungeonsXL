@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.game;
 import org.bukkit.GameMode;
 
 /**
+ * Implement this to create custom game types.
+ *
  * @author Daniel Saukel
  */
 public interface GameType {
@@ -46,70 +48,92 @@ public interface GameType {
     public void setSignName(String signName);
 
     /**
+     * @return the goal of the game
+     */
+    public GameGoal getGameGoal();
+
+    /**
+     * @param gameGoal
+     * the goal of the game to set
+     */
+    public void setGameGoal(GameGoal gameGoal);
+
+    /**
      * @return the playerVersusPlayer
      */
-    public boolean isPlayerVersusPlayer();
+    public Boolean isPlayerVersusPlayer();
 
     /**
      * @param playerVersusPlayer
      * the playerVersusPlayer to set
      */
-    public void setPlayerVersusPlayer(boolean playerVersusPlayer);
+    public void setPlayerVersusPlayer(Boolean playerVersusPlayer);
 
     /**
      * @return the friendlyFire
      */
-    public boolean isFriendlyFire();
+    public Boolean isFriendlyFire();
 
     /**
      * @param friendlyFire
      * the friendlyFire to set
      */
-    public void setFriendlyFire(boolean friendlyFire);
-
-    /**
-     * @return the mobWaves
-     */
-    public boolean hasMobWaves();
-
-    /**
-     * @param mobWaves
-     * enable / disable mob waves
-     */
-    public void setMobWaves(boolean mobWaves);
+    public void setFriendlyFire(Boolean friendlyFire);
 
     /**
      * @return if players get rewards after the dungeon
      */
-    public boolean hasRewards();
+    public Boolean hasRewards();
 
     /**
      * @param rewards
      * enable / disable rewards
      */
-    public void setRewards(boolean rewards);
+    public void setRewards(Boolean rewards);
 
     /**
      * @return if players shall see how long they play
      */
-    public boolean getShowTime();
+    public Boolean getShowTime();
 
     /**
      * @param showTime
      * set if players shall see how long they play
      */
-    public void setShowTime(boolean showTime);
+    public void setShowTime(Boolean showTime);
 
     /**
-     * @return if players can build
+     * @return if all blocks may be destroyed
      */
-    public boolean canBuild();
+    public Boolean canBreakBlocks();
 
     /**
-     * @param build
-     * enable / disable building
+     * @param breakBlocks
+     * if blocks may be destroyed
      */
-    public void setBuild(boolean build);
+    public void setBreakBlocks(Boolean breakBlocks);
+
+    /**
+     * @return if blocks placed in game may be destroyed
+     */
+    public Boolean canBreakPlacedBlocks();
+
+    /**
+     * @param breakPlacedBlocks
+     * if placed blocks may be destroyed
+     */
+    public void setBreakPlacedBlocks(Boolean breakPlacedBlocks);
+
+    /**
+     * @return if blocks may be placed
+     */
+    public Boolean canPlaceBlocks();
+
+    /**
+     * @param placeBlocks
+     * if blocks may be placed
+     */
+    public void setPlaceBlocks(Boolean placeBlocks);
 
     /**
      * @return the gameMode
@@ -125,12 +149,12 @@ public interface GameType {
     /**
      * @return if players lose lives
      */
-    public boolean hasLives();
+    public Boolean hasLives();
 
     /**
      * @param lives
      * set if the gametype uses player lives
      */
-    public void setLives(boolean lives);
+    public void setLives(Boolean lives);
 
 }

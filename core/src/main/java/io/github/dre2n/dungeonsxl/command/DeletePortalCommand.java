@@ -28,8 +28,9 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Frank Baumann, Daniel Saukel
- * @deprecated
+ * @deprecated Use BreakCommand instead.
  */
+@Deprecated
 public class DeletePortalCommand extends BRCommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();

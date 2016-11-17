@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.github.dre2n</groupId>
         <artifactId>dungeonsxl</artifactId>
-        <version>0.14.4</version>
+        <version>0.15</version>
     </parent>
     <build>
         <resources>
@@ -36,6 +36,13 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>dungeonsxl-abstract</artifactId>
+            <version>${parent.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>dungeonsxl-craftbukkit_1_11_R1</artifactId>
             <version>${parent.version}</version>
             <type>jar</type>
             <scope>compile</scope>

@@ -61,7 +61,7 @@ public class MsgCommand extends BRCommand {
         try {
             int id = Integer.parseInt(args[1]);
 
-            WorldConfig config = editWorld.getResource().getConfig();
+            WorldConfig config = editWorld.getResource().getConfig(true);
 
             if (args.length == 2) {
                 String msg = config.getMessage(id);

@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * DSignType instance manager.
+ *
  * @author Daniel Saukel
  */
 public class DSignTypes {

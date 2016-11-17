@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.github.dre2n</groupId>
         <artifactId>dungeonsxl</artifactId>
-        <version>0.14.4</version>
+        <version>0.15</version>
     </parent>
     <build>
         <finalName>dungeonsxl-${project.version}${buildNo}</finalName>
@@ -29,6 +29,10 @@
                                     <pattern>io.github.dre2n.commons</pattern>
                                     <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.inventivetalent.rpapi</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
+                                </relocation>
                             </relocations>
                             <artifactSet>
                                 <includes>
@@ -36,6 +40,7 @@
                                     <include>io.github.dre2n:caliburn</include>
                                     <include>io.github.dre2n:debukkit</include>
                                     <include>io.github.dre2n:dungeonsxl-*</include>
+                                    <include>org.inventivetalent.resourcepackapi:api</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -55,6 +60,13 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>dungeonsxl-core</artifactId>
+            <version>${parent.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>dungeonsxl-craftbukkit_1_11_R1</artifactId>
             <version>${parent.version}</version>
             <type>jar</type>
             <scope>compile</scope>

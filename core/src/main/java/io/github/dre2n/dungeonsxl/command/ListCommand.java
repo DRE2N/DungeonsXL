@@ -26,6 +26,7 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import io.github.dre2n.dungeonsxl.world.DWorlds;
 import java.io.File;
 import java.util.ArrayList;
@@ -64,10 +65,10 @@ public class ListCommand extends BRCommand {
         }
         ArrayList<String> loadedList = new ArrayList<>();
         for (DEditWorld editWorld : worlds.getEditWorlds()) {
-            loadedList.add(editWorld.getWorld().getWorldFolder().getName());
+            loadedList.add(editWorld.getWorld().getWorldFolder().getName() + " / " + editWorld.getName());
         }
         for (DGameWorld gameWorld : worlds.getGameWorlds()) {
-            loadedList.add(gameWorld.getWorld().getWorldFolder().getName());
+            loadedList.add(gameWorld.getWorld().getWorldFolder().getName() + " / " + gameWorld.getName());
         }
         ArrayList<String> toSend = new ArrayList<>();
 
@@ -132,7 +133,10 @@ public class ListCommand extends BRCommand {
                 for (String map : toSend) {
                     boolean invited = false;
                     if (sender instanceof Player) {
-                        invited = worlds.getResourceByName(map).isInvitedPlayer((Player) sender);
+                        DResourceWorld resource = worlds.getResourceByName(map);
+                        if (resource != null) {
+                            invited = resource.isInvitedPlayer((Player) sender);
+                        }
                     }
 
                     MessageUtil.sendMessage(sender, "&b" + map + "&7 | &e" + invited);

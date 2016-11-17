@@ -30,6 +30,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
+ * A sign to leave a group.
+ *
  * @author Frank Baumann
  */
 public class LeaveSign extends GlobalProtection {
@@ -44,14 +46,7 @@ public class LeaveSign extends GlobalProtection {
         setText();
     }
 
-    public void setText() {
-        sign.setLine(0, ChatColor.BLUE + "############");
-        sign.setLine(1, ChatColor.DARK_GREEN + "Leave");
-        sign.setLine(2, "");
-        sign.setLine(3, ChatColor.BLUE + "############");
-        sign.update();
-    }
-
+    /* Getters and setters */
     @Override
     public Set<Block> getBlocks() {
         if (blocks == null) {
@@ -62,6 +57,34 @@ public class LeaveSign extends GlobalProtection {
         }
 
         return blocks;
+    }
+
+    /* Actions */
+    public void setText() {
+        sign.setLine(0, ChatColor.BLUE + "############");
+        sign.setLine(1, ChatColor.DARK_GREEN + "Leave");
+        sign.setLine(2, "");
+        sign.setLine(3, ChatColor.BLUE + "############");
+        sign.update();
+    }
+
+    public void onPlayerInteract(Player player) {
+        DGamePlayer dplayer = DGamePlayer.getByPlayer(player);
+
+        if (dplayer != null) {
+            dplayer.leave();
+            return;
+
+        } else {
+            DGroup group = DGroup.getByPlayer(player);
+            if (group != null) {
+                group.removePlayer(player);
+                MessageUtil.sendMessage(player, DMessages.PLAYER_LEAVE_GROUP.getMessage());
+                return;
+            }
+        }
+
+        return;
     }
 
     @Override
@@ -87,34 +110,6 @@ public class LeaveSign extends GlobalProtection {
         }
 
         return null;
-    }
-
-    /* SUBJECT TO CHANGE */
-    @Deprecated
-    public static boolean playerInteract(Block block, Player player) {
-
-        LeaveSign leaveSign = getByBlock(block);
-
-        if (leaveSign == null) {
-            return false;
-        }
-
-        DGamePlayer dplayer = DGamePlayer.getByPlayer(player);
-
-        if (dplayer != null) {
-            dplayer.leave();
-            return true;
-
-        } else {
-            DGroup dgroup = DGroup.getByPlayer(player);
-            if (dgroup != null) {
-                dgroup.removePlayer(player);
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_LEAVE_GROUP));
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }

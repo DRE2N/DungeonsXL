@@ -20,12 +20,13 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,9 +50,9 @@ public class PlayCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
 
-        if (dPlayer != null) {
+        if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
@@ -70,7 +71,7 @@ public class PlayCommand extends BRCommand {
             mapName = identifier;
             if (args[1].equalsIgnoreCase("dungeon") || args[1].equalsIgnoreCase("d")) {
                 Dungeon dungeon = plugin.getDungeons().getByName(args[2]);
-                if (dungeon != null) {
+                if (dungeon != null && dungeon.isMultiFloor()) {
                     multiFloor = true;
                     mapName = dungeon.getConfig().getStartFloor().getName();
                 } else {
@@ -96,20 +97,9 @@ public class PlayCommand extends BRCommand {
             }
 
             if (dGroup.getMapName() == null) {
-                if (!multiFloor) {
-                    dGroup.setMapName(identifier);
-
-                } else {
+                dGroup.setMapName(mapName);
+                if (multiFloor) {
                     dGroup.setDungeonName(identifier);
-                    Dungeon dungeon = plugin.getDungeons().getByName(identifier);
-
-                    if (dungeon != null) {
-                        DungeonConfig config = dungeon.getConfig();
-
-                        if (config != null) {
-                            dGroup.setMapName(config.getStartFloor().getName());
-                        }
-                    }
                 }
 
             } else {
@@ -134,11 +124,11 @@ public class PlayCommand extends BRCommand {
         }
 
         if (dGroup.getGameWorld() == null) {
-            new Game(dGroup, dGroup.getMapName());
+            new Game(dGroup, mapName);
         }
 
         if (dGroup.getGameWorld() == null) {
-            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_SAVED.getMessage(DGroup.getByPlayer(player).getMapName()));
+            MessageUtil.sendMessage(player, DMessages.ERROR_NOT_SAVED.getMessage(mapName));
             dGroup.delete();
             return;
         }

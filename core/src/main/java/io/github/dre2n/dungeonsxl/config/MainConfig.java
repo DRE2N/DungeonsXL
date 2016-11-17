@@ -16,8 +16,13 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.config.BRConfig;
 import io.github.dre2n.commons.util.EnumUtil;
+import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.util.DColor;
+import static io.github.dre2n.dungeonsxl.util.DColor.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +32,8 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
+ * Represents the main config.yml.
+ *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class MainConfig extends BRConfig {
@@ -38,7 +45,7 @@ public class MainConfig extends BRConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 11;
+    public static final int CONFIG_VERSION = 13;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -50,21 +57,29 @@ public class MainConfig extends BRConfig {
     private String tutorialEndGroup = "player";
 
     /* Announcers */
-    private List<Short> groupColorPriority = new ArrayList<>(Arrays.asList(
-            (short) 11,
-            (short) 14,
-            (short) 4,
-            (short) 5,
-            (short) 10,
-            (short) 1,
-            (short) 0,
-            (short) 15
+    private List<DColor> groupColorPriority = new ArrayList<>(Arrays.asList(
+            DARK_BLUE,
+            LIGHT_RED,
+            YELLOW,
+            LIGHT_GREEN,
+            PURPLE,
+            ORANGE,
+            WHITE,
+            BLACK,
+            LIGHT_BLUE,
+            DARK_GREEN,
+            DARK_RED,
+            LIGHT_GRAY,
+            CYAN,
+            MAGENTA,
+            DARK_GRAY
     ));
     private double announcementInterval = 30;
 
     /* Misc */
     private boolean sendFloorTitle = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
+    private Map<String, Object> resourcePacks = new HashMap<>();
 
     /* Performance */
     private int maxInstances = 10;
@@ -186,16 +201,16 @@ public class MainConfig extends BRConfig {
     /**
      * @return the group colors
      */
-    public List<Short> getGroupColorPriority() {
+    public List<DColor> getGroupColorPriority() {
         return groupColorPriority;
     }
 
     /**
-     * @param dataValues
-     * wool data values
+     * @param colors
+     * the colors to set
      */
-    public void setGroupColorPriority(List<Short> dataValues) {
-        groupColorPriority = dataValues;
+    public void setGroupColorPriority(List<DColor> colors) {
+        groupColorPriority = colors;
     }
 
     /**
@@ -233,6 +248,13 @@ public class MainConfig extends BRConfig {
      */
     public Map<String, Object> getExternalMobProviders() {
         return externalMobProviders;
+    }
+
+    /**
+     * @return the resource pack index
+     */
+    public Map<String, Object> getResourcePacks() {
+        return resourcePacks;
     }
 
     /**
@@ -389,7 +411,11 @@ public class MainConfig extends BRConfig {
         }
 
         if (!config.contains("groupColorPriority")) {
-            config.set("groupColorPriority", groupColorPriority);
+            ArrayList<String> strings = new ArrayList<>();
+            for (DColor color : groupColorPriority) {
+                strings.add(color.toString());
+            }
+            config.set("groupColorPriority", strings);
         }
 
         if (!config.contains("announcementInterval")) {
@@ -402,6 +428,10 @@ public class MainConfig extends BRConfig {
 
         if (!config.contains("externalMobProviders")) {
             config.createSection("externalMobProviders");
+        }
+
+        if (!config.contains("resourcePacks")) {
+            config.createSection("resourcePacks");
         }
 
         if (!config.contains("maxInstances")) {
@@ -476,7 +506,12 @@ public class MainConfig extends BRConfig {
         }
 
         if (config.contains("groupColorPriority")) {
-            groupColorPriority = config.getShortList("groupColorPriority");
+            groupColorPriority.clear();
+            for (String color : config.getStringList("groupColorPriority")) {
+                if (EnumUtil.isValidEnum(DColor.class, color)) {
+                    groupColorPriority.add(DColor.valueOf(color));
+                }
+            }
         }
 
         if (config.contains("announcementInterval")) {
@@ -491,12 +526,21 @@ public class MainConfig extends BRConfig {
             externalMobProviders = config.getConfigurationSection("externalMobProviders").getValues(false);
         }
 
+        if (config.contains("resourcePacks")) {
+            resourcePacks = config.getConfigurationSection("resourcePacks").getValues(false);
+        }
+
         if (config.contains("maxInstances")) {
             maxInstances = config.getInt("maxInstances");
         }
 
         if (config.contains("tweaksEnabled")) {
-            tweaksEnabled = config.getBoolean("tweaksEnabled");
+            if (Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals())) {
+                tweaksEnabled = config.getBoolean("tweaksEnabled");
+            } else {
+                tweaksEnabled = false;
+                MessageUtil.log(DMessages.LOG_DISABLED_TWEAKS.getMessage());
+            }
         }
 
         if (config.contains("secureMode.enabled")) {

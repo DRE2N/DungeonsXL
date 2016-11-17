@@ -28,6 +28,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * A boss bar based progress bar.
+ *
  * @author Daniel Saukel
  */
 public class ProgressBar extends BukkitRunnable {

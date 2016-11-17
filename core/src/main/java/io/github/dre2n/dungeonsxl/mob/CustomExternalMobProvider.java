@@ -21,6 +21,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 /**
+ * A custom external mob provider like defined in the main config file.
+ *
  * @author Daniel Saukel
  */
 public class CustomExternalMobProvider implements ExternalMobProvider {

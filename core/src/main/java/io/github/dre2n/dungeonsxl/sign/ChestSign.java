@@ -18,8 +18,8 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.loottable.DLootTable;
-import io.github.dre2n.dungeonsxl.reward.RewardChest;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.block.RewardChest;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -181,7 +181,7 @@ public class ChestSign extends DSign {
                 itemReward = list.toArray(new ItemStack[list.size()]);
             }
 
-            new RewardChest(chest, getGameWorld(), moneyReward, levelReward, itemReward);
+            getGameWorld().addGameBlock(new RewardChest(chest, moneyReward, levelReward, itemReward));
             getSign().getBlock().setType(Material.AIR);
 
         } else {

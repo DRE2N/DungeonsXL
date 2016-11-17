@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.mob;
 import org.bukkit.Location;
 
 /**
+ * Implement this to create custom ExternalMobProviders.
+ *
  * @author Daniel Saukel
  */
 public interface ExternalMobProvider {

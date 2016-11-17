@@ -19,6 +19,9 @@ package io.github.dre2n.dungeonsxl.listener;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.dplayer.*;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.edit.DEditPlayerEscapeEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
+import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -30,20 +33,20 @@ public class DPlayerListener implements Listener {
     DungeonsXL plugin = DungeonsXL.getInstance();
 
     @EventHandler
-    public void onDeath(DPlayerDeathEvent event) {
+    public void onDeath(DGamePlayerDeathEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
         MessageUtil.log(plugin, "DPlayer: " + event.getDPlayer().getPlayer().getName());
         MessageUtil.log(plugin, "Lost lives: " + event.getLostLives());
     }
 
     @EventHandler
-    public void onEscape(DPlayerEscapeEvent event) {
+    public void onEscape(DEditPlayerEscapeEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
         MessageUtil.log(plugin, "DPlayer: " + event.getDPlayer().getPlayer().getName());
     }
 
     @EventHandler
-    public void onFinish(DPlayerFinishEvent event) {
+    public void onFinish(DGamePlayerFinishEvent event) {
         MessageUtil.log(plugin, "&b== " + event.getEventName() + "==");
         MessageUtil.log(plugin, "DPlayer: " + event.getDPlayer().getPlayer().getName());
         MessageUtil.log(plugin, "Player has to wait: " + event.getHasToWait());

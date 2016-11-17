@@ -23,17 +23,19 @@ import io.github.dre2n.dungeonsxl.player.DPermissions;
  */
 public enum DSignTypeCustom implements DSignType {
 
-    CUSTOM("Custom", "custom", false, CustomSign.class);
+    CUSTOM("Custom", "custom", false, false, CustomSign.class);
 
     private String name;
     private String buildPermission;
     private boolean onDungeonInit;
+    private boolean isProtected;
     private Class<? extends DSign> handler;
 
-    DSignTypeCustom(String name, String buildPermission, boolean onDungeonInit, Class<? extends DSign> handler) {
+    DSignTypeCustom(String name, String buildPermission, boolean onDungeonInit, boolean isProtected, Class<? extends DSign> handler) {
         this.name = name;
         this.buildPermission = buildPermission;
         this.onDungeonInit = onDungeonInit;
+        this.isProtected = isProtected;
         this.handler = handler;
     }
 
@@ -50,6 +52,11 @@ public enum DSignTypeCustom implements DSignType {
     @Override
     public boolean isOnDungeonInit() {
         return onDungeonInit;
+    }
+
+    @Override
+    public boolean isProtected() {
+        return isProtected;
     }
 
     @Override

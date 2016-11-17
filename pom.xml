@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.14.4</version>
+    <version>0.15</version>
     <packaging>pom</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
@@ -15,6 +15,7 @@
         <module>shade</module>
         <module>core</module>
         <module>abstract</module>
+        <module>craftbukkit_1_11_R1</module>
         <module>craftbukkit_1_10_R1</module>
         <module>craftbukkit_1_9_R2</module>
         <module>craftbukkit_1_9_R1</module>
@@ -23,7 +24,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <version>1.11-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -35,7 +36,7 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>commons</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
@@ -45,7 +46,7 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.2</version>
+            <version>0.2.2</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
@@ -68,6 +69,17 @@
             <artifactId>BetonQuest</artifactId>
             <version>1.8.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>BossShop</artifactId>
+            <version>2.6.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent.resourcepackapi</groupId>
+            <artifactId>api</artifactId>
+            <version>2.2.1</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -85,6 +97,10 @@
         <repository>
             <id>betonquest-repo</id>
             <url>http://betonquest.betoncraft.pl/mvn</url>
+        </repository>
+        <repository>
+            <id>inventive-repo</id>
+            <url>http://repo.inventivetalent.org/content/groups/public/</url>
         </repository>
         <repository>
             <id>dre2n-repo</id>
