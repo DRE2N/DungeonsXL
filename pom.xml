@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.15</version>
+    <version>0.15.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>commons</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.2.2</version>
+            <version>0.2.3</version>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>

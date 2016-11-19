@@ -68,10 +68,10 @@ Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org
 Maven automatically fetches all dependencies and builds DungeonsXL; just run _build.bat_ or enter the command _mvn clean install_.
 
 #### BRCommons
-[BRCommons](https://github.com/DRE2N/BRCommons) is a util library for common tasks. DungeonsXL contains BRCommons 1.0.2.
+[BRCommons](https://github.com/DRE2N/BRCommons) is a util library for common tasks. DungeonsXL contains BRCommons 1.0.3.
 
 #### Caliburn API
-[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.2.2.
+[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.2.3.
 
 #### ResourcePackAPI
 inventivetalent's [ResourcePackAPI](https://www.spigotmc.org/resources/api-resourcepackapi-1-7-1-8-1-9-1-10.2397/) is an API to set the resourcepack of a player. DungeonsXL contains ResourcePackAPI 2.2.1.
