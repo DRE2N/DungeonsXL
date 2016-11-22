@@ -22,10 +22,13 @@ import java.util.Iterator;
 import java.util.UUID;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCCreateEvent;
+import net.citizensnpcs.api.npc.AbstractNPC;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.MobType;
+import net.citizensnpcs.api.util.DataKey;
+import net.citizensnpcs.api.util.MemoryDataKey;
 import net.citizensnpcs.trait.ArmorStandTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -121,12 +124,37 @@ public class DNPCRegistry implements NPCRegistry {
      * @return
      * a clone of the NPC
      */
-    public NPC createTransientClone(NPC npc) {
+    public NPC createTransientClone(AbstractNPC npc) {
         NPC copy = createNPC(npc.getTrait(MobType.class).getType(), npc.getFullName());
+        DataKey key = new MemoryDataKey();
+        save(npc, key);
+        copy.load(key);
         for (Trait trait : copy.getTraits()) {
             trait.onCopy();
         }
         return copy;
+    }
+
+    // Like in AbstractNPC#save(DataKey), but without persistence stuff
+    public void save(AbstractNPC npc, DataKey root) {
+        if (!npc.data().get(NPC.SHOULD_SAVE_METADATA, true)) {
+            return;
+        }
+        npc.data().saveTo(root.getRelative("metadata"));
+        root.setString("name", npc.getFullName());
+        root.setString("uuid", npc.getUniqueId().toString());
+
+        StringBuilder traitNames = new StringBuilder();
+        for (Trait trait : npc.getTraits()) {
+            DataKey traitKey = root.getRelative("traits." + trait.getName());
+            trait.save(traitKey);
+            traitNames.append(trait.getName() + ",");
+        }
+        if (traitNames.length() > 0) {
+            root.setString("traitnames", traitNames.substring(0, traitNames.length() - 1));
+        } else {
+            root.setString("traitnames", "");
+        }
     }
 
 }

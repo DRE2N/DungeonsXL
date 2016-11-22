@@ -21,6 +21,7 @@ import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.AbstractNPC;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -83,10 +84,10 @@ public class CitizensMobProvider implements ExternalMobProvider {
 
     @Override
     public void summon(String mob, Location location) {
-        NPC npc = CitizensAPI.getNPCRegistry().getById(NumberUtil.parseInt(mob));
+        NPC source = CitizensAPI.getNPCRegistry().getById(NumberUtil.parseInt(mob));
 
-        if (npc != null) {
-            npc = registry.createTransientClone(npc);
+        if (source instanceof AbstractNPC) {
+            NPC npc = registry.createTransientClone((AbstractNPC) source);
             if (npc.isSpawned()) {
                 npc.despawn();
             }
