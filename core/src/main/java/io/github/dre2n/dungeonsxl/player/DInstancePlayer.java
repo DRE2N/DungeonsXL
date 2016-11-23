@@ -83,7 +83,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
         player.getInventory().setArmorContents(null);
         player.setTotalExperience(0);
         player.setLevel(0);
-        player.setHealthScale(20);
+        player.setMaxHealth(20);
         player.setHealth(20);
         player.setFoodLevel(20);
         for (PotionEffect effect : player.getActivePotionEffects()) {
