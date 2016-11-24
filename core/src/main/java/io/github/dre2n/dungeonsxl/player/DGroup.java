@@ -710,11 +710,25 @@ public class DGroup {
             dPlayer.respawn();
 
             if (plugin.getMainConfig().isSendFloorTitleEnabled()) {
-                if (dungeonName != null) {
+                if (rules.getTitle() != null || rules.getSubTitle() != null) {
+                    String title = rules.getTitle() == null ? "" : rules.getTitle();
+                    String subtitle = rules.getSubTitle() == null ? "" : rules.getSubTitle();
+
+                    MessageUtil.sendTitleMessage(player, title, subtitle, rules.getTitleFadeIn(), rules.getTitleShow(), rules.getTitleFadeOut());
+
+                } else if (dungeonName != null) {
                     MessageUtil.sendTitleMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", " "));
 
                 } else {
                     MessageUtil.sendTitleMessage(player, "&4&l" + mapName.replaceAll("_", " "));
+                }
+
+                if (rules.getActionBar() != null) {
+                    MessageUtil.sendActionBarMessage(player, rules.getActionBar());
+                }
+
+                if (rules.getChatText() != null) {
+                    MessageUtil.sendCenteredMessage(player, rules.getChatText());
                 }
             }
 

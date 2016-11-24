@@ -79,6 +79,11 @@ public class GameRules {
         DEFAULT_VALUES.gameCommandWhitelist = new ArrayList<>();
         DEFAULT_VALUES.gamePermissions = new ArrayList<>();
 
+        /* Title */
+        DEFAULT_VALUES.titleFadeIn = 20;
+        DEFAULT_VALUES.titleFadeOut = 20;
+        DEFAULT_VALUES.titleShow = 60;
+
         /* Misc */
         DEFAULT_VALUES.msgs = new HashMap<>();
         DEFAULT_VALUES.secureObjects = new ArrayList<>();
@@ -124,6 +129,15 @@ public class GameRules {
     /* Commands and permissions */
     protected List<String> gameCommandWhitelist;
     protected List<String> gamePermissions;
+
+    /* Title */
+    protected String title;
+    protected String subtitle;
+    protected String actionBar;
+    protected String chat;
+    protected Integer titleFadeIn;
+    protected Integer titleFadeOut;
+    protected Integer titleShow;
 
     /* Misc */
     protected Map<Integer, String> msgs;
@@ -372,6 +386,112 @@ public class GameRules {
         return gamePermissions;
     }
 
+    // Title
+    /**
+     * @return the main title string or null for the default one
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param text
+     * the text to set
+     */
+    public void setTitle(String text) {
+        title = text;
+    }
+
+    /**
+     * @return the subtitle string or null for the default one
+     */
+    public String getSubTitle() {
+        return subtitle;
+    }
+
+    /**
+     * @param text
+     * the text to set
+     */
+    public void setSubTitle(String text) {
+        subtitle = text;
+    }
+
+    /**
+     * @return the action bar string or null for the default one
+     */
+    public String getActionBar() {
+        return actionBar;
+    }
+
+    /**
+     * @param text
+     * the text to set
+     */
+    public void setActionBar(String text) {
+        actionBar = text;
+    }
+
+    /**
+     * @return the chat message string or null for the default one
+     */
+    public String getChatText() {
+        return chat;
+    }
+
+    /**
+     * @param text
+     * the text to set
+     */
+    public void setChatText(String text) {
+        chat = text;
+    }
+
+    /**
+     * @return the title fade in time in ticks
+     */
+    public int getTitleFadeIn() {
+        return titleFadeIn;
+    }
+
+    /**
+     * @param time
+     * the time to set
+     */
+    public void setTitleFadeIn(int time) {
+        titleFadeIn = time;
+    }
+
+    /**
+     * @return the title fade out time in ticks
+     */
+    public int getTitleFadeOut() {
+        return titleFadeOut;
+    }
+
+    /**
+     * @param time
+     * the time to set
+     */
+    public void setTitleFadeOut(int time) {
+        titleFadeOut = time;
+    }
+
+    /**
+     * @return the time until the title disappears in ticks
+     */
+    public int getTitleShow() {
+        return titleShow;
+    }
+
+    /**
+     * @param time
+     * the time to set
+     */
+    public void setTitleShow(int time) {
+        titleShow = time;
+    }
+
     // Misc
     /**
      * @param id
@@ -577,6 +697,35 @@ public class GameRules {
             gamePermissions = defaultValues.gamePermissions;
         } else if (defaultValues.gamePermissions != null) {
             gamePermissions.addAll(defaultValues.gamePermissions);
+        }
+
+        /* Title */
+        if (title == null) {
+            title = defaultValues.title;
+        }
+
+        if (subtitle == null) {
+            subtitle = defaultValues.subtitle;
+        }
+
+        if (actionBar == null) {
+            actionBar = defaultValues.actionBar;
+        }
+
+        if (chat == null) {
+            chat = defaultValues.chat;
+        }
+
+        if (titleFadeIn == null) {
+            titleFadeIn = defaultValues.titleFadeIn;
+        }
+
+        if (titleFadeOut == null) {
+            titleFadeOut = defaultValues.titleFadeOut;
+        }
+
+        if (titleShow == null) {
+            titleShow = defaultValues.titleShow;
         }
 
         /* Misc */

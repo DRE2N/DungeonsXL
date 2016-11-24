@@ -265,6 +265,34 @@ public class WorldConfig extends GameRules {
         if (configFile.contains("forcedGameType")) {
             forcedGameType = plugin.getGameTypes().getByName(configFile.getString("forcedGameType"));
         }
+
+        if (configFile.contains("title.title")) {
+            title = configFile.getString("title.title");
+        }
+
+        if (configFile.contains("title.subtitle")) {
+            subtitle = configFile.getString("title.subtitle");
+        }
+
+        if (configFile.contains("title.actionBar")) {
+            actionBar = configFile.getString("title.actionBar");
+        }
+
+        if (configFile.contains("title.chat")) {
+            chat = configFile.getString("title.chat");
+        }
+
+        if (configFile.contains("title.fadeIn")) {
+            titleFadeIn = (int) configFile.getDouble("title.fadeIn") * 20;
+        }
+
+        if (configFile.contains("title.fadeOut")) {
+            titleFadeOut = (int) configFile.getDouble("title.fadeOut") * 20;
+        }
+
+        if (configFile.contains("title.show")) {
+            titleShow = (int) configFile.getDouble("title.show") * 20;
+        }
     }
 
     public void save() {
