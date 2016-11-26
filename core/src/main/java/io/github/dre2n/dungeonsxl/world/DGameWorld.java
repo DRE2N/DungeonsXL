@@ -382,7 +382,6 @@ public class DGameWorld extends DInstanceWorld {
      * @return the potential amount of mobs in the world
      */
     public int getMobCount() {
-        plugin.debug.start("DGameWorld#getMobCount");
         int mobCount = 0;
 
         signs:
@@ -402,7 +401,6 @@ public class DGameWorld extends DInstanceWorld {
             mobCount += ((MobSign) dSign).getInitialAmount();
         }
 
-        plugin.debug.end("DGameWorld#getMobCount", true);
         return mobCount;
     }
 
@@ -462,7 +460,6 @@ public class DGameWorld extends DInstanceWorld {
      */
     @Override
     public void delete() {
-        plugin.debug.start("DGameWorld#delete");
         GameWorldUnloadEvent event = new GameWorldUnloadEvent(this);
         plugin.getServer().getPluginManager().callEvent(event);
 
@@ -486,7 +483,6 @@ public class DGameWorld extends DInstanceWorld {
                 }
             }.runTaskAsynchronously(plugin);
         }
-        plugin.debug.end("DGameWorld#delete", true);
     }
 
     /**

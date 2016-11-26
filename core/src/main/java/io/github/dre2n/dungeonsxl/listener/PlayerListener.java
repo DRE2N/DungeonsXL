@@ -406,7 +406,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onQuit(PlayerQuitEvent event) {
-        plugin.debug.start("PlayerListener#onQuit");
         Player player = event.getPlayer();
         DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
         DGroup dGroup = DGroup.getByPlayer(player);
@@ -435,7 +434,6 @@ public class PlayerListener implements Listener {
         } else if (dPlayer instanceof DEditPlayer) {
             ((DEditPlayer) dPlayer).leave();
         }
-        plugin.debug.end("PlayerListener#onQuit", true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

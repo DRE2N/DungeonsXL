@@ -204,7 +204,6 @@ public class DResourceWorld {
      * @return an instance of this world
      */
     public DInstanceWorld instantiate(final boolean game) {
-        plugin.debug.start("DResourceWorld#instantiate");
         int id = worlds.generateId();
         String name = worlds.generateName(game);
         final File instanceFolder = new File(Bukkit.getWorldContainer(), name);
@@ -246,7 +245,6 @@ public class DResourceWorld {
             }.runTaskAsynchronously(plugin);
         }
 
-        plugin.debug.end("DResourceWorld#instantiate", true);
         return instance;
     }
 
@@ -276,7 +274,6 @@ public class DResourceWorld {
      * @return the automatically created DEditWorld instance
      */
     public DEditWorld generate() {
-        plugin.debug.start("DResourceWorld#generate");
         final String name = worlds.generateName(false);
         int id = worlds.generateId();
         final File folder = new File(Bukkit.getWorldContainer(), name);
@@ -306,7 +303,6 @@ public class DResourceWorld {
             }.runTaskAsynchronously(plugin);
         }
 
-        plugin.debug.end("DResourceWorld#generate", true);
         return editWorld;
     }
 

@@ -185,9 +185,6 @@ public class DungeonsXL extends BRPlugin {
 
         // Stop shedulers
         getServer().getScheduler().cancelTasks(this);
-
-        // DebukkIt
-        debug.save();
     }
 
     // Init.
@@ -670,8 +667,5 @@ public class DungeonsXL extends BRPlugin {
     public List<DGroup> getDGroups() {
         return dGroups;
     }
-
-    // DebukkIt
-    public final io.github.dre2n.debukkit.DebukkIt debug = new io.github.dre2n.debukkit.DebukkIt(this);
 
 }

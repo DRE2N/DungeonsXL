@@ -149,7 +149,6 @@ public class DEditWorld extends DInstanceWorld {
      * whether this world should be saved
      */
     public void delete(final boolean save) {
-        plugin.debug.start("DEditWorld#delete");
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
         plugin.getServer().getPluginManager().callEvent(event);
 
@@ -192,7 +191,6 @@ public class DEditWorld extends DInstanceWorld {
                 }
             }.runTaskAsynchronously(plugin);
         }
-        plugin.debug.end("DEditWorld#delete", true);
     }
 
     /* Statics */

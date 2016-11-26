@@ -38,7 +38,6 @@
                                 <includes>
                                     <include>io.github.dre2n:commons</include>
                                     <include>io.github.dre2n:caliburn</include>
-                                    <include>io.github.dre2n:debukkit</include>
                                     <include>io.github.dre2n:dungeonsxl-*</include>
                                     <include>org.inventivetalent.resourcepackapi:api</include>
                                 </includes>

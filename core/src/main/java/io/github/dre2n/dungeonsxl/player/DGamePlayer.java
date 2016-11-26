@@ -86,7 +86,6 @@ public class DGamePlayer extends DInstancePlayer {
     public DGamePlayer(Player player, DGameWorld world) {
         super(player, world.getWorld());
 
-        plugin.debug.start("DGamePlayer#init");
         Game game = Game.getByGameWorld(world);
         if (game == null) {
             game = new Game(DGroup.getByPlayer(player));
@@ -112,7 +111,6 @@ public class DGamePlayer extends DInstancePlayer {
         } else {
             PlayerUtil.secureTeleport(player, teleport);
         }
-        plugin.debug.end("DGamePlayer#init", true);
     }
 
     /**
@@ -233,10 +231,8 @@ public class DGamePlayer extends DInstancePlayer {
      * the dClass to set
      */
     public void setDClass(String className) {
-        plugin.debug.start("DGamePlayer#setDClass");
         Game game = Game.getByWorld(getPlayer().getWorld());
         if (game == null) {
-            plugin.debug.end("DGamePlayer#setDClass", true);
             return;
         }
 
@@ -299,7 +295,6 @@ public class DGamePlayer extends DInstancePlayer {
                 }
             }
         }
-        plugin.debug.end("DGamePlayer#setDClass", true);
     }
 
     /**
@@ -752,7 +747,6 @@ public class DGamePlayer extends DInstancePlayer {
             DGamePlayer dPlayer = getByPlayer(player);
             if (!dPlayer.finished) {
                 MessageUtil.sendMessage(this.getPlayer(), DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
-                plugin.debug.end("DGamePlayer#finishFloor", true);
                 return;
             }
         }
@@ -771,7 +765,6 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         if (invalid) {
-            plugin.debug.end("DGamePlayer#finishFloor", true);
             return;
         }
 
@@ -811,7 +804,6 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
         dGroup.startGame(game);
-        plugin.debug.end("DGamePlayer#finishFloor", true);
     }
 
     /**
@@ -869,7 +861,6 @@ public class DGamePlayer extends DInstancePlayer {
         DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dGroup);
 
         if (dGroupFinishDungeonEvent.isCancelled()) {
-            plugin.debug.end("DGamePlayer#finish", true);
             return;
         }
 
