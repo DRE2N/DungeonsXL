@@ -21,6 +21,7 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -78,7 +79,7 @@ public class ItemReward extends Reward {
 
         } else {
             new DLootInventory(player, items.subList(0, 54).toArray(new ItemStack[54]));
-            plugin.getDPlayers().getByPlayer(player).setRewardItems(items.subList(54, items.size()));
+            plugin.getDPlayers().getByPlayer(player).setRewardItems(new CopyOnWriteArrayList<>(items.subList(54, items.size())));
             MessageUtil.sendMessage(player, DMessages.ERROR_TOO_MANY_REWARDS.getMessage());
         }
     }
