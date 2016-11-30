@@ -50,6 +50,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -85,6 +86,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
+        if (isCitizensNPC(player)) {
+            return;
+        }
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
@@ -95,6 +99,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (isCitizensNPC(player)) {
+            return;
+        }
         DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
         Block clickedBlock = event.getClickedBlock();
         DGameWorld dGameWorld = DGameWorld.getByWorld(player.getWorld());
@@ -268,6 +275,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
+        if (isCitizensNPC(player)) {
+            return;
+        }
 
         DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
         if (dPlayer == null) {
@@ -313,6 +323,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
+        if (isCitizensNPC(player)) {
+            return;
+        }
         plugin.getDPlayers().getByPlayer(player).applyRespawnInventory();
 
         DGlobalPlayer dPlayer = DGamePlayer.getByPlayer(player);
@@ -375,6 +388,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
+        if (isCitizensNPC(player)) {
+            return;
+        }
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
 
         if (dPlayer == null) {
@@ -393,6 +409,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
+        if (isCitizensNPC(player)) {
+            return;
+        }
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
             return;
@@ -497,14 +516,19 @@ public class PlayerListener implements Listener {
     // Deny Player Cmds
     @EventHandler(priority = EventPriority.HIGH)
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (DPermissions.hasPermission(event.getPlayer(), DPermissions.BYPASS)) {
+        Player player = event.getPlayer();
+        if (isCitizensNPC(player)) {
             return;
         }
 
-        if (!(dPlayers.getByPlayer(event.getPlayer()) instanceof DInstancePlayer)) {
+        if (DPermissions.hasPermission(player, DPermissions.BYPASS)) {
             return;
         }
-        DInstancePlayer dPlayer = (DInstancePlayer) dPlayers.getByPlayer(event.getPlayer());
+
+        if (!(dPlayers.getByPlayer(player) instanceof DInstancePlayer)) {
+            return;
+        }
+        DInstancePlayer dPlayer = (DInstancePlayer) dPlayers.getByPlayer(player);
 
         String command = event.getMessage().toLowerCase();
         ArrayList<String> commandWhitelist = new ArrayList<>();
@@ -512,7 +536,7 @@ public class PlayerListener implements Listener {
         Game game = Game.getByWorld(dPlayer.getWorld());
 
         if (dPlayer instanceof DEditPlayer) {
-            if (DPermissions.hasPermission(event.getPlayer(), DPermissions.CMD_EDIT)) {
+            if (DPermissions.hasPermission(player, DPermissions.CMD_EDIT)) {
                 return;
 
             } else {
@@ -538,7 +562,7 @@ public class PlayerListener implements Listener {
         }
 
         if (event.isCancelled()) {
-            MessageUtil.sendMessage(event.getPlayer(), DMessages.ERROR_CMD.getMessage());
+            MessageUtil.sendMessage(player, DMessages.ERROR_CMD.getMessage());
         }
     }
 
@@ -607,6 +631,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        if (isCitizensNPC(player)) {
+            return;
+        }
         DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
         DGamePlayer gamePlayer = DGamePlayer.getByPlayer(player);
         if (gameWorld != null && gamePlayer != null && gamePlayer.isStealing()) {
@@ -638,6 +665,10 @@ public class PlayerListener implements Listener {
         }
 
         dPortal.teleport(player);
+    }
+
+    boolean isCitizensNPC(LivingEntity entity) {
+        return entity.hasMetadata("NPC");
     }
 
 }
