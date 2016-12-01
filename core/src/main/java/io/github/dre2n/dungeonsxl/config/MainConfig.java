@@ -24,11 +24,14 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.DColor;
 import static io.github.dre2n.dungeonsxl.util.DColor.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -506,10 +509,23 @@ public class MainConfig extends BRConfig {
         }
 
         if (config.contains("groupColorPriority")) {
-            groupColorPriority.clear();
-            for (String color : config.getStringList("groupColorPriority")) {
-                if (EnumUtil.isValidEnum(DColor.class, color)) {
-                    groupColorPriority.add(DColor.valueOf(color));
+            if (config.getStringList("groupColorPriority").size() < 15) {
+                ArrayList<String> strings = new ArrayList<>();
+                for (DColor color : groupColorPriority) {
+                    strings.add(color.toString());
+                }
+                config.set("groupColorPriority", strings);
+                try {
+                    config.save(file);
+                } catch (IOException exception) {
+                }
+
+            } else {
+                groupColorPriority.clear();
+                for (String color : config.getStringList("groupColorPriority")) {
+                    if (EnumUtil.isValidEnum(DColor.class, color)) {
+                        groupColorPriority.add(DColor.valueOf(color));
+                    }
                 }
             }
         }
