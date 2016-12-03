@@ -50,6 +50,7 @@ import io.github.dre2n.dungeonsxl.task.SecureModeTask;
 import io.github.dre2n.dungeonsxl.task.UpdateTask;
 import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
+import io.github.dre2n.dungeonsxl.util.NoReload;
 import io.github.dre2n.dungeonsxl.world.DWorlds;
 import java.io.File;
 import java.util.List;
@@ -159,6 +160,8 @@ public class DungeonsXL extends BRPlugin {
         if (mainConfig.isSecureModeEnabled()) {
             startSecureModeTask(mainConfig.getSecureModeCheckInterval());
         }
+
+        new NoReload(this);
     }
 
     @Override
