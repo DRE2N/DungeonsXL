@@ -59,6 +59,7 @@ public enum DPermissions {
     PLAY("play", OP),
     PORTAL("portal", OP),
     RELOAD("reload", OP),
+    RENAME("rename", OP),
     RESOURCE_PACK("resourcepack", OP),
     REWARDS("rewards", TRUE),
     SAVE("save", OP),
@@ -85,7 +86,7 @@ public enum DPermissions {
     // Kits
     ADMINISTRATOR("*", OP),
     HALF_EDITOR("halfeditor", OP, ESCAPE, LIST, MESSAGE, SAVE),
-    FULL_EDITOR("fulleditor", OP, HALF_EDITOR, EDIT, PLAY, SIGN, TEST),
+    FULL_EDITOR("fulleditor", OP, HALF_EDITOR, EDIT, PLAY, RENAME, SIGN, TEST),
     HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, JOIN, LEAVE, LIVES, MAIN, SETTINGS, SETTINGS_PLAYER),
     FULL_PLAYER("fullplayer", OP, HALF_PLAYER, GROUP);
 
