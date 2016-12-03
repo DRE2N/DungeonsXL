@@ -22,6 +22,9 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
+import io.github.dre2n.dungeonsxl.global.GameSign;
+import io.github.dre2n.dungeonsxl.global.GlobalProtection;
+import io.github.dre2n.dungeonsxl.global.GroupSign;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
@@ -86,6 +89,27 @@ public class RenameCommand extends BRCommand {
             } catch (IOException ex) {
             }
         }
+
+        boolean changed = false;
+        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections()) {
+            if (protection instanceof GroupSign) {
+                if (((GroupSign) protection).getMapName().equals(args[1])) {
+                    ((GroupSign) protection).setMapName(args[2]);
+                    changed = true;
+                }
+
+            } else if (protection instanceof GameSign) {
+                if (((GameSign) protection).getMapName().equals(args[1])) {
+                    ((GameSign) protection).setMapName(args[2]);
+                    changed = true;
+                }
+            }
+        }
+
+        if (changed) {
+            plugin.getGlobalProtections().saveAll();
+        }
+
         MessageUtil.sendMessage(sender, DMessages.CMD_RENAME_SUCCESS.getMessage(args[1], args[2]));
     }
 
