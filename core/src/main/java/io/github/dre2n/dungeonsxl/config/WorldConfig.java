@@ -302,8 +302,10 @@ public class WorldConfig extends GameRules {
         FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
 
         // Messages
-        for (int msgs : this.msgs.keySet()) {
-            configFile.set("message." + msgs, this.msgs.get(msgs));
+        if (msgs != null) {
+            for (int msgs : this.msgs.keySet()) {
+                configFile.set("message." + msgs, this.msgs.get(msgs));
+            }
         }
 
         List<String> secureObjectIds = new ArrayList<>();
