@@ -31,6 +31,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Represents a player in a DEditWorld.
@@ -41,10 +42,17 @@ public class DEditPlayer extends DInstancePlayer {
 
     private String[] linesCopy;
 
-    public DEditPlayer(Player player, DEditWorld world) {
+    public DEditPlayer(final Player player, DEditWorld world) {
         super(player, world.getWorld());
 
-        player.setGameMode(GameMode.CREATIVE);
+        // Set gamemode a few ticks later to avoid incompatibilities with plugins that force a gamemode
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.setGameMode(GameMode.CREATIVE);
+            }
+        }.runTaskLater(plugin, 10L);
+
         clearPlayerData();
 
         Location teleport = world.getLobbyLocation();
