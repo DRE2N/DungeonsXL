@@ -33,6 +33,7 @@ public class DCommands extends BRCommands {
     public static EditCommand EDIT = new EditCommand();
     public static EnterCommand ENTER = new EnterCommand();
     public static EscapeCommand ESCAPE = new EscapeCommand();
+    public static DeleteCommand DELETE = new DeleteCommand();
     public static GameCommand GAME = new GameCommand();
     public static GroupCommand GROUP = new GroupCommand();
     public static HelpCommand HELP = new HelpCommand();
@@ -62,6 +63,7 @@ public class DCommands extends BRCommands {
                 CHAT,
                 CHAT_SPY,
                 CREATE,
+                DELETE,
                 EDIT,
                 ENTER,
                 ESCAPE,

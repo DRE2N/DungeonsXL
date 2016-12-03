@@ -38,6 +38,7 @@ public enum DPermissions {
     CHAT_SPY("chatspy", OP),
     CMD_EDIT("cmdedit", OP),
     CREATE("create", OP),
+    DELETE("delete", OP),
     EDIT("edit", OP),
     ENTER("enter", OP),
     ESCAPE("escape", TRUE),
@@ -86,7 +87,7 @@ public enum DPermissions {
     // Kits
     ADMINISTRATOR("*", OP),
     HALF_EDITOR("halfeditor", OP, ESCAPE, LIST, MESSAGE, SAVE),
-    FULL_EDITOR("fulleditor", OP, HALF_EDITOR, EDIT, PLAY, RENAME, SIGN, TEST),
+    FULL_EDITOR("fulleditor", OP, HALF_EDITOR, DELETE, EDIT, PLAY, RENAME, SIGN, TEST),
     HALF_PLAYER("halfplayer", TRUE, CHAT, ESCAPE, GAME, HELP, JOIN, LEAVE, LIVES, MAIN, SETTINGS, SETTINGS_PLAYER),
     FULL_PLAYER("fullplayer", OP, HALF_PLAYER, GROUP);
 
