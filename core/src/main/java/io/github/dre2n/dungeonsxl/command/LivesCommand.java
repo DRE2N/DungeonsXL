@@ -62,6 +62,10 @@ public class LivesCommand extends BRCommand {
         }
 
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        if (dPlayer == null && args.length == 1) {
+            MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));
+            return;
+        }
         DGroup dGroup = dPlayer != null ? dPlayer.getDGroup() : DGroup.getByName(args[1]);
         if (dPlayer != null) {
             MessageUtil.sendMessage(sender, DMessages.CMD_LIVES_PLAYER.getMessage(dPlayer.getName(), String.valueOf(dPlayer.getLives() == -1 ? "UNLIMITED" : dPlayer.getLives())));
