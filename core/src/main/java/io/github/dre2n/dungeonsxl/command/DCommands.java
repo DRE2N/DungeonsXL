@@ -48,6 +48,7 @@ public class DCommands extends BRCommands {
     public static PlayCommand PLAY = new PlayCommand();
     public static PortalCommand PORTAL = new PortalCommand();
     public static ReloadCommand RELOAD = new ReloadCommand();
+    public static RenameCommand RENAME = new RenameCommand();
     public static ResourcePackCommand RESOURCE_PACK = new ResourcePackCommand();
     public static RewardsCommand REWARDS = new RewardsCommand();
     public static SaveCommand SAVE = new SaveCommand();
@@ -79,6 +80,7 @@ public class DCommands extends BRCommands {
                 PLAY,
                 PORTAL,
                 RELOAD,
+                RENAME,
                 RESOURCE_PACK,
                 REWARDS,
                 SAVE,

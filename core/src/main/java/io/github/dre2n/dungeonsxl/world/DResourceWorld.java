@@ -98,6 +98,7 @@ public class DResourceWorld {
      */
     public void setName(String name) {
         folder.renameTo(new File(folder.getParentFile(), name));
+        folder = new File(folder.getParentFile(), name);
     }
 
     /**
