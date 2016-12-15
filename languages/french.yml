@@ -1,0 +1,147 @@
+Announcer_Cmd: '&4&l=> &6UTILISEZ &4/DXL JOIN &v1 &6POUR REJOINDRE &4&l<='
+Announcer_Click: '&4&l=> &6CLIQUEZ ICI POUR REJOINDRE &4&l<='
+Cmd_Break_ProtectedMode: '&6Vous ne pouvez plus casser des blocs protégés par DungeonsXL.'
+Cmd_Break_BreakMode: '&6Vous pouvez casser un bloc protégé par DungeonsXL.'
+Cmd_Chat_DungeonChat: '&6Vous êtes entrés dans l''espace de discussion du donjon.'
+Cmd_Chat_NormalChat: '&6Vous êtes maintenant dans l''espace de discussion public.'
+Cmd_Chatspy_Stopped: '&6Vous avez arrêté d''espionner l''espace de discussion du donjon.'
+Cmd_Chatspy_Start: '&6Vous avez commencé à espionner l''espace de discussion du donjon.'
+Cmd_Enter: '&6Le groupe &4&v1 &6est rentré avec succès dans la partie du groupe &4&v2&6.'
+Cmd_Invite_Success: '&6Le joueur &4&v1&6 a été invité avec succès à éditer la carte &4&v2&6.'
+Cmd_Leave_Success: '&6Vous avez quitté le groupe avec succès!'
+Cmd_Lives: '&4&v1&6 a &4&v2 &6vies restantes.'
+Cmd_Main_Welcome: '&7Bienvenue sur &4Dungeons&fXL'
+Cmd_Main_Loaded: '&eCartes: &o[&v1] &eDonjons: &o[&v2] &eChargés: &o[&v3] &eJoueurs:&o[&v4]'
+Cmd_Main_Compatibility: '&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]'
+Cmd_Main_Help: '&7Tapez dans &o/dxl help&r&7 pour plus d''information.'
+Cmd_Msg_Added: '&6Nouveaux messages (&4&v1&6) ajoutés!'
+Cmd_Msg_Updated: '&6Messages (&4&v1&6) mis à jour!'
+Cmd_Reload_Done: '&7DungeonsXL a été rechargé avec succès.'
+Cmd_Save_Success: '&6Carte sauvegardée!'
+Cmd_Uninvite_Success: '&4&v1&6 a été désinviter avec succès à éditer la carte &4&v1&6!'
+Error_Bed: '&4Vous ne pouvez utiliser un lit en étant dans un donjon!'
+Error_ChestIsOpened: '&4Ce coffre a déjà été ouvert.'
+Error_Cmd: '&4Les commandes ne sont pas autorisées pendant un donjon!'
+Error_CmdNotExist1: '&4La commande &6&v1&4 n''existe pas!'
+Error_CmdNotExist2: '&4Entrez, s''il vous plaît, &6/dxl help&4 pour de l''aide!'
+Error_Cooldown: '&4Vous ne pouvez entrer dans ce donjon que toutes les &6&v1&4 heures!'
+Error_Dispenser: '&4Vous ne pouvez accéder à ce distributeur!'
+Error_Drop: '&4Vous ne pouvez lâcher cet objet protégé'
+Error_DungeonNotExist: '&4Le donjon &6&v1&4 n''existe pas!'
+Error_Enderchest: '&4Vous ne pouvez utiliser un coffre de l''ender quand vous êtes dans un donjon!'
+Error_InGroup: '&4Le joueur &6&v1&4 est déjà membre d''un groupe.'
+Error_JoinGroup: '&4Vous devez d''abord rejoindre un groupe!'
+Error_LeaveDungeon: '&4Vous devez d''abord quitter votre donjon actuel!'
+Error_LeaveGame: '&4Vous devez d''abord quitter votre partie actuelle!'
+Error_LeaveGroup: '&4Vous devez d''abord quitter votre groupe!'
+Error_Leftklick: '&4Vous devez utilisez le clique gauche sur ce panneau!'
+Error_MsgIdNotExist: '&4Le message avec  l''Id &6&v1&4 n''existe pas!'
+Error_MsgFormat: '&4Les messages doivent être entre "!'
+Error_MsgNoInt: '&4L''argument [id] doit inclure un nombre!'
+Error_NameInUse: '&4Le nom &6&v1 &4est déjà utilisé.'
+Error_NameToLong: '&4Le nom ne devrait pas être plus long que 15 caractères!'
+Error_NoConsoleCommand: '&6/dxl &v1&4 ne peut être utilisé en tant que console!'
+Error_NoGame: '&4Vous ne prenez actuellement pas part à une partie.'
+Error_NoLeaveInTutorial: '&4Vous ne pouvez utiliser cette commande dans le tutoriel!'
+Error_NoPermissions: '&4Vous n''avez pas la permission de faire ça!'
+Error_NoPlayerCommand: '&6/dxl &v1&4 ne peut être utilisé en tant que joueur!'
+Error_NoDXLBlock: '&4Ce n''est pas un bloc protégé par DungeonsXL!'
+Error_NoSuchGroup: '&4Le groupe &6&v1&4 n''existe pas!'
+Error_NoSuchPlayer: '&4Le joueur &6&v1&4 n''existe pas!'
+Error_NotCaptain: '&4Vous n''êtes pas le capitaine de votre groupe!'
+Error_NotInDungeon: '&4Vous n''êtes pas dans un donjon!'
+Error_NotInGame: '&4Le groupe &6&v1&4 n''est pas membre d''une partie.'
+Error_NotInGroup: '&4Le joueur &6&v1&4 n''est pas membre du groupe &6&v2&v4.'
+Error_NotInvited: '&4Vous n''êtes pas invité au groupe &6&v1&4.'
+Error_NotSaved: '&4La carte &6&v1&4 n''a pas encore été sauvegardée dans le dossier &6DungeonsXL/maps/ &4!'
+Error_Ready: '&4Choisissez d''abord votre classe!'
+Error_Requirements: '&4Vous ne remplissez pas les prérequis pour ce donjon!'
+Error_SignWrongFormat: '&4Le panneau n''est pas rédigé correctement!'
+Error_TooManyInstances: '&4Il y a actuellement trop de carte instantiées. Réessayez dans quelques minutes!'
+Error_TooManyTutorials: '&4Il y a actuellement trop de tutoriel en cours. Réessayez dans quelques minutes!'
+Error_TutorialNotExist: '&4Le tutoriel du donjon n''existe pas!'
+Help_Cmd_Break: /dxl break - Casser un bloque protégé par DungeonsXL
+Help_Cmd_Chat: /dxl chat - Changer le mode de discussion
+Help_Cmd_Chatspy: /dxl chatspy - Activer/désactiver le mode espionnage
+Help_Cmd_Create: /dxl create [name] - Créer une nouvelle carte de donjon
+Help_Cmd_Edit: /dxl edit [name] - Editer une carte existante de donjon
+Help_Cmd_Escape: /dxl escape - Quitter le monde actuel en cours d'édition sans sauvegarder
+Help_Cmd_Game: /dxl game - Montrer les informations à propos de la partie de jeu actuel
+Help_Cmd_Group: /dxl group - Montrer l'aide des commandes de groupe
+Help_Cmd_GroupCreate: /dxl group create [group] - Créer un nouveau groupe
+Help_Cmd_GroupDisband: /dxl group disband ([group]) - Dissoudre un groupe
+Help_Cmd_GroupInvite: /dxl group invite [player]- Inviter quelqu'un a votre groupe
+Help_Cmd_GroupUninvite: /dxl group uninvite [player] - Retirer une invitation à votre groupe
+Help_Cmd_GroupJoin: /dxl group join [group]- Rejoindre un groupe
+Help_Cmd_GroupKick: /dxl group kick [player] - Ejecter un joueur
+Help_Cmd_GroupShow: /dxl group show [group] - Montrer un groupe
+Help_Cmd_Help: /dxl help [page] - Montrer la page d''aide
+Help_Cmd_Invite: /dxl invite [player] [dungeon] - Inviter un joueur à éditer un donjon
+Help_Cmd_Join: /dxl join [announcement] - Ouvrir l'interface pour rejoindre un groupe dans une prochaine partie
+Help_Cmd_Enter: /dxl enter ([joining group]) [target group] - Laisser le groupe en train de rejoindre, entrer dans la partie du groupe cible
+Help_Cmd_Leave: /dxl leave - Quitter le groupe et le donjon ou le monde en cours d''édition
+Help_Cmd_List: /dxl list ([dungeon|map|loaded]) ([dungeon]) - Lister tout les donjons
+Help_Cmd_Lives: /dxl lives [player] - Montrer les vies d''un joueur venant de partir
+Help_Cmd_Main: /dxl - Informations générales sur l'état
+Help_Cmd_Msg: /dxl msg [id] '[msg]' - Montrer ou éditer un message
+Help_Cmd_Play: /dxl play ([dungeon|map]) [name] - Permettre au joueur de jouer à un donjon sans un portail
+Help_Cmd_Portal: /dxl portal - Créer un portail qui mène à un donjon
+Help_Cmd_Reload: /dxl reload - Recharge le plugin
+Help_Cmd_Save: /dxl save - Sauvegarder le donjon actuel
+Help_Cmd_Settings: /dxl settings ([edit|global|player])- Ouvre le menu des paramètres
+Help_Cmd_Test: /dxl test - Lance une partie en mode test
+Help_Cmd_Uninvite: /dxl uninvite [player] [dungeon] - Désinvite un joueur à éditer un donjon
+Group_Created: '&4&v1&6 a créé le groupe &4&v2&6!'
+Group_Disbanded: '&4&v1&6 a dissous le groupe &4&v2&6.'
+Group_InvitedPlayer: '&4&v1&6 a invité le joueur &4&v2&6 au groupe &4&v3&6.'
+Group_JoinedGame: '&6Votre groupe a rejoint la partie avec succès.'
+Group_UninvitedPlayer: '&4&v1&6 a repris l''invitation de &4&v2&6 pour le groupe &4&v3&6.'
+Group_KickedPlayer: '&4&v1&6 a éjecté &4&v2&6 du groupe &4&v3&6.'
+Group_PlayerJoined: '&6Le joueur &4&v1&6 a rejoint le groupe!'
+Group_WaveFinished: '&6Votre groupe a fini la vague numéro. &4&v1&6. La suivante va commencer dans &4&v2&6 secondes.'
+Log_Error_MobEnchantment: '&4Erreur au chargement de mob.yml: L''enchantement &6&v1&4 n''existe pas!'
+Log_Error_MobType: '&4Erreur au chargement de mob.yml: Le Mob &6&v1&4 n''existe pas!'
+Log_Error_NoConsoleCommand: '&6/dxl &v1&4 ne peut pas être exécuté en tant que console!'
+Log_GenerateNewWorld: '&6Génération d''un nouveau monde...'
+Log_NewDungeon: '&6Nouveau donjon'
+Log_NewPlayerData: '&6Un nouveau fichier de données de joueur a été créé et sauvegardé sous &v1.'
+Log_WorldGenerationFinished: '&6Génération du monde terminée!'
+Player_BlockInfo: '&6Block ID: &2&v1'
+Player_CheckpointReached: '&6Point de sauvegarde atteint!'
+Player_Death: '&6Vous êtes mort, vies restantes: &2&v1'
+Player_DeathKick: '&2&v1&6 est mort et a perdu sa dernière vie.'
+Player_FinishedDungeon: '&6Vous avez terminé le donjon avec succès!'
+Player_Invited: '&4&v1&6 vous a invité au groupe &4&v2&6.'
+Player_Uninvited: '&4&v1&6 a repris votre invitation au groupe &4&v2&6.'
+Player_JoinGroup: '&6Vous avez rejoint le groupe avec succès!'
+Player_Kicked: '&4Vous avez été éjecté du groupe &6&v1&4.'
+Player_LeaveGroup: '&6Vous avez quitté le groupe avec succès!'
+Player_LeftGroup: '&6Le joueur &4&v1&6 a quitté le groupe!'
+Player_LootAdded: '&4&v1&6 a été rajouté à votre inventaire de récompenses!'
+Player_NewCaptain: '&6Vous êtes maintenant le nouveau capitaine du groupe.'
+Player_Offline: '&Le joueur &4&v1&6 est passé hors ligne. Dans &4&v2&6 secondes il va être automatiquement éjecté du donjon!'
+Player_OfflineNever: '&6Le joueur &4&v1&6 est passé hors ligne. Il ne va &4pas&6 être éjecté du donjon automatiquement!'
+Player_PortalAbort: '&6Création de portails annulée!'
+Player_PortalIntroduction: '&6Cliquez sur les deux bords du portail avec l''épée en bois!'
+Player_PortalCreated: '&6Portail créé!'
+Player_PortalProgress: '&6Le premier bord a été marqué avec succès. Vous devez maintenant cliquer sur le deuxième bord.'
+Player_ProtectedBlockDeleted: '&6Protection retirée avec succès.'
+Player_Ready: '&6Vous êtes maintenant prêt à démarrer le donjon.'
+Player_SignCreated: '&6Création avec succès d''un panneau de donjon.'
+Player_SignCopied: '&6Données du panneau copiées.'
+Player_TimeLeft: '&v1Il vous reste &6&v2 &v1secondes pour finir le donjon!'
+Player_TimeKick: 'Temps de &2&v1&6 écoulé.'
+Player_Treasures: '&1trésors'
+Player_WaitForOtherPlayers: '&6En attente des membres de l''équipe...'
+Requirement_Fee: '&6Vous avez été débité de &4&v1 &6pour entrer dans le donjon.'
+Reward_General: '&6Vous avez reçu &4&v1 &6pour avoir fini le donjon.'
+Settings_Announcements1: '&fActive / désactive les'
+Settings_Announcements2: '&fannonces de jeu.'
+Settings_Break1: '&fPermet de casser les blocs'
+Settings_Break2: '&fprotégé par DungeonsXL.'
+Settings_ChatSpy1: '&fVous permet de recevoir'
+Settings_ChatSpy2: '&ftous les messages du donjon.'
+Settings_Title: '&4Paramètres: &o'
+Settings_Title_Edit: Configuration du donjon
+Settings_Title_Global: Configuration globale
+Settings_Title_Player: Joueur
