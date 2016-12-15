@@ -26,7 +26,7 @@ Error_CmdNotExist1: '&4La commande &6&v1&4 n''existe pas!'
 Error_CmdNotExist2: '&4Entrez, s''il vous plaît, &6/dxl help&4 pour de l''aide!'
 Error_Cooldown: '&4Vous ne pouvez entrer dans ce donjon que toutes les &6&v1&4 heures!'
 Error_Dispenser: '&4Vous ne pouvez accéder à ce distributeur!'
-Error_Drop: '&4Vous ne pouvez lâcher cet objet protégé'
+Error_Drop: '&4Vous ne pouvez pas lâcher cet objet protégé.'
 Error_DungeonNotExist: '&4Le donjon &6&v1&4 n''existe pas!'
 Error_Enderchest: '&4Vous ne pouvez utiliser un coffre de l''ender quand vous êtes dans un donjon!'
 Error_InGroup: '&4Le joueur &6&v1&4 est déjà membre d''un groupe.'
@@ -57,10 +57,10 @@ Error_NotSaved: '&4La carte &6&v1&4 n''a pas encore été sauvegardée dans le doss
 Error_Ready: '&4Choisissez d''abord votre classe!'
 Error_Requirements: '&4Vous ne remplissez pas les prérequis pour ce donjon!'
 Error_SignWrongFormat: '&4Le panneau n''est pas rédigé correctement!'
-Error_TooManyInstances: '&4Il y a actuellement trop de carte instantiées. Réessayez dans quelques minutes!'
+Error_TooManyInstances: '&4Il y a actuellement trop de carte instanciées. Réessayez dans quelques minutes!'
 Error_TooManyTutorials: '&4Il y a actuellement trop de tutoriel en cours. Réessayez dans quelques minutes!'
 Error_TutorialNotExist: '&4Le tutoriel du donjon n''existe pas!'
-Help_Cmd_Break: /dxl break - Casser un bloque protégé par DungeonsXL
+Help_Cmd_Break: /dxl break - Casser un bloc protégé par DungeonsXL
 Help_Cmd_Chat: /dxl chat - Changer le mode de discussion
 Help_Cmd_Chatspy: /dxl chatspy - Activer/désactiver le mode espionnage
 Help_Cmd_Create: /dxl create [name] - Créer une nouvelle carte de donjon
@@ -73,7 +73,7 @@ Help_Cmd_GroupDisband: /dxl group disband ([group]) - Dissoudre un groupe
 Help_Cmd_GroupInvite: /dxl group invite [player]- Inviter quelqu'un a votre groupe
 Help_Cmd_GroupUninvite: /dxl group uninvite [player] - Retirer une invitation à votre groupe
 Help_Cmd_GroupJoin: /dxl group join [group]- Rejoindre un groupe
-Help_Cmd_GroupKick: /dxl group kick [player] - Ejecter un joueur
+Help_Cmd_GroupKick: /dxl group kick [player] - Éjecter un joueur
 Help_Cmd_GroupShow: /dxl group show [group] - Montrer un groupe
 Help_Cmd_Help: /dxl help [page] - Montrer la page d''aide
 Help_Cmd_Invite: /dxl invite [player] [dungeon] - Inviter un joueur à éditer un donjon
@@ -82,7 +82,7 @@ Help_Cmd_Enter: /dxl enter ([joining group]) [target group] - Laisser le groupe 
 Help_Cmd_Leave: /dxl leave - Quitter le groupe et le donjon ou le monde en cours d''édition
 Help_Cmd_List: /dxl list ([dungeon|map|loaded]) ([dungeon]) - Lister tout les donjons
 Help_Cmd_Lives: /dxl lives [player] - Montrer les vies d''un joueur venant de partir
-Help_Cmd_Main: /dxl - Informations générales sur l'état
+Help_Cmd_Main: /dxl - Informations générales
 Help_Cmd_Msg: /dxl msg [id] '[msg]' - Montrer ou éditer un message
 Help_Cmd_Play: /dxl play ([dungeon|map]) [name] - Permettre au joueur de jouer à un donjon sans un portail
 Help_Cmd_Portal: /dxl portal - Créer un portail qui mène à un donjon
@@ -98,7 +98,7 @@ Group_JoinedGame: '&6Votre groupe a rejoint la partie avec succès.'
 Group_UninvitedPlayer: '&4&v1&6 a repris l''invitation de &4&v2&6 pour le groupe &4&v3&6.'
 Group_KickedPlayer: '&4&v1&6 a éjecté &4&v2&6 du groupe &4&v3&6.'
 Group_PlayerJoined: '&6Le joueur &4&v1&6 a rejoint le groupe!'
-Group_WaveFinished: '&6Votre groupe a fini la vague numéro. &4&v1&6. La suivante va commencer dans &4&v2&6 secondes.'
+Group_WaveFinished: '&6Votre groupe a fini la vague numéro &4&v1&6. La suivante va commencer dans &4&v2&6 secondes.'
 Log_Error_MobEnchantment: '&4Erreur au chargement de mob.yml: L''enchantement &6&v1&4 n''existe pas!'
 Log_Error_MobType: '&4Erreur au chargement de mob.yml: Le Mob &6&v1&4 n''existe pas!'
 Log_Error_NoConsoleCommand: '&6/dxl &v1&4 ne peut pas être exécuté en tant que console!'
@@ -112,7 +112,7 @@ Player_Death: '&6Vous êtes mort, vies restantes: &2&v1'
 Player_DeathKick: '&2&v1&6 est mort et a perdu sa dernière vie.'
 Player_FinishedDungeon: '&6Vous avez terminé le donjon avec succès!'
 Player_Invited: '&4&v1&6 vous a invité au groupe &4&v2&6.'
-Player_Uninvited: '&4&v1&6 a repris votre invitation au groupe &4&v2&6.'
+Player_Uninvited: '&4&v1&6 a annulé votre invitation au groupe &4&v2&6.'
 Player_JoinGroup: '&6Vous avez rejoint le groupe avec succès!'
 Player_Kicked: '&4Vous avez été éjecté du groupe &6&v1&4.'
 Player_LeaveGroup: '&6Vous avez quitté le groupe avec succès!'
