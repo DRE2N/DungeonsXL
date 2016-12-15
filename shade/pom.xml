@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.github.dre2n</groupId>
         <artifactId>dungeonsxl</artifactId>
-        <version>0.15.2</version>
+        <version>0.15.3-SNAPSHOT</version>
     </parent>
     <build>
         <finalName>dungeonsxl-${project.version}${buildNo}</finalName>
@@ -31,6 +31,14 @@
                                 </relocation>
                                 <relocation>
                                     <pattern>org.inventivetalent.rpapi</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>de.inventivegames.rpapi</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.inventivetalent.reflection</pattern>
                                     <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
                                 </relocation>
                             </relocations>
