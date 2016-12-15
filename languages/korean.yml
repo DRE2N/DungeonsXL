@@ -1,0 +1,157 @@
+﻿Announcer_Cmd: '&4&l=> &4/DXL JOIN &v1 &6 명령어로 참가 &4&l<='
+Announcer_Click: '&4&l=> &6클릭 시 참가 &4&l<='
+Cmd_Break_ProtectedMode: '&6이제 DungeonsXL에 의해 보호된 블록은 더 이상 부술 수 없습니다.'
+Cmd_Break_BreakMode: '&6이제 DungeonsXL에 의해 보호 블록을 부술 수 있습니다.'
+Cmd_Chat_DungeonChat: '&6던전 채팅에 들어옴'
+Cmd_Chat_NormalChat: '&6공개 채팅에 들어옴'
+Cmd_Chatspy_Stopped: '&6던전 채팅 스파이가 중지됨.'
+Cmd_Chatspy_Start: '&6던전 채팅 스파이가 시작됨.'
+Cmd_Enter: '&6그룹 &4&v1 &6이가 성공적으로 그룹&4&v2&6 의 게임에 참가 했습니다.'
+Cmd_Import: '&6성공적으로 월드 &4&v1&6 를 불러옴.'
+Cmd_Invite_Success: '&플레이어 &4&v1&6 가 성공적으로 맵 &4&v2&6 수정에 초대 되었습니다.'
+Cmd_Kick_Success: '&6성공적으로 플레이어 &4&v1&6 추방을 시도 했습니다.'
+Cmd_Leave_Success: '&6성공적으로 그룹을 떠났습니다!'
+Cmd_Lives: '&4&v1&6 는 목숨이 &4&v2 &6개 남았습니다.'
+Cmd_Main_Welcome: '&4Dungeons&fXL&7 에 환영합니다'
+Cmd_Main_Loaded: '&e맵: &o[&v1] &e던전: &o[&v2] &e로드됨: &o[&v3] &e플레이어들:
+  &o[&v4]'
+Cmd_Main_Compatibility: '&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]'
+Cmd_Main_Help: '&o/dxl help&r&7 명령어로 도움말을 봅니다.'
+Cmd_Msg_Added: '&6새 메시지 (&4&v1&6) 가 추가됨!'
+Cmd_Msg_Updated: '&6메시지 (&4&v1&6) 가 업데이트됨!'
+Cmd_Reload_Done: '&7성공적으로 DungeonsXL를 다시로드.'
+Cmd_Save_Success: '&6맵 저장됨!'
+Cmd_Uninvite_Success: '&4&v1&6 는 이제 &4&v1&6 맵에 초대되지 않습니다!'
+Error_Bed: '&4던전에서 침대를 사용할 수 없습니다!'
+Error_ChestIsOpened: '&4그 상자은 이미 열려있습니다.'
+Error_Cmd: '&4던전에있는 동안 명령어는 허용되지 않습니다!'
+Error_CmdNotExist1: '&4명령어 &6&v1&4 는 존재하지 않습니다!'
+Error_CmdNotExist2: '&6/dxl help&4 로 확인 하세요!'
+Error_Cooldown: '&4이 던전에는 &6&v1&4 시간 마다 입장 할 수 있습니다!'
+Error_Dispenser: '&4디스펜서에 액세스 할 수 없습니다!'
+Error_Drop: '&4세이프 아이템을 삭제할 수 없습니다'
+Error_DungeonNotExist: '&4그 던전이 존재하지 않습니다.'
+Error_Enderchest: '&4동안 던전에서 enderchest을 사용할 수 없습니다!'
+Error_InGroup: '&4플레이어 &6&v1&4 는 이미 그룹원 입니다.'
+Error_JoinGroup: '&4먼저 그룹에 가입해야합니다!'
+Error_LeaveDungeon: '&4먼저 현재 던전을 나가야 합니다!'
+Error_LeaveGame: '&4먼저 현재 게임을 나가야 합니다!'
+Error_LeaveGroup: '&4먼저 그룹을 나가야 합니다!'
+Error_MsgIdNotExist: 'Id &6&v1&4 인 메시지가 없습니다!'
+Error_MsgFormat: '&6" &4를 이용해서 메시지의 시작과 끝을 표시 해주세요!'
+Error_MsgNoInt: '&4인수 [ID]는 숫자를 포함해야합니다!'
+Error_NameInUse: '&6&v1 &4은 이미 사용 중 입니다.'
+Error_NameToLong: '&4이름은 15자를 초과 할 수 없습니다!'
+Error_NoConsoleCommand: '&6/dxl &v1&4 는 콘솔에서 실행 할 수 없습니다!'
+Error_NoGame: '&4현재 게임에 참여하지 않습니다.'
+Error_NoLeaveInTutorial: '&4튜토리얼에서 이 명령을 사용할 수 없습니다!'
+Error_NoPermissions: '&4작업을 수행 할 권한이 없습니다!'
+Error_NoPlayer명령어: '&6 / DXL &V1 &4 를 플레이어로 실행할 수 없습니다!'
+Error_NoDXLBlock: '&4이 블록은 DungeonsXL에 의해 보호되지 않았습니다!'
+Error_NoSuchGroup: '&4그룹 &6&v1&4 는 존재하지 않습니다!'
+Error_NoSuchMap: '&4월드 &6&v1&4 는 존재하지 않습니다!'
+Error_NoSuchPlayer: '&4플레이어 6&v1&4 는 존재하지 않습니다!'
+Error_NotCaptain: '&4그룹의 주장이 아닙니다!'
+Error_NotInDungeon: '&4던전에 있지 않습니다!'
+Error_NotInGame: '&4그룹 &6&v1&4는 게임의 구성원이 아닙니다.'
+Error_NotInGroup: '&4플레이어 &6&v1&4 는 그룹 &6&v2&v4 의 그룹원이 아닙니다.'
+Error_NotInvited: '&4그룹 &6&v1&4에 초대되지 않습니다.'
+Error_NotSaved: '&4맵 &6&v1&4 은 아직 &6DungeonsXL/maps/ &4에 저장되지 않았습니다!'
+Error_Ready: '&4먼저 클래스를 고르세요!'
+Error_Requirements: '&4이 던전에 들어가기 위한 조건이 충족되지 않았습니다!'
+Error_SignWrongFormat: '&4기호가 제대로 기록되지 않습니다!'
+Error_TooManyInstances: '&4현재 인스턴스 너무 많은지도입니다. 몇 분 후에 다시 사용해보십시오! '
+Error_TooManyTutorials: '&4현재 실행 너무 많은 튜토리얼입니다. 몇 분 후에 다시 사용해보십시오! '
+Error_TutorialNotExist: '&4Tutorial 던전이 존재하지 않습니다!'
+Help_Cmd_Break: /dxl break - DungeonsXL 로 보호된 블록을 제거 합니다
+Help_Cmd_Chat: /dxl chat - 채팅 모드를 변경합니다
+Help_Cmd_Chatspy: /dxl chatspy - spymode을 켜고 끕니다.
+Help_Cmd_Create: /dxl create [name] - 새로운 던전의 맵을 작성합니다.
+Help_Cmd_Edit: /dxl edit [map] - 기존의 던전 맵을 편집합니다
+Help_Cmd_Enter: /dxl enter ([joining group]) [target group] - joining 그룹을 target 그룹에 참여 시킵니다
+Help_Cmd_Escape: /dxl escape - 저장하지 않고 현재 수정 세계를 떠납니다
+Help_Cmd_Game: /dxl game - 현재 게임 세션에 대한 정보를 표시합니다
+Help_Cmd_Group: /dxl group - group 명령의 도움말을 표시합니다
+Help_Cmd_GroupCreate: /dxl group create [group] - 새 그룹을 만듭니다.
+Help_Cmd_GroupDisband: /dxl group disband ([group]) - 그룹을 해산
+Help_Cmd_GroupInvite: /dxl group invite [player] - 당신의 그룹에 누군가를 초대 합니다
+Help_Cmd_GroupUninvite: /dxl group uninvite [player] - 당신의 그룹에 초대를 취소합니다
+Help_Cmd_GroupJoin: /dxl group join [group] - 그룹에 참여합니다
+Help_Cmd_GroupKick: /dxl group kick [player] - 플레이어를 강퇴 합니다
+Help_Cmd_GroupShow: /dxl group show [group] - 그룹 정보를 봅니다
+Help_Cmd_Help: /dxl help [page] - 도움말 페이지를 표시합니다
+Help_Cmd_Import: /dxl import [world] - 던전을 불러옵니다
+Help_Cmd_Invite: /dxl invite [player] [dungeon] - 던전을 편집하는 플레이어를 초대 합니다
+Help_Cmd_Join: /dxl join [announcement] - 향후 게임의 그룹에 참여하기 위한 GUI를 엽니다 
+Help_Cmd_Kick: /dxl kick [player] - 그룹원을 강퇴 합니다
+Help_Cmd_Leave: /dxl leave - 현재 그룹과 던전이나 편집의 세계를 떠납니다
+Help_Cmd_List: /dxl list ([dungeon|map|loaded]) ([dungeon]) - 모든 던전을 나열합니다
+Help_Cmd_Lives: /dxl lives [player] - 플레이어가 남아있는 목숨을 보여줍니다
+Help_Cmd_Main: /dxl - 메인 메뉴
+Help_Cmd_Msg: /dxl msg [id] '[msg]' - 메시지를 표시하거나 편집합니다
+Help_Cmd_Play: /dxl play ([dungeon|map]) [name] - 플레이어가 포털없이 던전을 플레이 할 수 있습니다
+Help_Cmd_Portal: /dxl portal - 던전으로 이어지는 포털을 만듭니다.
+Help_Cmd_Reload: /dxl reload - 플러그인을 다시로드합니다
+Help_Cmd_Save: /dxl save - 현재 던전을 저장합니다
+Help_Cmd_Status: /dxl status - DungeonsXL의 기술적 인 상태를 표시합니다
+Help_Cmd_Settings: /dxl settings ([edit|global|player]) - 설정 메뉴를 엽니 다.
+Help_Cmd_Test: /dxl test - 테스트 모드에서 게임을 시작합니다
+Help_Cmd_Uninvite: /dxl uninvite [player] [dungeon] - 던전을 편집하는 플레이어 초대를 취소 합니다
+Group_Created: '&4&v1&6 가 그룹 &4&v2&6 을 생성 했습니다!'
+Group_Disbanded: '&4&v1&6 가 그룹 &4&v2&6 을 해체 했습니다.'
+Group_InvitedPlayer: '&4&v1&6 가 플레이어 &4&v2&6 를 그룹 &4&v3&6 에 초대합니다.'
+Group_JoinedGame: '&6당신의 그룹이 성공적으로 게임에 참여 했습니다.'
+Group_UninvitedPlayer: '&4&v1&6 이가 &4&v2&6 의 &4&v3&6 참가에 대한 그룹 초대를 취소 합니다.'
+Group_KickedPlayer: '&4&v1&6 가 플레이어 &4&v2&6 를 그룹에서 추방 합니다 &4&v3&6.'
+Group_PlayerJoined: '&6플레이어 &4&v1&6 가 그룹에 참가 했습니다!'
+Group_WaveFinished: '&6당신의 그룹이 웨이브 번호 no. &4&v1&6 를 마쳤습니다. 다음 웨이브는 &4&v2&6 초 뒤에 시작됩니다.'
+Log_Error_MobEnchantment: '&4mob.yml 로딩 실패: 인챈트 &6&v1&4 가 존재하지 않습니다!'
+Log_Error_MobType: '&4mob.yml 로딩 실패: 몹 &6&v1&4 가 존재하지 않습니다!'
+Log_Error_NoConsole명령어: '&6 / DXL &V1 &4 콘솔로 실행할 수 없습니다!'
+Log_Error_SignSetup: '&4위치 &6&v1&4 에 있는 팻말에 오류가 있습니다!'
+Log_GenerateNewWorld: '&6Generating 새로운 세계 ...'
+Log_ImportWorld: '&세계를 6Importing ...'
+Log_NewDungeon: '&6Creating 새로운지도.'
+Log_NewPlayerData: '&6새로운 플레이어 데이터를 생성하고 &v1 로 저장 했습니다.'
+Log_WorldGenerationFinished: '&6World 생성 완료 했습니다!'
+Player_BlockInfo: '&6Block ID: &2&v1'
+Player_CheckpointReached: '&6Checkpoint에 도달!'
+Player_Death: '&6죽었습니다, 남은 목숨: &2&v1'
+Player_DeathKick: '&2&v1&6 님은 마지막 목숨을 잃었습니다.'
+Player_FinishedDungeon: '&6성공적으로 던전을 완료 했습니다!'
+Player_Invited: '&4&v1&6 가 당신을 그룹에 초대 합니다 &4&v2&6.'
+Player_Uninvited: '&4&v1&6 가 초대를 취소 합니다 &4&v2&6.'
+Player_JoinGroup: '&6성공적으로 그룹에 가입!'
+Player_Kicked: '&4그룹 &6&v1&4에서 쫓겨났습니다.'
+Player_LeaveGroup: '&6성공적으로 그룹을 떠났다!'
+Player_LeftGroup: '&6Player &4 &V1 &6은 그룹을 떠났다!'
+Player_LivesAdded: '&6보너스 &4&v1&6 목숨을 얻었습니다.'
+Player_LivesRemoved: '&6목숨을 &4&v1&6 개 잃었습니다!'
+Player_LootAdded: '&4&v1&6 가 인벤토리에 추가 되었습니다!'
+Player_NewCaptain: '&6이제 그룹의 주장입니다.'
+Player_Offline: '&플레이어 &4&v1&6 가 오프라인 입니다. &4&v2&6 초 후 자동으로 던전에서 강퇴 됩니다!'
+Player_OfflineNever: '&6플레이어 &4&v1&6 가 오프라인 입니다. 던전에서 강퇴 되지는 않습니다!'
+Player_PortalAbort: '&6Portal 생성 취소!'
+Player_PortalIntroduction: '&6나무 칼 로 포털의 두 가장자리를 클릭 하세요!'
+Player_PortalCreated: '&6Portal 생성됨!'
+Player_PortalProgress: '&6가장자리 성공적으로 표시했습니다. 이제 다른 가장자리에 클릭 할 수 있습니다. '
+Player_ProtectedBlockDeleted: '&6보호 기능을 제거했습니다.'
+Player_Ready: '&6이제 던전을 시작할 수 있습니다.'
+Player_SignCreated: '&6던전 Sign 생성됨.'
+Player_SignCopied: '&6Sign 데이터 복사됨.'
+Player_TimeLeft: '&v1총 &6&v2 &v1초 남았습니다!'
+Player_TimeKick: '&2&v1&6의 시간이 만료 되었습니다.'
+Player_Treasures: '&1보물'
+Player_WaitForOtherPlayers: '&6팀원을 기다리는 중...'
+Requirement_Fee: '&6돈 &4&v1 &6원을 던전 입장비로 냈습니다.'
+Reward_General: '&6보상 &4&v1 &6을 던전을 완료 했습니다해서 받았습니다.'
+Settings_Announcements1: '&f개인 토글'
+Settings_Announcements2: '&f게임 방송.'
+Settings_Break1: '&f블록 부수기 허용'
+Settings_Break2: '&fDungeonsXL에 의해 보호됨.'
+Settings_ChatSpy1: '&f수신 허용'
+Settings_ChatSpy2: '&f모든 던전 채팅 메시지.'
+Settings_Title: '&4설정: &o'
+Settings_Title_Edit: 던전 설정
+Settings_Title_Global: 글로벌 설정
+Settings_Title_Player: 플레이어
