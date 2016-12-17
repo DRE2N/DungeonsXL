@@ -19,13 +19,19 @@ package io.github.dre2n.dungeonsxl.command;
 import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Internals;
+import io.github.dre2n.commons.util.messageutil.DefaultFontInfo;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.DataReloadEvent;
+import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
+import java.util.List;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -38,7 +44,7 @@ public class ReloadCommand extends BRCommand {
     public ReloadCommand() {
         setCommand("reload");
         setMinArgs(0);
-        setMaxArgs(0);
+        setMaxArgs(1);
         setHelp(DMessages.HELP_CMD_RELOAD.getMessage());
         setPermission(DPermissions.RELOAD.getNode());
         setPlayerCommand(true);
@@ -47,12 +53,27 @@ public class ReloadCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
+        List<DInstancePlayer> dPlayers = plugin.getDPlayers().getDInstancePlayers();
+        if (!dPlayers.isEmpty() && args.length == 1 && CompatibilityHandler.getInstance().isSpigot() && sender instanceof Player) {
+            MessageUtil.sendMessage(sender, DMessages.CMD_RELOAD_PLAYERS.getMessage());
+            ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -force");
+            String message = DefaultFontInfo.center("&a[ OK ]");
+            TextComponent text = new TextComponent(message);
+            text.setClickEvent(onClick);
+            ((Player) sender).spigot().sendMessage(text);
+            return;
+        }
+
         PluginManager plugins = Bukkit.getPluginManager();
 
         DataReloadEvent event = new DataReloadEvent();
         plugins.callEvent(event);
         if (event.isCancelled()) {
             return;
+        }
+
+        for (DInstancePlayer dPlayer : dPlayers) {
+            dPlayer.leave();
         }
 
         int maps = DungeonsXL.MAPS.listFiles().length;

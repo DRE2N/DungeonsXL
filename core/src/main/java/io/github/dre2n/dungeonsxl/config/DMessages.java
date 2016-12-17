@@ -55,6 +55,7 @@ public enum DMessages implements Messages {
     CMD_MSG_ADDED("Cmd_Msg_Added", "&6New Messages (&4&v1&6) added!"),
     CMD_MSG_UPDATED("Cmd_Msg_Updated", "&6Messages (&4&v1&6) updated!"),
     CMD_RELOAD_DONE("Cmd_Reload_Done", "&7Successfully reloaded DungeonsXL."),
+    CMD_RELOAD_PLAYERS("Cmd_Reload_Players", "&4Warning: If you reload the plugin, all players will get kicked out of their game."),
     CMD_RENAME_SUCCESS("Cmd_Rename_Success", "&6Successfully renamed the map &4&v1&6 to &4&v2&6."),
     CMD_SAVE_SUCCESS("Cmd_Save_Success", "&6Map saved!"),
     CMD_UNINVITE_SUCCESS("Cmd_Uninvite_Success", "&4&v1&6's permission to edit the map &4&v2&6 has been removed successfully."),
