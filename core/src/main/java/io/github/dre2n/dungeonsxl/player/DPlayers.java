@@ -96,7 +96,6 @@ public class DPlayers {
      */
     public void addPlayer(DGlobalPlayer player) {
         removePlayer(player);
-
         dGlobalPlayers.add(player);
     }
 
@@ -105,13 +104,8 @@ public class DPlayers {
      * an instance of DGlobalPlayer to remove
      */
     public void removePlayer(DGlobalPlayer player) {
-        if (dGlobalPlayers.remove(player)) {
-            return;
-        }
-
-        // Fallback check just in case an old Player instance is kept
         for (DGlobalPlayer dGlobalPlayer : dGlobalPlayers) {
-            if (dGlobalPlayer.getName().equals(player.getName())) {
+            if (dGlobalPlayer.getPlayer().equals(player.getPlayer())) {
                 dGlobalPlayers.remove(dGlobalPlayer);
             }
         }
