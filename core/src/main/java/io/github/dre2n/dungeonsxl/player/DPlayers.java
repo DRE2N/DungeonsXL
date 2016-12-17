@@ -41,7 +41,7 @@ public class DPlayers {
             }
         }
 
-        return null;
+        return new DGlobalPlayer(player);
     }
 
     /**
@@ -95,11 +95,7 @@ public class DPlayers {
      * an instance of DGlobalPlayer to add
      */
     public void addPlayer(DGlobalPlayer player) {
-        for (DGlobalPlayer dGlobalPlayer : dGlobalPlayers) {
-            if (dGlobalPlayer.getPlayer().equals(player.getPlayer())) {
-                dGlobalPlayers.remove(dGlobalPlayer);
-            }
-        }
+        removePlayer(player);
 
         dGlobalPlayers.add(player);
     }
@@ -109,7 +105,16 @@ public class DPlayers {
      * an instance of DGlobalPlayer to remove
      */
     public void removePlayer(DGlobalPlayer player) {
-        dGlobalPlayers.remove(player);
+        if (dGlobalPlayers.remove(player)) {
+            return;
+        }
+
+        // Fallback check just in case an old Player instance is kept
+        for (DGlobalPlayer dGlobalPlayer : dGlobalPlayers) {
+            if (dGlobalPlayer.getName().equals(player.getName())) {
+                dGlobalPlayers.remove(dGlobalPlayer);
+            }
+        }
     }
 
     /**
