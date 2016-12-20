@@ -40,7 +40,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Frank Baumann, Daniel Saukel
  */
 public class RewardChest extends GameBlock {
-    
+
     static DungeonsXL plugin = DungeonsXL.getInstance();
 
     // Variables
@@ -49,14 +49,14 @@ public class RewardChest extends GameBlock {
     private double moneyReward;
     private int levelReward;
     private ItemStack[] itemReward;
-    
+
     public RewardChest(Block chest, double moneyReward, int levelReward, ItemStack[] itemReward) {
         super(chest);
-        
+
         if (!(chest.getState() instanceof Chest)) {
             return;
         }
-        
+
         this.chest = (Chest) chest.getState();
         this.moneyReward = moneyReward;
         this.levelReward = levelReward;
@@ -138,77 +138,77 @@ public class RewardChest extends GameBlock {
             MessageUtil.sendMessage(plugin.getServer().getPlayer(opener.getUniqueId()), DMessages.ERROR_CHEST_IS_OPENED.getMessage());
             return;
         }
-        
+
         if (chest.getLocation().distance(chest.getLocation()) < 1) {
             addTreasure(DGroup.getByPlayer(opener));
             used = true;
         }
     }
-    
+
     public void addTreasure(DGroup dGroup) {
         if (dGroup == null) {
             return;
         }
-        
+
         boolean hasMoneyReward = false;
         boolean hasLevelReward = false;
         boolean hasItemReward = false;
-        
+
         for (Reward reward : dGroup.getRewards()) {
             if (reward.getType() == RewardTypeDefault.MONEY) {
                 hasMoneyReward = true;
                 ((MoneyReward) reward).addMoney(moneyReward);
-                
+
             } else if (reward.getType() == RewardTypeDefault.LEVEL) {
                 hasLevelReward = true;
                 ((LevelReward) reward).addLevels(levelReward);
-                
+
             } else if (reward.getType() == RewardTypeDefault.ITEM) {
                 hasItemReward = true;
                 ((ItemReward) reward).addItems(itemReward);
             }
         }
-        
+
         if (!hasMoneyReward) {
             Reward reward = Reward.create(RewardTypeDefault.MONEY);
             ((MoneyReward) reward).addMoney(moneyReward);
             dGroup.addReward(reward);
         }
-        
+
         if (!hasLevelReward) {
             Reward reward = Reward.create(RewardTypeDefault.LEVEL);
             ((LevelReward) reward).addLevels(levelReward);
             dGroup.addReward(reward);
         }
-        
+
         if (!hasItemReward) {
             Reward reward = Reward.create(RewardTypeDefault.ITEM);
             ((ItemReward) reward).addItems(itemReward);
             dGroup.addReward(reward);
         }
-        
+
         for (Player player : dGroup.getPlayers()) {
             DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             if (dPlayer == null) {
                 continue;
             }
-            
+
             if (itemReward != null) {
                 String msg = "";
                 for (ItemStack itemStack : itemReward) {
-                    
+
                     if (itemStack == null) {
                         continue;
                     }
-                    
+
                     String name = null;
-                    
+
                     if (itemStack.hasItemMeta()) {
                         if (itemStack.getItemMeta().hasDisplayName()) {
                             name = itemStack.getItemMeta().getDisplayName();
                         }
                     }
-                    
+
                     if (name == null) {
                         if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
                             ItemInfo itemInfo = Items.itemByStack(itemStack);
@@ -217,30 +217,30 @@ public class RewardChest extends GameBlock {
                             } else {
                                 name = itemStack.getType().name();
                             }
-                            
+
                         } else {
                             name = itemStack.getType().toString();
                         }
                     }
-                    
+
                     msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
                 }
-                
+
                 if (msg.length() >= 1) {
                     msg = msg.substring(0, msg.length() - 1);
                 }
-                
+
                 MessageUtil.sendMessage(player, DMessages.PLAYER_LOOT_ADDED.getMessage(msg));
             }
-            
+
             if (moneyReward != 0 && plugin.getEconomyProvider() != null) {
                 MessageUtil.sendMessage(player, DMessages.PLAYER_LOOT_ADDED.getMessage(plugin.getEconomyProvider().format(moneyReward)));
             }
-            
+
             if (levelReward != 0) {
                 MessageUtil.sendMessage(player, DMessages.PLAYER_LOOT_ADDED.getMessage(levelReward + " levels"));
             }
         }
     }
-    
+
 }
