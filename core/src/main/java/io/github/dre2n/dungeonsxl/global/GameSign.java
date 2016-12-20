@@ -513,8 +513,7 @@ public class GameSign extends GlobalProtection {
 
         if (topSign.getLine(0).equals(NEW_GAME)) {
             Game game = new Game(dGroup);
-            dGroup.setDungeonName(gameSign.dungeonName);
-            dGroup.setMapName(gameSign.mapName);
+            dGroup.setDungeon(gameSign.dungeonName == null ? gameSign.mapName : gameSign.dungeonName);
             gameSign.games[column] = game;
             gameSign.update();
 

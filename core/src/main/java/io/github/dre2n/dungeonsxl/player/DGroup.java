@@ -58,8 +58,6 @@ public class DGroup {
     private List<UUID> players = new ArrayList<>();
     private List<UUID> invitedPlayers = new ArrayList<>();
     private Dungeon dungeon;
-    private String dungeonName;
-    private String mapName;
     private List<DResourceWorld> unplayedFloors = new ArrayList<>();
     private DGameWorld gameWorld;
     private boolean playing;
@@ -115,13 +113,13 @@ public class DGroup {
 
         dungeon = plugin.getDungeons().getByName(identifier);
         if (multiFloor && dungeon != null) {
-            dungeonName = dungeon.getName();
-            mapName = dungeon.getConfig().getStartFloor().getName();
+            // Real dungeon
             unplayedFloors = dungeon.getConfig().getFloors();
 
         } else {
-            mapName = identifier;
-            dungeon = new Dungeon(identifier);
+            // Artificial dungeon
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(identifier);
+            dungeon = new Dungeon(resource);
         }
 
         playing = false;
@@ -391,13 +389,11 @@ public class DGroup {
     public void setDungeon(String name) {
         dungeon = plugin.getDungeons().getByName(name);
         if (dungeon != null) {
-            dungeonName = dungeon.getName();
-            mapName = dungeon.getConfig().getStartFloor().getName();
             unplayedFloors = dungeon.getConfig().getFloors();
 
         } else {
-            mapName = name;
-            dungeon = new Dungeon(name);
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(name);
+            dungeon = new Dungeon(resource);
         }
     }
 
@@ -405,38 +401,14 @@ public class DGroup {
      * @return the dungeonName
      */
     public String getDungeonName() {
-        return dungeonName;
-    }
-
-    /**
-     * Will fail if there is no dungeon with this name.
-     *
-     * @param dungeonName
-     * the dungeonName to set
-     */
-    public void setDungeonName(String dungeonName) {
-        if (plugin.getDungeons().getByName(name) != null) {
-            this.dungeonName = dungeonName;
-        }
+        return dungeon.getName();
     }
 
     /**
      * @return if the group is playing
      */
     public String getMapName() {
-        return mapName;
-    }
-
-    /**
-     * Will fail if there is no resource world with this name.
-     *
-     * @param name
-     * the name to set
-     */
-    public void setMapName(String name) {
-        if (plugin.getDWorlds().exists(name)) {
-            mapName = name;
-        }
+        return gameWorld == null ? null : gameWorld.getName();
     }
 
     /**
@@ -716,11 +688,11 @@ public class DGroup {
 
                     MessageUtil.sendTitleMessage(player, title, subtitle, rules.getTitleFadeIn(), rules.getTitleShow(), rules.getTitleFadeOut());
 
-                } else if (dungeonName != null) {
-                    MessageUtil.sendTitleMessage(player, "&b&l" + dungeonName.replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", " "));
+                } else if (getDungeonName() != null) {
+                    MessageUtil.sendTitleMessage(player, "&b&l" + getDungeonName().replaceAll("_", " "), "&4&l" + getMapName().replaceAll("_", " "));
 
                 } else {
-                    MessageUtil.sendTitleMessage(player, "&4&l" + mapName.replaceAll("_", " "));
+                    MessageUtil.sendTitleMessage(player, "&4&l" + getMapName().replaceAll("_", " "));
                 }
 
                 if (rules.getActionBar() != null) {

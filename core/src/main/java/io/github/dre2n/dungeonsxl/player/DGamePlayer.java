@@ -509,9 +509,9 @@ public class DGamePlayer extends DInstancePlayer {
 
         if (getDGroup() != null) {
             if (!dGroup.isEmpty()) {
-                if (dGroup.finishIfMembersFinished()) {
+                /*if (dGroup.finishIfMembersFinished()) {
                     return;
-                }
+                }*/
 
                 // Give secure objects to other players
                 int i = 0;
@@ -787,7 +787,6 @@ public class DGamePlayer extends DInstancePlayer {
         Game game = dGroup.getGameWorld().getGame();
 
         dGroup.removeUnplayedFloor(dGroup.getGameWorld().getResource(), false);
-        dGroup.setMapName(newFloor.getName());
 
         DGameWorld gameWorld = null;
         if (newFloor != null) {
