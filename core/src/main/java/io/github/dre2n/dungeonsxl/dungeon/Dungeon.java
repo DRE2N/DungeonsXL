@@ -41,8 +41,9 @@ public class Dungeon {
      * Real dungeon
      */
     public Dungeon(File file) {
-        this.name = file.getName().replaceAll(".yml", "");
-        this.config = new DungeonConfig(file);
+        name = file.getName().replaceAll(".yml", "");
+        config = new DungeonConfig(file);
+        map = config.getStartFloor();
     }
 
     /**
@@ -58,6 +59,14 @@ public class Dungeon {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @param name
+     * the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -106,6 +115,11 @@ public class Dungeon {
      * @return false if there are setup errors
      */
     public boolean isSetupCorrect() {
+        for (DResourceWorld resource : DungeonsXL.getInstance().getDWorlds().getResources()) {
+            if (resource.getName().equals(name)) {
+                return false;
+            }
+        }
         return config.getStartFloor() != null && config.getEndFloor() != null;
     }
 

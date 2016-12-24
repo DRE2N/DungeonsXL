@@ -66,27 +66,29 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler
-    public void onBreakWithSignOnIt(BlockBreakEvent event){
+    public void onBreakWithSignOnIt(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        
+
         Block blockAbove = block.getRelative(BlockFace.UP);
         //get the above block and return if there is nothing
-        if(blockAbove == null)
-        	return;
-        
+        if (blockAbove == null) {
+            return;
+        }
+
         //return if above block is not a sign
-        if(blockAbove.getType() != Material.SIGN_POST && blockAbove.getType() != Material.WALL_SIGN)
-        	return;
-        
+        if (blockAbove.getType() != Material.SIGN_POST && blockAbove.getType() != Material.WALL_SIGN) {
+            return;
+        }
+
         //let onBreak() method to handle the sign
         BlockBreakEvent bbe = new BlockBreakEvent(blockAbove, player);
         onBreak(bbe);
-        
+
         //follow the onBreak()
         event.setCancelled(bbe.isCancelled());
     }
-    
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
@@ -156,21 +158,15 @@ public class BlockListener implements Listener {
                 if (data.length >= 2 && data.length <= 3) {
                     int maxObjects = NumberUtil.parseInt(data[0]);
                     int maxMembersPerObject = NumberUtil.parseInt(data[1]);
-                    boolean multiFloor = false;
-                    if (data.length == 3) {
-                        if (data[2].equals("+")) {
-                            multiFloor = true;
-                        }
-                    }
 
                     if (maxObjects > 0 && maxMembersPerObject > 0) {
                         if (lines[1].equalsIgnoreCase("Game")) {
-                            if (GameSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject, multiFloor) != null) {
+                            if (GameSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject) != null) {
                                 event.setCancelled(true);
                             }
 
                         } else if (lines[1].equalsIgnoreCase("Group")) {
-                            if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject, multiFloor) != null) {
+                            if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject) != null) {
                                 event.setCancelled(true);
                             }
                         }

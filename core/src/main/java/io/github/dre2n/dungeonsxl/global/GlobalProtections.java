@@ -171,13 +171,9 @@ public class GlobalProtections {
                         String mapName = data.getString(preString + ".dungeon");
                         int maxGames = data.getInt(preString + ".maxGames");
                         int maxGroupsPerGame = data.getInt(preString + ".maxGroupsPerGame");
-                        boolean multiFloor = false;
-                        if (data.contains(preString + ".multiFloor")) {
-                            multiFloor = data.getBoolean(preString + ".multiFloor");
-                        }
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GameSign(id, startSign, mapName, maxGames, maxGroupsPerGame, multiFloor);
+                        new GameSign(id, startSign, mapName, maxGames, maxGroupsPerGame);
                     }
 
                 } while (data.contains(preString));
@@ -195,13 +191,9 @@ public class GlobalProtections {
                         String mapName = data.getString(preString + ".dungeon");
                         int maxGroups = data.getInt(preString + ".maxGroups");
                         int maxPlayersPerGroup = data.getInt(preString + ".maxPlayersPerGroup");
-                        boolean multiFloor = false;
-                        if (data.contains(preString + ".multiFloor")) {
-                            multiFloor = data.getBoolean(preString + ".multiFloor");
-                        }
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GroupSign(id, startSign, mapName, maxGroups, maxPlayersPerGroup, multiFloor);
+                        new GroupSign(id, startSign, mapName, maxGroups, maxPlayersPerGroup);
                     }
                 } while (data.contains(preString));
             }

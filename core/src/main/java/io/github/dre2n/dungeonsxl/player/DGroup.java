@@ -85,14 +85,17 @@ public class DGroup {
         floorCount = 0;
     }
 
+    @Deprecated
     public DGroup(Player player, String identifier, boolean multiFloor) {
         this("Group_" + plugin.getDGroups().size(), player, identifier, multiFloor);
     }
 
+    @Deprecated
     public DGroup(String name, Player player, String identifier, boolean multiFloor) {
         this(name, player, new ArrayList<Player>(), identifier, multiFloor);
     }
 
+    @Deprecated
     public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
         plugin.getDGroups().add(this);
         this.name = name;
@@ -122,6 +125,38 @@ public class DGroup {
             dungeon = new Dungeon(resource);
         }
 
+        playing = false;
+        floorCount = 0;
+    }
+
+    public DGroup(Player player, Dungeon dungeon) {
+        this("Group_" + plugin.getDGroups().size(), player, dungeon);
+    }
+
+    @Deprecated
+    public DGroup(String name, Player player, Dungeon dungeon) {
+        this(name, player, new ArrayList<Player>(), dungeon);
+    }
+
+    public DGroup(String name, Player captain, List<Player> players, Dungeon dungeon) {
+        plugin.getDGroups().add(this);
+        this.name = name;
+
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayers().getByPlayer(captain), true, this);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (!event.isCancelled()) {
+            this.captain = captain.getUniqueId();
+            this.players.add(captain.getUniqueId());
+        }
+
+        for (Player player : players) {
+            if (!this.players.contains(player.getUniqueId())) {
+                addPlayer(player);
+            }
+        }
+
+        this.dungeon = dungeon;
         playing = false;
         floorCount = 0;
     }
@@ -688,7 +723,7 @@ public class DGroup {
 
                     MessageUtil.sendTitleMessage(player, title, subtitle, rules.getTitleFadeIn(), rules.getTitleShow(), rules.getTitleFadeOut());
 
-                } else if (getDungeonName() != null) {
+                } else if (!getDungeonName().equals(getMapName())) {
                     MessageUtil.sendTitleMessage(player, "&b&l" + getDungeonName().replaceAll("_", " "), "&4&l" + getMapName().replaceAll("_", " "));
 
                 } else {

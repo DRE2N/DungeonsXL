@@ -21,6 +21,7 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -47,31 +48,24 @@ public class GroupSign extends GlobalProtection {
 
     // Variables
     private DGroup[] dGroups;
-    private boolean multiFloor;
-    private String dungeonName;
-    private String mapName;
+    private Dungeon dungeon;
     private int maxPlayersPerGroup;
     private Block startSign;
     private int directionX = 0, directionZ = 0;
     private int verticalSigns;
     private Set<Block> blocks;
 
-    public GroupSign(int id, Block startSign, String identifier, int maxGroups, int maxPlayersPerGroup, boolean multiFloor) {
+    public GroupSign(int id, Block startSign, String identifier, int maxGroups, int maxPlayersPerGroup) {
         super(startSign.getWorld(), id);
 
         this.startSign = startSign;
         dGroups = new DGroup[maxGroups];
-        this.setMultiFloor(multiFloor);
-        if (multiFloor) {
-            dungeonName = identifier;
-            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
-            if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor().getName();
-            } else {
-                mapName = "invalid";
+        dungeon = plugin.getDungeons().getByName(identifier);
+        if (dungeon == null) {
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(identifier);
+            if (resource != null) {
+                dungeon = new Dungeon(resource);
             }
-        } else {
-            mapName = identifier;
         }
         this.maxPlayersPerGroup = maxPlayersPerGroup;
         verticalSigns = (int) Math.ceil((float) (1 + maxPlayersPerGroup) / 4);
@@ -99,48 +93,18 @@ public class GroupSign extends GlobalProtection {
     }
 
     /**
-     * @return the multiFloor
+     * @return the dungeon
      */
-    public boolean isMultiFloor() {
-        return multiFloor;
+    public Dungeon getDungeon() {
+        return dungeon;
     }
 
     /**
-     * @param multiFloor
-     * the multiFloor to set
+     * @param dungeon
+     * the dungeon to set
      */
-    public void setMultiFloor(boolean multiFloor) {
-        this.multiFloor = multiFloor;
-    }
-
-    /**
-     * @return the dungeonName
-     */
-    public String getDungeonName() {
-        return dungeonName;
-    }
-
-    /**
-     * @param dungeonName
-     * the dungeonName to set
-     */
-    public void setDungeonName(String dungeonName) {
-        this.dungeonName = dungeonName;
-    }
-
-    /**
-     * @return the mapName
-     */
-    public String getMapName() {
-        return mapName;
-    }
-
-    /**
-     * @param mapName
-     * the mapName to set
-     */
-    public void setMapName(String mapName) {
-        this.mapName = mapName;
+    public void setDungeon(Dungeon dungeon) {
+        this.dungeon = dungeon;
     }
 
     /**
@@ -265,17 +229,9 @@ public class GroupSign extends GlobalProtection {
         config.set(preString + ".x", startSign.getX());
         config.set(preString + ".y", startSign.getY());
         config.set(preString + ".z", startSign.getZ());
-
-        if (isMultiFloor()) {
-            config.set(preString + ".dungeon", dungeonName);
-
-        } else {
-            config.set(preString + ".dungeon", mapName);
-        }
-
+        config.set(preString + ".dungeon", dungeon.getName());
         config.set(preString + ".maxGroups", dGroups.length);
         config.set(preString + ".maxPlayersPerGroup", maxPlayersPerGroup);
-        config.set(preString + ".multiFloor", isMultiFloor());
     }
 
     /* Statics */
@@ -342,7 +298,7 @@ public class GroupSign extends GlobalProtection {
 
     /* SUBJECT TO CHANGE */
     @Deprecated
-    public static GroupSign tryToCreate(Block startSign, String mapName, int maxGroups, int maxPlayersPerGroup, boolean multiFloor) {
+    public static GroupSign tryToCreate(Block startSign, String mapName, int maxGroups, int maxPlayersPerGroup) {
         World world = startSign.getWorld();
         int direction = startSign.getData();
         int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
@@ -438,7 +394,7 @@ public class GroupSign extends GlobalProtection {
             block.setTypeIdAndData(68, startSign.getData(), true);
         }
 
-        GroupSign sign = new GroupSign(protections.generateId(GroupSign.class, world), startSign, mapName, maxGroups, maxPlayersPerGroup, multiFloor);
+        GroupSign sign = new GroupSign(protections.generateId(GroupSign.class, world), startSign, mapName, maxGroups, maxPlayersPerGroup);
 
         return sign;
     }
@@ -476,12 +432,7 @@ public class GroupSign extends GlobalProtection {
         Sign topSign = (Sign) topBlock.getState();
 
         if (topSign.getLine(0).equals(NEW_GROUP)) {
-            if (groupSign.isMultiFloor()) {
-                groupSign.dGroups[column] = new DGroup(player, groupSign.dungeonName, groupSign.isMultiFloor());
-
-            } else {
-                groupSign.dGroups[column] = new DGroup(player, groupSign.mapName, groupSign.isMultiFloor());
-            }
+            groupSign.dGroups[column] = new DGroup(player, groupSign.dungeon);
             groupSign.update();
 
         } else if (topSign.getLine(0).equals(JOIN_GROUP)) {
