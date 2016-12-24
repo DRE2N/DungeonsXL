@@ -60,6 +60,7 @@ public class RenameCommand extends BRCommand {
 
         resource.setName(args[2]);
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
+        resource.getSignData().updateFile(resource);
 
         for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
             DungeonConfig dConfig = dungeon.getConfig();
