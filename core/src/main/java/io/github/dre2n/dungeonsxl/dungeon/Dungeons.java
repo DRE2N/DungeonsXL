@@ -76,7 +76,7 @@ public class Dungeons {
      * @return the Dungeon that has the name
      */
     public Dungeon loadDungeon(String name) {
-        Dungeon dungeon = new Dungeon(name);
+        Dungeon dungeon = new Dungeon(Dungeon.getFileFromName(name));
         dungeons.add(dungeon);
         return dungeon;
     }

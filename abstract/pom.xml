@@ -8,6 +8,6 @@
     <parent>
         <groupId>io.github.dre2n</groupId>
         <artifactId>dungeonsxl</artifactId>
-        <version>0.15.3-SNAPSHOT</version>
+        <version>0.15.3</version>
     </parent>
 </project>

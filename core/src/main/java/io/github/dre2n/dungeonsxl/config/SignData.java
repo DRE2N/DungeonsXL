@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.config;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -56,6 +57,10 @@ public class SignData {
      */
     public File getFile() {
         return file;
+    }
+
+    public void updateFile(DResourceWorld resource) {
+        file = new File(resource.getFolder(), "DXLData.data");
     }
 
     /* Actions */

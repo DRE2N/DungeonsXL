@@ -76,7 +76,7 @@ public class EnterCommand extends BRCommand {
         }
 
         if (joining == null) {
-            joining = new DGroup(captain, game.getWorld().getName(), game.getDungeon() != null);
+            joining = new DGroup(captain, game.getDungeon());
         }
 
         if (joining.getCaptain() != captain && !DPermissions.hasPermission(sender, DPermissions.BYPASS)) {

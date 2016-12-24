@@ -18,7 +18,11 @@ package io.github.dre2n.dungeonsxl.dungeon;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DungeonConfig;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents a dungeon.
@@ -31,19 +35,23 @@ public class Dungeon {
 
     private String name;
     private DungeonConfig config;
+    private DResourceWorld map;
 
+    /**
+     * Real dungeon
+     */
     public Dungeon(File file) {
-        this.name = file.getName().replaceAll(".yml", "");
-        this.config = new DungeonConfig(file);
+        name = file.getName().replaceAll(".yml", "");
+        config = new DungeonConfig(file);
+        map = config.getStartFloor();
     }
 
-    public Dungeon(String name) {
-        this.name = name;
-
-        File file = new File(DungeonsXL.DUNGEONS, name + ".yml");
-        if (file.exists()) {
-            this.config = new DungeonConfig(file);
-        }
+    /**
+     * Artificial dungeon
+     */
+    public Dungeon(DResourceWorld resource) {
+        name = resource.getName();
+        map = resource;
     }
 
     /**
@@ -51,6 +59,14 @@ public class Dungeon {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @param name
+     * the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -68,10 +84,54 @@ public class Dungeon {
     }
 
     /**
+     * @return
+     * the floors of the dungeon
+     */
+    public List<DResourceWorld> getFloors() {
+        if (isMultiFloor()) {
+            return config.getFloors();
+        } else {
+            return new ArrayList<>(Arrays.asList(map));
+        }
+    }
+
+    /**
+     * @return
+     * the SFD map / start floor
+     */
+    public DResourceWorld getMap() {
+        return map;
+    }
+
+    /**
+     * @param map
+     * the SFD map / start floor to set
+     */
+    public void setMap(DResourceWorld map) {
+        this.map = map;
+    }
+
+    /**
      * @return false if there are setup errors
      */
     public boolean isSetupCorrect() {
+        for (DResourceWorld resource : DungeonsXL.getInstance().getDWorlds().getResources()) {
+            if (resource.getName().equals(name)) {
+                return false;
+            }
+        }
         return config.getStartFloor() != null && config.getEndFloor() != null;
+    }
+
+    /* Statics */
+    /**
+     * @param name
+     * the name of the dungeon
+     * @return
+     * the file. Might not exist
+     */
+    public static File getFileFromName(String name) {
+        return new File(DungeonsXL.DUNGEONS, name + ".yml");
     }
 
 }

@@ -60,6 +60,7 @@ public class RenameCommand extends BRCommand {
 
         resource.setName(args[2]);
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
+        resource.getSignData().updateFile(resource);
 
         for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
             DungeonConfig dConfig = dungeon.getConfig();
@@ -93,14 +94,16 @@ public class RenameCommand extends BRCommand {
         boolean changed = false;
         for (GlobalProtection protection : plugin.getGlobalProtections().getProtections()) {
             if (protection instanceof GroupSign) {
-                if (((GroupSign) protection).getMapName().equals(args[1])) {
-                    ((GroupSign) protection).setMapName(args[2]);
+                Dungeon dungeon = ((GroupSign) protection).getDungeon();
+                if (dungeon.getName().equals(args[1])) {
+                    dungeon.setName(args[2]);
                     changed = true;
                 }
 
             } else if (protection instanceof GameSign) {
-                if (((GameSign) protection).getMapName().equals(args[1])) {
-                    ((GameSign) protection).setMapName(args[2]);
+                Dungeon dungeon = ((GameSign) protection).getDungeon();
+                if (dungeon.getName().equals(args[1])) {
+                    dungeon.setName(args[2]);
                     changed = true;
                 }
             }

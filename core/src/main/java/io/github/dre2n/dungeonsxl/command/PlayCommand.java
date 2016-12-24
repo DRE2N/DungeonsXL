@@ -97,9 +97,10 @@ public class PlayCommand extends BRCommand {
             }
 
             if (dGroup.getMapName() == null) {
-                dGroup.setMapName(mapName);
                 if (multiFloor) {
-                    dGroup.setDungeonName(identifier);
+                    dGroup.setDungeon(plugin.getDungeons().getByName(identifier));
+                } else {
+                    dGroup.setDungeon(mapName);
                 }
 
             } else {

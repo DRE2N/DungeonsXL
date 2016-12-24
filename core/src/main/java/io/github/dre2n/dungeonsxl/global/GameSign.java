@@ -21,7 +21,9 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.game.Game;
+import static io.github.dre2n.dungeonsxl.global.GlobalProtection.plugin;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -48,31 +50,24 @@ public class GameSign extends GlobalProtection {
 
     // Variables
     private Game[] games;
-    private boolean multiFloor;
-    private String dungeonName;
-    private String mapName;
+    private Dungeon dungeon;
     private int maxGroupsPerGame;
     private Block startSign;
     private int directionX = 0, directionZ = 0;
     private int verticalSigns;
     private Set<Block> blocks;
 
-    public GameSign(int id, Block startSign, String identifier, int maxGames, int maxGroupsPerGame, boolean multiFloor) {
+    public GameSign(int id, Block startSign, String identifier, int maxGames, int maxGroupsPerGame) {
         super(startSign.getWorld(), id);
 
         this.startSign = startSign;
         games = new Game[maxGames];
-        this.setMultiFloor(multiFloor);
-        if (multiFloor) {
-            dungeonName = identifier;
-            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
-            if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor().getName();
-            } else {
-                mapName = "invalid";
+        dungeon = plugin.getDungeons().getByName(identifier);
+        if (dungeon == null) {
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(identifier);
+            if (resource != null) {
+                dungeon = new Dungeon(resource);
             }
-        } else {
-            mapName = identifier;
         }
         this.maxGroupsPerGame = maxGroupsPerGame;
         verticalSigns = (int) Math.ceil((float) (1 + maxGroupsPerGame) / 4);
@@ -100,48 +95,18 @@ public class GameSign extends GlobalProtection {
     }
 
     /**
-     * @return the multiFloor
+     * @return the dungeon
      */
-    public boolean isMultiFloor() {
-        return multiFloor;
+    public Dungeon getDungeon() {
+        return dungeon;
     }
 
     /**
-     * @param multiFloor
-     * the multiFloor to set
+     * @param dungeon
+     * the dungeon to set
      */
-    public void setMultiFloor(boolean multiFloor) {
-        this.multiFloor = multiFloor;
-    }
-
-    /**
-     * @return the dungeonName
-     */
-    public String getDungeonName() {
-        return dungeonName;
-    }
-
-    /**
-     * @param dungeonName
-     * the dungeonName to set
-     */
-    public void setDungeonName(String dungeonName) {
-        this.dungeonName = dungeonName;
-    }
-
-    /**
-     * @return the mapName
-     */
-    public String getMapName() {
-        return mapName;
-    }
-
-    /**
-     * @param mapName
-     * the mapName to set
-     */
-    public void setMapName(String mapName) {
-        this.mapName = mapName;
+    public void setDungeon(Dungeon dungeon) {
+        this.dungeon = dungeon;
     }
 
     /**
@@ -266,17 +231,9 @@ public class GameSign extends GlobalProtection {
         config.set(preString + ".x", startSign.getX());
         config.set(preString + ".y", startSign.getY());
         config.set(preString + ".z", startSign.getZ());
-
-        if (isMultiFloor()) {
-            config.set(preString + ".dungeon", dungeonName);
-
-        } else {
-            config.set(preString + ".dungeon", mapName);
-        }
-
+        config.set(preString + ".dungeon", dungeon.getName());
         config.set(preString + ".maxGames", games.length);
         config.set(preString + ".maxGroupsPerGame", maxGroupsPerGame);
-        config.set(preString + ".multiFloor", isMultiFloor());
     }
 
     /* Statics */
@@ -361,7 +318,7 @@ public class GameSign extends GlobalProtection {
 
     /* SUBJECT TO CHANGE*/
     @Deprecated
-    public static GameSign tryToCreate(Block startSign, String mapName, int maxGames, int maxGroupsPerGame, boolean multiFloor) {
+    public static GameSign tryToCreate(Block startSign, String mapName, int maxGames, int maxGroupsPerGame) {
         World world = startSign.getWorld();
         int direction = startSign.getData();
         int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
@@ -457,7 +414,7 @@ public class GameSign extends GlobalProtection {
             block.setTypeIdAndData(68, startSign.getData(), true);
         }
 
-        GameSign sign = new GameSign(protections.generateId(GameSign.class, world), startSign, mapName, maxGames, maxGroupsPerGame, multiFloor);
+        GameSign sign = new GameSign(protections.generateId(GameSign.class, world), startSign, mapName, maxGames, maxGroupsPerGame);
 
         return sign;
     }
@@ -513,8 +470,7 @@ public class GameSign extends GlobalProtection {
 
         if (topSign.getLine(0).equals(NEW_GAME)) {
             Game game = new Game(dGroup);
-            dGroup.setDungeonName(gameSign.dungeonName);
-            dGroup.setMapName(gameSign.mapName);
+            dGroup.setDungeon(gameSign.dungeon);
             gameSign.games[column] = game;
             gameSign.update();
 
