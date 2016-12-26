@@ -19,6 +19,8 @@ package io.github.dre2n.dungeonsxl.world.block;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.reward.ItemReward;
@@ -169,22 +171,25 @@ public class RewardChest extends GameBlock {
             }
         }
 
-        if (!hasMoneyReward) {
-            Reward reward = Reward.create(RewardTypeDefault.MONEY);
-            ((MoneyReward) reward).addMoney(moneyReward);
-            dGroup.addReward(reward);
-        }
+        Game game = Game.getByDGroup(dGroup);
+        if (game == null || game.getType() == GameTypeDefault.CUSTOM || game.getType().hasRewards()) {
+            if (!hasMoneyReward) {
+                Reward reward = Reward.create(RewardTypeDefault.MONEY);
+                ((MoneyReward) reward).addMoney(moneyReward);
+                dGroup.addReward(reward);
+            }
 
-        if (!hasLevelReward) {
-            Reward reward = Reward.create(RewardTypeDefault.LEVEL);
-            ((LevelReward) reward).addLevels(levelReward);
-            dGroup.addReward(reward);
-        }
+            if (!hasLevelReward) {
+                Reward reward = Reward.create(RewardTypeDefault.LEVEL);
+                ((LevelReward) reward).addLevels(levelReward);
+                dGroup.addReward(reward);
+            }
 
-        if (!hasItemReward) {
-            Reward reward = Reward.create(RewardTypeDefault.ITEM);
-            ((ItemReward) reward).addItems(itemReward);
-            dGroup.addReward(reward);
+            if (!hasItemReward) {
+                Reward reward = Reward.create(RewardTypeDefault.ITEM);
+                ((ItemReward) reward).addItems(itemReward);
+                dGroup.addReward(reward);
+            }
         }
 
         for (Player player : dGroup.getPlayers()) {
