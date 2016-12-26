@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.task;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
@@ -37,7 +38,7 @@ public class CreateDInstancePlayerTask extends BukkitRunnable {
 
     private UUID player;
     private DInstanceWorld instance;
-    private boolean ready;
+    private GameType ready;
 
     private int i = 12;
 
@@ -46,7 +47,7 @@ public class CreateDInstancePlayerTask extends BukkitRunnable {
         this.instance = instance;
     }
 
-    public CreateDInstancePlayerTask(Player player, DInstanceWorld instance, boolean ready) {
+    public CreateDInstancePlayerTask(Player player, DInstanceWorld instance, GameType ready) {
         this.player = player.getUniqueId();
         this.instance = instance;
         this.ready = ready;
@@ -63,8 +64,8 @@ public class CreateDInstancePlayerTask extends BukkitRunnable {
         if (instance.exists()) {
             if (instance instanceof DGameWorld) {
                 DGamePlayer gamePlayer = new DGamePlayer(player, (DGameWorld) instance);
-                if (ready) {
-                    gamePlayer.ready();
+                if (ready != null) {
+                    gamePlayer.ready(ready);
                 }
 
             } else if (instance instanceof DEditWorld) {

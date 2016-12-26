@@ -31,6 +31,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class AnnouncerStartGameTask extends BukkitRunnable {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     private Announcer announcer;
     private ProgressBar bar;
 
@@ -47,7 +49,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             }
         }
         bar = new ProgressBar(players, 30);
-        bar.runTaskTimer(DungeonsXL.getInstance(), 0L, 20L);
+        bar.runTaskTimer(plugin, 0L, 20L);
     }
 
     /**
@@ -72,7 +74,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             }
 
             if (game == null) {
-                game = new Game(dGroup, announcer.getMapName());
+                game = new Game(dGroup, plugin.getDWorlds().getResourceByName(announcer.getMapName()));
             } else {
                 game.getDGroups().add(dGroup);
             }
