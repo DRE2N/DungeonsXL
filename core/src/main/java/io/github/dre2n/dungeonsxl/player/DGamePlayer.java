@@ -462,7 +462,13 @@ public class DGamePlayer extends DInstancePlayer {
      */
     public void leave(boolean message) {
         Game game = Game.getByWorld(getWorld());
+        if (game == null) {
+            return;
+        }
         DGameWorld gameWorld = game.getWorld();
+        if (gameWorld == null) {
+            return;
+        }
         GameRules rules = game.getRules();
         delete();
 
