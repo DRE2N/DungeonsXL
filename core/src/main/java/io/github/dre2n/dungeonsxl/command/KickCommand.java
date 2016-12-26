@@ -38,8 +38,9 @@ public class KickCommand extends BRCommand {
         setMinArgs(1);
         setMaxArgs(1);
         setHelp(DMessages.HELP_CMD_KICK.getMessage());
-        setPermission(DPermissions.LEAVE.getNode());
+        setPermission(DPermissions.KICK.getNode());
         setPlayerCommand(true);
+        setConsoleCommand(true);
     }
 
     @Override
