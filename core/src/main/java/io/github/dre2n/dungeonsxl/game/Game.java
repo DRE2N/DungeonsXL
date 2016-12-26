@@ -89,15 +89,12 @@ public class Game {
         dGroup.setScore(rules.getInitialScore());
     }
 
-    public Game(DGroup dGroup, String worldName) {
+    public Game(DGroup dGroup, DResourceWorld resource) {
         plugin.getGames().add(this);
 
         tutorial = false;
         started = false;
-        DResourceWorld resource = plugin.getDWorlds().getResourceByName(worldName);
-        if (resource != null) {
-            world = resource.instantiateAsGameWorld();
-        }
+        world = resource.instantiateAsGameWorld();
 
         dGroups.add(dGroup);
         dGroup.setGameWorld(world);

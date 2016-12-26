@@ -41,9 +41,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class DEditPlayer extends DInstancePlayer {
 
     private String[] linesCopy;
+    private DEditWorld editWorld;
 
     public DEditPlayer(final Player player, DEditWorld world) {
         super(player, world.getWorld());
+        editWorld = world;
 
         // Set gamemode a few ticks later to avoid incompatibilities with plugins that force a gamemode
         new BukkitRunnable() {
@@ -94,6 +96,13 @@ public class DEditPlayer extends DInstancePlayer {
      */
     public void setLinesCopy(String[] linesCopy) {
         this.linesCopy = linesCopy;
+    }
+
+    /**
+     * @return the DEditWorld
+     */
+    public DEditWorld getEditWorld() {
+        return editWorld;
     }
 
     /* Actions */

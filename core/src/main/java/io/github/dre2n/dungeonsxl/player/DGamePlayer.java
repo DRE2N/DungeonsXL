@@ -120,7 +120,7 @@ public class DGamePlayer extends DInstancePlayer {
      * the player's GameWorld
      */
     public static void create(Player player, DGameWorld gameWorld) {
-        create(player, gameWorld, false);
+        create(player, gameWorld, null);
     }
 
     /**
@@ -129,9 +129,10 @@ public class DGamePlayer extends DInstancePlayer {
      * @param gameWorld
      * the player's GameWorld
      * @param ready
-     * if the player will be ready from the beginning
+     * Any GameType if the player will be ready from the beginning
+     * null if the player will not be ready from the beginning
      */
-    public static void create(Player player, DGameWorld gameWorld, boolean ready) {
+    public static void create(Player player, DGameWorld gameWorld, GameType ready) {
         new CreateDInstancePlayerTask(player, gameWorld, ready).runTaskTimer(plugin, 0L, 5L);
     }
 

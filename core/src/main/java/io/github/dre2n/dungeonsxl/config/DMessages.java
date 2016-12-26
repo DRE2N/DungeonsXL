@@ -132,7 +132,7 @@ public enum DMessages implements Messages {
     HELP_CMD_LIVES("Help_Cmd_Lives", "/dxl lives [player] - Shows the lives a player has left"),
     HELP_CMD_MAIN("Help_Cmd_Main", "/dxl - General status information"),
     HELP_CMD_MSG("Help_Cmd_Msg", "/dxl msg [id] '[msg]' - Show or edit a message"),
-    HELP_CMD_PLAY("Help_Cmd_Play", "/dxl play ([dungeon|map]) [name] - Allows the player to play a dungeon without a portal"),
+    HELP_CMD_PLAY("Help_Cmd_Play", "/dxl play [name] - Allows the player to play a dungeon without a portal"),
     HELP_CMD_PORTAL("Help_Cmd_Portal", "/dxl portal ([material=portal])- Creates a portal that leads into a dungeon"),
     HELP_CMD_RELOAD("Help_Cmd_Reload", "/dxl reload - Reloads the plugin"),
     HELP_CMD_RENAME("Help_Cmd_Rename", "/dxl rename [old name] [new name] - Changes the name of a map to the new one. This command does NOT break dungeons that include this map."),

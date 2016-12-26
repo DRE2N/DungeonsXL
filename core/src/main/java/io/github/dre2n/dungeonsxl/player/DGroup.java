@@ -133,7 +133,6 @@ public class DGroup {
         this("Group_" + plugin.getDGroups().size(), player, dungeon);
     }
 
-    @Deprecated
     public DGroup(String name, Player player, Dungeon dungeon) {
         this(name, player, new ArrayList<Player>(), dungeon);
     }
@@ -421,14 +420,19 @@ public class DGroup {
      * @param name
      * the name of the dungeon
      */
-    public void setDungeon(String name) {
+    public boolean setDungeon(String name) {
         dungeon = plugin.getDungeons().getByName(name);
         if (dungeon != null) {
             unplayedFloors = dungeon.getConfig().getFloors();
+            return true;
 
         } else {
             DResourceWorld resource = plugin.getDWorlds().getResourceByName(name);
-            dungeon = new Dungeon(resource);
+            if (resource != null) {
+                dungeon = new Dungeon(resource);
+                return true;
+            }
+            return false;
         }
     }
 

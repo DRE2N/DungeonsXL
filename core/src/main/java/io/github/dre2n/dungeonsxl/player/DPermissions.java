@@ -52,6 +52,7 @@ public enum DPermissions {
     INVITE("invite", OP),
     INSECURE("insecure", OP),
     JOIN("join", TRUE),
+    KICK("kick", OP),
     LEAVE("leave", TRUE),
     LIST("list", OP),
     LIVES("lives", TRUE),
