@@ -25,6 +25,7 @@ import io.github.dre2n.dungeonsxl.player.DPermissions;
  */
 public enum DSignTypeDefault implements DSignType {
 
+    ACTION_BAR("ActionBar", "actionbar", true, false, ActionBarSign.class),
     BED("Bed", "bed", false, false, BedSign.class),
     BLOCK("Block", "block", false, true, BlockSign.class),
     BOSS_SHOP("BossShop", "bossshop", false, true, BossShopSign.class),
@@ -57,6 +58,7 @@ public enum DSignTypeDefault implements DSignType {
     SOUND_MESSAGE("SoundMSG", "soundmsg", false, false, SoundMessageSign.class),
     START("Start", "start", true, false, StartSign.class),
     TELEPORT("Teleport", "teleport", false, false, TeleportSign.class),
+    TITLE("Title", "title", true, false, TitleSign.class),
     TRIGGER("Trigger", "trigger", true, false, TriggerSign.class),
     WAVE("Wave", "wave", false, false, WaveSign.class);
 
