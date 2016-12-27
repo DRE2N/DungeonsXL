@@ -73,9 +73,17 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DGameWorld extends DInstanceWorld {
 
+    public enum Type {
+        START_FLOOR,
+        END_FLOOR,
+        DEFAULT
+    }
+
     Game game;
 
     // Variables
+    private Type type = Type.DEFAULT;
+
     private boolean isPlaying = false;
 
     // TO DO: Which lists actually need to be CopyOnWriteArrayLists?
@@ -117,6 +125,22 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         return game;
+    }
+
+    /**
+     * @return
+     * the type of the floor
+     */
+    public Type getType() {
+        return type;
+    }
+
+    /**
+     * @param type
+     * the type to set
+     */
+    public void setType(Type type) {
+        this.type = type;
     }
 
     /**

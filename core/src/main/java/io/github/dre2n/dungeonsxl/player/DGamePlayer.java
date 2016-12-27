@@ -16,14 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.DungeonConfig;
-import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
-import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
@@ -737,79 +733,34 @@ public class DGamePlayer extends DInstancePlayer {
      * the name of the next floor
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
-        MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_DUNGEON.getMessage());
+        if (!dGroup.getDungeon().isMultiFloor()) {
+            finish();
+            return;
+        }
+
+        MessageUtil.sendMessage(getPlayer(), DMessages.PLAYER_FINISHED_FLOOR.getMessage());
         finished = true;
 
+        boolean hasToWait = false;
         if (getDGroup() == null) {
             return;
         }
-
         if (!dGroup.isPlaying()) {
             return;
         }
-
         dGroup.setNextFloor(specifiedFloor);
-
-        for (Player player : dGroup.getPlayers()) {
-            DGamePlayer dPlayer = getByPlayer(player);
-            if (!dPlayer.finished) {
-                MessageUtil.sendMessage(this.getPlayer(), DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
-                return;
-            }
+        if (dGroup.isFinished()) {
+            dGroup.finishFloor(specifiedFloor);
+        } else {
+            MessageUtil.sendMessage(player, DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
+            hasToWait = true;
         }
 
-        boolean invalid = !dGroup.getDungeon().isMultiFloor();
-
-        for (Player player : dGroup.getPlayers()) {
-            DGamePlayer dPlayer = getByPlayer(player);
-
-            if (invalid) {
-                dPlayer.finish(false);
-
-            } else {
-                dPlayer.finished = false;
-            }
+        DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, hasToWait);
+        plugin.getServer().getPluginManager().callEvent(dPlayerFinishEvent);
+        if (dPlayerFinishEvent.isCancelled()) {
+            finished = false;
         }
-
-        if (invalid) {
-            return;
-        }
-
-        DungeonConfig dConfig = dGroup.getDungeon().getConfig();
-        int random = NumberUtil.generateRandomInt(0, dConfig.getFloors().size());
-        DResourceWorld newFloor = dGroup.getUnplayedFloors().get(random);
-        if (dConfig.getFloorCount() == dGroup.getFloorCount() - 1) {
-            newFloor = dConfig.getEndFloor();
-
-        } else if (specifiedFloor != null) {
-            newFloor = specifiedFloor;
-        }
-
-        /*DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(dGroup, dGroup.getGameWorld(), newFloor);
-
-        if (event.isCancelled()) {
-            return;
-        }
-         */
-        Game game = dGroup.getGameWorld().getGame();
-
-        dGroup.removeUnplayedFloor(dGroup.getGameWorld().getResource(), false);
-
-        DGameWorld gameWorld = null;
-        if (newFloor != null) {
-            gameWorld = newFloor.instantiateAsGameWorld();
-        }
-        dGroup.setGameWorld(gameWorld);
-
-        for (Player player : dGroup.getPlayers()) {
-            DGamePlayer dPlayer = getByPlayer(player);
-            dPlayer.setWorld(gameWorld.getWorld());
-            dPlayer.setCheckpoint(dGroup.getGameWorld().getStartLocation(dGroup));
-            if (dPlayer.getWolf() != null) {
-                dPlayer.getWolf().teleport(dPlayer.getCheckpoint());
-            }
-        }
-        dGroup.startGame(game);
     }
 
     /**
@@ -829,60 +780,23 @@ public class DGamePlayer extends DInstancePlayer {
         }
         finished = true;
 
-        if (getDGroup() == null) {
-            return;
-        }
-
-        if (!dGroup.isPlaying()) {
-            return;
-        }
-
-        boolean first = true;
         boolean hasToWait = false;
-
-        for (Player player : dGroup.getPlayers()) {
-            DGamePlayer dPlayer = getByPlayer(player);
-            if (!dPlayer.finished) {
-                if (message) {
-                    MessageUtil.sendMessage(this.getPlayer(), DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
-                }
-                hasToWait = true;
-
-            } else if (dPlayer != this) {
-                first = false;
+        if (!getDGroup().isPlaying()) {
+            return;
+        }
+        if (dGroup.isFinished()) {
+            dGroup.finish();
+        } else {
+            if (message) {
+                MessageUtil.sendMessage(this.getPlayer(), DMessages.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
             }
+            hasToWait = true;
         }
 
-        DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, first, hasToWait);
-
+        DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, hasToWait);
+        plugin.getServer().getPluginManager().callEvent(dPlayerFinishEvent);
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
-            return;
-        }
-
-        if (hasToWait) {
-            return;
-        }
-
-        DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dGroup);
-
-        if (dGroupFinishDungeonEvent.isCancelled()) {
-            return;
-        }
-
-        Game.getByDGroup(dGroup).resetWaveKills();
-
-        DGroupRewardEvent dGroupRewardEvent = new DGroupRewardEvent(dGroup);
-        plugin.getServer().getPluginManager().callEvent(dGroupRewardEvent);
-        for (Player player : dGroup.getPlayers()) {
-            DGamePlayer dPlayer = getByPlayer(player);
-            dPlayer.leave(false);
-
-            if (!dGroupRewardEvent.isCancelled()) {
-                for (Reward reward : dGroup.getRewards()) {
-                    reward.giveTo(player);
-                }
-            }
         }
     }
 

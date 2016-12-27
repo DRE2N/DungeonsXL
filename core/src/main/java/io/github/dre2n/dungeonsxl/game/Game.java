@@ -95,6 +95,7 @@ public class Game {
         tutorial = false;
         started = false;
         world = resource.instantiateAsGameWorld();
+        world.setType(DGameWorld.Type.START_FLOOR);
 
         dGroups.add(dGroup);
         dGroup.setGameWorld(world);

@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.event.dgroup;
 
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -30,9 +31,9 @@ public class DGroupFinishFloorEvent extends DGroupEvent implements Cancellable {
     private boolean cancelled;
 
     private DGameWorld finished;
-    private String next;
+    private DResourceWorld next;
 
-    public DGroupFinishFloorEvent(DGroup dGroup, DGameWorld finished, String next) {
+    public DGroupFinishFloorEvent(DGroup dGroup, DGameWorld finished, DResourceWorld next) {
         super(dGroup);
         this.finished = finished;
         this.next = next;
@@ -56,15 +57,15 @@ public class DGroupFinishFloorEvent extends DGroupEvent implements Cancellable {
     /**
      * @return the next
      */
-    public String getNext() {
+    public DResourceWorld getNext() {
         return next;
     }
 
     /**
      * @param next
-     * the name of the DGameWorld to set
+     * the resource to set
      */
-    public void setNext(String next) {
+    public void setNext(DResourceWorld next) {
         this.next = next;
     }
 

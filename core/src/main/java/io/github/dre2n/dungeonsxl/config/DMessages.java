@@ -181,6 +181,7 @@ public enum DMessages implements Messages {
     PLAYER_DEATH("Player_Death", "&4&v1 &6died and has &4&v2 &6lives left."),
     PLAYER_DEATH_KICK("Player_DeathKick", "&2&v1 &6lost his last life and was kicked."),
     PLAYER_FINISHED_DUNGEON("Player_FinishedDungeon", "&6You successfully finished the dungeon!"),
+    PLAYER_FINISHED_FLOOR("Player_Finished_Floor", "&6You successfully finished the floor."),
     PLAYER_INVITED("Player_Invited", "&4&v1&6 invited you to the group &4&v2&6."),
     PLAYER_UNINVITED("Player_Uninvited", "&4&v1&6 took back your invitation to the group &4&v2&6."),
     PLAYER_JOIN_GROUP("Player_JoinGroup", "&6You successfully joined the group!"),

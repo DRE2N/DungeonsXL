@@ -28,28 +28,11 @@ public class DGamePlayerFinishEvent extends DGamePlayerEvent implements Cancella
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private boolean first;
     private boolean hasToWait;
 
-    public DGamePlayerFinishEvent(DGamePlayer dPlayer, boolean first, boolean hasToWait) {
+    public DGamePlayerFinishEvent(DGamePlayer dPlayer, boolean hasToWait) {
         super(dPlayer);
-        this.first = first;
         this.hasToWait = hasToWait;
-    }
-
-    /**
-     * @return the first
-     */
-    public boolean isFirst() {
-        return first;
-    }
-
-    /**
-     * @param first
-     * the first to set
-     */
-    public void setFirst(boolean first) {
-        this.first = first;
     }
 
     /**

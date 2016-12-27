@@ -16,11 +16,16 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
+import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupDisbandEvent;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
+import io.github.dre2n.dungeonsxl.event.dgroup.DGroupRewardEvent;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementDemandEvent;
@@ -117,7 +122,7 @@ public class DGroup {
         dungeon = plugin.getDungeons().getByName(identifier);
         if (multiFloor && dungeon != null) {
             // Real dungeon
-            unplayedFloors = dungeon.getConfig().getFloors();
+            unplayedFloors = new ArrayList<>(dungeon.getConfig().getFloors());
 
         } else {
             // Artificial dungeon
@@ -155,7 +160,7 @@ public class DGroup {
             }
         }
 
-        this.dungeon = dungeon;
+        setDungeon(dungeon);
         playing = false;
         floorCount = 0;
     }
@@ -407,11 +412,16 @@ public class DGroup {
     }
 
     /**
+     * Sets up all dungeon-related fields.
+     *
      * @param dungeon
      * the dungeon to set
      */
     public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
+        if (dungeon.isMultiFloor()) {
+            unplayedFloors = new ArrayList<>(dungeon.getConfig().getFloors());
+        }
     }
 
     /**
@@ -644,7 +654,92 @@ public class DGroup {
         this.lives = lives;
     }
 
+    /**
+     * @return true if all players are finished
+     */
+    public boolean isFinished() {
+        for (DGamePlayer dPlayer : getDGamePlayers()) {
+            if (!dPlayer.isFinished()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /* Actions */
+    /**
+     * The group finishs the dungeon.
+     */
+    public void finish() {
+        DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dungeon, this);
+        plugin.getServer().getPluginManager().callEvent(dGroupFinishDungeonEvent);
+        if (dGroupFinishDungeonEvent.isCancelled()) {
+            return;
+        }
+
+        Game.getByDGroup(this).resetWaveKills();
+        DGroupRewardEvent dGroupRewardEvent = new DGroupRewardEvent(this);
+        plugin.getServer().getPluginManager().callEvent(dGroupRewardEvent);
+        for (DGamePlayer player : getDGamePlayers()) {
+            player.leave(false);
+            if (!dGroupRewardEvent.isCancelled()) {
+                for (Reward reward : rewards) {
+                    reward.giveTo(player.getPlayer());
+                }
+            }
+        }
+    }
+
+    /**
+     * The group finishs the current floor.
+     *
+     * @param specifiedFloor
+     * the name of the next floor
+     */
+    public void finishFloor(DResourceWorld specifiedFloor) {
+        DungeonConfig dConfig = dungeon.getConfig();
+        int floorsLeft = getUnplayedFloors().size();
+        DResourceWorld newFloor = null;
+        DGameWorld.Type type = null;
+        if (gameWorld.getType() == DGameWorld.Type.END_FLOOR) {
+            finish();
+            return;
+        } else if (specifiedFloor != null) {
+            newFloor = specifiedFloor;
+            type = DGameWorld.Type.DEFAULT;
+        } else if (floorsLeft > 0) {
+            int random = NumberUtil.generateRandomInt(0, floorsLeft);
+            newFloor = getUnplayedFloors().get(random);
+            type = DGameWorld.Type.DEFAULT;
+        } else {
+            newFloor = dConfig.getEndFloor();
+            type = DGameWorld.Type.END_FLOOR;
+        }
+
+        DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(this, gameWorld, newFloor);
+        plugin.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        Game game = gameWorld.getGame();
+        removeUnplayedFloor(gameWorld.getResource(), false);
+        DGameWorld gameWorld = newFloor.instantiateAsGameWorld();
+        gameWorld.setType(type);
+        this.gameWorld = gameWorld;
+        game.setWorld(gameWorld);
+
+        for (DGamePlayer player : getDGamePlayers()) {
+            player.setWorld(gameWorld.getWorld());
+            player.setCheckpoint(gameWorld.getStartLocation(this));
+            if (player.getWolf() != null) {
+                player.getWolf().teleport(player.getCheckpoint());
+            }
+            player.setFinished(false);
+        }
+        startGame(game);
+    }
+
     /**
      * Remove the group from the List
      */
@@ -808,23 +903,6 @@ public class DGroup {
         }
 
         return true;
-    }
-
-    public boolean finishIfMembersFinished() {
-        boolean finish = true;
-
-        for (DGamePlayer dPlayer : getDGamePlayers()) {
-            if (!dPlayer.isFinished()) {
-                finish = false;
-                break;
-            }
-        }
-
-        if (finish && getDGamePlayers().size() > 0) {
-            getDGamePlayers().get(0).finishFloor(nextFloor);
-        }
-
-        return finish;
     }
 
     /**
