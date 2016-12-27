@@ -191,39 +191,6 @@ public class DungeonConfig extends BRConfig {
     }
 
     @Override
-    public void initialize() {
-        if (!config.contains("floors")) {
-            config.createSection("floors");
-        }
-
-        if (!config.contains("startFloor")) {
-            config.set("startFloor", startFloor.getName());
-        }
-
-        if (!config.contains("endFloor")) {
-            config.set("endFloor", endFloor.getName());
-        }
-
-        if (!config.contains("floorCount")) {
-            config.set("floorCount", floorCount);
-        }
-
-        if (!config.contains("removeWhenPlayed")) {
-            config.set("removeWhenPlayed", removeWhenPlayed);
-        }
-
-        if (!config.contains("overrideValues")) {
-            config.createSection("overrideValues");
-        }
-
-        if (!config.contains("defaultValues")) {
-            config.createSection("defaultValues");
-        }
-
-        save();
-    }
-
-    @Override
     public void load() {
         if (config.contains("floors")) {
             for (String floor : config.getStringList("floors")) {
