@@ -106,7 +106,7 @@ Help_Cmd_List: /dxl list ([dungeon|map|loaded]) ([dungeon]) - Lists all dungeons
 Help_Cmd_Lives: /dxl lives [player] - Shows the lives a player has left
 Help_Cmd_Main: /dxl - General status information
 Help_Cmd_Msg: /dxl msg [id] '[msg]' - Show or edit a message
-Help_Cmd_Play: /dxl play ([dungeon|map]) [name] - Allows the player to play a dungeon without a portal
+Help_Cmd_Play: /dxl play [name] - Allows the player to play a dungeon without a portal
 Help_Cmd_Portal: /dxl portal ([material=portal])- Creates a portal that leads into a dungeon
 Help_Cmd_Reload: /dxl reload - Reloads the plugin
 Help_Cmd_Rename: /dxl rename [old name] [new name] - Changes the name of a map to the new one. This command does NOT break dungeons that include this map.
@@ -161,6 +161,7 @@ Player_CheckpointReached: '&6Checkpoint reached!'
 Player_Death: '&4&v1 &6died and has &4&v2 &6lives left.'
 Player_DeathKick: '&2&v1 &6lost his last life and was kicked.'
 Player_FinishedDungeon: '&6You successfully finished the dungeon!'
+Player_Finished_Floor: '&6You successfully finished the floor.'
 Player_Invited: '&4&v1&6 invited you to the group &4&v2&6.'
 Player_Uninvited: '&4&v1&6 took back your invitation to the group &4&v2&6.'
 Player_JoinGroup: '&6You successfully joined the group!'

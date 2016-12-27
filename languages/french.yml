@@ -85,7 +85,7 @@ Help_Cmd_List: /dxl list ([dungeon|map|loaded]) ([dungeon]) - Lister tout les do
 Help_Cmd_Lives: /dxl lives [player] - Montrer les vies d''un joueur venant de partir
 Help_Cmd_Main: /dxl - Informations générales
 Help_Cmd_Msg: /dxl msg [id] '[msg]' - Montrer ou éditer un message
-Help_Cmd_Play: /dxl play ([dungeon|map]) [name] - Permettre au joueur de jouer à un donjon sans un portail
+Help_Cmd_Play: /dxl play [name] - Permettre au joueur de jouer à un donjon sans un portail
 Help_Cmd_Portal: /dxl portal - Créer un portail qui mène à un donjon
 Help_Cmd_Reload: /dxl reload - Recharge le plugin
 Help_Cmd_Save: /dxl save - Sauvegarder le donjon actuel
@@ -112,6 +112,7 @@ Player_CheckpointReached: '&6Point de sauvegarde atteint!'
 Player_Death: '&6Vous êtes mort, vies restantes: &2&v1'
 Player_DeathKick: '&2&v1&6 est mort et a perdu sa dernière vie.'
 Player_FinishedDungeon: '&6Vous avez terminé le donjon avec succès!'
+Player_Finished_Floor: '&6Vous avez terminé l''étage avec succès!'
 Player_Invited: '&4&v1&6 vous a invité au groupe &4&v2&6.'
 Player_Uninvited: '&4&v1&6 a annulé votre invitation au groupe &4&v2&6.'
 Player_JoinGroup: '&6Vous avez rejoint le groupe avec succès!'
