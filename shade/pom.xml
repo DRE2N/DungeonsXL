@@ -34,11 +34,11 @@
                                     <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>de.inventivegames.rpapi</pattern>
-                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
+                                    <pattern>org.inventivetalent.reflection</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.reflectionhelper</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>org.inventivetalent.reflection</pattern>
+                                    <pattern>de.inventivegames.rpapi</pattern>
                                     <shadedPattern>io.github.dre2n.dungeonsxl.util.resourcepackapi</shadedPattern>
                                 </relocation>
                             </relocations>
@@ -47,7 +47,8 @@
                                     <include>io.github.dre2n:commons</include>
                                     <include>io.github.dre2n:caliburn</include>
                                     <include>io.github.dre2n:dungeonsxl-*</include>
-                                    <include>org.inventivetalent.resourcepackapi:api</include>
+                                    <include>org.inventivetalent:reflection</include>
+                                    <include>org.inventivetalent.resourcepackapi:*</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -67,6 +68,13 @@
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>dungeonsxl-core</artifactId>
+            <version>${parent.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>dungeonsxl-rpapi-patch_1_11_R1</artifactId>
             <version>${parent.version}</version>
             <type>jar</type>
             <scope>compile</scope>

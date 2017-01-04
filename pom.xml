@@ -15,6 +15,7 @@
         <module>shade</module>
         <module>core</module>
         <module>abstract</module>
+        <module>rpapi-patch_1_11_R1</module>
         <module>craftbukkit_1_11_R1</module>
         <module>craftbukkit_1_10_R1</module>
         <module>craftbukkit_1_9_R2</module>
@@ -70,9 +71,24 @@
             <version>2.6.9</version>
             <scope>provided</scope>
         </dependency>
+        <!--<dependency>
+            <groupId>org.inventivetalent.resourcepackapi</groupId>
+            <artifactId>v1_11_R1</artifactId>
+            <version>2.2.1</version>
+        </dependency>-->
         <dependency>
             <groupId>org.inventivetalent.resourcepackapi</groupId>
-            <artifactId>api</artifactId>
+            <artifactId>v1_10_R1</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent.resourcepackapi</groupId>
+            <artifactId>v1_9_R2</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent.resourcepackapi</groupId>
+            <artifactId>v1_9_R1</artifactId>
             <version>2.2.1</version>
         </dependency>
     </dependencies>
