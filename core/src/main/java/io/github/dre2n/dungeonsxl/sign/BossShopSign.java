@@ -94,7 +94,7 @@ public class BossShopSign extends DSign {
 
     @Override
     public boolean onPlayerTrigger(Player player) {
-        openShop(player, lines[1]);
+        openShop(player, shopName);
         return true;
     }
 
