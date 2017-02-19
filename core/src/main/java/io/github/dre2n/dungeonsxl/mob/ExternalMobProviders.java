@@ -31,15 +31,19 @@ import org.bukkit.Bukkit;
  */
 public class ExternalMobProviders {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     private Set<ExternalMobProvider> providers = new HashSet<>();
 
     public ExternalMobProviders() {
         // Supported providers
         providers.addAll(Arrays.asList(ExternalMobPlugin.values()));
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
-            providers.add(new CitizensMobProvider());
+            CitizensMobProvider citizens = new CitizensMobProvider();
+            providers.add(citizens);
+            Bukkit.getPluginManager().registerEvents(citizens, plugin);
         } else {
-            MessageUtil.log("Could not find compatible Citizens plugin. The mob provider Citizens (\"CI\") will not get enabled...");
+            MessageUtil.log(plugin, "Could not find compatible Citizens plugin. The mob provider Citizens (\"CI\") will not get enabled...");
         }
 
         // Custom providers

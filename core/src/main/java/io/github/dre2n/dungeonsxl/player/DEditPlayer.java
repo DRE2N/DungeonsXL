@@ -20,7 +20,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
-import io.github.dre2n.dungeonsxl.task.CreateDInstancePlayerTask;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.ChatColor;

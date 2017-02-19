@@ -20,6 +20,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -36,6 +37,10 @@ public class GlobalProtections {
     DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Set<GlobalProtection> protections = new HashSet<>();
+
+    public GlobalProtections() {
+        Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(), plugin);
+    }
 
     /**
      * @return the protection which covers this location

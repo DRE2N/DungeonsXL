@@ -21,17 +21,20 @@ import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.npc.AbstractNPC;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 /**
  * ExternalMobProvider implementation for Citizens.
  *
  * @author Daniel Saukel
  */
-public class CitizensMobProvider implements ExternalMobProvider {
+public class CitizensMobProvider implements ExternalMobProvider, Listener {
 
     private DNPCRegistry registry = new DNPCRegistry();
     private String identifier = "CI";
@@ -97,6 +100,16 @@ public class CitizensMobProvider implements ExternalMobProvider {
 
             DGameWorld gameWorld = DGameWorld.getByWorld(location.getWorld());
             new DMob((LivingEntity) npc.getEntity(), gameWorld, null, mob);
+        }
+    }
+
+    /* Listeners */
+    @EventHandler
+    public void onNPCDeath(NPCDeathEvent event) {
+        NPC npc = event.getNPC();
+        if (spawnedNPCs.contains(npc)) {
+            CitizensAPI.getNPCRegistry().deregister(npc);
+            removeSpawnedNPC(npc);
         }
     }
 

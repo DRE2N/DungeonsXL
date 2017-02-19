@@ -25,7 +25,6 @@ import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.task.AnnouncerStartGameTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;

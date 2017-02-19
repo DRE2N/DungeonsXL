@@ -17,11 +17,14 @@
 package io.github.dre2n.dungeonsxl.announcer;
 
 import io.github.dre2n.commons.util.FileUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Announcer instance manager.
@@ -29,6 +32,10 @@ import org.bukkit.inventory.Inventory;
  * @author Daniel Saukel
  */
 public class Announcers {
+
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
+    private BukkitTask announcerTask;
 
     private List<Announcer> announcers = new ArrayList<>();
 
@@ -38,6 +45,8 @@ public class Announcers {
                 announcers.add(new Announcer(script));
             }
         }
+        startAnnouncerTask(plugin.getMainConfig().getAnnouncmentInterval());
+        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(), plugin);
     }
 
     /**
@@ -87,6 +96,22 @@ public class Announcers {
      */
     public void removeAnnouncer(Announcer announcer) {
         announcers.remove(announcer);
+    }
+
+    /**
+     * @return the AnnouncerTask
+     */
+    public BukkitTask getAnnouncerTask() {
+        return announcerTask;
+    }
+
+    /**
+     * start a new AnnouncerTask
+     */
+    public void startAnnouncerTask(long period) {
+        if (!announcers.isEmpty()) {
+            announcerTask = new AnnouncerTask(this).runTaskTimer(plugin, period, period);
+        }
     }
 
 }

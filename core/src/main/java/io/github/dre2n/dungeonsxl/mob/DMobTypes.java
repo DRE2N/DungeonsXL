@@ -17,9 +17,11 @@
 package io.github.dre2n.dungeonsxl.mob;
 
 import io.github.dre2n.commons.util.FileUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 /**
  * @author Daniel Saukel
@@ -34,6 +36,7 @@ public class DMobTypes {
                 dMobTypes.add(new DMobType(script));
             }
         }
+        Bukkit.getPluginManager().registerEvents(new DMobListener(), DungeonsXL.getInstance());
     }
 
     /**

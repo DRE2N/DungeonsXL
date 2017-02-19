@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl.world;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import java.io.File;
 import org.bukkit.Location;

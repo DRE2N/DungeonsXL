@@ -25,9 +25,24 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * World instance manager.
@@ -40,6 +55,8 @@ public class DWorlds {
     MainConfig mainConfig = plugin.getMainConfig();
 
     public static final File RAW = new File(DungeonsXL.MAPS, ".raw");
+
+    private BukkitTask worldUnloadTask;
 
     private Set<DResourceWorld> resources = new HashSet<>();
     private Set<DInstanceWorld> instances = new HashSet<>();
@@ -54,6 +71,9 @@ public class DWorlds {
         if (!RAW.exists()) {
             createRaw();
         }
+
+        startWorldUnloadTask(1200L);
+        Bukkit.getPluginManager().registerEvents(new DWorldListener(), plugin);
     }
 
     /* Getters and setters */
@@ -68,6 +88,13 @@ public class DWorlds {
         }
 
         return null;
+    }
+
+    /**
+     * @return the DInstanceWorld that represents this world
+     */
+    public DInstanceWorld getInstanceByWorld(World world) {
+        return getInstanceByName(world.getName());
     }
 
     /**
@@ -271,6 +298,21 @@ public class DWorlds {
         FileUtil.copyDirectory(worldFolder, RAW, DungeonsXL.EXCLUDED_FILES);
         Bukkit.unloadWorld(world, false);
         FileUtil.removeDirectory(worldFolder);
+    }
+
+    /* Tasks */
+    /**
+     * @return the worldUnloadTask
+     */
+    public BukkitTask getWorldUnloadTask() {
+        return worldUnloadTask;
+    }
+
+    /**
+     * start a new WorldUnloadTask
+     */
+    public void startWorldUnloadTask(long period) {
+        worldUnloadTask = new WorldUnloadTask().runTaskTimer(plugin, period, period);
     }
 
 }

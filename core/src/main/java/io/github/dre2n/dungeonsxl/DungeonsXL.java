@@ -22,7 +22,7 @@ import io.github.dre2n.commons.config.MessageConfig;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
 import io.github.dre2n.dungeonsxl.announcer.Announcers;
-import io.github.dre2n.dungeonsxl.command.*;
+import io.github.dre2n.dungeonsxl.command.DCommands;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.GlobalData;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
@@ -30,7 +30,6 @@ import io.github.dre2n.dungeonsxl.dungeon.Dungeons;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.game.GameTypes;
 import io.github.dre2n.dungeonsxl.global.GlobalProtections;
-import io.github.dre2n.dungeonsxl.listener.*;
 import io.github.dre2n.dungeonsxl.loottable.DLootTables;
 import io.github.dre2n.dungeonsxl.mob.DMobTypes;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProviders;
@@ -44,11 +43,6 @@ import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypes;
 import io.github.dre2n.dungeonsxl.sign.DSignTypes;
 import io.github.dre2n.dungeonsxl.sign.SignScripts;
-import io.github.dre2n.dungeonsxl.task.AnnouncerTask;
-import io.github.dre2n.dungeonsxl.task.LazyUpdateTask;
-import io.github.dre2n.dungeonsxl.task.SecureModeTask;
-import io.github.dre2n.dungeonsxl.task.UpdateTask;
-import io.github.dre2n.dungeonsxl.task.WorldUnloadTask;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypes;
 import io.github.dre2n.dungeonsxl.util.NoReload;
 import io.github.dre2n.dungeonsxl.world.DWorlds;
@@ -56,7 +50,6 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.event.HandlerList;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * The main class of DungeonsXL.
@@ -102,12 +95,6 @@ public class DungeonsXL extends BRPlugin {
     private SignScripts signScripts;
     private DWorlds dWorlds;
 
-    private BukkitTask announcerTask;
-    private BukkitTask worldUnloadTask;
-    private BukkitTask lazyUpdateTask;
-    private BukkitTask updateTask;
-    private BukkitTask secureModeTask;
-
     private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
@@ -138,28 +125,7 @@ public class DungeonsXL extends BRPlugin {
         DPermissions.register();
         initFolders();
         loadCore();
-
-        manager.registerEvents(new EntityListener(), this);
-        manager.registerEvents(new GUIListener(), this);
-        manager.registerEvents(new PlayerListener(), this);
-        manager.registerEvents(new BlockListener(), this);
-        manager.registerEvents(new WorldListener(), this);
-        manager.registerEvents(new HangingListener(), this);
-        if (manager.getPlugin("Citizens") != null) {
-            manager.registerEvents(new CitizensListener(), this);
-        }
-
-        // Load All
         loadData();
-
-        // Tasks
-        startAnnouncerTask(mainConfig.getAnnouncmentInterval());
-        startWorldUnloadTask(1200L);
-        startLazyUpdateTask(20L);
-        startUpdateTask(20L);
-        if (mainConfig.isSecureModeEnabled()) {
-            startSecureModeTask(mainConfig.getSecureModeCheckInterval());
-        }
 
         new NoReload(this);
     }
@@ -576,78 +542,6 @@ public class DungeonsXL extends BRPlugin {
      */
     public void loadDWorlds(File folder) {
         dWorlds = new DWorlds(MAPS);
-    }
-
-    /**
-     * @return the AnnouncerTask
-     */
-    public BukkitTask getAnnouncerTask() {
-        return announcerTask;
-    }
-
-    /**
-     * start a new AnnouncerTask
-     */
-    public void startAnnouncerTask(long period) {
-        if (!announcers.getAnnouncers().isEmpty()) {
-            announcerTask = new AnnouncerTask(announcers).runTaskTimer(this, period, period);
-        }
-    }
-
-    /**
-     * @return the worldUnloadTask
-     */
-    public BukkitTask getWorldUnloadTask() {
-        return worldUnloadTask;
-    }
-
-    /**
-     * start a new WorldUnloadTask
-     */
-    public void startWorldUnloadTask(long period) {
-        worldUnloadTask = new WorldUnloadTask().runTaskTimer(this, period, period);
-    }
-
-    /**
-     * @return the lazyUpdateTask
-     */
-    public BukkitTask getLazyUpdateTask() {
-        return lazyUpdateTask;
-    }
-
-    /**
-     * start a new LazyUpdateTask
-     */
-    public void startLazyUpdateTask(long period) {
-        lazyUpdateTask = new LazyUpdateTask().runTaskTimer(this, period, period);
-    }
-
-    /**
-     * @return the updateTask
-     */
-    public BukkitTask getUpdateTask() {
-        return updateTask;
-    }
-
-    /**
-     * start a new LazyUpdateTask
-     */
-    public void startUpdateTask(long period) {
-        updateTask = new UpdateTask().runTaskTimer(this, period, period);
-    }
-
-    /**
-     * @return the secureModeTask
-     */
-    public BukkitTask getSecureModeTask() {
-        return secureModeTask;
-    }
-
-    /**
-     * start a new SecureModeTask
-     */
-    public void startSecureModeTask(long period) {
-        updateTask = new SecureModeTask().runTaskTimer(this, period, period);
     }
 
     /**

@@ -16,9 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.trigger;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 /**
  * TriggerType instance manager.
@@ -27,10 +29,13 @@ import java.util.List;
  */
 public class TriggerTypes {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     private List<TriggerType> types = new ArrayList<>();
 
     public TriggerTypes() {
         types.addAll(Arrays.asList(TriggerTypeDefault.values()));
+        Bukkit.getPluginManager().registerEvents(new TriggerListener(), plugin);
     }
 
     /**

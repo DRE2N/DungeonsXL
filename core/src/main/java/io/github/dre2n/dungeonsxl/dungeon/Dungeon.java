@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.dungeon;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.DungeonConfig;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.util.ArrayList;

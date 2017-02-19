@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl.trigger;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
-import static io.github.dre2n.dungeonsxl.trigger.Trigger.plugin;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 
 /**

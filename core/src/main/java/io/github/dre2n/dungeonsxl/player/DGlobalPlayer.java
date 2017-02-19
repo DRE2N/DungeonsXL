@@ -22,7 +22,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.PlayerData;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.global.DPortal;
@@ -46,7 +45,7 @@ public class DGlobalPlayer {
 
     protected Player player;
 
-    private PlayerData data;
+    private DPlayerData data;
 
     private boolean breakMode;
     private boolean chatSpyMode;
@@ -102,15 +101,15 @@ public class DGlobalPlayer {
     /**
      * @return the saved data
      */
-    public PlayerData getData() {
+    public DPlayerData getData() {
         return data;
     }
 
     /**
-     * Load / reload a new instance of PlayerData
+     * Load / reload a new instance of DPlayerData
      */
     public void loadPlayerData(File file) {
-        data = new PlayerData(file);
+        data = new DPlayerData(file);
     }
 
     /**

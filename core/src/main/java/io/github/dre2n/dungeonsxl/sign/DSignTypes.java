@@ -16,9 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 /**
  * DSignType instance manager.
@@ -27,10 +29,13 @@ import java.util.List;
  */
 public class DSignTypes {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     private List<DSignType> types = new ArrayList<>();
 
     public DSignTypes() {
         types.addAll(Arrays.asList(DSignTypeDefault.values()));
+        Bukkit.getPluginManager().registerEvents(new DSignListener(), plugin);
     }
 
     /**

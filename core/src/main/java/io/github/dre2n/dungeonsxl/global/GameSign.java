@@ -21,7 +21,6 @@ import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.game.Game;
-import static io.github.dre2n.dungeonsxl.global.GlobalProtection.plugin;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;

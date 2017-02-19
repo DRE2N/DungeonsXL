@@ -16,9 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.reward;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 /**
  * RewardType instance manager.
@@ -27,10 +29,13 @@ import java.util.List;
  */
 public class RewardTypes {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     private List<RewardType> types = new ArrayList<>();
 
     public RewardTypes() {
         types.addAll(Arrays.asList(RewardTypeDefault.values()));
+        Bukkit.getPluginManager().registerEvents(new RewardListener(), plugin);
     }
 
     /**

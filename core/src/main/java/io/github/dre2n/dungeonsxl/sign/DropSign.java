@@ -19,12 +19,12 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.caliburn.item.UniversalItem;
 import io.github.dre2n.commons.util.NumberUtil;
-import io.github.dre2n.dungeonsxl.task.DropItemTask;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -79,13 +79,23 @@ public class DropSign extends DSign {
 
     @Override
     public void onTrigger() {
-        Location spawnLocation = getSign().getLocation().add(0.5, 0, 0.5);
+        final Location spawnLocation = getSign().getLocation().add(0.5, 0, 0.5);
         if (interval < 0) {
             getSign().getWorld().dropItem(spawnLocation, item);
 
         } else {
             long period = (long) interval * 20;
-            new DropItemTask(item, spawnLocation).runTaskTimer(plugin, period, period);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        spawnLocation.getWorld().dropItem(spawnLocation, item);
+                    } catch (NullPointerException exception) {
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(plugin, period, period);
         }
     }
 

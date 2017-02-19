@@ -53,12 +53,12 @@ public class StatusCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         String minecraftVersion = compat.getVersion().toString();
-        String bukkitVersion = Bukkit.getName() + " " + Bukkit.getBukkitVersion();
+        String bukkitVersion = Bukkit.getName() + (compat.isSpigot() ? " (Spigot)" : new String()) + " " + Bukkit.getBukkitVersion();
         String internalsVersion = compat.getInternals().toString();
         String dungeonsxlVersion = plugin.getDescription().getVersion();
 
         String internalsVersionCorrect = getSymbol(plugin.getSettings().getInternals().contains(compat.getInternals()));
-        String bukkitVersionCorrect = getSymbol(bukkitVersion.startsWith("Spigot"));
+        String bukkitVersionCorrect = getSymbol(bukkitVersion.contains("Spigot"));
         String dungeonsxlVersionCorrect = getSymbol(!dungeonsxlVersion.contains("SNAPSHOT"));
 
         MessageUtil.sendCenteredMessage(sender, "&4&l=> &6STATUS &4&l<=");

@@ -16,20 +16,41 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * DGlobalPlayer instance manager.
  *
  * @author Daniel Saukel
  */
-public class DPlayers {
+public class DPlayers implements Listener {
+
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    MainConfig mainConfig = plugin.getMainConfig();
+
+    private BukkitTask secureModeTask;
+    private BukkitTask updateTask;
+    private BukkitTask lazyUpdateTask;
 
     private CopyOnWriteArrayList<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
+
+    public DPlayers() {
+        if (mainConfig.isSecureModeEnabled()) {
+            startSecureModeTask(mainConfig.getSecureModeCheckInterval());
+        }
+        startUpdateTask(2L);
+        startLazyUpdateTask(20L);
+
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
 
     /**
      * @return the DGlobalPlayer which represents the player
@@ -142,6 +163,49 @@ public class DPlayers {
         dPlayer.setPlayer(player);
         dPlayer.setOfflineTime(0);
         return true;
+    }
+
+    /* Tasks */
+    /**
+     * @return the secureModeTask
+     */
+    public BukkitTask getSecureModeTask() {
+        return secureModeTask;
+    }
+
+    /**
+     * start a new SecureModeTask
+     */
+    public void startSecureModeTask(long period) {
+        secureModeTask = new SecureModeTask().runTaskTimer(plugin, period, period);
+    }
+
+    /**
+     * @return the updateTask
+     */
+    public BukkitTask getUpdateTask() {
+        return updateTask;
+    }
+
+    /**
+     * start a new LazyUpdateTask
+     */
+    public void startUpdateTask(long period) {
+        updateTask = new UpdateTask().runTaskTimer(plugin, period, period);
+    }
+
+    /**
+     * @return the lazyUpdateTask
+     */
+    public BukkitTask getLazyUpdateTask() {
+        return lazyUpdateTask;
+    }
+
+    /**
+     * start a new LazyUpdateTask
+     */
+    public void startLazyUpdateTask(long period) {
+        lazyUpdateTask = new LazyUpdateTask().runTaskTimer(plugin, period, period);
     }
 
 }

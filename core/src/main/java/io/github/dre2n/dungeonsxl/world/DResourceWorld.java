@@ -18,11 +18,8 @@ package io.github.dre2n.dungeonsxl.world;
 
 import io.github.dre2n.commons.util.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import io.github.dre2n.dungeonsxl.config.SignData;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldGenerateEvent;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
-import io.github.dre2n.dungeonsxl.task.BackupResourceTask;
 import io.github.dre2n.dungeonsxl.util.worldloader.WorldLoader;
 import java.io.File;
 import java.io.IOException;

@@ -17,6 +17,17 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.sign.lobby.ClassesSign;
+import io.github.dre2n.dungeonsxl.sign.lobby.LobbySign;
+import io.github.dre2n.dungeonsxl.sign.lobby.ReadySign;
+import io.github.dre2n.dungeonsxl.sign.lobby.StartSign;
+import io.github.dre2n.dungeonsxl.sign.message.ActionBarSign;
+import io.github.dre2n.dungeonsxl.sign.message.HologramSign;
+import io.github.dre2n.dungeonsxl.sign.message.MessageSign;
+import io.github.dre2n.dungeonsxl.sign.message.SoundMessageSign;
+import io.github.dre2n.dungeonsxl.sign.message.TitleSign;
+import io.github.dre2n.dungeonsxl.sign.mob.DMobSign;
+import io.github.dre2n.dungeonsxl.sign.mob.ExternalMobSign;
 
 /**
  * Default implementation of DSignType.

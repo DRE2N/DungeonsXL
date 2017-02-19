@@ -23,6 +23,7 @@ import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.util.DColor;
 import static io.github.dre2n.dungeonsxl.util.DColor.*;
+import io.github.dre2n.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

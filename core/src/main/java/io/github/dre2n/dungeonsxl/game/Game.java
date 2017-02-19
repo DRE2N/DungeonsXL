@@ -19,16 +19,16 @@ package io.github.dre2n.dungeonsxl.game;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.config.DungeonConfig;
-import io.github.dre2n.dungeonsxl.config.WorldConfig;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
+import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.sign.DSign;
-import io.github.dre2n.dungeonsxl.sign.MobSign;
+import io.github.dre2n.dungeonsxl.sign.mob.MobSign;
 import io.github.dre2n.dungeonsxl.trigger.ProgressTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
+import io.github.dre2n.dungeonsxl.world.WorldConfig;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,7 +48,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class Game {
 
-    static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     private boolean tutorial;
     private List<DGroup> dGroups = new ArrayList<>();
@@ -461,7 +461,7 @@ public class Game {
 
     /* Statics */
     public static Game getByDGroup(DGroup dGroup) {
-        for (Game game : plugin.getGames()) {
+        for (Game game : DungeonsXL.getInstance().getGames()) {
             if (game.getDGroups().contains(dGroup)) {
                 return game;
             }
@@ -475,7 +475,7 @@ public class Game {
     }
 
     public static Game getByGameWorld(DGameWorld gameWorld) {
-        for (Game game : plugin.getGames()) {
+        for (Game game : DungeonsXL.getInstance().getGames()) {
             if (gameWorld.equals(game.getWorld())) {
                 return game;
             }

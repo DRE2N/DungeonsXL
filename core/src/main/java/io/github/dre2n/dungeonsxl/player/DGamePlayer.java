@@ -33,7 +33,6 @@ import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
-import io.github.dre2n.dungeonsxl.task.CreateDInstancePlayerTask;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
