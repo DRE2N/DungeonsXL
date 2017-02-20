@@ -69,12 +69,15 @@ public class PortalCommand extends BRCommand {
             dPortal = new DPortal(DungeonsXL.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
+            dGlobalPlayer.setCachedItem(player.getItemInHand());
             player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
             MessageUtil.sendMessage(player, DMessages.PLAYER_PORTAL_INTRODUCTION.getMessage());
 
         } else {
             dPortal.delete();
             dGlobalPlayer.setCreatingPortal(null);
+            player.setItemInHand(dGlobalPlayer.getCachedItem());
+            dGlobalPlayer.setCachedItem(null);
             MessageUtil.sendMessage(player, DMessages.PLAYER_PORTAL_ABORT.getMessage());
         }
     }

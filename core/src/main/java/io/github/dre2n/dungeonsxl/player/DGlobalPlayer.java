@@ -51,6 +51,7 @@ public class DGlobalPlayer {
     private boolean groupChat = false;
     private boolean chatSpyMode = false;
     private DPortal creatingPortal;
+    private ItemStack cachedItem;
     private boolean announcerEnabled = true;
 
     private ItemStack[] respawnInventory;
@@ -184,6 +185,21 @@ public class DGlobalPlayer {
      */
     public void setCreatingPortal(DPortal dPortal) {
         creatingPortal = dPortal;
+    }
+
+    /**
+     * @return the item the player had in his hand before he started to create a portal
+     */
+    public ItemStack getCachedItem() {
+        return cachedItem;
+    }
+
+    /**
+     * @param item
+     * the cached item to set
+     */
+    public void setCachedItem(ItemStack item) {
+        cachedItem = item;
     }
 
     /**

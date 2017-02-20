@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
@@ -37,6 +38,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Daniel Saukel, Wooyoung Son, Frank Baumann, Milan Albrecht
@@ -134,6 +136,40 @@ public class GlobalProtectionListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onPortalCreation(PlayerInteractEvent event) {
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(event.getPlayer());
+        if (!dPlayer.isCreatingPortal()) {
+            return;
+        }
+        ItemStack item = event.getItem();
+        Block block = event.getClickedBlock();
+        if (item.getType() != Material.WOOD_SWORD || block == null) {
+            return;
+        }
+
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(DPortal.class)) {
+            DPortal dPortal = (DPortal) protection;
+            if (dPortal.isActive() || dPortal != dPlayer.getPortal()) {
+                continue;
+            }
+
+            if (dPortal.getBlock1() == null) {
+                dPortal.setBlock1(event.getClickedBlock());
+                dPlayer.sendMessage(DMessages.PLAYER_PORTAL_PROGRESS.getMessage());
+
+            } else if (dPortal.getBlock2() == null) {
+                dPortal.setBlock2(event.getClickedBlock());
+                dPortal.setActive(true);
+                dPortal.create(dPlayer);
+                dPlayer.sendMessage(DMessages.PLAYER_PORTAL_CREATED.getMessage());
+                dPlayer.getPlayer().getInventory().setItemInHand(dPlayer.getCachedItem());
+                dPlayer.setCachedItem(null);
+            }
+            event.setCancelled(true);
+        }
+    }
+
     /* SUBJECT TO CHANGE */
     @Deprecated
     @EventHandler
@@ -208,6 +244,7 @@ public class GlobalProtectionListener implements Listener {
             } else if (lines[1].equalsIgnoreCase("Leave")) {
                 if (block.getState() instanceof Sign) {
                     Sign sign = (Sign) block.getState();
+
                     new LeaveSign(DungeonsXL.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
                 }
 

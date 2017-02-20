@@ -546,7 +546,6 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
         Block clickedBlock = event.getClickedBlock();
         DGameWorld dGameWorld = DGameWorld.getByWorld(player.getWorld());
         if (clickedBlock != null) {
@@ -591,32 +590,6 @@ public class DPlayerListener implements Listener {
         // Check Portals
         if (event.getItem() != null) {
             ItemStack item = event.getItem();
-
-            if (dGlobalPlayer.isCreatingPortal()) {
-                if (item.getType() == Material.WOOD_SWORD) {
-                    if (clickedBlock != null) {
-                        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(DPortal.class
-                        )) {
-                            DPortal dPortal = (DPortal) protection;
-                            if (!dPortal.isActive()) {
-                                if (dPortal == dGlobalPlayer.getPortal()) {
-                                    if (dPortal.getBlock1() == null) {
-                                        dPortal.setBlock1(event.getClickedBlock());
-                                        MessageUtil.sendMessage(player, DMessages.PLAYER_PORTAL_PROGRESS.getMessage());
-
-                                    } else if (dPortal.getBlock2() == null) {
-                                        dPortal.setBlock2(event.getClickedBlock());
-                                        dPortal.setActive(true);
-                                        dPortal.create(dGlobalPlayer);
-                                        MessageUtil.sendMessage(player, DMessages.PLAYER_PORTAL_CREATED.getMessage());
-                                    }
-                                    event.setCancelled(true);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
 
             // Copy/Paste a Sign and Block-info
             if (DEditWorld.getByWorld(player.getWorld()) != null) {
