@@ -41,7 +41,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -797,20 +796,6 @@ public class DGamePlayer extends DInstancePlayer {
         Bukkit.getPluginManager().callEvent(dPlayerFinishEvent);
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
-        }
-    }
-
-    @Override
-    public void sendMessage(String message) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(getWorld());
-        gameWorld.sendMessage(message);
-
-        for (DGlobalPlayer player : DungeonsXL.getDPlayers().getDGlobalPlayers()) {
-            if (player.isInChatSpyMode()) {
-                if (!gameWorld.getWorld().getPlayers().contains(player.getPlayer())) {
-                    MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
-                }
-            }
         }
     }
 

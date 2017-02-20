@@ -31,7 +31,7 @@ import org.bukkit.entity.Player;
 public class ChatSpyCommand extends BRCommand {
 
     public ChatSpyCommand() {
-        setCommand("chatspy");
+        setCommand("chatSpy");
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(DMessages.HELP_CMD_CHATSPY.getMessage());
@@ -42,16 +42,10 @@ public class ChatSpyCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
-        if (dGlobalPlayer.isInChatSpyMode()) {
-            dGlobalPlayer.setInChatSpyMode(false);
-            MessageUtil.sendMessage(player, DMessages.CMD_CHATSPY_STOPPED.getMessage());
-
-        } else {
-            dGlobalPlayer.setInChatSpyMode(true);
-            MessageUtil.sendMessage(player, DMessages.CMD_CHATSPY_START.getMessage());
-        }
+        dPlayer.setInChatSpyMode(!dPlayer.isInChatSpyMode());
+        MessageUtil.sendMessage(player, (dPlayer.isInChatSpyMode() ? DMessages.CMD_CHATSPY_START : DMessages.CMD_CHATSPY_STOPPED).getMessage());
     }
 
 }

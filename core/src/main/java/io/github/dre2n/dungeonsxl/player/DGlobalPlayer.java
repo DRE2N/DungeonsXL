@@ -47,8 +47,9 @@ public class DGlobalPlayer {
 
     private DPlayerData data;
 
-    private boolean breakMode;
-    private boolean chatSpyMode;
+    private boolean breakMode = false;
+    private boolean groupChat = false;
+    private boolean chatSpyMode = false;
     private DPortal creatingPortal;
     private boolean announcerEnabled = true;
 
@@ -128,9 +129,30 @@ public class DGlobalPlayer {
     }
 
     /**
+     * @return if the player is in group chat
+     */
+    public boolean isInGroupChat() {
+        if (!DungeonsXL.getMainConfig().isChatEnabled()) {
+            return false;
+        }
+        return groupChat;
+    }
+
+    /**
+     * @param groupChat
+     * set if the player is in group chat
+     */
+    public void setInGroupChat(boolean groupChat) {
+        this.groupChat = groupChat;
+    }
+
+    /**
      * @return if the player spies the DXL chat channels
      */
     public boolean isInChatSpyMode() {
+        if (!DungeonsXL.getMainConfig().isChatEnabled()) {
+            return false;
+        }
         return chatSpyMode;
     }
 
@@ -264,6 +286,16 @@ public class DGlobalPlayer {
     }
 
     /* Actions */
+    /**
+     * Sends a message to the player
+     *
+     * @param message
+     * the message to send
+     */
+    public void sendMessage(String message) {
+        MessageUtil.sendMessage(player, message);
+    }
+
     /**
      * Respawns the player at his old position before he was in a dungeon
      */

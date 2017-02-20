@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommands;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 
 /**
  * An enumeration of all command instances.
@@ -60,8 +61,6 @@ public class DCommands extends BRCommands {
     public DCommands(BRPlugin plugin) {
         super("dungeonsxl", plugin,
                 BREAK,
-                CHAT,
-                CHAT_SPY,
                 CREATE,
                 DELETE,
                 EDIT,
@@ -91,6 +90,10 @@ public class DCommands extends BRCommands {
                 UNINVITE,
                 new DeletePortalCommand()
         );
+        if (DungeonsXL.getMainConfig().isChatEnabled()) {
+            addCommand(CHAT);
+            addCommand(CHAT_SPY);
+        }
     }
 
 }

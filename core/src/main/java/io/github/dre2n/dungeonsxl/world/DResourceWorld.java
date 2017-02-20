@@ -203,11 +203,12 @@ public class DResourceWorld {
      */
     public DInstanceWorld instantiate(final boolean game) {
         int id = worlds.generateId();
-        String name = worlds.generateName(game);
+        String name = worlds.generateName(game, id);
         final File instanceFolder = new File(Bukkit.getWorldContainer(), name);
 
-        if (Bukkit.getWorld(name) != null) {
-            return null;
+        while (Bukkit.getWorld(name) != null) {
+            id++;
+            name = worlds.generateName(game, id);
         }
 
         final DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);

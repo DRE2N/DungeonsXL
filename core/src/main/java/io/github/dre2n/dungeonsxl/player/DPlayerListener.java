@@ -25,6 +25,7 @@ import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.global.GlobalProtection;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
+import io.github.dre2n.dungeonsxl.util.ParsingUtil;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.LockedDoor;
@@ -65,6 +66,9 @@ public class DPlayerListener implements Listener {
 
     DungeonsXL plugin;
     DPlayers dPlayers;
+    MainConfig config = DungeonsXL.getMainConfig();
+
+    public static final String ALL = "@all ";
 
     public DPlayerListener(DPlayers dPlayers) {
         this.plugin = DungeonsXL.getInstance();
@@ -216,14 +220,24 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
         if (dPlayer == null) {
             return;
         }
+        if (!dPlayer.isInGroupChat()) {
+            return;
+        }
+        DGroup dGroup = DGroup.getByPlayer(player);
+        if (dGroup == null) {
+            return;
+        }
 
-        if (dPlayer.isInDungeonChat()) {
-            dPlayer.sendMessage(player.getDisplayName() + ": " + event.getMessage());
-            event.setCancelled(true);
+        boolean game = event.getMessage().startsWith(ALL) && dPlayer instanceof DInstancePlayer;
+        event.setCancelled(true);
+        if (game) {
+            ((DInstancePlayer) dPlayer).chat(event.getMessage().substring(ALL.length()));
+        } else {
+            dGroup.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatGroup(), dPlayer) + event.getMessage());
         }
     }
 
@@ -253,7 +267,7 @@ public class DPlayerListener implements Listener {
                 return;
 
             } else {
-                commandWhitelist.addAll(DungeonsXL.getMainConfig().getEditCommandWhitelist());
+                commandWhitelist.addAll(config.getEditCommandWhitelist());
             }
 
         } else if (game != null) {
@@ -304,7 +318,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        if (dPlayer instanceof DEditPlayer && !DungeonsXL.getMainConfig().getDropItems() && !DPermissions.hasPermission(player, DPermissions.INSECURE)) {
+        if (dPlayer instanceof DEditPlayer && !config.getDropItems() && !DPermissions.hasPermission(player, DPermissions.INSECURE)) {
             event.setCancelled(true);
         }
 
@@ -352,7 +366,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        if (!DungeonsXL.getMainConfig().isTutorialActivated()) {
+        if (!config.isTutorialActivated()) {
             return;
         }
 
@@ -581,7 +595,8 @@ public class DPlayerListener implements Listener {
             if (dGlobalPlayer.isCreatingPortal()) {
                 if (item.getType() == Material.WOOD_SWORD) {
                     if (clickedBlock != null) {
-                        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(DPortal.class)) {
+                        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(DPortal.class
+                        )) {
                             DPortal dPortal = (DPortal) protection;
                             if (!dPortal.isActive()) {
                                 if (dPortal == dGlobalPlayer.getPortal()) {

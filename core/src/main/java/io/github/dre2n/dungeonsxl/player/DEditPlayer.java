@@ -24,7 +24,6 @@ import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEv
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -165,20 +164,6 @@ public class DEditPlayer extends DInstancePlayer {
         DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
         if (editWorld != null) {
             editWorld.save();
-        }
-    }
-
-    @Override
-    public void sendMessage(String message) {
-        DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
-        editWorld.sendMessage(message);
-
-        for (DGlobalPlayer player : DungeonsXL.getDPlayers().getDGlobalPlayers()) {
-            if (player.isInChatSpyMode()) {
-                if (!editWorld.getWorld().getPlayers().contains(player.getPlayer())) {
-                    MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
-                }
-            }
         }
     }
 

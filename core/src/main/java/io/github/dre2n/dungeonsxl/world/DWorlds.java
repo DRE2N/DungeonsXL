@@ -263,13 +263,25 @@ public class DWorlds {
     }
 
     /**
-     * @return a name for the instance
-     *
+     * @return
+     * a name for the instance
      * @param game
      * whether the instance is a DGameWorld
      */
     public String generateName(boolean game) {
-        return "DXL_" + (game ? "Game" : "Edit") + "_" + generateId();
+        return generateName(game, generateId());
+    }
+
+    /**
+     * @return
+     * a name for the instance
+     * @param game
+     * whether the instance is a DGameWorld
+     * @param id
+     * the id to use
+     */
+    public String generateName(boolean game, int id) {
+        return "DXL_" + (game ? "Game" : "Edit") + "_" + id;
     }
 
     /**

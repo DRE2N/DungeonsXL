@@ -47,10 +47,16 @@ public class MainConfig extends BRConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 13;
+    public static final int CONFIG_VERSION = 14;
 
     private String language = "english";
     private boolean enableEconomy = false;
+
+    /* Chat */
+    private boolean chatEnabled = true;
+    private String chatFormatGame = "&2[Game] %group_color%%player_name%: &r";
+    private String chatFormatGroup = "&2%group_color%[%group_name%] %player_name%: &r";
+    private String chatFormatSpy = "&2[Chat Spy] %player_name%: &r";
 
     /* Tutorial */
     private boolean tutorialActivated = false;
@@ -138,6 +144,70 @@ public class MainConfig extends BRConfig {
      */
     public void setEconomyEnabled(boolean enabled) {
         enableEconomy = enabled;
+    }
+
+    /**
+     * @return
+     * if the dungeon chat is enabled
+     */
+    public boolean isChatEnabled() {
+        return chatEnabled;
+    }
+
+    /**
+     * @param enabled
+     * if the dungeon chat is enabled
+     */
+    public void setChatEnabled(boolean enabled) {
+        chatEnabled = enabled;
+    }
+
+    /**
+     * @return
+     * the game chat format
+     */
+    public String getChatFormatGame() {
+        return chatFormatGame;
+    }
+
+    /**
+     * @param string
+     * the game chat format to set
+     */
+    public void setChatFormatGame(String string) {
+        chatFormatGame = string;
+    }
+
+    /**
+     * @return
+     * the group chat format
+     */
+    public String getChatFormatGroup() {
+        return chatFormatGroup;
+    }
+
+    /**
+     * @param string
+     * the group chat format to set
+     */
+    public void setChatFormatGroup(String string) {
+        chatFormatGroup = string;
+    }
+
+    /**
+     * @return
+     * the chat spy format
+     */
+    public String getChatFormatSpy() {
+        return chatFormatSpy;
+    }
+
+    /**
+     * @param string
+     * the chat spy format to set
+     */
+    public void setChatFormatSpy(String string) {
+        chatFormatSpy = string;
     }
 
     /**
@@ -396,6 +466,22 @@ public class MainConfig extends BRConfig {
             config.set("enableEconomy", enableEconomy);
         }
 
+        if (!config.contains("chatEnabled")) {
+            config.set("chatEnabled", chatEnabled);
+        }
+
+        if (!config.contains("chatFormatGame")) {
+            config.set("chatFormatGame", chatFormatGame);
+        }
+
+        if (!config.contains("chatFormatGroup")) {
+            config.set("chatFormatGroup", chatFormatGroup);
+        }
+
+        if (!config.contains("chatFormatSpy")) {
+            config.set("chatFormatSpy", chatFormatSpy);
+        }
+
         if (!config.contains("tutorial.activated")) {
             config.set("tutorial.activated", tutorialActivated);
         }
@@ -489,6 +575,26 @@ public class MainConfig extends BRConfig {
 
         if (config.contains("enableEconomy")) {
             enableEconomy = config.getBoolean("enableEconomy");
+        }
+
+        if (config.contains("chatEnabled")) {
+            chatEnabled = config.getBoolean("chatEnabled");
+        }
+
+        if (config.contains("chatFormatGame")) {
+            chatFormatGame = config.getString("chatFormatGame");
+        }
+
+        if (config.contains("chatFormatGroup")) {
+            chatFormatGroup = config.getString("chatFormatGroup");
+        }
+
+        if (config.contains("chatFormatSpy")) {
+            chatFormatSpy = config.getString("chatFormatSpy");
+        }
+
+        if (config.contains("chatEnabled")) {
+            chatEnabled = config.getBoolean("chatEnabled");
         }
 
         if (config.contains("tutorial.activated")) {

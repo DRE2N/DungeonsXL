@@ -17,6 +17,9 @@
 package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.MainConfig;
+import io.github.dre2n.dungeonsxl.util.ParsingUtil;
+import io.github.dre2n.dungeonsxl.world.DInstanceWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -28,8 +31,9 @@ import org.bukkit.potion.PotionEffect;
  */
 public abstract class DInstancePlayer extends DGlobalPlayer {
 
+    MainConfig config = DungeonsXL.getMainConfig();
+
     private World world;
-    private boolean inDungeonChat = false;
 
     DInstancePlayer(Player player, World world) {
         super(player, false);
@@ -52,21 +56,6 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
      */
     public void setWorld(World instance) {
         world = instance;
-    }
-
-    /**
-     * @return the inDungeonChat
-     */
-    public boolean isInDungeonChat() {
-        return inDungeonChat;
-    }
-
-    /**
-     * @param inDungeonChat
-     * the inDungeonChat to set
-     */
-    public void setInDungeonChat(boolean inDungeonChat) {
-        this.inDungeonChat = inDungeonChat;
     }
 
     // Players in dungeons never get announcer messages
@@ -105,16 +94,33 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
         }
     }
 
+    /**
+     * Makes the player send a message to the world.
+     *
+     * @param message
+     * the message to send
+     */
+    public void chat(String message) {
+        DInstanceWorld instance = DungeonsXL.getDWorlds().getInstanceByWorld(world);
+        if (instance == null) {
+            return;
+        }
+        instance.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatGame(), this) + message);
+
+        for (DGlobalPlayer player : DungeonsXL.getDPlayers().getDGlobalPlayers()) {
+            if (player.isInChatSpyMode()) {
+                if (!instance.getWorld().getPlayers().contains(player.getPlayer())) {
+                    player.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatSpy(), this) + message);
+                }
+            }
+        }
+    }
+
     /* Abstracts */
     /**
      * The player leaves the dungeon and / or his group.
      */
     public abstract void leave();
-
-    /**
-     * Sends a message to the player and the world.
-     */
-    public abstract void sendMessage(String message);
 
     /**
      * Repeating checks for the player.

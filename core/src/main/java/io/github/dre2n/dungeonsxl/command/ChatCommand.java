@@ -20,7 +20,8 @@ import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
-import io.github.dre2n.dungeonsxl.player.DGamePlayer;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
+import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,21 +43,15 @@ public class ChatCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
-        if (dPlayer == null) {
+        if (DGroup.getByPlayer(player) == null) {
             MessageUtil.sendMessage(player, DMessages.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
-        if (dPlayer.isInDungeonChat()) {
-            dPlayer.setInDungeonChat(false);
-            MessageUtil.sendMessage(player, DMessages.CMD_CHAT_NORMAL_CHAT.getMessage());
-
-        } else {
-            dPlayer.setInDungeonChat(true);
-            MessageUtil.sendMessage(player, DMessages.CMD_CHAT_DUNGEON_CHAT.getMessage());
-        }
+        dPlayer.setInGroupChat(!dPlayer.isInGroupChat());
+        MessageUtil.sendMessage(player, (dPlayer.isInGroupChat() ? DMessages.CMD_CHAT_DUNGEON_CHAT : DMessages.CMD_CHAT_NORMAL_CHAT).getMessage());
     }
 
 }
