@@ -30,8 +30,6 @@ import org.bukkit.entity.Player;
  */
 public class ChatCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public ChatCommand() {
         setCommand("chat");
         setMinArgs(0);

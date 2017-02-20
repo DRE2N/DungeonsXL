@@ -32,9 +32,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public abstract class GlobalProtection {
 
-    static DungeonsXL plugin = DungeonsXL.getInstance();
-    static FileConfiguration config = plugin.getGlobalData().getConfig();
-    static GlobalProtections protections = plugin.getGlobalProtections();
+    FileConfiguration config = DungeonsXL.getGlobalData().getConfig();
+    GlobalProtections protections = DungeonsXL.getGlobalProtections();
 
     private World world;
     private int id;
@@ -94,8 +93,8 @@ public abstract class GlobalProtection {
     public boolean onBreak(DGlobalPlayer dPlayer) {
         if (dPlayer.isInBreakMode()) {
             delete();
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.CMD_BREAK_PROTECTED_MODE));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), DungeonsXL.getMessageConfig().getMessage(DMessages.PLAYER_PROTECTED_BLOCK_DELETED));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), DungeonsXL.getMessageConfig().getMessage(DMessages.CMD_BREAK_PROTECTED_MODE));
             dPlayer.setInBreakMode(false);
             return false;
 

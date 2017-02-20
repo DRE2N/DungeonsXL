@@ -74,7 +74,7 @@ public class FeeLevelRequirement extends Requirement {
         DPlayerData data = dPlayer.getData();
         data.setOldLevel(data.getOldLevel() - fee);
 
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REQUIREMENT_FEE, fee + " levels"));
+        MessageUtil.sendMessage(player, DMessages.REQUIREMENT_FEE.getMessage(fee + " levels"));
     }
 
 }

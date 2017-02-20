@@ -60,7 +60,7 @@ public class CheckpointSign extends DSign {
 
         for (DGamePlayer dplayer : DGamePlayer.getByWorld(getGameWorld().getWorld())) {
             dplayer.setCheckpoint(getSign().getLocation());
-            MessageUtil.sendMessage(dplayer.getPlayer(), plugin.getMessageConfig().getMessage(DMessages.PLAYER_CHECKPOINT_REACHED));
+            MessageUtil.sendMessage(dplayer.getPlayer(), DMessages.PLAYER_CHECKPOINT_REACHED.getMessage());
         }
 
         remove();
@@ -77,7 +77,7 @@ public class CheckpointSign extends DSign {
             if (!done.contains(dplayer)) {
                 done.add(dplayer);
                 dplayer.setCheckpoint(getSign().getLocation());
-                MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.PLAYER_CHECKPOINT_REACHED));
+                MessageUtil.sendMessage(player, DMessages.PLAYER_CHECKPOINT_REACHED.getMessage());
             }
         }
 

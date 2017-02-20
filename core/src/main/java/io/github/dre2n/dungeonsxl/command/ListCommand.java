@@ -39,7 +39,7 @@ import org.bukkit.entity.Player;
 public class ListCommand extends BRCommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorlds worlds = plugin.getDWorlds();
+    DWorlds worlds = DungeonsXL.getDWorlds();
 
     public ListCommand() {
         setCommand("list");
@@ -54,7 +54,7 @@ public class ListCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         ArrayList<String> dungeonList = new ArrayList<>();
-        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
+        for (Dungeon dungeon : DungeonsXL.getDungeons().getDungeons()) {
             dungeonList.add(dungeon.getName());
         }
         ArrayList<String> mapList = new ArrayList<>();
@@ -78,7 +78,7 @@ public class ListCommand extends BRCommand {
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("dungeons") || args[1].equalsIgnoreCase("d")) {
                 if (args.length >= 3) {
-                    Dungeon dungeon = plugin.getDungeons().getByName(args[2]);
+                    Dungeon dungeon = DungeonsXL.getDungeons().getByName(args[2]);
                     if (dungeon != null) {
                         MessageUtil.sendPluginTag(sender, plugin);
                         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dungeon.getName() + " &4&l]");

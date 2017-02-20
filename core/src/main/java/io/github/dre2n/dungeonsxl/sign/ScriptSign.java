@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -43,12 +44,12 @@ public class ScriptSign extends DSign {
 
     @Override
     public boolean check() {
-        return plugin.getSignScripts().getByName(lines[1]) != null;
+        return DungeonsXL.getSignScripts().getByName(lines[1]) != null;
     }
 
     @Override
     public void onInit() {
-        SignScript script = plugin.getSignScripts().getByName(name);
+        SignScript script = DungeonsXL.getSignScripts().getByName(name);
         for (String[] lines : script.getSigns()) {
             DSign dSign = DSign.create(getSign(), lines, getGameWorld());
             getGameWorld().getDSigns().add(dSign);

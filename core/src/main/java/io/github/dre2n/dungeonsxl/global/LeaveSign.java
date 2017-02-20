@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -73,18 +74,14 @@ public class LeaveSign extends GlobalProtection {
 
         if (dplayer != null) {
             dplayer.leave();
-            return;
 
         } else {
             DGroup group = DGroup.getByPlayer(player);
             if (group != null) {
                 group.removePlayer(player);
                 MessageUtil.sendMessage(player, DMessages.PLAYER_LEAVE_GROUP.getMessage());
-                return;
             }
         }
-
-        return;
     }
 
     @Override
@@ -101,7 +98,7 @@ public class LeaveSign extends GlobalProtection {
      * a block which is protected by the returned LeaveSign
      */
     public static LeaveSign getByBlock(Block block) {
-        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(LeaveSign.class)) {
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(LeaveSign.class)) {
             LeaveSign leaveSign = (LeaveSign) protection;
 
             if (leaveSign.getBlocks().contains(block)) {

@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.game.Game;
@@ -61,9 +62,9 @@ public class GameSign extends GlobalProtection {
 
         this.startSign = startSign;
         games = new Game[maxGames];
-        dungeon = plugin.getDungeons().getByName(identifier);
+        dungeon = DungeonsXL.getDungeons().getByName(identifier);
         if (dungeon == null) {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(identifier);
+            DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(identifier);
             if (resource != null) {
                 dungeon = new Dungeon(resource);
             }
@@ -246,7 +247,7 @@ public class GameSign extends GlobalProtection {
         }
 
         int x = block.getX(), y = block.getY(), z = block.getZ();
-        for (GlobalProtection protection : protections.getProtections(GameSign.class)) {
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(GameSign.class)) {
             GameSign gameSign = (GameSign) protection;
 
             int sx1 = gameSign.startSign.getX(), sy1 = gameSign.startSign.getY(), sz1 = gameSign.startSign.getZ();
@@ -302,7 +303,7 @@ public class GameSign extends GlobalProtection {
      * the game to check
      */
     public static GameSign getByGame(Game game) {
-        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(GameSign.class)) {
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(GameSign.class)) {
             GameSign gameSign = (GameSign) protection;
 
             for (Game signGame : gameSign.games) {
@@ -413,7 +414,7 @@ public class GameSign extends GlobalProtection {
             block.setTypeIdAndData(68, startSign.getData(), true);
         }
 
-        GameSign sign = new GameSign(protections.generateId(GameSign.class, world), startSign, mapName, maxGames, maxGroupsPerGame);
+        GameSign sign = new GameSign(DungeonsXL.getGlobalProtections().generateId(GameSign.class, world), startSign, mapName, maxGames, maxGroupsPerGame);
 
         return sign;
     }
@@ -427,7 +428,7 @@ public class GameSign extends GlobalProtection {
             return false;
         }
 
-        if (plugin.getDWorlds().getGameWorlds().size() >= plugin.getMainConfig().getMaxInstances()) {
+        if (DungeonsXL.getDWorlds().getGameWorlds().size() >= DungeonsXL.getMainConfig().getMaxInstances()) {
             MessageUtil.sendMessage(player, DMessages.ERROR_TOO_MANY_INSTANCES.getMessage());
             return true;
         }
@@ -435,17 +436,17 @@ public class GameSign extends GlobalProtection {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup == null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(player, DungeonsXL.getMessageConfig().getMessage(DMessages.ERROR_JOIN_GROUP));
             return true;
         }
 
         if (!dGroup.getCaptain().equals(player)) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_NOT_CAPTAIN));
+            MessageUtil.sendMessage(player, DungeonsXL.getMessageConfig().getMessage(DMessages.ERROR_NOT_CAPTAIN));
             return true;
         }
 
         if (Game.getByDGroup(dGroup) != null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_LEAVE_GAME));
+            MessageUtil.sendMessage(player, DungeonsXL.getMessageConfig().getMessage(DMessages.ERROR_LEAVE_GAME));
             return true;
         }
 

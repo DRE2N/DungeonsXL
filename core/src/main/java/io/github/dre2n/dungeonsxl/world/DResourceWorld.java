@@ -212,9 +212,9 @@ public class DResourceWorld {
 
         final DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
+        if (!DungeonsXL.getMainConfig().areTweaksEnabled()) {
             FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
-            instance.world = plugin.getServer().createWorld(WorldCreator.name(name));
+            instance.world = Bukkit.createWorld(WorldCreator.name(name));
 
             if (game) {
                 signData.deserializeSigns((DGameWorld) instance);
@@ -282,12 +282,12 @@ public class DResourceWorld {
         final DEditWorld editWorld = new DEditWorld(this, folder, id);
 
         EditWorldGenerateEvent event = new EditWorldGenerateEvent(editWorld);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return null;
         }
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
+        if (!DungeonsXL.getMainConfig().areTweaksEnabled()) {
             editWorld.world = creator.createWorld();
 
         } else {

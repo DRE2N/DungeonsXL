@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +80,7 @@ public class ItemReward extends Reward {
 
         } else {
             new DLootInventory(player, items.subList(0, 54).toArray(new ItemStack[54]));
-            plugin.getDPlayers().getByPlayer(player).setRewardItems(new CopyOnWriteArrayList<>(items.subList(54, items.size())));
+            DungeonsXL.getDPlayers().getByPlayer(player).setRewardItems(new CopyOnWriteArrayList<>(items.subList(54, items.size())));
             MessageUtil.sendMessage(player, DMessages.ERROR_TOO_MANY_REWARDS.getMessage());
         }
     }

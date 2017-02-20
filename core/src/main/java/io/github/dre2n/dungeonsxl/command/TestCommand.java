@@ -38,8 +38,6 @@ import org.bukkit.entity.Player;
  */
 public class TestCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public TestCommand() {
         setCommand("test");
         setMinArgs(0);
@@ -53,7 +51,7 @@ public class TestCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
         if (!(dPlayer instanceof DEditPlayer)) {
             DGroup dGroup = DGroup.getByPlayer(player);

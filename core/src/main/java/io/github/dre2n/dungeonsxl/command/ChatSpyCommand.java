@@ -30,8 +30,6 @@ import org.bukkit.entity.Player;
  */
 public class ChatSpyCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public ChatSpyCommand() {
         setCommand("chatspy");
         setMinArgs(0);
@@ -44,7 +42,7 @@ public class ChatSpyCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
         if (dGlobalPlayer.isInChatSpyMode()) {
             dGlobalPlayer.setInChatSpyMode(false);

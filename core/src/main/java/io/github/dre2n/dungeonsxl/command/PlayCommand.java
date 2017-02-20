@@ -29,6 +29,7 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -36,8 +37,6 @@ import org.bukkit.entity.Player;
  * @author Daniel Saukel
  */
 public class PlayCommand extends BRCommand {
-
-    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public PlayCommand() {
         setCommand("play");
@@ -52,15 +51,15 @@ public class PlayCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
         if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 
-        Dungeon dungeon = plugin.getDungeons().getByName(args[1]);
+        Dungeon dungeon = DungeonsXL.getDungeons().getByName(args[1]);
         if (dungeon == null) {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[1]);
+            DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(args[1]);
             if (resource != null) {
                 dungeon = new Dungeon(resource);
             } else {
@@ -73,9 +72,9 @@ public class PlayCommand extends BRCommand {
         if (dGroup == null || dGroup.isPlaying()) {
             dGroup = new DGroup(player, dungeon);
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
-            plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
-                plugin.getDGroups().remove(dGroup);
+                DungeonsXL.getDGroups().remove(dGroup);
                 dGroup = null;
             }
         }

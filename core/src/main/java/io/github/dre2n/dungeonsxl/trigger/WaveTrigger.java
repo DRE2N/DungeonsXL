@@ -20,6 +20,7 @@ import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Bukkit;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -51,7 +52,7 @@ public class WaveTrigger extends Trigger {
 
     public void onTrigger() {
         TriggerActionEvent event = new TriggerActionEvent(this);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;

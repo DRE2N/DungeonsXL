@@ -32,8 +32,6 @@ import org.bukkit.entity.Player;
  */
 public class GameCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public GameCommand() {
         setCommand("game");
         setMinArgs(0);

@@ -32,8 +32,7 @@ import org.bukkit.entity.Player;
  */
 public class SaveCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig mainConfig = plugin.getMainConfig();
+    MainConfig mainConfig = DungeonsXL.getMainConfig();
 
     public SaveCommand() {
         setCommand("save");

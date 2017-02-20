@@ -69,7 +69,7 @@ public class ImportCommand extends BRCommand {
         MessageUtil.log(plugin, DMessages.LOG_NEW_MAP.getMessage());
         MessageUtil.log(plugin, DMessages.LOG_IMPORT_WORLD.getMessage());
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
+        if (!DungeonsXL.getMainConfig().areTweaksEnabled()) {
             FileUtil.copyDirectory(source, target, new String[]{"playerdata", "stats"});
 
         } else {
@@ -81,7 +81,7 @@ public class ImportCommand extends BRCommand {
             }.runTaskAsynchronously(plugin);
         }
 
-        plugin.getDWorlds().addResource(new DResourceWorld(plugin.getDWorlds(), args[1]));
+        DungeonsXL.getDWorlds().addResource(new DResourceWorld(DungeonsXL.getDWorlds(), args[1]));
         MessageUtil.sendMessage(sender, DMessages.CMD_IMPORT_SUCCESS.getMessage(args[1]));
     }
 

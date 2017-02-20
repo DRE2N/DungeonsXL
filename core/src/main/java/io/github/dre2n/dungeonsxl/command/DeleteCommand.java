@@ -38,8 +38,6 @@ import org.bukkit.entity.Player;
  */
 public class DeleteCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public DeleteCommand() {
         setCommand("delete");
         setMinArgs(1);
@@ -52,7 +50,7 @@ public class DeleteCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DWorlds dWorlds = plugin.getDWorlds();
+        DWorlds dWorlds = DungeonsXL.getDWorlds();
 
         DResourceWorld resource = dWorlds.getResourceByName(args[1]);
         if (resource == null) {

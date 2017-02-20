@@ -36,8 +36,7 @@ import org.bukkit.entity.Player;
  */
 public class EditCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorlds worlds = plugin.getDWorlds();
+    DWorlds worlds = DungeonsXL.getDWorlds();
 
     public EditCommand() {
         setCommand("edit");
@@ -70,7 +69,7 @@ public class EditCommand extends BRCommand {
 
         DEditWorld editWorld = resource.instantiateAsEditWorld();
         DGroup dGroup = DGroup.getByPlayer(player);
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
         if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());

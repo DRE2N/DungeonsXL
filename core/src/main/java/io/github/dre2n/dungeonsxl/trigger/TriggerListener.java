@@ -33,7 +33,7 @@ public class TriggerListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (DGameWorld gameWorld : DungeonsXL.getInstance().getDWorlds().getGameWorlds()) {
+                for (DGameWorld gameWorld : DungeonsXL.getDWorlds().getGameWorlds()) {
                     if (event.getBlock().getWorld() == gameWorld.getWorld()) {
                         RedstoneTrigger.updateAll(gameWorld);
                     }

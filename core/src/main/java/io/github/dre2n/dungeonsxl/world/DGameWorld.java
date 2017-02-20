@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.world;
 
 import io.github.dre2n.commons.util.FileUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
@@ -50,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -117,7 +119,7 @@ public class DGameWorld extends DInstanceWorld {
      */
     public Game getGame() {
         if (game == null) {
-            for (Game game : plugin.getGames()) {
+            for (Game game : DungeonsXL.getGames()) {
                 if (game.getWorld() == this) {
                     this.game = game;
                 }
@@ -432,7 +434,7 @@ public class DGameWorld extends DInstanceWorld {
      * @return the Dungeon that contains the DGameWorld
      */
     public Dungeon getDungeon() {
-        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
+        for (Dungeon dungeon : DungeonsXL.getDungeons().getDungeons()) {
             if (dungeon.getConfig().containsFloor(getResource())) {
                 return dungeon;
             }
@@ -446,7 +448,7 @@ public class DGameWorld extends DInstanceWorld {
      */
     public void startGame() {
         GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, getGame());
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -485,14 +487,14 @@ public class DGameWorld extends DInstanceWorld {
     @Override
     public void delete() {
         GameWorldUnloadEvent event = new GameWorldUnloadEvent(this);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
         }
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
-            plugin.getServer().unloadWorld(getWorld(), false);
+        if (!DungeonsXL.getMainConfig().areTweaksEnabled()) {
+            Bukkit.unloadWorld(getWorld(), false);
             FileUtil.removeDirectory(getFolder());
             worlds.removeInstance(this);
 
@@ -501,7 +503,7 @@ public class DGameWorld extends DInstanceWorld {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    plugin.getServer().unloadWorld(getWorld(), false);
+                    Bukkit.unloadWorld(getWorld(), false);
                     FileUtil.removeDirectory(getFolder());
                     worlds.removeInstance(gameWorld);
                 }
@@ -650,7 +652,7 @@ public class DGameWorld extends DInstanceWorld {
      * the EditWorld that represents the world
      */
     public static DGameWorld getByWorld(World world) {
-        DInstanceWorld instance = plugin.getDWorlds().getInstanceByName(world.getName());
+        DInstanceWorld instance = DungeonsXL.getDWorlds().getInstanceByName(world.getName());
 
         if (instance instanceof DGameWorld) {
             return (DGameWorld) instance;

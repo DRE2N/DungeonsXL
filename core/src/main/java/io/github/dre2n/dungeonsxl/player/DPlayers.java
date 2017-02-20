@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
@@ -31,10 +30,10 @@ import org.bukkit.scheduler.BukkitTask;
  *
  * @author Daniel Saukel
  */
-public class DPlayers implements Listener {
+public class DPlayers {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig mainConfig = plugin.getMainConfig();
+    MainConfig mainConfig = DungeonsXL.getMainConfig();
 
     private BukkitTask secureModeTask;
     private BukkitTask updateTask;
@@ -49,7 +48,7 @@ public class DPlayers implements Listener {
         startUpdateTask(2L);
         startLazyUpdateTask(20L);
 
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(new DPlayerListener(this), plugin);
     }
 
     /**

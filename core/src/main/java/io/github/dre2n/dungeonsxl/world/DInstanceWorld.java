@@ -30,8 +30,8 @@ import org.bukkit.World;
  */
 public abstract class DInstanceWorld {
 
-    protected static DungeonsXL plugin = DungeonsXL.getInstance();
-    protected static DWorlds worlds = plugin.getDWorlds();
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    DWorlds worlds = DungeonsXL.getDWorlds();
 
     private DResourceWorld resourceWorld;
     private File folder;

@@ -59,7 +59,7 @@ public class MoneyReward extends Reward {
         }
 
         plugin.getEconomyProvider().depositPlayer(player, money);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REWARD_GENERAL, plugin.getEconomyProvider().format(money)));
+        MessageUtil.sendMessage(player, DMessages.REWARD_GENERAL.getMessage(plugin.getEconomyProvider().format(money)));
     }
 
     @Override

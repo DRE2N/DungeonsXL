@@ -33,8 +33,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardsCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public RewardsCommand() {
         setCommand("rewards");
         setMinArgs(0);
@@ -47,7 +45,7 @@ public class RewardsCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
         if (!dGlobalPlayer.hasRewardItemsLeft()) {
             MessageUtil.sendMessage(player, DMessages.ERROR_NO_REWARDS_LEFT.getMessage());

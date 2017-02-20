@@ -40,6 +40,7 @@ import io.github.dre2n.dungeonsxl.world.block.TeamFlag;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -128,7 +129,7 @@ public class DGamePlayer extends DInstancePlayer {
      * null if the player will not be ready from the beginning
      */
     public static void create(Player player, DGameWorld gameWorld, GameType ready) {
-        new CreateDInstancePlayerTask(player, gameWorld, ready).runTaskTimer(plugin, 0L, 5L);
+        new CreateDInstancePlayerTask(player, gameWorld, ready).runTaskTimer(DungeonsXL.getInstance(), 0L, 5L);
     }
 
     /* Getters and setters */
@@ -232,7 +233,7 @@ public class DGamePlayer extends DInstancePlayer {
             return;
         }
 
-        DClass dClass = plugin.getDClasses().getByName(className);
+        DClass dClass = DungeonsXL.getDClasses().getByName(className);
         if (dClass != null) {
             if (this.dClass != dClass) {
                 this.dClass = dClass;
@@ -495,12 +496,12 @@ public class DGamePlayer extends DInstancePlayer {
 
                     // Tutorial Permissions
                     if (game.isTutorial() && plugin.getPermissionProvider().hasGroupSupport()) {
-                        String endGroup = plugin.getMainConfig().getTutorialEndGroup();
+                        String endGroup = DungeonsXL.getMainConfig().getTutorialEndGroup();
                         if (plugin.isGroupEnabled(endGroup)) {
                             plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
                         }
 
-                        String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+                        String startGroup = DungeonsXL.getMainConfig().getTutorialStartGroup();
                         if (plugin.isGroupEnabled(startGroup)) {
                             plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
                         }
@@ -547,7 +548,7 @@ public class DGamePlayer extends DInstancePlayer {
 
     public void kill() {
         DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.DEATH);
-        plugin.getServer().getPluginManager().callEvent(dPlayerKickEvent);
+        Bukkit.getPluginManager().callEvent(dPlayerKickEvent);
 
         if (!dPlayerKickEvent.isCancelled()) {
             DGameWorld gameWorld = getDGroup().getGameWorld();
@@ -579,7 +580,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         for (Requirement requirement : rules.getRequirements()) {
             RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
-            plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 continue;
@@ -756,7 +757,7 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, hasToWait);
-        plugin.getServer().getPluginManager().callEvent(dPlayerFinishEvent);
+        Bukkit.getPluginManager().callEvent(dPlayerFinishEvent);
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
         }
@@ -793,7 +794,7 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, hasToWait);
-        plugin.getServer().getPluginManager().callEvent(dPlayerFinishEvent);
+        Bukkit.getPluginManager().callEvent(dPlayerFinishEvent);
         if (dPlayerFinishEvent.isCancelled()) {
             finished = false;
         }
@@ -804,7 +805,7 @@ public class DGamePlayer extends DInstancePlayer {
         DGameWorld gameWorld = DGameWorld.getByWorld(getWorld());
         gameWorld.sendMessage(message);
 
-        for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
+        for (DGlobalPlayer player : DungeonsXL.getDPlayers().getDGlobalPlayers()) {
             if (player.isInChatSpyMode()) {
                 if (!gameWorld.getWorld().getPlayers().contains(player.getPlayer())) {
                     MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
@@ -825,7 +826,7 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         DGamePlayerDeathEvent dPlayerDeathEvent = new DGamePlayerDeathEvent(this, event, 1);
-        plugin.getServer().getPluginManager().callEvent(dPlayerDeathEvent);
+        Bukkit.getPluginManager().callEvent(dPlayerDeathEvent);
 
         if (dPlayerDeathEvent.isCancelled()) {
             return;
@@ -946,7 +947,7 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, teleportWolf, respawnInventory, offline, kick, triggerAllInDistance);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -979,7 +980,7 @@ public class DGamePlayer extends DInstancePlayer {
 
     /* Statics */
     public static DGamePlayer getByPlayer(Player player) {
-        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getDPlayers().getDGamePlayers()) {
             if (dPlayer.getPlayer().equals(player)) {
                 return dPlayer;
             }
@@ -988,7 +989,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public static DGamePlayer getByName(String name) {
-        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getDPlayers().getDGamePlayers()) {
             if (dPlayer.getPlayer().getName().equalsIgnoreCase(name) || dPlayer.getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
@@ -1000,7 +1001,7 @@ public class DGamePlayer extends DInstancePlayer {
     public static List<DGamePlayer> getByWorld(World world) {
         List<DGamePlayer> dPlayers = new ArrayList<>();
 
-        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getDPlayers().getDGamePlayers()) {
             if (dPlayer.getWorld() == world) {
                 dPlayers.add(dPlayer);
             }

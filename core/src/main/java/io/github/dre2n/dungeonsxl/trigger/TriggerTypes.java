@@ -29,13 +29,11 @@ import org.bukkit.Bukkit;
  */
 public class TriggerTypes {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private List<TriggerType> types = new ArrayList<>();
 
     public TriggerTypes() {
         types.addAll(Arrays.asList(TriggerTypeDefault.values()));
-        Bukkit.getPluginManager().registerEvents(new TriggerListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new TriggerListener(), DungeonsXL.getInstance());
     }
 
     /**

@@ -38,8 +38,6 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public class RenameCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public RenameCommand() {
         setCommand("rename");
         setMinArgs(2);
@@ -52,7 +50,7 @@ public class RenameCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[1]);
+        DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(args[1]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
@@ -62,7 +60,7 @@ public class RenameCommand extends BRCommand {
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
         resource.getSignData().updateFile(resource);
 
-        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
+        for (Dungeon dungeon : DungeonsXL.getDungeons().getDungeons()) {
             DungeonConfig dConfig = dungeon.getConfig();
             FileConfiguration config = dConfig.getConfig();
             File file = dConfig.getFile();
@@ -92,7 +90,7 @@ public class RenameCommand extends BRCommand {
         }
 
         boolean changed = false;
-        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections()) {
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections()) {
             if (protection instanceof GroupSign) {
                 Dungeon dungeon = ((GroupSign) protection).getDungeon();
                 if (dungeon.getName().equals(args[1])) {
@@ -110,7 +108,7 @@ public class RenameCommand extends BRCommand {
         }
 
         if (changed) {
-            plugin.getGlobalProtections().saveAll();
+            DungeonsXL.getGlobalProtections().saveAll();
         }
 
         MessageUtil.sendMessage(sender, DMessages.CMD_RENAME_SUCCESS.getMessage(args[1], args[2]));

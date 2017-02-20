@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -25,6 +26,8 @@ import org.bukkit.entity.Player;
  * @author Daniel Saukel
  */
 public class FeeMoneyRequirement extends Requirement {
+
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     private RequirementType type = RequirementTypeDefault.FEE_MONEY;
 
@@ -73,7 +76,7 @@ public class FeeMoneyRequirement extends Requirement {
         }
 
         plugin.getEconomyProvider().withdrawPlayer(player, fee);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REQUIREMENT_FEE, plugin.getEconomyProvider().format(fee)));
+        MessageUtil.sendMessage(player, DMessages.REQUIREMENT_FEE.getMessage(plugin.getEconomyProvider().format(fee)));
     }
 
 }

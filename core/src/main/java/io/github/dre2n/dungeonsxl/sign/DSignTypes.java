@@ -29,13 +29,11 @@ import org.bukkit.Bukkit;
  */
 public class DSignTypes {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private List<DSignType> types = new ArrayList<>();
 
     public DSignTypes() {
         types.addAll(Arrays.asList(DSignTypeDefault.values()));
-        Bukkit.getPluginManager().registerEvents(new DSignListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new DSignListener(), DungeonsXL.getInstance());
     }
 
     /**

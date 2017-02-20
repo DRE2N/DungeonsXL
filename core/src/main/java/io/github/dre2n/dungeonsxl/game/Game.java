@@ -48,8 +48,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class Game {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private boolean tutorial;
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;
@@ -61,7 +59,7 @@ public class Game {
     private Map<String, Integer> waveKills = new HashMap<>();
 
     public Game(DGroup dGroup) {
-        plugin.getGames().add(this);
+        DungeonsXL.getGames().add(this);
 
         tutorial = false;
         started = false;
@@ -75,7 +73,7 @@ public class Game {
     }
 
     public Game(DGroup dGroup, DGameWorld world) {
-        plugin.getGames().add(this);
+        DungeonsXL.getGames().add(this);
 
         tutorial = false;
         started = false;
@@ -90,7 +88,7 @@ public class Game {
     }
 
     public Game(DGroup dGroup, DResourceWorld resource) {
-        plugin.getGames().add(this);
+        DungeonsXL.getGames().add(this);
 
         tutorial = false;
         started = false;
@@ -110,7 +108,7 @@ public class Game {
     }
 
     public Game(List<DGroup> dGroups, GameType type, DGameWorld world) {
-        plugin.getGames().add(this);
+        DungeonsXL.getGames().add(this);
 
         this.dGroups = dGroups;
         this.type = type;
@@ -271,7 +269,7 @@ public class Game {
             finalRules.apply(dungeonConfig.getDefaultValues());
         }
 
-        finalRules.apply(plugin.getMainConfig().getDefaultWorldConfig());
+        finalRules.apply(DungeonsXL.getMainConfig().getDefaultWorldConfig());
 
         finalRules.apply(GameRules.DEFAULT_VALUES);
 
@@ -398,7 +396,7 @@ public class Game {
     public void delete() {
         GameSign gameSign = GameSign.getByGame(this);
 
-        plugin.getGames().remove(this);
+        DungeonsXL.getGames().remove(this);
 
         if (gameSign != null) {
             gameSign.update();
@@ -447,7 +445,7 @@ public class Game {
                     mobSign.initializeTask();
                 }
             }
-        }.runTaskLater(plugin, delay * 20);
+        }.runTaskLater(DungeonsXL.getInstance(), delay * 20);
     }
 
     /**
@@ -461,7 +459,7 @@ public class Game {
 
     /* Statics */
     public static Game getByDGroup(DGroup dGroup) {
-        for (Game game : DungeonsXL.getInstance().getGames()) {
+        for (Game game : DungeonsXL.getGames()) {
             if (game.getDGroups().contains(dGroup)) {
                 return game;
             }
@@ -475,7 +473,7 @@ public class Game {
     }
 
     public static Game getByGameWorld(DGameWorld gameWorld) {
-        for (Game game : DungeonsXL.getInstance().getGames()) {
+        for (Game game : DungeonsXL.getGames()) {
             if (gameWorld.equals(game.getWorld())) {
                 return game;
             }

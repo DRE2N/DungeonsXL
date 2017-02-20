@@ -33,8 +33,6 @@ import org.bukkit.entity.Player;
 @Deprecated
 public class DeletePortalCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public DeletePortalCommand() {
         setCommand("deleteportal");
         setMinArgs(0);

@@ -26,7 +26,7 @@ public class LazyUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getDPlayers().getDGamePlayers()) {
             dPlayer.update(true);
         }
     }

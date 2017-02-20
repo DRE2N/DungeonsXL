@@ -39,8 +39,6 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class ExternalMobSign extends DSign implements MobSign {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private DSignType type = DSignTypeDefault.EXTERNAL_MOB;
 
     // Variables
@@ -143,7 +141,7 @@ public class ExternalMobSign extends DSign implements MobSign {
 
     @Override
     public void initializeTask() {
-        task = new ExternalMobSpawnTask(this, provider).runTaskTimer(plugin, 0L, 20L);
+        task = new ExternalMobSpawnTask(this, provider).runTaskTimer(DungeonsXL.getInstance(), 0L, 20L);
     }
 
     /**
@@ -230,7 +228,7 @@ public class ExternalMobSign extends DSign implements MobSign {
                 initialAmount = amount;
 
                 if (attributes.length == 3) {
-                    provider = plugin.getExternalMobProviders().getByIdentifier(attributes[2]);
+                    provider = DungeonsXL.getExternalMobProviders().getByIdentifier(attributes[2]);
                 } else {
                     provider = ExternalMobPlugin.MYTHIC_MOBS;
                 }

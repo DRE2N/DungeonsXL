@@ -32,8 +32,6 @@ import org.bukkit.entity.Player;
  */
 public abstract class Requirement {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public static Requirement create(RequirementType type) {
         Requirement requirement = null;
 

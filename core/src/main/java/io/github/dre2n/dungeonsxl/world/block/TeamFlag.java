@@ -31,8 +31,6 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public class TeamFlag extends TeamBlock {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public static final int WOOL = 35;
 
     public TeamFlag(Block block, DGroup owner) {

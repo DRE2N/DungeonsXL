@@ -31,7 +31,7 @@ public class DEditPlayerEscapeEvent extends DEditPlayerEvent implements Cancella
     public DEditPlayerEscapeEvent(DEditPlayer dPlayer) {
         super(dPlayer);
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;

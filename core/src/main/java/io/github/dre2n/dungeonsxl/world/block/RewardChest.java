@@ -43,7 +43,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardChest extends GameBlock {
 
-    static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     // Variables
     private boolean used = false;
@@ -137,7 +137,7 @@ public class RewardChest extends GameBlock {
      */
     public void onOpen(Player opener) {
         if (used) {
-            MessageUtil.sendMessage(plugin.getServer().getPlayer(opener.getUniqueId()), DMessages.ERROR_CHEST_IS_OPENED.getMessage());
+            MessageUtil.sendMessage(Bukkit.getPlayer(opener.getUniqueId()), DMessages.ERROR_CHEST_IS_OPENED.getMessage());
             return;
         }
 

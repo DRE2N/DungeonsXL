@@ -43,8 +43,6 @@ import org.bukkit.event.player.PlayerPortalEvent;
  */
 public class GlobalProtectionListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     @EventHandler
     public void onBlockBreakWithSignOnIt(BlockBreakEvent event) {
         Block block = event.getBlock();
@@ -73,9 +71,9 @@ public class GlobalProtectionListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
-        GlobalProtection protection = plugin.getGlobalProtections().getByBlock(block);
+        GlobalProtection protection = DungeonsXL.getGlobalProtections().getByBlock(block);
         if (protection != null) {
             if (protection.onBreak(dGlobalPlayer)) {
                 event.setCancelled(true);
@@ -101,7 +99,7 @@ public class GlobalProtectionListener implements Listener {
     public void onEntityExplode(EntityExplodeEvent event) {
         List<Block> blocklist = event.blockList();
         for (Block block : blocklist) {
-            if (DungeonsXL.getInstance().getGlobalProtections().isProtectedBlock(block)) {
+            if (DungeonsXL.getGlobalProtections().isProtectedBlock(block)) {
                 event.setCancelled(true);
             }
         }
@@ -141,7 +139,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getDPlayers().getByPlayer(player).isInBreakMode()) {
+        if (DungeonsXL.getDPlayers().getByPlayer(player).isInBreakMode()) {
             return;
         }
         Block clickedBlock = event.getClickedBlock();
@@ -210,7 +208,7 @@ public class GlobalProtectionListener implements Listener {
             } else if (lines[1].equalsIgnoreCase("Leave")) {
                 if (block.getState() instanceof Sign) {
                     Sign sign = (Sign) block.getState();
-                    new LeaveSign(plugin.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
+                    new LeaveSign(DungeonsXL.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
                 }
 
                 event.setCancelled(true);

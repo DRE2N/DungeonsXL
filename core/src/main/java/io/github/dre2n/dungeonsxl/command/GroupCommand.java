@@ -35,8 +35,6 @@ import org.bukkit.entity.Player;
  */
 public class GroupCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public GroupCommand() {
         setCommand("group");
         setMinArgs(0);
@@ -126,7 +124,7 @@ public class GroupCommand extends BRCommand {
 
         DGroup dGroup = new DGroup(args[2], player);
         DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             dGroup.delete();
@@ -149,7 +147,7 @@ public class GroupCommand extends BRCommand {
         }
 
         DGroupDisbandEvent event = new DGroupDisbandEvent(dGroup, player, DGroupDisbandEvent.Cause.COMMAND);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
             dGroup.delete();
@@ -164,7 +162,7 @@ public class GroupCommand extends BRCommand {
             return;
         }
 
-        Player toInvite = plugin.getServer().getPlayer(args[2]);
+        Player toInvite = Bukkit.getPlayer(args[2]);
 
         if (toInvite != null) {
             dGroup.addInvitedPlayer(toInvite, false);
@@ -182,7 +180,7 @@ public class GroupCommand extends BRCommand {
 
         dGroup.clearOfflineInvitedPlayers();
 
-        Player toUninvite = plugin.getServer().getPlayer(args[2]);
+        Player toUninvite = Bukkit.getPlayer(args[2]);
 
         if (toUninvite != null) {
             if (dGroup.getInvitedPlayers().contains(toUninvite)) {
@@ -222,10 +220,10 @@ public class GroupCommand extends BRCommand {
             MessageUtil.sendMessage(sender, DMessages.ERROR_JOIN_GROUP.getMessage());
         }
 
-        Player toKick = plugin.getServer().getPlayer(args[2]);
+        Player toKick = Bukkit.getPlayer(args[2]);
         if (toKick != null) {
             DPlayerKickEvent event = new DPlayerKickEvent(DGamePlayer.getByPlayer(toKick.getPlayer()), DPlayerKickEvent.Cause.COMMAND);
-            plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 if (dGroup.getPlayers().contains(toKick)) {
@@ -268,7 +266,7 @@ public class GroupCommand extends BRCommand {
     }
 
     public void showHelp(String page) {
-        MessageUtil.sendPluginTag(sender, plugin);
+        MessageUtil.sendPluginTag(sender, DungeonsXL.getInstance());
         switch (page) {
             default:
                 MessageUtil.sendCenteredMessage(sender, "&4&l[ &61-5 &4/ &67 &4| &61 &4&l]");

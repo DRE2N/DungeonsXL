@@ -30,16 +30,14 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DLootInventory {
 
-    static DungeonsXL plugin = DungeonsXL.getInstance();
-
     private Inventory inventory;
     private InventoryView inventoryView;
     private Player player;
 
     public DLootInventory(Player player, ItemStack[] itemStacks) {
-        plugin.getDLootInventories().add(this);
+        DungeonsXL.getDLootInventories().add(this);
 
-        inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', plugin.getMessageConfig().getMessage(DMessages.PLAYER_TREASURES)));
+        inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', DungeonsXL.getMessageConfig().getMessage(DMessages.PLAYER_TREASURES)));
         for (ItemStack itemStack : itemStacks) {
             if (itemStack != null) {
                 inventory.addItem(itemStack);
@@ -117,7 +115,7 @@ public class DLootInventory {
      * the player whose DLootIntentory will be returned
      */
     public static DLootInventory getByPlayer(Player player) {
-        for (DLootInventory inventory : plugin.getDLootInventories()) {
+        for (DLootInventory inventory : DungeonsXL.getDLootInventories()) {
             if (inventory.player == player) {
                 return inventory;
             }

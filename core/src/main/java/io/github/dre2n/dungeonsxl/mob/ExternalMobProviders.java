@@ -47,7 +47,7 @@ public class ExternalMobProviders {
         }
 
         // Custom providers
-        for (Entry<String, Object> customExternalMobProvider : DungeonsXL.getInstance().getMainConfig().getExternalMobProviders().entrySet()) {
+        for (Entry<String, Object> customExternalMobProvider : DungeonsXL.getMainConfig().getExternalMobProviders().entrySet()) {
             providers.add(new CustomExternalMobProvider(customExternalMobProvider));
         }
     }

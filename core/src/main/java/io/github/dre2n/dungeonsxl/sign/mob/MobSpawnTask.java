@@ -71,7 +71,7 @@ public class MobSpawnTask extends BukkitRunnable {
                 }
 
                 // Check custom mobs
-                DMobType mobType = DungeonsXL.getInstance().getDMobTypes().getByName(sign.getMob());
+                DMobType mobType = DungeonsXL.getDMobTypes().getByName(sign.getMob());
 
                 if (mobType != null) {
                     mobType.spawn(gameWorld, spawnLoc);

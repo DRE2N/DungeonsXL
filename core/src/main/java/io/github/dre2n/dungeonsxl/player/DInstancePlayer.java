@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -100,7 +101,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
             new DGlobalPlayer(this);
 
         } else {
-            plugin.getDPlayers().removePlayer(this);
+            DungeonsXL.getDPlayers().removePlayer(this);
         }
     }
 

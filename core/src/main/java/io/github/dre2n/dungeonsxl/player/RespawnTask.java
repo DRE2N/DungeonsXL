@@ -41,7 +41,7 @@ public class RespawnTask extends BukkitRunnable {
             PlayerUtil.secureTeleport(player, location);
         }
 
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
         if (dPlayer == null) {
             return;

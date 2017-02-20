@@ -16,10 +16,12 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -65,7 +67,7 @@ public class LeaveSign extends DSign {
         DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer != null) {
             DGamePlayerEscapeEvent event = new DGamePlayerEscapeEvent(dPlayer);
-            plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 return false;
@@ -79,9 +81,9 @@ public class LeaveSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getDPlayers().getDGamePlayers()) {
             DGamePlayerEscapeEvent event = new DGamePlayerEscapeEvent(dPlayer);
-            plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 return;

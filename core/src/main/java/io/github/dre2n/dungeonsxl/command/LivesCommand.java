@@ -32,8 +32,6 @@ import org.bukkit.entity.Player;
  */
 public class LivesCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public LivesCommand() {
         setCommand("lives");
         setMinArgs(0);

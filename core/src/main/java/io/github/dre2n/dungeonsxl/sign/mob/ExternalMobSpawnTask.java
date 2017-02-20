@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author Frank Baumann, Daniel Saukel
  */
 public class ExternalMobSpawnTask extends BukkitRunnable {
-    
+
     private ExternalMobSign sign;
     private ExternalMobProvider provider;
 

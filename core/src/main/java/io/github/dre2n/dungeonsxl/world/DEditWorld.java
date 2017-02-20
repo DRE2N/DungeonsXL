@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -38,7 +39,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DEditWorld extends DInstanceWorld {
 
-    static DWorlds worlds = plugin.getDWorlds();
+    DWorlds worlds = DungeonsXL.getDWorlds();
 
     public static String ID_FILE_PREFIX = ".id_";
 
@@ -112,7 +113,7 @@ public class DEditWorld extends DInstanceWorld {
      */
     public void save() {
         EditWorldSaveEvent event = new EditWorldSaveEvent(this);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -120,7 +121,7 @@ public class DEditWorld extends DInstanceWorld {
 
         getWorld().save();
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
+        if (!DungeonsXL.getMainConfig().areTweaksEnabled()) {
             FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
             FileUtil.deleteUnusedFiles(getResource().getFolder());
 
@@ -150,7 +151,7 @@ public class DEditWorld extends DInstanceWorld {
      */
     public void delete(final boolean save) {
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -161,14 +162,14 @@ public class DEditWorld extends DInstanceWorld {
             dPlayer.leave();
         }
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
+        if (!DungeonsXL.getMainConfig().areTweaksEnabled()) {
             if (save) {
-                plugin.getServer().unloadWorld(getWorld(), true);
+                Bukkit.unloadWorld(getWorld(), true);
             }
             FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
             FileUtil.deleteUnusedFiles(getResource().getFolder());
             if (!save) {
-                plugin.getServer().unloadWorld(getWorld(), true);
+                Bukkit.unloadWorld(getWorld(), true);
             }
             FileUtil.removeDirectory(getFolder());
             worlds.removeInstance(this);
@@ -179,12 +180,12 @@ public class DEditWorld extends DInstanceWorld {
                 @Override
                 public void run() {
                     if (save) {
-                        plugin.getServer().unloadWorld(getWorld(), true);
+                        Bukkit.unloadWorld(getWorld(), true);
                     }
                     FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
                     FileUtil.deleteUnusedFiles(getResource().getFolder());
                     if (!save) {
-                        plugin.getServer().unloadWorld(getWorld(), true);
+                        Bukkit.unloadWorld(getWorld(), true);
                     }
                     FileUtil.removeDirectory(getFolder());
                     worlds.removeInstance(editWorld);
@@ -211,7 +212,7 @@ public class DEditWorld extends DInstanceWorld {
      * the DEditWorld that represents the world
      */
     public static DEditWorld getByName(String name) {
-        DInstanceWorld instance = worlds.getInstanceByName(name);
+        DInstanceWorld instance = DungeonsXL.getDWorlds().getInstanceByName(name);
 
         if (instance instanceof DEditWorld) {
             return (DEditWorld) instance;

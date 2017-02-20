@@ -27,6 +27,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -38,7 +39,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class DSign {
 
-    static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public static final String ERROR_0 = ChatColor.DARK_RED + "## ERROR ##";
     public static final String ERROR_1 = ChatColor.WHITE + "Please";
@@ -217,7 +218,7 @@ public abstract class DSign {
     public static DSign create(Sign sign, String[] lines, DGameWorld gameWorld) {
         DSign dSign = null;
 
-        for (DSignType type : plugin.getDSigns().getDSigns()) {
+        for (DSignType type : DungeonsXL.getDSigns().getDSigns()) {
             if (!lines[0].equalsIgnoreCase("[" + type.getName() + "]")) {
                 continue;
             }
@@ -236,7 +237,7 @@ public abstract class DSign {
 
         if (gameWorld != null) {
             DSignRegistrationEvent event = new DSignRegistrationEvent(sign, gameWorld, dSign);
-            plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 return null;

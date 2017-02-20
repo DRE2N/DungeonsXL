@@ -242,7 +242,7 @@ public enum DMessages implements Messages {
 
     @Override
     public String getMessage(String... args) {
-        return DungeonsXL.getInstance().getMessageConfig().getMessage(this, args);
+        return DungeonsXL.getMessageConfig().getMessage(this, args);
     }
 
     @Override

@@ -41,8 +41,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class ReadySign extends DSign {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private DSignType type = DSignTypeDefault.READY;
 
     private GameType gameType;
@@ -90,8 +88,8 @@ public class ReadySign extends DSign {
 
     @Override
     public void onInit() {
-        if (plugin.getGameTypes().getBySign(this) != null) {
-            gameType = plugin.getGameTypes().getBySign(this);
+        if (DungeonsXL.getGameTypes().getBySign(this) != null) {
+            gameType = DungeonsXL.getGameTypes().getBySign(this);
 
         } else {
             gameType = GameTypeDefault.CUSTOM;
@@ -131,7 +129,7 @@ public class ReadySign extends DSign {
                 public void run() {
                     onTrigger();
                 }
-            }.runTaskLater(plugin, (long) (autoStart * 20));
+            }.runTaskLater(DungeonsXL.getInstance(), (long) (autoStart * 20));
 
             if (!DGroup.getByPlayer(player).isPlaying()) {
                 ProgressBar.sendProgressBar(getGame().getPlayers(), (int) Math.ceil(autoStart));
@@ -170,7 +168,7 @@ public class ReadySign extends DSign {
         }
 
         if (dPlayer.isReady()) {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(dPlayer.isReady() ? DMessages.PLAYER_READY : DMessages.ERROR_READY));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), DungeonsXL.getMessageConfig().getMessage(dPlayer.isReady() ? DMessages.PLAYER_READY : DMessages.ERROR_READY));
         }
     }
 

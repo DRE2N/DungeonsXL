@@ -117,7 +117,7 @@ public class StatusCommand extends BRCommand {
 
         String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.5"));
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
-        String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
+        String economyPluginCorrect = getSymbol(!DungeonsXL.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
         String commandsxlVersionCorrect = getSymbol(commandsxlVersion.startsWith("2.1"));
         String itemsxlVersionCorrect = getSymbol(itemsxlVersion.startsWith("0.2"));
         String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));

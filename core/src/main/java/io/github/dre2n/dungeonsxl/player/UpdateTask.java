@@ -26,7 +26,7 @@ public class UpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (DInstancePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDInstancePlayers()) {
+        for (DInstancePlayer dPlayer : DungeonsXL.getDPlayers().getDInstancePlayers()) {
             dPlayer.update(false);
         }
     }

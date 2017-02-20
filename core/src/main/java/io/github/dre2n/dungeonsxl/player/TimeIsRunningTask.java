@@ -32,7 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class TimeIsRunningTask extends BukkitRunnable {
 
-    MessageConfig messageConfig = DungeonsXL.getInstance().getMessageConfig();
+    MessageConfig messageConfig = DungeonsXL.getMessageConfig();
 
     private DGroup dGroup;
     private int time;

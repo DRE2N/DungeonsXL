@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
@@ -181,7 +182,7 @@ public class DPortal extends GlobalProtection {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup == null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(player, DungeonsXL.getMessageConfig().getMessage(DMessages.ERROR_JOIN_GROUP));
             return;
         }
 
@@ -325,7 +326,7 @@ public class DPortal extends GlobalProtection {
      * a block covered by the returned portal
      */
     public static DPortal getByBlock(Block block) {
-        for (GlobalProtection protection : protections.getProtections(DPortal.class)) {
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(DPortal.class)) {
             DPortal portal = (DPortal) protection;
             if (portal.getBlock1() == null || portal.getBlock2() == null) {
                 continue;

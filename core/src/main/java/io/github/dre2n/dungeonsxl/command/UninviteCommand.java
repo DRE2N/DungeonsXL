@@ -31,8 +31,6 @@ import org.bukkit.command.CommandSender;
  */
 public class UninviteCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public UninviteCommand() {
         setCommand("uninvite");
         setMinArgs(2);
@@ -45,7 +43,7 @@ public class UninviteCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[2]);
+        DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(args[2]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_DUNGEON_NOT_EXIST.getMessage(args[2]));
             return;

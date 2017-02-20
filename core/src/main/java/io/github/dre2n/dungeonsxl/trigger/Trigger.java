@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -34,8 +35,6 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Daniel Saukel
  */
 public abstract class Trigger {
-
-    static DungeonsXL plugin = DungeonsXL.getInstance();
 
     private boolean triggered;
     private Player player; // Holds Player for Player specific TriggerTypes
@@ -124,7 +123,7 @@ public abstract class Trigger {
     }
 
     public static Trigger getOrCreate(String identifier, String value, DSign dSign) {
-        TriggerType type = plugin.getTriggers().getByIdentifier(identifier);
+        TriggerType type = DungeonsXL.getTriggers().getByIdentifier(identifier);
         Trigger trigger = null;
 
         if (type == TriggerTypeDefault.REDSTONE) {
@@ -205,7 +204,7 @@ public abstract class Trigger {
         }
 
         TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return null;

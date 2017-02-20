@@ -41,7 +41,7 @@ import org.bukkit.potion.PotionEffect;
  */
 public class DGlobalPlayer {
 
-    static DungeonsXL plugin = DungeonsXL.getInstance();
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     protected Player player;
 
@@ -68,7 +68,7 @@ public class DGlobalPlayer {
             reset(false);
         }
 
-        plugin.getDPlayers().addPlayer(this);
+        DungeonsXL.getDPlayers().addPlayer(this);
     }
 
     public DGlobalPlayer(DGlobalPlayer dPlayer) {
@@ -80,7 +80,7 @@ public class DGlobalPlayer {
         respawnInventory = dPlayer.getRespawnInventory();
         respawnArmor = dPlayer.getRespawnArmor();
 
-        plugin.getDPlayers().addPlayer(this);
+        DungeonsXL.getDPlayers().addPlayer(this);
     }
 
     /* Getters and setters */
@@ -315,8 +315,8 @@ public class DGlobalPlayer {
             return;
         }
 
-        final String startGroup = plugin.getMainConfig().getTutorialStartGroup();
-        if ((plugin.getMainConfig().getTutorialDungeon() == null || startGroup == null)) {
+        final String startGroup = DungeonsXL.getMainConfig().getTutorialStartGroup();
+        if ((DungeonsXL.getMainConfig().getTutorialDungeon() == null || startGroup == null)) {
             return;
         }
 
@@ -324,10 +324,10 @@ public class DGlobalPlayer {
             plugin.getPermissionProvider().playerAddGroup(player, startGroup);
         }
 
-        DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
+        DGroup dGroup = new DGroup(player, DungeonsXL.getMainConfig().getTutorialDungeon(), false);
 
         DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
-        plugin.getServer().getPluginManager().callEvent(createEvent);
+        Bukkit.getPluginManager().callEvent(createEvent);
 
         if (createEvent.isCancelled()) {
             dGroup = null;
@@ -340,7 +340,7 @@ public class DGlobalPlayer {
         DGameWorld gameWorld = null;
 
         if (dGroup.getGameWorld() == null) {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(dGroup.getMapName());
+            DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(dGroup.getMapName());
             if (resource == null) {
                 MessageUtil.sendMessage(player, DMessages.ERROR_TUTORIAL_NOT_EXIST.getMessage());
                 return;

@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
  */
 public class KickCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public KickCommand() {
         setCommand("kick");
         setMinArgs(1);

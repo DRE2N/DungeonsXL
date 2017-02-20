@@ -32,8 +32,6 @@ import org.bukkit.entity.Player;
  */
 public class JoinCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public JoinCommand() {
         setCommand("join");
         setMinArgs(1);
@@ -45,13 +43,13 @@ public class JoinCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DGlobalPlayer player = plugin.getDPlayers().getByPlayer((Player) sender);
+        DGlobalPlayer player = DungeonsXL.getDPlayers().getByPlayer((Player) sender);
         if (player instanceof DInstancePlayer) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_LEAVE_GAME.getMessage());
             return;
         }
 
-        Announcer announcer = plugin.getAnnouncers().getByName(args[1]);
+        Announcer announcer = DungeonsXL.getAnnouncers().getByName(args[1]);
         if (announcer != null) {
             announcer.showGUI((Player) sender);
         }

@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.global;
 
 import io.github.dre2n.commons.util.BlockUtil;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.player.DGroup;
@@ -60,9 +61,9 @@ public class GroupSign extends GlobalProtection {
 
         this.startSign = startSign;
         dGroups = new DGroup[maxGroups];
-        dungeon = plugin.getDungeons().getByName(identifier);
+        dungeon = DungeonsXL.getDungeons().getByName(identifier);
         if (dungeon == null) {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(identifier);
+            DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(identifier);
             if (resource != null) {
                 dungeon = new Dungeon(resource);
             }
@@ -245,7 +246,7 @@ public class GroupSign extends GlobalProtection {
         }
 
         int x = block.getX(), y = block.getY(), z = block.getZ();
-        for (GlobalProtection protection : protections.getProtections(GroupSign.class)) {
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(GroupSign.class)) {
             GroupSign groupSign = (GroupSign) protection;
 
             int sx1 = groupSign.startSign.getX(), sy1 = groupSign.startSign.getY(), sz1 = groupSign.startSign.getZ();
@@ -394,7 +395,7 @@ public class GroupSign extends GlobalProtection {
             block.setTypeIdAndData(68, startSign.getData(), true);
         }
 
-        GroupSign sign = new GroupSign(protections.generateId(GroupSign.class, world), startSign, mapName, maxGroups, maxPlayersPerGroup);
+        GroupSign sign = new GroupSign(DungeonsXL.getGlobalProtections().generateId(GroupSign.class, world), startSign, mapName, maxGroups, maxPlayersPerGroup);
 
         return sign;
     }
@@ -409,7 +410,7 @@ public class GroupSign extends GlobalProtection {
         }
 
         if (DGroup.getByPlayer(player) != null) {
-            MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.ERROR_LEAVE_GROUP));
+            MessageUtil.sendMessage(player, DungeonsXL.getMessageConfig().getMessage(DMessages.ERROR_LEAVE_GROUP));
             return true;
         }
 
@@ -445,7 +446,7 @@ public class GroupSign extends GlobalProtection {
 
     @Deprecated
     public static void updatePerGroup(DGroup dGroupSearch) {
-        for (GlobalProtection protection : protections.getProtections(GroupSign.class)) {
+        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(GroupSign.class)) {
             GroupSign groupSign = (GroupSign) protection;
 
             int i = 0;

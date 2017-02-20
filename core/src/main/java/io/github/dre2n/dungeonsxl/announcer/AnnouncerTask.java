@@ -29,8 +29,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class AnnouncerTask extends BukkitRunnable {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private List<Announcer> announcers;
     private int index;
 
@@ -44,7 +42,7 @@ public class AnnouncerTask extends BukkitRunnable {
         Announcer announcer = announcers.get(index);
         List<String> worlds = announcer.getWorlds();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+            DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
             if (!(dPlayer instanceof DInstancePlayer) && dPlayer.isAnnouncerEnabled()) {
                 if (worlds.isEmpty() || worlds.contains(player.getWorld().getName())) {
                     announcer.send(player);

@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class DungeonConfig extends BRConfig {
 
-    DWorlds worlds = DungeonsXL.getInstance().getDWorlds();
+    DWorlds worlds = DungeonsXL.getDWorlds();
 
     public static final int CONFIG_VERSION = 1;
 

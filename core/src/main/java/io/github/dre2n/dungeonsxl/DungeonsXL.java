@@ -279,8 +279,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of GlobalData
      */
-    public GlobalData getGlobalData() {
-        return globalData;
+    public static GlobalData getGlobalData() {
+        return instance.globalData;
     }
 
     /**
@@ -293,8 +293,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of MainConfig
      */
-    public MainConfig getMainConfig() {
-        return mainConfig;
+    public static MainConfig getMainConfig() {
+        return instance.mainConfig;
     }
 
     /**
@@ -307,8 +307,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of MessageConfig
      */
-    public MessageConfig getMessageConfig() {
-        return messageConfig;
+    public static MessageConfig getMessageConfig() {
+        return instance.messageConfig;
     }
 
     /**
@@ -337,8 +337,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the dSigns
      */
-    public DSignTypes getDSigns() {
-        return dSigns;
+    public static DSignTypes getDSigns() {
+        return instance.dSigns;
     }
 
     /**
@@ -351,8 +351,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the game types
      */
-    public GameTypes getGameTypes() {
-        return gameTypes;
+    public static GameTypes getGameTypes() {
+        return instance.gameTypes;
     }
 
     /**
@@ -365,8 +365,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the requirement types
      */
-    public RequirementTypes getRequirementTypes() {
-        return requirementTypes;
+    public static RequirementTypes getRequirementTypes() {
+        return instance.requirementTypes;
     }
 
     /**
@@ -379,8 +379,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the reward types
      */
-    public RewardTypes getRewardTypes() {
-        return rewardTypes;
+    public static RewardTypes getRewardTypes() {
+        return instance.rewardTypes;
     }
 
     /**
@@ -393,8 +393,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the triggers
      */
-    public TriggerTypes getTriggers() {
-        return triggers;
+    public static TriggerTypes getTriggers() {
+        return instance.triggers;
     }
 
     /**
@@ -407,8 +407,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of Dungeons
      */
-    public Dungeons getDungeons() {
-        return dungeons;
+    public static Dungeons getDungeons() {
+        return instance.dungeons;
     }
 
     /**
@@ -421,8 +421,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of GlobalProtections
      */
-    public GlobalProtections getGlobalProtections() {
-        return protections;
+    public static GlobalProtections getGlobalProtections() {
+        return instance.protections;
     }
 
     /**
@@ -435,8 +435,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of ExternalMobProviders
      */
-    public ExternalMobProviders getExternalMobProviders() {
-        return dMobProviders;
+    public static ExternalMobProviders getExternalMobProviders() {
+        return instance.dMobProviders;
     }
 
     /**
@@ -449,8 +449,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of DPlayers
      */
-    public DPlayers getDPlayers() {
-        return dPlayers;
+    public static DPlayers getDPlayers() {
+        return instance.dPlayers;
     }
 
     /**
@@ -463,8 +463,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of Announcers
      */
-    public Announcers getAnnouncers() {
-        return announcers;
+    public static Announcers getAnnouncers() {
+        return instance.announcers;
     }
 
     /**
@@ -477,8 +477,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of DClasses
      */
-    public DClasses getDClasses() {
-        return dClasses;
+    public static DClasses getDClasses() {
+        return instance.dClasses;
     }
 
     /**
@@ -491,8 +491,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of DLootTables
      */
-    public DLootTables getDLootTables() {
-        return dLootTables;
+    public static DLootTables getDLootTables() {
+        return instance.dLootTables;
     }
 
     /**
@@ -505,8 +505,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of DMobTypes
      */
-    public DMobTypes getDMobTypes() {
-        return dMobTypes;
+    public static DMobTypes getDMobTypes() {
+        return instance.dMobTypes;
     }
 
     /**
@@ -519,8 +519,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of SignScripts
      */
-    public SignScripts getSignScripts() {
-        return signScripts;
+    public static SignScripts getSignScripts() {
+        return instance.signScripts;
     }
 
     /**
@@ -533,8 +533,8 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the loaded instance of DWorlds
      */
-    public DWorlds getDWorlds() {
-        return dWorlds;
+    public static DWorlds getDWorlds() {
+        return instance.dWorlds;
     }
 
     /**
@@ -547,22 +547,22 @@ public class DungeonsXL extends BRPlugin {
     /**
      * @return the dLootInventories
      */
-    public List<DLootInventory> getDLootInventories() {
-        return dLootInventories;
+    public static List<DLootInventory> getDLootInventories() {
+        return instance.dLootInventories;
     }
 
     /**
      * @return the games
      */
-    public List<Game> getGames() {
-        return games;
+    public static List<Game> getGames() {
+        return instance.games;
     }
 
     /**
      * @return the dGroups
      */
-    public List<DGroup> getDGroups() {
-        return dGroups;
+    public static List<DGroup> getDGroups() {
+        return instance.dGroups;
     }
 
 }

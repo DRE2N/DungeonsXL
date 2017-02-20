@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
@@ -61,7 +62,7 @@ public class FloorSign extends DSign {
     @Override
     public void onInit() {
         if (!lines[1].isEmpty()) {
-            floor = plugin.getDWorlds().getResourceByName(lines[1]);
+            floor = DungeonsXL.getDWorlds().getResourceByName(lines[1]);
         }
 
         if (!getTriggers().isEmpty()) {
@@ -103,7 +104,7 @@ public class FloorSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getDPlayers().getDGamePlayers()) {
             dPlayer.finishFloor(floor);
         }
     }

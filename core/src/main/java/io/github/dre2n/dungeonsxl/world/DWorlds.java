@@ -25,23 +25,9 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import org.bukkit.block.Block;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockSpreadEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
@@ -52,7 +38,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class DWorlds {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig mainConfig = plugin.getMainConfig();
+    MainConfig mainConfig = DungeonsXL.getMainConfig();
 
     public static final File RAW = new File(DungeonsXL.MAPS, ".raw");
 
@@ -73,7 +59,7 @@ public class DWorlds {
         }
 
         startWorldUnloadTask(1200L);
-        Bukkit.getPluginManager().registerEvents(new DWorldListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new DWorldListener(this), plugin);
     }
 
     /* Getters and setters */

@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -44,7 +45,6 @@ import org.bukkit.potion.PotionEffect;
  */
 public class DPlayerData extends BRConfig {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
     boolean is1_9 = Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals());
 
     public static final int CONFIG_VERSION = 2;
@@ -317,7 +317,7 @@ public class DPlayerData extends BRConfig {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                MessageUtil.log(plugin, DMessages.LOG_NEW_PLAYER_DATA.getMessage(file.getName()));
+                MessageUtil.log(DungeonsXL.getInstance(), DMessages.LOG_NEW_PLAYER_DATA.getMessage(file.getName()));
             } catch (IOException exception) {
             }
         }
@@ -357,7 +357,7 @@ public class DPlayerData extends BRConfig {
 
         oldLocation = (Location) config.get(PREFIX_STATE_PERSISTENCE + "oldLocation");
         if (oldLocation.getWorld() == null) {
-            oldLocation = plugin.getServer().getWorlds().get(0).getSpawnLocation();
+            oldLocation = Bukkit.getWorlds().get(0).getSpawnLocation();
         }
     }
 

@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.trigger;
 import io.github.dre2n.commons.util.NumberUtil;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import org.bukkit.Bukkit;
 
 /**
  * @author Daniel Saukel
@@ -62,7 +63,7 @@ public class FortuneTrigger extends Trigger {
         }
 
         TriggerActionEvent event = new TriggerActionEvent(this);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;

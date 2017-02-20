@@ -39,8 +39,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
@@ -48,7 +46,7 @@ public class RewardListener implements Listener {
         }
         Player player = (Player) event.getPlayer();
 
-        for (DLootInventory inventory : plugin.getDLootInventories()) {
+        for (DLootInventory inventory : DungeonsXL.getDLootInventories()) {
             if (event.getView() != inventory.getInventoryView()) {
                 continue;
             }
@@ -63,7 +61,7 @@ public class RewardListener implements Listener {
                 }
             }
 
-            plugin.getDLootInventories().remove(inventory);
+            DungeonsXL.getDLootInventories().remove(inventory);
         }
     }
 
@@ -96,7 +94,7 @@ public class RewardListener implements Listener {
             event.setCancelled(true);
         }
 
-        if (!plugin.getMainConfig().getOpenInventories() && !DPermissions.hasPermission(event.getPlayer(), DPermissions.INSECURE)) {
+        if (!DungeonsXL.getMainConfig().getOpenInventories() && !DPermissions.hasPermission(event.getPlayer(), DPermissions.INSECURE)) {
             World world = event.getPlayer().getWorld();
             if (event.getInventory().getType() != InventoryType.CREATIVE && DEditWorld.getByWorld(world) != null) {
                 event.setCancelled(true);

@@ -114,7 +114,7 @@ public class Dungeon {
      * @return false if there are setup errors
      */
     public boolean isSetupCorrect() {
-        for (DResourceWorld resource : DungeonsXL.getInstance().getDWorlds().getResources()) {
+        for (DResourceWorld resource : DungeonsXL.getDWorlds().getResources()) {
             if (resource.getName().equals(name)) {
                 return false;
             }

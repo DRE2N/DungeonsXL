@@ -53,7 +53,7 @@ public class ReloadCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        List<DInstancePlayer> dPlayers = plugin.getDPlayers().getDInstancePlayers();
+        List<DInstancePlayer> dPlayers = DungeonsXL.getDPlayers().getDInstancePlayers();
         if (!dPlayers.isEmpty() && args.length == 1 && CompatibilityHandler.getInstance().isSpigot() && sender instanceof Player) {
             MessageUtil.sendMessage(sender, DMessages.CMD_RELOAD_PLAYERS.getMessage());
             ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -force");
@@ -78,8 +78,8 @@ public class ReloadCommand extends BRCommand {
 
         int maps = DungeonsXL.MAPS.listFiles().length;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
-        int players = plugin.getDPlayers().getDGamePlayers().size();
+        int loaded = DungeonsXL.getDWorlds().getEditWorlds().size() + DungeonsXL.getDWorlds().getGameWorlds().size();
+        int players = DungeonsXL.getDPlayers().getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {
@@ -90,11 +90,9 @@ public class ReloadCommand extends BRCommand {
             mythicMobs = plugins.getPlugin("MythicMobs").getDescription().getVersion();
         }
 
-        // Save
-        plugin.saveData();
-        plugin.getMessageConfig().save();
-
+        plugin.onDisable();
         plugin.loadCore();
+        plugin.loadData();
 
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessages.CMD_RELOAD_DONE.getMessage());

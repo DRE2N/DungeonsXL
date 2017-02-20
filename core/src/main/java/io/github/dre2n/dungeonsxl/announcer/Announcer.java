@@ -33,6 +33,7 @@ import java.util.List;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -95,7 +96,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
+            Dungeon dungeon = DungeonsXL.getDungeons().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor().getName();
             }
@@ -136,7 +137,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
+            Dungeon dungeon = DungeonsXL.getDungeons().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor().getName();
             }
@@ -384,7 +385,7 @@ public class Announcer {
 
         } else if (dGroup == null && pGroup == null) {
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.ANNOUNCER);
-            plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 dGroups.set(buttons.indexOf(button), new DGroup(player));
             }
@@ -422,7 +423,7 @@ public class Announcer {
             List<String> lore = new ArrayList<>();
 
             DGroup dGroup = dGroups.get(groupCount);
-            if (!plugin.getDGroups().contains(dGroup)) {
+            if (!DungeonsXL.getDGroups().contains(dGroup)) {
                 dGroups.set(groupCount, null);
 
             } else if (dGroup != null) {
@@ -435,7 +436,7 @@ public class Announcer {
 
             boolean full = playerCount >= maxPlayersPerGroup;
 
-            ItemStack button = new ItemStack(Material.WOOL, playerCount, plugin.getMainConfig().getGroupColorPriority().get(groupCount).getWoolData());
+            ItemStack button = new ItemStack(Material.WOOL, playerCount, DungeonsXL.getMainConfig().getGroupColorPriority().get(groupCount).getWoolData());
             ItemMeta meta = button.getItemMeta();
             meta.setDisplayName(name + (full ? ChatColor.DARK_RED : ChatColor.GREEN) + " [" + playerCount + "/" + maxPlayersPerGroup + "]");
             meta.setLore(lore);

@@ -32,8 +32,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class SignScript {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private String name;
 
     private List<String[]> signs;

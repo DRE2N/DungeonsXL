@@ -30,8 +30,6 @@ import org.bukkit.entity.Player;
  */
 public class BreakCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public BreakCommand() {
         setCommand("break");
         setMinArgs(0);
@@ -44,7 +42,7 @@ public class BreakCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
         if (dGlobalPlayer.isInBreakMode()) {
             dGlobalPlayer.setInBreakMode(false);

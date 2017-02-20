@@ -34,8 +34,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class PortalCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public PortalCommand() {
         setCommand("portal");
         setMinArgs(0);
@@ -48,7 +46,7 @@ public class PortalCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
 
         if (dGlobalPlayer instanceof DGamePlayer) {
             MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_DUNGEON.getMessage());
@@ -68,7 +66,7 @@ public class PortalCommand extends BRCommand {
         DPortal dPortal = dGlobalPlayer.getPortal();
 
         if (dPortal == null) {
-            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
+            dPortal = new DPortal(DungeonsXL.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));

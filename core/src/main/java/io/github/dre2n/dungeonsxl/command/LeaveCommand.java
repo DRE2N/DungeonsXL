@@ -29,6 +29,7 @@ import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -36,8 +37,6 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Daniel Saukel
  */
 public class LeaveCommand extends BRCommand {
-
-    DungeonsXL plugin = DungeonsXL.getInstance();
 
     public LeaveCommand() {
         setCommand("leave");
@@ -51,7 +50,7 @@ public class LeaveCommand extends BRCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
         Game game = Game.getByPlayer(player);
 
         if (game != null && game.isTutorial()) {
@@ -68,14 +67,14 @@ public class LeaveCommand extends BRCommand {
 
         if (dPlayer instanceof DGamePlayer) {
             DGamePlayerEscapeEvent dPlayerEscapeEvent = new DGamePlayerEscapeEvent((DGamePlayer) dPlayer);
-            plugin.getServer().getPluginManager().callEvent(dPlayerEscapeEvent);
+            Bukkit.getPluginManager().callEvent(dPlayerEscapeEvent);
             if (dPlayerEscapeEvent.isCancelled()) {
                 return;
             }
         }
 
         DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
-        plugin.getServer().getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
+        Bukkit.getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
         if (dPlayerLeaveDGroupEvent.isCancelled()) {
             return;
         }

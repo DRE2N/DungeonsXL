@@ -27,7 +27,7 @@ public class WorldUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (DGameWorld gameWorld : DungeonsXL.getInstance().getDWorlds().getGameWorlds()) {
+        for (DGameWorld gameWorld : DungeonsXL.getDWorlds().getGameWorlds()) {
             gameWorld.update();
         }
     }

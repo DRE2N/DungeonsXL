@@ -52,7 +52,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class WorldConfig extends GameRules {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
     CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private File file;
@@ -232,7 +231,7 @@ public class WorldConfig extends GameRules {
 
             ConfigurationSection requirementSection = configFile.getConfigurationSection("requirements");
             for (String identifier : configFile.getConfigurationSection("requirements").getKeys(false)) {
-                Requirement requirement = Requirement.create(plugin.getRequirementTypes().getByIdentifier(identifier));
+                Requirement requirement = Requirement.create(DungeonsXL.getRequirementTypes().getByIdentifier(identifier));
                 requirement.setup(requirementSection);
                 requirements.add(requirement);
             }
@@ -263,7 +262,7 @@ public class WorldConfig extends GameRules {
         }
 
         if (configFile.contains("forcedGameType")) {
-            forcedGameType = plugin.getGameTypes().getByName(configFile.getString("forcedGameType"));
+            forcedGameType = DungeonsXL.getGameTypes().getByName(configFile.getString("forcedGameType"));
         }
 
         if (configFile.contains("title.title")) {

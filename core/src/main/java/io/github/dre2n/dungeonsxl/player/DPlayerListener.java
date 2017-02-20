@@ -39,6 +39,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -60,10 +61,15 @@ import org.bukkit.inventory.meta.BookMeta;
 /**
  * @author Daniel Saukel, Frank Baumann, Milan Albrecht
  */
-public class DPlayerListener {
+public class DPlayerListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    DPlayers dPlayers = plugin.getDPlayers();
+    DungeonsXL plugin;
+    DPlayers dPlayers;
+
+    public DPlayerListener(DPlayers dPlayers) {
+        this.plugin = DungeonsXL.getInstance();
+        this.dPlayers = dPlayers;
+    }
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
@@ -247,7 +253,7 @@ public class DPlayerListener {
                 return;
 
             } else {
-                commandWhitelist.addAll(plugin.getMainConfig().getEditCommandWhitelist());
+                commandWhitelist.addAll(DungeonsXL.getMainConfig().getEditCommandWhitelist());
             }
 
         } else if (game != null) {
@@ -298,7 +304,7 @@ public class DPlayerListener {
             return;
         }
 
-        if (dPlayer instanceof DEditPlayer && !plugin.getMainConfig().getDropItems() && !DPermissions.hasPermission(player, DPermissions.INSECURE)) {
+        if (dPlayer instanceof DEditPlayer && !DungeonsXL.getMainConfig().getDropItems() && !DPermissions.hasPermission(player, DPermissions.INSECURE)) {
             event.setCancelled(true);
         }
 
@@ -346,7 +352,7 @@ public class DPlayerListener {
             return;
         }
 
-        if (!plugin.getMainConfig().isTutorialActivated()) {
+        if (!DungeonsXL.getMainConfig().isTutorialActivated()) {
             return;
         }
 
@@ -360,7 +366,7 @@ public class DPlayerListener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-        MainConfig config = plugin.getMainConfig();
+        MainConfig config = DungeonsXL.getMainConfig();
 
         if (!config.isTutorialActivated()) {
             return;
@@ -383,7 +389,7 @@ public class DPlayerListener {
                 continue;
             }
 
-            if (plugin.getDWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
+            if (DungeonsXL.getDWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
                 event.setResult(PlayerLoginEvent.Result.KICK_FULL);
                 event.setKickMessage(DMessages.ERROR_TOO_MANY_TUTORIALS.getMessage());
             }
@@ -447,7 +453,7 @@ public class DPlayerListener {
         if (isCitizensNPC(player)) {
             return;
         }
-        plugin.getDPlayers().getByPlayer(player).applyRespawnInventory();
+        DungeonsXL.getDPlayers().getByPlayer(player).applyRespawnInventory();
 
         DGlobalPlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
@@ -575,7 +581,7 @@ public class DPlayerListener {
             if (dGlobalPlayer.isCreatingPortal()) {
                 if (item.getType() == Material.WOOD_SWORD) {
                     if (clickedBlock != null) {
-                        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(DPortal.class)) {
+                        for (GlobalProtection protection : DungeonsXL.getGlobalProtections().getProtections(DPortal.class)) {
                             DPortal dPortal = (DPortal) protection;
                             if (!dPortal.isActive()) {
                                 if (dPortal == dGlobalPlayer.getPortal()) {

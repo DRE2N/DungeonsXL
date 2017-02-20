@@ -30,8 +30,6 @@ import org.inventivetalent.rpapi.ResourcePackAPI;
  */
 public class ResourcePackCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public ResourcePackCommand() {
         setCommand("resourcepack");
         setMinArgs(1);
@@ -51,7 +49,7 @@ public class ResourcePackCommand extends BRCommand {
             return;
         }
 
-        String url = (String) plugin.getMainConfig().getResourcePacks().get(args[1]);
+        String url = (String) DungeonsXL.getMainConfig().getResourcePacks().get(args[1]);
         if (url == null) {
             MessageUtil.sendMessage(sender, DMessages.ERROR_NO_SUCH_RESOURCE_PACK.getMessage(args[1]));
             return;

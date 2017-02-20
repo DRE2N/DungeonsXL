@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.util.NumberUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.loottable.DLootTable;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.RewardChest;
@@ -166,7 +167,7 @@ public class ChestSign extends DSign {
         }
 
         if (!lines[2].isEmpty()) {
-            lootTable = plugin.getDLootTables().getByName(lines[2]);
+            lootTable = DungeonsXL.getDLootTables().getByName(lines[2]);
         }
 
         if (chest == null) {

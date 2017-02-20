@@ -45,8 +45,7 @@ public class Announcers {
                 announcers.add(new Announcer(script));
             }
         }
-        startAnnouncerTask(plugin.getMainConfig().getAnnouncmentInterval());
-        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(), plugin);
+        startAnnouncerTask(DungeonsXL.getMainConfig().getAnnouncmentInterval());
     }
 
     /**

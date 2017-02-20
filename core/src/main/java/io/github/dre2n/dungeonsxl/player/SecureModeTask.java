@@ -29,7 +29,7 @@ public class SecureModeTask extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            DGlobalPlayer dGlobalPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+            DGlobalPlayer dGlobalPlayer = DungeonsXL.getDPlayers().getByPlayer(player);
             if (dGlobalPlayer == null) {
                 dGlobalPlayer = new DGlobalPlayer(player);
             }

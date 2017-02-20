@@ -31,8 +31,6 @@ import org.bukkit.command.CommandSender;
  */
 public class InviteCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public InviteCommand() {
         setMinArgs(2);
         setMaxArgs(2);
@@ -45,7 +43,7 @@ public class InviteCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[2]);
+        DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(args[2]);
         OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
 
         if (resource != null) {

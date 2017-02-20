@@ -67,8 +67,8 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
-            plugin.getDWorlds().addResource(resource);
+            DResourceWorld resource = new DResourceWorld(DungeonsXL.getDWorlds(), name);
+            DungeonsXL.getDWorlds().addResource(resource);
             DEditWorld editWorld = resource.generate();
             editWorld.save();
             editWorld.delete();
@@ -89,8 +89,8 @@ public class CreateCommand extends BRCommand {
             MessageUtil.log(plugin, DMessages.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
-            plugin.getDWorlds().addResource(resource);
+            DResourceWorld resource = new DResourceWorld(DungeonsXL.getDWorlds(), name);
+            DungeonsXL.getDWorlds().addResource(resource);
             DEditWorld editWorld = resource.generate();
 
             // MSG Done

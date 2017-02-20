@@ -18,10 +18,12 @@ package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.commons.util.playerutil.PlayerUtil;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -65,7 +67,7 @@ public class DEditPlayer extends DInstancePlayer {
 
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
-            for (String permission : plugin.getMainConfig().getEditPermissions()) {
+            for (String permission : DungeonsXL.getMainConfig().getEditPermissions()) {
                 plugin.getPermissionProvider().playerAddTransient(world.getName(), player, permission);
             }
         }
@@ -78,7 +80,7 @@ public class DEditPlayer extends DInstancePlayer {
      * the player's EditWorld
      */
     public static void create(Player player, DEditWorld editWorld) {
-        new CreateDInstancePlayerTask(player, editWorld).runTaskTimer(plugin, 0L, 5L);
+        new CreateDInstancePlayerTask(player, editWorld).runTaskTimer(DungeonsXL.getInstance(), 0L, 5L);
     }
 
     /* Getters and setters */
@@ -109,7 +111,7 @@ public class DEditPlayer extends DInstancePlayer {
     public void delete() {
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
-            for (String permission : plugin.getMainConfig().getEditPermissions()) {
+            for (String permission : DungeonsXL.getMainConfig().getEditPermissions()) {
                 plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
             }
         }
@@ -132,7 +134,7 @@ public class DEditPlayer extends DInstancePlayer {
             if (lines[0].isEmpty() && lines[1].isEmpty() && lines[2].isEmpty() && lines[3].isEmpty()) {
                 if (linesCopy != null) {
                     SignChangeEvent event = new SignChangeEvent(block, getPlayer(), linesCopy);
-                    plugin.getServer().getPluginManager().callEvent(event);
+                    Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         sign.setLine(0, event.getLine(0));
                         sign.setLine(1, event.getLine(1));
@@ -171,7 +173,7 @@ public class DEditPlayer extends DInstancePlayer {
         DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
         editWorld.sendMessage(message);
 
-        for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
+        for (DGlobalPlayer player : DungeonsXL.getDPlayers().getDGlobalPlayers()) {
             if (player.isInChatSpyMode()) {
                 if (!editWorld.getWorld().getPlayers().contains(player.getPlayer())) {
                     MessageUtil.sendMessage(player.getPlayer(), ChatColor.GREEN + "[Chatspy] " + ChatColor.WHITE + message);
@@ -200,7 +202,7 @@ public class DEditPlayer extends DInstancePlayer {
         }
 
         DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, false, false, false, false, false);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -213,7 +215,7 @@ public class DEditPlayer extends DInstancePlayer {
 
     /* Statics */
     public static DEditPlayer getByPlayer(Player player) {
-        for (DEditPlayer dPlayer : plugin.getDPlayers().getDEditPlayers()) {
+        for (DEditPlayer dPlayer : DungeonsXL.getDPlayers().getDEditPlayers()) {
             if (dPlayer.getPlayer().equals(player)) {
                 return dPlayer;
             }
@@ -222,7 +224,7 @@ public class DEditPlayer extends DInstancePlayer {
     }
 
     public static DEditPlayer getByName(String name) {
-        for (DEditPlayer dPlayer : plugin.getDPlayers().getDEditPlayers()) {
+        for (DEditPlayer dPlayer : DungeonsXL.getDPlayers().getDEditPlayers()) {
             if (dPlayer.getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
@@ -233,7 +235,7 @@ public class DEditPlayer extends DInstancePlayer {
     public static CopyOnWriteArrayList<DEditPlayer> getByWorld(World world) {
         CopyOnWriteArrayList<DEditPlayer> dPlayers = new CopyOnWriteArrayList<>();
 
-        for (DEditPlayer dPlayer : plugin.getDPlayers().getDEditPlayers()) {
+        for (DEditPlayer dPlayer : DungeonsXL.getDPlayers().getDEditPlayers()) {
             if (dPlayer.getWorld() == world) {
                 dPlayers.add(dPlayer);
             }

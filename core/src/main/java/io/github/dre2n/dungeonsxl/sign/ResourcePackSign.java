@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
@@ -61,7 +62,7 @@ public class ResourcePackSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return plugin.getMainConfig().getResourcePacks().get(lines[1]) != null || lines[1].equalsIgnoreCase("reset");
+        return DungeonsXL.getMainConfig().getResourcePacks().get(lines[1]) != null || lines[1].equalsIgnoreCase("reset");
     }
 
     @Override
@@ -71,7 +72,7 @@ public class ResourcePackSign extends DSign {
             // Placeholder to reset to default
             url = "http://google.com";
         } else {
-            url = plugin.getMainConfig().getResourcePacks().get(lines[1]);
+            url = DungeonsXL.getMainConfig().getResourcePacks().get(lines[1]);
         }
 
         if (url instanceof String) {

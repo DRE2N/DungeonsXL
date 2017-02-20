@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -37,8 +36,11 @@ import org.bukkit.event.world.ChunkUnloadEvent;
  */
 public class DWorldListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorlds dWorlds = plugin.getDWorlds();
+    DWorlds dWorlds;
+
+    public DWorldListener(DWorlds dWorlds) {
+        this.dWorlds = dWorlds;
+    }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {

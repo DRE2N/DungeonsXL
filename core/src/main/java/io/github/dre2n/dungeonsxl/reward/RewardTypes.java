@@ -29,13 +29,11 @@ import org.bukkit.Bukkit;
  */
 public class RewardTypes {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private List<RewardType> types = new ArrayList<>();
 
     public RewardTypes() {
         types.addAll(Arrays.asList(RewardTypeDefault.values()));
-        Bukkit.getPluginManager().registerEvents(new RewardListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new RewardListener(), DungeonsXL.getInstance());
     }
 
     /**

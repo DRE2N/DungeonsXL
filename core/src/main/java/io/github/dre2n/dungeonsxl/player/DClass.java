@@ -35,7 +35,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DClass {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
     CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private String name;

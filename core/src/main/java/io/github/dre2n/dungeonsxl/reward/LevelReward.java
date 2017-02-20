@@ -59,7 +59,7 @@ public class LevelReward extends Reward {
         }
 
         player.setLevel(player.getLevel() + levels);
-        MessageUtil.sendMessage(player, plugin.getMessageConfig().getMessage(DMessages.REWARD_GENERAL, levels + " levels"));
+        MessageUtil.sendMessage(player, DMessages.REWARD_GENERAL.getMessage(levels + " levels"));
     }
 
     @Override

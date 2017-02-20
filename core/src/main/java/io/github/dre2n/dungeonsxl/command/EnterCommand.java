@@ -33,8 +33,6 @@ import org.bukkit.entity.Player;
  */
 public class EnterCommand extends BRCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     public EnterCommand() {
         setMinArgs(1);
         setMaxArgs(2);

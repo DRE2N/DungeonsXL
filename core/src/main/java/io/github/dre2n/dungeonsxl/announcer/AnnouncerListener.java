@@ -29,19 +29,17 @@ import org.bukkit.inventory.ItemStack;
  */
 public class AnnouncerListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     @EventHandler
     public void onButtonClick(ButtonClickEvent event) {
         Player player = event.getPlayer();
 
         Inventory gui = event.getGUI();
-        if (!plugin.getGUIs().contains(gui)) {
+        if (!DungeonsXL.getInstance().getGUIs().contains(gui)) {
             return;
         }
 
         ItemStack button = gui.getItem(event.getSlot());
-        Announcer announcer = plugin.getAnnouncers().getByGUI(gui);
+        Announcer announcer = DungeonsXL.getAnnouncers().getByGUI(gui);
 
         if (announcer != null) {
             announcer.clickGroupButton(player, button);

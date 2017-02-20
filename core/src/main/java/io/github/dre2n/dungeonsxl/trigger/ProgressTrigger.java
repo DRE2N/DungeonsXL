@@ -16,11 +16,13 @@
  */
 package io.github.dre2n.dungeonsxl.trigger;
 
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Bukkit;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -91,7 +93,7 @@ public class ProgressTrigger extends Trigger {
     /* Actions */
     public void onTrigger() {
         TriggerActionEvent event = new TriggerActionEvent(this);
-        plugin.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
             return;
@@ -115,7 +117,7 @@ public class ProgressTrigger extends Trigger {
     }
 
     public static ProgressTrigger getOrCreate(String floor, DGameWorld gameWorld) {
-        DResourceWorld resource = plugin.getDWorlds().getResourceByName(floor);
+        DResourceWorld resource = DungeonsXL.getDWorlds().getResourceByName(floor);
 
         if (resource != null) {
             return new ProgressTrigger(resource);
