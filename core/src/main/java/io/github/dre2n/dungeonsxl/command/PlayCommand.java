@@ -69,7 +69,11 @@ public class PlayCommand extends BRCommand {
         }
 
         DGroup dGroup = DGroup.getByPlayer(player);
-        if (dGroup == null || dGroup.isPlaying()) {
+        if (dGroup.isPlaying()) {
+            MessageUtil.sendMessage(player, DMessages.ERROR_LEAVE_GROUP.getMessage());
+            return;
+        }
+        if (dGroup == null) {
             dGroup = new DGroup(player, dungeon);
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
