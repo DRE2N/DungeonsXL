@@ -105,6 +105,9 @@ public class RewardListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        if (DungeonsXL.getDWorlds().getInstanceByWorld(player.getWorld()) != null) {
+            return;
+        }
         DLootInventory inventory = DLootInventory.getByPlayer(player);
         if (inventory != null && player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
                 && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(-1, 0, 0).getType() != Material.PORTAL
