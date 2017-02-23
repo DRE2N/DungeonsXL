@@ -50,7 +50,17 @@ public enum ExternalMobPlugin implements ExternalMobProvider {
 
     @Override
     public String getCommand(String mob, String world, double x, double y, double z) {
-        return command.replaceAll("%mob%", mob).replaceAll("%world%", world).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z));
+        String xStr, yStr, zStr;
+        if (this == CUSTOM_MOBS) {
+            xStr = String.valueOf(Location.locToBlock(x));
+            yStr = String.valueOf(Location.locToBlock(y));
+            zStr = String.valueOf(Location.locToBlock(z));
+        } else {
+            xStr = String.valueOf(x);
+            yStr = String.valueOf(y);
+            zStr = String.valueOf(z);
+        }
+        return command.replaceAll("%mob%", mob).replaceAll("%world%", world).replaceAll("%x%", xStr).replaceAll("%y%", yStr).replaceAll("%z%", zStr);
     }
 
     @Override
