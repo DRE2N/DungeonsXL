@@ -78,6 +78,8 @@ public class DGamePlayer extends DInstancePlayer {
     private ItemStack oldHelmet;
     private DGroup stealing;
 
+    private DGroupTag groupTag;
+
     public DGamePlayer(Player player, DGameWorld world) {
         super(player, world.getWorld());
 
@@ -408,6 +410,22 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         stealing = dGroup;
+    }
+
+    /**
+     * @return
+     * the player's group tag
+     */
+    public DGroupTag getDGroupTag() {
+        return groupTag;
+    }
+
+    /**
+     * @return
+     * the player's group tag
+     */
+    public void initDGroupTag() {
+        groupTag = new DGroupTag(this);
     }
 
     /* Actions */

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -87,6 +88,7 @@ public class GameRules {
         /* Misc */
         DEFAULT_VALUES.msgs = new HashMap<>();
         DEFAULT_VALUES.secureObjects = new ArrayList<>();
+        DEFAULT_VALUES.groupTagEnabled = false;
     }
 
     /* keepInventory */
@@ -142,6 +144,7 @@ public class GameRules {
     /* Misc */
     protected Map<Integer, String> msgs;
     protected List<ItemStack> secureObjects;
+    protected Boolean groupTagEnabled;
 
     /* Getters and setters */
     // keepInventory
@@ -527,6 +530,18 @@ public class GameRules {
         return secureObjects;
     }
 
+    /**
+     * @return
+     * if the group tag is enabled.
+     * Returns false if HolographicDisplays isn't loaded
+     */
+    public boolean isGroupTagEnabled() {
+        if (!Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays")) {
+            return false;
+        }
+        return groupTagEnabled;
+    }
+
     /* Actions */
     /**
      * @param defaultValues
@@ -739,6 +754,10 @@ public class GameRules {
             secureObjects = defaultValues.secureObjects;
         } else if (defaultValues.secureObjects != null) {
             secureObjects.addAll(defaultValues.secureObjects);
+        }
+        
+        if (groupTagEnabled == null) {
+            groupTagEnabled = defaultValues.groupTagEnabled;
         }
     }
 

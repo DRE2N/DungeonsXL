@@ -778,7 +778,9 @@ public class DGroup {
                 if (dPlayer == null) {
                     dPlayer = new DGamePlayer(player, gameWorld);
                 }
-
+                if (rules.isGroupTagEnabled()) {
+                    dPlayer.initDGroupTag();
+                }
                 if (!dPlayer.isReady()) {
                     ready = false;
                 }

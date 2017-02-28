@@ -417,12 +417,17 @@ public class DPlayerListener implements Listener {
         }
         DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
         DGamePlayer gamePlayer = DGamePlayer.getByPlayer(player);
-        if (gameWorld != null && gamePlayer != null && gamePlayer.isStealing()) {
-            DGroup group = gamePlayer.getDGroup();
-            Location startLocation = gameWorld.getStartLocation(group);
+        if (gameWorld != null && gamePlayer != null) {
+            if (gamePlayer.getDGroupTag() != null) {
+                gamePlayer.getDGroupTag().update();
+            }
+            if (gamePlayer.isStealing()) {
+                DGroup group = gamePlayer.getDGroup();
+                Location startLocation = gameWorld.getStartLocation(group);
 
-            if (startLocation.distance(player.getLocation()) < 3) {
-                gamePlayer.captureFlag();
+                if (startLocation.distance(player.getLocation()) < 3) {
+                    gamePlayer.captureFlag();
+                }
             }
         }
     }

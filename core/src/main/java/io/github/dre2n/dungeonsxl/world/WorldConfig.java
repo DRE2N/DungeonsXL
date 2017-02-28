@@ -292,6 +292,10 @@ public class WorldConfig extends GameRules {
         if (configFile.contains("title.show")) {
             titleShow = (int) configFile.getDouble("title.show") * 20;
         }
+
+        if (configFile.contains("groupTagEnabled")) {
+            groupTagEnabled = configFile.getBoolean("groupTagEnabled");
+        }
     }
 
     public void save() {
