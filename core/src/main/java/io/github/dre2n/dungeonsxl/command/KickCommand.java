@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl.command;
 
 import io.github.dre2n.commons.command.BRCommand;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import static io.github.dre2n.dungeonsxl.command.DCommands.LEAVE;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.player.DPermissions;

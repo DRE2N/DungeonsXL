@@ -75,7 +75,7 @@ public class DGroup {
     private int lives = -1;
 
     public DGroup(Player player) {
-        this("Group_" + DungeonsXL.getDGroups().size(), player);
+        this(DungeonsXL.getMainConfig().getGroupColorPriority().get(DungeonsXL.getDGroups().size()).toString(), player);
     }
 
     public DGroup(String name, Player player) {
@@ -91,7 +91,7 @@ public class DGroup {
 
     @Deprecated
     public DGroup(Player player, String identifier, boolean multiFloor) {
-        this("Group_" + DungeonsXL.getDGroups().size(), player, identifier, multiFloor);
+        this(DungeonsXL.getMainConfig().getGroupColorPriority().get(DungeonsXL.getDGroups().size()).toString(), player, identifier, multiFloor);
     }
 
     @Deprecated
@@ -134,7 +134,7 @@ public class DGroup {
     }
 
     public DGroup(Player player, Dungeon dungeon) {
-        this("Group_" + DungeonsXL.getDGroups().size(), player, dungeon);
+        this(DungeonsXL.getMainConfig().getGroupColorPriority().get(DungeonsXL.getDGroups().size()).toString(), player, dungeon);
     }
 
     public DGroup(String name, Player player, Dungeon dungeon) {

@@ -57,7 +57,7 @@ public class ReloadCommand extends BRCommand {
         if (!dPlayers.isEmpty() && args.length == 1 && CompatibilityHandler.getInstance().isSpigot() && sender instanceof Player) {
             MessageUtil.sendMessage(sender, DMessages.CMD_RELOAD_PLAYERS.getMessage());
             ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -force");
-            String message = DefaultFontInfo.center("&a[ OK ]");
+            String message = DefaultFontInfo.center(DMessages.MISC_OKAY.getMessage());
             TextComponent text = new TextComponent(message);
             text.setClickEvent(onClick);
             ((Player) sender).spigot().sendMessage(text);

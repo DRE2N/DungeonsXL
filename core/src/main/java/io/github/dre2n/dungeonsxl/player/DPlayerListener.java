@@ -21,8 +21,6 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessages;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.game.Game;
-import io.github.dre2n.dungeonsxl.global.DPortal;
-import io.github.dre2n.dungeonsxl.global.GlobalProtection;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
 import io.github.dre2n.dungeonsxl.util.ParsingUtil;

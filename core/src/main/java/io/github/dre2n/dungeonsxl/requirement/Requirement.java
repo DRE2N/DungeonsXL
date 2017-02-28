@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.requirement;
 
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementRegistrationEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

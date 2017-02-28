@@ -60,11 +60,11 @@ public class DeleteCommand extends BRCommand {
 
         if (args.length == 2 && CompatibilityHandler.getInstance().isSpigot() && sender instanceof Player) {
             ClickEvent onClickConfirm = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl delete " + args[1] + " true");
-            TextComponent confirm = new TextComponent(ChatColor.GREEN + "[ YES ]");
+            TextComponent confirm = new TextComponent(DMessages.MISC_YES.getMessage());
             confirm.setClickEvent(onClickConfirm);
 
             ClickEvent onClickDeny = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl delete " + args[1] + " false");
-            TextComponent deny = new TextComponent(ChatColor.DARK_RED + "[ NO ]");
+            TextComponent deny = new TextComponent(DMessages.MISC_NO.getMessage());
             deny.setClickEvent(onClickDeny);
 
             MessageUtil.sendMessage(sender, DMessages.CMD_DELETE_BACKUPS.getMessage());
