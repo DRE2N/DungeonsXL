@@ -178,6 +178,7 @@ public enum DMessages implements Messages {
     LOG_WORLD_GENERATION_FINISHED("Log_WorldGenerationFinished", "&6World generation finished!"),
     MISC_NO("Misc_No", "&4[ NO ]"),
     MISC_OKAY("Misc_Okay", "&a[ OK ]"),
+    MISC_UNLIMITED("Misc_Unlimited", "unlimited"),
     MISC_YES("Misc_Yes", "&a[ YES ]"),
     PLAYER_BLOCK_INFO("Player_BlockInfo", "&6Block ID: &2&v1"),
     PLAYER_CHECKPOINT_REACHED("Player_CheckpointReached", "&6Checkpoint reached!"),

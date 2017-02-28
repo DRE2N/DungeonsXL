@@ -817,28 +817,31 @@ public class DGamePlayer extends DInstancePlayer {
             return;
         }
 
-        if (lives != -1) {
-            lives = lives - dPlayerDeathEvent.getLostLives();
+        if (game.getRules().getKeepInventoryOnDeath()) {
+            setRespawnInventory(event.getEntity().getInventory().getContents());
+            setRespawnArmor(event.getEntity().getInventory().getArmorContents());
+            // Delete all drops
+            for (ItemStack item : event.getDrops()) {
+                item.setType(Material.AIR);
+            }
+        }
+
+        if (getDGroup() != null && dGroup.getLives() != -1) {
+            dGroup.setLives(dGroup.getLives() - 1);
+            MessageUtil.broadcastMessage(DMessages.GROUP_DEATH.getMessage(getName(), dGroup.getName(), String.valueOf(dGroup.getLives())));
+
+        } else {
+            if (lives != -1) {
+                lives = lives - dPlayerDeathEvent.getLostLives();
+            }
 
             DGamePlayer killer = DGamePlayer.getByPlayer(player.getKiller());
+            String newLives = lives == -1 ? DMessages.MISC_UNLIMITED.getMessage() : String.valueOf(this.lives);
             if (killer != null) {
-                gameWorld.sendMessage(DMessages.PLAYER_KILLED.getMessage(getName(), killer.getName(), String.valueOf(lives)));
+                gameWorld.sendMessage(DMessages.PLAYER_KILLED.getMessage(getName(), killer.getName(), newLives));
             } else {
-                gameWorld.sendMessage(DMessages.PLAYER_DEATH.getMessage(getName(), String.valueOf(lives)));
+                gameWorld.sendMessage(DMessages.PLAYER_DEATH.getMessage(getName(), newLives));
             }
-
-            if (game.getRules().getKeepInventoryOnDeath()) {
-                setRespawnInventory(event.getEntity().getInventory().getContents());
-                setRespawnArmor(event.getEntity().getInventory().getArmorContents());
-                // Delete all drops
-                for (ItemStack item : event.getDrops()) {
-                    item.setType(Material.AIR);
-                }
-            }
-
-        } else if (getDGroup() != null && dGroup.getLives() != -1) {
-            dGroup.setLives(dGroup.getLives() - 1);
-            MessageUtil.broadcastMessage(DMessages.GROUP_DEATH.getMessage(player.getName(), String.valueOf(lives)));
         }
 
         if (isStealing()) {
@@ -851,7 +854,7 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        if (lives == 0 && ready) {
+        if ((dGroup.getLives() == 0 || lives == 0) && ready) {
             kill();
         }
 
