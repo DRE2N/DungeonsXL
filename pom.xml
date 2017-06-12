@@ -15,6 +15,8 @@
         <module>shade</module>
         <module>core</module>
         <module>abstract</module>
+        <module>rpapi-patch_1_12_R1</module>
+        <module>craftbukkit_1_12_R1</module>
         <module>rpapi-patch_1_11_R1</module>
         <module>craftbukkit_1_11_R1</module>
         <module>craftbukkit_1_10_R1</module>
@@ -25,7 +27,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -99,7 +101,7 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
             <id>citizens-repo</id>
