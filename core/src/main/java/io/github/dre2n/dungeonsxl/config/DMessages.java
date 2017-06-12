@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
-import io.github.dre2n.commons.config.Messages;
+import io.github.dre2n.commons.config.Message;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import org.bukkit.ChatColor;
@@ -29,7 +29,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  * @author Daniel Saukel
  */
-public enum DMessages implements Messages {
+public enum DMessages implements Message {
 
     ANNOUNCER_CMD("Announcer_Cmd", "&4&l=> &6USE &4/DXL JOIN &v1 &6TO JOIN &4&l<="),
     ANNOUNCER_CLICK("Announcer_Click", "&4&l=> &6CLICK HERE TO JOIN &4&l<="),
@@ -263,8 +263,8 @@ public enum DMessages implements Messages {
      * @param identifer
      * the identifer to set
      */
-    public static Messages getByIdentifier(String identifier) {
-        for (Messages message : values()) {
+    public static Message getByIdentifier(String identifier) {
+        for (Message message : values()) {
             if (message.getIdentifier().equals(identifier)) {
                 return message;
             }
