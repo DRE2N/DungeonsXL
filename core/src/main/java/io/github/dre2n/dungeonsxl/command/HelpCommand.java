@@ -45,7 +45,7 @@ public class HelpCommand extends BRCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        Set<BRCommand> dCommandList = plugin.getCommands().getCommands();
+        Set<BRCommand> dCommandList = plugin.getCommandCache().getCommands();
         ArrayList<BRCommand> toSend = new ArrayList<>();
 
         int page = 1;

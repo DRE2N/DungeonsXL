@@ -356,7 +356,7 @@ public class DungeonsXL extends BRPlugin {
      * @return the loaded instance of DCommands
      */
     @Override
-    public DCommands getCommands() {
+    public DCommands getCommandCache() {
         return dCommands;
     }
 

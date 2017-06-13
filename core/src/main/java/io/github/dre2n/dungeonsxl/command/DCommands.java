@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.commons.command.BRCommands;
+import io.github.dre2n.commons.command.BRCommandCache;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 
 /**
@@ -24,7 +24,7 @@ import io.github.dre2n.commons.javaplugin.BRPlugin;
  *
  * @author Daniel Saukel
  */
-public class DCommands extends BRCommands {
+public class DCommands extends BRCommandCache {
 
     public static BreakCommand BREAK = new BreakCommand();
     public static ChatCommand CHAT = new ChatCommand();
