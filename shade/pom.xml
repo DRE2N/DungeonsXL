@@ -74,6 +74,20 @@
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
+            <artifactId>dungeonsxl-rpapi-patch_1_12_R1</artifactId>
+            <version>${parent.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
+            <artifactId>dungeonsxl-craftbukkit_1_12_R1</artifactId>
+            <version>${parent.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dre2n</groupId>
             <artifactId>dungeonsxl-rpapi-patch_1_11_R1</artifactId>
             <version>${parent.version}</version>
             <type>jar</type>

@@ -35,7 +35,7 @@ public class DXLTest extends JavaPlugin {
     @Override
     public void onEnable() {
         // This is how you register /dxl subcommands.
-        DungeonsXL.getInstance().getCommands().addCommand(new CustomCommand());
+        DungeonsXL.getInstance().getCommandCache().addCommand(new CustomCommand());
 
         // Register the DungeonsXL events just like any Bukkit event.
         getServer().getPluginManager().registerEvents(new DGroupListener(), this);
