@@ -115,15 +115,15 @@ public class StatusCommand extends DRECommand {
             holographicdisplaysVersion = holographicdisplays.getDescription().getVersion();
         }
 
-        String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.5"));
+        String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.6"));
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
         String economyPluginCorrect = getSymbol(!DungeonsXL.getInstance().getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
         String commandsxlVersionCorrect = getSymbol(commandsxlVersion.startsWith("2.1"));
         String itemsxlVersionCorrect = getSymbol(itemsxlVersion.startsWith("0.2"));
         String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));
         String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
-        String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("2."));
-        String mythicmobsVersionCorrect = getSymbol(mythicmobsVersion.startsWith("2."));
+        String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("3."));
+        String mythicmobsVersionCorrect = getSymbol(mythicmobsVersion.startsWith("4."));
         String holographicdisplaysVersionCorrect = getSymbol(holographicdisplaysVersion.startsWith("2.2"));
 
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Dependency info:");
