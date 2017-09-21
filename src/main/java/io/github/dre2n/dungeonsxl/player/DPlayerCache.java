@@ -20,6 +20,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -60,8 +61,19 @@ public class DPlayerCache {
                 return dGlobalPlayer;
             }
         }
-
         return new DGlobalPlayer(player);
+    }
+
+    /**
+     * @return the DGlobalPlayer which represents the player with this UUID
+     */
+    public DGlobalPlayer getByUniqueId(UUID uuid) {
+        for (DGlobalPlayer dGlobalPlayer : dGlobalPlayers) {
+            if (dGlobalPlayer.getUniqueId().equals(uuid)) {
+                return dGlobalPlayer;
+            }
+        }
+        return null;
     }
 
     /**

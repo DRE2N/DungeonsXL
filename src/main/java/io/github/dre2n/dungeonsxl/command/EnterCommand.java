@@ -85,7 +85,7 @@ public class EnterCommand extends DRECommand {
         game.addDGroup(joining);
         joining.sendMessage(DMessage.CMD_ENTER_SUCCESS.getMessage(joining.getName(), target.getName()));
 
-        for (Player player : joining.getPlayers()) {
+        for (Player player : joining.getPlayers().getOnlinePlayers()) {
             DGamePlayer.create(player, game.getWorld(), game.getType());
         }
     }

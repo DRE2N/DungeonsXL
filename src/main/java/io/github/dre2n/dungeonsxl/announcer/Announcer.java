@@ -429,8 +429,8 @@ public class Announcer {
             } else if (dGroup != null) {
                 name = ChatColor.AQUA + dGroup.getName();
                 playerCount = dGroup.getPlayers().size();
-                for (Player player : dGroup.getPlayers()) {
-                    lore.add((dGroup.getCaptain() == player ? ChatColor.GOLD : ChatColor.GRAY) + player.getName());
+                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
+                    lore.add((dGroup.getCaptain().equals(player) ? ChatColor.GOLD : ChatColor.GRAY) + player.getName());
                 }
             }
 

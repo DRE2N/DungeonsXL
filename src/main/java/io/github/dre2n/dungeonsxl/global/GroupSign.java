@@ -168,7 +168,7 @@ public class GroupSign extends GlobalProtection {
                 int j = 1;
                 Sign rowSign = sign;
 
-                for (Player player : dGroup.getPlayers()) {
+                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
                     if (j > 3) {
                         j = 0;
                         rowSign = (Sign) sign.getBlock().getRelative(0, -1, 0).getState();

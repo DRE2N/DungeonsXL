@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.player;
 
 import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.commons.misc.NumberUtil;
+import io.github.dre2n.commons.player.PlayerCollection;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -59,8 +61,8 @@ public class DGroup {
 
     private String name;
     private UUID captain;
-    private List<UUID> players = new ArrayList<>();
-    private List<UUID> invitedPlayers = new ArrayList<>();
+    private PlayerCollection players = new PlayerCollection();
+    private PlayerCollection invitedPlayers = new PlayerCollection();
     private Dungeon dungeon;
     private List<DResourceWorld> unplayedFloors = new ArrayList<>();
     private DGameWorld gameWorld;
@@ -203,23 +205,19 @@ public class DGroup {
     }
 
     /**
-     * @return the players as a Set<Player>
+     * @return the players
      */
-    public List<Player> getPlayers() {
-        List<Player> players = new ArrayList<>();
-        for (UUID uuid : this.players) {
-            players.add(Bukkit.getPlayer(uuid));
-        }
+    public PlayerCollection getPlayers() {
         return players;
     }
 
     /**
      * @return the players as a Set<DGlobalPlayer>
      */
-    public List<DGlobalPlayer> getDGlobalPlayers() {
-        List<DGlobalPlayer> players = new ArrayList<>();
-        for (UUID uuid : this.players) {
-            players.add(dPlayers.getByPlayer(Bukkit.getPlayer(uuid)));
+    public Set<DGlobalPlayer> getDGlobalPlayers() {
+        Set<DGlobalPlayer> players = new HashSet<>();
+        for (UUID uuid : this.players.getUniqueIds()) {
+            players.add(dPlayers.getByUniqueId(uuid));
         }
         return players;
     }
@@ -227,10 +225,10 @@ public class DGroup {
     /**
      * @return the players as a Set<DGamePlayer>
      */
-    public List<DGamePlayer> getDGamePlayers() {
-        List<DGamePlayer> players = new ArrayList<>();
-        for (UUID uuid : this.players) {
-            DGlobalPlayer dPlayer = dPlayers.getByPlayer(Bukkit.getPlayer(uuid));
+    public Set<DGamePlayer> getDGamePlayers() {
+        Set<DGamePlayer> players = new HashSet<>();
+        for (UUID uuid : this.players.getUniqueIds()) {
+            DGlobalPlayer dPlayer = dPlayers.getByUniqueId(uuid);
             if (dPlayer instanceof DGamePlayer) {
                 players.add((DGamePlayer) dPlayer);
             }
@@ -305,13 +303,8 @@ public class DGroup {
     /**
      * @return the players
      */
-    public List<Player> getInvitedPlayers() {
-        ArrayList<Player> players = new ArrayList<>();
-        for (UUID uuid : invitedPlayers) {
-            players.add(Bukkit.getPlayer(uuid));
-        }
-
-        return players;
+    public PlayerCollection getInvitedPlayers() {
+        return invitedPlayers;
     }
 
     /**
@@ -365,7 +358,7 @@ public class DGroup {
 
         // Send message
         if (!silent) {
-            for (Player groupPlayer : getPlayers()) {
+            for (Player groupPlayer : players.getOnlinePlayers()) {
                 MessageUtil.sendMessage(groupPlayer, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.GROUP_UNINVITED_PLAYER, getCaptain().getName(), player.getName(), name));
             }
         }
@@ -378,13 +371,11 @@ public class DGroup {
      */
     public void clearOfflineInvitedPlayers() {
         ArrayList<UUID> toRemove = new ArrayList<>();
-
-        for (UUID uuid : invitedPlayers) {
+        for (UUID uuid : invitedPlayers.getUniqueIds()) {
             if (Bukkit.getPlayer(uuid) == null) {
                 toRemove.add(uuid);
             }
         }
-
         invitedPlayers.removeAll(toRemove);
     }
 
@@ -565,7 +556,7 @@ public class DGroup {
      * @return whether there are players in the group
      */
     public boolean isEmpty() {
-        return players.isEmpty();
+        return players.size() == 0;
     }
 
     /**
@@ -773,7 +764,7 @@ public class DGroup {
             }
 
             boolean ready = true;
-            for (Player player : dGroup.getPlayers()) {
+            for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
                 DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                 if (dPlayer == null) {
                     dPlayer = new DGamePlayer(player, gameWorld);
@@ -808,7 +799,7 @@ public class DGroup {
 
         floorCount++;
 
-        for (Player player : getPlayers()) {
+        for (Player player : players.getOnlinePlayers()) {
             DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             if (dPlayer == null) {
                 continue;
@@ -910,7 +901,7 @@ public class DGroup {
      * Send a message to all players in the group
      */
     public void sendMessage(String message) {
-        for (Player player : getPlayers()) {
+        for (Player player : players.getOnlinePlayers()) {
             if (player.isOnline()) {
                 MessageUtil.sendMessage(player, message);
             }
@@ -925,7 +916,7 @@ public class DGroup {
      */
     public void sendMessage(String message, Player... except) {
         HashSet<Player> exceptSet = new HashSet<>(Arrays.asList(except));
-        for (Player player : getPlayers()) {
+        for (Player player : players.getOnlinePlayers()) {
             if (player.isOnline() && !exceptSet.contains(player)) {
                 MessageUtil.sendMessage(player, message);
             }

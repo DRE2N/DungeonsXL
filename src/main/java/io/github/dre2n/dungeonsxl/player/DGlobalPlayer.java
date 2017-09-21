@@ -20,6 +20,7 @@ import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.player.PlayerUtil;
+import io.github.dre2n.commons.player.PlayerWrapper;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
@@ -28,6 +29,7 @@ import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -39,7 +41,7 @@ import org.bukkit.potion.PotionEffect;
  *
  * @author Daniel Saukel
  */
-public class DGlobalPlayer {
+public class DGlobalPlayer implements PlayerWrapper {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
 
@@ -86,18 +88,19 @@ public class DGlobalPlayer {
     }
 
     /* Getters and setters */
-    /**
-     * @return the player's name
-     */
+    @Override
     public String getName() {
         return player.getName();
     }
 
-    /**
-     * @return the Bukkit player
-     */
+    @Override
     public Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return player.getUniqueId();
     }
 
     /**

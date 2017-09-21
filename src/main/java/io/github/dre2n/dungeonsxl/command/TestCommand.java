@@ -77,7 +77,7 @@ public class TestCommand extends DRECommand {
                 return;
             }
 
-            for (Player groupPlayer : dGroup.getPlayers()) {
+            for (Player groupPlayer : dGroup.getPlayers().getOnlinePlayers()) {
                 DGamePlayer.getByPlayer(groupPlayer).ready(GameTypeDefault.TEST);
             }
 

@@ -377,7 +377,7 @@ public class Game {
     public Set<Player> getPlayers() {
         Set<Player> toReturn = new HashSet<>();
         for (DGroup dGroup : dGroups) {
-            toReturn.addAll(dGroup.getPlayers());
+            toReturn.addAll(dGroup.getPlayers().getOnlinePlayers());
         }
         return toReturn;
     }

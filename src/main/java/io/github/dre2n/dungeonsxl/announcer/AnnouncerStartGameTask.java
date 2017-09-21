@@ -41,7 +41,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             if (dGroup == null) {
                 continue;
             }
-            for (Player player : dGroup.getPlayers()) {
+            for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
                 players.add(player);
             }
         }

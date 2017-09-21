@@ -534,26 +534,33 @@ public class DGamePlayer extends DInstancePlayer {
                 }*/
 
                 // Give secure objects to other players
-                int i = 0;
-                Player groupPlayer;
-                do {
-                    groupPlayer = dGroup.getPlayers().get(i);
-                    if (groupPlayer != null) {
-                        for (ItemStack itemStack : getPlayer().getInventory()) {
-                            if (itemStack != null) {
-                                if (gameWorld.getSecureObjects().contains(itemStack)) {
-                                    groupPlayer.getInventory().addItem(itemStack);
-                                }
+                Player groupPlayer = null;
+                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
+                    if (player.isOnline()) {
+                        groupPlayer = player;
+                        break;
+                    }
+                }
+                if (groupPlayer != null) {
+                    for (ItemStack itemStack : getPlayer().getInventory()) {
+                        if (itemStack != null) {
+                            if (gameWorld.getSecureObjects().contains(itemStack)) {
+                                groupPlayer.getInventory().addItem(itemStack);
                             }
                         }
                     }
-                    i++;
-                } while (groupPlayer == null);
+                }
             }
 
             if (dGroup.getCaptain().equals(getPlayer()) && dGroup.getPlayers().size() > 0) {
                 // Captain here!
-                Player newCaptain = dGroup.getPlayers().get(0);
+                Player newCaptain = null;
+                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
+                    if (player.isOnline()) {
+                        newCaptain = player;
+                        break;
+                    }
+                }
                 dGroup.setCaptain(newCaptain);
                 if (message) {
                     MessageUtil.sendMessage(newCaptain, DMessage.PLAYER_NEW_CAPTAIN.getMessage());

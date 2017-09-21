@@ -57,7 +57,7 @@ public class TimeIsRunningTask extends BukkitRunnable {
             color = ChatColor.DARK_RED.toString();
 
         } finally {
-            for (Player player : dGroup.getPlayers()) {
+            for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
                 MessageUtil.sendActionBarMessage(player, DMessage.PLAYER_TIME_LEFT.getMessage(color, String.valueOf(timeLeft)));
 
                 DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);

@@ -254,9 +254,9 @@ public class GroupCommand extends DRECommand {
 
         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dGroup.getName() + " &4&l]");
         MessageUtil.sendMessage(sender, "&bCaptain: &e" + dGroup.getCaptain().getName());
-        String players = "";
-        for (Player player : dGroup.getPlayers()) {
-            players += (player == dGroup.getPlayers().get(0) ? "" : "&b, &e") + player.getName();
+        String players = new String();
+        for (String player : dGroup.getPlayers().getNames()) {
+            players += (players.isEmpty() ? "" : "&b, &e") + player;
         }
         MessageUtil.sendMessage(sender, "&bPlayers: &e" + players);
         MessageUtil.sendMessage(sender, "&bDungeon: &e" + (dGroup.getDungeonName() == null ? "N/A" : dGroup.getDungeonName()));

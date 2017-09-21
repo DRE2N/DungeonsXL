@@ -192,7 +192,7 @@ public class RewardChest extends GameBlock {
             }
         }
 
-        for (Player player : dGroup.getPlayers()) {
+        for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
             DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
             if (dPlayer == null) {
                 continue;

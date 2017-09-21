@@ -88,7 +88,7 @@ public class PlayCommand extends DRECommand {
         dGroup.setDungeon(dungeon);
 
         new Game(dGroup, dungeon.getMap());
-        for (Player groupPlayer : dGroup.getPlayers()) {
+        for (Player groupPlayer : dGroup.getPlayers().getOnlinePlayers()) {
             DGamePlayer.create(groupPlayer, dGroup.getGameWorld());
         }
     }
