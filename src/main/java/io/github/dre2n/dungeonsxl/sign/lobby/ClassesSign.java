@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.sign.lobby;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.player.DClass;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;

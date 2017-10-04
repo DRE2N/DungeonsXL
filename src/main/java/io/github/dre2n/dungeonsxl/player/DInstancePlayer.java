@@ -16,7 +16,6 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.util.ParsingUtil;
 import io.github.dre2n.dungeonsxl.world.DInstanceWorld;

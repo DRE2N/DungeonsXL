@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import java.util.ArrayList;
 import java.util.Arrays;

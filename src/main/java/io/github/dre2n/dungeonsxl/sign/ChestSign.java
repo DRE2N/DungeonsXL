@@ -17,7 +17,6 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.misc.NumberUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.loottable.DLootTable;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.RewardChest;

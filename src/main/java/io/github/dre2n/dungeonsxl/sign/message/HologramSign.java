@@ -24,11 +24,11 @@ import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.commons.misc.EnumUtil;
 import io.github.dre2n.commons.misc.NumberUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,6 +55,10 @@ public class HologramSign extends DSign {
 
     @Override
     public void onInit() {
+        if (Bukkit.getPluginManager().getPlugin("HolographicDisplays") == null) {
+            markAsErroneous();
+            return;
+        }
         getSign().getBlock().setType(Material.AIR);
 
         String[] holoLines = lines[1].split("/");
