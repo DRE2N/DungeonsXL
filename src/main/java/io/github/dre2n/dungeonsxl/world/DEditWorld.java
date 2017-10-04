@@ -39,7 +39,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DEditWorld extends DInstanceWorld {
 
-    DWorldCache worlds = DungeonsXL.getInstance().getDWorlds();
+    DWorldCache worlds = plugin.getDWorlds();
 
     public static String ID_FILE_PREFIX = ".id_";
 
@@ -121,7 +121,7 @@ public class DEditWorld extends DInstanceWorld {
 
         getWorld().save();
 
-        if (!DungeonsXL.getInstance().getMainConfig().areTweaksEnabled()) {
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
             FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
             FileUtil.deleteUnusedFiles(getResource().getFolder());
 
@@ -162,7 +162,7 @@ public class DEditWorld extends DInstanceWorld {
             dPlayer.leave();
         }
 
-        if (!DungeonsXL.getInstance().getMainConfig().areTweaksEnabled()) {
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
             if (save) {
                 Bukkit.unloadWorld(getWorld(), true);
             }

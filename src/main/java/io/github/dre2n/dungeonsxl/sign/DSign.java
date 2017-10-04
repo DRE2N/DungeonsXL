@@ -39,7 +39,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class DSign {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    protected DungeonsXL plugin = DungeonsXL.getInstance();
 
     public static final String ERROR_0 = ChatColor.DARK_RED + "## ERROR ##";
     public static final String ERROR_1 = ChatColor.WHITE + "Please";

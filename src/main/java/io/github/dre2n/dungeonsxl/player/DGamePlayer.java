@@ -234,7 +234,7 @@ public class DGamePlayer extends DInstancePlayer {
             return;
         }
 
-        DClass dClass = DungeonsXL.getInstance().getDClasses().getByName(className);
+        DClass dClass = plugin.getDClasses().getByName(className);
         if (dClass != null) {
             if (this.dClass != dClass) {
                 this.dClass = dClass;
@@ -513,12 +513,12 @@ public class DGamePlayer extends DInstancePlayer {
 
                     // Tutorial Permissions
                     if (game.isTutorial() && plugin.getPermissionProvider().hasGroupSupport()) {
-                        String endGroup = DungeonsXL.getInstance().getMainConfig().getTutorialEndGroup();
+                        String endGroup = plugin.getMainConfig().getTutorialEndGroup();
                         if (plugin.isGroupEnabled(endGroup)) {
                             plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
                         }
 
-                        String startGroup = DungeonsXL.getInstance().getMainConfig().getTutorialStartGroup();
+                        String startGroup = plugin.getMainConfig().getTutorialStartGroup();
                         if (plugin.isGroupEnabled(startGroup)) {
                             plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
                         }

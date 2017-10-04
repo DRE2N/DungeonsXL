@@ -33,6 +33,8 @@ import org.bukkit.plugin.PluginManager;
  */
 public class MainCommand extends DRECommand {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     public MainCommand() {
         setCommand("main");
         setHelp(DMessage.HELP_CMD_MAIN.getMessage());
@@ -47,8 +49,8 @@ public class MainCommand extends DRECommand {
 
         int maps = DungeonsXL.MAPS.listFiles().length;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = DungeonsXL.getInstance().getDWorlds().getEditWorlds().size() + DungeonsXL.getInstance().getDWorlds().getGameWorlds().size();
-        int players = DungeonsXL.getInstance().getDPlayers().getDGamePlayers().size();
+        int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
+        int players = plugin.getDPlayers().getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {
@@ -64,7 +66,7 @@ public class MainCommand extends DRECommand {
         MessageUtil.sendCenteredMessage(sender, "&4" + D[2] + "&f" + X[2] + L[2]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[3] + "&f" + X[3] + L[3]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[4] + "&f" + X[4] + L[4]);
-        MessageUtil.sendCenteredMessage(sender, "&b&l###### " + DMessage.CMD_MAIN_WELCOME.getMessage() + "&7 v" + DungeonsXL.getInstance().getDescription().getVersion() + " &b&l######");
+        MessageUtil.sendCenteredMessage(sender, "&b&l###### " + DMessage.CMD_MAIN_WELCOME.getMessage() + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, itemsxl));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP.getMessage());

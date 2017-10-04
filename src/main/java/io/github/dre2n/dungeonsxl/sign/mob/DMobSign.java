@@ -129,7 +129,7 @@ public class DMobSign extends DSign implements MobSign {
 
     @Override
     public void initializeTask() {
-        task = new MobSpawnTask(this).runTaskTimer(DungeonsXL.getInstance(), 0L, 20L);
+        task = new MobSpawnTask(this).runTaskTimer(plugin, 0L, 20L);
     }
 
     @Override

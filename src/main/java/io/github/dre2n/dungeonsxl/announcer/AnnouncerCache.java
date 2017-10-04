@@ -44,7 +44,7 @@ public class AnnouncerCache {
                 announcers.add(new Announcer(script));
             }
         }
-        startAnnouncerTask(DungeonsXL.getInstance().getMainConfig().getAnnouncmentInterval());
+        startAnnouncerTask(plugin.getMainConfig().getAnnouncmentInterval());
     }
 
     /**

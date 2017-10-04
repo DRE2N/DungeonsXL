@@ -66,7 +66,7 @@ public class DEditPlayer extends DInstancePlayer {
 
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
-            for (String permission : DungeonsXL.getInstance().getMainConfig().getEditPermissions()) {
+            for (String permission : plugin.getMainConfig().getEditPermissions()) {
                 plugin.getPermissionProvider().playerAddTransient(world.getName(), player, permission);
             }
         }
@@ -110,7 +110,7 @@ public class DEditPlayer extends DInstancePlayer {
     public void delete() {
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
-            for (String permission : DungeonsXL.getInstance().getMainConfig().getEditPermissions()) {
+            for (String permission : plugin.getMainConfig().getEditPermissions()) {
                 plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
             }
         }

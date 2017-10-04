@@ -167,7 +167,7 @@ public class ChestSign extends DSign {
         }
 
         if (!lines[2].isEmpty()) {
-            lootTable = DungeonsXL.getInstance().getDLootTables().getByName(lines[2]);
+            lootTable = plugin.getDLootTables().getByName(lines[2]);
         }
 
         if (chest == null) {

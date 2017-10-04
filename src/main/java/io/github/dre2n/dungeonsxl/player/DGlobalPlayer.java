@@ -72,7 +72,7 @@ public class DGlobalPlayer implements PlayerWrapper {
             reset(false);
         }
 
-        DungeonsXL.getInstance().getDPlayers().addPlayer(this);
+        plugin.getDPlayers().addPlayer(this);
     }
 
     public DGlobalPlayer(DGlobalPlayer dPlayer) {
@@ -84,7 +84,7 @@ public class DGlobalPlayer implements PlayerWrapper {
         respawnInventory = dPlayer.getRespawnInventory();
         respawnArmor = dPlayer.getRespawnArmor();
 
-        DungeonsXL.getInstance().getDPlayers().addPlayer(this);
+        plugin.getDPlayers().addPlayer(this);
     }
 
     /* Getters and setters */
@@ -136,7 +136,7 @@ public class DGlobalPlayer implements PlayerWrapper {
      * @return if the player is in group chat
      */
     public boolean isInGroupChat() {
-        if (!DungeonsXL.getInstance().getMainConfig().isChatEnabled()) {
+        if (!plugin.getMainConfig().isChatEnabled()) {
             return false;
         }
         return groupChat;
@@ -154,7 +154,7 @@ public class DGlobalPlayer implements PlayerWrapper {
      * @return if the player spies the DXL chat channels
      */
     public boolean isInChatSpyMode() {
-        if (!DungeonsXL.getInstance().getMainConfig().isChatEnabled()) {
+        if (!plugin.getMainConfig().isChatEnabled()) {
             return false;
         }
         return chatSpyMode;
@@ -366,8 +366,8 @@ public class DGlobalPlayer implements PlayerWrapper {
             return;
         }
 
-        final String startGroup = DungeonsXL.getInstance().getMainConfig().getTutorialStartGroup();
-        if ((DungeonsXL.getInstance().getMainConfig().getTutorialDungeon() == null || startGroup == null)) {
+        final String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+        if ((plugin.getMainConfig().getTutorialDungeon() == null || startGroup == null)) {
             return;
         }
 
@@ -375,7 +375,7 @@ public class DGlobalPlayer implements PlayerWrapper {
             plugin.getPermissionProvider().playerAddGroup(player, startGroup);
         }
 
-        DGroup dGroup = new DGroup(player, DungeonsXL.getInstance().getMainConfig().getTutorialDungeon(), false);
+        DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
 
         DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
         Bukkit.getPluginManager().callEvent(createEvent);
@@ -391,7 +391,7 @@ public class DGlobalPlayer implements PlayerWrapper {
         DGameWorld gameWorld = null;
 
         if (dGroup.getGameWorld() == null) {
-            DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(dGroup.getMapName());
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(dGroup.getMapName());
             if (resource == null) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_TUTORIAL_NOT_EXIST.getMessage());
                 return;

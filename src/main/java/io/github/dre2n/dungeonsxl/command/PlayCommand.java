@@ -38,6 +38,8 @@ import org.bukkit.entity.Player;
  */
 public class PlayCommand extends DRECommand {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     public PlayCommand() {
         setCommand("play");
         setMinArgs(1);
@@ -51,15 +53,15 @@ public class PlayCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
         if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 
-        Dungeon dungeon = DungeonsXL.getInstance().getDungeons().getByName(args[1]);
+        Dungeon dungeon = plugin.getDungeons().getByName(args[1]);
         if (dungeon == null) {
-            DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(args[1]);
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[1]);
             if (resource != null) {
                 dungeon = new Dungeon(resource);
             } else {
@@ -77,7 +79,7 @@ public class PlayCommand extends DRECommand {
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
-                DungeonsXL.getInstance().getDGroups().remove(dGroup);
+                plugin.getDGroups().remove(dGroup);
                 dGroup = null;
             }
         }

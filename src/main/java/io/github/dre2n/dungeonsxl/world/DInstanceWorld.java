@@ -31,7 +31,7 @@ import org.bukkit.World;
 public abstract class DInstanceWorld {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorldCache worlds = DungeonsXL.getInstance().getDWorlds();
+    DWorldCache worlds = plugin.getDWorlds();
 
     private DResourceWorld resourceWorld;
     private File folder;

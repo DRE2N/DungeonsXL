@@ -36,7 +36,7 @@ public class ClassesSign extends DSign {
 
     public ClassesSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
-        dClass = DungeonsXL.getInstance().getDClasses().getByName(sign.getLine(1));
+        dClass = plugin.getDClasses().getByName(sign.getLine(1));
     }
 
     /* Getters and setters */
@@ -58,7 +58,7 @@ public class ClassesSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return DungeonsXL.getInstance().getDClasses().getByName(lines[1]) != null;
+        return plugin.getDClasses().getByName(lines[1]) != null;
     }
 
     @Override

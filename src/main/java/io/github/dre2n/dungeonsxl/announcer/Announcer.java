@@ -96,7 +96,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = DungeonsXL.getInstance().getDungeons().getByName(identifier);
+            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor().getName();
             }
@@ -137,7 +137,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = DungeonsXL.getInstance().getDungeons().getByName(identifier);
+            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor().getName();
             }
@@ -423,7 +423,7 @@ public class Announcer {
             List<String> lore = new ArrayList<>();
 
             DGroup dGroup = dGroups.get(groupCount);
-            if (!DungeonsXL.getInstance().getDGroups().contains(dGroup)) {
+            if (!plugin.getDGroups().contains(dGroup)) {
                 dGroups.set(groupCount, null);
 
             } else if (dGroup != null) {
@@ -436,7 +436,7 @@ public class Announcer {
 
             boolean full = playerCount >= maxPlayersPerGroup;
 
-            ItemStack button = new ItemStack(Material.WOOL, playerCount, DungeonsXL.getInstance().getMainConfig().getGroupColorPriority().get(groupCount).getWoolData());
+            ItemStack button = new ItemStack(Material.WOOL, playerCount, plugin.getMainConfig().getGroupColorPriority().get(groupCount).getWoolData());
             ItemMeta meta = button.getItemMeta();
             meta.setDisplayName(name + (full ? ChatColor.DARK_RED : ChatColor.GREEN) + " [" + playerCount + "/" + maxPlayersPerGroup + "]");
             meta.setLore(lore);

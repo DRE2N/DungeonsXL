@@ -62,7 +62,7 @@ public class FloorSign extends DSign {
     @Override
     public void onInit() {
         if (!lines[1].isEmpty()) {
-            floor = DungeonsXL.getInstance().getDWorlds().getResourceByName(lines[1]);
+            floor = plugin.getDWorlds().getResourceByName(lines[1]);
         }
 
         if (!getTriggers().isEmpty()) {
@@ -104,7 +104,7 @@ public class FloorSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             dPlayer.finishFloor(floor);
         }
     }

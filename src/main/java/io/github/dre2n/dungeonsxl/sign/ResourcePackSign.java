@@ -61,7 +61,7 @@ public class ResourcePackSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return DungeonsXL.getInstance().getMainConfig().getResourcePacks().get(lines[1]) != null || lines[1].equalsIgnoreCase("reset");
+        return plugin.getMainConfig().getResourcePacks().get(lines[1]) != null || lines[1].equalsIgnoreCase("reset");
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ResourcePackSign extends DSign {
             // Placeholder to reset to default
             url = "http://google.com";
         } else {
-            url = DungeonsXL.getInstance().getMainConfig().getResourcePacks().get(lines[1]);
+            url = plugin.getMainConfig().getResourcePacks().get(lines[1]);
         }
 
         if (url instanceof String) {

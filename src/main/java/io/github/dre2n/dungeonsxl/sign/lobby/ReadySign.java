@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl.sign.lobby;
 
 import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.commons.misc.NumberUtil;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
@@ -88,8 +87,8 @@ public class ReadySign extends DSign {
 
     @Override
     public void onInit() {
-        if (DungeonsXL.getInstance().getGameTypes().getBySign(this) != null) {
-            gameType = DungeonsXL.getInstance().getGameTypes().getBySign(this);
+        if (plugin.getGameTypes().getBySign(this) != null) {
+            gameType = plugin.getGameTypes().getBySign(this);
 
         } else {
             gameType = GameTypeDefault.CUSTOM;
@@ -129,7 +128,7 @@ public class ReadySign extends DSign {
                 public void run() {
                     onTrigger();
                 }
-            }.runTaskLater(DungeonsXL.getInstance(), (long) (autoStart * 20));
+            }.runTaskLater(plugin, (long) (autoStart * 20));
 
             if (!DGroup.getByPlayer(player).isPlaying()) {
                 ProgressBar.sendProgressBar(getGame().getPlayers(), (int) Math.ceil(autoStart));
@@ -168,7 +167,7 @@ public class ReadySign extends DSign {
         }
 
         if (dPlayer.isReady()) {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), DungeonsXL.getInstance().getMessageConfig().getMessage(dPlayer.isReady() ? DMessage.PLAYER_READY : DMessage.ERROR_READY));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(dPlayer.isReady() ? DMessage.PLAYER_READY : DMessage.ERROR_READY));
         }
     }
 

@@ -93,8 +93,8 @@ public abstract class GlobalProtection {
     public boolean onBreak(DGlobalPlayer dPlayer) {
         if (dPlayer.isInBreakMode()) {
             delete();
-            MessageUtil.sendMessage(dPlayer.getPlayer(), DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.PLAYER_PROTECTED_BLOCK_DELETED));
-            MessageUtil.sendMessage(dPlayer.getPlayer(), DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.CMD_BREAK_PROTECTED_MODE));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), DMessage.PLAYER_PROTECTED_BLOCK_DELETED.getMessage());
+            MessageUtil.sendMessage(dPlayer.getPlayer(), DMessage.CMD_BREAK_PROTECTED_MODE.getMessage());
             dPlayer.setInBreakMode(false);
             return false;
 

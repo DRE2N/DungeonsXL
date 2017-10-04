@@ -57,7 +57,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class DGroup {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    DPlayerCache dPlayers = DungeonsXL.getInstance().getDPlayers();
+    DPlayerCache dPlayers = plugin.getDPlayers();
 
     private String name;
     private UUID captain;
@@ -81,7 +81,7 @@ public class DGroup {
     }
 
     public DGroup(String name, Player player) {
-        DungeonsXL.getInstance().getDGroups().add(this);
+        plugin.getDGroups().add(this);
         this.name = name;
 
         setCaptain(player);
@@ -103,10 +103,10 @@ public class DGroup {
 
     @Deprecated
     public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
-        DungeonsXL.getInstance().getDGroups().add(this);
+        plugin.getDGroups().add(this);
         this.name = name;
 
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(DungeonsXL.getInstance().getDPlayers().getByPlayer(captain), true, this);
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayers().getByPlayer(captain), true, this);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
@@ -120,14 +120,14 @@ public class DGroup {
             }
         }
 
-        dungeon = DungeonsXL.getInstance().getDungeons().getByName(identifier);
+        dungeon = plugin.getDungeons().getByName(identifier);
         if (multiFloor && dungeon != null) {
             // Real dungeon
             unplayedFloors = new ArrayList<>(dungeon.getConfig().getFloors());
 
         } else {
             // Artificial dungeon
-            DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(identifier);
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(identifier);
             dungeon = new Dungeon(resource);
         }
 
@@ -144,10 +144,10 @@ public class DGroup {
     }
 
     public DGroup(String name, Player captain, List<Player> players, Dungeon dungeon) {
-        DungeonsXL.getInstance().getDGroups().add(this);
+        plugin.getDGroups().add(this);
         this.name = name;
 
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(DungeonsXL.getInstance().getDPlayers().getByPlayer(captain), true, this);
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayers().getByPlayer(captain), true, this);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
@@ -287,7 +287,7 @@ public class DGroup {
         GroupSign.updatePerGroup(this);
 
         if (message) {
-            sendMessage(DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.PLAYER_LEFT_GROUP, player.getName()));
+            sendMessage(DMessage.PLAYER_LEFT_GROUP.getMessage(player.getName()));
         }
 
         if (isEmpty()) {
@@ -318,18 +318,18 @@ public class DGroup {
 
         if (DGroup.getByPlayer(player) != null) {
             if (!silent) {
-                MessageUtil.sendMessage(getCaptain(), DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.ERROR_IN_GROUP, player.getName()));
+                MessageUtil.sendMessage(getCaptain(), DMessage.ERROR_IN_GROUP.getMessage(player.getName()));
             }
             return;
         }
 
         if (!silent) {
-            MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.PLAYER_INVITED, getCaptain().getName(), name));
+            MessageUtil.sendMessage(player, DMessage.PLAYER_INVITED.getMessage(getCaptain().getName(), name));
         }
 
         // Send message
         if (!silent) {
-            sendMessage(DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.GROUP_INVITED_PLAYER, getCaptain().getName(), player.getName(), name));
+            sendMessage(DMessage.GROUP_INVITED_PLAYER.getMessage(getCaptain().getName(), player.getName(), name));
         }
 
         // Add player
@@ -347,19 +347,19 @@ public class DGroup {
 
         if (DGroup.getByPlayer(player) != this) {
             if (!silent) {
-                MessageUtil.sendMessage(getCaptain(), DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.ERROR_NOT_IN_GROUP, player.getName(), name));
+                MessageUtil.sendMessage(getCaptain(), DMessage.ERROR_NOT_IN_GROUP.getMessage(player.getName(), name));
             }
             return;
         }
 
         if (!silent) {
-            MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.PLAYER_UNINVITED, player.getName(), name));
+            MessageUtil.sendMessage(player, DMessage.PLAYER_UNINVITED.getMessage(player.getName(), name));
         }
 
         // Send message
         if (!silent) {
             for (Player groupPlayer : players.getOnlinePlayers()) {
-                MessageUtil.sendMessage(groupPlayer, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.GROUP_UNINVITED_PLAYER, getCaptain().getName(), player.getName(), name));
+                MessageUtil.sendMessage(groupPlayer, DMessage.GROUP_UNINVITED_PLAYER.getMessage(getCaptain().getName(), player.getName(), name));
             }
         }
 
@@ -421,13 +421,13 @@ public class DGroup {
      * the name of the dungeon
      */
     public boolean setDungeon(String name) {
-        dungeon = DungeonsXL.getInstance().getDungeons().getByName(name);
+        dungeon = plugin.getDungeons().getByName(name);
         if (dungeon != null) {
             unplayedFloors = dungeon.getConfig().getFloors();
             return true;
 
         } else {
-            DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(name);
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(name);
             if (resource != null) {
                 dungeon = new Dungeon(resource);
                 return true;
@@ -736,7 +736,7 @@ public class DGroup {
     public void delete() {
         Game game = Game.getByDGroup(this);
 
-        DungeonsXL.getInstance().getDGroups().remove(this);
+        plugin.getDGroups().remove(this);
 
         if (game != null) {
             game.removeDGroup(this);
@@ -756,7 +756,7 @@ public class DGroup {
         game.fetchRules();
         GameRuleProvider rules = game.getRules();
 
-        color = DungeonsXL.getInstance().getMainConfig().getGroupColorPriority().get(game.getDGroups().indexOf(this));
+        color = plugin.getMainConfig().getGroupColorPriority().get(game.getDGroups().indexOf(this));
 
         for (DGroup dGroup : game.getDGroups()) {
             if (dGroup == null) {
@@ -807,7 +807,7 @@ public class DGroup {
 
             dPlayer.respawn();
 
-            if (DungeonsXL.getInstance().getMainConfig().isSendFloorTitleEnabled()) {
+            if (plugin.getMainConfig().isSendFloorTitleEnabled()) {
                 if (rules.getTitle() != null || rules.getSubTitle() != null) {
                     String title = rules.getTitle() == null ? "" : rules.getTitle();
                     String subtitle = rules.getSubTitle() == null ? "" : rules.getSubTitle();

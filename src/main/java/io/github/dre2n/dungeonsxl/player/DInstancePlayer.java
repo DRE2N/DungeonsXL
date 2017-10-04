@@ -31,7 +31,7 @@ import org.bukkit.potion.PotionEffect;
  */
 public abstract class DInstancePlayer extends DGlobalPlayer {
 
-    MainConfig config = DungeonsXL.getInstance().getMainConfig();
+    MainConfig config = plugin.getMainConfig();
 
     private World world;
 
@@ -90,7 +90,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
             new DGlobalPlayer(this);
 
         } else {
-            DungeonsXL.getInstance().getDPlayers().removePlayer(this);
+            plugin.getDPlayers().removePlayer(this);
         }
     }
 
@@ -101,13 +101,13 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
      * the message to send
      */
     public void chat(String message) {
-        DInstanceWorld instance = DungeonsXL.getInstance().getDWorlds().getInstanceByWorld(world);
+        DInstanceWorld instance = plugin.getDWorlds().getInstanceByWorld(world);
         if (instance == null) {
             return;
         }
         instance.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatGame(), this) + message);
 
-        for (DGlobalPlayer player : DungeonsXL.getInstance().getDPlayers().getDGlobalPlayers()) {
+        for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
             if (player.isInChatSpyMode()) {
                 if (!instance.getWorld().getPlayers().contains(player.getPlayer())) {
                     player.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatSpy(), this) + message);

@@ -62,14 +62,13 @@ import org.bukkit.inventory.meta.BookMeta;
  */
 public class DPlayerListener implements Listener {
 
-    DungeonsXL plugin;
+    DungeonsXL plugin = DungeonsXL.getInstance();
     DPlayerCache dPlayers;
-    MainConfig config = DungeonsXL.getInstance().getMainConfig();
+    MainConfig config = plugin.getMainConfig();
 
     public static final String ALL = "@all ";
 
     public DPlayerListener(DPlayerCache dPlayers) {
-        this.plugin = DungeonsXL.getInstance();
         this.dPlayers = dPlayers;
     }
 
@@ -378,7 +377,7 @@ public class DPlayerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-        MainConfig config = DungeonsXL.getInstance().getMainConfig();
+        MainConfig config = plugin.getMainConfig();
 
         if (!config.isTutorialActivated()) {
             return;
@@ -401,7 +400,7 @@ public class DPlayerListener implements Listener {
                 continue;
             }
 
-            if (DungeonsXL.getInstance().getDWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
+            if (plugin.getDWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
                 event.setResult(PlayerLoginEvent.Result.KICK_FULL);
                 event.setKickMessage(DMessage.ERROR_TOO_MANY_TUTORIALS.getMessage());
             }
@@ -470,7 +469,7 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        DungeonsXL.getInstance().getDPlayers().getByPlayer(player).applyRespawnInventory();
+        plugin.getDPlayers().getByPlayer(player).applyRespawnInventory();
 
         DGlobalPlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {

@@ -53,7 +53,7 @@ public class ReloadCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        List<DInstancePlayer> dPlayers = DungeonsXL.getInstance().getDPlayers().getDInstancePlayers();
+        List<DInstancePlayer> dPlayers = plugin.getDPlayers().getDInstancePlayers();
         if (!dPlayers.isEmpty() && args.length == 1 && CompatibilityHandler.getInstance().isSpigot() && sender instanceof Player) {
             MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_PLAYERS.getMessage());
             ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -force");
@@ -78,8 +78,8 @@ public class ReloadCommand extends DRECommand {
 
         int maps = DungeonsXL.MAPS.listFiles().length;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = DungeonsXL.getInstance().getDWorlds().getEditWorlds().size() + DungeonsXL.getInstance().getDWorlds().getGameWorlds().size();
-        int players = DungeonsXL.getInstance().getDPlayers().getDGamePlayers().size();
+        int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
+        int players = plugin.getDPlayers().getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {

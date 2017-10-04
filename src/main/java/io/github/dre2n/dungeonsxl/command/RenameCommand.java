@@ -38,6 +38,8 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public class RenameCommand extends DRECommand {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     public RenameCommand() {
         setCommand("rename");
         setMinArgs(2);
@@ -50,7 +52,7 @@ public class RenameCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(args[1]);
+        DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[1]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
@@ -60,7 +62,7 @@ public class RenameCommand extends DRECommand {
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
         resource.getSignData().updateFile(resource);
 
-        for (Dungeon dungeon : DungeonsXL.getInstance().getDungeons().getDungeons()) {
+        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
             DungeonConfig dConfig = dungeon.getConfig();
             FileConfiguration config = dConfig.getConfig();
             File file = dConfig.getFile();
@@ -90,7 +92,7 @@ public class RenameCommand extends DRECommand {
         }
 
         boolean changed = false;
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections()) {
+        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections()) {
             if (protection instanceof GroupSign) {
                 Dungeon dungeon = ((GroupSign) protection).getDungeon();
                 if (dungeon.getName().equals(args[1])) {
@@ -108,7 +110,7 @@ public class RenameCommand extends DRECommand {
         }
 
         if (changed) {
-            DungeonsXL.getInstance().getGlobalProtections().saveAll();
+            plugin.getGlobalProtections().saveAll();
         }
 
         MessageUtil.sendMessage(sender, DMessage.CMD_RENAME_SUCCESS.getMessage(args[1], args[2]));

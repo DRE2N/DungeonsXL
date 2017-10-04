@@ -34,7 +34,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class DPlayerCache {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig mainConfig = DungeonsXL.getInstance().getMainConfig();
+    MainConfig mainConfig = plugin.getMainConfig();
 
     private BukkitTask secureModeTask;
     private BukkitTask updateTask;

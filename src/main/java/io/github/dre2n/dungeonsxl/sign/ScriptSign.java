@@ -44,12 +44,12 @@ public class ScriptSign extends DSign {
 
     @Override
     public boolean check() {
-        return DungeonsXL.getInstance().getSignScripts().getByName(lines[1]) != null;
+        return plugin.getSignScripts().getByName(lines[1]) != null;
     }
 
     @Override
     public void onInit() {
-        SignScript script = DungeonsXL.getInstance().getSignScripts().getByName(name);
+        SignScript script = plugin.getSignScripts().getByName(name);
         for (String[] lines : script.getSigns()) {
             DSign dSign = DSign.create(getSign(), lines, getGameWorld());
             getGameWorld().getDSigns().add(dSign);

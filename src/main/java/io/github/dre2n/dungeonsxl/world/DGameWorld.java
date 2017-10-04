@@ -119,7 +119,7 @@ public class DGameWorld extends DInstanceWorld {
      */
     public Game getGame() {
         if (game == null) {
-            for (Game game : DungeonsXL.getInstance().getGames()) {
+            for (Game game : plugin.getGames()) {
                 if (game.getWorld() == this) {
                     this.game = game;
                 }
@@ -434,7 +434,7 @@ public class DGameWorld extends DInstanceWorld {
      * @return the Dungeon that contains the DGameWorld
      */
     public Dungeon getDungeon() {
-        for (Dungeon dungeon : DungeonsXL.getInstance().getDungeons().getDungeons()) {
+        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
             if (dungeon.getConfig().containsFloor(getResource())) {
                 return dungeon;
             }
@@ -493,7 +493,7 @@ public class DGameWorld extends DInstanceWorld {
             return;
         }
 
-        if (!DungeonsXL.getInstance().getMainConfig().areTweaksEnabled()) {
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
             Bukkit.unloadWorld(getWorld(), false);
             FileUtil.removeDirectory(getFolder());
             worlds.removeInstance(this);

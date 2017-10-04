@@ -47,7 +47,7 @@ public class ExternalMobProviderCache {
         }
 
         // Custom providers
-        for (Entry<String, Object> customExternalMobProvider : DungeonsXL.getInstance().getMainConfig().getExternalMobProviders().entrySet()) {
+        for (Entry<String, Object> customExternalMobProvider : plugin.getMainConfig().getExternalMobProviders().entrySet()) {
             providers.add(new CustomExternalMobProvider(customExternalMobProvider));
         }
     }

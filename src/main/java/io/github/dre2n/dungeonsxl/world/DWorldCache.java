@@ -38,7 +38,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class DWorldCache {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig mainConfig = DungeonsXL.getInstance().getMainConfig();
+    MainConfig mainConfig = plugin.getMainConfig();
 
     public static final File RAW = new File(DungeonsXL.MAPS, ".raw");
 

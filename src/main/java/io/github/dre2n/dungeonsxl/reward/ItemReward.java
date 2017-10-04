@@ -80,7 +80,7 @@ public class ItemReward extends Reward {
 
         } else {
             new DLootInventory(player, items.subList(0, 54).toArray(new ItemStack[54]));
-            DungeonsXL.getInstance().getDPlayers().getByPlayer(player).setRewardItems(new CopyOnWriteArrayList<>(items.subList(54, items.size())));
+            plugin.getDPlayers().getByPlayer(player).setRewardItems(new CopyOnWriteArrayList<>(items.subList(54, items.size())));
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_REWARDS.getMessage());
         }
     }

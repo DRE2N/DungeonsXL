@@ -410,7 +410,7 @@ public class GroupSign extends GlobalProtection {
         }
 
         if (DGroup.getByPlayer(player) != null) {
-            MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.ERROR_LEAVE_GROUP));
+            MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return true;
         }
 

@@ -34,10 +34,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class GlobalProtectionCache {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     private Set<GlobalProtection> protections = new HashSet<>();
 
     public GlobalProtectionCache() {
-        Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(), DungeonsXL.getInstance());
+        Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(), plugin);
     }
 
     /**
@@ -101,7 +103,7 @@ public class GlobalProtectionCache {
      * Save all protections to the default file
      */
     public void saveAll() {
-        saveAll(DungeonsXL.getInstance().getGlobalData().getConfig());
+        saveAll(plugin.getGlobalData().getConfig());
     }
 
     /**
@@ -122,7 +124,7 @@ public class GlobalProtectionCache {
             protection.save(config);
         }
 
-        DungeonsXL.getInstance().getGlobalData().save();
+        plugin.getGlobalData().save();
     }
 
     /**
@@ -159,7 +161,7 @@ public class GlobalProtectionCache {
     /* SUBJECT TO CHANGE */
     @Deprecated
     public void loadAll() {
-        FileConfiguration data = DungeonsXL.getInstance().getGlobalData().getConfig();
+        FileConfiguration data = plugin.getGlobalData().getConfig();
 
         for (World world : Bukkit.getWorlds()) {
             // GameSigns

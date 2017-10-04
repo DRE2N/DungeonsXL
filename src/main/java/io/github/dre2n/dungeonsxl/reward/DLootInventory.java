@@ -37,7 +37,7 @@ public class DLootInventory {
     public DLootInventory(Player player, ItemStack[] itemStacks) {
         DungeonsXL.getInstance().getDLootInventories().add(this);
 
-        inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.PLAYER_TREASURES)));
+        inventory = Bukkit.createInventory(player, 54, ChatColor.translateAlternateColorCodes('&', DMessage.PLAYER_TREASURES.getMessage()));
         for (ItemStack itemStack : itemStacks) {
             if (itemStack != null) {
                 inventory.addItem(itemStack);

@@ -213,7 +213,7 @@ public class DResourceWorld {
 
         final DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
 
-        if (!DungeonsXL.getInstance().getMainConfig().areTweaksEnabled()) {
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
             FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
             instance.world = Bukkit.createWorld(WorldCreator.name(name));
 
@@ -288,7 +288,7 @@ public class DResourceWorld {
             return null;
         }
 
-        if (!DungeonsXL.getInstance().getMainConfig().areTweaksEnabled()) {
+        if (!plugin.getMainConfig().areTweaksEnabled()) {
             editWorld.world = creator.createWorld();
 
         } else {

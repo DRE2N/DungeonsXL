@@ -436,17 +436,17 @@ public class GameSign extends GlobalProtection {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup == null) {
-            MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return true;
         }
 
         if (!dGroup.getCaptain().equals(player)) {
-            MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.ERROR_NOT_CAPTAIN));
+            MessageUtil.sendMessage(player, DMessage.ERROR_NOT_CAPTAIN.getMessage());
             return true;
         }
 
         if (Game.getByDGroup(dGroup) != null) {
-            MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.ERROR_LEAVE_GAME));
+            MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GAME.getMessage());
             return true;
         }
 

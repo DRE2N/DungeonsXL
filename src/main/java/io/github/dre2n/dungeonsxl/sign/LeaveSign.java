@@ -81,7 +81,7 @@ public class LeaveSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
             DGamePlayerEscapeEvent event = new DGamePlayerEscapeEvent(dPlayer);
             Bukkit.getPluginManager().callEvent(event);
 

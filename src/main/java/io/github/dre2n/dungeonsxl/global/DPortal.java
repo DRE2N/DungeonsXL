@@ -182,7 +182,7 @@ public class DPortal extends GlobalProtection {
         DGroup dGroup = DGroup.getByPlayer(player);
 
         if (dGroup == null) {
-            MessageUtil.sendMessage(player, DungeonsXL.getInstance().getMessageConfig().getMessage(DMessage.ERROR_JOIN_GROUP));
+            MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 

@@ -61,7 +61,7 @@ public class HologramSign extends DSign {
         Location location = getSign().getLocation();
         location = location.add(0.5, NumberUtil.parseDouble(lines[2]), 0.5);
 
-        hologram = HologramsAPI.createHologram(DungeonsXL.getInstance(), location);
+        hologram = HologramsAPI.createHologram(plugin, location);
         for (String line : holoLines) {
             if (line.startsWith("Item:")) {
                 String id = line.replace("Item:", "");

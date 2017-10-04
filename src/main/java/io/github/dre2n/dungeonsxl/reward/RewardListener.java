@@ -39,6 +39,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardListener implements Listener {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
@@ -46,7 +48,7 @@ public class RewardListener implements Listener {
         }
         Player player = (Player) event.getPlayer();
 
-        for (DLootInventory inventory : DungeonsXL.getInstance().getDLootInventories()) {
+        for (DLootInventory inventory : plugin.getDLootInventories()) {
             if (event.getView() != inventory.getInventoryView()) {
                 continue;
             }
@@ -61,7 +63,7 @@ public class RewardListener implements Listener {
                 }
             }
 
-            DungeonsXL.getInstance().getDLootInventories().remove(inventory);
+            plugin.getDLootInventories().remove(inventory);
         }
     }
 
@@ -94,7 +96,7 @@ public class RewardListener implements Listener {
             event.setCancelled(true);
         }
 
-        if (!DungeonsXL.getInstance().getMainConfig().getOpenInventories() && !DPermissions.hasPermission(event.getPlayer(), DPermissions.INSECURE)) {
+        if (!plugin.getMainConfig().getOpenInventories() && !DPermissions.hasPermission(event.getPlayer(), DPermissions.INSECURE)) {
             World world = event.getPlayer().getWorld();
             if (event.getInventory().getType() != InventoryType.CREATIVE && DEditWorld.getByWorld(world) != null) {
                 event.setCancelled(true);
@@ -105,7 +107,7 @@ public class RewardListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (DungeonsXL.getInstance().getDWorlds().getInstanceByWorld(player.getWorld()) != null) {
+        if (plugin.getDWorlds().getInstanceByWorld(player.getWorld()) != null) {
             return;
         }
         DLootInventory inventory = DLootInventory.getByPlayer(player);

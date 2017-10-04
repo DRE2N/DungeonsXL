@@ -48,6 +48,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class Game {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+    
     private boolean tutorial;
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;
@@ -73,7 +75,7 @@ public class Game {
     }
 
     public Game(DGroup dGroup, DGameWorld world) {
-        DungeonsXL.getInstance().getGames().add(this);
+        plugin.getGames().add(this);
 
         tutorial = false;
         started = false;
@@ -88,7 +90,7 @@ public class Game {
     }
 
     public Game(DGroup dGroup, DResourceWorld resource) {
-        DungeonsXL.getInstance().getGames().add(this);
+        plugin.getGames().add(this);
 
         tutorial = false;
         started = false;
@@ -108,7 +110,7 @@ public class Game {
     }
 
     public Game(List<DGroup> dGroups, GameType type, DGameWorld world) {
-        DungeonsXL.getInstance().getGames().add(this);
+        plugin.getGames().add(this);
 
         this.dGroups = dGroups;
         this.type = type;
@@ -269,7 +271,7 @@ public class Game {
             finalRules.apply(dungeonConfig.getDefaultValues());
         }
 
-        finalRules.apply(DungeonsXL.getInstance().getMainConfig().getDefaultWorldConfig());
+        finalRules.apply(plugin.getMainConfig().getDefaultWorldConfig());
 
         finalRules.apply(GameRuleProvider.DEFAULT_VALUES);
 
@@ -396,7 +398,7 @@ public class Game {
     public void delete() {
         GameSign gameSign = GameSign.getByGame(this);
 
-        DungeonsXL.getInstance().getGames().remove(this);
+        plugin.getGames().remove(this);
 
         if (gameSign != null) {
             gameSign.update();
@@ -445,7 +447,7 @@ public class Game {
                     mobSign.initializeTask();
                 }
             }
-        }.runTaskLater(DungeonsXL.getInstance(), delay * 20);
+        }.runTaskLater(plugin, delay * 20);
     }
 
     /**

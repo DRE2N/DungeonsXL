@@ -45,6 +45,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class GlobalProtectionListener implements Listener {
 
+    DungeonsXL plugin = DungeonsXL.getInstance();
+
     @EventHandler
     public void onBlockBreakWithSignOnIt(BlockBreakEvent event) {
         Block block = event.getBlock();
@@ -73,9 +75,9 @@ public class GlobalProtectionListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        DGlobalPlayer dGlobalPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
 
-        GlobalProtection protection = DungeonsXL.getInstance().getGlobalProtections().getByBlock(block);
+        GlobalProtection protection = plugin.getGlobalProtections().getByBlock(block);
         if (protection != null) {
             if (protection.onBreak(dGlobalPlayer)) {
                 event.setCancelled(true);
@@ -101,7 +103,7 @@ public class GlobalProtectionListener implements Listener {
     public void onEntityExplode(EntityExplodeEvent event) {
         List<Block> blocklist = event.blockList();
         for (Block block : blocklist) {
-            if (DungeonsXL.getInstance().getGlobalProtections().isProtectedBlock(block)) {
+            if (plugin.getGlobalProtections().isProtectedBlock(block)) {
                 event.setCancelled(true);
             }
         }
@@ -138,7 +140,7 @@ public class GlobalProtectionListener implements Listener {
 
     @EventHandler
     public void onPortalCreation(PlayerInteractEvent event) {
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(event.getPlayer());
+        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(event.getPlayer());
         if (!dPlayer.isCreatingPortal()) {
             return;
         }
@@ -148,7 +150,7 @@ public class GlobalProtectionListener implements Listener {
             return;
         }
 
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(DPortal.class)) {
+        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(DPortal.class)) {
             DPortal dPortal = (DPortal) protection;
             if (dPortal.isActive() || dPortal != dPlayer.getPortal()) {
                 continue;
@@ -175,7 +177,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (DungeonsXL.getInstance().getDPlayers().getByPlayer(player).isInBreakMode()) {
+        if (plugin.getDPlayers().getByPlayer(player).isInBreakMode()) {
             return;
         }
         Block clickedBlock = event.getClickedBlock();
@@ -245,7 +247,7 @@ public class GlobalProtectionListener implements Listener {
                 if (block.getState() instanceof Sign) {
                     Sign sign = (Sign) block.getState();
 
-                    new LeaveSign(DungeonsXL.getInstance().getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
+                    new LeaveSign(plugin.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
                 }
 
                 event.setCancelled(true);
