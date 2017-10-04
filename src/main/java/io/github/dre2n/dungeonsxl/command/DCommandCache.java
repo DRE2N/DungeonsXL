@@ -16,7 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.command;
 
+import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.commons.command.DRECommandCache;
+import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.javaplugin.DREPlugin;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 
@@ -49,7 +51,7 @@ public class DCommandCache extends DRECommandCache {
     public static MsgCommand MESSAGE = new MsgCommand();
     public static PlayCommand PLAY = new PlayCommand();
     public static PortalCommand PORTAL = new PortalCommand();
-    public static ReloadCommand RELOAD = new ReloadCommand();
+    public static DRECommand RELOAD = CompatibilityHandler.getInstance().isSpigot() ? new ReloadCommand() : new ReloadCommandNoSpigot();
     public static RenameCommand RENAME = new RenameCommand();
     public static ResourcePackCommand RESOURCE_PACK = new ResourcePackCommand();
     public static RewardsCommand REWARDS = new RewardsCommand();
