@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.util.DColor;
 import io.github.dre2n.dungeonsxl.util.GUIUtil;
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Wool;
 
 /**
  * Represents a game announcement.
@@ -356,7 +358,6 @@ public class Announcer {
         updateButtons();
         Inventory gui = GUIUtil.createGUI(plugin, ChatColor.DARK_RED + name, buttons);
         plugin.addGUI(gui);
-        player.closeInventory();
         player.openInventory(gui);
     }
 
@@ -367,6 +368,7 @@ public class Announcer {
     public void clickGroupButton(Player player, ItemStack button) {
         DGroup dGroup = getDGroupByButton(button);
         DGroup pGroup = DGroup.getByPlayer(player);
+        DColor color = DColor.getByDyeColor(((Wool) button.getData()).getColor());
 
         for (DGroup group : dGroups) {
             if (dGroups.contains(pGroup) && pGroup != null && pGroup.isCustom() && pGroup.getCaptain() == player) {
@@ -387,14 +389,16 @@ public class Announcer {
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.ANNOUNCER);
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                dGroups.set(buttons.indexOf(button), new DGroup(player));
+                dGroups.set(buttons.indexOf(button), new DGroup(player, color));
             }
 
         } else if (dGroup == null && pGroup != null) {
+            pGroup.setName(color);
             dGroups.set(buttons.indexOf(button), pGroup);
 
         } else if (pGroup != null && dGroups.contains(pGroup) && pGroup != dGroup) {
             dGroups.set(dGroups.indexOf(pGroup), null);
+            pGroup.setName(color);
             dGroups.set(buttons.indexOf(button), pGroup);
         }
 

@@ -21,6 +21,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitTask;
@@ -45,6 +46,7 @@ public class AnnouncerCache {
             }
         }
         startAnnouncerTask(plugin.getMainConfig().getAnnouncmentInterval());
+        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(), plugin);
     }
 
     /**

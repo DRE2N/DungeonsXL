@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Links different color types together.
@@ -77,6 +78,34 @@ public enum DColor {
      */
     public byte getWoolData() {
         return dye.getWoolData();
+    }
+
+    /**
+     * @param color
+     * the DyeColor to check
+     * @return the matching DColor or null
+     */
+    public static DColor getByDyeColor(DyeColor color) {
+        for (DColor dColor : values()) {
+            if (dColor.dye == color) {
+                return dColor;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param color
+     * the ChatColor to check
+     * @return the matching DColor or null
+     */
+    public static DColor getByChatColor(ChatColor color) {
+        for (DColor dColor : values()) {
+            if (dColor.chat == color) {
+                return dColor;
+            }
+        }
+        return null;
     }
 
 }

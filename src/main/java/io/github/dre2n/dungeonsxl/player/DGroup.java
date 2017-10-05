@@ -77,7 +77,11 @@ public class DGroup {
     private int lives = -1;
 
     public DGroup(Player player) {
-        this(DungeonsXL.getInstance().getMainConfig().getGroupColorPriority().get(DungeonsXL.getInstance().getDGroups().size()).toString(), player);
+        this("Group " + DungeonsXL.getInstance().getDGroups().size(), player);
+    }
+
+    public DGroup(Player player, DColor color) {
+        this(color.toString().replace("_", " "), player);
     }
 
     public DGroup(String name, Player player) {
@@ -187,6 +191,14 @@ public class DGroup {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @param name
+     * the name to set
+     */
+    public void setName(DColor color) {
+        name = color.toString().replace("_", " ");
     }
 
     /**
