@@ -23,6 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Wool;
 
 /**
  * @author Daniel Saukel
@@ -37,9 +38,9 @@ public class AnnouncerListener implements Listener {
         Player player = (Player) event.getWhoClicked();
 
         Inventory gui = event.getInventory();
-        ItemStack button = gui.getItem(event.getSlot());
+        ItemStack button = event.getCurrentItem();
         Announcer announcer = DungeonsXL.getInstance().getAnnouncers().getByGUI(gui);
-        if (announcer != null) {
+        if (announcer != null && button != null && button.getData() instanceof Wool) {
             announcer.clickGroupButton(player, button);
         }
     }
