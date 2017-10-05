@@ -26,11 +26,11 @@ import java.util.List;
  *
  * @author Daniel Saukel
  */
-public class SignScripts {
+public class SignScriptCache {
 
     private List<SignScript> scripts = new ArrayList<>();
 
-    public SignScripts(File file) {
+    public SignScriptCache(File file) {
         if (file.isDirectory()) {
             for (File script : FileUtil.getFilesForFolder(file)) {
                 scripts.add(new SignScript(script));

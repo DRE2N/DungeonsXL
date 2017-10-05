@@ -54,7 +54,6 @@ public class DCommandCache extends DRECommandCache {
     public static DRECommand RELOAD = CompatibilityHandler.getInstance().isSpigot() ? new ReloadCommand() : new ReloadCommandNoSpigot();
     public static RenameCommand RENAME = new RenameCommand();
     public static ResourcePackCommand RESOURCE_PACK = new ResourcePackCommand();
-    public static RewardsCommand REWARDS = new RewardsCommand();
     public static SaveCommand SAVE = new SaveCommand();
     public static StatusCommand STATUS = new StatusCommand();
     public static TestCommand TEST = new TestCommand();
@@ -85,7 +84,6 @@ public class DCommandCache extends DRECommandCache {
                 RELOAD,
                 RENAME,
                 RESOURCE_PACK,
-                REWARDS,
                 SAVE,
                 STATUS,
                 TEST,

@@ -17,7 +17,10 @@
 package io.github.dre2n.dungeonsxl.reward;
 
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.config.DMessage;
+import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.util.PageGUI;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.RewardChest;
@@ -27,7 +30,6 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -40,8 +42,8 @@ import org.bukkit.inventory.ItemStack;
 public class RewardListener implements Listener {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    
-    @EventHandler
+
+    /*@EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
             return;
@@ -49,7 +51,7 @@ public class RewardListener implements Listener {
         Player player = (Player) event.getPlayer();
 
         for (DLootInventory inventory : plugin.getDLootInventories()) {
-            if (event.getView() != inventory.getInventoryView()) {
+            if (PageGUI.getByInventory() != inventory.getInventory()) {
                 continue;
             }
 
@@ -65,8 +67,7 @@ public class RewardListener implements Listener {
 
             plugin.getDLootInventories().remove(inventory);
         }
-    }
-
+    }*/
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
@@ -107,15 +108,21 @@ public class RewardListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
         if (plugin.getDWorlds().getInstanceByWorld(player.getWorld()) != null) {
             return;
         }
-        DLootInventory inventory = DLootInventory.getByPlayer(player);
-        if (inventory != null && player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
+        if (dPlayer.hasRewardItemsLeft() && player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
                 && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(-1, 0, 0).getType() != Material.PORTAL
                 && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
-            inventory.setInventoryView(player.openInventory(inventory.getInventory()));
-            inventory.setTime(System.currentTimeMillis());
+            PageGUI lootInventory = new PageGUI(DMessage.PLAYER_TREASURES.getMessage(), true);
+            for (ItemStack item : dPlayer.getRewardItems()) {
+                if (item != null) {
+                    lootInventory.addButton(item);
+                }
+            }
+            lootInventory.open(player);
+            dPlayer.setRewardItems(null);
         }
     }
 

@@ -29,8 +29,8 @@ import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -58,7 +58,7 @@ public class DGlobalPlayer implements PlayerWrapper {
 
     private ItemStack[] respawnInventory;
     private ItemStack[] respawnArmor;
-    private CopyOnWriteArrayList<ItemStack> rewardItems;
+    private List<ItemStack> rewardItems;
 
     public DGlobalPlayer(Player player) {
         this(player, false);
@@ -276,7 +276,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     /**
      * @return the reward items
      */
-    public CopyOnWriteArrayList<ItemStack> getRewardItems() {
+    public List<ItemStack> getRewardItems() {
         return rewardItems;
     }
 
@@ -291,7 +291,7 @@ public class DGlobalPlayer implements PlayerWrapper {
      * @param rewardItems
      * the reward items to set
      */
-    public void setRewardItems(CopyOnWriteArrayList<ItemStack> rewardItems) {
+    public void setRewardItems(List<ItemStack> rewardItems) {
         this.rewardItems = rewardItems;
     }
 

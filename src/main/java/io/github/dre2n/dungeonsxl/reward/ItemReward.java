@@ -16,12 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.reward;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.dungeonsxl.config.DMessage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -38,16 +35,16 @@ public class ItemReward extends Reward {
     /**
      * @return the reward items
      */
-    public ItemStack[] getItems() {
-        return items.toArray(new ItemStack[items.size()]);
+    public List<ItemStack> getItems() {
+        return items;
     }
 
     /**
      * @param items
      * the reward items to set
      */
-    public void setItems(ItemStack[] items) {
-        this.items = Arrays.asList(items);
+    public void setItems(List<ItemStack> items) {
+        this.items = items;
     }
 
     /**
@@ -74,14 +71,7 @@ public class ItemReward extends Reward {
     /* Actions */
     @Override
     public void giveTo(Player player) {
-        if (items.size() <= 54) {
-            new DLootInventory(player, getItems());
-
-        } else {
-            new DLootInventory(player, items.subList(0, 54).toArray(new ItemStack[54]));
-            plugin.getDPlayers().getByPlayer(player).setRewardItems(new CopyOnWriteArrayList<>(items.subList(54, items.size())));
-            MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_REWARDS.getMessage());
-        }
+        plugin.getDPlayers().getByPlayer(player).setRewardItems(items);
     }
 
 }

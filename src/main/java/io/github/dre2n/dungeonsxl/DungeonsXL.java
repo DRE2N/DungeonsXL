@@ -39,12 +39,12 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DPermissions;
 import io.github.dre2n.dungeonsxl.player.DPlayerCache;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypeCache;
-import io.github.dre2n.dungeonsxl.reward.DLootInventory;
 import io.github.dre2n.dungeonsxl.reward.RewardTypeCache;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeCache;
-import io.github.dre2n.dungeonsxl.sign.SignScripts;
+import io.github.dre2n.dungeonsxl.sign.SignScriptCache;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypeCache;
 import io.github.dre2n.dungeonsxl.util.NoReload;
+import io.github.dre2n.dungeonsxl.util.PageGUICache;
 import io.github.dre2n.dungeonsxl.world.DWorldCache;
 import java.io.File;
 import java.util.List;
@@ -92,10 +92,10 @@ public class DungeonsXL extends DREPlugin {
     private DClasses dClasses;
     private DLootTableCache dLootTables;
     private DMobTypeCache dMobTypes;
-    private SignScripts signScripts;
+    private SignScriptCache signScripts;
     private DWorldCache dWorlds;
+    private PageGUICache pageGUIs;
 
-    private CopyOnWriteArrayList<DLootInventory> dLootInventories = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
 
@@ -142,8 +142,6 @@ public class DungeonsXL extends DREPlugin {
             dPlayer.leave();
         }
 
-        // Delete all Data
-        dLootInventories.clear();
         dGroups.clear();
 
         // Delete DWorlds
@@ -245,6 +243,7 @@ public class DungeonsXL extends DREPlugin {
         loadDMobTypes(MOBS);
         loadSignScripts(SIGNS);
         loadDCommandCache();
+        loadPageGUICache();
     }
 
     // Save and load
@@ -342,7 +341,7 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
-     * load / reload a new instance of DSignTypes
+     * load / reload a new instance of DSignTypeCache
      */
     public void loadDSigns() {
         dSigns = new DSignTypeCache();
@@ -356,7 +355,7 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
-     * load / reload a new instance of GameTypes
+     * load / reload a new instance of GameTypeCache
      */
     public void loadGameTypes() {
         gameTypes = new GameTypeCache();
@@ -370,7 +369,7 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
-     * load / reload a new instance of RequirementTypes
+     * load / reload a new instance of RequirementTypeCache
      */
     public void loadRequirementTypes() {
         requirementTypes = new RequirementTypeCache();
@@ -384,7 +383,7 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
-     * load / reload a new instance of RewardTypes
+     * load / reload a new instance of RewardTypeCache
      */
     public void loadRewardTypes() {
         rewardTypes = new RewardTypeCache();
@@ -398,157 +397,165 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
-     * load / reload a new instance of TriggerTypes
+     * load / reload a new instance of TriggerTypeCache
      */
     public void loadTriggers() {
         triggers = new TriggerTypeCache();
     }
 
     /**
-     * @return the loaded instance of Dungeons
+     * @return the loaded instance of DungeonCache
      */
     public DungeonCache getDungeons() {
         return dungeons;
     }
 
     /**
-     * load / reload a new instance of Dungeons
+     * load / reload a new instance of DungeonCache
      */
     public void loadDungeons(File file) {
         dungeons = new DungeonCache(file);
     }
 
     /**
-     * @return the loaded instance of GlobalProtections
+     * @return the loaded instance of GlobalProtectionCache
      */
     public GlobalProtectionCache getGlobalProtections() {
         return protections;
     }
 
     /**
-     * load / reload a new instance of GlobalProtections
+     * load / reload a new instance of GlobalProtectionCache
      */
     public void loadGlobalProtections() {
         protections = new GlobalProtectionCache();
     }
 
     /**
-     * @return the loaded instance of ExternalMobProviders
+     * @return the loaded instance of ExternalMobProviderCache
      */
     public ExternalMobProviderCache getExternalMobProviders() {
         return dMobProviders;
     }
 
     /**
-     * load / reload a new instance of ExternalMobProviders
+     * load / reload a new instance of ExternalMobProviderCache
      */
     public void loadExternalMobProviders() {
         dMobProviders = new ExternalMobProviderCache();
     }
 
     /**
-     * @return the loaded instance of DPlayers
+     * @return the loaded instance of DPlayerCache
      */
     public DPlayerCache getDPlayers() {
         return dPlayers;
     }
 
     /**
-     * load / reload a new instance of DPlayers
+     * load / reload a new instance of DPlayerCache
      */
     public void loadDPlayers() {
         dPlayers = new DPlayerCache();
     }
 
     /**
-     * @return the loaded instance of Announcers
+     * @return the loaded instance of AnnouncerCache
      */
     public AnnouncerCache getAnnouncers() {
         return announcers;
     }
 
     /**
-     * load / reload a new instance of Announcers
+     * load / reload a new instance of AnnouncerCache
      */
     public void loadAnnouncers(File file) {
         announcers = new AnnouncerCache(file);
     }
 
     /**
-     * @return the loaded instance of DClasses
+     * @return the loaded instance of DClasseCache
      */
     public DClasses getDClasses() {
         return dClasses;
     }
 
     /**
-     * load / reload a new instance of DClasses
+     * load / reload a new instance of DClasseCache
      */
     public void loadDClasses(File file) {
         dClasses = new DClasses(file);
     }
 
     /**
-     * @return the loaded instance of DLootTables
+     * @return the loaded instance of DLootTableCache
      */
     public DLootTableCache getDLootTables() {
         return dLootTables;
     }
 
     /**
-     * load / reload a new instance of DLootTables
+     * load / reload a new instance of DLootTableCache
      */
     public void loadDLootTables(File file) {
         dLootTables = new DLootTableCache(file);
     }
 
     /**
-     * @return the loaded instance of DMobTypes
+     * @return the loaded instance of DMobTypeCache
      */
     public DMobTypeCache getDMobTypes() {
         return dMobTypes;
     }
 
     /**
-     * load / reload a new instance of DMobTypes
+     * load / reload a new instance of DMobTypeCache
      */
     public void loadDMobTypes(File file) {
         dMobTypes = new DMobTypeCache(file);
     }
 
     /**
-     * @return the loaded instance of SignScripts
+     * @return the loaded instance of SignScriptCache
      */
-    public SignScripts getSignScripts() {
+    public SignScriptCache getSignScripts() {
         return signScripts;
     }
 
     /**
-     * load / reload a new instance of SignScripts
+     * load / reload a new instance of SignScriptCache
      */
     public void loadSignScripts(File file) {
-        signScripts = new SignScripts(file);
+        signScripts = new SignScriptCache(file);
     }
 
     /**
-     * @return the loaded instance of DWorlds
+     * @return the loaded instance of DWorldCache
      */
     public DWorldCache getDWorlds() {
         return dWorlds;
     }
 
     /**
-     * load / reload a new instance of DWorlds
+     * load / reload a new instance of DWorldCache
      */
     public void loadDWorlds(File folder) {
         dWorlds = new DWorldCache(MAPS);
     }
 
+    public PageGUICache getPageGUICache() {
+        return pageGUIs;
+    }
+
     /**
-     * @return the dLootInventories
+     * load / reload a new instance of PageGUICache
      */
-    public List<DLootInventory> getDLootInventories() {
-        return dLootInventories;
+    public void loadPageGUICache() {
+        if (pageGUIs != null) {
+            HandlerList.unregisterAll(pageGUIs);
+        }
+        pageGUIs = new PageGUICache();
+        manager.registerEvents(pageGUIs, this);
     }
 
     /**
