@@ -436,7 +436,7 @@ public class Announcer {
 
             boolean full = playerCount >= maxPlayersPerGroup;
 
-            ItemStack button = new ItemStack(Material.WOOL, playerCount, plugin.getMainConfig().getGroupColorPriority().get(groupCount).getWoolData());
+            ItemStack button = new ItemStack(Material.WOOL, 1, plugin.getMainConfig().getGroupColorPriority().get(groupCount).getWoolData());
             ItemMeta meta = button.getItemMeta();
             meta.setDisplayName(name + (full ? ChatColor.DARK_RED : ChatColor.GREEN) + " [" + playerCount + "/" + maxPlayersPerGroup + "]");
             meta.setLore(lore);
