@@ -68,7 +68,7 @@ public class GameRuleProvider {
         DEFAULT_VALUES.timeToNextLoot = 0;
         DEFAULT_VALUES.timeToNextWave = 10;
         DEFAULT_VALUES.timeToFinish = -1;
-        DEFAULT_VALUES.timeUntilKickOfflinePlayer = -1;
+        DEFAULT_VALUES.timeUntilKickOfflinePlayer = 0;
 
         /* Requirements and rewards */
         DEFAULT_VALUES.requirements = new ArrayList<>();
