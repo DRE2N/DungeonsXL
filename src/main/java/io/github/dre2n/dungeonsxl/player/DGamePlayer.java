@@ -980,6 +980,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         if (kick) {
             DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.OFFLINE);
+            Bukkit.getPluginManager().callEvent(dPlayerKickEvent);
 
             if (!dPlayerKickEvent.isCancelled()) {
                 leave();
