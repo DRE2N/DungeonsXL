@@ -25,7 +25,7 @@ import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
 import io.github.dre2n.dungeonsxl.global.GameSign;
 import io.github.dre2n.dungeonsxl.global.GlobalProtection;
 import io.github.dre2n.dungeonsxl.global.GroupSign;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class RenameCommand extends DRECommand {
         setMinArgs(2);
         setMaxArgs(2);
         setHelp(DMessage.HELP_CMD_RENAME.getMessage());
-        setPermission(DPermissions.RENAME.getNode());
+        setPermission(DPermission.RENAME.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

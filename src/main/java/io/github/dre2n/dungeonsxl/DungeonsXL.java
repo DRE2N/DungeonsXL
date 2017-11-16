@@ -33,10 +33,10 @@ import io.github.dre2n.dungeonsxl.global.GlobalProtectionCache;
 import io.github.dre2n.dungeonsxl.loottable.DLootTableCache;
 import io.github.dre2n.dungeonsxl.mob.DMobTypeCache;
 import io.github.dre2n.dungeonsxl.mob.ExternalMobProviderCache;
-import io.github.dre2n.dungeonsxl.player.DClasses;
+import io.github.dre2n.dungeonsxl.player.DClassCache;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.player.DPlayerCache;
 import io.github.dre2n.dungeonsxl.requirement.RequirementTypeCache;
 import io.github.dre2n.dungeonsxl.reward.RewardTypeCache;
@@ -89,7 +89,7 @@ public class DungeonsXL extends DREPlugin {
     private ExternalMobProviderCache dMobProviders;
     private DPlayerCache dPlayers;
     private AnnouncerCache announcers;
-    private DClasses dClasses;
+    private DClassCache dClasses;
     private DLootTableCache dLootTables;
     private DMobTypeCache dMobTypes;
     private SignScriptCache signScripts;
@@ -122,7 +122,7 @@ public class DungeonsXL extends DREPlugin {
         super.onEnable();
         instance = this;
 
-        DPermissions.register();
+        DPermission.register();
         initFolders();
         loadCore();
         loadData();
@@ -476,7 +476,7 @@ public class DungeonsXL extends DREPlugin {
     /**
      * @return the loaded instance of DClasseCache
      */
-    public DClasses getDClasses() {
+    public DClassCache getDClasses() {
         return dClasses;
     }
 
@@ -484,7 +484,7 @@ public class DungeonsXL extends DREPlugin {
      * load / reload a new instance of DClasseCache
      */
     public void loadDClasses(File file) {
-        dClasses = new DClasses(file);
+        dClasses = new DClassCache(file);
     }
 
     /**

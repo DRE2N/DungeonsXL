@@ -21,7 +21,7 @@ import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,7 +36,7 @@ public class GameCommand extends DRECommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(DMessage.HELP_CMD_GAME.getMessage());
-        setPermission(DPermissions.GAME.getNode());
+        setPermission(DPermission.GAME.getNode());
         setPlayerCommand(true);
     }
 

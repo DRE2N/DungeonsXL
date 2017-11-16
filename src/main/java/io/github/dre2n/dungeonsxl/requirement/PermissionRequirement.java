@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.requirement;
 
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
@@ -61,7 +61,7 @@ public class PermissionRequirement extends Requirement {
     @Override
     public boolean check(Player player) {
         for (String permission : permissions) {
-            if (!DPermissions.hasPermission(player, permission)) {
+            if (!DPermission.hasPermission(player, permission)) {
                 return false;
             }
         }

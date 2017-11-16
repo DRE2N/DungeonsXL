@@ -22,7 +22,7 @@ import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,7 +37,7 @@ public class EscapeCommand extends DRECommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(DMessage.HELP_CMD_ESCAPE.getMessage());
-        setPermission(DPermissions.ESCAPE.getNode());
+        setPermission(DPermission.ESCAPE.getNode());
         setPlayerCommand(true);
     }
 

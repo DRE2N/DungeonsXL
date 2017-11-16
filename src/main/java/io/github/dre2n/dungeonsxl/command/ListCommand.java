@@ -23,7 +23,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.dungeon.DungeonConfig;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
@@ -46,7 +46,7 @@ public class ListCommand extends DRECommand {
         setMinArgs(0);
         setMaxArgs(3);
         setHelp(DMessage.HELP_CMD_LIST.getMessage());
-        setPermission(DPermissions.LIST.getNode());
+        setPermission(DPermission.LIST.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

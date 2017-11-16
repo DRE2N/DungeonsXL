@@ -245,7 +245,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        if (DPermissions.hasPermission(player, DPermissions.BYPASS)) {
+        if (DPermission.hasPermission(player, DPermission.BYPASS)) {
             return;
         }
 
@@ -260,7 +260,7 @@ public class DPlayerListener implements Listener {
         Game game = Game.getByWorld(dPlayer.getWorld());
 
         if (dPlayer instanceof DEditPlayer) {
-            if (DPermissions.hasPermission(player, DPermissions.CMD_EDIT)) {
+            if (DPermission.hasPermission(player, DPermission.CMD_EDIT)) {
                 return;
 
             } else {
@@ -315,7 +315,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        if (dPlayer instanceof DEditPlayer && !config.getDropItems() && !DPermissions.hasPermission(player, DPermissions.INSECURE)) {
+        if (dPlayer instanceof DEditPlayer && !config.getDropItems() && !DPermission.hasPermission(player, DPermission.INSECURE)) {
             event.setCancelled(true);
         }
 
@@ -532,7 +532,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
+        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
             event.setCancelled(true);
         }
     }
@@ -555,13 +555,13 @@ public class DPlayerListener implements Listener {
             if (dGameWorld != null || DEditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.ENDER_CHEST) {
-                        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
+                        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_ENDERCHEST.getMessage());
                             event.setCancelled(true);
                         }
 
                     } else if (clickedBlock.getType() == Material.BED_BLOCK) {
-                        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
+                        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_BED.getMessage());
                             event.setCancelled(true);
                         }
@@ -573,7 +573,7 @@ public class DPlayerListener implements Listener {
             if (dGameWorld != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (clickedBlock.getType() == Material.DISPENSER) {
-                        if (!DPermissions.hasPermission(player, DPermissions.BYPASS)) {
+                        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_DISPENSER.getMessage());
                             event.setCancelled(true);
                         }

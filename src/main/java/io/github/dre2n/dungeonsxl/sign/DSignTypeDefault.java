@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.sign.lobby.ClassesSign;
 import io.github.dre2n.dungeonsxl.sign.lobby.LobbySign;
 import io.github.dre2n.dungeonsxl.sign.lobby.ReadySign;
@@ -94,7 +94,7 @@ public enum DSignTypeDefault implements DSignType {
 
     @Override
     public String getBuildPermission() {
-        return DPermissions.SIGN.getNode() + "." + buildPermission;
+        return DPermission.SIGN.getNode() + "." + buildPermission;
     }
 
     @Override

@@ -591,7 +591,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public boolean checkRequirements(Game game) {
-        if (DPermissions.hasPermission(player, DPermissions.IGNORE_REQUIREMENTS)) {
+        if (DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS)) {
             return true;
         }
 
@@ -669,7 +669,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public boolean checkTime(Game game) {
-        if (DPermissions.hasPermission(player, DPermissions.IGNORE_TIME_LIMIT)) {
+        if (DPermission.hasPermission(player, DPermission.IGNORE_TIME_LIMIT)) {
             return true;
         }
 

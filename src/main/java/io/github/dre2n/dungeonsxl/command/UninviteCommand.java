@@ -20,7 +20,7 @@ import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -36,7 +36,7 @@ public class UninviteCommand extends DRECommand {
         setMinArgs(2);
         setMaxArgs(2);
         setHelp(DMessage.HELP_CMD_UNINVITE.getMessage());
-        setPermission(DPermissions.UNINVITE.getNode());
+        setPermission(DPermission.UNINVITE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

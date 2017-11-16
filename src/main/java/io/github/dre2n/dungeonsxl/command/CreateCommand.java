@@ -22,7 +22,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
@@ -42,7 +42,7 @@ public class CreateCommand extends DRECommand {
         setMaxArgs(1);
         setCommand("create");
         setHelp(DMessage.HELP_CMD_CREATE.getMessage());
-        setPermission(DPermissions.CREATE.getNode());
+        setPermission(DPermission.CREATE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

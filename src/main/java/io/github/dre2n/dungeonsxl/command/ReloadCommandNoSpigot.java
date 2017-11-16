@@ -24,7 +24,7 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.event.DataReloadEvent;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -42,7 +42,7 @@ public class ReloadCommandNoSpigot extends DRECommand {
         setMinArgs(0);
         setMaxArgs(1);
         setHelp(DMessage.HELP_CMD_RELOAD.getMessage());
-        setPermission(DPermissions.RELOAD.getNode());
+        setPermission(DPermission.RELOAD.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

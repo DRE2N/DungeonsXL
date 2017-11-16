@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Links different color types together.
@@ -74,8 +73,10 @@ public enum DColor {
     }
 
     /**
+     * @deprecated Use getDyeColor() instead
      * @return the wool DV
      */
+    @Deprecated
     public byte getWoolData() {
         return dye.getWoolData();
     }

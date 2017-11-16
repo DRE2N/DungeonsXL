@@ -27,7 +27,7 @@ import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import org.bukkit.command.CommandSender;
@@ -43,7 +43,7 @@ public class TestCommand extends DRECommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(DMessage.HELP_CMD_TEST.getMessage());
-        setPermission(DPermissions.TEST.getNode());
+        setPermission(DPermission.TEST.getNode());
         setPlayerCommand(true);
         setConsoleCommand(false);
     }
@@ -60,7 +60,7 @@ public class TestCommand extends DRECommand {
                 return;
             }
 
-            if (!dGroup.getCaptain().equals(player) && !DPermissions.hasPermission(player, DPermissions.BYPASS)) {
+            if (!dGroup.getCaptain().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
                 MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_CAPTAIN.getMessage());
                 return;
             }

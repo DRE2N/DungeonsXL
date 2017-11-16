@@ -19,7 +19,7 @@ package io.github.dre2n.dungeonsxl.sign;
 import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
@@ -97,7 +97,7 @@ public class DSignListener implements Listener {
                 return;
             }
 
-            if (!DPermissions.hasPermission(player, dsign.getType().getBuildPermission())) {
+            if (!DPermission.hasPermission(player, dsign.getType().getBuildPermission())) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_NO_PERMISSIONS.getMessage());
                 return;
             }

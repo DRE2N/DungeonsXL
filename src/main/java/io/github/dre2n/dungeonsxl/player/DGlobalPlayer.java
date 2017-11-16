@@ -269,8 +269,8 @@ public class DGlobalPlayer implements PlayerWrapper {
      * the permission to check
      * @return if the player has the permission
      */
-    public boolean hasPermission(DPermissions permission) {
-        return DPermissions.hasPermission(player, permission);
+    public boolean hasPermission(DPermission permission) {
+        return DPermission.hasPermission(player, permission);
     }
 
     /**
@@ -301,7 +301,7 @@ public class DGlobalPlayer implements PlayerWrapper {
      * @return if the player has the permission
      */
     public boolean hasPermission(String permission) {
-        return DPermissions.hasPermission(player, permission);
+        return DPermission.hasPermission(player, permission);
     }
 
     /* Actions */

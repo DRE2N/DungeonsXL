@@ -21,7 +21,7 @@ import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,7 +36,7 @@ public class LivesCommand extends DRECommand {
         setMinArgs(0);
         setMaxArgs(1);
         setHelp(DMessage.HELP_CMD_LIVES.getMessage());
-        setPermission(DPermissions.LIVES.getNode());
+        setPermission(DPermission.LIVES.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

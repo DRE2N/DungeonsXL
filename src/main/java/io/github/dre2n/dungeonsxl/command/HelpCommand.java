@@ -21,7 +21,7 @@ import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import java.util.ArrayList;
 import java.util.Set;
 import org.bukkit.command.CommandSender;
@@ -38,7 +38,7 @@ public class HelpCommand extends DRECommand {
         setMinArgs(0);
         setMaxArgs(1);
         setHelp(DMessage.HELP_CMD_HELP.getMessage());
-        setPermission(DPermissions.HELP.getNode());
+        setPermission(DPermission.HELP.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

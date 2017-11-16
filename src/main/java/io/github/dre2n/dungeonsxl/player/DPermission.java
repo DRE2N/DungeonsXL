@@ -29,7 +29,7 @@ import static org.bukkit.permissions.PermissionDefault.*;
 /**
  * @author Daniel Saukel
  */
-public enum DPermissions {
+public enum DPermission {
 
     // Main nodes
     BREAK("break", OP),
@@ -96,14 +96,14 @@ public enum DPermissions {
 
     private String node;
     private PermissionDefault isDefault;
-    private List<DPermissions> children = new ArrayList<>();
+    private List<DPermission> children = new ArrayList<>();
 
-    DPermissions(String node, PermissionDefault isDefault) {
+    DPermission(String node, PermissionDefault isDefault) {
         this.node = node;
         this.isDefault = isDefault;
     }
 
-    DPermissions(String node, PermissionDefault isDefault, DPermissions... children) {
+    DPermission(String node, PermissionDefault isDefault, DPermission... children) {
         this(node, isDefault);
         this.children = Arrays.asList(children);
     }
@@ -132,7 +132,7 @@ public enum DPermissions {
     /**
      * @return the child permissions
      */
-    public List<DPermissions> getChildren() {
+    public List<DPermission> getChildren() {
         return children;
     }
 
@@ -140,10 +140,10 @@ public enum DPermissions {
      * @param node
      * the node String, with or without "dxl."
      * @return
-     * the DPermissions value
+     * the DPermission value
      */
-    public static DPermissions getByNode(String node) {
-        for (DPermissions permission : values()) {
+    public static DPermission getByNode(String node) {
+        for (DPermission permission : values()) {
             if (permission.getNode().equals(node) || permission.node.equals(node)) {
                 return permission;
             }
@@ -157,12 +157,12 @@ public enum DPermissions {
      * the permission to check
      * @return if the player has the permission
      */
-    public static boolean hasPermission(CommandSender sender, DPermissions permission) {
+    public static boolean hasPermission(CommandSender sender, DPermission permission) {
         if (sender.hasPermission(permission.getNode())) {
             return true;
         }
 
-        for (DPermissions parent : DPermissions.values()) {
+        for (DPermission parent : DPermission.values()) {
             if (parent.getChildren().contains(permission) && sender.hasPermission(parent.getNode())) {
                 return true;
             }
@@ -181,19 +181,19 @@ public enum DPermissions {
             return true;
         }
 
-        DPermissions dPermission = null;
-        if (EnumUtil.isValidEnum(DPermissions.class, permission)) {
-            dPermission = DPermissions.valueOf(permission);
+        DPermission dPermission = null;
+        if (EnumUtil.isValidEnum(DPermission.class, permission)) {
+            dPermission = DPermission.valueOf(permission);
 
-        } else if (DPermissions.getByNode(permission) != null) {
-            dPermission = DPermissions.getByNode(permission);
+        } else if (DPermission.getByNode(permission) != null) {
+            dPermission = DPermission.getByNode(permission);
         }
 
         if (dPermission == null) {
             return false;
         }
 
-        for (DPermissions parent : DPermissions.values()) {
+        for (DPermission parent : DPermission.values()) {
             if (parent.getChildren().contains(dPermission) && sender.hasPermission(parent.getNode())) {
                 return true;
             }
@@ -206,7 +206,7 @@ public enum DPermissions {
      * Registers the permissions.
      */
     public static void register() {
-        for (DPermissions permission : values()) {
+        for (DPermission permission : values()) {
             Bukkit.getPluginManager().addPermission(new Permission(permission.getNode(), permission.isDefault()));
         }
     }

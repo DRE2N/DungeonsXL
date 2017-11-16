@@ -20,7 +20,7 @@ import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,7 +34,7 @@ public class ResourcePackCommand extends DRECommand {
         setMinArgs(1);
         setMaxArgs(1);
         setHelp(DMessage.HELP_CMD_RESOURCE_PACK.getMessage());
-        setPermission(DPermissions.RESOURCE_PACK.getNode());
+        setPermission(DPermission.RESOURCE_PACK.getNode());
         setPlayerCommand(true);
     }
 

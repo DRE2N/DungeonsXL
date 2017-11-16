@@ -21,7 +21,7 @@ import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import org.bukkit.Bukkit;
@@ -41,7 +41,7 @@ public class ImportCommand extends DRECommand {
         setMaxArgs(1);
         setCommand("import");
         setHelp(DMessage.HELP_CMD_IMPORT.getMessage());
-        setPermission(DPermissions.IMPORT.getNode());
+        setPermission(DPermission.IMPORT.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

@@ -24,7 +24,7 @@ import io.github.dre2n.dungeonsxl.player.DEditPlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import io.github.dre2n.dungeonsxl.world.DWorldCache;
@@ -62,7 +62,7 @@ public class EditCommand extends DRECommand {
             return;
         }
 
-        if (!resource.isInvitedPlayer(player) && !DPermissions.hasPermission(player, DPermissions.EDIT)) {
+        if (!resource.isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.EDIT)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NO_PERMISSIONS.getMessage());
             return;
         }

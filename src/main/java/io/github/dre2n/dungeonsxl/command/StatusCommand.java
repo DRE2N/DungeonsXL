@@ -21,7 +21,7 @@ import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,7 @@ public class StatusCommand extends DRECommand {
         setMinArgs(0);
         setMaxArgs(0);
         setHelp(DMessage.HELP_CMD_STATUS.getMessage());
-        setPermission(DPermissions.STATUS.getNode());
+        setPermission(DPermission.STATUS.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

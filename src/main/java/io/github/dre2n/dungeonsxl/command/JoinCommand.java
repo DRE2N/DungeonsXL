@@ -23,7 +23,7 @@ import io.github.dre2n.dungeonsxl.announcer.Announcer;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DInstancePlayer;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -37,7 +37,7 @@ public class JoinCommand extends DRECommand {
         setMinArgs(1);
         setMaxArgs(1);
         setHelp(DMessage.HELP_CMD_JOIN.getMessage());
-        setPermission(DPermissions.JOIN.getNode());
+        setPermission(DPermission.JOIN.getNode());
         setPlayerCommand(true);
     }
 

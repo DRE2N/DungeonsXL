@@ -22,7 +22,7 @@ import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import io.github.dre2n.dungeonsxl.world.DWorldCache;
@@ -42,7 +42,7 @@ public class DeleteCommand extends DRECommand {
         setMinArgs(1);
         setMaxArgs(2);
         setHelp(DMessage.HELP_CMD_DELETE.getMessage());
-        setPermission(DPermissions.DELETE.getNode());
+        setPermission(DPermission.DELETE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

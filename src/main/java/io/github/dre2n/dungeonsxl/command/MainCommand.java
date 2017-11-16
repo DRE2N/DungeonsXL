@@ -23,7 +23,7 @@ import io.github.dre2n.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -38,7 +38,7 @@ public class MainCommand extends DRECommand {
     public MainCommand() {
         setCommand("main");
         setHelp(DMessage.HELP_CMD_MAIN.getMessage());
-        setPermission(DPermissions.MAIN.getNode());
+        setPermission(DPermission.MAIN.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
     }

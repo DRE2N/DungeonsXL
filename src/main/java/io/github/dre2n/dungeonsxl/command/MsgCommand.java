@@ -19,7 +19,7 @@ package io.github.dre2n.dungeonsxl.command;
 import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.commons.command.DRECommand;
 import io.github.dre2n.dungeonsxl.config.DMessage;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.WorldConfig;
 import org.bukkit.ChatColor;
@@ -36,7 +36,7 @@ public class MsgCommand extends DRECommand {
         setMaxArgs(-1);
         setCommand("msg");
         setHelp(DMessage.HELP_CMD_MSG.getMessage());
-        setPermission(DPermissions.MESSAGE.getNode());
+        setPermission(DPermission.MESSAGE.getNode());
         setPlayerCommand(true);
     }
 

@@ -20,7 +20,7 @@ import io.github.dre2n.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
-import io.github.dre2n.dungeonsxl.player.DPermissions;
+import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.List;
 import org.bukkit.Material;
@@ -213,7 +213,7 @@ public class GlobalProtectionListener implements Listener {
 
         // Group Signs
         if (DEditWorld.getByWorld(player.getWorld()) == null) {
-            if (!DPermissions.hasPermission(player, DPermissions.SIGN)) {
+            if (!DPermission.hasPermission(player, DPermission.SIGN)) {
                 return;
             }
 

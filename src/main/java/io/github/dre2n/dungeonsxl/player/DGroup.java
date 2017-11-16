@@ -882,7 +882,7 @@ public class DGroup {
     }
 
     public boolean checkTime(Game game) {
-        if (DPermissions.hasPermission(getCaptain(), DPermissions.IGNORE_TIME_LIMIT)) {
+        if (DPermission.hasPermission(getCaptain(), DPermission.IGNORE_TIME_LIMIT)) {
             return true;
         }
 
@@ -896,7 +896,7 @@ public class DGroup {
     }
 
     public boolean checkRequirements(Game game) {
-        if (DPermissions.hasPermission(getCaptain(), DPermissions.IGNORE_REQUIREMENTS)) {
+        if (DPermission.hasPermission(getCaptain(), DPermission.IGNORE_REQUIREMENTS)) {
             return true;
         }
 

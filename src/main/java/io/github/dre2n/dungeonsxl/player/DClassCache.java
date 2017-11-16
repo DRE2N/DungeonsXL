@@ -26,11 +26,11 @@ import java.util.List;
  *
  * @author Daniel Saukel
  */
-public class DClasses {
+public class DClassCache {
 
     private List<DClass> dClasses = new ArrayList<>();
 
-    public DClasses(File file) {
+    public DClassCache(File file) {
         if (file.isDirectory()) {
             for (File script : FileUtil.getFilesForFolder(file)) {
                 dClasses.add(new DClass(script));
