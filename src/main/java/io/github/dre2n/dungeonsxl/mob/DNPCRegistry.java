@@ -20,16 +20,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.UUID;
+import net.citizensnpcs.Settings.Setting;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCCreateEvent;
 import net.citizensnpcs.api.npc.AbstractNPC;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
+import net.citizensnpcs.api.persistence.PersistenceLoader;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.MemoryDataKey;
 import net.citizensnpcs.trait.ArmorStandTrait;
+import net.citizensnpcs.trait.LookClose;
+import net.citizensnpcs.trait.MountTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -67,6 +71,10 @@ public class DNPCRegistry implements NPCRegistry {
         if (type == EntityType.ARMOR_STAND && !npc.hasTrait(ArmorStandTrait.class)) {
             npc.addTrait(ArmorStandTrait.class);
         }
+        if (Setting.DEFAULT_LOOK_CLOSE.asBoolean()) {
+            npc.addTrait(LookClose.class);
+        }
+        npc.addTrait(MountTrait.class);
 
         return npc;
     }
@@ -148,6 +156,8 @@ public class DNPCRegistry implements NPCRegistry {
         for (Trait trait : npc.getTraits()) {
             DataKey traitKey = root.getRelative("traits." + trait.getName());
             trait.save(traitKey);
+            PersistenceLoader.save(trait, traitKey);
+            //npc.removedTraits.remove(trait.getName());
             traitNames.append(trait.getName() + ",");
         }
         if (traitNames.length() > 0) {
@@ -155,6 +165,7 @@ public class DNPCRegistry implements NPCRegistry {
         } else {
             root.setString("traitnames", "");
         }
+        //npc.removedTraits.clear();
     }
 
 }
