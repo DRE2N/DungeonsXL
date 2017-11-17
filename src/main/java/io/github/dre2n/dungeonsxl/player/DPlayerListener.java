@@ -154,6 +154,9 @@ public class DPlayerListener implements Listener {
         if (attackerEntity instanceof Player && attackedEntity instanceof Player) {
             attackerPlayer = (Player) attackerEntity;
             attackedPlayer = (Player) attackedEntity;
+            if (attackedPlayer.hasMetadata("NPC") || attackerPlayer.hasMetadata("NPC")) {
+                return;
+            }
 
             attackerDGroup = DGroup.getByPlayer(attackerPlayer);
             attackedDGroup = DGroup.getByPlayer(attackedPlayer);
