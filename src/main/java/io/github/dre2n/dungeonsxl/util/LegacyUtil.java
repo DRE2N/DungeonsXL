@@ -31,7 +31,7 @@ import org.bukkit.inventory.ItemStack;
 public class LegacyUtil {
 
     public static boolean is1_9 = Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion());
-    public static boolean is1_13 = Version.andHigher(Version.MC1_13).contains(CompatibilityHandler.getInstance().getVersion());
+    public static boolean is1_13 = false/*Version.andHigher(Version.MC1_13).contains(CompatibilityHandler.getInstance().getVersion())*/;
 
     public static Material WOODEN_SWORD = is1_13 ? Material.valueOf("WOODEN_SWORD") : Material.valueOf("WOOD_SWORD");
     public static Material GOLDEN_HELMET = is1_13 ? Material.valueOf("GOLDEN_HELMET") : Material.valueOf("GOLD_HELMET");

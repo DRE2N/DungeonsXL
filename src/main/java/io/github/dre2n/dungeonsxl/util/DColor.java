@@ -27,22 +27,22 @@ import org.bukkit.Material;
  */
 public enum DColor {
 
-    BLACK(ChatColor.BLACK, DyeColor.BLACK, Material.BLACK_WOOL),
-    DARK_GRAY(ChatColor.DARK_GRAY, DyeColor.GRAY, Material.GRAY_WOOL),
-    LIGHT_GRAY(ChatColor.GRAY, DyeColor.SILVER, Material.LIGHT_GRAY_WOOL),
-    WHITE(ChatColor.WHITE, DyeColor.WHITE, Material.WHITE_WOOL),
-    DARK_GREEN(ChatColor.DARK_GREEN, DyeColor.GREEN, Material.GREEN_WOOL),
-    LIGHT_GREEN(ChatColor.GREEN, DyeColor.LIME, Material.LIME_WOOL),
-    CYAN(ChatColor.DARK_AQUA, DyeColor.CYAN, Material.CYAN_WOOL),
-    DARK_BLUE(ChatColor.DARK_BLUE, DyeColor.BLUE, Material.BLUE_WOOL),
-    LIGHT_BLUE(ChatColor.AQUA, DyeColor.LIGHT_BLUE, Material.LIGHT_BLUE_WOOL),
-    PURPLE(ChatColor.DARK_PURPLE, DyeColor.PURPLE, Material.PURPLE_WOOL),
-    MAGENTA(ChatColor.LIGHT_PURPLE, DyeColor.MAGENTA, Material.MAGENTA_WOOL),
-    DARK_RED(ChatColor.DARK_RED, DyeColor.BROWN, Material.BROWN_WOOL),
-    LIGHT_RED(ChatColor.RED, DyeColor.RED, Material.RED_WOOL),
-    ORANGE(ChatColor.GOLD, DyeColor.ORANGE, Material.ORANGE_WOOL),
-    YELLOW(ChatColor.YELLOW, DyeColor.YELLOW, Material.YELLOW_WOOL),
-    DEFAULT(ChatColor.BLUE, DyeColor.PINK, Material.PINK_WOOL);
+    BLACK(ChatColor.BLACK, DyeColor.BLACK, Material.valueOf("BLACK_WOOL")),
+    DARK_GRAY(ChatColor.DARK_GRAY, DyeColor.GRAY, Material.valueOf("GRAY_WOOL")),
+    LIGHT_GRAY(ChatColor.GRAY, DyeColor.SILVER, Material.valueOf("LIGHT_GRAY_WOOL")),
+    WHITE(ChatColor.WHITE, DyeColor.WHITE, Material.valueOf("WHITE_WOOL")),
+    DARK_GREEN(ChatColor.DARK_GREEN, DyeColor.GREEN, Material.valueOf("GREEN_WOOL")),
+    LIGHT_GREEN(ChatColor.GREEN, DyeColor.LIME, Material.valueOf("LIME_WOOL")),
+    CYAN(ChatColor.DARK_AQUA, DyeColor.CYAN, Material.valueOf("CYAN_WOOL")),
+    DARK_BLUE(ChatColor.DARK_BLUE, DyeColor.BLUE, Material.valueOf("BLUE_WOOL")),
+    LIGHT_BLUE(ChatColor.AQUA, DyeColor.LIGHT_BLUE, Material.valueOf("LIGHT_BLUE_WOOL")),
+    PURPLE(ChatColor.DARK_PURPLE, DyeColor.PURPLE, Material.valueOf("PURPLE_WOOL")),
+    MAGENTA(ChatColor.LIGHT_PURPLE, DyeColor.MAGENTA, Material.valueOf("MAGENTA_WOOL")),
+    DARK_RED(ChatColor.DARK_RED, DyeColor.BROWN, Material.valueOf("BROWN_WOOL")),
+    LIGHT_RED(ChatColor.RED, DyeColor.RED, Material.valueOf("RED_WOOL")),
+    ORANGE(ChatColor.GOLD, DyeColor.ORANGE, Material.valueOf("ORANGE_WOOL")),
+    YELLOW(ChatColor.YELLOW, DyeColor.YELLOW, Material.valueOf("YELLOW_WOOL")),
+    DEFAULT(ChatColor.BLUE, DyeColor.PINK, Material.valueOf("PINK_WOOL"));
 
     private ChatColor chat;
     private DyeColor dye;
