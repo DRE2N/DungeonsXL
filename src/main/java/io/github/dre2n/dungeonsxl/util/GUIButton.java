@@ -33,14 +33,14 @@ import org.bukkit.potion.PotionType;
 public class GUIButton {
 
     /* Raw skulls */
-    public static final ItemStack SKULL = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-    public static final ItemStack LEFT = ItemUtil.setSkullOwner(SKULL, "69b9a08d-4e89-4878-8be8-551caeacbf2a", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2ViZjkwNzQ5NGE5MzVlOTU1YmZjYWRhYjgxYmVhZmI5MGZiOWJlNDljNzAyNmJhOTdkNzk4ZDVmMWEyMyJ9fX0=");
-    public static final ItemStack RIGHT = ItemUtil.setSkullOwner(SKULL, "15f49744-9b61-46af-b1c3-71c6261a0d0e", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWI2ZjFhMjViNmJjMTk5OTQ2NDcyYWVkYjM3MDUyMjU4NGZmNmY0ZTgzMjIxZTU5NDZiZDJlNDFiNWNhMTNiIn19fQ==");
+    public static final ItemStack LEFT = ItemUtil.setSkullOwner(LegacyUtil.RAW_PLAYER_HEAD, "69b9a08d-4e89-4878-8be8-551caeacbf2a", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2ViZjkwNzQ5NGE5MzVlOTU1YmZjYWRhYjgxYmVhZmI5MGZiOWJlNDljNzAyNmJhOTdkNzk4ZDVmMWEyMyJ9fX0=");
+    public static final ItemStack RIGHT = ItemUtil.setSkullOwner(LegacyUtil.RAW_PLAYER_HEAD, "15f49744-9b61-46af-b1c3-71c6261a0d0e", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWI2ZjFhMjViNmJjMTk5OTQ2NDcyYWVkYjM3MDUyMjU4NGZmNmY0ZTgzMjIxZTU5NDZiZDJlNDFiNWNhMTNiIn19fQ==");
 
     /* GUI buttons */
     public static final ItemStack NEXT_PAGE = setDisplayName(RIGHT, DMessage.MISC_NEXT_PAGE.getMessage());
     public static final ItemStack PREVIOUS_PAGE = setDisplayName(LEFT, DMessage.MISC_PREVIOUS_PAGE.getMessage());
-    public static final ItemStack PLACEHOLDER = setDisplayName(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), ChatColor.RESET.toString());
+    public static final ItemStack PLACEHOLDER = setDisplayName(LegacyUtil.RAW_PLACEHOLDER, ChatColor.RESET.toString());
+    ;
 
     /* Blank items that show meta stuff by default */
     public static final ItemStack GUI_SWORD = new ItemStack(Material.IRON_SWORD);

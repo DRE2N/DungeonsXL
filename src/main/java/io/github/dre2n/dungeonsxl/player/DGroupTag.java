@@ -19,8 +19,7 @@ package io.github.dre2n.dungeonsxl.player;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 
 /**
  * @author Daniel Saukel
@@ -35,7 +34,7 @@ public class DGroupTag {
         DGroup group = player.getDGroup();
         if (group != null) {
             hologram = HologramsAPI.createHologram(DungeonsXL.getInstance(), player.getPlayer().getLocation().clone().add(0, 3.5, 0));
-            hologram.appendItemLine(new ItemStack(Material.WOOL, 1, group.getDColor().getWoolData()));
+            hologram.appendItemLine(LegacyUtil.createColoredWool(group.getDColor()));
             hologram.appendTextLine(group.getName());
         }
     }

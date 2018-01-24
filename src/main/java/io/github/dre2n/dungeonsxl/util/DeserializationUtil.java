@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.util;
 import io.github.dre2n.commons.misc.NumberUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -62,7 +63,7 @@ public class DeserializationUtil {
                 }
 
                 // Add Item to Stacks
-                ItemStack itemStack = new ItemStack(itemId, itemSize, (short) itemData);
+                ItemStack itemStack = new ItemStack(LegacyUtil.getMaterial(itemId), itemSize, (short) itemData);
                 if (itemEnchantment != null) {
                     itemStack.addEnchantment(itemEnchantment, itemLvlEnchantment);
                 }

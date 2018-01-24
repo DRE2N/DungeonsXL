@@ -21,9 +21,9 @@ import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPermission;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.List;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -59,7 +59,7 @@ public class GlobalProtectionListener implements Listener {
         }
 
         //return if above block is not a sign
-        if (blockAbove.getType() != Material.SIGN_POST && blockAbove.getType() != Material.WALL_SIGN) {
+        if (!LegacyUtil.isSign(blockAbove)) {
             return;
         }
 
@@ -146,7 +146,7 @@ public class GlobalProtectionListener implements Listener {
         }
         ItemStack item = event.getItem();
         Block block = event.getClickedBlock();
-        if (item.getType() != Material.WOOD_SWORD || block == null) {
+        if (item.getType() != LegacyUtil.WOODEN_SWORD || block == null) {
             return;
         }
 
@@ -185,7 +185,7 @@ public class GlobalProtectionListener implements Listener {
             return;
         }
 
-        if (clickedBlock.getType() == Material.WALL_SIGN || clickedBlock.getType() == Material.SIGN_POST) {
+        if (LegacyUtil.isSign(clickedBlock)) {
             // Check Group Signs
             if (GroupSign.playerInteract(clickedBlock, player)) {
                 event.setCancelled(true);

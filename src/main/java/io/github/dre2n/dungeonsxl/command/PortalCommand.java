@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.global.DPortal;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPermission;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -72,7 +73,7 @@ public class PortalCommand extends DRECommand {
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             dGlobalPlayer.setCachedItem(player.getItemInHand());
-            player.getInventory().setItemInHand(new ItemStack(Material.WOOD_SWORD));
+            player.getInventory().setItemInHand(new ItemStack(LegacyUtil.WOODEN_SWORD));
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_INTRODUCTION.getMessage());
 
         } else {

@@ -27,6 +27,7 @@ import io.github.dre2n.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -83,7 +84,7 @@ public class HologramSign extends DSign {
                         item = new ItemStack(Material.valueOf(id));
 
                     } else {
-                        item = new ItemStack(NumberUtil.parseInt(id, 1));
+                        item = new ItemStack(LegacyUtil.getMaterial(NumberUtil.parseInt(id, 1)));
                     }
                 }
 

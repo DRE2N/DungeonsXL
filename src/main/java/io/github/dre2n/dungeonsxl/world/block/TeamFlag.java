@@ -20,6 +20,7 @@ import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -29,8 +30,6 @@ import org.bukkit.event.block.BlockBreakEvent;
  * @author Daniel Saukel
  */
 public class TeamFlag extends TeamBlock {
-
-    public static final int WOOL = 35;
 
     public TeamFlag(Block block, DGroup owner) {
         super(block, owner);
@@ -42,7 +41,7 @@ public class TeamFlag extends TeamBlock {
      * Reset a team flag when the capturer dies.
      */
     public void reset() {
-        block.setTypeIdAndData(WOOL, owner.getDColor().getWoolData(), false);
+        LegacyUtil.setBlockWoolColor(block, owner.getDColor());
     }
 
     @Override

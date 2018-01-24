@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -242,7 +243,7 @@ public class GameSign extends GlobalProtection {
      * a block which is protected by the returned GameSign
      */
     public static GameSign getByBlock(Block block) {
-        if (!(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) {
+        if (!LegacyUtil.isSign(block)) {
             return null;
         }
 

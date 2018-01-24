@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import io.github.dre2n.commons.misc.BlockUtil;
 import io.github.dre2n.commons.misc.NumberUtil;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.TeamBed;
 import org.bukkit.Material;
@@ -54,7 +55,7 @@ public class BedSign extends DSign {
         this.team = NumberUtil.parseInt(lines[1]);
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
 
-        if (block.getType() == Material.BED_BLOCK) {
+        if (LegacyUtil.isBed(block.getType())) {
             if (getGame().getDGroups().size() > team) {
                 getGameWorld().addGameBlock(new TeamBed(block, getGame().getDGroups().get(team)));
             }

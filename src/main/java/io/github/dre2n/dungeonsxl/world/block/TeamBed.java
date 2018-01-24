@@ -20,6 +20,7 @@ import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DGroup;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -41,16 +42,16 @@ public class TeamBed extends TeamBlock implements MultiBlock {
 
     /* Getters and setters */
     public Block getAttachedBlock(Block block) {
-        if (block.getRelative(BlockFace.EAST).getType() == Material.BED_BLOCK) {
+        if (LegacyUtil.isBed(block.getRelative(BlockFace.EAST).getType())) {
             return block.getRelative(BlockFace.EAST);
 
-        } else if (block.getRelative(BlockFace.NORTH).getType() == Material.BED_BLOCK) {
+        } else if (LegacyUtil.isBed(block.getRelative(BlockFace.NORTH).getType())) {
             return block.getRelative(BlockFace.NORTH);
 
-        } else if (block.getRelative(BlockFace.WEST).getType() == Material.BED_BLOCK) {
+        } else if (LegacyUtil.isBed(block.getRelative(BlockFace.WEST).getType())) {
             return block.getRelative(BlockFace.WEST);
 
-        } else if (block.getRelative(BlockFace.SOUTH).getType() == Material.BED_BLOCK) {
+        } else if (LegacyUtil.isBed(block.getRelative(BlockFace.SOUTH).getType())) {
             return block.getRelative(BlockFace.SOUTH);
 
         } else {

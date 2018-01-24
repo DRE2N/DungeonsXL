@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.world.block;
 
 import io.github.dre2n.commons.misc.NumberUtil;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,7 +48,7 @@ public class PlaceableBlock extends GameBlock {
         if (!ids.isEmpty()) {
             String[] splittedIds = ids.split(",");
             for (String id : splittedIds) {
-                Material material = Material.getMaterial(NumberUtil.parseInt(id));
+                Material material = LegacyUtil.getMaterial(NumberUtil.parseInt(id));
                 if (material != null) {
                     materials.add(material);
                 }

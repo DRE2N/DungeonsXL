@@ -20,6 +20,7 @@ import io.github.dre2n.commons.chat.MessageUtil;
 import io.github.dre2n.commons.misc.EnumUtil;
 import io.github.dre2n.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.io.File;
 import java.util.Arrays;
@@ -89,23 +90,23 @@ public class DMobType {
 
         // Load Items
         if (config.contains("itemHelmet")) {
-            itemHelmet = new ItemStack(config.getInt("itemHelmet"));
+            itemHelmet = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemHelmet")));
         }
 
         if (config.contains("itemChestplate")) {
-            itemChestplate = new ItemStack(config.getInt("itemChestplate"));
+            itemChestplate = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemChestplate")));
         }
 
         if (config.contains("itemBoots")) {
-            itemBoots = new ItemStack(config.getInt("itemBoots"));
+            itemBoots = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemBoots")));
         }
 
         if (config.contains("itemLeggings")) {
-            itemLeggings = new ItemStack(config.getInt("itemLeggings"));
+            itemLeggings = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemLeggings")));
         }
 
         if (config.contains("itemHand")) {
-            itemHand = new ItemStack(config.getInt("itemHand"));
+            itemHand = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemHand")));
         }
 
         // Load different Mob options
@@ -127,7 +128,7 @@ public class DMobType {
                 int chance = 100;
 
                 /* Item Stack */
-                Material mat = Material.getMaterial(configSetion.getInt(dropPath + ".id"));
+                Material mat = LegacyUtil.getMaterial(configSetion.getInt(dropPath + ".id"));
                 int amount = 1;
                 short data = 0;
 

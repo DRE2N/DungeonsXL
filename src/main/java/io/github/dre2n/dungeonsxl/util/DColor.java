@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 
 /**
  * Links different color types together.
@@ -26,29 +27,31 @@ import org.bukkit.DyeColor;
  */
 public enum DColor {
 
-    BLACK(ChatColor.BLACK, DyeColor.BLACK),
-    DARK_GRAY(ChatColor.DARK_GRAY, DyeColor.GRAY),
-    LIGHT_GRAY(ChatColor.GRAY, DyeColor.SILVER),
-    WHITE(ChatColor.WHITE, DyeColor.WHITE),
-    DARK_GREEN(ChatColor.DARK_GREEN, DyeColor.GREEN),
-    LIGHT_GREEN(ChatColor.GREEN, DyeColor.LIME),
-    CYAN(ChatColor.DARK_AQUA, DyeColor.CYAN),
-    DARK_BLUE(ChatColor.DARK_BLUE, DyeColor.BLUE),
-    LIGHT_BLUE(ChatColor.AQUA, DyeColor.LIGHT_BLUE),
-    PURPLE(ChatColor.DARK_PURPLE, DyeColor.PURPLE),
-    MAGENTA(ChatColor.LIGHT_PURPLE, DyeColor.MAGENTA),
-    DARK_RED(ChatColor.DARK_RED, DyeColor.BROWN),
-    LIGHT_RED(ChatColor.RED, DyeColor.RED),
-    ORANGE(ChatColor.GOLD, DyeColor.ORANGE),
-    YELLOW(ChatColor.YELLOW, DyeColor.YELLOW),
-    DEFAULT(ChatColor.BLUE, DyeColor.PINK);
+    BLACK(ChatColor.BLACK, DyeColor.BLACK, Material.BLACK_WOOL),
+    DARK_GRAY(ChatColor.DARK_GRAY, DyeColor.GRAY, Material.GRAY_WOOL),
+    LIGHT_GRAY(ChatColor.GRAY, DyeColor.SILVER, Material.LIGHT_GRAY_WOOL),
+    WHITE(ChatColor.WHITE, DyeColor.WHITE, Material.WHITE_WOOL),
+    DARK_GREEN(ChatColor.DARK_GREEN, DyeColor.GREEN, Material.GREEN_WOOL),
+    LIGHT_GREEN(ChatColor.GREEN, DyeColor.LIME, Material.LIME_WOOL),
+    CYAN(ChatColor.DARK_AQUA, DyeColor.CYAN, Material.CYAN_WOOL),
+    DARK_BLUE(ChatColor.DARK_BLUE, DyeColor.BLUE, Material.BLUE_WOOL),
+    LIGHT_BLUE(ChatColor.AQUA, DyeColor.LIGHT_BLUE, Material.LIGHT_BLUE_WOOL),
+    PURPLE(ChatColor.DARK_PURPLE, DyeColor.PURPLE, Material.PURPLE_WOOL),
+    MAGENTA(ChatColor.LIGHT_PURPLE, DyeColor.MAGENTA, Material.MAGENTA_WOOL),
+    DARK_RED(ChatColor.DARK_RED, DyeColor.BROWN, Material.BROWN_WOOL),
+    LIGHT_RED(ChatColor.RED, DyeColor.RED, Material.RED_WOOL),
+    ORANGE(ChatColor.GOLD, DyeColor.ORANGE, Material.ORANGE_WOOL),
+    YELLOW(ChatColor.YELLOW, DyeColor.YELLOW, Material.YELLOW_WOOL),
+    DEFAULT(ChatColor.BLUE, DyeColor.PINK, Material.PINK_WOOL);
 
     private ChatColor chat;
     private DyeColor dye;
+    private Material woolMaterial;
 
-    DColor(ChatColor chat, DyeColor dye) {
+    DColor(ChatColor chat, DyeColor dye, Material woolMaterial) {
         this.chat = chat;
         this.dye = dye;
+        this.woolMaterial = woolMaterial;
     }
 
     /**
@@ -73,12 +76,19 @@ public enum DColor {
     }
 
     /**
-     * @deprecated Use getDyeColor() instead
+     * @deprecated Use getDyeColor() or getMaterial() instead
      * @return the wool DV
      */
     @Deprecated
     public byte getWoolData() {
         return dye.getWoolData();
+    }
+
+    /**
+     * @return the wool material
+     */
+    public Material getWoolMaterial() {
+        return woolMaterial;
     }
 
     /**

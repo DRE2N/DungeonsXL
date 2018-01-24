@@ -34,6 +34,7 @@ import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import io.github.dre2n.dungeonsxl.trigger.DistanceTrigger;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import io.github.dre2n.dungeonsxl.world.block.TeamFlag;
@@ -273,19 +274,19 @@ public class DGamePlayer extends DInstancePlayer {
 
                     // Leggings
                     if (istack.getType() == Material.LEATHER_LEGGINGS || istack.getType() == Material.CHAINMAIL_LEGGINGS || istack.getType() == Material.IRON_LEGGINGS
-                            || istack.getType() == Material.DIAMOND_LEGGINGS || istack.getType() == Material.GOLD_LEGGINGS) {
+                            || istack.getType() == Material.DIAMOND_LEGGINGS || istack.getType() == LegacyUtil.GOLDEN_LEGGINGS) {
                         getPlayer().getInventory().setLeggings(istack);
                     } // Helmet
                     else if (istack.getType() == Material.LEATHER_HELMET || istack.getType() == Material.CHAINMAIL_HELMET || istack.getType() == Material.IRON_HELMET
-                            || istack.getType() == Material.DIAMOND_HELMET || istack.getType() == Material.GOLD_HELMET) {
+                            || istack.getType() == Material.DIAMOND_HELMET || istack.getType() == LegacyUtil.GOLDEN_HELMET) {
                         getPlayer().getInventory().setHelmet(istack);
                     } // Chestplate
                     else if (istack.getType() == Material.LEATHER_CHESTPLATE || istack.getType() == Material.CHAINMAIL_CHESTPLATE || istack.getType() == Material.IRON_CHESTPLATE
-                            || istack.getType() == Material.DIAMOND_CHESTPLATE || istack.getType() == Material.GOLD_CHESTPLATE) {
+                            || istack.getType() == Material.DIAMOND_CHESTPLATE || istack.getType() == LegacyUtil.GOLDEN_CESTPLATE) {
                         getPlayer().getInventory().setChestplate(istack);
                     } // Boots
                     else if (istack.getType() == Material.LEATHER_BOOTS || istack.getType() == Material.CHAINMAIL_BOOTS || istack.getType() == Material.IRON_BOOTS
-                            || istack.getType() == Material.DIAMOND_BOOTS || istack.getType() == Material.GOLD_BOOTS) {
+                            || istack.getType() == Material.DIAMOND_BOOTS || istack.getType() == LegacyUtil.GOLDEN_BOOTS) {
                         getPlayer().getInventory().setBoots(istack);
                     } else {
                         getPlayer().getInventory().addItem(istack);
@@ -406,7 +407,7 @@ public class DGamePlayer extends DInstancePlayer {
     public void setRobbedGroup(DGroup dGroup) {
         if (dGroup != null) {
             oldHelmet = player.getInventory().getHelmet();
-            player.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, getDGroup().getDColor().getWoolData()));
+            player.getInventory().setHelmet(LegacyUtil.createColoredWool(getDGroup().getDColor()));
         }
 
         stealing = dGroup;

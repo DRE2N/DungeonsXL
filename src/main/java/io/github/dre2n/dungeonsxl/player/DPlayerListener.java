@@ -23,6 +23,7 @@ import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.game.Game;
 import io.github.dre2n.dungeonsxl.mob.DMob;
 import io.github.dre2n.dungeonsxl.trigger.UseItemTrigger;
+import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.util.ParsingUtil;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
@@ -563,7 +564,7 @@ public class DPlayerListener implements Listener {
                             event.setCancelled(true);
                         }
 
-                    } else if (clickedBlock.getType() == Material.BED_BLOCK) {
+                    } else if (LegacyUtil.isBed(clickedBlock.getType())) {
                         if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_BED.getMessage());
                             event.setCancelled(true);
@@ -618,7 +619,7 @@ public class DPlayerListener implements Listener {
                         if (item.getItemMeta().hasDisplayName()) {
                             name = item.getItemMeta().getDisplayName();
 
-                        } else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.BOOK_AND_QUILL) {
+                        } else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == LegacyUtil.WRITABLE_BOOK) {
                             if (item.getItemMeta() instanceof BookMeta) {
                                 BookMeta meta = (BookMeta) item.getItemMeta();
                                 if (meta.hasTitle()) {
