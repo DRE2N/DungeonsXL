@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.util;
 
+import io.github.dre2n.commons.misc.EnumUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -27,31 +28,35 @@ import org.bukkit.Material;
  */
 public enum DColor {
 
-    BLACK(ChatColor.BLACK, DyeColor.BLACK, Material.valueOf("BLACK_WOOL")),
-    DARK_GRAY(ChatColor.DARK_GRAY, DyeColor.GRAY, Material.valueOf("GRAY_WOOL")),
-    LIGHT_GRAY(ChatColor.GRAY, DyeColor.SILVER, Material.valueOf("LIGHT_GRAY_WOOL")),
-    WHITE(ChatColor.WHITE, DyeColor.WHITE, Material.valueOf("WHITE_WOOL")),
-    DARK_GREEN(ChatColor.DARK_GREEN, DyeColor.GREEN, Material.valueOf("GREEN_WOOL")),
-    LIGHT_GREEN(ChatColor.GREEN, DyeColor.LIME, Material.valueOf("LIME_WOOL")),
-    CYAN(ChatColor.DARK_AQUA, DyeColor.CYAN, Material.valueOf("CYAN_WOOL")),
-    DARK_BLUE(ChatColor.DARK_BLUE, DyeColor.BLUE, Material.valueOf("BLUE_WOOL")),
-    LIGHT_BLUE(ChatColor.AQUA, DyeColor.LIGHT_BLUE, Material.valueOf("LIGHT_BLUE_WOOL")),
-    PURPLE(ChatColor.DARK_PURPLE, DyeColor.PURPLE, Material.valueOf("PURPLE_WOOL")),
-    MAGENTA(ChatColor.LIGHT_PURPLE, DyeColor.MAGENTA, Material.valueOf("MAGENTA_WOOL")),
-    DARK_RED(ChatColor.DARK_RED, DyeColor.BROWN, Material.valueOf("BROWN_WOOL")),
-    LIGHT_RED(ChatColor.RED, DyeColor.RED, Material.valueOf("RED_WOOL")),
-    ORANGE(ChatColor.GOLD, DyeColor.ORANGE, Material.valueOf("ORANGE_WOOL")),
-    YELLOW(ChatColor.YELLOW, DyeColor.YELLOW, Material.valueOf("YELLOW_WOOL")),
-    DEFAULT(ChatColor.BLUE, DyeColor.PINK, Material.valueOf("PINK_WOOL"));
+    BLACK(ChatColor.BLACK, DyeColor.BLACK, "BLACK_WOOL"),
+    DARK_GRAY(ChatColor.DARK_GRAY, DyeColor.GRAY, "GRAY_WOOL"),
+    LIGHT_GRAY(ChatColor.GRAY, DyeColor.SILVER, "LIGHT_GRAY_WOOL"),
+    WHITE(ChatColor.WHITE, DyeColor.WHITE, "WHITE_WOOL"),
+    DARK_GREEN(ChatColor.DARK_GREEN, DyeColor.GREEN, "GREEN_WOOL"),
+    LIGHT_GREEN(ChatColor.GREEN, DyeColor.LIME, "LIME_WOOL"),
+    CYAN(ChatColor.DARK_AQUA, DyeColor.CYAN, "CYAN_WOOL"),
+    DARK_BLUE(ChatColor.DARK_BLUE, DyeColor.BLUE, "BLUE_WOOL"),
+    LIGHT_BLUE(ChatColor.AQUA, DyeColor.LIGHT_BLUE, "LIGHT_BLUE_WOOL"),
+    PURPLE(ChatColor.DARK_PURPLE, DyeColor.PURPLE, "PURPLE_WOOL"),
+    MAGENTA(ChatColor.LIGHT_PURPLE, DyeColor.MAGENTA, "MAGENTA_WOOL"),
+    DARK_RED(ChatColor.DARK_RED, DyeColor.BROWN, "BROWN_WOOL"),
+    LIGHT_RED(ChatColor.RED, DyeColor.RED, "RED_WOOL"),
+    ORANGE(ChatColor.GOLD, DyeColor.ORANGE, "ORANGE_WOOL"),
+    YELLOW(ChatColor.YELLOW, DyeColor.YELLOW, "YELLOW_WOOL"),
+    DEFAULT(ChatColor.BLUE, DyeColor.PINK, "PINK_WOOL");
 
     private ChatColor chat;
     private DyeColor dye;
     private Material woolMaterial;
 
-    DColor(ChatColor chat, DyeColor dye, Material woolMaterial) {
+    DColor(ChatColor chat, DyeColor dye, String woolMaterial) {
         this.chat = chat;
         this.dye = dye;
-        this.woolMaterial = woolMaterial;
+        if (EnumUtil.isValidEnum(Material.class, woolMaterial)) {
+            this.woolMaterial = Material.valueOf(woolMaterial);
+        } else {
+            this.woolMaterial = LegacyUtil.LEGACY_WOOL;
+        }
     }
 
     /**

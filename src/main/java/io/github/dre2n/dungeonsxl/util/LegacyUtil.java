@@ -39,8 +39,8 @@ public class LegacyUtil {
     public static Material GOLDEN_LEGGINGS = is1_13 ? Material.valueOf("GOLDEN_LEGGINGS") : Material.valueOf("GOLD_LEGGINGS");
     public static Material GOLDEN_BOOTS = is1_13 ? Material.valueOf("GOLDEN_BOOTS") : Material.valueOf("GOLD_BOOTS");
     public static Material WRITABLE_BOOK = is1_13 ? Material.valueOf("WRITABLE_BOOK") : Material.valueOf("BOOK_AND_QUILL");
-    private static Material LEGACY_WOOL = Material.valueOf("WOOL");
-    private static Material LEGACY_SIGN_POST = Material.valueOf("SIGN_POST");
+    public static Material LEGACY_WOOL = Material.valueOf("WOOL");
+    public static Material LEGACY_SIGN_POST = Material.valueOf("SIGN_POST");
     public static ItemStack RAW_PLACEHOLDER = is1_13 ? new ItemStack(Material.valueOf("BLACK_STAINED_GLASS_PANE")) : new ItemStack(Material.valueOf("STAINED_GLASS_PANE"), 1, (short) 15);
     public static ItemStack RAW_PLAYER_HEAD = is1_13 ? new ItemStack(Material.valueOf("PLAYER_HEAD")) : new ItemStack(Material.valueOf("SKULL"), 1, (short) 3);
 
