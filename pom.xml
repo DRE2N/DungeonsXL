@@ -78,16 +78,19 @@
             <groupId>io.github.dre2n</groupId>
             <artifactId>commons</artifactId>
             <version>3.1.4</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>caliburn</artifactId>
             <version>0.3</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>commandsxl</artifactId>
             <version>2.1.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
@@ -99,6 +102,7 @@
             <groupId>com.gmail.filoghost</groupId>
             <artifactId>holographicdisplaysapi</artifactId>
             <version>2.1.7</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.black_ixx</groupId>
