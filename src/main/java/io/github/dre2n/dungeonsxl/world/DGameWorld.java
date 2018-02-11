@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
+import io.github.dre2n.commons.misc.BlockUtil;
 import io.github.dre2n.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
@@ -549,7 +550,7 @@ public class DGameWorld extends DInstanceWorld {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         for (DSign dSign : dSigns) {
-            if (block.equals(dSign.getSign().getBlock()) && dSign.getType().isProtected()) {
+            if ((block.equals(dSign.getSign().getBlock()) || block.equals(BlockUtil.getAttachedBlock(dSign.getSign().getBlock()))) && dSign.getType().isProtected()) {
                 return true;
             }
         }

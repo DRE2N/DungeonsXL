@@ -20,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
@@ -42,7 +43,7 @@ public class DWorldListener implements Listener {
         this.dWorlds = dWorlds;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         // DEditWorld Signs
@@ -61,7 +62,7 @@ public class DWorldListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlock();
 
@@ -75,7 +76,7 @@ public class DWorldListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockIgnite(BlockIgniteEvent event) {
         if (dWorlds.getInstanceByWorld(event.getBlock().getWorld()) == null) {
             return;
@@ -86,7 +87,7 @@ public class DWorldListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockSpread(BlockSpreadEvent event) {
         Block block = event.getSource();
 
@@ -106,7 +107,7 @@ public class DWorldListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
         DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
 
@@ -121,7 +122,7 @@ public class DWorldListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
         DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
         if (gameWorld != null) {

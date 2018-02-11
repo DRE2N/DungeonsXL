@@ -29,6 +29,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -47,7 +48,7 @@ public class GlobalProtectionListener implements Listener {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockBreakWithSignOnIt(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
@@ -71,7 +72,7 @@ public class GlobalProtectionListener implements Listener {
         event.setCancelled(bbe.isCancelled());
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
@@ -85,21 +86,21 @@ public class GlobalProtectionListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockSpread(BlockSpreadEvent event) {
         if (DPortal.getByBlock(event.getBlock()) != null) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPhysics(BlockPhysicsEvent event) {
         if (DPortal.getByBlock(event.getBlock()) != null) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
         List<Block> blocklist = event.blockList();
         for (Block block : blocklist) {
@@ -138,7 +139,7 @@ public class GlobalProtectionListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPortalCreation(PlayerInteractEvent event) {
         DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(event.getPlayer());
         if (!dPlayer.isCreatingPortal()) {
@@ -174,7 +175,7 @@ public class GlobalProtectionListener implements Listener {
 
     /* SUBJECT TO CHANGE */
     @Deprecated
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (plugin.getDPlayers().getByPlayer(player).isInBreakMode()) {
@@ -205,7 +206,7 @@ public class GlobalProtectionListener implements Listener {
     }
 
     @Deprecated
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
