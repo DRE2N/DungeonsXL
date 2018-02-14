@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.util;
 
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Version;
+import de.erethon.commons.misc.EnumUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -31,18 +32,16 @@ import org.bukkit.inventory.ItemStack;
 public class LegacyUtil {
 
     public static boolean is1_9 = Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion());
-    public static boolean is1_13 = false/*Version.andHigher(Version.MC1_13).contains(CompatibilityHandler.getInstance().getVersion())*/;
+    public static boolean is1_13 = CompatibilityHandler.getInstance().getVersion().useNewMaterials();
 
-    public static Material WOODEN_SWORD = is1_13 ? Material.valueOf("WOODEN_SWORD") : Material.valueOf("WOOD_SWORD");
-    public static Material GOLDEN_HELMET = is1_13 ? Material.valueOf("GOLDEN_HELMET") : Material.valueOf("GOLD_HELMET");
-    public static Material GOLDEN_CESTPLATE = is1_13 ? Material.valueOf("GOLDEN_CHESTPLATE") : Material.valueOf("GOLD_CHESTPLATE");
-    public static Material GOLDEN_LEGGINGS = is1_13 ? Material.valueOf("GOLDEN_LEGGINGS") : Material.valueOf("GOLD_LEGGINGS");
-    public static Material GOLDEN_BOOTS = is1_13 ? Material.valueOf("GOLDEN_BOOTS") : Material.valueOf("GOLD_BOOTS");
-    public static Material WRITABLE_BOOK = is1_13 ? Material.valueOf("WRITABLE_BOOK") : Material.valueOf("BOOK_AND_QUILL");
-    public static Material LEGACY_WOOL = Material.valueOf("WOOL");
-    public static Material LEGACY_SIGN_POST = Material.valueOf("SIGN_POST");
-    public static ItemStack RAW_PLACEHOLDER = is1_13 ? new ItemStack(Material.valueOf("BLACK_STAINED_GLASS_PANE")) : new ItemStack(Material.valueOf("STAINED_GLASS_PANE"), 1, (short) 15);
-    public static ItemStack RAW_PLAYER_HEAD = is1_13 ? new ItemStack(Material.valueOf("PLAYER_HEAD")) : new ItemStack(Material.valueOf("SKULL"), 1, (short) 3);
+    public static Material WOODEN_SWORD = Material.valueOf(is1_13 ? "WOODEN_SWORD" : "WOOD_SWORD");
+    public static Material GOLDEN_HELMET = Material.valueOf(is1_13 ? "GOLDEN_HELMET" : "GOLD_HELMET");
+    public static Material GOLDEN_CESTPLATE = Material.valueOf(is1_13 ? "GOLDEN_CHESTPLATE" : "GOLD_CHESTPLATE");
+    public static Material GOLDEN_LEGGINGS = Material.valueOf(is1_13 ? "GOLDEN_LEGGINGS" : "GOLD_LEGGINGS");
+    public static Material GOLDEN_BOOTS = Material.valueOf(is1_13 ? "GOLDEN_BOOTS" : "GOLD_BOOTS");
+    public static Material WRITABLE_BOOK = Material.valueOf(is1_13 ? "WRITABLE_BOOK" : "BOOK_AND_QUILL");
+    public static Material LEGACY_WOOL = EnumUtil.getEnum(Material.class, "WOOL");
+    public static Material LEGACY_SIGN_POST = EnumUtil.getEnum(Material.class, "SIGN_POST");
 
     public static boolean isSign(Block block) {
         if (is1_13) {
