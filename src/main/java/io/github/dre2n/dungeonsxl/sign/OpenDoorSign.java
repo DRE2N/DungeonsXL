@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.commons.misc.BlockUtil;
+import de.erethon.commons.misc.BlockUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.LockedDoor;
 import org.bukkit.Material;

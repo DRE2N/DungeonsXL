@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.global;
 
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;

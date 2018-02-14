@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
-import io.github.dre2n.commons.misc.FileUtil;
+import de.erethon.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,7 +35,7 @@ public class BackupResourceTask extends BukkitRunnable {
     @Override
     public void run() {
         File target = new File(DungeonsXL.BACKUPS, resource.getName() + "-" + System.currentTimeMillis());
-        FileUtil.copyDirectory(resource.getFolder(), target, new String[]{});
+        FileUtil.copyDir(resource.getFolder(), target);
     }
 
 }

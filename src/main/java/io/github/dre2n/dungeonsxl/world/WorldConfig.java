@@ -16,12 +16,12 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
+import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.compatibility.Version;
+import de.erethon.commons.misc.EnumUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.caliburn.item.UniversalItemStack;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Version;
-import io.github.dre2n.commons.misc.EnumUtil;
-import io.github.dre2n.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.game.GameRuleProvider;
 import io.github.dre2n.dungeonsxl.game.GameType;

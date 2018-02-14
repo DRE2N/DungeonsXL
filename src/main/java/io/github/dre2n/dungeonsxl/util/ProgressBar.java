@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.util;
 
-import io.github.dre2n.commons.chat.MessageUtil;
+import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.util.HashSet;
 import java.util.Set;

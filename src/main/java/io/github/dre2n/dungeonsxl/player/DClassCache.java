@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.misc.FileUtil;
+import de.erethon.commons.misc.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.util;
 
-import io.github.dre2n.commons.item.ItemUtil;
+import de.erethon.commons.item.ItemUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

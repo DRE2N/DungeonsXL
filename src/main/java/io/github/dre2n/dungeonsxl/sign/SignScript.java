@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.misc.NumberUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

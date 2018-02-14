@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign.mob;
 
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;

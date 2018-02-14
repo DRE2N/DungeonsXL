@@ -16,9 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.command.DRECommand;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.command.DRECommand;
+import de.erethon.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DPermission;

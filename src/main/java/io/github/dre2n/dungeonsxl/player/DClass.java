@@ -16,9 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
+import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.compatibility.Version;
 import io.github.dre2n.caliburn.item.UniversalItemStack;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Version;
 import io.github.dre2n.dungeonsxl.util.DeserializationUtil;
 import java.io.File;
 import java.util.ArrayList;

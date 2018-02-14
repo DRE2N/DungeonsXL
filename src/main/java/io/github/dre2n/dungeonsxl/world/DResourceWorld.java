@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
-import io.github.dre2n.commons.misc.FileUtil;
-import io.github.dre2n.commons.worldloader.WorldLoader;
+import de.erethon.commons.misc.FileUtil;
+import de.erethon.commons.worldloader.WorldLoader;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldGenerateEvent;
 import io.github.dre2n.dungeonsxl.player.DEditPlayer;
@@ -214,7 +214,7 @@ public class DResourceWorld {
         final DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
 
         if (!plugin.getMainConfig().areTweaksEnabled()) {
-            FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
+            FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
             instance.world = Bukkit.createWorld(WorldCreator.name(name));
 
             if (game) {
@@ -227,7 +227,7 @@ public class DResourceWorld {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    FileUtil.copyDirectory(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
+                    FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
                     instance.world = WorldLoader.createWorld(WorldCreator.name(instanceFolder.getName()));
 
                     new BukkitRunnable() {
@@ -295,7 +295,7 @@ public class DResourceWorld {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    FileUtil.copyDirectory(DWorldCache.RAW, folder, DungeonsXL.EXCLUDED_FILES);
+                    FileUtil.copyDir(DWorldCache.RAW, folder, DungeonsXL.EXCLUDED_FILES);
                     editWorld.generateIdFile();
                     editWorld.world = WorldLoader.createWorld(creator);
                 }

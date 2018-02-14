@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.util;
 
-import io.github.dre2n.commons.javaplugin.DREPlugin;
+import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -64,7 +64,7 @@ public enum GUIUtil {
      * @return
      * an Inventory that can easily be shown to a Player
      */
-    public static Inventory createGUI(DREPlugin plugin, String title, ItemStack... buttons) {
+    public static Inventory createGUI(DungeonsXL plugin, String title, ItemStack... buttons) {
         return createGUI(plugin, title, Arrays.asList(buttons));
     }
 
@@ -80,7 +80,7 @@ public enum GUIUtil {
      * @return
      * an Inventory that can easily be shown to a Player
      */
-    public static Inventory createGUI(DREPlugin plugin, String title, List<ItemStack> buttons) {
+    public static Inventory createGUI(DungeonsXL plugin, String title, List<ItemStack> buttons) {
         int rows = (int) Math.ceil(((double) buttons.size()) / 9);
         Inventory gui = plugin.getServer().createInventory(null, rows * 9, ChatColor.translateAlternateColorCodes('&', title));
 
@@ -110,7 +110,7 @@ public enum GUIUtil {
             i++;
         }
 
-        plugin.addGUI(gui);
+        plugin.getGUIs().add(gui);
         return gui;
     }
 

@@ -16,9 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.command.DRECommand;
-import io.github.dre2n.commons.misc.FileUtil;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.command.DRECommand;
+import de.erethon.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DPermission;
@@ -70,13 +70,13 @@ public class ImportCommand extends DRECommand {
         MessageUtil.log(plugin, DMessage.LOG_IMPORT_WORLD.getMessage());
 
         if (!plugin.getMainConfig().areTweaksEnabled()) {
-            FileUtil.copyDirectory(source, target, new String[]{"playerdata", "stats"});
+            FileUtil.copyDir(source, target, "playerdata", "stats");
 
         } else {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    FileUtil.copyDirectory(source, target, new String[]{"playerdata", "stats"});
+                    FileUtil.copyDir(source, target, "playerdata", "stats");
                 }
             }.runTaskAsynchronously(plugin);
         }

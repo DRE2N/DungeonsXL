@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.commons.chat.MessageUtil;
+import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DPermission;

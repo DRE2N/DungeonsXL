@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.world.block;
 
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;

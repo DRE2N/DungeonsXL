@@ -16,11 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Version;
-import io.github.dre2n.commons.player.PlayerUtil;
-import io.github.dre2n.commons.player.PlayerWrapper;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.compatibility.Version;
+import de.erethon.commons.player.PlayerUtil;
+import de.erethon.commons.player.PlayerWrapper;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.event.dgroup.DGroupCreateEvent;

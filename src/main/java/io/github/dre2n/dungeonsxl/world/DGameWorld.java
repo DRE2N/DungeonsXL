@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
-import io.github.dre2n.commons.misc.BlockUtil;
-import io.github.dre2n.commons.misc.FileUtil;
+import de.erethon.commons.misc.BlockUtil;
+import de.erethon.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
@@ -496,7 +496,7 @@ public class DGameWorld extends DInstanceWorld {
 
         if (!plugin.getMainConfig().areTweaksEnabled()) {
             Bukkit.unloadWorld(getWorld(), false);
-            FileUtil.removeDirectory(getFolder());
+            FileUtil.removeDir(getFolder());
             worlds.removeInstance(this);
 
         } else {
@@ -505,7 +505,7 @@ public class DGameWorld extends DInstanceWorld {
                 @Override
                 public void run() {
                     Bukkit.unloadWorld(getWorld(), false);
-                    FileUtil.removeDirectory(getFolder());
+                    FileUtil.removeDir(getFolder());
                     worlds.removeInstance(gameWorld);
                 }
             }.runTaskAsynchronously(plugin);

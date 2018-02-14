@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.config.Message;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.config.Message;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;

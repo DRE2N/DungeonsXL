@@ -16,9 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.misc.NumberUtil;
-import io.github.dre2n.commons.player.PlayerCollection;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.player.PlayerCollection;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
@@ -43,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -710,7 +710,7 @@ public class DGroup {
             newFloor = specifiedFloor;
             type = DGameWorld.Type.DEFAULT;
         } else if (floorsLeft > 0) {
-            int random = NumberUtil.generateRandomInt(0, floorsLeft);
+            int random = new Random().nextInt(floorsLeft);
             newFloor = getUnplayedFloors().get(random);
             type = DGameWorld.Type.DEFAULT;
         } else {

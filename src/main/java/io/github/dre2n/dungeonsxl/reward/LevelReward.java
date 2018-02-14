@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.reward;
 
-import io.github.dre2n.commons.chat.MessageUtil;
+import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import org.bukkit.entity.Player;
 

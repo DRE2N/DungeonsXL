@@ -16,9 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.mob;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.misc.EnumUtil;
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.misc.EnumUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.misc.EnumUtil;
+import de.erethon.commons.misc.EnumUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.requirement;
 
-import io.github.dre2n.commons.chat.MessageUtil;
+import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.event.requirement.RequirementRegistrationEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

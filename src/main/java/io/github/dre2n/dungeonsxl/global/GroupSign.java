@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.global;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.misc.BlockUtil;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.misc.BlockUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;

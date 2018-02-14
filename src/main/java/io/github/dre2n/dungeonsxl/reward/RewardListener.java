@@ -16,11 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.reward;
 
+import de.erethon.commons.gui.PageGUI;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGlobalPlayer;
 import io.github.dre2n.dungeonsxl.player.DPermission;
-import io.github.dre2n.dungeonsxl.util.PageGUI;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.RewardChest;

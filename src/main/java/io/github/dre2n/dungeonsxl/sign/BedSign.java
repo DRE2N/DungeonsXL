@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
-import io.github.dre2n.commons.misc.BlockUtil;
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.misc.BlockUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import io.github.dre2n.dungeonsxl.world.block.TeamBed;

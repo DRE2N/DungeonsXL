@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.sign.lobby;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.game.GameType;
 import io.github.dre2n.dungeonsxl.game.GameTypeDefault;
@@ -167,7 +167,7 @@ public class ReadySign extends DSign {
         }
 
         if (dPlayer.isReady()) {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), plugin.getMessageConfig().getMessage(dPlayer.isReady() ? DMessage.PLAYER_READY : DMessage.ERROR_READY));
+            MessageUtil.sendMessage(dPlayer.getPlayer(), (dPlayer.isReady() ? DMessage.PLAYER_READY : DMessage.ERROR_READY).getMessage());
         }
     }
 

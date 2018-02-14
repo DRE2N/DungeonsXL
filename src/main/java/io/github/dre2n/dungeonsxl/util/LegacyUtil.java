@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.util;
 
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Version;
+import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.compatibility.Version;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;

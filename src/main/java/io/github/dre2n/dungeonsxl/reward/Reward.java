@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.reward;
 
-import io.github.dre2n.commons.chat.MessageUtil;
+import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.reward.RewardRegistrationEvent;
 import java.lang.reflect.Constructor;

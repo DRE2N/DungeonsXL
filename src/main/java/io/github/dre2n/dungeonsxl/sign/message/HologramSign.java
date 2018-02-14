@@ -18,12 +18,12 @@ package io.github.dre2n.dungeonsxl.sign.message;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.compatibility.Version;
+import de.erethon.commons.misc.EnumUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.caliburn.CaliburnAPI;
 import io.github.dre2n.caliburn.item.UniversalItem;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Version;
-import io.github.dre2n.commons.misc.EnumUtil;
-import io.github.dre2n.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;

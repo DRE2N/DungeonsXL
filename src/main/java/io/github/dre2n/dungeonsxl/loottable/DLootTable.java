@@ -17,10 +17,10 @@
 package io.github.dre2n.dungeonsxl.loottable;
 
 import io.github.dre2n.caliburn.item.UniversalItemStack;
-import io.github.dre2n.commons.misc.NumberUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -168,7 +168,7 @@ public class DLootTable {
     public List<ItemStack> generateLootList() {
         List<ItemStack> lootList = new ArrayList<>();
         for (Entry entry : entries) {
-            if (NumberUtil.generateRandomInt(0, 100) < entry.getLootChance()) {
+            if (new Random().nextInt(100) < entry.getLootChance()) {
                 lootList.add(entry.getLootItem());
             }
         }

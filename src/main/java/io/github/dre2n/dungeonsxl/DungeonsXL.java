@@ -16,11 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl;
 
+import de.erethon.commons.compatibility.Internals;
+import de.erethon.commons.config.MessageConfig;
+import de.erethon.commons.javaplugin.DREPlugin;
+import de.erethon.commons.javaplugin.DREPluginSettings;
 import io.github.dre2n.caliburn.CaliburnAPI;
-import io.github.dre2n.commons.compatibility.Internals;
-import io.github.dre2n.commons.config.MessageConfig;
-import io.github.dre2n.commons.javaplugin.DREPlugin;
-import io.github.dre2n.commons.javaplugin.DREPluginSettings;
 import io.github.dre2n.dungeonsxl.announcer.AnnouncerCache;
 import io.github.dre2n.dungeonsxl.command.DCommandCache;
 import io.github.dre2n.dungeonsxl.config.DMessage;
@@ -44,12 +44,14 @@ import io.github.dre2n.dungeonsxl.sign.DSignTypeCache;
 import io.github.dre2n.dungeonsxl.sign.SignScriptCache;
 import io.github.dre2n.dungeonsxl.trigger.TriggerTypeCache;
 import io.github.dre2n.dungeonsxl.util.NoReload;
-import io.github.dre2n.dungeonsxl.util.PageGUICache;
 import io.github.dre2n.dungeonsxl.world.DWorldCache;
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.Inventory;
 
 /**
  * The main class of DungeonsXL.
@@ -76,7 +78,6 @@ public class DungeonsXL extends DREPlugin {
 
     private GlobalData globalData;
     private MainConfig mainConfig;
-    private MessageConfig messageConfig;
 
     private DCommandCache dCommands;
     private DSignTypeCache dSigns;
@@ -94,7 +95,6 @@ public class DungeonsXL extends DREPlugin {
     private DMobTypeCache dMobTypes;
     private SignScriptCache signScripts;
     private DWorldCache dWorlds;
-    private PageGUICache pageGUIs;
 
     private CopyOnWriteArrayList<Game> games = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
@@ -243,7 +243,6 @@ public class DungeonsXL extends DREPlugin {
         loadDMobTypes(MOBS);
         loadSignScripts(SIGNS);
         loadDCommandCache();
-        loadPageGUICache();
     }
 
     // Save and load
@@ -301,13 +300,6 @@ public class DungeonsXL extends DREPlugin {
      */
     public void loadMainConfig(File file) {
         mainConfig = new MainConfig(file);
-    }
-
-    /**
-     * @return the loaded instance of MessageConfig
-     */
-    public MessageConfig getMessageConfig() {
-        return messageConfig;
     }
 
     /**
@@ -543,21 +535,6 @@ public class DungeonsXL extends DREPlugin {
         dWorlds = new DWorldCache(MAPS);
     }
 
-    public PageGUICache getPageGUICache() {
-        return pageGUIs;
-    }
-
-    /**
-     * load / reload a new instance of PageGUICache
-     */
-    public void loadPageGUICache() {
-        if (pageGUIs != null) {
-            HandlerList.unregisterAll(pageGUIs);
-        }
-        pageGUIs = new PageGUICache();
-        manager.registerEvents(pageGUIs, this);
-    }
-
     /**
      * @return the games
      */
@@ -570,6 +547,14 @@ public class DungeonsXL extends DREPlugin {
      */
     public List<DGroup> getDGroups() {
         return dGroups;
+    }
+
+    @Deprecated
+    private Set<Inventory> guis = new HashSet<>();
+
+    @Deprecated
+    public Set<Inventory> getGUIs() {
+        return guis;
     }
 
 }

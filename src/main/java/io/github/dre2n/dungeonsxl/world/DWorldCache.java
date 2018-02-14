@@ -16,8 +16,8 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
-import io.github.dre2n.commons.misc.FileUtil;
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.misc.FileUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.MainConfig;
 import io.github.dre2n.dungeonsxl.config.MainConfig.BackupMode;
@@ -212,15 +212,15 @@ public class DWorldCache {
                     if (mapFile.getName().startsWith(".id_")) {
                         String name = mapFile.getName().substring(4);
 
-                        FileUtil.copyDirectory(file, new File(DungeonsXL.MAPS, name), DungeonsXL.EXCLUDED_FILES);
-                        FileUtil.deleteUnusedFiles(new File(DungeonsXL.MAPS, name));
+                        FileUtil.copyDir(file, new File(DungeonsXL.MAPS, name), DungeonsXL.EXCLUDED_FILES);
+                        deleteUnusedFiles(new File(DungeonsXL.MAPS, name));
 
-                        FileUtil.removeDirectory(file);
+                        FileUtil.removeDir(file);
                     }
                 }
 
             } else if (file.getName().startsWith("DXL_Game_") && file.isDirectory()) {
-                FileUtil.removeDirectory(file);
+                FileUtil.removeDir(file);
             }
         }
     }
@@ -293,9 +293,9 @@ public class DWorldCache {
         creator.generateStructures(false);
         World world = creator.createWorld();
         File worldFolder = new File(Bukkit.getWorldContainer(), ".raw");
-        FileUtil.copyDirectory(worldFolder, RAW, DungeonsXL.EXCLUDED_FILES);
+        FileUtil.copyDir(worldFolder, RAW, DungeonsXL.EXCLUDED_FILES);
         Bukkit.unloadWorld(world, false);
-        FileUtil.removeDirectory(worldFolder);
+        FileUtil.removeDir(worldFolder);
     }
 
     /* Tasks */
@@ -311,6 +311,22 @@ public class DWorldCache {
      */
     public void startWorldUnloadTask(long period) {
         worldUnloadTask = new WorldUnloadTask().runTaskTimer(plugin, period, period);
+    }
+
+    /* Util */
+    /**
+     * Removes files that are not needed from a world
+     *
+     * @param dir
+     * the directory to purge
+     */
+    public static void deleteUnusedFiles(File dir) {
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.getName().equalsIgnoreCase("uid.dat") || file.getName().contains(".id_")) {
+                file.delete();
+            }
+        }
     }
 
 }

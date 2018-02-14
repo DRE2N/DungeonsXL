@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.mob;
 
-import io.github.dre2n.commons.misc.FileUtil;
+import de.erethon.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;

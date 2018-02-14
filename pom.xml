@@ -46,12 +46,12 @@
                             <artifactSet>
                                 <includes>
                                     <include>io.github.dre2n:caliburn</include>
-                                    <include>io.github.dre2n:commons</include>
+                                    <include>de.erethon:commons</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>io.github.dre2n.commons</pattern>
+                                    <pattern>de.erethon.commons</pattern>
                                     <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
                                 </relocation>
                             </relocations>
@@ -75,9 +75,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.dre2n</groupId>
+            <groupId>de.erethon</groupId>
             <artifactId>commons</artifactId>
-            <version>3.1.4</version>
+            <version>4.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -129,8 +129,12 @@
             <url>http://repo.inventivetalent.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>dre2n-repo</id>
+            <id>sataniel-repo</id>
             <url>http://feuerstern.bplaced.net/repo/</url>
+        </repository>
+        <repository>
+            <id>dre-repo</id>
+            <url>http://erethon.de/repo/</url>
         </repository>
     </repositories>
 </project>

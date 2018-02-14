@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.dungeon;
 
-import io.github.dre2n.commons.chat.MessageUtil;
+import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import java.io.File;
 import java.util.ArrayList;

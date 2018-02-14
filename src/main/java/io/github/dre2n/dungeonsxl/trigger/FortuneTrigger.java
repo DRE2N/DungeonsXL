@@ -16,9 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.trigger;
 
-import io.github.dre2n.commons.misc.NumberUtil;
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.event.trigger.TriggerActionEvent;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
+import java.util.Random;
 import org.bukkit.Bukkit;
 
 /**
@@ -57,7 +58,7 @@ public class FortuneTrigger extends Trigger {
 
     /* Actions */
     public void onTrigger() {
-        int random = NumberUtil.generateRandomInt(0, 100);
+        int random = new Random().nextInt(100);
         if (chance * 100 < random) {
             return;
         }

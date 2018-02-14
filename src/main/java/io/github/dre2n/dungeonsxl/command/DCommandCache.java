@@ -16,10 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.command;
 
-import io.github.dre2n.commons.command.DRECommand;
-import io.github.dre2n.commons.command.DRECommandCache;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.javaplugin.DREPlugin;
+import de.erethon.commons.command.DRECommand;
+import de.erethon.commons.command.DRECommandCache;
+import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.javaplugin.DREPlugin;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 
 /**

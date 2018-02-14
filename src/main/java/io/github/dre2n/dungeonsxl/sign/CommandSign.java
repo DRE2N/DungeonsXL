@@ -16,10 +16,10 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.commandsxl.CommandsXL;
 import io.github.dre2n.commandsxl.command.CCommand;
 import io.github.dre2n.commandsxl.command.CCommandExecutorTask;
-import io.github.dre2n.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;

@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.player;
 
-import io.github.dre2n.commons.player.PlayerUtil;
+import de.erethon.commons.player.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

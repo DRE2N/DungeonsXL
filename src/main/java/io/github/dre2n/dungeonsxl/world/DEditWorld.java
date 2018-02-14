@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
-import io.github.dre2n.commons.misc.FileUtil;
+import de.erethon.commons.misc.FileUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldSaveEvent;
 import io.github.dre2n.dungeonsxl.event.editworld.EditWorldUnloadEvent;
@@ -122,15 +122,15 @@ public class DEditWorld extends DInstanceWorld {
         getWorld().save();
 
         if (!plugin.getMainConfig().areTweaksEnabled()) {
-            FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-            FileUtil.deleteUnusedFiles(getResource().getFolder());
+            FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+            DWorldCache.deleteUnusedFiles(getResource().getFolder());
 
         } else {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-                    FileUtil.deleteUnusedFiles(getResource().getFolder());
+                    FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                    DWorldCache.deleteUnusedFiles(getResource().getFolder());
                 }
             }.runTaskAsynchronously(plugin);
         }
@@ -166,12 +166,12 @@ public class DEditWorld extends DInstanceWorld {
             if (save) {
                 Bukkit.unloadWorld(getWorld(), true);
             }
-            FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-            FileUtil.deleteUnusedFiles(getResource().getFolder());
+            FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+            DWorldCache.deleteUnusedFiles(getResource().getFolder());
             if (!save) {
                 Bukkit.unloadWorld(getWorld(), true);
             }
-            FileUtil.removeDirectory(getFolder());
+            FileUtil.removeDir(getFolder());
             worlds.removeInstance(this);
 
         } else {
@@ -182,12 +182,12 @@ public class DEditWorld extends DInstanceWorld {
                     if (save) {
                         Bukkit.unloadWorld(getWorld(), true);
                     }
-                    FileUtil.copyDirectory(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-                    FileUtil.deleteUnusedFiles(getResource().getFolder());
+                    FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                    DWorldCache.deleteUnusedFiles(getResource().getFolder());
                     if (!save) {
                         Bukkit.unloadWorld(getWorld(), true);
                     }
-                    FileUtil.removeDirectory(getFolder());
+                    FileUtil.removeDir(getFolder());
                     worlds.removeInstance(editWorld);
                 }
             }.runTaskAsynchronously(plugin);

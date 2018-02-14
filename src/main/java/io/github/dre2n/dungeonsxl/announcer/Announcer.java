@@ -16,9 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.announcer;
 
-import io.github.dre2n.commons.chat.DefaultFontInfo;
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.chat.DefaultFontInfo;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.compatibility.CompatibilityHandler;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
@@ -357,7 +357,7 @@ public class Announcer {
     public void showGUI(Player player) {
         updateButtons();
         Inventory gui = GUIUtil.createGUI(plugin, ChatColor.DARK_RED + name, buttons);
-        plugin.addGUI(gui);
+        plugin.getGUIs().add(gui);
         player.openInventory(gui);
     }
 

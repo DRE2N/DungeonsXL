@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
-import io.github.dre2n.commons.config.DREConfig;
+import de.erethon.commons.config.DREConfig;
 import java.io.File;
 
 /**

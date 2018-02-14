@@ -16,7 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.dungeon;
 
-import io.github.dre2n.commons.config.DREConfig;
+import de.erethon.commons.config.DREConfig;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import io.github.dre2n.dungeonsxl.world.DWorldCache;

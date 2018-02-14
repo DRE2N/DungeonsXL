@@ -16,11 +16,11 @@
  */
 package io.github.dre2n.dungeonsxl.config;
 
-import io.github.dre2n.commons.chat.MessageUtil;
-import io.github.dre2n.commons.compatibility.CompatibilityHandler;
-import io.github.dre2n.commons.compatibility.Internals;
-import io.github.dre2n.commons.config.DREConfig;
-import io.github.dre2n.commons.misc.EnumUtil;
+import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.compatibility.Internals;
+import de.erethon.commons.config.DREConfig;
+import de.erethon.commons.misc.EnumUtil;
 import io.github.dre2n.dungeonsxl.util.DColor;
 import static io.github.dre2n.dungeonsxl.util.DColor.*;
 import io.github.dre2n.dungeonsxl.world.WorldConfig;
