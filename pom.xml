@@ -2,94 +2,113 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dre2n</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.15.7-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <version>0.16-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
     <description>Create custom dungeons and adventure maps with ease!</description>
     <properties>
         <buildNo></buildNo>
-        <skipTests>true</skipTests>
     </properties>
-    <modules>
-        <module>shade</module>
-        <module>core</module>
-        <module>abstract</module>
-        <module>rpapi-patch_1_11_R1</module>
-        <module>craftbukkit_1_11_R1</module>
-        <module>craftbukkit_1_10_R1</module>
-        <module>craftbukkit_1_9_R2</module>
-        <module>craftbukkit_1_9_R1</module>
-    </modules>
+    <build>
+        <finalName>dungeonsxl-${project.version}${buildNo}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>src/main/resources/</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>io.github.dre2n:caliburn</include>
+                                    <include>de.erethon:commons</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>de.erethon.commons</pattern>
+                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.dre2n</groupId>
+            <groupId>de.erethon</groupId>
             <artifactId>commons</artifactId>
-            <version>1.0.6</version>
+            <version>4.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.2.3</version>
+            <version>0.3</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
             <artifactId>commandsxl</artifactId>
             <version>2.1.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
-            <version>2.0.19-SNAPSHOT</version>
+            <version>2.0.21-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.gmail.filoghost</groupId>
             <artifactId>holographicdisplaysapi</artifactId>
             <version>2.1.7</version>
-        </dependency>
-        <dependency>
-            <groupId>pl.betoncraft.betonquest</groupId>
-            <artifactId>BetonQuest</artifactId>
-            <version>1.8.5</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.black_ixx</groupId>
             <artifactId>BossShop</artifactId>
             <version>2.6.9</version>
             <scope>provided</scope>
-        </dependency>
-        <!--<dependency>
-            <groupId>org.inventivetalent.resourcepackapi</groupId>
-            <artifactId>v1_11_R1</artifactId>
-            <version>2.2.1</version>
-        </dependency>-->
-        <dependency>
-            <groupId>org.inventivetalent.resourcepackapi</groupId>
-            <artifactId>v1_10_R1</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.inventivetalent.resourcepackapi</groupId>
-            <artifactId>v1_9_R2</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.inventivetalent.resourcepackapi</groupId>
-            <artifactId>v1_9_R1</artifactId>
-            <version>2.2.1</version>
         </dependency>
     </dependencies>
     <repositories>
@@ -106,16 +125,16 @@
             <url>http://repo.citizensnpcs.co/</url>
         </repository>
         <repository>
-            <id>betonquest-repo</id>
-            <url>http://betonquest.betoncraft.pl/mvn</url>
-        </repository>
-        <repository>
             <id>inventive-repo</id>
             <url>http://repo.inventivetalent.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>dre2n-repo</id>
+            <id>sataniel-repo</id>
             <url>http://feuerstern.bplaced.net/repo/</url>
+        </repository>
+        <repository>
+            <id>dre-repo</id>
+            <url>http://erethon.de/repo/</url>
         </repository>
     </repositories>
 </project>
