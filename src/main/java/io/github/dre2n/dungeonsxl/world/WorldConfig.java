@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -58,6 +59,7 @@ public class WorldConfig extends GameRuleProvider {
 
     private List<String> invitedPlayers = new ArrayList<>();
     private GameType forcedGameType;
+    private Environment worldEnvironment;
 
     public WorldConfig() {
     }
@@ -96,7 +98,11 @@ public class WorldConfig extends GameRuleProvider {
         /* Invited Players */
         if (configFile.contains("invitedPlayers")) {
             invitedPlayers = configFile.getStringList("invitedPlayers");
+        }
 
+        if (configFile.contains("worldEnvironment")) {
+            Environment env = EnumUtil.getEnum(Environment.class, configFile.getString("worldEnvironment"));
+            worldEnvironment = env != null ? env : Environment.NORMAL;
         }
 
         /* Keep Inventory */
@@ -312,15 +318,13 @@ public class WorldConfig extends GameRuleProvider {
         }
 
         List<String> secureObjectIds = new ArrayList<>();
-
         for (ItemStack item : getSecureObjects()) {
             secureObjectIds.add(CaliburnAPI.getInstance().getItems().getCustomItemId(item));
         }
 
         configFile.set("secureObjects", secureObjects);
-
-        // Invited Players
         configFile.set("invitedPlayers", invitedPlayers);
+        configFile.set("worldEnvironment", worldEnvironment.name());
 
         try {
             configFile.save(file);
@@ -374,6 +378,21 @@ public class WorldConfig extends GameRuleProvider {
      */
     public void setForcedGameType(GameType forcedGameType) {
         this.forcedGameType = forcedGameType;
+    }
+
+    /**
+     * @return the world environment
+     */
+    public Environment getWorldEnvironment() {
+        return worldEnvironment;
+    }
+
+    /**
+     * @param worldEnvironment
+     * the world environment to set
+     */
+    public void setWorldEnvironment(Environment worldEnvironment) {
+        this.worldEnvironment = worldEnvironment;
     }
 
 }

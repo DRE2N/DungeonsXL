@@ -26,6 +26,7 @@ import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -81,7 +82,12 @@ public class ImportCommand extends DRECommand {
             }.runTaskAsynchronously(plugin);
         }
 
-        plugin.getDWorlds().addResource(new DResourceWorld(plugin.getDWorlds(), args[1]));
+        DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), args[1]);
+        if (world.getEnvironment() != Environment.NORMAL) {
+            resource.getConfig(true).setWorldEnvironment(world.getEnvironment());
+            resource.getConfig().save();
+        }
+        plugin.getDWorlds().addResource(resource);
         MessageUtil.sendMessage(sender, DMessage.CMD_IMPORT_SUCCESS.getMessage(args[1]));
     }
 

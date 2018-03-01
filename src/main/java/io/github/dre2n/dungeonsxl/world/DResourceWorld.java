@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -126,6 +127,10 @@ public class DResourceWorld {
         return config;
     }
 
+    public Environment getWorldEnvironment() {
+        return config != null ? config.getWorldEnvironment() : Environment.NORMAL;
+    }
+
     /**
      * @return the DXLData.data file
      */
@@ -215,7 +220,7 @@ public class DResourceWorld {
 
         if (!plugin.getMainConfig().areTweaksEnabled()) {
             FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
-            instance.world = Bukkit.createWorld(WorldCreator.name(name));
+            instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment()));
 
             if (game) {
                 signData.deserializeSigns((DGameWorld) instance);
@@ -228,7 +233,7 @@ public class DResourceWorld {
                 @Override
                 public void run() {
                     FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
-                    instance.world = WorldLoader.createWorld(WorldCreator.name(instanceFolder.getName()));
+                    instance.world = WorldLoader.createWorld(WorldCreator.name(instanceFolder.getName()).environment(getWorldEnvironment()));
 
                     new BukkitRunnable() {
                         @Override
