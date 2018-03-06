@@ -18,7 +18,9 @@ package io.github.dre2n.dungeonsxl.world.block;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.material.Door;
 
 /**
  * A locked door that may be opened with a trigger.
@@ -55,7 +57,9 @@ public class LockedDoor extends GameBlock implements MultiBlock {
      * Opens the door.
      */
     public void open() {
-        block.setData((byte) (block.getData() + 4));
+        BlockState state = block.getState();
+        ((Door) state.getData()).setOpen(true);
+        state.update(true);
     }
 
 }
