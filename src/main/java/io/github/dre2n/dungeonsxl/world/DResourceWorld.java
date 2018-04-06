@@ -128,7 +128,7 @@ public class DResourceWorld {
     }
 
     public Environment getWorldEnvironment() {
-        return config != null ? config.getWorldEnvironment() : Environment.NORMAL;
+        return (config != null && config.getWorldEnvironment() != null) ? config.getWorldEnvironment() : Environment.NORMAL;
     }
 
     /**
