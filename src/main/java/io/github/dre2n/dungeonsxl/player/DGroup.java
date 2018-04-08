@@ -850,7 +850,9 @@ public class DGroup {
                     continue;
                 }
 
-                requirement.demand(player);
+                if (!DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS)) {
+                    requirement.demand(player);
+                }
             }
 
             player.setGameMode(rules.getGameMode());
