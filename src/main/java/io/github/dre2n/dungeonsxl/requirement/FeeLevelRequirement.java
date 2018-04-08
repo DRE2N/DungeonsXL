@@ -18,6 +18,8 @@ package io.github.dre2n.dungeonsxl.requirement;
 
 import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.config.DMessage;
+import io.github.dre2n.dungeonsxl.game.Game;
+import io.github.dre2n.dungeonsxl.game.GameRuleProvider;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.player.DPlayerData;
 import org.bukkit.configuration.ConfigurationSection;
@@ -31,6 +33,7 @@ public class FeeLevelRequirement extends Requirement {
     private RequirementType type = RequirementTypeDefault.FEE_LEVEL;
 
     private int fee;
+    private Boolean keepInventory;
 
     /* Getters and setters */
     /**
@@ -61,20 +64,48 @@ public class FeeLevelRequirement extends Requirement {
 
     @Override
     public boolean check(Player player) {
-        return player.getLevel() >= fee;
+        if (isKeepInventory(player)) {
+            return player.getLevel() >= fee;
+        }
+
+        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        return dPlayer != null ? dPlayer.getData().getOldLevel() >= fee : true;
     }
 
     @Override
     public void demand(Player player) {
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
-        if (dPlayer == null) {
-            return;
+        if (isKeepInventory(player)) {
+            player.setLevel(player.getLevel() - fee);
+
+        } else {
+            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+            if (dPlayer == null) {
+                return;
+            }
+            DPlayerData data = dPlayer.getData();
+            data.setOldLevel(data.getOldLevel() - fee);
         }
 
-        DPlayerData data = dPlayer.getData();
-        data.setOldLevel(data.getOldLevel() - fee);
-
         MessageUtil.sendMessage(player, DMessage.REQUIREMENT_FEE.getMessage(fee + " levels"));
+    }
+
+    private boolean isKeepInventory(Player player) {
+        if (keepInventory != null) {
+            return keepInventory;
+        }
+
+        Game game = Game.getByPlayer(player);
+        GameRuleProvider rules = null;
+        if (game != null) {
+            rules = game.getRules();
+        }
+        if (rules != null) {
+            keepInventory = rules.getKeepInventoryOnEnter();
+            return keepInventory;
+        }
+
+        keepInventory = GameRuleProvider.DEFAULT_VALUES.getKeepInventoryOnEnter();
+        return keepInventory;
     }
 
 }
