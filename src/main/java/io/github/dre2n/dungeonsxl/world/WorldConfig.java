@@ -324,7 +324,9 @@ public class WorldConfig extends GameRuleProvider {
 
         configFile.set("secureObjects", secureObjects);
         configFile.set("invitedPlayers", invitedPlayers);
-        configFile.set("worldEnvironment", worldEnvironment.name());
+        if (worldEnvironment != null) {
+            configFile.set("worldEnvironment", worldEnvironment.name());
+        }
 
         try {
             configFile.save(file);
