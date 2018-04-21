@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign.message;
 
+import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
@@ -23,6 +24,7 @@ import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -35,7 +37,10 @@ public class SoundMessageSign extends DSign {
 
     // Variables
     private boolean initialized;
-    private String msg;
+    private String sound;
+    private SoundCategory category;
+    private float volume;
+    private float pitch;
     private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<>();
 
     public SoundMessageSign(Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -54,19 +59,33 @@ public class SoundMessageSign extends DSign {
     @Override
     public void onInit() {
         if (!lines[1].isEmpty()) {
-            String msg = getGame().getRules().getMessage(NumberUtil.parseInt(lines[1]));
-            if (msg != null) {
-                this.msg = msg;
-                getSign().getBlock().setType(Material.AIR);
+            sound = lines[1];
+            if (!lines[2].isEmpty()) {
+                String[] args = lines[2].split(",");
+                if (args.length >= 1) {
+                    category = EnumUtil.getEnumIgnoreCase(SoundCategory.class, args[0]);
+                    if (category == null) {
+                        category = SoundCategory.MASTER;
+                    }
+                }
+                if (args.length == 3) {
+                    volume = (float) NumberUtil.parseDouble(args[1], 5.0);
+                    pitch = (float) NumberUtil.parseDouble(args[2], 1.0);
+                }
             }
+            getSign().getBlock().setType(Material.AIR);
+            initialized = true;
+        } else {
+            markAsErroneous();
         }
-
-        initialized = true;
     }
 
     @Override
     public void onTrigger() {
         if (initialized) {
+            for (Player player : getGameWorld().getWorld().getPlayers()) {
+                player.playSound(getSign().getLocation(), sound, category, volume, pitch);
+            }
             remove();
         }
     }
@@ -74,12 +93,15 @@ public class SoundMessageSign extends DSign {
     @Override
     public boolean onPlayerTrigger(Player player) {
         if (initialized) {
-            remove();
+            if (!done.contains(player)) {
+                done.add(player);
+                player.playSound(getSign().getLocation(), sound, category, volume, pitch);
+            }
+
             if (done.size() >= getGameWorld().getWorld().getPlayers().size()) {
                 remove();
             }
         }
-
         return true;
     }
 
