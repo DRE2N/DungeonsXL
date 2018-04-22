@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
@@ -55,7 +56,7 @@ public class LeaveSign extends DSign {
             addTrigger(trigger);
         }
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.DARK_GREEN + "Leave");
+        getSign().setLine(1, DMessage.SIGN_LEAVE.getMessage());
         getSign().setLine(2, "");
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();

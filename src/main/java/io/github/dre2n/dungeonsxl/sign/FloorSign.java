@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
@@ -76,9 +77,9 @@ public class FloorSign extends DSign {
         }
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.DARK_GREEN + "ENTER");
+        getSign().setLine(1, DMessage.SIGN_FLOOR_1.getMessage());
         if (floor == null) {
-            getSign().setLine(2, ChatColor.DARK_GREEN + "NEXT FLOOR");
+            getSign().setLine(2, DMessage.SIGN_FLOOR_2.getMessage());
         } else {
             getSign().setLine(2, ChatColor.DARK_GREEN + floor.getName().replaceAll("_", " "));
         }

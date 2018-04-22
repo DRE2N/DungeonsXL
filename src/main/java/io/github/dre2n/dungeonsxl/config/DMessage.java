@@ -18,7 +18,7 @@ package io.github.dre2n.dungeonsxl.config;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.config.Message;
-import io.github.dre2n.dungeonsxl.DungeonsXL;
+import de.erethon.commons.javaplugin.DREPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -224,7 +224,21 @@ public enum DMessage implements Message {
     SETTINGS_TITLE("Settings_Title", "&4Settings: &o"),
     SETTINGS_TITLE_EDIT("Settings_Title_Edit", "Dungeon Setup"),
     SETTINGS_TITLE_GLOBAL("Settings_Title_Global", "Global Configuration"),
-    SETTINGS_TITLE_PLAYER("Settings_Title_Player", "Player");
+    SETTINGS_TITLE_PLAYER("Settings_Title_Player", "Player"),
+    SIGN_END("sign.end", "&2END"),
+    SIGN_FLOOR_1("sign.floor.1", "&2ENTER"),
+    SIGN_FLOOR_2("sign.floor.2", "&2NEXT FLOOR"),
+    SIGN_GLOBAL_FULL("sign.global.full", "&4FULL"),
+    SIGN_GLOBAL_IS_PLAYING("sign.global.isPlaying", "&4IS PLAYING"),
+    SIGN_GLOBAL_JOIN_GAME("sign.global.joinGame", "&2JOIN GAME"),
+    SIGN_GLOBAL_JOIN_GROUP("sign.global.joinGroup", "&2JOIN GROUP"),
+    SIGN_GLOBAL_NEW_GAME("sign.global.newGame", "&2NEW GAME"),
+    SIGN_GLOBAL_NEW_GROUP("sign.global.newGroup", "&2NEW GROUP"),
+    SIGN_LEAVE("sign.leave", "&2LEAVE"),
+    SIGN_READY("sign.ready", "&2READY"),
+    SIGN_RESOURCE_PACK("sign.resourcePack", "&2DOWNLOAD"),
+    SIGN_WAVE_1("sign.wave.1", "&2START"),
+    SIGN_WAVE_2("sign.wave.2", "&2NEXT WAVE");
 
     private String identifier;
     private String message;
@@ -247,7 +261,7 @@ public enum DMessage implements Message {
 
     @Override
     public String getMessage(String... args) {
-        return DungeonsXL.getInstance().getMessageConfig().getMessage(this, args);
+        return DREPlugin.getInstance().getMessageConfig().getMessage(this, args);
     }
 
     @Override
@@ -260,13 +274,13 @@ public enum DMessage implements Message {
      * Sends the message to the console.
      */
     public void debug() {
-        MessageUtil.log(DungeonsXL.getInstance(), getMessage());
+        MessageUtil.log(DREPlugin.getInstance(), getMessage());
     }
 
     /* Statics */
     /**
-     * @param identifer
-     * the identifer to set
+     * @param identifier
+     * the identifier to set
      */
     public static Message getByIdentifier(String identifier) {
         for (Message message : values()) {

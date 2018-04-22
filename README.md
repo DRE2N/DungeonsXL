@@ -1,9 +1,9 @@
 ![DungeonsXL](http://feuerstern.bplaced.net/ressourcen/logos/DungeonsXL.png)
 
-[![Builds](http://feuerstern.bplaced.net/ressourcen/buttons/Builds.png)](http://feuerstern.bplaced.net/repo/io/github/dre2n/dungeonsxl)
+[![Builds](http://feuerstern.bplaced.net/ressourcen/buttons/Builds.png)](http://erethon.de/repo/de/erethon/dungeonsxl)
 [![Wiki](http://feuerstern.bplaced.net/ressourcen/buttons/Wiki.png)](../../wiki/)
 [![Issues](http://feuerstern.bplaced.net/ressourcen/buttons/Issues.png)](../../issues/)
-[![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://feuerstern.bplaced.net/javadocs/dxl/)
+[![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://erethon.de/javadocs/dungeonsxl/)
 [![MCStats](http://feuerstern.bplaced.net/ressourcen/buttons/MCStats.png)](http://mcstats.org/plugin/DungeonsXL/)
 
 ![Doge](https://i.imgflip.com/vtpyi.jpg)
@@ -68,7 +68,7 @@ Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org
 Maven automatically fetches all dependencies and builds DungeonsXL; just run _build.bat_ or enter the command _mvn clean install_.
 
 #### DRECommons
-[DRECommons](https://github.com/DRE2N/DRECommons) is a util library for common tasks. DungeonsXL contains DRECommons 4.0.
+[DRECommons](https://github.com/DRE2N/DRECommons) is a util library for common tasks. DungeonsXL contains DRECommons 4.1.
 
 #### Caliburn API
 [Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.3.

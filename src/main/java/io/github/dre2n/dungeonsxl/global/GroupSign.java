@@ -27,7 +27,6 @@ import io.github.dre2n.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -42,13 +41,6 @@ import org.bukkit.entity.Player;
  */
 public class GroupSign extends GlobalProtection {
 
-    // Sign Labels
-    public static final String IS_PLAYING = ChatColor.DARK_RED + "Is Playing";
-    public static final String FULL = ChatColor.DARK_RED + "Full";
-    public static final String JOIN_GROUP = ChatColor.DARK_GREEN + "Join Group";
-    public static final String NEW_GROUP = ChatColor.DARK_GREEN + "New Group";
-
-    // Variables
     private DGroup[] dGroups;
     private Dungeon dungeon;
     private int maxPlayersPerGroup;
@@ -157,13 +149,13 @@ public class GroupSign extends GlobalProtection {
             // Set Signs
             if (dGroup != null) {
                 if (dGroup.isPlaying()) {
-                    sign.setLine(0, IS_PLAYING);
+                    sign.setLine(0, DMessage.SIGN_GLOBAL_IS_PLAYING.getMessage());
 
                 } else if (dGroup.getPlayers().size() >= maxPlayersPerGroup) {
-                    sign.setLine(0, FULL);
+                    sign.setLine(0, DMessage.SIGN_GLOBAL_FULL.getMessage());
 
                 } else {
-                    sign.setLine(0, JOIN_GROUP);
+                    sign.setLine(0, DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage());
                 }
 
                 int j = 1;
@@ -184,7 +176,7 @@ public class GroupSign extends GlobalProtection {
                 }
 
             } else {
-                sign.setLine(0, NEW_GROUP);
+                sign.setLine(0, DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage());
             }
 
             sign.update();
@@ -433,11 +425,11 @@ public class GroupSign extends GlobalProtection {
 
         Sign topSign = (Sign) topBlock.getState();
 
-        if (topSign.getLine(0).equals(NEW_GROUP)) {
+        if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage())) {
             groupSign.dGroups[column] = new DGroup(player, groupSign.dungeon);
             groupSign.update();
 
-        } else if (topSign.getLine(0).equals(JOIN_GROUP)) {
+        } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage())) {
             groupSign.dGroups[column].addPlayer(player);
             groupSign.update();
         }

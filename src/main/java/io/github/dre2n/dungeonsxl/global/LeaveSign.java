@@ -63,7 +63,7 @@ public class LeaveSign extends GlobalProtection {
     /* Actions */
     public void setText() {
         sign.setLine(0, ChatColor.BLUE + "############");
-        sign.setLine(1, ChatColor.DARK_GREEN + "Leave");
+        sign.setLine(1, DMessage.SIGN_LEAVE.getMessage());
         sign.setLine(2, "");
         sign.setLine(3, ChatColor.BLUE + "############");
         sign.update();

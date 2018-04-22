@@ -110,7 +110,7 @@ public class ReadySign extends DSign {
         }
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.DARK_GREEN + "Ready");
+        getSign().setLine(1, DMessage.SIGN_READY.getMessage());
         getSign().setLine(2, ChatColor.DARK_RED + gameType.getSignName());
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();

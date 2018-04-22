@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.sign;
 
+import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
@@ -94,7 +95,7 @@ public class ResourcePackSign extends DSign {
 
         String name = lines[1];
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.DARK_GREEN + "Download");
+        getSign().setLine(1, DMessage.SIGN_RESOURCE_PACK.getMessage());
         getSign().setLine(2, ChatColor.DARK_GREEN + name);
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();

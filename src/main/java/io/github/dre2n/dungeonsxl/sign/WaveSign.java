@@ -17,6 +17,7 @@
 package io.github.dre2n.dungeonsxl.sign;
 
 import de.erethon.commons.misc.NumberUtil;
+import io.github.dre2n.dungeonsxl.config.DMessage;
 import io.github.dre2n.dungeonsxl.trigger.InteractTrigger;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
@@ -95,8 +96,8 @@ public class WaveSign extends DSign {
         }
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.DARK_GREEN + "START");
-        getSign().setLine(2, ChatColor.DARK_GREEN + "NEXT WAVE");
+        getSign().setLine(1, DMessage.SIGN_WAVE_1.getMessage());
+        getSign().setLine(2, DMessage.SIGN_WAVE_2.getMessage());
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
     }
