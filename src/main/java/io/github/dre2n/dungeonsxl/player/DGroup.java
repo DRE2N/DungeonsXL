@@ -817,6 +817,7 @@ public class DGroup {
             if (dPlayer == null) {
                 continue;
             }
+            dPlayer.getData().logTimeLastStarted(getDungeonName());
 
             dPlayer.respawn();
 
@@ -890,7 +891,7 @@ public class DGroup {
         }
 
         for (DGamePlayer dPlayer : getDGamePlayers()) {
-            if (!dPlayer.checkTime(game)) {
+            if (!dPlayer.checkTimeAfterStart(game) || !dPlayer.checkTimeAfterFinish(game)) {
                 return false;
             }
         }

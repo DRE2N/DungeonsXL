@@ -67,7 +67,8 @@ public class GameRuleProvider {
 
         /* Timer */
         DEFAULT_VALUES.timeLastPlayed = 0;
-        DEFAULT_VALUES.timeToNextPlay = 0;
+        DEFAULT_VALUES.timeToNextPlayAfterStart = 0;
+        DEFAULT_VALUES.timeToNextPlayAfterFinish = 0;
         DEFAULT_VALUES.timeToNextLoot = 0;
         DEFAULT_VALUES.timeToNextWave = 10;
         DEFAULT_VALUES.timeToFinish = -1;
@@ -122,7 +123,8 @@ public class GameRuleProvider {
 
     /* Timer */
     protected Integer timeLastPlayed;
-    protected Integer timeToNextPlay;
+    protected Integer timeToNextPlayAfterStart;
+    protected Integer timeToNextPlayAfterFinish;
     protected Integer timeToNextLoot;
     protected Integer timeToNextWave;
     protected Integer timeToFinish;
@@ -334,10 +336,17 @@ public class GameRuleProvider {
     }
 
     /**
-     * @return the time until a player can play again
+     * @return the time until a player can play again after he started the dungeon the last time
      */
-    public int getTimeToNextPlay() {
-        return timeToNextPlay;
+    public int getTimeToNextPlayAfterStart() {
+        return timeToNextPlayAfterStart;
+    }
+
+    /**
+     * @return the time until a player can play again after he finished the dungeon the last time
+     */
+    public int getTimeToNextPlayAfterFinish() {
+        return timeToNextPlayAfterFinish;
     }
 
     /**
@@ -732,8 +741,12 @@ public class GameRuleProvider {
             timeLastPlayed = defaultValues.timeLastPlayed;
         }
 
-        if (timeToNextPlay == null) {
-            timeToNextPlay = defaultValues.timeToNextPlay;
+        if (timeToNextPlayAfterStart == null) {
+            timeToNextPlayAfterStart = defaultValues.timeToNextPlayAfterStart;
+        }
+
+        if (timeToNextPlayAfterFinish == null) {
+            timeToNextPlayAfterFinish = defaultValues.timeToNextPlayAfterFinish;
         }
 
         if (timeToNextLoot == null) {

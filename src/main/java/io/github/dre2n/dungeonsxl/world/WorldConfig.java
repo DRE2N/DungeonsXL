@@ -106,6 +106,7 @@ public class WorldConfig extends GameRuleProvider {
         }
 
         /* Keep Inventory */
+        // DEPRECATED
         if (configFile.contains("keepInventory")) {
             if (!configFile.contains("keepInventoryOnEnter")) {
                 keepInventoryOnEnter = configFile.getBoolean("keepInventory");
@@ -221,8 +222,17 @@ public class WorldConfig extends GameRuleProvider {
         }
 
         /* Times */
+        if (configFile.contains("timeToNextPlayAfterStart")) {
+            timeToNextPlayAfterStart = configFile.getInt("timeToNextPlayAfterStart");
+        }
+
+        // DEPRECATED
         if (configFile.contains("timeToNextPlay")) {
-            timeToNextPlay = configFile.getInt("timeToNextPlay");
+            timeToNextPlayAfterFinish = configFile.getInt("timeToNextPlay");
+        }
+
+        if (configFile.contains("timeToNextPlayAfterFinish")) {
+            timeToNextPlayAfterFinish = configFile.getInt("timeToNextPlayAfterFinish");
         }
 
         if (configFile.contains("timeToNextLoot")) {

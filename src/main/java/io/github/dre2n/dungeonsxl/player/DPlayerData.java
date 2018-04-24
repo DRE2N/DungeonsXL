@@ -47,7 +47,7 @@ public class DPlayerData extends DREConfig {
 
     boolean is1_9 = Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals());
 
-    public static final int CONFIG_VERSION = 2;
+    public static final int CONFIG_VERSION = 3;
 
     public static final String PREFIX_STATE_PERSISTENCE = "savePlayer.";
     public static final String PREFIX_STATS = "stats.";
@@ -67,7 +67,8 @@ public class DPlayerData extends DREConfig {
     private Collection<PotionEffect> oldPotionEffects;
 
     // Stats
-    private Map<String, Long> timeLastPlayed = new HashMap<>();
+    private Map<String, Long> timeLastStarted = new HashMap<>();
+    private Map<String, Long> timeLastFinished = new HashMap<>();
 
     public DPlayerData(File file) {
         super(file, CONFIG_VERSION);
@@ -267,10 +268,42 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
+     * @return a map of the player's started dungeons with dates.
+     */
+    public Map<String, Long> getTimeLastStarted() {
+        return timeLastStarted;
+    }
+
+    /**
+     * @param dungeon
+     * the dungeon to check
+     * @return the time when the player started the dungeon for the last time
+     */
+    public long getTimeLastStarted(String dungeon) {
+        Long time = timeLastStarted.get(dungeon.toLowerCase());
+        if (time == null) {
+            return -1;
+        } else {
+            return time;
+        }
+    }
+
+    /**
+     * @param dungeon
+     * the started dungeon
+     * @param time
+     * the time when the dungeon was started
+     */
+    public void setTimeLastStarted(String dungeon, long time) {
+        timeLastStarted.put(dungeon.toLowerCase(), time);
+        save();
+    }
+
+    /**
      * @return a map of the player's finished dungeons with dates.
      */
-    public Map<String, Long> getTimeLastPlayed() {
-        return timeLastPlayed;
+    public Map<String, Long> getTimeLastFinished() {
+        return timeLastFinished;
     }
 
     /**
@@ -278,8 +311,8 @@ public class DPlayerData extends DREConfig {
      * the dungeon to check
      * @return the time when the player finished the dungeon for the last time
      */
-    public long getTimeLastPlayed(String dungeon) {
-        Long time = timeLastPlayed.get(dungeon.toLowerCase());
+    public long getTimeLastFinished(String dungeon) {
+        Long time = timeLastFinished.get(dungeon.toLowerCase());
         if (time == null) {
             return -1;
         } else {
@@ -293,25 +326,38 @@ public class DPlayerData extends DREConfig {
      * @param time
      * the time when the dungeon was finished
      */
-    public void setTimeLastPlayed(String dungeon, long time) {
-        timeLastPlayed.put(dungeon.toLowerCase(), time);
+    public void setTimeLastFinished(String dungeon, long time) {
+        timeLastFinished.put(dungeon.toLowerCase(), time);
         save();
     }
 
     /* Actions */
     /**
      * @param dungeon
+     * the started dungeon
+     */
+    public void logTimeLastStarted(String dungeon) {
+        timeLastStarted.put(dungeon.toLowerCase(), System.currentTimeMillis());
+        save();
+    }
+
+    /**
+     * @param dungeon
      * the finished dungeon
      */
-    public void logTimeLastPlayed(String dungeon) {
-        timeLastPlayed.put(dungeon.toLowerCase(), System.currentTimeMillis());
+    public void logTimeLastFinished(String dungeon) {
+        timeLastFinished.put(dungeon.toLowerCase(), System.currentTimeMillis());
         save();
     }
 
     @Override
     public void initialize() {
-        if (!config.contains(PREFIX_STATS + "timeLastPlayed")) {
-            config.createSection(PREFIX_STATS + "timeLastPlayed");
+        if (!config.contains(PREFIX_STATS + "timeLastStarted")) {
+            config.createSection(PREFIX_STATS + "timeLastStarted");
+        }
+
+        if (!config.contains(PREFIX_STATS + "timeLastFinished")) {
+            config.createSection(PREFIX_STATS + "timeLastFinished");
         }
 
         if (!file.exists()) {
@@ -327,9 +373,15 @@ public class DPlayerData extends DREConfig {
 
     @Override
     public void load() {
-        if (config.isConfigurationSection(PREFIX_STATS + "timeLastPlayed")) {
-            for (String key : config.getConfigurationSection(PREFIX_STATS + "timeLastPlayed").getKeys(false)) {
-                timeLastPlayed.put(key, config.getLong(PREFIX_STATS + "timeLastPlayed." + key));
+        if (config.isConfigurationSection(PREFIX_STATS + "timeLastStarted")) {
+            for (String key : config.getConfigurationSection(PREFIX_STATS + "timeLastStarted").getKeys(false)) {
+                timeLastStarted.put(key, config.getLong(PREFIX_STATS + "timeLastStarted." + key));
+            }
+        }
+
+        if (config.isConfigurationSection(PREFIX_STATS + "timeLastFinished")) {
+            for (String key : config.getConfigurationSection(PREFIX_STATS + "timeLastFinished").getKeys(false)) {
+                timeLastFinished.put(key, config.getLong(PREFIX_STATS + "timeLastFinished." + key));
             }
         }
 
@@ -363,7 +415,8 @@ public class DPlayerData extends DREConfig {
 
     @Override
     public void save() {
-        config.set(PREFIX_STATS + "timeLastPlayed", timeLastPlayed);
+        config.set(PREFIX_STATS + "timeLastStarted", timeLastStarted);
+        config.set(PREFIX_STATS + "timeLastFinished", timeLastFinished);
         super.save();
     }
 

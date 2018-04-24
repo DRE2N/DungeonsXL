@@ -20,6 +20,7 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
 import io.github.dre2n.dungeonsxl.config.DMessage;
+import io.github.dre2n.dungeonsxl.dungeon.Dungeon;
 import io.github.dre2n.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import io.github.dre2n.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
@@ -510,7 +511,7 @@ public class DGamePlayer extends DInstancePlayer {
                         reward.giveTo(getPlayer());
                     }
 
-                    getData().logTimeLastPlayed(getDGroup().getDungeon().getName());
+                    getData().logTimeLastFinished(getDGroup().getDungeonName());
 
                     // Tutorial Permissions
                     if (game.isTutorial() && plugin.getPermissionProvider().hasGroupSupport()) {
@@ -598,8 +599,13 @@ public class DGamePlayer extends DInstancePlayer {
 
         GameRuleProvider rules = game.getRules();
 
-        if (!checkTime(game)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlay())));
+        if (!checkTimeAfterStart(game)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterStart())));
+            return false;
+        }
+
+        if (!checkTimeAfterFinish(game)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterStart())));
             return false;
         }
 
@@ -632,7 +638,7 @@ public class DGamePlayer extends DInstancePlayer {
                         if (new File(DungeonsXL.MAPS, dungeonName).isDirectory()) {
                             if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
 
-                                Long time = getData().getTimeLastPlayed(dungeonName);
+                                Long time = getData().getTimeLastFinished(dungeonName);
                                 if (time != -1) {
                                     if (rules.getFinishedAll().contains(played)) {
                                         numOfNeeded++;
@@ -669,20 +675,22 @@ public class DGamePlayer extends DInstancePlayer {
         return true;
     }
 
-    public boolean checkTime(Game game) {
+    public boolean checkTimeAfterStart(Game game) {
+        return checkTime(game.getDungeon(), game.getRules().getTimeToNextPlayAfterStart(), getData().getTimeLastStarted(game.getDungeon().getName()));
+    }
+
+    public boolean checkTimeAfterFinish(Game game) {
+        return checkTime(game.getDungeon(), game.getRules().getTimeToNextPlayAfterFinish(), getData().getTimeLastFinished(game.getDungeon().getName()));
+    }
+
+    public boolean checkTime(Dungeon dungeon, int requirement, long dataTime) {
         if (DPermission.hasPermission(player, DPermission.IGNORE_TIME_LIMIT)) {
             return true;
         }
 
-        GameRuleProvider rules = game.getRules();
-
-        if (rules.getTimeToNextPlay() != 0) {
-            // read PlayerConfig
-            long time = getData().getTimeLastPlayed(game.getDungeon().getName());
-            if (time != -1) {
-                if (time + rules.getTimeToNextPlay() * 1000 * 60 * 60 > System.currentTimeMillis()) {
-                    return false;
-                }
+        if (requirement != -1) {
+            if (requirement + dataTime * 1000 * 60 * 60 > System.currentTimeMillis()) {
+                return false;
             }
         }
         return true;
