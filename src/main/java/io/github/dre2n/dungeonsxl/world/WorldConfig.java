@@ -134,7 +134,7 @@ public class WorldConfig extends GameRuleProvider {
             keepInventoryOnDeath = configFile.getBoolean("keepInventoryOnDeath");
         }
 
-        /* World interaction */
+        /* World */
         if (configFile.contains("gameMode")) {
             if (EnumUtil.isValidEnum(GameMode.class, configFile.getString("gameMode").toUpperCase())) {
                 gameMode = GameMode.valueOf(configFile.getString("gameMode"));
@@ -182,6 +182,18 @@ public class WorldConfig extends GameRuleProvider {
                     placeWhitelist.add(material);
                 }
             }
+        }
+
+        if (configFile.contains("rain")) {
+            rain = configFile.getBoolean("rain");
+        }
+
+        if (configFile.contains("thunder")) {
+            thunder = configFile.getBoolean("thunder");
+        }
+
+        if (configFile.contains("time")) {
+            time = configFile.getLong("time");
         }
 
         /* PvP */

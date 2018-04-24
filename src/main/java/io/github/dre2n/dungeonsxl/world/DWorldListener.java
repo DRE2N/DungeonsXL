@@ -16,6 +16,7 @@
  */
 package io.github.dre2n.dungeonsxl.world;
 
+import io.github.dre2n.dungeonsxl.game.Game;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -141,8 +142,16 @@ public class DWorldListener implements Listener {
 
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
-        if (dWorlds.getInstanceByWorld(event.getWorld()) != null) {
-            if (event.toWeatherState()) {
+        DInstanceWorld dWorld = dWorlds.getInstanceByWorld(event.getWorld());
+        if (dWorld instanceof DEditWorld && event.toWeatherState()) {
+            event.setCancelled(true);
+        } else if (dWorld instanceof DGameWorld) {
+            Game game = Game.getByGameWorld((DGameWorld) dWorld);
+            Boolean raining = game.getRules().isRaining();
+            if (raining == null) {
+                return;
+            }
+            if ((raining && !event.toWeatherState()) || (!raining && event.toWeatherState())) {
                 event.setCancelled(true);
             }
         }

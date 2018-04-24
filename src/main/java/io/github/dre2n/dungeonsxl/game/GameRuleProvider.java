@@ -46,13 +46,16 @@ public class GameRuleProvider {
         DEFAULT_VALUES.keepInventoryOnDeath = true;
         DEFAULT_VALUES.lobbyDisabled = false;
 
-        /* World interaction */
+        /* World */
         DEFAULT_VALUES.gameMode = GameMode.SURVIVAL;
         DEFAULT_VALUES.breakBlocks = false;
         DEFAULT_VALUES.breakPlacedBlocks = false;
         DEFAULT_VALUES.breakWhitelist = null;
         DEFAULT_VALUES.placeBlocks = false;
         DEFAULT_VALUES.placeWhitelist = null;
+        DEFAULT_VALUES.rain = null;
+        DEFAULT_VALUES.thunder = null;
+        DEFAULT_VALUES.time = null;
 
         /* Fighting */
         DEFAULT_VALUES.playerVersusPlayer = false;
@@ -98,13 +101,16 @@ public class GameRuleProvider {
     protected Boolean keepInventoryOnDeath;
     protected Boolean lobbyDisabled;
 
-    /* World interaction */
+    /* World */
     protected GameMode gameMode;
     protected Boolean breakBlocks;
     protected Boolean breakPlacedBlocks;
     protected Map<Material, HashSet<Material>> breakWhitelist;
     protected Boolean placeBlocks;
     protected Set<Material> placeWhitelist;
+    protected Boolean rain;
+    protected Boolean thunder;
+    protected Long time;
 
     /* Fighting */
     protected Boolean playerVersusPlayer;
@@ -183,7 +189,7 @@ public class GameRuleProvider {
         return lobbyDisabled;
     }
 
-    // World interaction
+    // World
     /**
      * @return the gameMode
      */
@@ -224,6 +230,56 @@ public class GameRuleProvider {
      */
     public Set<Material> getPlaceWhitelist() {
         return placeWhitelist;
+    }
+
+    /**
+     * @return
+     * if it's raining permanently in this dungeon,
+     * null if random
+     */
+    public Boolean isRaining() {
+        return rain;
+    }
+
+    /**
+     * @param rain
+     * set if it's raining permanently in this dungeon
+     */
+    public void setRaining(Boolean rain) {
+        this.rain = rain;
+    }
+
+    /**
+     * @return
+     * You've been... THUNDERSTRUCK!
+     */
+    public Boolean isThundering() {
+        return thunder;
+    }
+
+    /**
+     * @param thunder
+     * You've been... THUNDERSTRUCK!
+     */
+    public void setThundering(Boolean thunder) {
+        this.thunder = thunder;
+    }
+
+    /**
+     * @return
+     * the locked day time in this dungeon,
+     * null if not locked
+     */
+    public Long getTime() {
+        return time;
+    }
+
+    /**
+     * @param time
+     * the locked day time to set
+     */
+    public void setTime(Long time) {
+        this.time = time;
     }
 
     // Fight
@@ -609,7 +665,7 @@ public class GameRuleProvider {
             lobbyDisabled = defaultValues.lobbyDisabled;
         }
 
-        /* World interaction */
+        /* World */
         if (gameMode == null) {
             gameMode = defaultValues.gameMode;
         }
@@ -632,6 +688,18 @@ public class GameRuleProvider {
 
         if (placeWhitelist == null) {
             placeWhitelist = defaultValues.placeWhitelist;
+        }
+
+        if (rain == null) {
+            rain = defaultValues.rain;
+        }
+
+        if (thunder == null) {
+            thunder = defaultValues.thunder;
+        }
+
+        if (time == null) {
+            time = defaultValues.time;
         }
 
         /* Fighting */
@@ -755,7 +823,7 @@ public class GameRuleProvider {
         } else if (defaultValues.secureObjects != null) {
             secureObjects.addAll(defaultValues.secureObjects);
         }
-        
+
         if (groupTagEnabled == null) {
             groupTagEnabled = defaultValues.groupTagEnabled;
         }

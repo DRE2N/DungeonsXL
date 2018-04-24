@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.world;
 
 import de.erethon.commons.chat.MessageUtil;
 import io.github.dre2n.dungeonsxl.DungeonsXL;
+import io.github.dre2n.dungeonsxl.game.GameRuleProvider;
 import io.github.dre2n.dungeonsxl.player.DGamePlayer;
 import java.io.File;
 import org.bukkit.Location;
@@ -123,6 +124,31 @@ public abstract class DInstanceWorld {
     public void sendMessage(String message) {
         for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
             MessageUtil.sendMessage(dPlayer.getPlayer(), message);
+        }
+    }
+
+    /**
+     * @param rules
+     * sets up the time and weather to match the rules
+     */
+    public void setWeather(GameRuleProvider rules) {
+        if (world == null) {
+            return;
+        }
+
+        if (rules.isThundering() != null) {
+            if (rules.isThundering()) {
+                world.setThundering(true);
+                world.setStorm(true);
+                world.setThunderDuration(Integer.MAX_VALUE);
+            } else {
+                world.setThundering(false);
+                world.setStorm(false);
+            }
+        }
+
+        if (rules.getTime() != null) {
+            world.setTime(rules.getTime());
         }
     }
 

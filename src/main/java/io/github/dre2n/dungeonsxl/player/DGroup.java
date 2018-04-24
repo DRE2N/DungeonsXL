@@ -767,6 +767,7 @@ public class DGroup {
         }
         game.fetchRules();
         GameRuleProvider rules = game.getRules();
+        gameWorld.setWeather(rules);
 
         color = plugin.getMainConfig().getGroupColorPriority().get(game.getDGroups().indexOf(this));
 
