@@ -74,7 +74,7 @@ Maven automatically fetches all dependencies and builds DungeonsXL; just run _bu
 [Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.3.
 
 ### Java
-Make sure that your server uses Java 7 or higher.
+Make sure that your server uses Java 8 or higher.
 
 ### UUIDs
 Supported.

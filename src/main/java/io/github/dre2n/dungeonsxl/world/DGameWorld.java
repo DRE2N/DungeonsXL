@@ -61,6 +61,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
@@ -578,6 +579,20 @@ public class DGameWorld extends DInstanceWorld {
         GameRuleProvider rules = game.getRules();
         if (!rules.canBreakBlocks() && !rules.canBreakPlacedBlocks()) {
             return true;
+        }
+
+        // Cancel if a protected entity is attached
+        for (Entity entity : world.getNearbyEntities(block.getLocation(), 2, 2, 2)) {
+            if (!(entity instanceof Hanging)) {
+                continue;
+            }
+            if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
+                Hanging hanging = (Hanging) entity;
+                if (rules.getDamageProtectedEntities().contains(hanging.getType())) {
+                    event.setCancelled(true);
+                    break;
+                }
+            }
         }
 
         Map<Material, HashSet<Material>> whitelist = rules.getBreakWhitelist();

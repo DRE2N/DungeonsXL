@@ -42,6 +42,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -169,6 +170,16 @@ public class WorldConfig extends GameRuleProvider {
 
                 breakWhitelist.put(breakable, tools);
             }
+        }
+
+        if (configFile.contains("damageProtectedEntities")) {
+            damageProtectedEntities = new HashSet<>();
+            configFile.getStringList("damageProtectedEntities").forEach(e -> damageProtectedEntities.add(EnumUtil.getEnumIgnoreCase(EntityType.class, e)));
+        }
+
+        if (configFile.contains("interactionProtectedEntities")) {
+            interactionProtectedEntities = new HashSet<>();
+            configFile.getStringList("interactionProtectedEntities").forEach(e -> interactionProtectedEntities.add(EnumUtil.getEnumIgnoreCase(EntityType.class, e)));
         }
 
         if (configFile.contains("placeBlocks")) {

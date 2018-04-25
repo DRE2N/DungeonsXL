@@ -19,6 +19,7 @@ package io.github.dre2n.dungeonsxl.game;
 import io.github.dre2n.dungeonsxl.requirement.Requirement;
 import io.github.dre2n.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -51,6 +53,15 @@ public class GameRuleProvider {
         DEFAULT_VALUES.breakBlocks = false;
         DEFAULT_VALUES.breakPlacedBlocks = false;
         DEFAULT_VALUES.breakWhitelist = null;
+        DEFAULT_VALUES.damageProtectedEntities = new HashSet<>(Arrays.asList(
+                EntityType.ARMOR_STAND,
+                EntityType.ITEM_FRAME,
+                EntityType.PAINTING
+        ));
+        DEFAULT_VALUES.interactionProtectedEntities = new HashSet<>(Arrays.asList(
+                EntityType.ARMOR_STAND,
+                EntityType.ITEM_FRAME
+        ));
         DEFAULT_VALUES.placeBlocks = false;
         DEFAULT_VALUES.placeWhitelist = null;
         DEFAULT_VALUES.rain = null;
@@ -107,6 +118,8 @@ public class GameRuleProvider {
     protected Boolean breakBlocks;
     protected Boolean breakPlacedBlocks;
     protected Map<Material, HashSet<Material>> breakWhitelist;
+    protected Set<EntityType> damageProtectedEntities;
+    protected Set<EntityType> interactionProtectedEntities;
     protected Boolean placeBlocks;
     protected Set<Material> placeWhitelist;
     protected Boolean rain;
@@ -218,6 +231,20 @@ public class GameRuleProvider {
      */
     public Map<Material, HashSet<Material>> getBreakWhitelist() {
         return breakWhitelist;
+    }
+
+    /**
+     * @return a Set of all entity types that cannot be damaged
+     */
+    public Set<EntityType> getDamageProtectedEntities() {
+        return damageProtectedEntities;
+    }
+
+    /**
+     * @return a Set of all entity types that cannot be damaged
+     */
+    public Set<EntityType> getInteractionProtectedEntities() {
+        return interactionProtectedEntities;
     }
 
     /**
@@ -689,6 +716,26 @@ public class GameRuleProvider {
 
         if (breakWhitelist == null) {
             breakWhitelist = defaultValues.breakWhitelist;
+        }
+
+        if (damageProtectedEntities == null) {
+            // If nothing is specialized for protected entites yet (=> damageProtectedEntites == null and DEFAULT_VALUES are used)
+            // and if blocks may be broken, it makes no sense to assume the user wants to have paintings etc. protected.
+            if (defaultValues == DEFAULT_VALUES && breakBlocks) {
+                damageProtectedEntities = new HashSet<>();
+            } else {
+                damageProtectedEntities = defaultValues.damageProtectedEntities;
+            }
+        }
+
+        if (interactionProtectedEntities == null) {
+            // If nothing is specialized for protected entites yet (=> interactionProtectedEntites == null and DEFAULT_VALUES are used)
+            // and if blocks may be broken, it makes no sense to assume the user wants to have paintings etc. protected.
+            if (defaultValues == DEFAULT_VALUES && breakBlocks) {
+                interactionProtectedEntities = new HashSet<>();
+            } else {
+                interactionProtectedEntities = defaultValues.interactionProtectedEntities;
+            }
         }
 
         if (placeBlocks == null) {

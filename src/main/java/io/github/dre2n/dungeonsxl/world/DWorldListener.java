@@ -27,9 +27,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
@@ -124,9 +125,25 @@ public class DWorldListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
+    public void onEntityDamage(EntityDamageEvent event) {
         DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
-        if (gameWorld != null) {
+        if (gameWorld == null) {
+            return;
+        }
+        Game game = Game.getByGameWorld(gameWorld);
+        if (game.getRules().getDamageProtectedEntities().contains(event.getEntityType())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        DGameWorld gameWorld = DGameWorld.getByWorld(event.getPlayer().getWorld());
+        if (gameWorld == null) {
+            return;
+        }
+        Game game = Game.getByGameWorld(gameWorld);
+        if (game.getRules().getInteractionProtectedEntities().contains(event.getRightClicked().getType())) {
             event.setCancelled(true);
         }
     }
