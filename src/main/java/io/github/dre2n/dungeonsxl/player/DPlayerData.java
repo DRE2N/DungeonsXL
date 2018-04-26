@@ -34,6 +34,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -430,7 +431,9 @@ public class DPlayerData extends DREConfig {
         oldGameMode = player.getGameMode();
         oldFireTicks = player.getFireTicks();
         oldFoodLevel = player.getFoodLevel();
-        oldMaxHealth = player.getMaxHealth();
+        if (is1_9) {
+            oldMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+        }
         oldHealth = player.getHealth();
         oldExp = player.getExp();
         oldLvl = player.getLevel();

@@ -18,6 +18,7 @@ package io.github.dre2n.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.commons.player.PlayerWrapper;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -331,8 +333,10 @@ public class DGlobalPlayer implements PlayerWrapper {
                 }
                 player.setLevel(data.getOldLevel());
                 player.setExp(data.getOldExp());
-                player.setMaxHealth(data.getOldMaxHealth());
-                player.setHealth(data.getOldHealth());
+                if (Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals())) {
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(data.getOldMaxHealth());
+                }
+                player.setHealth(data.getOldHealth() <= data.getOldMaxHealth() ? data.getOldHealth() : data.getOldMaxHealth());
                 player.setFoodLevel(data.getOldFoodLevel());
                 player.setGameMode(data.getOldGameMode());
                 player.setFireTicks(data.getOldFireTicks());

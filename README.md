@@ -48,20 +48,7 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with 1.7.8 and higher. However, support for 1.12 / 1.11.x / 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
-
-Older versions of DungeonsXL support versions since Minecraft 1.3.x, but of course, they are completely unsupported.
-* [1.7.8-1.12.2](../../tree/master)
-* [1.7.5](../../tree/50f772d14281bfe278dba2559d1758cc459c1a30)
-* [1.7.2](../../tree/eccf82b7335dfb0723e3cd37a57df1a968ea7842)
-* [1.6.4](../../tree/780145cf783ea76fe1bfee04cf89216bd4f92e1d)
-* [1.6.2](../../tree/fcc27ca35caccb2b849c8f9de4ae212d875dc9a9)
-* [1.5.2](../../tree/08a8b31da0c88e6c4d4f3f4cce5b38cd0f72f447)
-* [1.5.1](../../tree/992542ec0f307ddfd48861c5391feb40610c4f20)
-* [1.4.7](../../tree/90a625cae0acc8a2ce57d0856a8e731a81f02729)
-* [1.4.6](../../tree/bf34312f30ccab48d64bce03ed7979863a8151cf)
-* [1.4.x](../../tree/3cf96c5f25eada06a434db7753ec22a34ffa4d78)
-* [1.3.x](../../tree/15effb1071b3c36bca68352c5ddb6469bcbead10)
+DungeonsXL works with 1.8.3 and higher. However, support for 1.12.x / 1.11.x / 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
 
 ### Building information and dependencies
 Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org/).
