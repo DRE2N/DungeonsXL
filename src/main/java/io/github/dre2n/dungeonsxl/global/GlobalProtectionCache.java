@@ -235,7 +235,8 @@ public class GlobalProtectionCache {
                         Block block1 = world.getBlockAt(data.getInt(preString + "loc1.x"), data.getInt(preString + "loc1.y"), data.getInt(preString + "loc1.z"));
                         Block block2 = world.getBlockAt(data.getInt(preString + "loc2.x"), data.getInt(preString + "loc2.y"), data.getInt(preString + "loc2.z"));
                         Material material = Material.getMaterial(data.getString(preString + "material"));
-                        DPortal dPortal = new DPortal(id, block1, block2, material != null ? material : Material.PORTAL, true);
+                        String axis = data.getString(preString + "axis");
+                        DPortal dPortal = new DPortal(id, block1, block2, material != null ? material : Material.PORTAL, (byte) (axis != null && axis.equals("z") ? 2 : 1), true);
                         dPortal.create(null);
                     }
 

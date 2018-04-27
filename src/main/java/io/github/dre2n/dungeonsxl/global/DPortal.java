@@ -45,6 +45,7 @@ public class DPortal extends GlobalProtection {
     private Block block1;
     private Block block2;
     private Material material = Material.PORTAL;
+    private byte axis;
     private boolean active;
     private Set<Block> blocks;
 
@@ -59,12 +60,13 @@ public class DPortal extends GlobalProtection {
         this.active = active;
     }
 
-    public DPortal(int id, Block block1, Block block2, Material material, boolean active) {
+    public DPortal(int id, Block block1, Block block2, Material material, byte axis, boolean active) {
         super(block1.getWorld(), id);
 
         this.block1 = block1;
         this.block2 = block2;
         this.material = material;
+        this.axis = axis;
         this.active = active;
     }
 
@@ -122,6 +124,15 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
+        if (player != null && material == Material.PORTAL) {
+            float yaw = player.getPlayer().getLocation().getYaw();
+            if (yaw >= 45 & yaw < 135 || yaw >= 225 & yaw < 315) {
+                axis = 2;//z;
+            } else if (yaw >= 315 | yaw < 45 || yaw >= 135 & yaw < 225) {
+                axis = 1;//x;
+            }
+        }
+
         int x1 = block1.getX(), y1 = block1.getY(), z1 = block1.getZ();
         int x2 = block2.getX(), y2 = block2.getY(), z2 = block2.getZ();
         int xcount = 0, ycount = 0, zcount = 0;
@@ -154,9 +165,8 @@ public class DPortal extends GlobalProtection {
                     if (!type.isSolid()) {
                         Block block = getWorld().getBlockAt(xx, yy, zz);
                         block.setType(material, false);
-                        if (player != null && material == Material.PORTAL) {
-                            float yaw = player.getPlayer().getLocation().getYaw();
-                            block.setData((yaw >= -135 & yaw < -45 || yaw >= -315 & yaw < -225) ? (byte) 2 : 1, false);
+                        if (material == Material.PORTAL) {
+                            block.setData(axis);
                         }
                     }
 
@@ -258,6 +268,9 @@ public class DPortal extends GlobalProtection {
         configFile.set(preString + ".loc2.z", block2.getZ());
 
         configFile.set(preString + ".material", material.toString());
+        if (material == Material.PORTAL) {
+            configFile.set(preString + ".axis", axis == 2 ? "z" : "x");
+        }
     }
 
     @Override
