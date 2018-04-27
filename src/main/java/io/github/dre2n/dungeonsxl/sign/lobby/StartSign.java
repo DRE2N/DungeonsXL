@@ -17,9 +17,9 @@
 package io.github.dre2n.dungeonsxl.sign.lobby;
 
 import de.erethon.commons.misc.NumberUtil;
-import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
+import io.github.dre2n.dungeonsxl.sign.LocationSign;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -27,7 +27,7 @@ import org.bukkit.block.Sign;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class StartSign extends DSign {
+public class StartSign extends LocationSign {
 
     private DSignType type = DSignTypeDefault.START;
 

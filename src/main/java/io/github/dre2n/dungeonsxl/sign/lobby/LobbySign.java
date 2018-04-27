@@ -16,9 +16,9 @@
  */
 package io.github.dre2n.dungeonsxl.sign.lobby;
 
-import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
+import io.github.dre2n.dungeonsxl.sign.LocationSign;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -26,7 +26,7 @@ import org.bukkit.block.Sign;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class LobbySign extends DSign {
+public class LobbySign extends LocationSign {
 
     private DSignType type = DSignTypeDefault.LOBBY;
 
@@ -41,7 +41,7 @@ public class LobbySign extends DSign {
 
     @Override
     public void onInit() {
-        getGameWorld().setLobbyLocation(getSign().getLocation());
+        getGameWorld().setLobbyLocation(getLocation());
         getSign().getBlock().setType(Material.AIR);
     }
 

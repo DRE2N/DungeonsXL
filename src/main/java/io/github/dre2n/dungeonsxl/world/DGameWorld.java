@@ -29,6 +29,7 @@ import io.github.dre2n.dungeonsxl.player.DGroup;
 import io.github.dre2n.dungeonsxl.sign.DSign;
 import io.github.dre2n.dungeonsxl.sign.DSignType;
 import io.github.dre2n.dungeonsxl.sign.DSignTypeDefault;
+import io.github.dre2n.dungeonsxl.sign.LocationSign;
 import io.github.dre2n.dungeonsxl.sign.lobby.StartSign;
 import io.github.dre2n.dungeonsxl.sign.mob.MobSign;
 import io.github.dre2n.dungeonsxl.trigger.FortuneTrigger;
@@ -172,7 +173,7 @@ public class DGameWorld extends DInstanceWorld {
         for (DSign dSign : dSigns) {
             if (dSign.getType() == DSignTypeDefault.START) {
                 if (((StartSign) dSign).getId() == index) {
-                    return dSign.getSign().getLocation();
+                    return ((LocationSign) dSign).getLocation();
                 }
             }
         }
@@ -180,7 +181,7 @@ public class DGameWorld extends DInstanceWorld {
         // Try any location
         for (DSign dSign : dSigns) {
             if (dSign.getType() == DSignTypeDefault.START) {
-                return dSign.getSign().getLocation();
+                return ((LocationSign) dSign).getLocation();
             }
         }
 

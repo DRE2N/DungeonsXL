@@ -18,7 +18,6 @@ package io.github.dre2n.dungeonsxl.sign;
 
 import de.erethon.commons.misc.NumberUtil;
 import io.github.dre2n.dungeonsxl.world.DGameWorld;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -26,11 +25,9 @@ import org.bukkit.entity.Player;
 /**
  * @author Milan Albrecht, Daniel Saukel
  */
-public class TeleportSign extends DSign {
+public class TeleportSign extends LocationSign {
 
     private DSignType type = DSignTypeDefault.TELEPORT;
-
-    private Location location;
 
     public TeleportSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -53,8 +50,6 @@ public class TeleportSign extends DSign {
 
     @Override
     public void onInit() {
-        location = getSign().getLocation().add(0.5, 0, 0.5);
-        location.setYaw(letterToYaw(((org.bukkit.material.Sign) getSign().getData()).getFacing().getOppositeFace().name().charAt(0)));
         for (int i = 1; i <= 2; i++) {
             if (!lines[i].isEmpty()) {
                 int yaw = letterToYaw(lines[i].charAt(0));
@@ -101,25 +96,6 @@ public class TeleportSign extends DSign {
     @Override
     public DSignType getType() {
         return type;
-    }
-
-    public static int letterToYaw(char c) {
-        switch (c) {
-            case 'S':
-            case 's':
-                return 0;
-            case 'W':
-            case 'w':
-                return 90;
-            case 'N':
-            case 'n':
-                return 180;
-            case 'E':
-            case 'e':
-                return -90;
-            default:
-                return -1;
-        }
     }
 
 }
