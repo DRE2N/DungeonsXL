@@ -147,7 +147,7 @@ public class GlobalProtectionListener implements Listener {
         }
         ItemStack item = event.getItem();
         Block block = event.getClickedBlock();
-        if (item.getType() != LegacyUtil.WOODEN_SWORD || block == null) {
+        if (item == null || item.getType() != LegacyUtil.WOODEN_SWORD || block == null) {
             return;
         }
 
