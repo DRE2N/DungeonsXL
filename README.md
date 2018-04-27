@@ -48,7 +48,7 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with 1.8.3 and higher. However, support for 1.12.x / 1.11.x / 1.10.x / 1.9.x has a higher priority than support for 1.8.x and lower. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
+DungeonsXL works with 1.8.8 and higher. However, support for 1.12.x / 1.11.x / 1.10.x / 1.9.x has a higher priority than support for 1.8.8. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
 
 ### Building information and dependencies
 Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org/).
