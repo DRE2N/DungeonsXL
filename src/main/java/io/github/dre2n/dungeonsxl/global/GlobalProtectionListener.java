@@ -24,6 +24,7 @@ import io.github.dre2n.dungeonsxl.player.DPermission;
 import io.github.dre2n.dungeonsxl.util.LegacyUtil;
 import io.github.dre2n.dungeonsxl.world.DEditWorld;
 import java.util.List;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -33,9 +34,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
@@ -83,6 +86,23 @@ public class GlobalProtectionListener implements Listener {
             if (protection.onBreak(dGlobalPlayer)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (DPortal.getByBlock(event.getBlock()) != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlayerBucketFill(PlayerBucketFillEvent event) {
+        Block block = event.getBlockClicked();
+        if (DPortal.getByBlock(block) != null) {
+            event.setCancelled(true);
+            // Workaround for a bug of Bukkit
+            event.getPlayer().sendBlockChange(block.getLocation(), block.getType(), (byte) 0);
         }
     }
 
