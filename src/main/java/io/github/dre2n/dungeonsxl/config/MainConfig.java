@@ -47,7 +47,7 @@ public class MainConfig extends DREConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 14;
+    public static final int CONFIG_VERSION = 15;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -86,6 +86,7 @@ public class MainConfig extends DREConfig {
 
     /* Misc */
     private boolean sendFloorTitle = true;
+    private boolean globalDeathMessagesDisabled = true;
     private Map<String, Object> externalMobProviders = new HashMap<>();
     private Map<String, Object> resourcePacks = new HashMap<>();
 
@@ -298,6 +299,23 @@ public class MainConfig extends DREConfig {
      */
     public void setAnnouncementInterval(double interval) {
         announcementInterval = interval;
+    }
+
+    /**
+     * @return
+     * false if death messages shall be sent to players who are not in the dungeon,
+     * true if not
+     */
+    public boolean areGlobalDeathMessagesDisabled() {
+        return globalDeathMessagesDisabled;
+    }
+
+    /**
+     * @param disabled
+     * set if death messages shall be sent to players who are not in the dungeon
+     */
+    public void setGlobalDeathMessagesDisabled(boolean disabled) {
+        globalDeathMessagesDisabled = false;
     }
 
     /**
@@ -514,6 +532,10 @@ public class MainConfig extends DREConfig {
             config.set("sendFloorTitle", sendFloorTitle);
         }
 
+        if (!config.contains("globalDeathMessagesDisabled")) {
+            config.set("globalDeathMessagesDisabled", globalDeathMessagesDisabled);
+        }
+
         if (!config.contains("externalMobProviders")) {
             config.createSection("externalMobProviders");
         }
@@ -641,6 +663,10 @@ public class MainConfig extends DREConfig {
 
         if (config.contains("sendFloorTitle")) {
             sendFloorTitle = config.getBoolean("sendFloorTitle");
+        }
+
+        if (config.contains("globalDeathMessagesDisabled")) {
+            globalDeathMessagesDisabled = config.getBoolean("globalDeathMessagesDisabled");
         }
 
         if (config.contains("externalMobProviders")) {

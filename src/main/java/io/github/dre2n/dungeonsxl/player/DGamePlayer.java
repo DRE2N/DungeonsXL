@@ -851,6 +851,10 @@ public class DGamePlayer extends DInstancePlayer {
             return;
         }
 
+        if (config.areGlobalDeathMessagesDisabled()) {
+            event.setDeathMessage(null);
+        }
+
         if (game.getRules().getKeepInventoryOnDeath()) {
             setRespawnInventory(event.getEntity().getInventory().getContents());
             setRespawnArmor(event.getEntity().getInventory().getArmorContents());
