@@ -166,11 +166,6 @@ public class DPlayerCache {
             return false;
         }
 
-        DGroup dGroup = DGroup.getByPlayer(dPlayer.getPlayer());
-        if (dGroup != null) {
-            dGroup.removePlayer(dPlayer.getPlayer());
-            dGroup.addPlayer(player);
-        }
         dPlayer.setPlayer(player);
         dPlayer.setOfflineTime(0);
         return true;

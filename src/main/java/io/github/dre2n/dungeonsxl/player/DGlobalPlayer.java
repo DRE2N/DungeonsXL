@@ -47,6 +47,8 @@ public class DGlobalPlayer implements PlayerWrapper {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
 
+    boolean is1_9 = Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals());
+
     protected Player player;
 
     private DPlayerData data;
@@ -328,12 +330,12 @@ public class DGlobalPlayer implements PlayerWrapper {
                 }
                 player.getInventory().setContents(data.getOldInventory().toArray(new ItemStack[36]));
                 player.getInventory().setArmorContents(data.getOldArmor().toArray(new ItemStack[4]));
-                if (Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
+                if (is1_9) {
                     player.getInventory().setItemInOffHand(data.getOldOffHand());
                 }
                 player.setLevel(data.getOldLevel());
                 player.setExp(data.getOldExp());
-                if (Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals())) {
+                if (is1_9) {
                     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(data.getOldMaxHealth());
                 }
                 player.setHealth(data.getOldHealth() <= data.getOldMaxHealth() ? data.getOldHealth() : data.getOldMaxHealth());

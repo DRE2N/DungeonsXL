@@ -48,12 +48,13 @@ public class DPlayerData extends DREConfig {
 
     boolean is1_9 = Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals());
 
-    public static final int CONFIG_VERSION = 3;
+    public static final int CONFIG_VERSION = 4;
 
     public static final String PREFIX_STATE_PERSISTENCE = "savePlayer.";
     public static final String PREFIX_STATS = "stats.";
 
     // State persistence
+    private boolean keepInventoryAfterLogout = true;
     private Location oldLocation;
     private List<ItemStack> oldInventory;
     private List<ItemStack> oldArmor;
@@ -86,6 +87,23 @@ public class DPlayerData extends DREConfig {
      */
     public boolean wasInGame() {
         return config.contains(PREFIX_STATE_PERSISTENCE);
+    }
+
+    /**
+     * @return if the inventory shall be reset after a logout
+     */
+    public boolean getKeepInventoryAfterLogout() {
+        return keepInventoryAfterLogout;
+    }
+
+    /**
+     * @param keepInventoryOnEscape
+     * set if the inventory shall be reset after a logout
+     */
+    public void setKeepInventoryAfterLogout(boolean keepInventoryAfterLogout) {
+        this.keepInventoryAfterLogout = keepInventoryAfterLogout;
+        config.set(PREFIX_STATE_PERSISTENCE + "keepInventoryAfterLogout", keepInventoryAfterLogout);
+        super.save();
     }
 
     /**
@@ -390,6 +408,7 @@ public class DPlayerData extends DREConfig {
             return;
         }
 
+        keepInventoryAfterLogout = config.getBoolean(PREFIX_STATE_PERSISTENCE + "keepInventoryAfterLogout");
         oldInventory = (List<ItemStack>) config.get(PREFIX_STATE_PERSISTENCE + "oldInventory");
         oldArmor = (List<ItemStack>) config.get(PREFIX_STATE_PERSISTENCE + "oldArmor");
         oldOffHand = (ItemStack) config.get(PREFIX_STATE_PERSISTENCE + "oldOffHand");

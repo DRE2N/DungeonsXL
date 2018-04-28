@@ -363,19 +363,12 @@ public class DPlayerListener implements Listener {
         }
 
         DGlobalPlayer dPlayer = new DGlobalPlayer(player);
-        if (player.hasPlayedBefore()) {
-            return;
+        if (dPlayer.getData().wasInGame()) {
+            dPlayer.reset(dPlayer.getData().getKeepInventoryAfterLogout());
         }
-
-        if (!config.isTutorialActivated()) {
-            return;
+        if (!player.hasPlayedBefore() && config.isTutorialActivated()) {
+            dPlayer.startTutorial();
         }
-
-        if (DGamePlayer.getByPlayer(player) != null) {
-            return;
-        }
-
-        dPlayer.startTutorial();
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -60,7 +60,7 @@ public class DGroup {
     DPlayerCache dPlayers = plugin.getDPlayers();
 
     private String name;
-    private UUID captain;
+    private Player captain;
     private PlayerCollection players = new PlayerCollection();
     private PlayerCollection invitedPlayers = new PlayerCollection();
     private Dungeon dungeon;
@@ -114,8 +114,8 @@ public class DGroup {
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
-            this.captain = captain.getUniqueId();
-            this.players.add(captain.getUniqueId());
+            this.captain = captain;
+            this.players.add(captain);
         }
 
         for (Player player : players) {
@@ -155,12 +155,12 @@ public class DGroup {
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
-            this.captain = captain.getUniqueId();
-            this.players.add(captain.getUniqueId());
+            this.captain = captain;
+            this.players.add(captain);
         }
 
         for (Player player : players) {
-            if (!this.players.contains(player.getUniqueId())) {
+            if (!this.players.contains(player)) {
                 addPlayer(player);
             }
         }
@@ -205,7 +205,7 @@ public class DGroup {
      * @return the captain
      */
     public Player getCaptain() {
-        return Bukkit.getPlayer(captain);
+        return captain;
     }
 
     /**
@@ -213,7 +213,7 @@ public class DGroup {
      * the captain to set
      */
     public void setCaptain(Player captain) {
-        this.captain = captain.getUniqueId();
+        this.captain = captain;
     }
 
     /**
@@ -818,6 +818,7 @@ public class DGroup {
                 continue;
             }
             dPlayer.getData().logTimeLastStarted(getDungeonName());
+            dPlayer.getData().setKeepInventoryAfterLogout(rules.getKeepInventoryOnEscape());
 
             dPlayer.respawn();
 

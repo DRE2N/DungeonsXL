@@ -237,62 +237,61 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         DClass dClass = plugin.getDClasses().getByName(className);
-        if (dClass != null) {
-            if (this.dClass != dClass) {
-                this.dClass = dClass;
+        if (dClass == null || this.dClass == dClass) {
+            return;
+        }
+        this.dClass = dClass;
 
-                /* Set Dog */
-                if (wolf != null) {
-                    wolf.remove();
-                    wolf = null;
-                }
+        /* Set Dog */
+        if (wolf != null) {
+            wolf.remove();
+            wolf = null;
+        }
 
-                if (dClass.hasDog()) {
-                    wolf = (Wolf) getWorld().spawnEntity(getPlayer().getLocation(), EntityType.WOLF);
-                    wolf.setTamed(true);
-                    wolf.setOwner(getPlayer());
+        if (dClass.hasDog()) {
+            wolf = (Wolf) getWorld().spawnEntity(getPlayer().getLocation(), EntityType.WOLF);
+            wolf.setTamed(true);
+            wolf.setOwner(getPlayer());
 
-                    double maxHealth = ((Damageable) wolf).getMaxHealth();
-                    wolf.setHealth(maxHealth);
-                }
+            double maxHealth = ((Damageable) wolf).getMaxHealth();
+            wolf.setHealth(maxHealth);
+        }
 
-                /* Delete Inventory */
-                getPlayer().getInventory().clear();
-                getPlayer().getInventory().setArmorContents(null);
-                getPlayer().getInventory().setItemInHand(new ItemStack(Material.AIR));
+        /* Delete Inventory */
+        getPlayer().getInventory().clear();
+        getPlayer().getInventory().setArmorContents(null);
+        getPlayer().getInventory().setItemInHand(new ItemStack(Material.AIR));
 
-                // Remove Potion Effects
-                for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
-                    getPlayer().removePotionEffect(effect.getType());
-                }
+        // Remove Potion Effects
+        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
+            getPlayer().removePotionEffect(effect.getType());
+        }
 
-                // Reset lvl
-                getPlayer().setTotalExperience(0);
-                getPlayer().setLevel(0);
+        // Reset lvl
+        getPlayer().setTotalExperience(0);
+        getPlayer().setLevel(0);
 
-                /* Set Inventory */
-                for (ItemStack istack : dClass.getItems()) {
+        /* Set Inventory */
+        for (ItemStack istack : dClass.getItems()) {
 
-                    // Leggings
-                    if (istack.getType() == Material.LEATHER_LEGGINGS || istack.getType() == Material.CHAINMAIL_LEGGINGS || istack.getType() == Material.IRON_LEGGINGS
-                            || istack.getType() == Material.DIAMOND_LEGGINGS || istack.getType() == LegacyUtil.GOLDEN_LEGGINGS) {
-                        getPlayer().getInventory().setLeggings(istack);
-                    } // Helmet
-                    else if (istack.getType() == Material.LEATHER_HELMET || istack.getType() == Material.CHAINMAIL_HELMET || istack.getType() == Material.IRON_HELMET
-                            || istack.getType() == Material.DIAMOND_HELMET || istack.getType() == LegacyUtil.GOLDEN_HELMET) {
-                        getPlayer().getInventory().setHelmet(istack);
-                    } // Chestplate
-                    else if (istack.getType() == Material.LEATHER_CHESTPLATE || istack.getType() == Material.CHAINMAIL_CHESTPLATE || istack.getType() == Material.IRON_CHESTPLATE
-                            || istack.getType() == Material.DIAMOND_CHESTPLATE || istack.getType() == LegacyUtil.GOLDEN_CESTPLATE) {
-                        getPlayer().getInventory().setChestplate(istack);
-                    } // Boots
-                    else if (istack.getType() == Material.LEATHER_BOOTS || istack.getType() == Material.CHAINMAIL_BOOTS || istack.getType() == Material.IRON_BOOTS
-                            || istack.getType() == Material.DIAMOND_BOOTS || istack.getType() == LegacyUtil.GOLDEN_BOOTS) {
-                        getPlayer().getInventory().setBoots(istack);
-                    } else {
-                        getPlayer().getInventory().addItem(istack);
-                    }
-                }
+            // Leggings
+            if (istack.getType() == Material.LEATHER_LEGGINGS || istack.getType() == Material.CHAINMAIL_LEGGINGS || istack.getType() == Material.IRON_LEGGINGS
+                    || istack.getType() == Material.DIAMOND_LEGGINGS || istack.getType() == LegacyUtil.GOLDEN_LEGGINGS) {
+                getPlayer().getInventory().setLeggings(istack);
+            } // Helmet
+            else if (istack.getType() == Material.LEATHER_HELMET || istack.getType() == Material.CHAINMAIL_HELMET || istack.getType() == Material.IRON_HELMET
+                    || istack.getType() == Material.DIAMOND_HELMET || istack.getType() == LegacyUtil.GOLDEN_HELMET) {
+                getPlayer().getInventory().setHelmet(istack);
+            } // Chestplate
+            else if (istack.getType() == Material.LEATHER_CHESTPLATE || istack.getType() == Material.CHAINMAIL_CHESTPLATE || istack.getType() == Material.IRON_CHESTPLATE
+                    || istack.getType() == Material.DIAMOND_CHESTPLATE || istack.getType() == LegacyUtil.GOLDEN_CESTPLATE) {
+                getPlayer().getInventory().setChestplate(istack);
+            } // Boots
+            else if (istack.getType() == Material.LEATHER_BOOTS || istack.getType() == Material.CHAINMAIL_BOOTS || istack.getType() == Material.IRON_BOOTS
+                    || istack.getType() == Material.DIAMOND_BOOTS || istack.getType() == LegacyUtil.GOLDEN_BOOTS) {
+                getPlayer().getInventory().setBoots(istack);
+            } else {
+                getPlayer().getInventory().addItem(istack);
             }
         }
     }
@@ -487,10 +486,12 @@ public class DGamePlayer extends DInstancePlayer {
         GameRuleProvider rules = game.getRules();
         delete();
 
-        if (finished) {
-            reset(rules.getKeepInventoryOnFinish());
-        } else {
-            reset(rules.getKeepInventoryOnEscape());
+        if (player.isOnline()) {
+            if (finished) {
+                reset(rules.getKeepInventoryOnFinish());
+            } else {
+                reset(rules.getKeepInventoryOnEscape());
+            }
         }
 
         // Permission bridge
