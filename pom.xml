@@ -52,7 +52,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>de.erethon.commons</pattern>
-                                    <shadedPattern>io.github.dre2n.dungeonsxl.util.commons</shadedPattern>
+                                    <shadedPattern>de.erethon.dungeonsxl.util.commons</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

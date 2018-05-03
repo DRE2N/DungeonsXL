@@ -1,5 +1,5 @@
 name: DungeonsXL
-main: io.github.dre2n.dungeonsxl.DungeonsXL
+main: de.erethon.dungeonsxl.DungeonsXL
 version: ${project.version}${buildNo}
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 description: ${project.description}
