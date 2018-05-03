@@ -600,13 +600,17 @@ public class DGamePlayer extends DInstancePlayer {
 
         GameRuleProvider rules = game.getRules();
 
-        if (!checkTimeAfterStart(game)) {
+        if (!checkTimeAfterStart(game) && !checkTimeAfterFinish(game)) {
+            int longestTime = rules.getTimeToNextPlayAfterStart() >= rules.getTimeToNextPlayAfterFinish() ? rules.getTimeToNextPlayAfterStart() : rules.getTimeToNextPlayAfterFinish();
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(longestTime)));
+            return false;
+
+        } else if (!checkTimeAfterStart(game)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterStart())));
             return false;
-        }
 
-        if (!checkTimeAfterFinish(game)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterStart())));
+        } else if (!checkTimeAfterFinish(game)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterFinish())));
             return false;
         }
 
@@ -689,12 +693,7 @@ public class DGamePlayer extends DInstancePlayer {
             return true;
         }
 
-        if (requirement != -1) {
-            if (requirement + dataTime * 1000 * 60 * 60 > System.currentTimeMillis()) {
-                return false;
-            }
-        }
-        return true;
+        return requirement != 0 && dataTime != -1 && dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
     }
 
     public void ready() {
