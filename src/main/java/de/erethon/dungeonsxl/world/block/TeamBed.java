@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
+import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.LegacyUtil;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -42,16 +42,16 @@ public class TeamBed extends TeamBlock implements MultiBlock {
 
     /* Getters and setters */
     public Block getAttachedBlock(Block block) {
-        if (LegacyUtil.isBed(block.getRelative(BlockFace.EAST).getType())) {
+        if (Category.BEDS.containsBlock(block.getRelative(BlockFace.EAST))) {
             return block.getRelative(BlockFace.EAST);
 
-        } else if (LegacyUtil.isBed(block.getRelative(BlockFace.NORTH).getType())) {
+        } else if (Category.BEDS.containsBlock(block.getRelative(BlockFace.NORTH))) {
             return block.getRelative(BlockFace.NORTH);
 
-        } else if (LegacyUtil.isBed(block.getRelative(BlockFace.WEST).getType())) {
+        } else if (Category.BEDS.containsBlock(block.getRelative(BlockFace.WEST))) {
             return block.getRelative(BlockFace.WEST);
 
-        } else if (LegacyUtil.isBed(block.getRelative(BlockFace.SOUTH).getType())) {
+        } else if (Category.BEDS.containsBlock(block.getRelative(BlockFace.SOUTH))) {
             return block.getRelative(BlockFace.SOUTH);
 
         } else {
@@ -88,10 +88,10 @@ public class TeamBed extends TeamBlock implements MultiBlock {
         if (((Bed) block1.getState().getData()).isHeadOfBed()) {
             Block block2 = getAttachedBlock(block1);
             if (block2 != null) {
-                block2.setType(Material.AIR);
+                block2.setType(VanillaItem.AIR.getMaterial());
             }
         }
-        block1.setType(Material.AIR);
+        block1.setType(VanillaItem.AIR.getMaterial());
         return true;
     }
 

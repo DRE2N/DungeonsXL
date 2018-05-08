@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.NumberUtil;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.TeamBed;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -55,11 +55,11 @@ public class BedSign extends DSign {
         this.team = NumberUtil.parseInt(lines[1]);
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
 
-        if (LegacyUtil.isBed(block.getType())) {
+        if (Category.BEDS.containsBlock(block)) {
             if (getGame().getDGroups().size() > team) {
                 getGameWorld().addGameBlock(new TeamBed(block, getGame().getDGroups().get(team)));
             }
-            getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
         } else {
             markAsErroneous();
         }

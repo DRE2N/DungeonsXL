@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.mob;
 
+import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.event.dmob.DMobDeathEvent;
 import de.erethon.dungeonsxl.event.dmob.DMobSpawnEvent;
 import de.erethon.dungeonsxl.game.Game;
@@ -37,15 +38,14 @@ public class DMob {
 
     // Variables
     private LivingEntity entity;
-    private DMobType type;
+    private ExMob type;
 
     private String trigger;
 
-    public DMob(LivingEntity entity, DGameWorld gameWorld, DMobType type) {
+    public DMob(LivingEntity entity, DGameWorld gameWorld) {
         gameWorld.addDMob(this);
 
         this.entity = entity;
-        this.type = type;
 
         /* Remove DropChance of equipment */
         if (!isExternalMob()) {
@@ -64,7 +64,17 @@ public class DMob {
         }
     }
 
-    public DMob(LivingEntity entity, DGameWorld gameWorld, DMobType type, String trigger) {
+    public DMob(LivingEntity entity, DGameWorld gameWorld, String trigger) {
+        this(entity, gameWorld);
+        this.trigger = trigger;
+    }
+
+    public DMob(LivingEntity entity, DGameWorld gameWorld, ExMob type) {
+        this(entity, gameWorld);
+        this.type = type;
+    }
+
+    public DMob(LivingEntity entity, DGameWorld gameWorld, ExMob type, String trigger) {
         this(entity, gameWorld, type);
         this.trigger = trigger;
     }
@@ -80,7 +90,7 @@ public class DMob {
     /**
      * @return the DMobType or null if the mob is an external mob
      */
-    public DMobType getType() {
+    public ExMob getType() {
         return type;
     }
 
@@ -115,14 +125,14 @@ public class DMob {
             return;
         }
 
-        if (type != null) {
+        if (type instanceof DMobType) {
             event.getDrops().clear();
 
-            for (ItemStack itemStack : type.getDrops().keySet()) {
+            for (ItemStack itemStack : ((DMobType) type).getDrops().keySet()) {
                 Random randomGenerator = new Random();
                 int random = randomGenerator.nextInt(100);
 
-                if (type.getDrops().get(itemStack) > random) {
+                if (((DMobType) type).getDrops().get(itemStack) > random) {
                     event.getDrops().add(itemStack);
                 }
             }

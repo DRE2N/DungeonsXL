@@ -16,6 +16,9 @@
  */
 package de.erethon.dungeonsxl.command;
 
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -24,11 +27,8 @@ import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.LegacyUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -36,6 +36,7 @@ import org.bukkit.inventory.ItemStack;
 public class PortalCommand extends DRECommand {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
+    CaliburnAPI caliburn = plugin.getCaliburn();
 
     public PortalCommand() {
         setCommand("portal");
@@ -56,24 +57,24 @@ public class PortalCommand extends DRECommand {
             return;
         }
 
-        Material material = null;
+        ExItem material = null;
 
         if (args.length == 2) {
-            material = Material.matchMaterial(args[1]);
+            material = caliburn.getExItem(args[1]);
         }
 
         if (material == null) {
-            material = Material.PORTAL;
+            material = VanillaItem.PORTAL;
         }
 
         DPortal dPortal = dGlobalPlayer.getPortal();
 
         if (dPortal == null) {
-            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
+            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material.getMaterial(), false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             dGlobalPlayer.setCachedItem(player.getItemInHand());
-            player.getInventory().setItemInHand(new ItemStack(LegacyUtil.WOODEN_SWORD));
+            player.getInventory().setItemInHand(VanillaItem.WOODEN_SWORD.toItemStack());
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_INTRODUCTION.getMessage());
 
         } else {

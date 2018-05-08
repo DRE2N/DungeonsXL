@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.player;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -35,7 +36,6 @@ import de.erethon.dungeonsxl.mob.DMob;
 import de.erethon.dungeonsxl.requirement.Requirement;
 import de.erethon.dungeonsxl.reward.Reward;
 import de.erethon.dungeonsxl.trigger.DistanceTrigger;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
@@ -45,7 +45,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
@@ -260,7 +259,7 @@ public class DGamePlayer extends DInstancePlayer {
         /* Delete Inventory */
         getPlayer().getInventory().clear();
         getPlayer().getInventory().setArmorContents(null);
-        getPlayer().getInventory().setItemInHand(new ItemStack(Material.AIR));
+        getPlayer().getInventory().setItemInHand(VanillaItem.AIR.toItemStack());
 
         // Remove Potion Effects
         for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
@@ -275,20 +274,20 @@ public class DGamePlayer extends DInstancePlayer {
         for (ItemStack istack : dClass.getItems()) {
 
             // Leggings
-            if (istack.getType() == Material.LEATHER_LEGGINGS || istack.getType() == Material.CHAINMAIL_LEGGINGS || istack.getType() == Material.IRON_LEGGINGS
-                    || istack.getType() == Material.DIAMOND_LEGGINGS || istack.getType() == LegacyUtil.GOLDEN_LEGGINGS) {
+            if (VanillaItem.LEATHER_LEGGINGS.is(istack) || VanillaItem.CHAINMAIL_LEGGINGS.is(istack) || VanillaItem.IRON_LEGGINGS.is(istack)
+                    || VanillaItem.DIAMOND_LEGGINGS.is(istack) || VanillaItem.GOLDEN_LEGGINGS.is(istack)) {
                 getPlayer().getInventory().setLeggings(istack);
             } // Helmet
-            else if (istack.getType() == Material.LEATHER_HELMET || istack.getType() == Material.CHAINMAIL_HELMET || istack.getType() == Material.IRON_HELMET
-                    || istack.getType() == Material.DIAMOND_HELMET || istack.getType() == LegacyUtil.GOLDEN_HELMET) {
+            else if (VanillaItem.LEATHER_HELMET.is(istack) || VanillaItem.CHAINMAIL_HELMET.is(istack) || VanillaItem.IRON_HELMET.is(istack)
+                    || VanillaItem.DIAMOND_HELMET.is(istack) || VanillaItem.GOLDEN_HELMET.is(istack)) {
                 getPlayer().getInventory().setHelmet(istack);
             } // Chestplate
-            else if (istack.getType() == Material.LEATHER_CHESTPLATE || istack.getType() == Material.CHAINMAIL_CHESTPLATE || istack.getType() == Material.IRON_CHESTPLATE
-                    || istack.getType() == Material.DIAMOND_CHESTPLATE || istack.getType() == LegacyUtil.GOLDEN_CESTPLATE) {
+            else if (VanillaItem.LEATHER_CHESTPLATE.is(istack) || VanillaItem.CHAINMAIL_CHESTPLATE.is(istack) || VanillaItem.IRON_CHESTPLATE.is(istack)
+                    || VanillaItem.DIAMOND_CHESTPLATE.is(istack) || VanillaItem.GOLDEN_CHESTPLATE.is(istack)) {
                 getPlayer().getInventory().setChestplate(istack);
             } // Boots
-            else if (istack.getType() == Material.LEATHER_BOOTS || istack.getType() == Material.CHAINMAIL_BOOTS || istack.getType() == Material.IRON_BOOTS
-                    || istack.getType() == Material.DIAMOND_BOOTS || istack.getType() == LegacyUtil.GOLDEN_BOOTS) {
+            else if (VanillaItem.LEATHER_BOOTS.is(istack) || VanillaItem.CHAINMAIL_BOOTS.is(istack) || VanillaItem.IRON_BOOTS.is(istack)
+                    || VanillaItem.DIAMOND_BOOTS.is(istack) || VanillaItem.GOLDEN_BOOTS.is(istack)) {
                 getPlayer().getInventory().setBoots(istack);
             } else {
                 getPlayer().getInventory().addItem(istack);
@@ -407,7 +406,7 @@ public class DGamePlayer extends DInstancePlayer {
     public void setRobbedGroup(DGroup dGroup) {
         if (dGroup != null) {
             oldHelmet = player.getInventory().getHelmet();
-            player.getInventory().setHelmet(LegacyUtil.createColoredWool(getDGroup().getDColor()));
+            player.getInventory().setHelmet(getDGroup().getDColor().getWoolMaterial().toItemStack());
         }
 
         stealing = dGroup;
@@ -860,7 +859,7 @@ public class DGamePlayer extends DInstancePlayer {
             setRespawnArmor(event.getEntity().getInventory().getArmorContents());
             // Delete all drops
             for (ItemStack item : event.getDrops()) {
-                item.setType(Material.AIR);
+                item.setType(VanillaItem.AIR.getMaterial());
             }
         }
 

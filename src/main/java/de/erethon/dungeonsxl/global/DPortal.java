@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.global;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -267,7 +268,7 @@ public class DPortal extends GlobalProtection {
         configFile.set(preString + ".loc2.y", block2.getY());
         configFile.set(preString + ".loc2.z", block2.getZ());
 
-        configFile.set(preString + ".material", material.toString());
+        configFile.set(preString + ".material", VanillaItem.get(material).getId());
         if (material == Material.PORTAL) {
             configFile.set(preString + ".axis", axis == 2 ? "z" : "x");
         }

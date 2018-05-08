@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
@@ -24,7 +25,6 @@ import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -77,7 +77,7 @@ public class LivesModifierSign extends DSign {
             target = Target.valueOf(lines[2].toUpperCase());
         }
 
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override

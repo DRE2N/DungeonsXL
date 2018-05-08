@@ -16,8 +16,8 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
-import de.erethon.commons.misc.NumberUtil;
-import de.erethon.dungeonsxl.util.LegacyUtil;
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +32,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class PlaceableBlock extends GameBlock {
 
     // Variables
-    private Set<Material> materials = new HashSet<>();
+    private Set<ExItem> materials = new HashSet<>();
 
     private boolean onTop = false;
     private boolean onBottom = false;
@@ -48,16 +48,16 @@ public class PlaceableBlock extends GameBlock {
         if (!ids.isEmpty()) {
             String[] splittedIds = ids.split(",");
             for (String id : splittedIds) {
-                Material material = LegacyUtil.getMaterial(NumberUtil.parseInt(id));
-                if (material != null) {
-                    materials.add(material);
+                ExItem item = CaliburnAPI.getInstance().getExItem(id);
+                if (item != null) {
+                    materials.add(item);
                 }
             }
         }
 
         // Read directions
         if (directions.length() == 6) {
-            for (int direction = 0; direction < 6; direction++) {
+            for (byte direction = 0; direction < 6; direction++) {
                 boolean positive = String.valueOf(directions.charAt(direction)).equals("x");
 
                 if (!positive) {
@@ -73,7 +73,7 @@ public class PlaceableBlock extends GameBlock {
                 }
 
                 if (block.getType() == Material.WALL_SIGN) {
-                    int data = block.getData();
+                    byte data = block.getData();
                     switch (data) {
                         case 3:
                             if (direction == 2) {
@@ -153,7 +153,7 @@ public class PlaceableBlock extends GameBlock {
                     }
 
                 } else {
-                    int data = block.getData();
+                    byte data = block.getData();
                     switch (data) {
                         case 0:
                         case 1:
@@ -261,7 +261,7 @@ public class PlaceableBlock extends GameBlock {
     }
 
     // Can build
-    public static boolean canBuildHere(Block block, BlockFace blockFace, Material mat, DGameWorld gameWorld) {
+    public static boolean canBuildHere(Block block, BlockFace blockFace, ExItem mat, DGameWorld gameWorld) {
         for (PlaceableBlock gamePlacableBlock : gameWorld.getPlaceableBlocks()) {
             if (gamePlacableBlock.block.getFace(block) != BlockFace.SELF) {
                 continue;

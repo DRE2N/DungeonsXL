@@ -16,12 +16,11 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
+import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
 /**
@@ -64,27 +63,7 @@ public class RedstoneTrigger extends Trigger {
 
     /* Statics */
     public static RedstoneTrigger getOrCreate(Sign sign, DGameWorld gameWorld) {
-        Block rtBlock = null;
-        if (sign.getBlock().getType() == Material.WALL_SIGN) {
-            switch (sign.getData().getData()) {
-                case 5:
-                    rtBlock = sign.getBlock().getRelative(BlockFace.WEST);
-                    break;
-                case 4:
-                    rtBlock = sign.getBlock().getRelative(BlockFace.EAST);
-                    break;
-                case 3:
-                    rtBlock = sign.getBlock().getRelative(BlockFace.NORTH);
-                    break;
-                case 2:
-                    rtBlock = sign.getBlock().getRelative(BlockFace.SOUTH);
-                    break;
-            }
-
-        } else {
-            rtBlock = sign.getBlock().getRelative(BlockFace.DOWN);
-        }
-
+        Block rtBlock = BlockUtil.getAttachedBlock(sign.getBlock());
         if (rtBlock != null) {
             for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
                 RedstoneTrigger trigger = (RedstoneTrigger) uncasted;

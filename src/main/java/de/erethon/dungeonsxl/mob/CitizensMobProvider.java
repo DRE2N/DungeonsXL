@@ -99,7 +99,7 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
             spawnedNPCs.add(npc);
 
             DGameWorld gameWorld = DGameWorld.getByWorld(location.getWorld());
-            new DMob((LivingEntity) npc.getEntity(), gameWorld, null, mob);
+            new DMob((LivingEntity) npc.getEntity(), gameWorld, mob);
         }
     }
 

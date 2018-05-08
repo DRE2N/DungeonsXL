@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.sign.mob;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -164,7 +164,7 @@ public class DMobSign extends DSign implements MobSign {
                 }
             }
         }
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         initialized = true;
     }

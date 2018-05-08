@@ -16,12 +16,11 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import io.github.dre2n.caliburn.CaliburnAPI;
-import io.github.dre2n.caliburn.item.UniversalItem;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -59,12 +58,12 @@ public class DropSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return CaliburnAPI.getInstance().getItems().getById(lines[1]) != null;
+        return plugin.getCaliburn().getExItem(lines[1]) != null;
     }
 
     @Override
     public void onInit() {
-        UniversalItem item = CaliburnAPI.getInstance().getItems().getById(lines[1]);
+        ExItem item = plugin.getCaliburn().getExItem(lines[1]);
 
         String[] attributes = lines[2].split(",");
         if (attributes.length >= 1) {
@@ -74,7 +73,7 @@ public class DropSign extends DSign {
             interval = NumberUtil.parseDouble(attributes[1]);
         }
 
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override

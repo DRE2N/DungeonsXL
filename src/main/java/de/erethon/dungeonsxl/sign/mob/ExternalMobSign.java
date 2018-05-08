@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign.mob;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.mob.ExternalMobPlugin;
 import de.erethon.dungeonsxl.mob.ExternalMobProvider;
@@ -26,7 +27,6 @@ import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -239,7 +239,7 @@ public class ExternalMobSign extends DSign implements MobSign {
             }
         }
 
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         initialized = true;
     }

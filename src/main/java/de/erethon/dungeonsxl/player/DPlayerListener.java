@@ -16,6 +16,9 @@
  */
 package de.erethon.dungeonsxl.player;
 
+import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -23,14 +26,12 @@ import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.mob.DMob;
 import de.erethon.dungeonsxl.trigger.UseItemTrigger;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import de.erethon.dungeonsxl.util.ParsingUtil;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import java.util.ArrayList;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -346,8 +347,8 @@ public class DPlayerListener implements Listener {
 
         Game game = Game.getByWorld(gamePlayer.getWorld());
 
-        for (ItemStack item : game.getRules().getSecureObjects()) {
-            if (event.getItemDrop().getItemStack().isSimilar(item)) {
+        for (ExItem item : game.getRules().getSecureObjects()) {
+            if (event.getItemDrop().getItemStack().isSimilar(item.toItemStack())) {
                 event.setCancelled(true);
                 MessageUtil.sendMessage(player, DMessage.ERROR_DROP.getMessage());
                 return;
@@ -551,13 +552,13 @@ public class DPlayerListener implements Listener {
             // Block Enderchests
             if (dGameWorld != null || DEditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
-                    if (clickedBlock.getType() == Material.ENDER_CHEST) {
+                    if (VanillaItem.ENDER_CHEST.is(clickedBlock)) {
                         if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_ENDERCHEST.getMessage());
                             event.setCancelled(true);
                         }
 
-                    } else if (LegacyUtil.isBed(clickedBlock.getType())) {
+                    } else if (Category.BEDS.containsBlock(clickedBlock)) {
                         if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_BED.getMessage());
                             event.setCancelled(true);
@@ -569,7 +570,7 @@ public class DPlayerListener implements Listener {
             // Block Dispensers
             if (dGameWorld != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
-                    if (clickedBlock.getType() == Material.DISPENSER) {
+                    if (VanillaItem.DISPENSER.is(clickedBlock)) {
                         if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_DISPENSER.getMessage());
                             event.setCancelled(true);
@@ -593,7 +594,7 @@ public class DPlayerListener implements Listener {
             // Copy/Paste a Sign and Block-info
             if (DEditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    if (item.getType() == Material.STICK) {
+                    if (VanillaItem.STICK.is(item)) {
                         DEditPlayer dPlayer = DEditPlayer.getByPlayer(player);
                         if (dPlayer != null) {
                             dPlayer.poke(clickedBlock);
@@ -612,7 +613,7 @@ public class DPlayerListener implements Listener {
                         if (item.getItemMeta().hasDisplayName()) {
                             name = item.getItemMeta().getDisplayName();
 
-                        } else if (item.getType() == Material.WRITTEN_BOOK || item.getType() == LegacyUtil.WRITABLE_BOOK) {
+                        } else if (VanillaItem.WRITTEN_BOOK.is(item) || VanillaItem.WRITABLE_BOOK.is(item)) {
                             if (item.getItemMeta() instanceof BookMeta) {
                                 BookMeta meta = (BookMeta) item.getItemMeta();
                                 if (meta.hasTitle()) {

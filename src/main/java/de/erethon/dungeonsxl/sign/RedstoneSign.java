@@ -16,9 +16,9 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitTask;
@@ -215,7 +215,7 @@ public class RedstoneSign extends DSign {
         }
 
         block = getSign().getBlock();
-        block.setType(Material.AIR);
+        block.setType(VanillaItem.AIR.getMaterial());
 
         initialized = true;
     }
@@ -260,11 +260,11 @@ public class RedstoneSign extends DSign {
     }
 
     public void power() {
-        block.setType(Material.REDSTONE_BLOCK);
+        block.setType(VanillaItem.REDSTONE_BLOCK.getMaterial());
     }
 
     public void unpower() {
-        block.setType(Material.AIR);
+        block.setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override

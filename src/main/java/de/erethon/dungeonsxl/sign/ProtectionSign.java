@@ -16,10 +16,10 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.ProtectedBlock;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
@@ -48,7 +48,7 @@ public class ProtectionSign extends DSign {
     @Override
     public void onInit() {
         getGameWorld().addGameBlock(new ProtectedBlock(BlockUtil.getAttachedBlock(getSign().getBlock())));
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
 }

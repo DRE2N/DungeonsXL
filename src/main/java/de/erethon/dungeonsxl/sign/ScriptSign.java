@@ -16,8 +16,8 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
@@ -59,7 +59,7 @@ public class ScriptSign extends DSign {
             }
         }
 
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override

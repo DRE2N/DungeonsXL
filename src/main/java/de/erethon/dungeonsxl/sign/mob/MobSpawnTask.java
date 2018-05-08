@@ -16,9 +16,9 @@
  */
 package de.erethon.dungeonsxl.sign.mob;
 
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.mob.DMob;
-import de.erethon.dungeonsxl.mob.DMobType;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -66,15 +66,15 @@ public class MobSpawnTask extends BukkitRunnable {
                         // Disable Despawning
                         entity.setRemoveWhenFarAway(false);
 
-                        new DMob(entity, sign.getGameWorld(), null);
+                        new DMob(entity, sign.getGameWorld(), sign.getMob());
                     }
                 }
 
                 // Check custom mobs
-                DMobType mobType = DungeonsXL.getInstance().getDMobTypes().getByName(sign.getMob());
+                ExMob mobType = CaliburnAPI.getInstance().getExMob(sign.getMob());
 
                 if (mobType != null) {
-                    mobType.spawn(gameWorld, spawnLoc);
+                    mobType.toEntity(spawnLoc);
                 }
 
                 // Set the amount

@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign.message;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.sign.DSign;
@@ -23,7 +24,6 @@ import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -61,7 +61,7 @@ public class MessageSign extends DSign {
             }
         }
 
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
         initialized = true;
     }
 

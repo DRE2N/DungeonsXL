@@ -18,21 +18,16 @@ package de.erethon.dungeonsxl.sign.message;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import de.erethon.commons.compatibility.CompatibilityHandler;
-import de.erethon.commons.compatibility.Version;
-import de.erethon.commons.misc.EnumUtil;
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import io.github.dre2n.caliburn.CaliburnAPI;
-import io.github.dre2n.caliburn.item.UniversalItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,7 +55,7 @@ public class HologramSign extends DSign {
             markAsErroneous();
             return;
         }
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         String[] holoLines = lines[1].split("/");
         Location location = getSign().getLocation();
@@ -72,20 +67,9 @@ public class HologramSign extends DSign {
                 String id = line.replace("Item:", "");
                 ItemStack item = null;
 
-                if (Version.andHigher(Version.MC1_9).contains(CompatibilityHandler.getInstance().getVersion())) {
-                    UniversalItem universalItem = CaliburnAPI.getInstance().getItems().getById(id);
-                    if (universalItem != null) {
-                        item = universalItem.toItemStack(1);
-                    }
-                }
-
-                if (item == null) {
-                    if (EnumUtil.isValidEnum(Material.class, id)) {
-                        item = new ItemStack(Material.valueOf(id));
-
-                    } else {
-                        item = new ItemStack(LegacyUtil.getMaterial(NumberUtil.parseInt(id, 1)));
-                    }
+                ExItem exItem = plugin.getCaliburn().getExItem(id);
+                if (exItem != null) {
+                    item = exItem.toItemStack();
                 }
 
                 hologram.appendItemLine(item);

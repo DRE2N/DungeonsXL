@@ -26,7 +26,6 @@ import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.DColor;
 import de.erethon.dungeonsxl.util.GUIUtil;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -440,7 +439,8 @@ public class Announcer {
 
             boolean full = playerCount >= maxPlayersPerGroup;
 
-            ItemStack button = LegacyUtil.createColoredWool(plugin.getMainConfig().getGroupColorPriority().get(groupCount));
+            DColor color = plugin.getMainConfig().getGroupColorPriority().get(groupCount);
+            ItemStack button = color.getWoolMaterial().toItemStack();
             ItemMeta meta = button.getItemMeta();
             meta.setDisplayName(name + (full ? ChatColor.DARK_RED : ChatColor.GREEN) + " [" + playerCount + "/" + maxPlayersPerGroup + "]");
             meta.setLore(lore);

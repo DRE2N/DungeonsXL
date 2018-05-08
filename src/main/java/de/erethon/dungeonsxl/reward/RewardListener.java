@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.reward;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.gui.PageGUI;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -24,8 +25,8 @@ import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
-import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -112,9 +113,10 @@ public class RewardListener implements Listener {
         if (plugin.getDWorlds().getInstanceByWorld(player.getWorld()) != null) {
             return;
         }
-        if (dPlayer.hasRewardItemsLeft() && player.getLocation().getBlock().getRelative(0, 1, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, -1, 0).getType() != Material.PORTAL
-                && player.getLocation().getBlock().getRelative(1, 0, 0).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(-1, 0, 0).getType() != Material.PORTAL
-                && player.getLocation().getBlock().getRelative(0, 0, 1).getType() != Material.PORTAL && player.getLocation().getBlock().getRelative(0, 0, -1).getType() != Material.PORTAL) {
+        Block block = player.getLocation().getBlock();
+        if (dPlayer.hasRewardItemsLeft() && !VanillaItem.PORTAL.is(block.getRelative(0, 1, 0)) && !VanillaItem.PORTAL.is(block.getRelative(0, -1, 0))
+                && !VanillaItem.PORTAL.is(block.getRelative(1, 0, 0)) && !VanillaItem.PORTAL.is(block.getRelative(-1, 0, 0))
+                && !VanillaItem.PORTAL.is(block.getRelative(0, 0, 1)) && !VanillaItem.PORTAL.is(block.getRelative(0, 0, -1))) {
             PageGUI lootInventory = new PageGUI(DMessage.PLAYER_TREASURES.getMessage(), true);
             for (ItemStack item : dPlayer.getRewardItems()) {
                 if (item != null) {

@@ -16,13 +16,13 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -66,7 +66,7 @@ public class FloorSign extends DSign {
         }
 
         if (!getTriggers().isEmpty()) {
-            getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
             return;
         }
 

@@ -11,7 +11,7 @@
         <buildNo></buildNo>
     </properties>
     <build>
-        <finalName>dungeonsxl-${project.version}${buildNo}</finalName>
+        <finalName>${project.artifactId}-${project.version}${buildNo}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
@@ -45,7 +45,7 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>io.github.dre2n:caliburn</include>
+                                    <include>de.erethon:caliburn</include>
                                     <include>de.erethon:commons</include>
                                 </includes>
                             </artifactSet>
@@ -81,9 +81,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.dre2n</groupId>
+            <groupId>de.erethon</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.3</version>
+            <version>0.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

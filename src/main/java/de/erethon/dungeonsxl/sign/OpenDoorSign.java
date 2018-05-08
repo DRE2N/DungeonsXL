@@ -16,10 +16,10 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -92,7 +92,7 @@ public class OpenDoorSign extends DSign {
             }
             getGameWorld().addGameBlock(door);
 
-            getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         } else {
             markAsErroneous();

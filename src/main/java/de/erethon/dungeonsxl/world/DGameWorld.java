@@ -16,6 +16,9 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -56,7 +59,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -84,6 +86,7 @@ public class DGameWorld extends DInstanceWorld {
         DEFAULT
     }
 
+    CaliburnAPI caliburn = plugin.getCaliburn();
     Game game;
 
     // Variables
@@ -596,9 +599,9 @@ public class DGameWorld extends DInstanceWorld {
             }
         }
 
-        Map<Material, HashSet<Material>> whitelist = rules.getBreakWhitelist();
-        Material material = block.getType();
-        Material breakTool = player.getItemInHand().getType();
+        Map<ExItem, HashSet<ExItem>> whitelist = rules.getBreakWhitelist();
+        ExItem material = VanillaItem.get(block.getType());
+        ExItem breakTool = caliburn.getExItem(player.getItemInHand());
 
         if (whitelist == null) {
             if (rules.canBreakPlacedBlocks()) {
@@ -635,7 +638,7 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         GameRuleProvider rules = game.getRules();
-        if (!rules.canPlaceBlocks() && !PlaceableBlock.canBuildHere(block, block.getFace(against), hand.getType(), this)) {
+        if (!rules.canPlaceBlocks() && !PlaceableBlock.canBuildHere(block, block.getFace(against), caliburn.getExItem(hand), this)) {
             // Workaround for a bug that would allow 3-Block-high jumping
             Location loc = player.getLocation();
             if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
@@ -652,8 +655,8 @@ public class DGameWorld extends DInstanceWorld {
             return true;
         }
 
-        Set<Material> whitelist = rules.getPlaceWhitelist();
-        if (whitelist == null || whitelist.contains(block.getType())) {
+        Set<ExItem> whitelist = rules.getPlaceWhitelist();
+        if (whitelist == null || whitelist.contains(VanillaItem.get(block.getType()))) {
             placedBlocks.add(block);
             return false;
         }

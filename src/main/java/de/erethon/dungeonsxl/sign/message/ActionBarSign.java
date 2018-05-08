@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.sign.message;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.sign.PerPlayerSign;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -65,7 +65,7 @@ public class ActionBarSign extends PerPlayerSign {
     public void onInit() {
         text = lines[1];
         text += lines[2];
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override
