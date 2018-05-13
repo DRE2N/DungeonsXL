@@ -29,12 +29,16 @@ public abstract class LocationSign extends DSign {
 
     public LocationSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
-        double x = sign.getX() + 0.5;
-        double y = sign.getY();
-        double z = sign.getZ() + 0.5;
+    }
+
+    @Override
+    public void onInit() {
+        double x = getSign().getX() + 0.5;
+        double y = getSign().getY();
+        double z = getSign().getZ() + 0.5;
         float yaw = letterToYaw(((org.bukkit.material.Sign) getSign().getData()).getFacing().getOppositeFace().name().charAt(0));
         float pitch = 0;
-        location = new Location(gameWorld.getWorld(), x, y, z, yaw, pitch);
+        location = new Location(getGameWorld().getWorld(), x, y, z, yaw, pitch);
     }
 
     /**

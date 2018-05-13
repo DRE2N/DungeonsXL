@@ -41,6 +41,7 @@ public class LobbySign extends LocationSign {
 
     @Override
     public void onInit() {
+        super.onInit();
         getGameWorld().setLobbyLocation(getLocation());
         getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }

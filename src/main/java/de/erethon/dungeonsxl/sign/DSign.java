@@ -232,6 +232,7 @@ public abstract class DSign {
                 if (!(type instanceof DSignTypeDefault)) {
                     MessageUtil.log("Please note that this sign is an unsupported feature added by an addon!");
                 }
+                exception.printStackTrace();
             }
         }
 
