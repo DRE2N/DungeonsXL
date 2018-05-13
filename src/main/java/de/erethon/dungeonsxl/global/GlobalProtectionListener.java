@@ -206,7 +206,7 @@ public class GlobalProtectionListener implements Listener {
             return;
         }
 
-        if (!Category.SIGNS.containsBlock(clickedBlock)) {
+        if (Category.SIGNS.containsBlock(clickedBlock)) {
             // Check Group Signs
             if (GroupSign.playerInteract(clickedBlock, player)) {
                 event.setCancelled(true);
