@@ -693,7 +693,7 @@ public class DGamePlayer extends DInstancePlayer {
             return true;
         }
 
-        return requirement != 0 && dataTime != -1 && dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
+        return dataTime == -1 || dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
     }
 
     public void ready() {
