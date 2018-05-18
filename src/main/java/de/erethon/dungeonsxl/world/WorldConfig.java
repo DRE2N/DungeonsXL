@@ -16,17 +16,15 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.commons.compatibility.CompatibilityHandler;
-import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.game.GameRuleProvider;
 import de.erethon.dungeonsxl.game.GameType;
 import de.erethon.dungeonsxl.requirement.Requirement;
-import de.erethon.dungeonsxl.util.DeserializationUtil;
-import io.github.dre2n.caliburn.CaliburnAPI;
-import io.github.dre2n.caliburn.item.UniversalItemStack;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,13 +35,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * The world configuration is a simple game rule source.
@@ -54,6 +50,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class WorldConfig extends GameRuleProvider {
 
+    CaliburnAPI caliburn = CaliburnAPI.getInstance();
     CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private File file;
@@ -89,11 +86,7 @@ public class WorldConfig extends GameRuleProvider {
 
         /* Secure Objects */
         if (configFile.contains("secureObjects")) {
-            if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
-                secureObjects = UniversalItemStack.deserializeList(configFile.getList("secureObjects"));
-            } else {
-                secureObjects = DeserializationUtil.deserializeStackList(configFile.getStringList("secureObjects"));
-            }
+            secureObjects = caliburn.deserializeExItemList(configFile, "secureObjects");
         }
 
         /* Invited Players */
@@ -156,12 +149,12 @@ public class WorldConfig extends GameRuleProvider {
         if (configFile.contains("breakWhitelist")) {
             breakWhitelist = new HashMap<>();
             for (Entry<String, Object> entry : configFile.getConfigurationSection("breakWhitelist").getValues(true).entrySet()) {
-                Material breakable = Material.matchMaterial(entry.getKey());
+                ExItem breakable = caliburn.getExItem(entry.getKey());
 
-                HashSet<Material> tools = new HashSet<>();
+                HashSet<ExItem> tools = new HashSet<>();
                 if (entry.getValue() instanceof List) {
                     for (String materialString : (List<String>) entry.getValue()) {
-                        Material tool = Material.matchMaterial(materialString);
+                        ExItem tool = caliburn.getExItem(materialString);
                         if (tool != null) {
                             tools.add(tool);
                         }
@@ -189,9 +182,9 @@ public class WorldConfig extends GameRuleProvider {
         if (configFile.contains("placeWhitelist")) {
             placeWhitelist = new HashSet<>();
             for (String materialString : configFile.getStringList("placeWhitelist")) {
-                Material material = Material.matchMaterial(materialString);
-                if (material != null) {
-                    placeWhitelist.add(material);
+                ExItem item = caliburn.getExItem(materialString);
+                if (item != null) {
+                    placeWhitelist.add(item);
                 }
             }
         }
@@ -351,8 +344,8 @@ public class WorldConfig extends GameRuleProvider {
         }
 
         List<String> secureObjectIds = new ArrayList<>();
-        for (ItemStack item : getSecureObjects()) {
-            secureObjectIds.add(CaliburnAPI.getInstance().getItems().getCustomItemId(item));
+        for (ExItem item : getSecureObjects()) {
+            secureObjectIds.add(item.getId());
         }
 
         configFile.set("secureObjects", secureObjects);

@@ -16,8 +16,8 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.game.Game;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -94,7 +94,7 @@ public class DWorldListener implements Listener {
         Block block = event.getSource();
 
         DInstanceWorld instance = dWorlds.getInstanceByWorld(block.getWorld());
-        if (instance != null && block.getType() == Material.VINE) {
+        if (instance != null && VanillaItem.VINE.is(block)) {
             event.setCancelled(true);
         }
     }
@@ -151,7 +151,7 @@ public class DWorldListener implements Listener {
     @EventHandler
     public void onItemSpawn(ItemSpawnEvent event) {
         if (DGameWorld.getByWorld(event.getLocation().getWorld()) != null) {
-            if (event.getEntity().getItemStack().getType() == Material.SIGN) {
+            if (VanillaItem.SIGN.is(event.getEntity().getItemStack())) {
                 event.setCancelled(true);
             }
         }

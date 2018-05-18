@@ -19,7 +19,6 @@ package de.erethon.dungeonsxl.player;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 
 /**
  * @author Daniel Saukel
@@ -34,7 +33,7 @@ public class DGroupTag {
         DGroup group = player.getDGroup();
         if (group != null) {
             hologram = HologramsAPI.createHologram(DungeonsXL.getInstance(), player.getPlayer().getLocation().clone().add(0, 3.5, 0));
-            hologram.appendItemLine(LegacyUtil.createColoredWool(group.getDColor()));
+            hologram.appendItemLine(group.getDColor().getWoolMaterial().toItemStack());
             hologram.appendTextLine(group.getName());
         }
     }

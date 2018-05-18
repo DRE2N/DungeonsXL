@@ -16,12 +16,13 @@
  */
 package de.erethon.dungeonsxl.global;
 
+import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import java.util.List;
 import org.bukkit.block.Block;
@@ -62,7 +63,7 @@ public class GlobalProtectionListener implements Listener {
         }
 
         //return if above block is not a sign
-        if (!LegacyUtil.isSign(blockAbove)) {
+        if (!Category.SIGNS.containsBlock(blockAbove)) {
             return;
         }
 
@@ -166,7 +167,7 @@ public class GlobalProtectionListener implements Listener {
         }
         ItemStack item = event.getItem();
         Block block = event.getClickedBlock();
-        if (item == null || item.getType() != LegacyUtil.WOODEN_SWORD || block == null) {
+        if (item == null || !VanillaItem.WOODEN_SWORD.is(item) || block == null) {
             return;
         }
 
@@ -205,7 +206,7 @@ public class GlobalProtectionListener implements Listener {
             return;
         }
 
-        if (LegacyUtil.isSign(clickedBlock)) {
+        if (Category.SIGNS.containsBlock(clickedBlock)) {
             // Check Group Signs
             if (GroupSign.playerInteract(clickedBlock, player)) {
                 event.setCancelled(true);

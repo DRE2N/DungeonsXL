@@ -16,14 +16,15 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.commons.misc.NumberUtil;
-import de.erethon.dungeonsxl.loottable.DLootTable;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -41,7 +42,7 @@ public class ChestSign extends DSign {
     private double moneyReward;
     private int levelReward;
     private ItemStack[] chestContent;
-    private DLootTable lootTable;
+    private LootTable lootTable;
 
     public ChestSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -99,7 +100,7 @@ public class ChestSign extends DSign {
     /**
      * @return the custom loot table
      */
-    public DLootTable getLootTable() {
+    public LootTable getLootTable() {
         return lootTable;
     }
 
@@ -107,7 +108,7 @@ public class ChestSign extends DSign {
      * @param lootTable
      * the loot table to set
      */
-    public void setLootTable(DLootTable lootTable) {
+    public void setLootTable(LootTable lootTable) {
         this.lootTable = lootTable;
     }
 
@@ -127,19 +128,19 @@ public class ChestSign extends DSign {
             Block yRelative = sign.getRelative(0, i, 0);
             Block zRelative = sign.getRelative(0, 0, i);
 
-            if (xRelative.getType() == Material.CHEST) {
+            if (Category.CHESTS.containsBlock(xRelative)) {
                 if (chestContent == null) {
                     chestContent = ((Chest) xRelative.getState()).getBlockInventory().getContents();
                 }
                 chest = xRelative;
 
-            } else if (yRelative.getType() == Material.CHEST) {
+            } else if (Category.CHESTS.containsBlock(yRelative)) {
                 if (chestContent == null) {
                     chestContent = ((Chest) yRelative.getState()).getBlockInventory().getContents();
                 }
                 chest = yRelative;
 
-            } else if (zRelative.getType() == Material.CHEST) {
+            } else if (Category.CHESTS.containsBlock(zRelative)) {
                 if (chestContent == null) {
                     chestContent = ((Chest) zRelative.getState()).getBlockInventory().getContents();
                 }
@@ -166,7 +167,7 @@ public class ChestSign extends DSign {
         }
 
         if (!lines[2].isEmpty()) {
-            lootTable = plugin.getDLootTables().getByName(lines[2]);
+            lootTable = plugin.getCaliburn().getLootTable(lines[2]);
         }
 
         if (chest == null) {
@@ -182,7 +183,7 @@ public class ChestSign extends DSign {
             }
 
             getGameWorld().addGameBlock(new RewardChest(chest, moneyReward, levelReward, itemReward));
-            getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         } else {
             markAsErroneous();

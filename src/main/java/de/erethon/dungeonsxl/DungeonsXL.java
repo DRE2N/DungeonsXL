@@ -16,10 +16,13 @@
  */
 package de.erethon.dungeonsxl;
 
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.MessageConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.javaplugin.DREPluginSettings;
+import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.announcer.AnnouncerCache;
 import de.erethon.dungeonsxl.command.DCommandCache;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -29,8 +32,8 @@ import de.erethon.dungeonsxl.dungeon.DungeonCache;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.game.GameTypeCache;
 import de.erethon.dungeonsxl.global.GlobalProtectionCache;
-import de.erethon.dungeonsxl.loottable.DLootTableCache;
-import de.erethon.dungeonsxl.mob.DMobTypeCache;
+import de.erethon.dungeonsxl.mob.DMobListener;
+import de.erethon.dungeonsxl.mob.DMobType;
 import de.erethon.dungeonsxl.mob.ExternalMobProviderCache;
 import de.erethon.dungeonsxl.player.DClassCache;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -44,12 +47,12 @@ import de.erethon.dungeonsxl.sign.SignScriptCache;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.NoReload;
 import de.erethon.dungeonsxl.world.DWorldCache;
-import io.github.dre2n.caliburn.CaliburnAPI;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 
@@ -62,6 +65,7 @@ import org.bukkit.inventory.Inventory;
 public class DungeonsXL extends DREPlugin {
 
     private static DungeonsXL instance;
+    private CaliburnAPI caliburn;
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
     public static File BACKUPS;
@@ -91,8 +95,6 @@ public class DungeonsXL extends DREPlugin {
     private DPlayerCache dPlayers;
     private AnnouncerCache announcers;
     private DClassCache dClasses;
-    private DLootTableCache dLootTables;
-    private DMobTypeCache dMobTypes;
     private SignScriptCache signScripts;
     private DWorldCache dWorlds;
 
@@ -239,8 +241,8 @@ public class DungeonsXL extends DREPlugin {
         loadDPlayers();
         loadAnnouncers(ANNOUNCERS);
         loadDClasses(CLASSES);
-        loadDLootTables(LOOT_TABLES);
-        loadDMobTypes(MOBS);
+        loadLootTables(LOOT_TABLES);
+        loadMobs(MOBS);
         loadSignScripts(SIGNS);
         loadDCommandCache();
     }
@@ -266,12 +268,17 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
+     * @return the loaded instance of CaliburnAPI
+     */
+    public CaliburnAPI getCaliburn() {
+        return caliburn;
+    }
+
+    /**
      * load / reload a new instance of CaliburnAPI if none exists
      */
     private void loadCaliburnAPI() {
-        if (CaliburnAPI.getInstance() == null) {
-            new CaliburnAPI(this).setupClean();
-        }
+        caliburn = CaliburnAPI.getInstance() == null ? new CaliburnAPI(this) : CaliburnAPI.getInstance();
     }
 
     /**
@@ -480,31 +487,24 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
-     * @return the loaded instance of DLootTableCache
+     * load / reload loot tables
      */
-    public DLootTableCache getDLootTables() {
-        return dLootTables;
+    public void loadLootTables(File file) {
+        for (File script : FileUtil.getFilesForFolder(file)) {
+            new LootTable(caliburn, script);
+        }
     }
 
     /**
-     * load / reload a new instance of DLootTableCache
+     * load / reload DMob types
      */
-    public void loadDLootTables(File file) {
-        dLootTables = new DLootTableCache(file);
-    }
-
-    /**
-     * @return the loaded instance of DMobTypeCache
-     */
-    public DMobTypeCache getDMobTypes() {
-        return dMobTypes;
-    }
-
-    /**
-     * load / reload a new instance of DMobTypeCache
-     */
-    public void loadDMobTypes(File file) {
-        dMobTypes = new DMobTypeCache(file);
+    public void loadMobs(File file) {
+        if (file.isDirectory()) {
+            for (File script : FileUtil.getFilesForFolder(file)) {
+                caliburn.getExMobs().add(new DMobType(script));
+            }
+        }
+        Bukkit.getPluginManager().registerEvents(new DMobListener(), this);
     }
 
     /**

@@ -16,13 +16,14 @@
  */
 package de.erethon.dungeonsxl.global;
 
+import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -234,7 +235,7 @@ public class GroupSign extends GlobalProtection {
      * a block which is protected by the returned GroupSign
      */
     public static GroupSign getByBlock(Block block) {
-        if (!LegacyUtil.isSign(block)) {
+        if (!Category.SIGNS.containsBlock(block)) {
             return null;
         }
 

@@ -48,7 +48,7 @@ public class ExternalMobSpawnTask extends BukkitRunnable {
 
                 sign.setExternalMobs();
                 if (sign.getExternalMob() != null) {
-                    new DMob(sign.getExternalMob(), sign.getGameWorld(), null, sign.getMob());
+                    new DMob(sign.getExternalMob(), sign.getGameWorld(), sign.getMob());
                 }
 
                 // Set the amount

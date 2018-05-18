@@ -16,10 +16,8 @@
  */
 package de.erethon.dungeonsxl.player;
 
+import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.commons.compatibility.CompatibilityHandler;
-import de.erethon.commons.compatibility.Version;
-import de.erethon.dungeonsxl.util.DeserializationUtil;
-import io.github.dre2n.caliburn.item.UniversalItemStack;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DClass {
 
+    CaliburnAPI caliburn = CaliburnAPI.getInstance();
     CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private String name;
@@ -49,11 +48,7 @@ public class DClass {
         this.name = name;
 
         if (config.contains("items")) {
-            if (Version.andHigher(Version.MC1_9).contains(compat.getVersion())) {
-                items = UniversalItemStack.deserializeList(config.getList("items"));
-            } else {
-                items = DeserializationUtil.deserializeStackList(config.getStringList("items"));
-            }
+            items = caliburn.deserializeStackList(config, "items");
         }
 
         if (config.contains("dog")) {

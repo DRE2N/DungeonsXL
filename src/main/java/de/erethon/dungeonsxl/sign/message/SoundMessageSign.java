@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign.message;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.misc.EnumUtil;
@@ -25,7 +26,6 @@ import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -78,7 +78,7 @@ public class SoundMessageSign extends DSign {
                     pitch = (float) NumberUtil.parseDouble(args[2], 1.0);
                 }
             }
-            getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
             initialized = true;
         } else {
             markAsErroneous();

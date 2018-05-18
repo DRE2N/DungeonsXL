@@ -16,10 +16,10 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
@@ -57,7 +57,7 @@ public class ChunkUpdaterSign extends DSign {
             getGameWorld().getLoadedChunks().add(chunk);
         }
 
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override

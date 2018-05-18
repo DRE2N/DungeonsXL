@@ -16,10 +16,11 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -34,9 +35,9 @@ public class UseItemTrigger extends Trigger {
 
     public UseItemTrigger(String name) {
         this.name = name;
-        Material mat = Material.matchMaterial(name);
-        if (mat != null) {
-            matchedName = mat.toString();
+        ExItem item = CaliburnAPI.getInstance().getExItem(name);
+        if (item != null) {
+            matchedName = item.toString();
         }
     }
 

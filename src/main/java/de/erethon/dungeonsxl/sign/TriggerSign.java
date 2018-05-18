@@ -16,13 +16,13 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -88,7 +88,7 @@ public class TriggerSign extends DSign {
     @Override
     public void onInit() {
         triggerId = NumberUtil.parseInt(getSign().getLine(1));
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         initialized = true;
     }

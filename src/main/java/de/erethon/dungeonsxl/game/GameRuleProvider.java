@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.game;
 
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.requirement.Requirement;
 import de.erethon.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
@@ -27,9 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * See {@link de.erethon.dungeonsxl.config.WorldConfig}
@@ -117,11 +116,11 @@ public class GameRuleProvider {
     protected GameMode gameMode;
     protected Boolean breakBlocks;
     protected Boolean breakPlacedBlocks;
-    protected Map<Material, HashSet<Material>> breakWhitelist;
+    protected Map<ExItem, HashSet<ExItem>> breakWhitelist;
     protected Set<EntityType> damageProtectedEntities;
     protected Set<EntityType> interactionProtectedEntities;
     protected Boolean placeBlocks;
-    protected Set<Material> placeWhitelist;
+    protected Set<ExItem> placeWhitelist;
     protected Boolean rain;
     protected Boolean thunder;
     protected Long time;
@@ -164,7 +163,7 @@ public class GameRuleProvider {
 
     /* Misc */
     protected Map<Integer, String> msgs;
-    protected List<ItemStack> secureObjects;
+    protected List<ExItem> secureObjects;
     protected Boolean groupTagEnabled;
 
     /* Getters and setters */
@@ -229,7 +228,7 @@ public class GameRuleProvider {
     /**
      * @return the destroyable materials and the materials that may be used to break them or null if any
      */
-    public Map<Material, HashSet<Material>> getBreakWhitelist() {
+    public Map<ExItem, HashSet<ExItem>> getBreakWhitelist() {
         return breakWhitelist;
     }
 
@@ -257,7 +256,7 @@ public class GameRuleProvider {
     /**
      * @return the placeable materials
      */
-    public Set<Material> getPlaceWhitelist() {
+    public Set<ExItem> getPlaceWhitelist() {
         return placeWhitelist;
     }
 
@@ -615,7 +614,7 @@ public class GameRuleProvider {
     /**
      * @return the objects to get passed to another player of the group when this player leaves
      */
-    public List<ItemStack> getSecureObjects() {
+    public List<ExItem> getSecureObjects() {
         if (secureObjects == null) {
             secureObjects = new ArrayList<>();
         }

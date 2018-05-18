@@ -16,11 +16,13 @@
  */
 package de.erethon.dungeonsxl.mob;
 
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.util.LegacyUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.io.File;
 import java.util.Arrays;
@@ -28,11 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
@@ -44,7 +47,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class DMobType {
+@Deprecated
+public class DMobType extends ExMob {
+
+    CaliburnAPI caliburn = CaliburnAPI.getInstance();
 
     private String name;
     private EntityType type;
@@ -89,34 +95,35 @@ public class DMobType {
         }
 
         // Load Items
-        if (config.contains("itemHelmet")) {
-            itemHelmet = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemHelmet")));
+        ExItem itemHelmet = caliburn.deserializeExItem(config, "itemHelmet");
+        if (itemHelmet != null) {
+            this.itemHelmet = itemHelmet.toItemStack();
         }
 
-        if (config.contains("itemChestplate")) {
-            itemChestplate = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemChestplate")));
+        ExItem itemChestplate = caliburn.deserializeExItem(config, "itemChestplate");
+        if (itemChestplate != null) {
+            this.itemChestplate = itemChestplate.toItemStack();
         }
 
-        if (config.contains("itemBoots")) {
-            itemBoots = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemBoots")));
+        ExItem itemBoots = caliburn.deserializeExItem(config, "itemBoots");
+        if (itemBoots != null) {
+            this.itemBoots = itemBoots.toItemStack();
         }
 
-        if (config.contains("itemLeggings")) {
-            itemLeggings = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemLeggings")));
+        ExItem itemLeggings = caliburn.deserializeExItem(config, "itemLeggings");
+        if (itemLeggings != null) {
+            this.itemLeggings = itemLeggings.toItemStack();
         }
 
-        if (config.contains("itemHand")) {
-            itemHand = new ItemStack(LegacyUtil.getMaterial(config.getInt("itemHand")));
+        ExItem itemHand = caliburn.deserializeExItem(config, "itemHand");
+        if (itemHand != null) {
+            this.itemHand = itemHand.toItemStack();
         }
 
         // Load different Mob options
-        if (config.contains("isWitherSkeleton")) {
-            witherSkeleton = config.getBoolean("isWitherSkeleton");
-        }
+        witherSkeleton = config.getBoolean("isWitherSkeleton", false);
 
-        if (config.contains("ocelotType")) {
-            ocelotType = config.getString("ocelotType");
-        }
+        ocelotType = config.getString("ocelotType", null);
 
         // Drops
         ConfigurationSection configSetion = config.getConfigurationSection("drops");
@@ -128,7 +135,7 @@ public class DMobType {
                 int chance = 100;
 
                 /* Item Stack */
-                Material mat = LegacyUtil.getMaterial(configSetion.getInt(dropPath + ".id"));
+                ExItem mat = caliburn.deserializeExItem(configSetion, dropPath + ".id");
                 int amount = 1;
                 short data = 0;
 
@@ -139,7 +146,8 @@ public class DMobType {
                     data = Short.parseShort(configSetion.getString(dropPath + ".data"));
                 }
 
-                item = new ItemStack(mat, amount, data);
+                item = mat.toItemStack(amount);
+                item.setDurability(data);
                 itemMeta = item.getItemMeta();
 
                 /* Enchantments */
@@ -359,16 +367,14 @@ public class DMobType {
     }
 
     /* Actions */
-    public void spawn(DGameWorld gameWorld, Location loc) {
-        if (type == null) {
-            return;
+    @Override
+    public Entity toEntity(Location loc) {
+        World world = loc.getWorld();
+        DGameWorld gameWorld = DGameWorld.getByWorld(world);
+        if (gameWorld == null) {
+            return null;
         }
-
-        if (!type.isAlive()) {
-            return;
-        }
-
-        LivingEntity entity = (LivingEntity) gameWorld.getWorld().spawnEntity(loc, type);
+        LivingEntity entity = (LivingEntity) world.spawnEntity(loc, type);
 
         /* Set the Items */
         entity.getEquipment().setItemInHand(itemHand);
@@ -404,6 +410,7 @@ public class DMobType {
 
         /* Spawn Mob */
         new DMob(entity, gameWorld, this);
+        return entity;
     }
 
 }

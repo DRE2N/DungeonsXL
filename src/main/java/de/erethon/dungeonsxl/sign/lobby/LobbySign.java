@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.sign.lobby;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.sign.LocationSign;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
@@ -41,8 +41,9 @@ public class LobbySign extends LocationSign {
 
     @Override
     public void onInit() {
+        super.onInit();
         getGameWorld().setLobbyLocation(getLocation());
-        getSign().getBlock().setType(Material.AIR);
+        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override

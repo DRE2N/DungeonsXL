@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -24,7 +25,6 @@ import io.github.dre2n.commandsxl.command.CCommand;
 import io.github.dre2n.commandsxl.command.CCommandExecutorTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -78,7 +78,7 @@ public class CommandSign extends DSign {
         cCommand = CommandsXL.getPlugin().getCCommands().getCCommand(command);
 
         if (!getTriggers().isEmpty()) {
-            getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
             return;
         }
 

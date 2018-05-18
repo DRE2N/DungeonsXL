@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
@@ -24,7 +25,6 @@ import org.black_ixx.bossshop.BossShop;
 import org.black_ixx.bossshop.core.BSShop;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -75,7 +75,7 @@ public class BossShopSign extends DSign {
         shopName = lines[1];
 
         if (!getTriggers().isEmpty()) {
-            getSign().getBlock().setType(Material.AIR);
+            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
             return;
         }
 
