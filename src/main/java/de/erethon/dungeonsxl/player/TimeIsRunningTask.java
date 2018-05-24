@@ -70,8 +70,9 @@ public class TimeIsRunningTask extends BukkitRunnable {
 
                 if (!dPlayerKickEvent.isCancelled()) {
                     MessageUtil.broadcastMessage(DMessage.PLAYER_TIME_KICK.getMessage(player.getName()));
+                    boolean keepInventory = Game.getByDGroup(dGroup).getRules().getKeepInventoryOnEscape();
                     dPlayer.leave();
-                    if (Game.getByDGroup(dGroup).getRules().getKeepInventoryOnEscape()) {
+                    if (keepInventory) {
                         dPlayer.applyRespawnInventory();
                     }
                 }
