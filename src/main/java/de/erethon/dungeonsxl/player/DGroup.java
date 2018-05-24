@@ -451,6 +451,9 @@ public class DGroup {
      * @return the dungeonName
      */
     public String getDungeonName() {
+        if (dungeon == null) {
+            return null;
+        }
         return dungeon.getName();
     }
 
