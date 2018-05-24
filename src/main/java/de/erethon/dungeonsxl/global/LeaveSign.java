@@ -37,6 +37,8 @@ import org.bukkit.entity.Player;
  */
 public class LeaveSign extends GlobalProtection {
 
+    public static final String LEAVE_SIGN_TAG = "Leave";
+
     private Sign sign;
     private Set<Block> blocks;
 

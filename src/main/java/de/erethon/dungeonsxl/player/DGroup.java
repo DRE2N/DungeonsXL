@@ -32,7 +32,6 @@ import de.erethon.dungeonsxl.event.requirement.RequirementDemandEvent;
 import de.erethon.dungeonsxl.event.reward.RewardAdditionEvent;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.game.GameRuleProvider;
-import de.erethon.dungeonsxl.global.GroupSign;
 import de.erethon.dungeonsxl.requirement.Requirement;
 import de.erethon.dungeonsxl.reward.Reward;
 import de.erethon.dungeonsxl.util.DColor;
@@ -296,7 +295,7 @@ public class DGroup {
      */
     public void removePlayer(Player player, boolean message) {
         players.remove(player.getUniqueId());
-        GroupSign.updatePerGroup(this);
+        plugin.getGlobalProtections().updateGroupSigns(this);
 
         if (message) {
             sendMessage(DMessage.PLAYER_LEFT_GROUP.getMessage(player.getName()));
@@ -758,7 +757,7 @@ public class DGroup {
             timeIsRunningTask.cancel();
         }
 
-        GroupSign.updatePerGroup(this);
+        plugin.getGlobalProtections().updateGroupSigns(this);
     }
 
     public void startGame(Game game) {
@@ -871,7 +870,7 @@ public class DGroup {
             }
         }
 
-        GroupSign.updatePerGroup(this);
+        plugin.getGlobalProtections().updateGroupSigns(this);
         nextFloor = null;
         initialLives = rules.getInitialGroupLives();
         lives = initialLives;

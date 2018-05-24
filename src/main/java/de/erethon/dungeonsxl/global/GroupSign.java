@@ -17,8 +17,10 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
+import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
@@ -26,13 +28,14 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.material.Attachable;
 
 /**
  * A sign to form a group and to define its dungeon.
@@ -41,19 +44,20 @@ import org.bukkit.entity.Player;
  */
 public class GroupSign extends GlobalProtection {
 
-    private DGroup[] dGroups;
+    public static final String GROUP_SIGN_TAG = "Group";
+
+    private String groupName;
+    private DGroup group;
     private Dungeon dungeon;
     private int maxPlayersPerGroup;
     private Block startSign;
-    private int directionX = 0, directionZ = 0;
     private int verticalSigns;
     private Set<Block> blocks;
 
-    public GroupSign(int id, Block startSign, String identifier, int maxGroups, int maxPlayersPerGroup) {
+    public GroupSign(int id, Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
         super(startSign.getWorld(), id);
 
         this.startSign = startSign;
-        dGroups = new DGroup[maxGroups];
         dungeon = DungeonsXL.getInstance().getDungeons().getByName(identifier);
         if (dungeon == null) {
             DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(identifier);
@@ -63,31 +67,30 @@ public class GroupSign extends GlobalProtection {
         }
         this.maxPlayersPerGroup = maxPlayersPerGroup;
         verticalSigns = (int) Math.ceil((float) (1 + maxPlayersPerGroup) / 4);
-
-        int[] direction = getDirection(this.startSign.getData());
-        directionX = direction[0];
-        directionZ = direction[1];
+        this.groupName = groupName;
 
         update();
     }
 
     /**
-     * @return the dGroups
+     * @return
+     * the attached group
      */
-    public DGroup[] getDGroups() {
-        return dGroups;
+    public DGroup getGroup() {
+        return group;
     }
 
     /**
-     * @param dGroups
-     * the dGroups to set
+     * @param group
+     * the group to set
      */
-    public void setDGroups(DGroup[] dGroups) {
-        this.dGroups = dGroups;
+    public void setGroup(DGroup group) {
+        this.group = group;
     }
 
     /**
-     * @return the dungeon
+     * @return
+     * the dungeon
      */
     public Dungeon getDungeon() {
         return dungeon;
@@ -102,7 +105,8 @@ public class GroupSign extends GlobalProtection {
     }
 
     /**
-     * @return the maximum player count per group
+     * @return
+     * the maximum player count per group
      */
     public int getMaxPlayersPerGroup() {
         return maxPlayersPerGroup;
@@ -112,7 +116,7 @@ public class GroupSign extends GlobalProtection {
      * @param maxPlayersPerGroup
      * the maximum player count per group to set
      */
-    public void setMaxPlayerPerGroup(int maxPlayersPerGroup) {
+    public void setMaxPlayersPerGroup(int maxPlayersPerGroup) {
         this.maxPlayersPerGroup = maxPlayersPerGroup;
     }
 
@@ -120,69 +124,63 @@ public class GroupSign extends GlobalProtection {
      * Update this group sign to show the group(s) correctly.
      */
     public void update() {
-        int i = 0;
-        for (DGroup dGroup : dGroups) {
-            if (!(startSign.getRelative(i * directionX, 0, i * directionZ).getState() instanceof Sign)) {
-                i++;
-                continue;
-            }
-
-            Sign sign = (Sign) startSign.getRelative(i * directionX, 0, i * directionZ).getState();
-
-            // Reset Signs
-            sign.setLine(0, "");
-            sign.setLine(1, "");
-            sign.setLine(2, "");
-            sign.setLine(3, "");
-
-            int yy = -1;
-            while (sign.getBlock().getRelative(0, yy, 0).getState() instanceof Sign) {
-                Sign subsign = (Sign) sign.getBlock().getRelative(0, yy, 0).getState();
-                subsign.setLine(0, "");
-                subsign.setLine(1, "");
-                subsign.setLine(2, "");
-                subsign.setLine(3, "");
-                subsign.update();
-                yy--;
-            }
-
-            // Set Signs
-            if (dGroup != null) {
-                if (dGroup.isPlaying()) {
-                    sign.setLine(0, DMessage.SIGN_GLOBAL_IS_PLAYING.getMessage());
-
-                } else if (dGroup.getPlayers().size() >= maxPlayersPerGroup) {
-                    sign.setLine(0, DMessage.SIGN_GLOBAL_FULL.getMessage());
-
-                } else {
-                    sign.setLine(0, DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage());
-                }
-
-                int j = 1;
-                Sign rowSign = sign;
-
-                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
-                    if (j > 3) {
-                        j = 0;
-                        rowSign = (Sign) sign.getBlock().getRelative(0, -1, 0).getState();
-                    }
-
-                    if (rowSign != null) {
-                        rowSign.setLine(j, player.getName());
-                    }
-
-                    j++;
-                    rowSign.update();
-                }
-
-            } else {
-                sign.setLine(0, DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage());
-            }
-
-            sign.update();
-
-            i++;
+        if (!(startSign.getState() instanceof Sign)) {
+            return;
         }
+
+        Sign sign = (Sign) startSign.getState();
+
+        sign.setLine(0, "");
+        sign.setLine(1, "");
+        sign.setLine(2, "");
+        sign.setLine(3, "");
+
+        int y = -1 * verticalSigns;
+        while (startSign.getRelative(0, y, 0).getState() instanceof Sign && y != 0) {
+            Sign subsign = (Sign) sign.getBlock().getRelative(0, y, 0).getState();
+            subsign.setLine(0, "");
+            subsign.setLine(1, "");
+            subsign.setLine(2, "");
+            subsign.setLine(3, "");
+            subsign.update();
+            y++;
+        }
+
+        // Set Signs
+        if (group == null) {
+            sign.setLine(0, DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage());
+            sign.update();
+            return;
+        }
+
+        if (group.isPlaying()) {
+            sign.setLine(0, DMessage.SIGN_GLOBAL_IS_PLAYING.getMessage());
+
+        } else if (group.getPlayers().size() >= maxPlayersPerGroup) {
+            sign.setLine(0, DMessage.SIGN_GLOBAL_FULL.getMessage());
+
+        } else {
+            sign.setLine(0, DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage());
+        }
+
+        int j = 1;
+        Sign rowSign = sign;
+
+        for (Player player : group.getPlayers().getOnlinePlayers()) {
+            if (j > 3) {
+                j = 0;
+                rowSign = (Sign) sign.getBlock().getRelative(0, -1, 0).getState();
+            }
+
+            if (rowSign != null) {
+                rowSign.setLine(j, player.getName());
+            }
+
+            j++;
+            rowSign.update();
+        }
+
+        sign.update();
     }
 
     @Override
@@ -190,17 +188,15 @@ public class GroupSign extends GlobalProtection {
         if (blocks == null) {
             blocks = new HashSet<>();
 
-            int i = dGroups.length;
-            do {
-                i--;
-
-                blocks.add(startSign.getRelative(i * directionX, 0, i * directionZ));
-
-            } while (i >= 0);
-
             HashSet<Block> toAdd = new HashSet<>();
+            int y = -1 * verticalSigns;
+            while (y != 1) {
+                blocks.add(startSign.getRelative(0, y, 0));
+                y++;
+            }
+
             for (Block block : blocks) {
-                i = verticalSigns;
+                int i = verticalSigns;
                 do {
                     i--;
 
@@ -224,8 +220,41 @@ public class GroupSign extends GlobalProtection {
         config.set(preString + ".y", startSign.getY());
         config.set(preString + ".z", startSign.getZ());
         config.set(preString + ".dungeon", dungeon.getName());
-        config.set(preString + ".maxGroups", dGroups.length);
+        config.set(preString + ".groupName", groupName);
         config.set(preString + ".maxPlayersPerGroup", maxPlayersPerGroup);
+    }
+
+    public boolean onPlayerInteract(Block block, Player player) {
+        int y = block.getY();
+        if (DGroup.getByPlayer(player) != null) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
+            return true;
+        }
+
+        int sy1 = startSign.getY();
+
+        Block topBlock = block.getRelative(0, sy1 - y, 0);
+
+        if (!(topBlock.getState() instanceof Sign)) {
+            return true;
+        }
+
+        Sign topSign = (Sign) topBlock.getState();
+
+        if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage())) {
+            if (groupName != null) {
+                group = new DGroup(groupName, player, dungeon);
+            } else {
+                group = new DGroup(player, dungeon);
+            }
+            update();
+
+        } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage())) {
+            group.addPlayer(player);
+            update();
+        }
+
+        return true;
     }
 
     /* Statics */
@@ -238,250 +267,60 @@ public class GroupSign extends GlobalProtection {
             return null;
         }
 
-        int x = block.getX(), y = block.getY(), z = block.getZ();
         for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(GroupSign.class)) {
             GroupSign groupSign = (GroupSign) protection;
-
-            int sx1 = groupSign.startSign.getX(), sy1 = groupSign.startSign.getY(), sz1 = groupSign.startSign.getZ();
-            int sx2 = sx1 + (groupSign.dGroups.length - 1) * groupSign.directionX;
-            int sy2 = sy1 - groupSign.verticalSigns + 1;
-            int sz2 = sz1 + (groupSign.dGroups.length - 1) * groupSign.directionZ;
-
-            if (sx1 > sx2) {
-                if (x < sx2 || x > sx1) {
-                    continue;
-                }
-
-            } else if (sx1 < sx2) {
-                if (x > sx2 || x < sx1) {
-                    continue;
-                }
-
-            } else if (x != sx1) {
-                continue;
+            Block start = groupSign.startSign;
+            if (start == block || (start.getX() == block.getX() && start.getZ() == block.getZ() && (start.getY() >= block.getY() && start.getY() - groupSign.verticalSigns <= block.getY()))) {
+                return groupSign;
             }
-
-            if (sy1 > sy2) {
-                if (y < sy2 || y > sy1) {
-                    continue;
-                }
-
-            } else if (y != sy1) {
-                continue;
-            }
-
-            if (sz1 > sz2) {
-                if (z < sz2 || z > sz1) {
-                    continue;
-                }
-
-            } else if (sz1 < sz2) {
-                if (z > sz2 || z < sz1) {
-                    continue;
-                }
-
-            } else if (z != sz1) {
-                continue;
-            }
-
-            return groupSign;
         }
 
         return null;
     }
 
-    /* SUBJECT TO CHANGE */
-    @Deprecated
-    public static GroupSign tryToCreate(Block startSign, String mapName, int maxGroups, int maxPlayersPerGroup) {
+    public static GroupSign tryToCreate(SignChangeEvent event) {
+        if (!event.getLine(0).equalsIgnoreCase(SIGN_TAG)) {
+            return null;
+        }
+        if (!event.getLine(1).equalsIgnoreCase(GROUP_SIGN_TAG)) {
+            return null;
+        }
+
+        String identifier = event.getLine(2);
+
+        String[] data = event.getLine(3).split(",");
+        int maxPlayersPerGroup = 1;
+        String groupName = null;
+        if (data.length >= 1) {
+            maxPlayersPerGroup = NumberUtil.parseInt(data[0], 1);
+        }
+        if (data.length == 2) {
+            groupName = data[1];
+        }
+
+        return tryToCreate(event.getBlock(), identifier, maxPlayersPerGroup, groupName);
+    }
+
+    public static GroupSign tryToCreate(Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
         World world = startSign.getWorld();
-        int direction = startSign.getData();
+        BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
         int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
 
         int verticalSigns = (int) Math.ceil((float) (1 + maxPlayersPerGroup) / 4);
+        while (verticalSigns > 1) {
+            Block block = world.getBlockAt(x, y - verticalSigns, z);
+            block.setType(VanillaItem.WALL_SIGN.getMaterial(), false);
+            org.bukkit.material.Sign signData = new org.bukkit.material.Sign(VanillaItem.WALL_SIGN.getMaterial());
+            signData.setFacingDirection(facing);
+            org.bukkit.block.Sign sign = (org.bukkit.block.Sign) block.getState();
+            sign.setData(signData);
+            sign.update(true, false);
 
-        CopyOnWriteArrayList<Block> changeBlocks = new CopyOnWriteArrayList<>();
-
-        int xx, yy, zz;
-        switch (direction) {
-            case 2:
-                zz = z;
-
-                for (yy = y; yy > y - verticalSigns; yy--) {
-                    for (xx = x; xx > x - maxGroups; xx--) {
-                        Block block = world.getBlockAt(xx, yy, zz);
-
-                        if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
-                            return null;
-                        }
-
-                        if (block.getRelative(0, 0, 1).getType() == Material.AIR) {
-                            return null;
-                        }
-
-                        changeBlocks.add(block);
-                    }
-                }
-
-                break;
-
-            case 3:
-                zz = z;
-                for (yy = y; yy > y - verticalSigns; yy--) {
-                    for (xx = x; xx < x + maxGroups; xx++) {
-
-                        Block block = world.getBlockAt(xx, yy, zz);
-                        if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
-                            return null;
-                        }
-
-                        if (block.getRelative(0, 0, -1).getType() == Material.AIR) {
-                            return null;
-                        }
-
-                        changeBlocks.add(block);
-                    }
-                }
-
-                break;
-
-            case 4:
-                xx = x;
-                for (yy = y; yy > y - verticalSigns; yy--) {
-                    for (zz = z; zz < z + maxGroups; zz++) {
-
-                        Block block = world.getBlockAt(xx, yy, zz);
-                        if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
-                            return null;
-                        }
-
-                        if (block.getRelative(1, 0, 0).getType() == Material.AIR) {
-                            return null;
-                        }
-
-                        changeBlocks.add(block);
-                    }
-                }
-                break;
-
-            case 5:
-                xx = x;
-                for (yy = y; yy > y - verticalSigns; yy--) {
-                    for (zz = z; zz > z - maxGroups; zz--) {
-
-                        Block block = world.getBlockAt(xx, yy, zz);
-                        if (block.getType() != Material.AIR && block.getType() != Material.WALL_SIGN) {
-                            return null;
-                        }
-
-                        if (block.getRelative(-1, 0, 0).getType() == Material.AIR) {
-                            return null;
-                        }
-
-                        changeBlocks.add(block);
-                    }
-                }
-
-                break;
+            verticalSigns--;
         }
-
-        for (Block block : changeBlocks) {
-            block.setTypeIdAndData(68, startSign.getData(), true);
-        }
-
-        GroupSign sign = new GroupSign(DungeonsXL.getInstance().getGlobalProtections().generateId(GroupSign.class, world), startSign, mapName, maxGroups, maxPlayersPerGroup);
+        GroupSign sign = new GroupSign(DungeonsXL.getInstance().getGlobalProtections().generateId(GroupSign.class, world), startSign, identifier, maxPlayersPerGroup, groupName);
 
         return sign;
-    }
-
-    @Deprecated
-    public static boolean playerInteract(Block block, Player player) {
-        int x = block.getX(), y = block.getY(), z = block.getZ();
-        GroupSign groupSign = getByBlock(block);
-
-        if (groupSign == null) {
-            return false;
-        }
-
-        if (DGroup.getByPlayer(player) != null) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
-            return true;
-        }
-
-        int sx1 = groupSign.startSign.getX(), sy1 = groupSign.startSign.getY(), sz1 = groupSign.startSign.getZ();
-
-        Block topBlock = block.getRelative(0, sy1 - y, 0);
-
-        int column;
-        if (groupSign.directionX != 0) {
-            column = Math.abs(x - sx1);
-
-        } else {
-            column = Math.abs(z - sz1);
-        }
-
-        if (!(topBlock.getState() instanceof Sign)) {
-            return true;
-        }
-
-        Sign topSign = (Sign) topBlock.getState();
-
-        if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage())) {
-            groupSign.dGroups[column] = new DGroup(player, groupSign.dungeon);
-            groupSign.update();
-
-        } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage())) {
-            groupSign.dGroups[column].addPlayer(player);
-            groupSign.update();
-        }
-
-        return true;
-    }
-
-    @Deprecated
-    public static void updatePerGroup(DGroup dGroupSearch) {
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(GroupSign.class)) {
-            GroupSign groupSign = (GroupSign) protection;
-
-            int i = 0;
-            for (DGroup dGroup : groupSign.dGroups) {
-                if (dGroup == null) {
-                    continue;
-                }
-
-                if (dGroup == dGroupSearch) {
-                    if (dGroupSearch.isEmpty()) {
-                        groupSign.dGroups[i] = null;
-                    }
-                    groupSign.update();
-                }
-
-                i++;
-            }
-        }
-    }
-
-    @Deprecated
-    public static int[] getDirection(byte data) {
-        int[] direction = new int[2];
-
-        switch (data) {
-            case 2:
-                direction[0] = -1;
-                break;
-
-            case 3:
-                direction[0] = 1;
-                break;
-
-            case 4:
-                direction[1] = 1;
-                break;
-
-            case 5:
-                direction[1] = -1;
-                break;
-        }
-        return direction;
     }
 
 }

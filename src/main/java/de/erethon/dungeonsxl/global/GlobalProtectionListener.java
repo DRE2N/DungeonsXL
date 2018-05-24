@@ -207,12 +207,11 @@ public class GlobalProtectionListener implements Listener {
         }
 
         if (Category.SIGNS.containsBlock(clickedBlock)) {
-            // Check Group Signs
-            if (GroupSign.playerInteract(clickedBlock, player)) {
+            GroupSign groupSign = GroupSign.getByBlock(clickedBlock);
+            if (groupSign != null && groupSign.onPlayerInteract(clickedBlock, player)) {
                 event.setCancelled(true);
             }
 
-            // Check Game Signs
             if (GameSign.playerInteract(clickedBlock, player)) {
                 event.setCancelled(true);
             }
@@ -225,7 +224,6 @@ public class GlobalProtectionListener implements Listener {
         }
     }
 
-    @Deprecated
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();
@@ -238,11 +236,17 @@ public class GlobalProtectionListener implements Listener {
                 return;
             }
 
-            if (!lines[0].equalsIgnoreCase("[DXL]")) {
+            if (!lines[0].equalsIgnoreCase(GlobalProtection.SIGN_TAG)) {
                 return;
             }
 
-            if (lines[1].equalsIgnoreCase("Game") || lines[1].equalsIgnoreCase("Group")) {
+            if (lines[1].equalsIgnoreCase(GroupSign.GROUP_SIGN_TAG)) {
+                if (GroupSign.tryToCreate(event) != null) {
+                    event.setCancelled(true);
+                }
+
+            } else if (lines[1].equalsIgnoreCase("Game")) {
+
                 String dungeonName = lines[2];
 
                 String[] data = lines[3].split("\\,");
@@ -251,20 +255,13 @@ public class GlobalProtectionListener implements Listener {
                     int maxMembersPerObject = NumberUtil.parseInt(data[1]);
 
                     if (maxObjects > 0 && maxMembersPerObject > 0) {
-                        if (lines[1].equalsIgnoreCase("Game")) {
-                            if (GameSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject) != null) {
-                                event.setCancelled(true);
-                            }
-
-                        } else if (lines[1].equalsIgnoreCase("Group")) {
-                            if (GroupSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject) != null) {
-                                event.setCancelled(true);
-                            }
+                        if (GameSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject) != null) {
+                            event.setCancelled(true);
                         }
                     }
                 }
 
-            } else if (lines[1].equalsIgnoreCase("Leave")) {
+            } else if (lines[1].equalsIgnoreCase(LeaveSign.LEAVE_SIGN_TAG)) {
                 if (block.getState() instanceof Sign) {
                     Sign sign = (Sign) block.getState();
 

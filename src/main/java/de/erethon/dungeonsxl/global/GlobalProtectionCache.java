@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.player.DGroup;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -159,6 +160,18 @@ public class GlobalProtectionCache {
         return false;
     }
 
+    public void updateGroupSigns(DGroup dGroupSearch) {
+        for (GlobalProtection protection : getProtections(GroupSign.class)) {
+            GroupSign groupSign = (GroupSign) protection;
+            if (dGroupSearch != null && groupSign.getGroup() == dGroupSearch) {
+                if (dGroupSearch.isEmpty()) {
+                    groupSign.setGroup(null);
+                }
+                groupSign.update();
+            }
+        }
+    }
+
     /* SUBJECT TO CHANGE */
     @Deprecated
     public void loadAll() {
@@ -195,11 +208,11 @@ public class GlobalProtectionCache {
                     preString = "protections.groupSigns." + world.getName() + "." + id + ".";
                     if (data.contains(preString)) {
                         String mapName = data.getString(preString + ".dungeon");
-                        int maxGroups = data.getInt(preString + ".maxGroups");
+                        String groupName = data.getString(preString + ".groupName");
                         int maxPlayersPerGroup = data.getInt(preString + ".maxPlayersPerGroup");
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GroupSign(id, startSign, mapName, maxGroups, maxPlayersPerGroup);
+                        new GroupSign(id, startSign, mapName, maxPlayersPerGroup, groupName);
                     }
                 } while (data.contains(preString));
             }

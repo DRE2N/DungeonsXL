@@ -32,6 +32,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public abstract class GlobalProtection {
 
+    public static final String SIGN_TAG = "[DXL]";
+
     FileConfiguration config = DungeonsXL.getInstance().getGlobalData().getConfig();
     GlobalProtectionCache protections = DungeonsXL.getInstance().getGlobalProtections();
 
