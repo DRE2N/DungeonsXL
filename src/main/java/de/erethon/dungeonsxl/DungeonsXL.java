@@ -219,9 +219,7 @@ public class DungeonsXL extends DREPlugin {
     }
 
     public void loadCore() {
-        if (Internals.andHigher(Internals.v1_9_R1).contains(compat.getInternals())) {
-            loadCaliburnAPI();
-        }
+        loadCaliburnAPI();
         // Load Language
         loadMessageConfig(new File(LANGUAGES, "english.yml"));
         // Load Config

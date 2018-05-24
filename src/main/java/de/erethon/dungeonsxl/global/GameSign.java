@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.category.Category;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
