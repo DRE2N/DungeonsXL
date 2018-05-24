@@ -61,6 +61,7 @@ public class StartSign extends LocationSign {
 
     @Override
     public void onInit() {
+        super.onInit();
         id = NumberUtil.parseInt(lines[1]);
         getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }

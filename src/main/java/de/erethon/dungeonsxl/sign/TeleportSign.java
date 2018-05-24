@@ -50,6 +50,7 @@ public class TeleportSign extends LocationSign {
 
     @Override
     public void onInit() {
+        super.onInit();
         for (int i = 1; i <= 2; i++) {
             if (!lines[i].isEmpty()) {
                 int yaw = letterToYaw(lines[i].charAt(0));
