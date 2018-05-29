@@ -19,15 +19,10 @@ package de.erethon.dungeonsxl.global;
 import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.world.DResourceWorld;
-import java.util.HashSet;
-import java.util.Set;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -42,34 +37,16 @@ import org.bukkit.material.Attachable;
  *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class GroupSign extends GlobalProtection {
+public class GroupSign extends JoinSign {
 
     public static final String GROUP_SIGN_TAG = "Group";
 
     private String groupName;
     private DGroup group;
-    private Dungeon dungeon;
-    private int maxPlayersPerGroup;
-    private Block startSign;
-    private int verticalSigns;
-    private Set<Block> blocks;
 
     public GroupSign(int id, Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
-        super(startSign.getWorld(), id);
-
-        this.startSign = startSign;
-        dungeon = DungeonsXL.getInstance().getDungeons().getByName(identifier);
-        if (dungeon == null) {
-            DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(identifier);
-            if (resource != null) {
-                dungeon = new Dungeon(resource);
-            }
-        }
-        this.maxPlayersPerGroup = maxPlayersPerGroup;
-        verticalSigns = (int) Math.ceil((float) (1 + maxPlayersPerGroup) / 4);
+        super(id, startSign, identifier, maxPlayersPerGroup);
         this.groupName = groupName;
-
-        update();
     }
 
     /**
@@ -89,64 +66,17 @@ public class GroupSign extends GlobalProtection {
     }
 
     /**
-     * @return
-     * the dungeon
-     */
-    public Dungeon getDungeon() {
-        return dungeon;
-    }
-
-    /**
-     * @param dungeon
-     * the dungeon to set
-     */
-    public void setDungeon(Dungeon dungeon) {
-        this.dungeon = dungeon;
-    }
-
-    /**
-     * @return
-     * the maximum player count per group
-     */
-    public int getMaxPlayersPerGroup() {
-        return maxPlayersPerGroup;
-    }
-
-    /**
-     * @param maxPlayersPerGroup
-     * the maximum player count per group to set
-     */
-    public void setMaxPlayersPerGroup(int maxPlayersPerGroup) {
-        this.maxPlayersPerGroup = maxPlayersPerGroup;
-    }
-
-    /**
      * Update this group sign to show the group(s) correctly.
      */
+    @Override
     public void update() {
         if (!(startSign.getState() instanceof Sign)) {
             return;
         }
 
+        super.update();
         Sign sign = (Sign) startSign.getState();
 
-        sign.setLine(0, "");
-        sign.setLine(1, "");
-        sign.setLine(2, "");
-        sign.setLine(3, "");
-
-        int y = -1 * verticalSigns;
-        while (startSign.getRelative(0, y, 0).getState() instanceof Sign && y != 0) {
-            Sign subsign = (Sign) sign.getBlock().getRelative(0, y, 0).getState();
-            subsign.setLine(0, "");
-            subsign.setLine(1, "");
-            subsign.setLine(2, "");
-            subsign.setLine(3, "");
-            subsign.update();
-            y++;
-        }
-
-        // Set Signs
         if (group == null) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage());
             sign.update();
@@ -156,7 +86,7 @@ public class GroupSign extends GlobalProtection {
         if (group.isPlaying()) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_IS_PLAYING.getMessage());
 
-        } else if (group.getPlayers().size() >= maxPlayersPerGroup) {
+        } else if (group.getPlayers().size() >= maxElements) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_FULL.getMessage());
 
         } else {
@@ -184,35 +114,6 @@ public class GroupSign extends GlobalProtection {
     }
 
     @Override
-    public Set<Block> getBlocks() {
-        if (blocks == null) {
-            blocks = new HashSet<>();
-
-            HashSet<Block> toAdd = new HashSet<>();
-            int y = -1 * verticalSigns;
-            while (y != 1) {
-                blocks.add(startSign.getRelative(0, y, 0));
-                y++;
-            }
-
-            for (Block block : blocks) {
-                int i = verticalSigns;
-                do {
-                    i--;
-
-                    Block beneath = block.getLocation().add(0, -1 * i, 0).getBlock();
-                    toAdd.add(beneath);
-                    toAdd.add(BlockUtil.getAttachedBlock(beneath));
-
-                } while (i >= 0);
-            }
-            blocks.addAll(toAdd);
-        }
-
-        return blocks;
-    }
-
-    @Override
     public void save(FileConfiguration config) {
         String preString = "protections.groupSigns." + getWorld().getName() + "." + getId();
 
@@ -221,20 +122,16 @@ public class GroupSign extends GlobalProtection {
         config.set(preString + ".z", startSign.getZ());
         config.set(preString + ".dungeon", dungeon.getName());
         config.set(preString + ".groupName", groupName);
-        config.set(preString + ".maxPlayersPerGroup", maxPlayersPerGroup);
+        config.set(preString + ".maxPlayersPerGroup", maxElements);
     }
 
     public boolean onPlayerInteract(Block block, Player player) {
-        int y = block.getY();
         if (DGroup.getByPlayer(player) != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return true;
         }
 
-        int sy1 = startSign.getY();
-
-        Block topBlock = block.getRelative(0, sy1 - y, 0);
-
+        Block topBlock = block.getRelative(0, startSign.getY() - block.getY(), 0);
         if (!(topBlock.getState() instanceof Sign)) {
             return true;
         }
@@ -308,7 +205,7 @@ public class GroupSign extends GlobalProtection {
 
         int verticalSigns = (int) Math.ceil((float) (1 + maxPlayersPerGroup) / 4);
         while (verticalSigns > 1) {
-            Block block = world.getBlockAt(x, y - verticalSigns, z);
+            Block block = world.getBlockAt(x, y - verticalSigns + 1, z);
             block.setType(VanillaItem.WALL_SIGN.getMaterial(), false);
             org.bukkit.material.Sign signData = new org.bukkit.material.Sign(VanillaItem.WALL_SIGN.getMaterial());
             signData.setFacingDirection(facing);

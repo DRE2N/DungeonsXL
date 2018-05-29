@@ -188,11 +188,10 @@ public class GlobalProtectionCache {
                     preString = "protections.gameSigns." + world.getName() + "." + id + ".";
                     if (data.contains(preString)) {
                         String mapName = data.getString(preString + ".dungeon");
-                        int maxGames = data.getInt(preString + ".maxGames");
                         int maxGroupsPerGame = data.getInt(preString + ".maxGroupsPerGame");
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GameSign(id, startSign, mapName, maxGames, maxGroupsPerGame);
+                        new GameSign(id, startSign, mapName, maxGroupsPerGame);
                     }
 
                 } while (data.contains(preString));

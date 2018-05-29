@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
@@ -212,7 +211,8 @@ public class GlobalProtectionListener implements Listener {
                 event.setCancelled(true);
             }
 
-            if (GameSign.playerInteract(clickedBlock, player)) {
+            GameSign gameSign = GameSign.getByBlock(clickedBlock);
+            if (gameSign != null && gameSign.onPlayerInteract(clickedBlock, player)) {
                 event.setCancelled(true);
             }
 
@@ -245,20 +245,9 @@ public class GlobalProtectionListener implements Listener {
                     event.setCancelled(true);
                 }
 
-            } else if (lines[1].equalsIgnoreCase("Game")) {
-
-                String dungeonName = lines[2];
-
-                String[] data = lines[3].split("\\,");
-                if (data.length >= 2 && data.length <= 3) {
-                    int maxObjects = NumberUtil.parseInt(data[0]);
-                    int maxMembersPerObject = NumberUtil.parseInt(data[1]);
-
-                    if (maxObjects > 0 && maxMembersPerObject > 0) {
-                        if (GameSign.tryToCreate(event.getBlock(), dungeonName, maxObjects, maxMembersPerObject) != null) {
-                            event.setCancelled(true);
-                        }
-                    }
+            } else if (lines[1].equalsIgnoreCase(GameSign.GAME_SIGN_TAG)) {
+                if (GameSign.tryToCreate(event) != null) {
+                    event.setCancelled(true);
                 }
 
             } else if (lines[1].equalsIgnoreCase(LeaveSign.LEAVE_SIGN_TAG)) {
