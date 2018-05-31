@@ -16,9 +16,10 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 
 /**
@@ -31,8 +32,8 @@ public class BlockSign extends DSign {
     // Variables
     private boolean initialized;
     private boolean active;
-    private int offBlockId = 0;
-    private int onBlockId = 0;
+    private ExItem offBlock = VanillaItem.AIR;
+    private ExItem onBlock = VanillaItem.AIR;
     private byte offBlockData = 0x0;
     private byte onBlockData = 0x0;
 
@@ -49,12 +50,7 @@ public class BlockSign extends DSign {
     public void onInit() {
         if (!lines[1].isEmpty()) {
             String line1[] = lines[1].split(",");
-            Material offBlock = Material.matchMaterial(line1[0]);
-            if (offBlock != null) {
-                offBlockId = offBlock.getId();
-            } else {
-                offBlockId = NumberUtil.parseInt(line1[0]);
-            }
+            offBlock = plugin.getCaliburn().getExItem(line1[0]);
             if (line1.length > 1) {
                 offBlockData = (byte) NumberUtil.parseInt(line1[1]);
             }
@@ -62,28 +58,22 @@ public class BlockSign extends DSign {
 
         if (!lines[2].isEmpty()) {
             String line2[] = lines[2].split(",");
-            Material onBlock = Material.matchMaterial(line2[0]);
-
-            if (onBlock != null) {
-                onBlockId = onBlock.getId();
-
-            } else {
-                onBlockId = NumberUtil.parseInt(line2[0]);
-            }
-
+            onBlock = plugin.getCaliburn().getExItem(line2[0]);
             if (line2.length > 1) {
                 onBlockData = (byte) NumberUtil.parseInt(line2[1]);
             }
         }
 
-        getSign().getBlock().setTypeIdAndData(offBlockId, offBlockData, true);
+        getSign().getBlock().setType(offBlock.getMaterial());
+        getSign().getBlock().setData(offBlockData);
         initialized = true;
     }
 
     @Override
     public void onTrigger() {
         if (initialized && !active) {
-            getSign().getBlock().setTypeIdAndData(onBlockId, onBlockData, true);
+            getSign().getBlock().setType(onBlock.getMaterial());
+            getSign().getBlock().setData(onBlockData);
             active = true;
         }
     }
@@ -91,7 +81,8 @@ public class BlockSign extends DSign {
     @Override
     public void onDisable() {
         if (initialized && active) {
-            getSign().getBlock().setTypeIdAndData(offBlockId, offBlockData, true);
+            getSign().getBlock().setType(offBlock.getMaterial());
+            getSign().getBlock().setData(offBlockData);
             active = false;
         }
     }
