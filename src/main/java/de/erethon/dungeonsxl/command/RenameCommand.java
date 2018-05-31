@@ -26,6 +26,7 @@ import de.erethon.dungeonsxl.global.GameSign;
 import de.erethon.dungeonsxl.global.GlobalProtection;
 import de.erethon.dungeonsxl.global.GroupSign;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.io.IOException;
@@ -61,6 +62,12 @@ public class RenameCommand extends DRECommand {
         resource.setName(args[2]);
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
         resource.getSignData().updateFile(resource);
+
+        for (DEditWorld editWorld : plugin.getDWorlds().getEditWorlds()) {
+            if (editWorld.getResource() == resource) {
+                editWorld.delete(true);
+            }
+        }
 
         for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
             DungeonConfig dConfig = dungeon.getConfig();
