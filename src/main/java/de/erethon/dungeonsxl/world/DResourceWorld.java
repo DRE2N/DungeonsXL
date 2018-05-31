@@ -262,7 +262,9 @@ public class DResourceWorld {
             }
         }
 
-        return (DEditWorld) instantiate(false);
+        DEditWorld editWorld = (DEditWorld) instantiate(false);
+        editWorld.generateIdFile();
+        return editWorld;
     }
 
     /**
@@ -295,6 +297,7 @@ public class DResourceWorld {
 
         if (!plugin.getMainConfig().areTweaksEnabled()) {
             editWorld.world = creator.createWorld();
+            editWorld.generateIdFile();
 
         } else {
             new BukkitRunnable() {

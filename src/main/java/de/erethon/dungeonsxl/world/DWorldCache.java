@@ -212,8 +212,20 @@ public class DWorldCache {
                     if (mapFile.getName().startsWith(".id_")) {
                         String name = mapFile.getName().substring(4);
 
-                        FileUtil.copyDir(file, new File(DungeonsXL.MAPS, name), DungeonsXL.EXCLUDED_FILES);
-                        deleteUnusedFiles(new File(DungeonsXL.MAPS, name));
+                        File resource = new File(DungeonsXL.MAPS, name);
+                        File backup = new File(DungeonsXL.BACKUPS, resource.getName() + "-" + System.currentTimeMillis() + "_crashbackup");
+                        FileUtil.copyDir(resource, backup);
+                        remove:
+                        for (File remove : FileUtil.getFilesForFolder(resource)) {
+                            for (String nope : DungeonsXL.EXCLUDED_FILES) {
+                                if (remove.getName().equals(nope)) {
+                                    continue remove;
+                                }
+                            }
+                            remove.delete();
+                        }
+                        deleteUnusedFiles(file);
+                        FileUtil.copyDir(file, resource, DungeonsXL.EXCLUDED_FILES);
 
                         FileUtil.removeDir(file);
                     }
