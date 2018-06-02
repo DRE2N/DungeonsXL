@@ -864,7 +864,7 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         if (getDGroup() != null && dGroup.getLives() != -1) {
-            dGroup.setLives(dGroup.getLives() - 1);
+            dGroup.setLives(dGroup.getLives() - dPlayerDeathEvent.getLostLives());
             gameWorld.sendMessage(DMessage.GROUP_DEATH.getMessage(getName(), dGroup.getName(), String.valueOf(dGroup.getLives())));
 
         } else {
