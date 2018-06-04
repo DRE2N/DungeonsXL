@@ -78,7 +78,7 @@ public class ResourcePackSign extends DSign {
             resourcePack = (String) url;
 
         } else {
-            markAsErroneous();
+            markAsErroneous("Unknown resourcepack format");
             return;
         }
 

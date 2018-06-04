@@ -48,20 +48,30 @@ public class BlockSign extends DSign {
 
     @Override
     public void onInit() {
-        if (!lines[1].isEmpty()) {
-            String line1[] = lines[1].split(",");
-            offBlock = plugin.getCaliburn().getExItem(line1[0]);
-            if (line1.length > 1) {
-                offBlockData = (byte) NumberUtil.parseInt(line1[1]);
-            }
+        if (lines[1].isEmpty()) {
+            offBlock = VanillaItem.AIR;
+        } else if (lines[2].isEmpty()) {
+            onBlock = VanillaItem.AIR;
         }
 
-        if (!lines[2].isEmpty()) {
-            String line2[] = lines[2].split(",");
-            onBlock = plugin.getCaliburn().getExItem(line2[0]);
-            if (line2.length > 1) {
-                onBlockData = (byte) NumberUtil.parseInt(line2[1]);
-            }
+        String[] line1 = lines[1].split(",");
+        offBlock = plugin.getCaliburn().getExItem(line1[0]);
+        if (offBlock == null) {
+            markAsErroneous("Could not recognize offBlock, input: " + lines[1]);
+            return;
+        }
+        if (line1.length > 1) {
+            offBlockData = (byte) NumberUtil.parseInt(line1[1]);
+        }
+
+        String[] line2 = lines[2].split(",");
+        onBlock = plugin.getCaliburn().getExItem(line2[0]);
+        if (onBlock == null) {
+            markAsErroneous("Could not recognize onBlock, input: " + lines[2]);
+            return;
+        }
+        if (line2.length > 1) {
+            onBlockData = (byte) NumberUtil.parseInt(line2[1]);
         }
 
         getSign().getBlock().setType(offBlock.getMaterial());

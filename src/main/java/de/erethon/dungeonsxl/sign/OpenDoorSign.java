@@ -95,7 +95,7 @@ public class OpenDoorSign extends DSign {
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         } else {
-            markAsErroneous();
+            markAsErroneous("No door attached");
         }
     }
 

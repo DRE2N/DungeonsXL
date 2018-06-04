@@ -186,7 +186,7 @@ public class ChestSign extends DSign {
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         } else {
-            markAsErroneous();
+            markAsErroneous("No chest attached");
         }
     }
 

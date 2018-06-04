@@ -81,7 +81,7 @@ public class SoundMessageSign extends DSign {
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
             initialized = true;
         } else {
-            markAsErroneous();
+            markAsErroneous("1. Line is empty; expected input: sound name");
         }
     }
 

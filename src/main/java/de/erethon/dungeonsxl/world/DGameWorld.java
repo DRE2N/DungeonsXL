@@ -31,7 +31,6 @@ import de.erethon.dungeonsxl.mob.DMob;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.sign.DSignType;
-import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.sign.LocationSign;
 import de.erethon.dungeonsxl.sign.lobby.StartSign;
 import de.erethon.dungeonsxl.sign.mob.MobSign;
@@ -174,7 +173,7 @@ public class DGameWorld extends DInstanceWorld {
 
         // Try the matching location
         for (DSign dSign : dSigns) {
-            if (dSign.getType() == DSignTypeDefault.START) {
+            if (dSign instanceof StartSign) {
                 if (((StartSign) dSign).getId() == index) {
                     return ((LocationSign) dSign).getLocation();
                 }
@@ -183,7 +182,7 @@ public class DGameWorld extends DInstanceWorld {
 
         // Try any location
         for (DSign dSign : dSigns) {
-            if (dSign.getType() == DSignTypeDefault.START) {
+            if (dSign instanceof StartSign) {
                 return ((LocationSign) dSign).getLocation();
             }
         }
@@ -479,10 +478,8 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         for (DSign dSign : dSigns) {
-            if (dSign != null) {
-                if (!dSign.hasTriggers()) {
-                    dSign.onTrigger();
-                }
+            if (dSign != null && !dSign.isErroneous() && !dSign.hasTriggers()) {
+                dSign.onTrigger();
             }
         }
     }

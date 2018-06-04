@@ -51,6 +51,9 @@ public class ScriptSign extends DSign {
         SignScript script = plugin.getSignScripts().getByName(name);
         for (String[] lines : script.getSigns()) {
             DSign dSign = DSign.create(getSign(), lines, getGameWorld());
+            if (dSign.isErroneous()) {
+                continue;
+            }
             getGameWorld().getDSigns().add(dSign);
 
             dSign.onInit();

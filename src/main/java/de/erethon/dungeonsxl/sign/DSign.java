@@ -53,6 +53,8 @@ public abstract class DSign {
     // List of Triggers
     private Set<Trigger> triggers = new HashSet<>();
 
+    private boolean erroneous;
+
     public DSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         this.sign = sign;
         this.lines = lines;
@@ -168,6 +170,10 @@ public abstract class DSign {
     }
 
     public void onUpdate() {
+        if (erroneous) {
+            return;
+        }
+
         for (Trigger trigger : triggers) {
             if (!trigger.isTriggered()) {
                 onDisable();
@@ -197,17 +203,26 @@ public abstract class DSign {
         return !triggers.isEmpty();
     }
 
+    public boolean isErroneous() {
+        return erroneous;
+    }
+
     /**
      * Set a placeholder to show that the sign is setup incorrectly.
+     *
+     * @param reason
+     * the reason why the sign is marked as erroneous
      */
-    public void markAsErroneous() {
+    public void markAsErroneous(String reason) {
+        erroneous = true;
         sign.setLine(0, ERROR_0);
         sign.setLine(1, ERROR_1);
         sign.setLine(2, ERROR_2);
         sign.setLine(3, ERROR_3);
         sign.update();
 
-        DMessage.LOG_ERROR_SIGN_SETUP.getMessage(sign.getX() + ", " + sign.getY() + ", " + sign.getZ());
+        MessageUtil.log(plugin, DMessage.LOG_ERROR_SIGN_SETUP.getMessage(sign.getX() + ", " + sign.getY() + ", " + sign.getZ()));
+        MessageUtil.log(plugin, getType().getName() + ": " + reason);
     }
 
     /* Statics */

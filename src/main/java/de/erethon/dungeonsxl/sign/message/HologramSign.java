@@ -52,7 +52,7 @@ public class HologramSign extends DSign {
     @Override
     public void onInit() {
         if (Bukkit.getPluginManager().getPlugin("HolographicDisplays") == null) {
-            markAsErroneous();
+            markAsErroneous("HolographicDisplays not enabled");
             return;
         }
         getSign().getBlock().setType(VanillaItem.AIR.getMaterial());

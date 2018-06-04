@@ -233,7 +233,7 @@ public class ExternalMobSign extends DSign implements MobSign {
                 }
 
                 if (provider == null) {
-                    markAsErroneous();
+                    markAsErroneous("Could not fetch a known external mob provider from " + lines[2]);
                     return;
                 }
             }

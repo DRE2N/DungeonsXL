@@ -61,7 +61,7 @@ public class BedSign extends DSign {
             }
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
         } else {
-            markAsErroneous();
+            markAsErroneous("No bed attached");
         }
     }
 

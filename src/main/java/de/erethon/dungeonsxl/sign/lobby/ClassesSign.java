@@ -71,7 +71,7 @@ public class ClassesSign extends DSign {
             getGameWorld().getClassesSigns().add(getSign());
 
         } else {
-            markAsErroneous();
+            markAsErroneous("No such class");
         }
     }
 
