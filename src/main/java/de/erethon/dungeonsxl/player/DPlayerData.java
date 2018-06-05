@@ -110,6 +110,9 @@ public class DPlayerData extends DREConfig {
      * @return the old location
      */
     public Location getOldLocation() {
+        if (oldLocation.getWorld() == null) {
+            return Bukkit.getWorlds().get(0).getSpawnLocation();
+        }
         return oldLocation;
     }
 
@@ -427,8 +430,9 @@ public class DPlayerData extends DREConfig {
         }
         oldPotionEffects = (Collection<PotionEffect>) config.get(PREFIX_STATE_PERSISTENCE + "oldPotionEffects");
 
-        oldLocation = (Location) config.get(PREFIX_STATE_PERSISTENCE + "oldLocation");
-        if (oldLocation.getWorld() == null) {
+        try {
+            oldLocation = (Location) config.get(PREFIX_STATE_PERSISTENCE + "oldLocation");
+        } catch (IllegalArgumentException exception) {
             oldLocation = Bukkit.getWorlds().get(0).getSpawnLocation();
         }
     }
