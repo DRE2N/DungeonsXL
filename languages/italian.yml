@@ -1,0 +1,212 @@
+Announcer_Cmd: '&4&l=> &6USE &4/DXL JOIN &v1 &6TO JOIN &4&l<='
+Announcer_Click: '&4&l=> &6CLICCA QUI PER JOINARE &4&l<='
+Cmd_Break_ProtectedMode: '&6Non puoi più rompere blocchi protetti da DungeonsXL.'
+Cmd_Break_BreakMode: '&6Puoi rompere i blocchi protetti da DungeonsXL.'
+Cmd_Chat_DungeonChat: '&6Chat del Dungeon attivata'
+Cmd_Chat_NormalChat: '&6Chat pubblica attivata'
+Cmd_Chatspy_Stopped: '&6Dungeon SpyChat disattivata.'
+Cmd_Chatspy_Start: '&6Dungeon SpyChat attivata.'
+Cmd_Delete_Backups: '&6Vuoi cancellare anche i BackUp?'
+Cmd_Delete_Success: '&6Mappa cancellata con successo &4&v1&6.'
+Cmd_Enter: '&6Il gruppo &4&v1 &6è entrato nel Raid &4&v2&6.'
+Cmd_Import: '&6Mondo importato con successo &4&v1&6.'
+Cmd_Invite_Success: '&6Il player &4&v1&6 è stato invitato a editare la mappa &4&v2&6.'
+Cmd_Kick_Success: '&6Kickato con successo &4&v1&6.'
+Cmd_Leave_Success: '&6Hai lasciato il gruppo!'
+Cmd_Lives_Group: '&4&v1 &6ha &4&v2 &6vite rimanenti.'
+Cmd_Lives_Player: '&4&v1 &6ha &4&v2 &6vite rimamenti.'
+Cmd_Main_Welcome: '&7Benvenuto a &4Dungeons&fXL'
+Cmd_Main_Loaded: '&eMaps: &o[&v1] &eDungeons: &o[&v2] &eLoaded: &o[&v3] &ePlayers: &o[&v4]'
+Cmd_Main_Compatibility: '&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]'
+Cmd_Main_Help: '&7Type in &o/dxl help&r&7 for further information.'
+Cmd_Msg_Added: '&6Nuovi messaggi (&4&v1&6) aggiunti!'
+Cmd_Msg_Updated: '&6Messages (&4&v1&6) updated!'
+Cmd_Reload_Done: '&7DungeonsXL ricaricato con successo.'
+Cmd_Reload_Players: '&4Warning: se ricarichi il plugin tutti i player verranno kickati dai dungeon.'
+Cmd_Rename_Success: '&6Cambiato il nome della mappa da &4&v1&6 a &4&v2&6.'
+Cmd_Save_Success: '&6Mappa salvata!'
+Cmd_Uninvite_Success: '&4&v1&6 permessi per editare la mappa &4&v2&6 rimossi con successo.'
+Error_Bed: '&4Non puoi usare un letto mentre sei in un dungeon!'
+Error_ChestIsOpened: '&4Questa chest è già stata aperta.'
+Error_Cmd: '&4I comandi non sono consentiti mentre sei in un dungeon!'
+Error_CmdNotExist1: '&4Il comando &6&v1&4 non esiste!'
+Error_CmdNotExist2: '&4Please enter &6/dxl help&4 for help!'
+Error_Cooldown: '&4Puoi entrare in un dungeon solo ogni &6&v1&4 ore!'
+Error_Dispenser: '&4Non puoi utilizzare questo dispenser!'
+Error_Drop: '&4You cannot drop safe items'
+Error_DungeonNotExist: '&4Questo dungeon non esiste!.'
+Error_Enderchest: '&4Non puoi usare le enderchest in questo dungeon!'
+Error_InGroup: '&4Il player &6&v1&4 fa già parte di un gruppo.'
+Error_JoinGroup: '&4Devi prima entrare in un gruppo!'
+Error_LeaveDungeon: '&4Devi premi uscire dal dungeon!'
+Error_LeaveGame: '&4Devi prima lasciare il Raid!'
+Error_LeaveGroup: '&4Devi prima uscire dal gruppo!'
+Error_MsgIdNotExist: '&4Il messaggio con l'' Id &6&v1&4 non esiste'
+Error_MsgFormat: '&4Per favore &6" &4per segnalare l''inizio e la fine del messaggio!'
+Error_MsgNoInt: '&4L''argomento [id] deve includere un numero!'
+Error_NameInUse: '&4Il nome &6&v1 &4è già utilizzato.'
+Error_NameToLong: '&4Il nome non deve essere più di 15 caratteri!'
+Error_NoConsoleCommand: '&6/dxl &v1&4 non può essere eseguito come Console!'
+Error_NoGame: '&4Al momento non fai parte di un raid.'
+Error_NoLeaveInTutorial: '&4Non puoi utilizzare questo comando nel tutorial!'
+Error_NoPermissions: '&4Non hai abbastanza permessi!'
+Error_NoPlayerCommand: '&6/dxl &v1&4 non può essere fatto da player!'
+Error_NoDXLBlock: '&4Questo blocco non è protetto da DungeonsXL!'
+Error_NoRewardsLeft: '&4Non hai nessuna reward rimasta.'
+Error_NoSuchGroup: '&4Il gruppo &6&v1&4 non esiste!'
+Error_NoSuchMap: '&4Il mondo &6&v1&4 non esiste!'
+Error_NoSuchPlayer: '&4Il player &6&v1&4 non esiste!'
+Error_NoSuchResourcePack: '&4La resource pack &6&v1 &4non è registrata nel file di configurazione!'
+Error_NoSuchShop: '&4Shop &v1 &4non trovato...'
+Error_NotCaptain: '&4Non sei il capitano del tuo gruppo!'
+Error_NotInDungeon: '&4Non sei in un dungeon!'
+Error_NotInGame: '&4Il gruppo &6&v1&4 non fa parte di un Raid.'
+Error_NotInGroup: '&4Il player &6&v1&4 non fa parte del gruppo &6&v2&v4.'
+Error_NotInvited: '&4Non sei invitato nel gruppo &6&v1&4.'
+Error_NotSaved: '&4La mappa &6&v1&4 non è ancora stata salvata nel &6DungeonsXL/maps/ &4folder'
+Error_BlockOwnTeam: '&4Questo blocco appartiene al tuo gruppo.'
+Error_Ready: '&4Scegli la tua classe!'
+Error_Requirements: '&4Non hai i requisiti necessari per entrare in questo dungeon!'
+Error_SignWrongFormat: '&4Il cartello non è scritto correttamente!'
+Error_TooManyInstances: '&4Al momento i Dungeon sono pieni. Prova di nuovo tra qualche minuto!'
+Error_TooManyTutorials: '&4Al momento ci sono troppi Tutorial attivi. Prova di nuovo tra qualche minuto!'
+Error_TutorialNotExist: '&4Il Dungeon Tutorial non esiste!'
+Help_Cmd_Break: /dxl break - Rompe un blocco protetto da DungeonsXL
+Help_Cmd_Chat: /dxl chat - Cambia la chat
+Help_Cmd_Chatspy: /dxl chatspy - Dis/enables la SpyChat
+Help_Cmd_Create: /dxl create [name] - Crea una nuova Mappa Dungeon
+Help_Cmd_Delete: /dxl delete [name] - Cancella una Mappa Dungeon
+Help_Cmd_Edit: /dxl edit [map] - Edita una Mappa Dungeon esistente
+Help_Cmd_Enter: /dxl enter ([joining group]) [target group] - Il joining group entra nel Raid del target group
+Help_Cmd_Escape: /dxl escape - Esci dal Mondo senza salvare
+Help_Cmd_Game: /dxl game - Mostra informazioni relative al Raid
+Help_Cmd_Group: /dxl group - Mostra i comandi help per i Gruppi
+Help_Cmd_GroupCreate: /dxl group create [group] - Crea un nuovo Gruppo
+Help_Cmd_GroupDisband: /dxl group disband ([group]) - Scioglie il Gruppo
+Help_Cmd_GroupInvite: /dxl group invite [player]- Invita un player nel Gruppo
+Help_Cmd_GroupUninvite: /dxl group uninvite [player] - Cancella un invito al Gruppo
+Help_Cmd_GroupJoin: /dxl group join [group]- Entra in un gruppo
+Help_Cmd_GroupKick: /dxl group kick [player] - Kicka un player dal gruppo
+Help_Cmd_GroupShow: /dxl group show [group] - Mostra un Gruppo
+Help_Cmd_Help: /dxl help [page] - Mostra la pagina dei comandi
+Help_Cmd_Import: /dxl import [world] - Importa un mondo dal World Container come una Mappa Dungeon
+Help_Cmd_Invite: /dxl invite [player] [dungeon] - Invita un player ad editare un Dungeon
+Help_Cmd_Join: /dxl join [announcement] - Apre la GUI per joinare un Gruppo in un Raid
+Help_Cmd_Kick: /dxl kick [player] - Kicka un player fuori da un gruppo e dal Dungeon
+Help_Cmd_Leave: /dxl leave - Lascia il Gruppo corrente, Dungeon, o Mondo Editabile
+Help_Cmd_List: /dxl list ([dungeon|map|loaded]) ([dungeon]) - Lista dei Dungeon
+Help_Cmd_Lives: /dxl lives [player] - Mostra le vite che rimangono ad un player
+Help_Cmd_Main: /dxl - Informazioni generali
+Help_Cmd_Msg: /dxl msg [id] '[msg]' - Mostra o Edita un messaggio
+Help_Cmd_Play: /dxl play [name] - Permette ai player di entrare in un Dungeon senza un portale
+Help_Cmd_Portal: /dxl portal ([material=portal])- Crea un portale che conduce in un dungeon
+Help_Cmd_Reload: /dxl reload - Ricarica il plugin
+Help_Cmd_Rename: /dxl rename [old name] [new name] - Cambia il nome di una mappa con uno nuovo. Questo comando non SPACCA i dungeon che contengono questa mappa.
+Help_Cmd_Rewards: /dxl rewards - Givva le reward rimamenti al player
+Help_Cmd_ResourcePack: /dxl resourcepack [ID] - Scarica una resourcepack contenuta nel file di configurazione; usa 'reset' per resettare
+Help_Cmd_Save: /dxl save - Salva il Dungeon corrente
+Help_Cmd_Status: /dxl status - Mostra lo stato tecnico di DungeonsXL
+Help_Cmd_Settings: /dxl settings ([edit|global|player])- Apre le impostazioni
+Help_Cmd_Test: /dxl test - Inizializza il gioco in modalità test
+Help_Cmd_Uninvite: /dxl uninvite [player] [dungeon] - Rimuovi un invito ad editare un dungeon
+Group_BedDestroyed: '&6Il letto del gruppo &4&v1 &6è stato dristrutto da &4&v2&6!'
+Group_Congrats: '&6Congratulazioni!'
+Group_CongratsSub: '&l&4Il tuo gruppo &v1 &4ha vinto il match!'
+Group_Created: '&4&v1&6 ha creato il gruppo &4&v2&6!'
+Group_Death: '&4&v1 &6è morto. &4&v2 &6ha &4&v3 &6vite rimaste.'
+Group_DeathKick: '&4&v1 &6è stato kickato perché &4&v2 &6non ha più vite.'
+Group_Defeated: '&4Il Gruppo &4v1 &6è stato sconfitto perché ha perso il suo ultimo punto.'
+Group_Disbanded: '&4&v1&6 ha sciolto il Gruppo &4&v2&6.'
+Group_FlagCaptured: '&4&v1&6 ha catturato la Bandiera del Gruppo &4&v2&6!'
+Group_FlagLost: '&4&v1&6 è morto e ha perso la bandiera di &4&v2&6.'
+Group_FlagStealing: '&4&v1&6 sta rubando la bandiera del Gruppo &4&v2&6!'
+Group_InvitedPlayer: '&4&v1&6 ha invitato il player &4&v2&6 al Gruppo &4&v3&6.'
+Group_JoinedGame: '&6Il tuo Gruppo è entrato nel Raid.'
+Group_Killed: '&4&v1 &6è stato ucciso da &4&v2&6. &4&v3&6 ha &4&v4 &6vite rimaste.'
+Group_KilledKick: '&4&v1&6 è stato ucciso da &4&v2&6. &4&v3 non ha più vite.'
+Group_LivesAdded: '&6Il tuo Gruppo ha ricevuto un bonus di &4&v1&6 vite.'
+Group_LivesRemoved: '&6Il tuo Gruppo ha perso &4&v1&6 vite!'
+Group_UninvitedPlayer: '&4&v1&6 ha rimosso l''invito a &4&v2&6 per il gruppo &4&v3&6.'
+Group_KickedPlayer: '&4&v1&6 ha kickato il player &4&v2&6 dal Gruppo &4&v3&6.'
+Group_PlayerJoined: '&6Il player &4&v1&6 è entrato nel Gruppo!'
+Group_WaveFinished: '&6Il tuo Gruppo ha terminato l''ondata no. &4&v1&6. La prossima inizierà tra &4&v2&6 secondi.'
+Log_DisabledTweaks: '&4Le performance tweaks sono state disabilitate perché non supportate dal server software.'
+Log_Error_DungeonSetup: '&4Il setup del dungeon &6&v1&4 è errato. Visita https://github.com/DRE2N/DungeonsXL/wiki/dungeon-configuration'
+Log_Error_MobEnchantment: '&4È occorso un errore nel caricamento di mob.yml: l''incantamento &6&v1&4 non esiste!'
+Log_Error_MobType: '&4Errore nel caricamento di mob.yml: Mob &6&v1&4 non esiste!'
+Log_Error_NoConsoleCommand: '&6/dxl &v1&4 non eseguibile come Console!'
+Log_Error_SignSetup: '&4Un cartello in &6&v1&4 è errato!'
+Log_GenerateNewWorld: '&6Generando il mondo...'
+Log_ImportWorld: '&6Importando il mondo...'
+Log_KilledCorruptedPlayer: '&4Il player &6&v1 &4è stato ucciso perché i dati del suo inventario sono corrotti :('
+Log_NewDungeon: '&6Creando una nuova Mappa.'
+Log_NewPlayerData: '&6I dati di un nuovo player sono stati creati e salvati come &v1.'
+Log_WorldGenerationFinished: '&6Il Mondo è stato generato!'
+Misc_NextPage: '&6&lPAGINA SUCCESSIVA'
+Misc_No: '&4[ NO ]'
+Misc_Okay: '&a[ OK ]'
+Misc_PreviousPage: '&6&lPAGINA PRECEDENTE'
+Misc_Unlimited: illimitato
+Misc_Yes: '&a[ Sì ]'
+Player_BlockInfo: '&6Block ID: &2&v1'
+Player_CheckpointReached: '&6Checkpoint raggiunto!'
+Player_Death: '&4&v1 &6è morto e ha &4&v2 &6vite rimanenti.'
+Player_DeathKick: '&2&v1 &6ha perso la sua ultima vita ed è stato kickato.'
+Player_FinishedDungeon: '&6Hai terminato il Dungeon!'
+Player_Finished_Floor: '&6Hai terminato un Piano.'
+Player_Invited: '&4&v1&6 ti ha invitato al gruppo &4&v2&6.'
+Player_Uninvited: '&4&v1&6 ha rimosso il tuo invito al gruppo &4&v2&6.'
+Player_JoinGroup: '&6Sei entrato nel gruppo!'
+Player_Kicked: '&4Sei stato kickato dal gruppo &6&v1&4.'
+Player_Killed: '&4&v1 &6è stato ucciso da &4&v2 &6e ha &4&v3 &6vite rimaste.'
+Player_KilledKick: '&4&v1&6 è stato ucciso da &4&v2 &6e ha perso la sua ultima vita.'
+Player_LeaveGroup: '&6Hai lasciato il tuo Gruppo!'
+Player_LeftGroup: '&6Il player &4&v1&6 ha lasciato il Gruppo!'
+Player_LivesAdded: '&6Ha ricevuto un bonus di &4&v1&6 vite.'
+Player_LivesRemoved: '&6Hai perso &4&v1&6 vite!'
+Player_LootAdded: '&4&v1&6 è stato aggiunto alle tue reward!'
+Player_NewCaptain: '&6Sei diventato il Capitano del Gruppo.'
+Player_Offline: '&Il player &4&v1&6 si è disconnesso. In &4&v2&6 secondi sarà automaticamente kickato dal Dungeon!'
+Player_OfflineNever: '&6Il player &4&v1&6 si è disconnesso.&4Not&6 sarà kickato dal Dungeon automaticamente!'
+Player_PortalAbort: '&6Creazione del Portale interrotta!'
+Player_PortalIntroduction: '&6Clicca i bordi del Portale con la spada di legno!'
+Player_PortalCreated: '&6Portale creato!'
+Player_PortalProgress: '&6Primo bordo selezionato. Clicca ora sul secondo bordo.'
+Player_ProtectedBlockDeleted: '&6Protezione rimossa.'
+Player_Ready: '&6Sei pronto per entrare nel Dungeon.'
+Player_SignCreated: '&6Cartello creato con successo.'
+Player_SignCopied: '&6Dati del cartello copiati.'
+Player_TimeLeft: '&v1Ti rimangono &6&v2 &v1secondi per finire il Dungeon!'
+Player_TimeKick: '&2&v1&6 ha esaurito il tempo.'
+Player_Treasures: '&1Tesori'
+Player_WaitForOtherPlayers: '&6Aspettando per altri giocatori...'
+Requirement_Fee: '&6Sei stato selezionato &4&v1 &6per entrare nel Dungeon.'
+Reward_General: '&6Hai ricevuto &4&v1 &6per aver finito il Dungeon.'
+Settings_Announcements1: '&fToggles personal'
+Settings_Announcements2: '&fAnnuncio di Raid.'
+Settings_Break1: '&fPuoi rompere i blocchi'
+Settings_Break2: '&fProtetto da DungeonsXL.'
+Settings_ChatSpy1: '&fTi permette di ricevere'
+Settings_ChatSpy2: '&fall dungeon chat messages.'
+Settings_Title: '&4Settings: &o'
+Settings_Title_Edit: Dungeon Setup
+Settings_Title_Global: Global Configuration
+Settings_Title_Player: Player
+sign:
+  end: '&3FINE'
+  floor:
+    '1': '&3ENTRA'
+    '2': '&3PROSSIMO PIANO'
+  global:
+    full: '&4PIENO'
+    isPlaying: '&4IN GIOCO'
+    joinGame: '&3ENTRA IN RAID'
+    joinGroup: '&3ENTRA NEL GRUPPO'
+    newGame: '&3NUOVO RAID'
+    newGroup: '&3NUOVO GRUPPO'
+  leave: '&3ABBANDONA'
+  ready: '&3PRONTO'
+  resourcePack: '&2DOWNLOAD'
+  wave:
+    '1': '&3START'
+    '2': '&3PROSSIMA ONDATA'
