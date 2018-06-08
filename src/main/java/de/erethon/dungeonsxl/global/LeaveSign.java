@@ -22,6 +22,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.util.LWCUtil;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
@@ -47,6 +48,8 @@ public class LeaveSign extends GlobalProtection {
 
         this.sign = sign;
         setText();
+
+        LWCUtil.removeProtection(sign.getBlock());
     }
 
     /* Getters and setters */

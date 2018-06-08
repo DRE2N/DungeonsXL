@@ -23,6 +23,7 @@ import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.util.LWCUtil;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -216,6 +217,8 @@ public class GroupSign extends JoinSign {
             verticalSigns--;
         }
         GroupSign sign = new GroupSign(DungeonsXL.getInstance().getGlobalProtections().generateId(GroupSign.class, world), startSign, identifier, maxPlayersPerGroup, groupName);
+
+        LWCUtil.removeProtection(startSign);
 
         return sign;
     }

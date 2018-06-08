@@ -21,6 +21,7 @@ import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
+import de.erethon.dungeonsxl.util.LWCUtil;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,6 +61,9 @@ public class DWorldCache {
 
         startWorldUnloadTask(1200L);
         Bukkit.getPluginManager().registerEvents(new DWorldListener(this), plugin);
+        if (LWCUtil.isLWCLoaded()) {
+            new LWCIntegration(plugin);
+        }
     }
 
     /* Getters and setters */
