@@ -121,25 +121,32 @@ public class GroupSign extends JoinSign {
         config.set(preString + ".x", startSign.getX());
         config.set(preString + ".y", startSign.getY());
         config.set(preString + ".z", startSign.getZ());
-        config.set(preString + ".dungeon", dungeon.getName());
+        if (dungeon != null) {
+            config.set(preString + ".dungeon", dungeon.getName());
+        }
         config.set(preString + ".groupName", groupName);
         config.set(preString + ".maxPlayersPerGroup", maxElements);
     }
 
-    public boolean onPlayerInteract(Block block, Player player) {
+    public void onPlayerInteract(Block block, Player player) {
         if (DGroup.getByPlayer(player) != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
-            return true;
+            return;
         }
 
         Block topBlock = block.getRelative(0, startSign.getY() - block.getY(), 0);
         if (!(topBlock.getState() instanceof Sign)) {
-            return true;
+            return;
         }
 
         Sign topSign = (Sign) topBlock.getState();
 
         if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage())) {
+            if (dungeon == null) {
+                MessageUtil.sendMessage(player, DMessage.ERROR_SIGN_WRONG_FORMAT.getMessage());
+                return;
+            }
+
             if (groupName != null) {
                 group = new DGroup(groupName, player, dungeon);
             } else {
@@ -151,8 +158,6 @@ public class GroupSign extends JoinSign {
             group.addPlayer(player);
             update();
         }
-
-        return true;
     }
 
     /* Statics */

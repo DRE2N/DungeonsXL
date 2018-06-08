@@ -192,8 +192,6 @@ public class GlobalProtectionListener implements Listener {
         }
     }
 
-    /* SUBJECT TO CHANGE */
-    @Deprecated
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -207,12 +205,14 @@ public class GlobalProtectionListener implements Listener {
 
         if (Category.SIGNS.containsBlock(clickedBlock)) {
             GroupSign groupSign = GroupSign.getByBlock(clickedBlock);
-            if (groupSign != null && groupSign.onPlayerInteract(clickedBlock, player)) {
+            if (groupSign != null) {
+                groupSign.onPlayerInteract(clickedBlock, player);
                 event.setCancelled(true);
             }
 
             GameSign gameSign = GameSign.getByBlock(clickedBlock);
-            if (gameSign != null && gameSign.onPlayerInteract(clickedBlock, player)) {
+            if (gameSign != null) {
+                gameSign.onPlayerInteract(clickedBlock, player);
                 event.setCancelled(true);
             }
 

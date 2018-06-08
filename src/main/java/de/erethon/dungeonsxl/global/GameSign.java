@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.global;
 
-import com.griefcraft.lwc.LWC;
-import com.griefcraft.model.Protection;
 import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
@@ -122,39 +120,46 @@ public class GameSign extends JoinSign {
         config.set(preString + ".x", startSign.getX());
         config.set(preString + ".y", startSign.getY());
         config.set(preString + ".z", startSign.getZ());
-        config.set(preString + ".dungeon", dungeon.getName());
+        if (dungeon != null) {
+            config.set(preString + ".dungeon", dungeon.getName());
+        }
         config.set(preString + ".maxGroupsPerGame", maxElements);
     }
 
-    public boolean onPlayerInteract(Block block, Player player) {
+    public void onPlayerInteract(Block block, Player player) {
         if (DungeonsXL.getInstance().getDWorlds().getGameWorlds().size() >= DungeonsXL.getInstance().getMainConfig().getMaxInstances()) {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
-            return true;
+            return;
         }
 
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
-            return true;
+            return;
         }
         if (!dGroup.getCaptain().equals(player)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NOT_CAPTAIN.getMessage());
-            return true;
+            return;
         }
 
         if (Game.getByDGroup(dGroup) != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GAME.getMessage());
-            return true;
+            return;
         }
 
         Block topBlock = block.getRelative(0, startSign.getY() - block.getY(), 0);
         if (!(topBlock.getState() instanceof Sign)) {
-            return true;
+            return;
         }
 
         Sign topSign = (Sign) topBlock.getState();
 
         if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_NEW_GAME.getMessage())) {
+            if (dungeon == null) {
+                MessageUtil.sendMessage(player, DMessage.ERROR_SIGN_WRONG_FORMAT.getMessage());
+                return;
+            }
+
             game = new Game(dGroup);
             dGroup.setDungeon(dungeon);
             update();
@@ -163,8 +168,6 @@ public class GameSign extends JoinSign {
             game.addDGroup(dGroup);
             update();
         }
-
-        return true;
     }
 
     /* Statics */
