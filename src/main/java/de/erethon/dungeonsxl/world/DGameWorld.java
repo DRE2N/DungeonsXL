@@ -496,6 +496,8 @@ public class DGameWorld extends DInstanceWorld {
             return;
         }
 
+        kickAllPlayers();
+
         if (!plugin.getMainConfig().areTweaksEnabled()) {
             Bukkit.unloadWorld(getWorld(), false);
             FileUtil.removeDir(getFolder());
@@ -552,6 +554,9 @@ public class DGameWorld extends DInstanceWorld {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         for (DSign dSign : dSigns) {
+            if (dSign == null) {
+                continue;
+            }
             if ((block.equals(dSign.getSign().getBlock()) || block.equals(BlockUtil.getAttachedBlock(dSign.getSign().getBlock()))) && dSign.getType().isProtected()) {
                 return true;
             }

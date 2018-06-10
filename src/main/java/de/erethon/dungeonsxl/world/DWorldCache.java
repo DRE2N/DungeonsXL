@@ -211,33 +211,37 @@ public class DWorldCache {
      */
     public void check() {
         for (File file : Bukkit.getWorldContainer().listFiles()) {
-            if (file.getName().startsWith("DXL_Edit_") && file.isDirectory()) {
-                for (File mapFile : file.listFiles()) {
-                    if (mapFile.getName().startsWith(".id_")) {
-                        String name = mapFile.getName().substring(4);
-
-                        File resource = new File(DungeonsXL.MAPS, name);
-                        File backup = new File(DungeonsXL.BACKUPS, resource.getName() + "-" + System.currentTimeMillis() + "_crashbackup");
-                        FileUtil.copyDir(resource, backup);
-                        remove:
-                        for (File remove : FileUtil.getFilesForFolder(resource)) {
-                            for (String nope : DungeonsXL.EXCLUDED_FILES) {
-                                if (remove.getName().equals(nope)) {
-                                    continue remove;
-                                }
-                            }
-                            remove.delete();
-                        }
-                        deleteUnusedFiles(file);
-                        FileUtil.copyDir(file, resource, DungeonsXL.EXCLUDED_FILES);
-
-                        FileUtil.removeDir(file);
-                    }
-                }
-
-            } else if (file.getName().startsWith("DXL_Game_") && file.isDirectory()) {
-                FileUtil.removeDir(file);
+            if (!file.getName().startsWith("DXL_") || !file.isDirectory()) {
+                continue;
             }
+
+            if (file.getName().startsWith("DXL_Edit_")) {
+                for (File mapFile : file.listFiles()) {
+                    if (!mapFile.getName().startsWith(".id_")) {
+                        continue;
+                    }
+
+                    String name = mapFile.getName().substring(4);
+
+                    File resource = new File(DungeonsXL.MAPS, name);
+                    File backup = new File(DungeonsXL.BACKUPS, resource.getName() + "-" + System.currentTimeMillis() + "_crashbackup");
+                    FileUtil.copyDir(resource, backup);
+                    // Remove all files from the backupped resource world but not the config & data that we cannot fetch from the instance.
+                    remove:
+                    for (File remove : FileUtil.getFilesForFolder(resource)) {
+                        for (String nope : DungeonsXL.EXCLUDED_FILES) {
+                            if (remove.getName().equals(nope)) {
+                                continue remove;
+                            }
+                        }
+                        remove.delete();
+                    }
+                    deleteUnusedFiles(file);
+                    FileUtil.copyDir(file, resource, DungeonsXL.EXCLUDED_FILES);
+                }
+            }
+
+            FileUtil.removeDir(file);
         }
     }
 

@@ -17,10 +17,15 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.game.GameRuleProvider;
 import de.erethon.dungeonsxl.player.DGamePlayer;
+import de.erethon.dungeonsxl.player.DInstancePlayer;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -114,6 +119,20 @@ public abstract class DInstanceWorld {
         this.lobby = lobby;
     }
 
+    /**
+     * @return
+     * the players in this world
+     */
+    public Collection<DInstancePlayer> getPlayers() {
+        Collection<DInstancePlayer> players = new ArrayList<>();
+        for (DInstancePlayer player : plugin.getDPlayers().getDInstancePlayers()) {
+            if (player.getWorld().equals(world)) {
+                players.add(player);
+            }
+        }
+        return players;
+    }
+
     /* Actions */
     /**
      * Sends a message to all players in the instance.
@@ -125,6 +144,17 @@ public abstract class DInstanceWorld {
         for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
             MessageUtil.sendMessage(dPlayer.getPlayer(), message);
         }
+    }
+
+    /**
+     * Makes all players leave the world.
+     * Attempts to let them leave properly if they are correct DInstancePlayers;
+     * teleports them to the spawn if they are not.
+     */
+    public void kickAllPlayers() {
+        getPlayers().forEach(p -> p.leave());
+        // Players who shouldn't be in the dungeon but still are for some reason
+        world.getPlayers().forEach(p -> PlayerUtil.secureTeleport(p, Bukkit.getWorlds().get(0).getSpawnLocation()));
     }
 
     /**

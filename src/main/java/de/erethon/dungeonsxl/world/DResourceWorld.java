@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.commons.worldloader.WorldLoader;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
@@ -209,12 +211,24 @@ public class DResourceWorld {
     public DInstanceWorld instantiate(final boolean game) {
         int id = worlds.generateId();
         String name = worlds.generateName(game, id);
-        final File instanceFolder = new File(Bukkit.getWorldContainer(), name);
-
-        while (Bukkit.getWorld(name) != null) {
-            id++;
-            name = worlds.generateName(game, id);
+        File tempIF = new File(Bukkit.getWorldContainer(), name);
+        while (tempIF.exists()) {
+            World world = Bukkit.getWorld(name);
+            boolean removed = false;
+            if (world != null && world.getPlayers().isEmpty()) {
+                Bukkit.unloadWorld(name, false);
+            }
+            if (world == null || world.getPlayers().isEmpty()) {
+                removed = tempIF.delete();
+            }
+            if (!removed) {
+                MessageUtil.log(plugin, "&6Warning: An unrecognized junk instance (&4" + name + "&6) has been found, but could not be deleted.");
+                id++;
+                name = worlds.generateName(game, id);
+                tempIF = new File(Bukkit.getWorldContainer(), name);
+            }
         }
+        final File instanceFolder = tempIF; // Because Java SUCKS
 
         final DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
 
@@ -263,7 +277,6 @@ public class DResourceWorld {
         }
 
         DEditWorld editWorld = (DEditWorld) instantiate(false);
-        editWorld.generateIdFile();
         return editWorld;
     }
 
@@ -306,6 +319,7 @@ public class DResourceWorld {
                     FileUtil.copyDir(DWorldCache.RAW, folder, DungeonsXL.EXCLUDED_FILES);
                     editWorld.generateIdFile();
                     editWorld.world = WorldLoader.createWorld(creator);
+                    editWorld.generateIdFile();
                 }
             }.runTaskAsynchronously(plugin);
         }

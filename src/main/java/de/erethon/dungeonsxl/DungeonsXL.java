@@ -36,7 +36,6 @@ import de.erethon.dungeonsxl.mob.DMobListener;
 import de.erethon.dungeonsxl.mob.DMobType;
 import de.erethon.dungeonsxl.mob.ExternalMobProviderCache;
 import de.erethon.dungeonsxl.player.DClassCache;
-import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerCache;
@@ -138,11 +137,6 @@ public class DungeonsXL extends DREPlugin {
         // Save
         saveData();
         messageConfig.save();
-
-        // DGamePlayer leaves World
-        for (DGamePlayer dPlayer : dPlayers.getDGamePlayers()) {
-            dPlayer.leave();
-        }
 
         dGroups.clear();
 

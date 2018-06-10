@@ -20,7 +20,6 @@ import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.event.editworld.EditWorldSaveEvent;
 import de.erethon.dungeonsxl.event.editworld.EditWorldUnloadEvent;
-import de.erethon.dungeonsxl.player.DEditPlayer;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,7 +27,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -157,10 +155,7 @@ public class DEditWorld extends DInstanceWorld {
             return;
         }
 
-        for (Player player : getWorld().getPlayers()) {
-            DEditPlayer dPlayer = DEditPlayer.getByPlayer(player);
-            dPlayer.leave();
-        }
+        kickAllPlayers();
 
         if (!plugin.getMainConfig().areTweaksEnabled()) {
             if (save) {
