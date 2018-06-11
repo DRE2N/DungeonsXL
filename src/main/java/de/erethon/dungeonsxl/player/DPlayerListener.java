@@ -31,6 +31,7 @@ import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import java.util.ArrayList;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -520,17 +521,17 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
 
-        if (dPlayer == null) {
+        World toWorld = event.getTo().getWorld();
+
+        if (dPlayer instanceof DInstancePlayer && ((DInstancePlayer) dPlayer).getWorld() == toWorld) {
             return;
         }
 
-        if (dPlayer.getWorld() == event.getTo().getWorld()) {
-            return;
-        }
-
-        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
+        if (plugin.getDWorlds().getInstanceByWorld(toWorld) != null) {
+            dPlayer.sendMessage(DMessage.ERROR_JOIN_GROUP.getMessage());
+            dPlayer.sendMessage(ChatColor.GOLD + DMessage.HELP_CMD_ENTER.getMessage());
             event.setCancelled(true);
         }
     }

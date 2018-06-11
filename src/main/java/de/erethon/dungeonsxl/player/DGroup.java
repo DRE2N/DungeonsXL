@@ -756,6 +756,13 @@ public class DGroup {
             game.removeDGroup(this);
         }
 
+        for (UUID uuid : players.getUniqueIds()) {
+            DGlobalPlayer member = dPlayers.getByUniqueId(uuid);
+            if (member instanceof DInstancePlayer) {
+                ((DInstancePlayer) member).leave();
+            }
+        }
+
         if (timeIsRunningTask != null) {
             timeIsRunningTask.cancel();
         }
