@@ -25,6 +25,7 @@ import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -79,7 +80,12 @@ public class DSignListener implements Listener {
         String[] lines = event.getLines();
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        Sign sign = (Sign) block.getState();
+        BlockState state = block.getState();
+        if (!(state instanceof Sign)) {
+            return;
+        }
+
+        Sign sign = (Sign) state;
         DEditWorld editWorld = DEditWorld.getByWorld(sign.getWorld());
         if (editWorld == null) {
             return;

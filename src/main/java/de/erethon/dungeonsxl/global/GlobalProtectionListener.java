@@ -26,6 +26,7 @@ import de.erethon.dungeonsxl.world.DEditWorld;
 import java.util.List;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -228,6 +229,11 @@ public class GlobalProtectionListener implements Listener {
     public void onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
+        BlockState state = block.getState();
+        if (!(state instanceof Sign)) {
+            return;
+        }
+
         String[] lines = event.getLines();
 
         // Group Signs
@@ -251,12 +257,8 @@ public class GlobalProtectionListener implements Listener {
                 }
 
             } else if (lines[1].equalsIgnoreCase(LeaveSign.LEAVE_SIGN_TAG)) {
-                if (block.getState() instanceof Sign) {
-                    Sign sign = (Sign) block.getState();
-
-                    new LeaveSign(plugin.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
-                }
-
+                Sign sign = (Sign) state;
+                new LeaveSign(plugin.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
                 event.setCancelled(true);
             }
         }
