@@ -77,7 +77,7 @@
         <dependency>
             <groupId>de.erethon</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.4</version>
+            <version>0.4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

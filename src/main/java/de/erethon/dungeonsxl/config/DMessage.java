@@ -16,10 +16,7 @@
  */
 package de.erethon.dungeonsxl.config;
 
-import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.config.Message;
-import de.erethon.commons.javaplugin.DREPlugin;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -255,26 +252,13 @@ public enum DMessage implements Message {
     }
 
     @Override
-    public String getMessage() {
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
-
-    @Override
-    public String getMessage(String... args) {
-        return DREPlugin.getInstance().getMessageConfig().getMessage(this, args);
+    public String getRaw() {
+        return message;
     }
 
     @Override
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    /* Actions */
-    /**
-     * Sends the message to the console.
-     */
-    public void debug() {
-        MessageUtil.log(DREPlugin.getInstance(), getMessage());
     }
 
     /* Statics */
@@ -288,7 +272,6 @@ public enum DMessage implements Message {
                 return message;
             }
         }
-
         return null;
     }
 
@@ -300,7 +283,6 @@ public enum DMessage implements Message {
         for (DMessage message : values()) {
             config.set(message.getIdentifier(), message.message);
         }
-
         return config;
     }
 
