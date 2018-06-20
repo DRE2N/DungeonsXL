@@ -48,17 +48,17 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with 1.8.8 and higher. However, support for 1.12.x / 1.11.x / 1.10.x / 1.9.x has a higher priority than support for 1.8.8. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
+DungeonsXL works with 1.8.8 and higher. However, support for 1.13 / 1.12.x / 1.11.x / 1.10.x / 1.9.x has a higher priority than support for 1.8.8. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
 
 ### Building information and dependencies
 Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org/).
 Maven automatically fetches all dependencies and builds DungeonsXL; just run _build.bat_ or enter the command _mvn clean install_.
 
 #### DRECommons
-[DRECommons](https://github.com/DRE2N/DRECommons) is a util library for common tasks. DungeonsXL contains DRECommons 4.2.
+[DRECommons](https://github.com/DRE2N/DRECommons) is a util library for common tasks. DungeonsXL contains DRECommons 4.2.1.
 
 #### Caliburn API
-[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.4.1.
+[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files. DungeonsXL contains Caliburn Beta 0.4.2.
 
 ### Java
 Make sure that your server uses Java 8 or higher.
@@ -69,6 +69,7 @@ Supported.
 ### Known incompatibilities
 * Towny
 * Corpses
+* PerWorldInventory
 
 Many incompatibilities can be fixed with [PerWorldPlugins](http://dev.bukkit.org/bukkit-plugins/perworldplugins/) ([fork for 1.8+](https://www.spigotmc.org/resources/perworldplugins-unofficial-update-version.6454/)).
 Try to add the incompatible plugins only to the worlds where you need them.

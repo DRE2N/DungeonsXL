@@ -32,10 +32,12 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Represents a player in the non-DXL worlds of the server.
@@ -322,7 +324,23 @@ public class DGlobalPlayer implements PlayerWrapper {
      * Respawns the player at his old position before he was in a dungeon
      */
     public void reset(boolean keepInventory) {
+        final Location tpLoc = data.getOldLocation().getWorld() != null ? data.getOldLocation() : Bukkit.getWorlds().get(0).getSpawnLocation();
+        if (player.isDead()) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    PlayerUtil.respawn(player);
+                    reset(tpLoc, keepInventory);
+                }
+            }.runTaskLater(plugin, 1L);
+        } else {
+            reset(tpLoc, keepInventory);
+        }
+    }
+
+    private void reset(Location tpLoc, boolean keepInventory) {
         try {
+            PlayerUtil.secureTeleport(player, tpLoc);
             if (!keepInventory) {
                 while (data.getOldInventory().size() > 36) {
                     data.getOldInventory().remove(36);
@@ -346,12 +364,6 @@ public class DGlobalPlayer implements PlayerWrapper {
                 }
 
                 player.addPotionEffects(data.getOldPotionEffects());
-            }
-
-            if (data.getOldLocation().getWorld() != null) {
-                PlayerUtil.secureTeleport(player, data.getOldLocation());
-            } else {
-                PlayerUtil.secureTeleport(player, Bukkit.getWorlds().get(0).getSpawnLocation());
             }
 
         } catch (NullPointerException exception) {
