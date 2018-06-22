@@ -61,8 +61,6 @@ public class ScriptSign extends DSign {
                 dSign.onTrigger();
             }
         }
-
-        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 
     @Override
