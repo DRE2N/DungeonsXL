@@ -125,10 +125,6 @@
             <url>http://repo.citizensnpcs.co/</url>
         </repository>
         <repository>
-            <id>inventive-repo</id>
-            <url>http://repo.inventivetalent.org/content/groups/public/</url>
-        </repository>
-        <repository>
             <id>filoghost-repo</id>
             <url>https://ci.filoghost.me/plugin/repository/everything/</url>
         </repository>
