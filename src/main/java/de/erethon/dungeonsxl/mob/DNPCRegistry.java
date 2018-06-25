@@ -43,8 +43,6 @@ import org.bukkit.entity.EntityType;
  */
 public class DNPCRegistry implements NPCRegistry {
 
-    NPCRegistry registry = CitizensAPI.getNPCRegistry();
-
     @Override
     public NPC createNPC(EntityType type, String name) {
         return createNPC(type, UUID.randomUUID(), 0, name);
@@ -54,9 +52,9 @@ public class DNPCRegistry implements NPCRegistry {
     public NPC createNPC(EntityType type, UUID uuid, int id, String name) {
         NPC npc = null;
         try {
-            Method method = registry.getClass().getDeclaredMethod("getByType", EntityType.class, UUID.class, int.class, String.class);
+            Method method = CitizensAPI.getNPCRegistry().getClass().getDeclaredMethod("getByType", EntityType.class, UUID.class, int.class, String.class);
             method.setAccessible(true);
-            npc = (NPC) method.invoke(registry, type, uuid, id, name);
+            npc = (NPC) method.invoke(CitizensAPI.getNPCRegistry(), type, uuid, id, name);
 
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
             throw new IllegalStateException("Could not create NPC: " + exception.getClass().getSimpleName());
@@ -81,47 +79,47 @@ public class DNPCRegistry implements NPCRegistry {
 
     @Override
     public void deregister(NPC npc) {
-        registry.deregister(npc);
+        CitizensAPI.getNPCRegistry().deregister(npc);
     }
 
     @Override
     public void deregisterAll() {
-        registry.deregisterAll();
+        CitizensAPI.getNPCRegistry().deregisterAll();
     }
 
     @Override
     public NPC getById(int id) {
-        return registry.getById(id);
+        return CitizensAPI.getNPCRegistry().getById(id);
     }
 
     @Override
     public NPC getByUniqueId(UUID uuid) {
-        return registry.getByUniqueId(uuid);
+        return CitizensAPI.getNPCRegistry().getByUniqueId(uuid);
     }
 
     @Override
     public NPC getByUniqueIdGlobal(UUID uuid) {
-        return registry.getByUniqueIdGlobal(uuid);
+        return CitizensAPI.getNPCRegistry().getByUniqueIdGlobal(uuid);
     }
 
     @Override
     public NPC getNPC(Entity entity) {
-        return registry.getNPC(entity);
+        return CitizensAPI.getNPCRegistry().getNPC(entity);
     }
 
     @Override
     public boolean isNPC(Entity entity) {
-        return registry.isNPC(entity);
+        return CitizensAPI.getNPCRegistry().isNPC(entity);
     }
 
     @Override
     public Iterable<NPC> sorted() {
-        return registry.sorted();
+        return CitizensAPI.getNPCRegistry().sorted();
     }
 
     @Override
     public Iterator<NPC> iterator() {
-        return registry.iterator();
+        return CitizensAPI.getNPCRegistry().iterator();
     }
 
     /**
