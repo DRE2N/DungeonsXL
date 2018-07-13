@@ -64,7 +64,7 @@ public class PortalCommand extends DRECommand {
         }
 
         if (material == null) {
-            material = VanillaItem.PORTAL;
+            material = VanillaItem.NETHER_PORTAL;
         }
 
         DPortal dPortal = dGlobalPlayer.getPortal();

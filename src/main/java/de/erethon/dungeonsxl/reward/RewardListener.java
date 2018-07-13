@@ -114,9 +114,9 @@ public class RewardListener implements Listener {
             return;
         }
         Block block = player.getLocation().getBlock();
-        if (dPlayer.hasRewardItemsLeft() && !VanillaItem.PORTAL.is(block.getRelative(0, 1, 0)) && !VanillaItem.PORTAL.is(block.getRelative(0, -1, 0))
-                && !VanillaItem.PORTAL.is(block.getRelative(1, 0, 0)) && !VanillaItem.PORTAL.is(block.getRelative(-1, 0, 0))
-                && !VanillaItem.PORTAL.is(block.getRelative(0, 0, 1)) && !VanillaItem.PORTAL.is(block.getRelative(0, 0, -1))) {
+        if (dPlayer.hasRewardItemsLeft() && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 1, 0)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, -1, 0))
+                && !VanillaItem.NETHER_PORTAL.is(block.getRelative(1, 0, 0)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(-1, 0, 0))
+                && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, 1)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, -1))) {
             PageGUI lootInventory = new PageGUI(DMessage.PLAYER_TREASURES.getMessage(), true);
             for (ItemStack item : dPlayer.getRewardItems()) {
                 if (item != null) {
