@@ -150,13 +150,26 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onPlayerPortal(PlayerPortalEvent event) {
         Block block1 = event.getFrom().getBlock();
+        Block block2 = block1.getRelative(BlockFace.UP);
+        Block block3 = block2.getRelative(BlockFace.UP);
+        Block block4 = block1.getRelative(BlockFace.DOWN);
+        if (isPortalInNearBy(block1) || isPortalInNearBy(block2) || isPortalInNearBy(block3) || isPortalInNearBy(block4)) {
+            event.setCancelled(true);
+        }
+    }
+
+    private boolean isPortalInNearBy(Block block1) {
         Block block2 = block1.getRelative(BlockFace.WEST);
         Block block3 = block1.getRelative(BlockFace.NORTH);
         Block block4 = block1.getRelative(BlockFace.EAST);
         Block block5 = block1.getRelative(BlockFace.SOUTH);
-        if (DPortal.getByBlock(block1) != null || DPortal.getByBlock(block2) != null || DPortal.getByBlock(block3) != null || DPortal.getByBlock(block4) != null || DPortal.getByBlock(block5) != null) {
-            event.setCancelled(true);
-        }
+        Block block6 = block2.getRelative(BlockFace.NORTH);
+        Block block7 = block2.getRelative(BlockFace.SOUTH);
+        Block block8 = block4.getRelative(BlockFace.NORTH);
+        Block block9 = block4.getRelative(BlockFace.SOUTH);
+        return (DPortal.getByBlock(block1) != null || DPortal.getByBlock(block2) != null || DPortal.getByBlock(block3) != null
+                || DPortal.getByBlock(block4) != null || DPortal.getByBlock(block5) != null || DPortal.getByBlock(block6) != null
+                || DPortal.getByBlock(block7) != null || DPortal.getByBlock(block8) != null || DPortal.getByBlock(block9) != null);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
