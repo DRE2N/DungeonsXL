@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.sign;
 
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Sign;
 

@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.global;
 
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
@@ -45,23 +46,23 @@ public class DPortal extends GlobalProtection {
 
     private Block block1;
     private Block block2;
-    private Material material = Material.PORTAL;
+    private ExItem material = VanillaItem.NETHER_PORTAL;
     private byte axis;
     private boolean active;
     private Set<Block> blocks;
 
     public DPortal(int id, World world, boolean active) {
-        this(id, world, Material.PORTAL, active);
+        this(id, world, VanillaItem.NETHER_PORTAL, active);
     }
 
-    public DPortal(int id, World world, Material material, boolean active) {
+    public DPortal(int id, World world, ExItem material, boolean active) {
         super(world, id);
 
         this.material = material;
         this.active = active;
     }
 
-    public DPortal(int id, Block block1, Block block2, Material material, byte axis, boolean active) {
+    public DPortal(int id, Block block1, Block block2, ExItem material, byte axis, boolean active) {
         super(block1.getWorld(), id);
 
         this.block1 = block1;
@@ -125,7 +126,7 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
-        if (player != null && material == Material.PORTAL) {
+        if (player != null && material == VanillaItem.NETHER_PORTAL) {
             float yaw = player.getPlayer().getLocation().getYaw();
             if (yaw >= 45 & yaw < 135 || yaw >= 225 & yaw < 315) {
                 axis = 2;//z;
@@ -165,8 +166,8 @@ public class DPortal extends GlobalProtection {
                     Material type = getWorld().getBlockAt(xx, yy, zz).getType();
                     if (!type.isSolid()) {
                         Block block = getWorld().getBlockAt(xx, yy, zz);
-                        block.setType(material, false);
-                        if (material == Material.PORTAL) {
+                        block.setType(material.getMaterial(), false);
+                        if (material == VanillaItem.NETHER_PORTAL) {
                             block.setData(axis);
                         }
                     }
@@ -268,8 +269,8 @@ public class DPortal extends GlobalProtection {
         configFile.set(preString + ".loc2.y", block2.getY());
         configFile.set(preString + ".loc2.z", block2.getZ());
 
-        configFile.set(preString + ".material", VanillaItem.get(material).getId());
-        if (material == Material.PORTAL) {
+        configFile.set(preString + ".material", material.getId());
+        if (material == VanillaItem.NETHER_PORTAL) {
             configFile.set(preString + ".axis", axis == 2 ? "z" : "x");
         }
     }
@@ -312,7 +313,7 @@ public class DPortal extends GlobalProtection {
                 do {
                     Material type = getWorld().getBlockAt(xx, yy, zz).getType();
 
-                    if (type == material) {
+                    if (material.getMaterial() == type) {
                         getWorld().getBlockAt(xx, yy, zz).setType(Material.AIR);
                     }
 

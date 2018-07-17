@@ -70,7 +70,7 @@ public class PortalCommand extends DRECommand {
         DPortal dPortal = dGlobalPlayer.getPortal();
 
         if (dPortal == null) {
-            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material.getMaterial(), false);
+            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             dGlobalPlayer.setCachedItem(player.getItemInHand());

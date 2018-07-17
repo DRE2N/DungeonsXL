@@ -9,3 +9,4 @@ commands:
   dungeonsxl:
     description: Reference command for DungeonsXL.
     aliases: [dxl,dungeon]
+api-version: 1.13
