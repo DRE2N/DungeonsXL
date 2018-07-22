@@ -23,6 +23,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.DColor;
+import de.erethon.dungeonsxl.util.MagicValueUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -67,7 +68,7 @@ public class TeamFlag extends TeamBlock {
     public static void setBlockWoolColor(Block block, DColor color) {
         block.setType(color.getWoolMaterial().getMaterial());
         if (!CompatibilityHandler.getInstance().getVersion().useNewMaterials()) {
-            block.setData(color.getWoolData());
+            MagicValueUtil.setBlockData(block, color.getWoolData());
         }
     }
 

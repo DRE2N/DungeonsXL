@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.misc.EnumUtil;
@@ -46,7 +45,7 @@ import org.bukkit.potion.PotionEffect;
  */
 public class DPlayerData extends DREConfig {
 
-    boolean is1_9 = Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals());
+    boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
 
     public static final int CONFIG_VERSION = 4;
 

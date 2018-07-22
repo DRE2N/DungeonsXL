@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.util;
 
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.commons.compatibility.Internals;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 
@@ -29,7 +30,7 @@ public enum DColor {
 
     BLACK(ChatColor.BLACK, DyeColor.BLACK, VanillaItem.BLACK_WOOL),
     DARK_GRAY(ChatColor.DARK_GRAY, DyeColor.GRAY, VanillaItem.GRAY_WOOL),
-    LIGHT_GRAY(ChatColor.GRAY, DyeColor.SILVER, VanillaItem.LIGHT_GRAY_WOOL),
+    LIGHT_GRAY(ChatColor.GRAY, DyeColor.valueOf(Internals.isAtLeast(Internals.v1_13_R1) ? "LIGHT_GRAY" : "SILVER"), VanillaItem.LIGHT_GRAY_WOOL),
     WHITE(ChatColor.WHITE, DyeColor.WHITE, VanillaItem.WHITE_WOOL),
     DARK_GREEN(ChatColor.DARK_GREEN, DyeColor.GREEN, VanillaItem.GREEN_WOOL),
     LIGHT_GREEN(ChatColor.GREEN, DyeColor.LIME, VanillaItem.LIME_WOOL),

@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.config;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.misc.EnumUtil;
@@ -682,7 +681,7 @@ public class MainConfig extends DREConfig {
         }
 
         if (config.contains("tweaksEnabled")) {
-            if (Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals())) {
+            if (Internals.isAtLeast(Internals.v1_9_R1)) {
                 tweaksEnabled = config.getBoolean("tweaksEnabled");
             } else {
                 tweaksEnabled = false;

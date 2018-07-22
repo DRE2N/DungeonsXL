@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.commons.player.PlayerWrapper;
@@ -48,7 +47,7 @@ public class DGlobalPlayer implements PlayerWrapper {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
 
-    boolean is1_9 = Internals.andHigher(Internals.v1_9_R1).contains(CompatibilityHandler.getInstance().getInternals());
+    boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
 
     protected Player player;
 

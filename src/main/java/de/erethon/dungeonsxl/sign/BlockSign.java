@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.sign;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.util.MagicValueUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Sign;
 
@@ -80,7 +81,7 @@ public class BlockSign extends DSign {
 
         getSign().getBlock().setType(offBlock.getMaterial());
         try {
-            getSign().getBlock().setData(offBlockData);
+            MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
         } catch (IllegalArgumentException exception) {
             markAsErroneous("offBlock data value " + offBlockData + " cannot be applied to given type " + offBlock.getId());
             return;
@@ -93,7 +94,7 @@ public class BlockSign extends DSign {
         if (initialized && !active) {
             getSign().getBlock().setType(onBlock.getMaterial());
             try {
-                getSign().getBlock().setData(onBlockData);
+                MagicValueUtil.setBlockData(getSign().getBlock(), onBlockData);
             } catch (IllegalArgumentException exception) {
                 markAsErroneous("onBlock data value " + onBlockData + " cannot be applied to given type " + onBlock.getId());
                 return;
@@ -106,7 +107,7 @@ public class BlockSign extends DSign {
     public void onDisable() {
         if (initialized && active) {
             getSign().getBlock().setType(offBlock.getMaterial());
-            getSign().getBlock().setData(offBlockData);
+            MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
             active = false;
         }
     }

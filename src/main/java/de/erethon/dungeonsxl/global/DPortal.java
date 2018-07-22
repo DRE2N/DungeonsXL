@@ -26,6 +26,7 @@ import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.util.MagicValueUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
@@ -168,7 +169,7 @@ public class DPortal extends GlobalProtection {
                         Block block = getWorld().getBlockAt(xx, yy, zz);
                         block.setType(material.getMaterial(), false);
                         if (material == VanillaItem.NETHER_PORTAL) {
-                            block.setData(axis);
+                            MagicValueUtil.setBlockData(block, axis);
                         }
                     }
 

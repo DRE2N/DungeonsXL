@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.sign.message;
 
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
@@ -64,7 +63,7 @@ public class SoundMessageSign extends DSign {
             sound = lines[1];
             if (!lines[2].isEmpty()) {
                 String[] args = lines[2].split(",");
-                if (args.length >= 1 && args.length != 2 && Internals.andHigher(Internals.v1_11_R1).contains(CompatibilityHandler.getInstance().getInternals())) {
+                if (args.length >= 1 && args.length != 2 && Internals.isAtLeast(Internals.v1_11_R1)) {
                     category = EnumUtil.getEnumIgnoreCase(SoundCategory.class, args[0]);
                     if (category == null) {
                         category = SoundCategory.MASTER;
@@ -100,7 +99,7 @@ public class SoundMessageSign extends DSign {
         if (initialized) {
             if (!done.contains(player)) {
                 done.add(player);
-                if (Internals.andHigher(Internals.v1_11_R1).contains(CompatibilityHandler.getInstance().getInternals())) {
+                if (Internals.isAtLeast(Internals.v1_11_R1)) {
                     player.playSound(getSign().getLocation(), sound, category, volume, pitch);
                 } else {
                     player.playSound(getSign().getLocation(), sound, volume, pitch);
