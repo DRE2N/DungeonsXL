@@ -53,8 +53,8 @@ public class ExternalMobProviderCache {
     }
 
     /**
-     * @param identifier
-     * the identifier for ExternalMob signs
+     * @param identifier the identifier to check
+     * @return the ExternalMobProvider represented by the identifier
      */
     public ExternalMobProvider getByIdentifier(String identifier) {
         for (ExternalMobProvider provider : providers) {
@@ -87,16 +87,14 @@ public class ExternalMobProviderCache {
     }
 
     /**
-     * @param provider
-     * the provider to register
+     * @param provider the provider to register
      */
     public void addExternalMobProvider(ExternalMobProvider provider) {
         providers.add(provider);
     }
 
     /**
-     * @param provider
-     * the provider to unregister
+     * @param provider the provider to unregister
      */
     public void removeExternalMobProvider(ExternalMobProvider provider) {
         providers.remove(provider);

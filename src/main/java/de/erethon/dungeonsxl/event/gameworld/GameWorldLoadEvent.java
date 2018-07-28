@@ -42,8 +42,7 @@ public class GameWorldLoadEvent extends Event implements Cancellable {
     }
 
     /**
-     * @param name
-     * the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;

@@ -46,8 +46,7 @@ public class StartSign extends LocationSign {
     }
 
     /**
-     * @param id
-     * the ID to set
+     * @param id the ID to set
      */
     public void setId(int id) {
         this.id = id;

@@ -185,16 +185,14 @@ public class DGroup {
     }
 
     /**
-     * @param name
-     * the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @param name
-     * the name to set
+     * @param color the color to fetch the name from
      */
     public void setName(DColor color) {
         name = color.toString().replace("_", " ");
@@ -208,8 +206,7 @@ public class DGroup {
     }
 
     /**
-     * @param captain
-     * the captain to set
+     * @param captain the captain to set
      */
     public void setCaptain(Player captain) {
         this.captain = captain;
@@ -223,7 +220,7 @@ public class DGroup {
     }
 
     /**
-     * @return the players as a Set<DGlobalPlayer>
+     * @return the players as a Set&lt;DGlobalPlayer&gt;
      */
     public Set<DGlobalPlayer> getDGlobalPlayers() {
         Set<DGlobalPlayer> players = new HashSet<>();
@@ -234,7 +231,7 @@ public class DGroup {
     }
 
     /**
-     * @return the players as a Set<DGamePlayer>
+     * @return the players as a Set&lt;DGamePlayer&gt;
      */
     public Set<DGamePlayer> getDGamePlayers() {
         Set<DGamePlayer> players = new HashSet<>();
@@ -250,18 +247,15 @@ public class DGroup {
     /**
      * Sends messages by default.
      *
-     * @param player
-     * the player to add
+     * @param player the player to add
      */
     public void addPlayer(Player player) {
         addPlayer(player, true);
     }
 
     /**
-     * @param player
-     * the player to add
-     * @param message
-     * if messages should be sent
+     * @param player  the player to add
+     * @param message if messages should be sent
      */
     public void addPlayer(Player player, boolean message) {
         DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(DGamePlayer.getByPlayer(player), false, this);
@@ -280,18 +274,15 @@ public class DGroup {
     /**
      * Sends messages by default.
      *
-     * @param player
-     * the player to remove
+     * @param player the player to remove
      */
     public void removePlayer(Player player) {
         removePlayer(player, true);
     }
 
     /**
-     * @param player
-     * the player to remove
-     * @param message
-     * if messages should be sent
+     * @param player  the player to remove
+     * @param message if messages should be sent
      */
     public void removePlayer(Player player, boolean message) {
         players.remove(player.getUniqueId());
@@ -319,8 +310,8 @@ public class DGroup {
     }
 
     /**
-     * @param player
-     * the player to add
+     * @param player the player to add
+     * @param silent if messages shall be sent
      */
     public void addInvitedPlayer(Player player, boolean silent) {
         if (player == null) {
@@ -348,8 +339,8 @@ public class DGroup {
     }
 
     /**
-     * @param player
-     * the player to remove
+     * @param player the player to remove
+     * @param silent if messages shall be sent
      */
     public void removeInvitedPlayer(Player player, boolean silent) {
         if (player == null) {
@@ -398,8 +389,7 @@ public class DGroup {
     }
 
     /**
-     * @param gameWorld
-     * the gameWorld to set
+     * @param gameWorld the gameWorld to set
      */
     public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -415,8 +405,7 @@ public class DGroup {
     /**
      * Sets up all dungeon-related fields.
      *
-     * @param dungeon
-     * the dungeon to set
+     * @param dungeon the dungeon to set
      */
     public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
@@ -428,8 +417,8 @@ public class DGroup {
     /**
      * Sets up all dungeon-related fields.
      *
-     * @param name
-     * the name of the dungeon
+     * @param name the name of the dungeon
+     * @return if the action was successful
      */
     public boolean setDungeon(String name) {
         dungeon = plugin.getDungeons().getByName(name);
@@ -472,18 +461,15 @@ public class DGroup {
     }
 
     /**
-     * @param unplayedFloor
-     * the unplayed floor to add
+     * @param unplayedFloor the unplayed floor to add
      */
     public void addUnplayedFloor(DResourceWorld unplayedFloor) {
         unplayedFloors.add(unplayedFloor);
     }
 
     /**
-     * @param unplayedFloor
-     * the unplayed floor to remove
-     * @param force
-     * remove the floor even if removeWhenPlayed is disabled
+     * @param unplayedFloor the unplayed floor to remove
+     * @param force         remove the floor even if removeWhenPlayed is disabled
      */
     public void removeUnplayedFloor(DResourceWorld unplayedFloor, boolean force) {
         if (getDungeon().getConfig().getRemoveWhenPlayed() || force) {
@@ -499,8 +485,7 @@ public class DGroup {
     }
 
     /**
-     * @param playing
-     * set if the group is playing
+     * @param playing set if the group is playing
      */
     public void setPlaying(boolean playing) {
         this.playing = playing;
@@ -514,8 +499,7 @@ public class DGroup {
     }
 
     /**
-     * @param floorCount
-     * the floorCount to set
+     * @param floorCount the floorCount to set
      */
     public void setFloorCount(int floorCount) {
         this.floorCount = floorCount;
@@ -529,8 +513,7 @@ public class DGroup {
     }
 
     /**
-     * @param reward
-     * the rewards to add
+     * @param reward the rewards to add
      */
     public void addReward(Reward reward) {
         RewardAdditionEvent event = new RewardAdditionEvent(reward, this);
@@ -544,8 +527,7 @@ public class DGroup {
     }
 
     /**
-     * @param reward
-     * the rewards to remove
+     * @param reward the rewards to remove
      */
     public void removeReward(Reward reward) {
         rewards.remove(reward);
@@ -559,8 +541,7 @@ public class DGroup {
     }
 
     /**
-     * @param task
-     * the task to set
+     * @param task the task to set
      */
     public void setTimeIsRunningTask(BukkitTask task) {
         this.timeIsRunningTask = task;
@@ -588,8 +569,7 @@ public class DGroup {
     }
 
     /**
-     * @param floor
-     * the next floor to set
+     * @param floor the next floor to set
      */
     public void setNextFloor(DResourceWorld floor) {
         nextFloor = floor;
@@ -621,8 +601,7 @@ public class DGroup {
     }
 
     /**
-     * @param score
-     * the score to set
+     * @param score the score to set
      */
     public void setScore(int score) {
         this.score = score;
@@ -636,8 +615,7 @@ public class DGroup {
     }
 
     /**
-     * @param initialLives
-     * the initial group lives to set
+     * @param initialLives the initial group lives to set
      */
     public void setInitialLives(int initialLives) {
         this.initialLives = initialLives;
@@ -651,8 +629,7 @@ public class DGroup {
     }
 
     /**
-     * @param lives
-     * the group lives to set
+     * @param lives the group lives to set
      */
     public void setLives(int lives) {
         this.lives = lives;
@@ -697,8 +674,7 @@ public class DGroup {
     /**
      * The group finishs the current floor.
      *
-     * @param specifiedFloor
-     * the name of the next floor
+     * @param specifiedFloor the name of the next floor
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
         DungeonConfig dConfig = dungeon.getConfig();
@@ -924,7 +900,9 @@ public class DGroup {
     }
 
     /**
-     * Send a message to all players in the group
+     * Sends a message to all players in the group.
+     *
+     * @param message the message to send
      */
     public void sendMessage(String message) {
         for (Player player : players.getOnlinePlayers()) {
@@ -935,10 +913,10 @@ public class DGroup {
     }
 
     /**
-     * Send a message to all players in the group
+     * Sends a message to all players in the group.
      *
-     * @param except
-     * Players who do not receive the message
+     * @param message the message to sent
+     * @param except  Players who shall not receive the message
      */
     public void sendMessage(String message, Player... except) {
         HashSet<Player> exceptSet = new HashSet<>(Arrays.asList(except));
@@ -979,8 +957,7 @@ public class DGroup {
     }
 
     /**
-     * @param gameWorld
-     * the DGameWorld to check
+     * @param gameWorld the DGameWorld to check
      * @return a List of DGroups in this DGameWorld
      */
     public static List<DGroup> getByGameWorld(DGameWorld gameWorld) {

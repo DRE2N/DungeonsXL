@@ -68,6 +68,7 @@ public class DWorldCache {
 
     /* Getters and setters */
     /**
+     * @param name the name to check
      * @return the DResourceWorld that has this name
      */
     public DResourceWorld getResourceByName(String name) {
@@ -81,6 +82,7 @@ public class DWorldCache {
     }
 
     /**
+     * @param world the world to check
      * @return the DInstanceWorld that represents this world
      */
     public DInstanceWorld getInstanceByWorld(World world) {
@@ -88,6 +90,7 @@ public class DWorldCache {
     }
 
     /**
+     * @param name the name to check
      * @return the DInstanceWorld that has this name
      */
     public DInstanceWorld getInstanceByName(String name) {
@@ -100,6 +103,7 @@ public class DWorldCache {
     }
 
     /**
+     * @param id the ID to check
      * @return the DInstanceWorld that has this ID
      */
     public DInstanceWorld getInstanceById(int id) {
@@ -120,16 +124,14 @@ public class DWorldCache {
     }
 
     /**
-     * @param resource
-     * the DResourceWorld to add
+     * @param resource the DResourceWorld to add
      */
     public void addResource(DResourceWorld resource) {
         resources.add(resource);
     }
 
     /**
-     * @param resource
-     * the DResourceWorld to remove
+     * @param resource the DResourceWorld to remove
      */
     public void removeResource(DResourceWorld resource) {
         resources.remove(resource);
@@ -143,16 +145,14 @@ public class DWorldCache {
     }
 
     /**
-     * @param instance
-     * the DInstanceWorld to add
+     * @param instance the DInstanceWorld to add
      */
     public void addInstance(DInstanceWorld instance) {
         instances.add(instance);
     }
 
     /**
-     * @param instance
-     * the DInstanceWorld to remove
+     * @param instance the DInstanceWorld to remove
      */
     public void removeInstance(DInstanceWorld instance) {
         instances.remove(instance);
@@ -185,10 +185,8 @@ public class DWorldCache {
     }
 
     /**
-     * @param name
-     * the name of the map; can either be the resource name or the instance name
-     * @return
-     * if a map with this name exists
+     * @param name the name of the map; can either be the resource name or the instance name
+     * @return if a map with this name exists
      */
     public boolean exists(String name) {
         for (DResourceWorld resource : resources) {
@@ -283,22 +281,17 @@ public class DWorldCache {
     }
 
     /**
-     * @return
-     * a name for the instance
-     * @param game
-     * whether the instance is a DGameWorld
+     * @return a name for the instance
+     * @param game whether the instance is a DGameWorld
      */
     public String generateName(boolean game) {
         return generateName(game, generateId());
     }
 
     /**
-     * @return
-     * a name for the instance
-     * @param game
-     * whether the instance is a DGameWorld
-     * @param id
-     * the id to use
+     * @return a name for the instance
+     * @param game whether the instance is a DGameWorld
+     * @param id   the id to use
      */
     public String generateName(boolean game, int id) {
         return "DXL_" + (game ? "Game" : "Edit") + "_" + id;
@@ -328,6 +321,8 @@ public class DWorldCache {
 
     /**
      * start a new WorldUnloadTask
+     *
+     * @param period the period in ticks
      */
     public void startWorldUnloadTask(long period) {
         worldUnloadTask = new WorldUnloadTask().runTaskTimer(plugin, period, period);
@@ -337,8 +332,7 @@ public class DWorldCache {
     /**
      * Removes files that are not needed from a world
      *
-     * @param dir
-     * the directory to purge
+     * @param dir the directory to purge
      */
     public static void deleteUnusedFiles(File dir) {
         File[] files = dir.listFiles();

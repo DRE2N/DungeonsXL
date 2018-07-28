@@ -37,16 +37,14 @@ public class LevelReward extends Reward {
     }
 
     /**
-     * @param levels
-     * the levels to add
+     * @param levels the levels to add
      */
     public void addLevels(int levels) {
         this.levels += levels;
     }
 
     /**
-     * @param levels
-     * the levels to set
+     * @param levels the levels to set
      */
     public void setLevels(int levels) {
         this.levels = levels;

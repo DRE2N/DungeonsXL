@@ -99,8 +99,8 @@ public class LeaveSign extends GlobalProtection {
 
     /* Statics */
     /**
-     * @param block
-     * a block which is protected by the returned LeaveSign
+     * @param block a block which is protected by the returned LeaveSign
+     * @return the leave sign the block belongs to, null if it belongs to none
      */
     public static LeaveSign getByBlock(Block block) {
         for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(LeaveSign.class)) {

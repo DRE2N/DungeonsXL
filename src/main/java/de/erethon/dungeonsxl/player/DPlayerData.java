@@ -96,8 +96,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param keepInventoryOnEscape
-     * set if the inventory shall be reset after a logout
+     * @param keepInventoryAfterLogout set if the inventory shall be reset after a logout
      */
     public void setKeepInventoryAfterLogout(boolean keepInventoryAfterLogout) {
         this.keepInventoryAfterLogout = keepInventoryAfterLogout;
@@ -116,8 +115,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param location
-     * the location to set
+     * @param location the location to set
      */
     public void setOldLocation(Location location) {
         oldLocation = location;
@@ -131,8 +129,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param inventory
-     * the inventory to set
+     * @param inventory the inventory to set
      */
     public void setOldInventory(List<ItemStack> inventory) {
         oldInventory = inventory;
@@ -146,8 +143,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param inventory
-     * the inventory to set
+     * @param inventory the inventory to set
      */
     public void setOldArmor(List<ItemStack> inventory) {
         oldArmor = inventory;
@@ -161,8 +157,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param offHand
-     * the off hand item to set
+     * @param offHand the off hand item to set
      */
     public void setOldOffHand(ItemStack offHand) {
         oldOffHand = offHand;
@@ -176,8 +171,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param level
-     * the level to set
+     * @param level the level to set
      */
     public void setOldLevel(int level) {
         oldLvl = level;
@@ -191,8 +185,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param exp
-     * the amount of exp to set
+     * @param exp the amount of exp to set
      */
     public void setOldExp(float exp) {
         oldExp = exp;
@@ -206,8 +199,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param maxHealth
-     * the maximum health to set
+     * @param maxHealth the maximum health to set
      */
     public void setOldMaxHealth(double maxHealth) {
         oldMaxHealth = maxHealth;
@@ -221,8 +213,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param health
-     * the health to set
+     * @param health the health to set
      */
     public void setOldHealth(double health) {
         oldHealth = health;
@@ -236,8 +227,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param foodLevel
-     * the food level to set
+     * @param foodLevel the food level to set
      */
     public void setOldFoodLevel(int foodLevel) {
         oldFoodLevel = foodLevel;
@@ -251,8 +241,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param fireTicks
-     * the fire ticks to set
+     * @param fireTicks the fire ticks to set
      */
     public void setFireTicks(int fireTicks) {
         oldFireTicks = fireTicks;
@@ -266,8 +255,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param gameMode
-     * the GameMode to set
+     * @param gameMode the GameMode to set
      */
     public void setOldGameMode(GameMode gameMode) {
         oldGameMode = gameMode;
@@ -281,8 +269,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param potionEffects
-     * the potion effects to set
+     * @param potionEffects the potion effects to set
      */
     public void setOldPotionEffects(Collection<PotionEffect> potionEffects) {
         oldPotionEffects = potionEffects;
@@ -296,8 +283,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param dungeon
-     * the dungeon to check
+     * @param dungeon the dungeon to check
      * @return the time when the player started the dungeon for the last time
      */
     public long getTimeLastStarted(String dungeon) {
@@ -310,10 +296,8 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param dungeon
-     * the started dungeon
-     * @param time
-     * the time when the dungeon was started
+     * @param dungeon the started dungeon
+     * @param time    the time when the dungeon was started
      */
     public void setTimeLastStarted(String dungeon, long time) {
         timeLastStarted.put(dungeon.toLowerCase(), time);
@@ -328,8 +312,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param dungeon
-     * the dungeon to check
+     * @param dungeon the dungeon to check
      * @return the time when the player finished the dungeon for the last time
      */
     public long getTimeLastFinished(String dungeon) {
@@ -342,10 +325,8 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param dungeon
-     * the finished dungeon
-     * @param time
-     * the time when the dungeon was finished
+     * @param dungeon the finished dungeon
+     * @param time    the time when the dungeon was finished
      */
     public void setTimeLastFinished(String dungeon, long time) {
         timeLastFinished.put(dungeon.toLowerCase(), time);
@@ -354,8 +335,7 @@ public class DPlayerData extends DREConfig {
 
     /* Actions */
     /**
-     * @param dungeon
-     * the started dungeon
+     * @param dungeon the started dungeon
      */
     public void logTimeLastStarted(String dungeon) {
         timeLastStarted.put(dungeon.toLowerCase(), System.currentTimeMillis());
@@ -363,8 +343,7 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @param dungeon
-     * the finished dungeon
+     * @param dungeon the finished dungeon
      */
     public void logTimeLastFinished(String dungeon) {
         timeLastFinished.put(dungeon.toLowerCase(), System.currentTimeMillis());
@@ -446,8 +425,7 @@ public class DPlayerData extends DREConfig {
     /**
      * Saves the player's data to the file.
      *
-     * @param player
-     * the Player to save
+     * @param player the Player to save
      */
     public void savePlayerState(Player player) {
         oldGameMode = player.getGameMode();

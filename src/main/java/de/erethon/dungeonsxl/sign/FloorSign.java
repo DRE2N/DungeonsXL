@@ -47,8 +47,7 @@ public class FloorSign extends DSign {
     }
 
     /**
-     * @param floor
-     * the floor to set
+     * @param floor the floor to set
      */
     public void setFloor(DResourceWorld floor) {
         this.floor = floor;

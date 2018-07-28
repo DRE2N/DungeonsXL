@@ -44,8 +44,7 @@ public class FeeLevelRequirement extends Requirement {
     }
 
     /**
-     * @param fee
-     * the fee to set
+     * @param fee the fee to set
      */
     public void setFee(int fee) {
         this.fee = fee;

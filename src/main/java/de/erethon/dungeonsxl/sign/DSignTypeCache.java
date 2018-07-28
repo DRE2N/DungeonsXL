@@ -44,16 +44,14 @@ public class DSignTypeCache {
     }
 
     /**
-     * @param type
-     * the type to add
+     * @param type the type to add
      */
     public void addDSign(DSignType type) {
         types.add(type);
     }
 
     /**
-     * @param type
-     * the type to remove
+     * @param type the type to remove
      */
     public void removeDSign(DSignType type) {
         types.remove(type);

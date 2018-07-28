@@ -24,9 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Represents a dungeon.
- * While multi floor dungeon scripts are represented by {@link de.erethon.dungeonsxl.config.DungeonConfig},
- * single floor dungeons also get a dungeon object without a config file as a placeholder.
+ * Represents a dungeon. While multi floor dungeon scripts are represented by {@link de.erethon.dungeonsxl.config.DungeonConfig}, single floor dungeons also get
+ * a dungeon object without a config file as a placeholder.
  *
  * @author Daniel Saukel
  */
@@ -38,6 +37,8 @@ public class Dungeon {
 
     /**
      * Real dungeon
+     *
+     * @param file the file to load from
      */
     public Dungeon(File file) {
         name = file.getName().replaceAll(".yml", "");
@@ -47,6 +48,8 @@ public class Dungeon {
 
     /**
      * Artificial dungeon
+     *
+     * @param resource the only resource world
      */
     public Dungeon(DResourceWorld resource) {
         name = resource.getName();
@@ -61,8 +64,7 @@ public class Dungeon {
     }
 
     /**
-     * @param name
-     * the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -83,8 +85,7 @@ public class Dungeon {
     }
 
     /**
-     * @return
-     * the floors of the dungeon
+     * @return the floors of the dungeon
      */
     public List<DResourceWorld> getFloors() {
         if (isMultiFloor()) {
@@ -95,16 +96,14 @@ public class Dungeon {
     }
 
     /**
-     * @return
-     * the SFD map / start floor
+     * @return the SFD map / start floor
      */
     public DResourceWorld getMap() {
         return map;
     }
 
     /**
-     * @param map
-     * the SFD map / start floor to set
+     * @param map the SFD map / start floor to set
      */
     public void setMap(DResourceWorld map) {
         this.map = map;
@@ -124,10 +123,8 @@ public class Dungeon {
 
     /* Statics */
     /**
-     * @param name
-     * the name of the dungeon
-     * @return
-     * the file. Might not exist
+     * @param name the name of the dungeon
+     * @return the file. Might not exist
      */
     public static File getFileFromName(String name) {
         return new File(DungeonsXL.DUNGEONS, name + ".yml");

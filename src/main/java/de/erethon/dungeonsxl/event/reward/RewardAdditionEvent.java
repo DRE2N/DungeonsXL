@@ -44,8 +44,7 @@ public class RewardAdditionEvent extends RewardEvent implements Cancellable {
     }
 
     /**
-     * @param dGroup
-     * the dGroup to set
+     * @param dGroup the dGroup to set
      */
     public void setDGroup(DGroup dGroup) {
         this.dGroup = dGroup;

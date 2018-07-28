@@ -44,8 +44,7 @@ public class RequirementCheckEvent extends RequirementEvent implements Cancellab
     }
 
     /**
-     * @param player
-     * the player to set
+     * @param player the player to set
      */
     public void setPlayer(Player player) {
         this.player = player;

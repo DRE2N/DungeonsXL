@@ -31,8 +31,7 @@ public interface GameType {
     public String getDisplayName();
 
     /**
-     * @param displayName
-     * the displayName to set
+     * @param displayName the displayName to set
      */
     public void setDisplayName(String displayName);
 
@@ -42,8 +41,7 @@ public interface GameType {
     public String getSignName();
 
     /**
-     * @param signName
-     * the signName to set
+     * @param signName the signName to set
      */
     public void setSignName(String signName);
 
@@ -53,8 +51,7 @@ public interface GameType {
     public GameGoal getGameGoal();
 
     /**
-     * @param gameGoal
-     * the goal of the game to set
+     * @param gameGoal the goal of the game to set
      */
     public void setGameGoal(GameGoal gameGoal);
 
@@ -64,8 +61,7 @@ public interface GameType {
     public Boolean isPlayerVersusPlayer();
 
     /**
-     * @param playerVersusPlayer
-     * the playerVersusPlayer to set
+     * @param playerVersusPlayer the playerVersusPlayer to set
      */
     public void setPlayerVersusPlayer(Boolean playerVersusPlayer);
 
@@ -75,8 +71,7 @@ public interface GameType {
     public Boolean isFriendlyFire();
 
     /**
-     * @param friendlyFire
-     * the friendlyFire to set
+     * @param friendlyFire the friendlyFire to set
      */
     public void setFriendlyFire(Boolean friendlyFire);
 
@@ -86,8 +81,7 @@ public interface GameType {
     public Boolean hasRewards();
 
     /**
-     * @param rewards
-     * enable / disable rewards
+     * @param rewards enable / disable rewards
      */
     public void setRewards(Boolean rewards);
 
@@ -97,8 +91,7 @@ public interface GameType {
     public Boolean getShowTime();
 
     /**
-     * @param showTime
-     * set if players shall see how long they play
+     * @param showTime set if players shall see how long they play
      */
     public void setShowTime(Boolean showTime);
 
@@ -108,8 +101,7 @@ public interface GameType {
     public Boolean canBreakBlocks();
 
     /**
-     * @param breakBlocks
-     * if blocks may be destroyed
+     * @param breakBlocks if blocks may be destroyed
      */
     public void setBreakBlocks(Boolean breakBlocks);
 
@@ -119,8 +111,7 @@ public interface GameType {
     public Boolean canBreakPlacedBlocks();
 
     /**
-     * @param breakPlacedBlocks
-     * if placed blocks may be destroyed
+     * @param breakPlacedBlocks if placed blocks may be destroyed
      */
     public void setBreakPlacedBlocks(Boolean breakPlacedBlocks);
 
@@ -130,8 +121,7 @@ public interface GameType {
     public Boolean canPlaceBlocks();
 
     /**
-     * @param placeBlocks
-     * if blocks may be placed
+     * @param placeBlocks if blocks may be placed
      */
     public void setPlaceBlocks(Boolean placeBlocks);
 
@@ -141,8 +131,7 @@ public interface GameType {
     public GameMode getGameMode();
 
     /**
-     * @param gameMode
-     * the gameMode to set
+     * @param gameMode the gameMode to set
      */
     public void setGameMode(GameMode gameMode);
 
@@ -152,8 +141,7 @@ public interface GameType {
     public Boolean hasLives();
 
     /**
-     * @param lives
-     * set if the gametype uses player lives
+     * @param lives set if the gametype uses player lives
      */
     public void setLives(Boolean lives);
 

@@ -44,8 +44,7 @@ public class DMobDeathEvent extends DMobEvent implements Cancellable {
     }
 
     /**
-     * @param bukkitEvent
-     * the bukkitEvent to set
+     * @param bukkitEvent the bukkitEvent to set
      */
     public void setBukkitEvent(EntityDeathEvent bukkitEvent) {
         this.bukkitEvent = bukkitEvent;

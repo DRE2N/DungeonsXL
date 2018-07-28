@@ -41,32 +41,28 @@ public class TitleSign extends PerPlayerSign {
 
     /* Getters and setters*/
     /**
-     * @return
-     * the title
+     * @return the title
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * @param text
-     * the text to set
+     * @param text the text to set
      */
     public void setTitle(String text) {
         title = text;
     }
 
     /**
-     * @return
-     * the subtitle
+     * @return the subtitle
      */
     public String getSubtitle() {
         return subtitle;
     }
 
     /**
-     * @param text
-     * the text to set
+     * @param text the text to set
      */
     public void setSubtitle(String text) {
         subtitle = text;

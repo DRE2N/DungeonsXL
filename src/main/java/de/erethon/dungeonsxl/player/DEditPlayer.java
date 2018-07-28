@@ -73,10 +73,8 @@ public class DEditPlayer extends DInstancePlayer {
     }
 
     /**
-     * @param player
-     * the represented Player
-     * @param editWorld
-     * the player's EditWorld
+     * @param player the represented Player
+     * @param editWorld the player's EditWorld
      */
     public static void create(Player player, DEditWorld editWorld) {
         new CreateDInstancePlayerTask(player, editWorld).runTaskTimer(DungeonsXL.getInstance(), 0L, 5L);
@@ -91,8 +89,7 @@ public class DEditPlayer extends DInstancePlayer {
     }
 
     /**
-     * @param linesCopy
-     * the linesCopy to set
+     * @param linesCopy the linesCopy to set
      */
     public void setLinesCopy(String[] linesCopy) {
         this.linesCopy = linesCopy;

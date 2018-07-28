@@ -43,8 +43,7 @@ public class WaveTrigger extends Trigger {
     }
 
     /**
-     * @param mustKillRate
-     * the minimal mob kill rate to trigger the wave to set
+     * @param mustKillRate the minimal mob kill rate to trigger the wave to set
      */
     public void setMustKillRate(double mustKillRate) {
         this.mustKillRate = mustKillRate;
@@ -74,6 +73,7 @@ public class WaveTrigger extends Trigger {
     }
 
     /**
+     * @param gameWorld the game world to check
      * @return the WaveTriggers in the DGameWorld
      */
     public static Set<WaveTrigger> getByGameWorld(DGameWorld gameWorld) {

@@ -38,8 +38,7 @@ public class GroupSizeRequirement extends Requirement {
     }
 
     /**
-     * @param minimum
-     * the minimal group size to set
+     * @param minimum the minimal group size to set
      */
     public void setMinimum(int minimum) {
         this.minimum = minimum;
@@ -53,8 +52,7 @@ public class GroupSizeRequirement extends Requirement {
     }
 
     /**
-     * @param maximum
-     * the maximal group size to set
+     * @param maximum the maximal group size to set
      */
     public void setMaximum(int maximum) {
         this.maximum = maximum;

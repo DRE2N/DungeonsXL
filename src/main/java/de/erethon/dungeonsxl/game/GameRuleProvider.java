@@ -261,50 +261,42 @@ public class GameRuleProvider {
     }
 
     /**
-     * @return
-     * if it's raining permanently in this dungeon,
-     * null if random
+     * @return if it's raining permanently in this dungeon, null if random
      */
     public Boolean isRaining() {
         return rain;
     }
 
     /**
-     * @param rain
-     * set if it's raining permanently in this dungeon
+     * @param rain set if it's raining permanently in this dungeon
      */
     public void setRaining(Boolean rain) {
         this.rain = rain;
     }
 
     /**
-     * @return
-     * You've been... THUNDERSTRUCK!
+     * @return You've been... THUNDERSTRUCK!
      */
     public Boolean isThundering() {
         return thunder;
     }
 
     /**
-     * @param thunder
-     * You've been... THUNDERSTRUCK!
+     * @param thunder You've been... THUNDERSTRUCK!
      */
     public void setThundering(Boolean thunder) {
         this.thunder = thunder;
     }
 
     /**
-     * @return
-     * the locked day time in this dungeon,
-     * null if not locked
+     * @return the locked day time in this dungeon, null if not locked
      */
     public Long getTime() {
         return time;
     }
 
     /**
-     * @param time
-     * the locked day time to set
+     * @param time the locked day time to set
      */
     public void setTime(Long time) {
         this.time = time;
@@ -432,8 +424,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @return all maps needed to be finished to play this map and a collection of maps of which at
-     * least one has to be finished
+     * @return all maps needed to be finished to play this map and a collection of maps of which at least one has to be finished
      */
     public List<String> getFinished() {
         if (finishedAll == null) {
@@ -489,8 +480,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param text
-     * the text to set
+     * @param text the text to set
      */
     public void setTitle(String text) {
         title = text;
@@ -504,8 +494,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param text
-     * the text to set
+     * @param text the text to set
      */
     public void setSubTitle(String text) {
         subtitle = text;
@@ -519,8 +508,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param text
-     * the text to set
+     * @param text the text to set
      */
     public void setActionBar(String text) {
         actionBar = text;
@@ -534,8 +522,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param text
-     * the text to set
+     * @param text the text to set
      */
     public void setChatText(String text) {
         chat = text;
@@ -549,8 +536,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param time
-     * the time to set
+     * @param time the time to set
      */
     public void setTitleFadeIn(int time) {
         titleFadeIn = time;
@@ -564,8 +550,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param time
-     * the time to set
+     * @param time the time to set
      */
     public void setTitleFadeOut(int time) {
         titleFadeOut = time;
@@ -579,8 +564,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param time
-     * the time to set
+     * @param time the time to set
      */
     public void setTitleShow(int time) {
         titleShow = time;
@@ -588,8 +572,8 @@ public class GameRuleProvider {
 
     // Misc
     /**
-     * @param id
-     * the id of the message
+     * @param id the id of the message
+     * @return the message
      */
     public String getMessage(int id) {
         if (msgs == null) {
@@ -599,10 +583,8 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param id
-     * the ID of the message
-     * @param msg
-     * the message to set
+     * @param id  the ID of the message
+     * @param msg the message to set
      */
     public void setMessage(int id, String msg) {
         if (msgs == null) {
@@ -622,9 +604,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @return
-     * if the group tag is enabled.
-     * Returns false if HolographicDisplays isn't loaded
+     * @return if the group tag is enabled. Returns false if HolographicDisplays isn't loaded
      */
     public boolean isGroupTagEnabled() {
         if (!Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays")) {
@@ -635,8 +615,7 @@ public class GameRuleProvider {
 
     /* Actions */
     /**
-     * @param defaultValues
-     * the GameType that overrides the values that are null.
+     * @param defaultValues the GameType that overrides the values that are null.
      */
     public void apply(GameType defaultValues) {
         if (playerVersusPlayer == null) {
@@ -675,8 +654,7 @@ public class GameRuleProvider {
     }
 
     /**
-     * @param defaultValues
-     * the GameRules that override the values that are null.
+     * @param defaultValues the GameRules that override the values that are null.
      */
     public void apply(GameRuleProvider defaultValues) {
         /* keepInventory */

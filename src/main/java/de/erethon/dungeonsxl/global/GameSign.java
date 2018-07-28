@@ -50,16 +50,14 @@ public class GameSign extends JoinSign {
     }
 
     /**
-     * @return
-     * the attached game
+     * @return the attached game
      */
     public Game getGame() {
         return game;
     }
 
     /**
-     * @param game
-     * the game to set
+     * @param game the game to set
      */
     public void setGame(Game game) {
         this.game = game;
@@ -172,8 +170,8 @@ public class GameSign extends JoinSign {
 
     /* Statics */
     /**
-     * @param block
-     * a block which is protected by the returned GameSign
+     * @param block a block which is protected by the returned GameSign
+     * @return the game sign the block belongs to, null if it belongs to none
      */
     public static GameSign getByBlock(Block block) {
         if (!Category.SIGNS.containsBlock(block)) {
@@ -192,8 +190,8 @@ public class GameSign extends JoinSign {
     }
 
     /**
-     * @param game
-     * the game to check
+     * @param game the game to check
+     * @return the game that this sign creates
      */
     public static GameSign getByGame(Game game) {
         for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(GameSign.class)) {

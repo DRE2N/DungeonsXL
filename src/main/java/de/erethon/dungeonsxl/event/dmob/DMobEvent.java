@@ -38,8 +38,7 @@ public abstract class DMobEvent extends Event {
     }
 
     /**
-     * @param dMob
-     * the dMob to set
+     * @param dMob the dMob to set
      */
     public void setDMob(DMob dMob) {
         this.dMob = dMob;

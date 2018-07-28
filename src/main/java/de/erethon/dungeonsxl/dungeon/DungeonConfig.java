@@ -61,8 +61,7 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param startFloor
-     * the startFloor to set
+     * @param startFloor the startFloor to set
      */
     public void setStartFloor(DResourceWorld startFloor) {
         this.startFloor = startFloor;
@@ -76,8 +75,7 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param endFloor
-     * the endFloor to set
+     * @param endFloor the endFloor to set
      */
     public void setEndFloor(DResourceWorld endFloor) {
         this.endFloor = endFloor;
@@ -91,16 +89,14 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param resource
-     * the resource to add
+     * @param resource the resource to add
      */
     public void addFloor(DResourceWorld resource) {
         floors.add(resource);
     }
 
     /**
-     * @param resource
-     * the resource to remove
+     * @param resource the resource to remove
      */
     public void removeFloor(DResourceWorld resource) {
         floors.remove(resource);
@@ -114,8 +110,7 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param floorCount
-     * the floorCount to set
+     * @param floorCount the floorCount to set
      */
     public void setFloorCount(int floorCount) {
         this.floorCount = floorCount;
@@ -129,16 +124,14 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param removeWhenPlayed
-     * the removeWhenPlayed to set
+     * @param removeWhenPlayed the removeWhenPlayed to set
      */
     public void setRemoveWhenPlayed(boolean removeWhenPlayed) {
         this.removeWhenPlayed = removeWhenPlayed;
     }
 
     /**
-     * The values from this WorldConfig will override all values of the
-     * WorldConfigs of inherited maps.
+     * The values from this WorldConfig will override all values of the WorldConfigs of inherited maps.
      *
      * @return the override values
      */
@@ -147,17 +140,15 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param worldConfig
-     * the WorldConfig to set
+     * @param worldConfig the WorldConfig to set
      */
     public void setOverrideValues(WorldConfig worldConfig) {
         overrideValues = worldConfig;
     }
 
     /**
-     * The values from this WorldConfig will get overriden by values of the
-     * WorldConfigs of inherited maps.
-     * They will still override the values from the main config, though.
+     * The values from this WorldConfig will get overriden by values of the WorldConfigs of inherited maps. They will still override the values from the main
+     * config, though.
      *
      * @return the default values
      */
@@ -166,16 +157,14 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param worldConfig
-     * the WorldConfig to set
+     * @param worldConfig the WorldConfig to set
      */
     public void setDefaultValues(WorldConfig worldConfig) {
         defaultValues = worldConfig;
     }
 
     /**
-     * @param resource
-     * the DResourceWorld to check
+     * @param resource the DResourceWorld to check
      * @return true if the floor is either in the list or the start / end floor.
      */
     public boolean containsFloor(DResourceWorld resource) {
@@ -183,8 +172,7 @@ public class DungeonConfig extends DREConfig {
     }
 
     /**
-     * @param mapName
-     * the name of the map to check
+     * @param mapName the name of the map to check
      * @return true if the floor is either in the list or the start / end floor.
      */
     public boolean containsFloor(String mapName) {

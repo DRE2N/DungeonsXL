@@ -58,8 +58,7 @@ public class ReadySign extends DSign {
     }
 
     /**
-     * @param gameType
-     * the gameType to set
+     * @param gameType the gameType to set
      */
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
@@ -73,8 +72,7 @@ public class ReadySign extends DSign {
     }
 
     /**
-     * @param time
-     * the time in seconds until the game starts automatically; -1 for no auto start
+     * @param time the time in seconds until the game starts automatically; -1 for no auto start
      */
     public void setTimeToAutoStart(double time) {
         autoStart = time;

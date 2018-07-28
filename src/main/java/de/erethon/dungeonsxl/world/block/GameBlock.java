@@ -41,8 +41,7 @@ public abstract class GameBlock {
     }
 
     /**
-     * @param block
-     * the block to set
+     * @param block the block to set
      */
     public void setBlock(Block block) {
         this.block = block;
@@ -52,8 +51,7 @@ public abstract class GameBlock {
     /**
      * Handles what happens when a player breaks the block.
      *
-     * @param event
-     * the passed Bukkit event
+     * @param event the passed Bukkit event
      * @return if the event is cancelled
      */
     public abstract boolean onBreak(BlockBreakEvent event);

@@ -51,16 +51,14 @@ public class GroupSign extends JoinSign {
     }
 
     /**
-     * @return
-     * the attached group
+     * @return the attached group
      */
     public DGroup getGroup() {
         return group;
     }
 
     /**
-     * @param group
-     * the group to set
+     * @param group the group to set
      */
     public void setGroup(DGroup group) {
         this.group = group;
@@ -162,8 +160,8 @@ public class GroupSign extends JoinSign {
 
     /* Statics */
     /**
-     * @param block
-     * a block which is protected by the returned GroupSign
+     * @param block a block which is protected by the returned GroupSign
+     * @return the group sign the block belongs to, null if it belongs to none
      */
     public static GroupSign getByBlock(Block block) {
         if (!Category.SIGNS.containsBlock(block)) {

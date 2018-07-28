@@ -38,8 +38,7 @@ public abstract class EditWorldEvent extends Event {
     }
 
     /**
-     * @param editWorld
-     * the editWorld to set
+     * @param editWorld the editWorld to set
      */
     public void setEditWorld(DEditWorld editWorld) {
         this.editWorld = editWorld;

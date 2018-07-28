@@ -42,8 +42,7 @@ public abstract class LocationSign extends DSign {
     }
 
     /**
-     * @return
-     * the location marked by this sign
+     * @return the location marked by this sign
      */
     public Location getLocation() {
         return location;

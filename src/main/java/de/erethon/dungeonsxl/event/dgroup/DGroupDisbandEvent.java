@@ -62,8 +62,7 @@ public class DGroupDisbandEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param disbander
-     * the disbander to set
+     * @param disbander the disbander to set
      */
     public void setDisbander(Player disbander) {
         this.disbander = disbander;
@@ -77,8 +76,7 @@ public class DGroupDisbandEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param cause
-     * the cause to set
+     * @param cause the cause to set
      */
     public void setCause(Cause cause) {
         this.cause = cause;

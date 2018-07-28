@@ -44,8 +44,7 @@ public class FortuneTrigger extends Trigger {
     }
 
     /**
-     * @param chance
-     * the chance to set
+     * @param chance the chance to set
      */
     public void setChance(double chance) {
         this.chance = chance;

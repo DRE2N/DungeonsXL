@@ -21,8 +21,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
- * An enumeration of all messages.
- * The values are fetched from the language file.
+ * An enumeration of all messages. The values are fetched from the language file.
  *
  * @author Daniel Saukel
  */
@@ -263,8 +262,8 @@ public enum DMessage implements Message {
 
     /* Statics */
     /**
-     * @param identifier
-     * the identifier to set
+     * @param identifier the identifier to set
+     * @return the message
      */
     public static Message getByIdentifier(String identifier) {
         for (Message message : values()) {

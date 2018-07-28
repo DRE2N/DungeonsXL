@@ -53,8 +53,7 @@ public class ProgressTrigger extends Trigger {
     }
 
     /**
-     * @param floor
-     * the specific floor to set
+     * @param floor the specific floor to set
      */
     public void setFloor(DResourceWorld floor) {
         this.floor = floor;
@@ -68,8 +67,7 @@ public class ProgressTrigger extends Trigger {
     }
 
     /**
-     * @param floorCount
-     * the floor count to set
+     * @param floorCount the floor count to set
      */
     public void setFloorCount(int floorCount) {
         this.floorCount = floorCount;
@@ -83,8 +81,7 @@ public class ProgressTrigger extends Trigger {
     }
 
     /**
-     * @param waveCount
-     * the wave count to set
+     * @param waveCount the wave count to set
      */
     public void setWaveCount(int waveCount) {
         this.waveCount = waveCount;

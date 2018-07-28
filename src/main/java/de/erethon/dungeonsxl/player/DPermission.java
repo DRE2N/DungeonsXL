@@ -137,10 +137,8 @@ public enum DPermission {
     }
 
     /**
-     * @param node
-     * the node String, with or without "dxl."
-     * @return
-     * the DPermission value
+     * @param node the node String, with or without "dxl."
+     * @return the DPermission value
      */
     public static DPermission getByNode(String node) {
         for (DPermission permission : values()) {
@@ -153,8 +151,8 @@ public enum DPermission {
     }
 
     /**
-     * @param permission
-     * the permission to check
+     * @param sender     the CommandSender
+     * @param permission the permission to check
      * @return if the player has the permission
      */
     public static boolean hasPermission(CommandSender sender, DPermission permission) {
@@ -172,8 +170,8 @@ public enum DPermission {
     }
 
     /**
-     * @param permission
-     * the permission to check
+     * @param sender     the CommandSender
+     * @param permission the permission to check
      * @return if the player has the permission
      */
     public static boolean hasPermission(CommandSender sender, String permission) {

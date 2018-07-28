@@ -36,25 +36,18 @@ public interface ExternalMobProvider {
     public String getRawCommand();
 
     /**
-     * @param mob
-     * the mob identifier
-     * @param world
-     * the game world
-     * @param x
-     * the x coordinate
-     * @param y
-     * the y coordinate
-     * @param z
-     * the z coordinate
+     * @param mob the mob identifier
+     * @param world the game world
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
      * @return the command with replaced variables
      */
     public String getCommand(String mob, String world, double x, double y, double z);
 
     /**
-     * @param mob
-     * the mob identifier
-     * @param location
-     * the location where the mob will be spawned
+     * @param mob the mob identifier
+     * @param location the location where the mob will be spawned
      */
     public void summon(String mob, Location location);
 

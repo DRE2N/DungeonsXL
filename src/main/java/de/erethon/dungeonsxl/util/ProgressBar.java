@@ -55,16 +55,14 @@ public class ProgressBar extends BukkitRunnable {
     }
 
     /**
-     * @param player
-     * the player to add
+     * @param player the player to add
      */
     public void addPlayer(Player player) {
         players.add(player.getUniqueId());
     }
 
     /**
-     * @param player
-     * the player to remove
+     * @param player the player to remove
      */
     public void removePlayer(Player player) {
         players.remove(player.getUniqueId());

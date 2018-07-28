@@ -19,8 +19,7 @@ package de.erethon.dungeonsxl.world.block;
 import org.bukkit.block.Block;
 
 /**
- * In some cases, a "game block" might actually be a structure with multiple blocks,
- * like a bed or a door with two halfs. These GameBlocks implement MultiBlock.
+ * In some cases, a "game block" might actually be a structure with multiple blocks, like a bed or a door with two halfs. These GameBlocks implement MultiBlock.
  *
  * @author Daniel Saukel
  */

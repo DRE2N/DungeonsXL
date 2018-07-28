@@ -47,8 +47,7 @@ public class DGroupFinishFloorEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param finished
-     * the name of the DGameWorld to set
+     * @param finished the name of the DGameWorld to set
      */
     public void setFinished(DGameWorld finished) {
         this.finished = finished;
@@ -62,8 +61,7 @@ public class DGroupFinishFloorEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param next
-     * the resource to set
+     * @param next the resource to set
      */
     public void setNext(DResourceWorld next) {
         this.next = next;

@@ -49,8 +49,7 @@ public class DungeonCache {
     }
 
     /**
-     * @param name
-     * the name of the Dungeon
+     * @param name the name of the Dungeon
      * @return the Dungeon that has the name
      */
     public Dungeon getByName(String name) {
@@ -71,8 +70,7 @@ public class DungeonCache {
     }
 
     /**
-     * @param name
-     * the name of the Dungeon
+     * @param name the name of the Dungeon
      * @return the Dungeon that has the name
      */
     public Dungeon loadDungeon(String name) {
@@ -82,16 +80,14 @@ public class DungeonCache {
     }
 
     /**
-     * @param dungeon
-     * the dungeon to add
+     * @param dungeon the dungeon to add
      */
     public void addDungeon(Dungeon dungeon) {
         dungeons.add(dungeon);
     }
 
     /**
-     * @param dungeon
-     * the dungeon to remove
+     * @param dungeon the dungeon to remove
      */
     public void removeDungeon(Dungeon dungeon) {
         dungeons.remove(dungeon);

@@ -125,10 +125,8 @@ public class DNPCRegistry implements NPCRegistry {
     /**
      * Clones an NPC without spamming the config.
      *
-     * @param npc
-     * the NPC to clone
-     * @return
-     * a clone of the NPC
+     * @param npc the NPC to clone
+     * @return a clone of the NPC
      */
     public NPC createTransientClone(AbstractNPC npc) {
         NPC copy = createNPC(npc.getTrait(MobType.class).getType(), npc.getFullName());

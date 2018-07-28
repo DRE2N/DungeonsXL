@@ -38,8 +38,7 @@ public abstract class GameWorldEvent extends Event {
     }
 
     /**
-     * @param gameWorld
-     * the gameWorld to set
+     * @param gameWorld the gameWorld to set
      */
     public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;

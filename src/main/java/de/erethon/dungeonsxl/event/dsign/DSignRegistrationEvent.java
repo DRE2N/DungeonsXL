@@ -47,8 +47,7 @@ public class DSignRegistrationEvent extends DSignEvent implements Cancellable {
     }
 
     /**
-     * @param sign
-     * the sign to set
+     * @param sign the sign to set
      */
     public void setSign(Sign sign) {
         this.sign = sign;
@@ -62,8 +61,7 @@ public class DSignRegistrationEvent extends DSignEvent implements Cancellable {
     }
 
     /**
-     * @param gameWorld
-     * the gameWorld to set
+     * @param gameWorld the gameWorld to set
      */
     public void setGameWorld(DGameWorld gameWorld) {
         this.gameWorld = gameWorld;

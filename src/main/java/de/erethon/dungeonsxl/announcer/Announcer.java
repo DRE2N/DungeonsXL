@@ -73,18 +73,15 @@ public class Announcer {
     private AnnouncerStartGameTask startTask;
 
     /**
-     * @param file
-     * the script file
+     * @param file the script file
      */
     public Announcer(File file) {
         this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
     }
 
     /**
-     * @param name
-     * the name of the Announcer
-     * @param config
-     * the config that stores the information
+     * @param name the name of the Announcer
+     * @param config the config that stores the information
      */
     public Announcer(String name, FileConfiguration config) {
         this.name = name;
@@ -115,20 +112,13 @@ public class Announcer {
     }
 
     /**
-     * @param name
-     * the name of the Announcer
-     * @param description
-     * the description messages
-     * @param worlds
-     * the names of the worlds where the announcement will be seen or null to broadcast it to all worlds
-     * @param identifier
-     * the dungeon identifier
-     * @param multiFloor
-     * if the identifier refers to an MFD (true) or an SFD (false)
-     * @param maxGroupsPerGame
-     * the amount of groups in one game
-     * @param maxPlayersPerGame
-     * the amount of players in one group
+     * @param name the name of the Announcer
+     * @param description the description messages
+     * @param worlds the names of the worlds where the announcement will be seen or null to broadcast it to all worlds
+     * @param identifier the dungeon identifier
+     * @param multiFloor if the identifier refers to an MFD (true) or an SFD (false)
+     * @param maxGroupsPerGame the amount of groups in one game
+     * @param maxPlayersPerGroup the amount of players in one group
      */
     public Announcer(String name, List<String> description, List<String> worlds, String identifier, boolean multiFloor, short maxGroupsPerGame, int maxPlayersPerGroup) {
         this.name = name;
@@ -168,8 +158,7 @@ public class Announcer {
     }
 
     /**
-     * @param description
-     * the description to set
+     * @param description the description to set
      */
     public void setDescription(List<String> description) {
         this.description = description;
@@ -183,8 +172,7 @@ public class Announcer {
     }
 
     /**
-     * @param worlds
-     * the worlds to set
+     * @param worlds the worlds to set
      */
     public void setWorlds(List<String> worlds) {
         this.worlds = worlds;
@@ -198,8 +186,7 @@ public class Announcer {
     }
 
     /**
-     * @param dungeonName
-     * the name of the dungeon to set
+     * @param dungeonName the name of the dungeon to set
      */
     public void setDungeonName(String dungeonName) {
         this.dungeonName = dungeonName;
@@ -213,8 +200,7 @@ public class Announcer {
     }
 
     /**
-     * @param mapName
-     * the name of the map to set
+     * @param mapName the name of the map to set
      */
     public void setMapName(String mapName) {
         this.mapName = mapName;
@@ -228,8 +214,7 @@ public class Announcer {
     }
 
     /**
-     * @param amount
-     * the amount to set
+     * @param amount the amount to set
      */
     public void setMinGroupsPerGame(int amount) {
         minGroupsPerGame = amount;
@@ -243,8 +228,7 @@ public class Announcer {
     }
 
     /**
-     * @param amount
-     * the amount to set
+     * @param amount the amount to set
      */
     public void setMinPlayersPerGroup(int amount) {
         minPlayersPerGroup = amount;
@@ -258,8 +242,7 @@ public class Announcer {
     }
 
     /**
-     * @param amount
-     * the amount to set
+     * @param amount the amount to set
      */
     public void setMaxGroupsPerGame(short amount) {
         maxGroupsPerGame = amount;
@@ -287,8 +270,7 @@ public class Announcer {
     }
 
     /**
-     * @param amount
-     * the amount to set
+     * @param amount the amount to set
      */
     public void setMaxPlayersPerGroup(int amount) {
         maxPlayersPerGroup = amount;
@@ -325,6 +307,8 @@ public class Announcer {
 
     /**
      * Sends the announcement
+     *
+     * @param player the player
      */
     public void send(Player player) {
         for (String message : description) {
@@ -352,6 +336,8 @@ public class Announcer {
 
     /**
      * Shows the group selection GUI
+     *
+     * @param player the player
      */
     public void showGUI(Player player) {
         updateButtons();
@@ -361,8 +347,8 @@ public class Announcer {
     }
 
     /**
-     * @param button
-     * the clicked button
+     * @param player the player
+     * @param button the clicked button
      */
     public void clickGroupButton(Player player, ItemStack button) {
         DGroup dGroup = getDGroupByButton(button);
@@ -452,8 +438,7 @@ public class Announcer {
     }
 
     /**
-     * @param button
-     * the button
+     * @param button the button
      * @return the matching DGroup
      */
     public DGroup getDGroupByButton(ItemStack button) {

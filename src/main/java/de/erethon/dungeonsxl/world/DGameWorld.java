@@ -72,8 +72,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * A playable resource instance.
- * There may be any amount of DGameWorlds per DResourceWorld.
+ * A playable resource instance. There may be any amount of DGameWorlds per DResourceWorld.
  *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
@@ -119,8 +118,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @return
-     * the Game connected to the DGameWorld
+     * @return the Game connected to the DGameWorld
      */
     public Game getGame() {
         if (game == null) {
@@ -135,16 +133,14 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @return
-     * the type of the floor
+     * @return the type of the floor
      */
     public Type getType() {
         return type;
     }
 
     /**
-     * @param type
-     * the type to set
+     * @param type the type to set
      */
     public void setType(Type type) {
         this.type = type;
@@ -158,14 +154,16 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param isPlaying
-     * the isPlaying to set
+     * @param isPlaying the isPlaying to set
      */
     public void setPlaying(boolean isPlaying) {
         this.isPlaying = isPlaying;
     }
 
     /**
+     * Returns the start location of the respective group.
+     *
+     * @param dGroup the group
      * @return the start location
      */
     public Location getStartLocation(DGroup dGroup) {
@@ -203,8 +201,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param gameBlock
-     * the gameBlock to add
+     * @param gameBlock the gameBlock to add
      */
     public void addGameBlock(GameBlock gameBlock) {
         gameBlocks.add(gameBlock);
@@ -223,8 +220,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param gameBlock
-     * the gameBlock to remove
+     * @param gameBlock the gameBlock to remove
      */
     public void removeGameBlock(GameBlock gameBlock) {
         gameBlocks.remove(gameBlock);
@@ -285,8 +281,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param secureObjects
-     * the secureObjects to set
+     * @param secureObjects the secureObjects to set
      */
     public void setSecureObjects(List<ItemStack> secureObjects) {
         this.secureObjects = secureObjects;
@@ -300,8 +295,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param loadedChunks
-     * the loadedChunks to set
+     * @param loadedChunks the loadedChunks to set
      */
     public void setLoadedChunks(CopyOnWriteArrayList<Chunk> loadedChunks) {
         this.loadedChunks = loadedChunks;
@@ -315,8 +309,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param classes signs
-     * the classes signs to set
+     * @param signs the classes signs to set
      */
     public void setClasses(CopyOnWriteArrayList<Sign> signs) {
         classesSigns = signs;
@@ -330,16 +323,14 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param dMob
-     * the dMob to add
+     * @param dMob the dMob to add
      */
     public void addDMob(DMob dMob) {
         dMobs.add(dMob);
     }
 
     /**
-     * @param dMob
-     * the dMob to remove
+     * @param dMob the dMob to remove
      */
     public void removeDMob(DMob dMob) {
         dMobs.remove(dMob);
@@ -353,6 +344,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
+     * @param type the DSignType to filter
      * @return the triggers with the type
      */
     public List<DSign> getDSigns(DSignType type) {
@@ -366,8 +358,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param dSigns
-     * the dSigns to set
+     * @param dSigns the dSigns to set
      */
     public void setDSigns(CopyOnWriteArrayList<DSign> dSigns) {
         this.dSigns = dSigns;
@@ -381,6 +372,7 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
+     * @param type the type to filter
      * @return the triggers with the type
      */
     public List<Trigger> getTriggers(TriggerType type) {
@@ -394,16 +386,14 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * @param trigger
-     * the trigger to add
+     * @param trigger the trigger to add
      */
     public void addTrigger(Trigger trigger) {
         triggers.add(trigger);
     }
 
     /**
-     * @param trigger
-     * the trigger to remove
+     * @param trigger the trigger to remove
      */
     public void removeTrigger(Trigger trigger) {
         triggers.remove(trigger);
@@ -546,8 +536,7 @@ public class DGameWorld extends DInstanceWorld {
     /**
      * Handles what happens when a player breaks a block.
      *
-     * @param event
-     * the passed Bukkit event
+     * @param event the passed Bukkit event
      * @return if the event is cancelled
      */
     public boolean onBreak(BlockBreakEvent event) {
@@ -629,8 +618,7 @@ public class DGameWorld extends DInstanceWorld {
      * @param player
      * @param block
      * @param against
-     * @param hand
-     * the event parameters.
+     * @param hand    the event parameters.
      * @return if the event is cancelled
      */
     public boolean onPlace(Player player, Block block, Block against, ItemStack hand) {
@@ -668,10 +656,8 @@ public class DGameWorld extends DInstanceWorld {
 
     /* Statics */
     /**
-     * @param world
-     * the instance
-     * @return
-     * the EditWorld that represents the world
+     * @param world the instance
+     * @return the EditWorld that represents the world
      */
     public static DGameWorld getByWorld(World world) {
         DInstanceWorld instance = DungeonsXL.getInstance().getDWorlds().getInstanceByName(world.getName());

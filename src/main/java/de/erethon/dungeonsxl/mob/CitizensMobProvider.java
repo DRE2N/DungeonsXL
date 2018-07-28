@@ -55,16 +55,14 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
     }
 
     /**
-     * @param npc
-     * the NPC to add
+     * @param npc the NPC to add
      */
     public void addSpawnedNPC(NPC npc) {
         spawnedNPCs.add(npc);
     }
 
     /**
-     * @param npc
-     * the NPC to remove
+     * @param npc the NPC to remove
      */
     public void removeSpawnedNPC(NPC npc) {
         spawnedNPCs.remove(npc);

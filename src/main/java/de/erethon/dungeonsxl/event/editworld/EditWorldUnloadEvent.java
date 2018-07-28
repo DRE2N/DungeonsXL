@@ -43,8 +43,7 @@ public class EditWorldUnloadEvent extends EditWorldEvent implements Cancellable 
     }
 
     /**
-     * @param save
-     * the save to set
+     * @param save the save to set
      */
     public void setSave(boolean save) {
         this.save = save;

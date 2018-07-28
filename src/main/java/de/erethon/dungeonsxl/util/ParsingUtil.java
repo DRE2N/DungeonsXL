@@ -51,10 +51,9 @@ public enum ParsingUtil {
     /**
      * Replace the placeholders that are relevant for the chat in a String automatically.
      *
-     * @param string
-     * the String that contains the placeholders
-     * @param sender
-     * the DGlobalPlayer who sent the message
+     * @param string the String that contains the placeholders
+     * @param sender the DGlobalPlayer who sent the message
+     * @return the string with the placeholders replaced
      */
     public static String replaceChatPlaceholders(String string, DGlobalPlayer sender) {
         DGroup group = DGroup.getByPlayer(sender.getPlayer());

@@ -34,8 +34,7 @@ public class NoReload implements Listener {
     Plugin plugin;
 
     /**
-     * @param plugin
-     * the plugin that integrates NoReload
+     * @param plugin the plugin that integrates NoReload
      */
     public NoReload(Plugin plugin) {
         this.plugin = plugin;

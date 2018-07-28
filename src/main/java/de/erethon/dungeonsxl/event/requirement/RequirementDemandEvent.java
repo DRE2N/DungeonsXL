@@ -44,8 +44,7 @@ public class RequirementDemandEvent extends RequirementEvent implements Cancella
     }
 
     /**
-     * @param player
-     * the player to set
+     * @param player the player to set
      */
     public void setPlayer(Player player) {
         this.player = player;

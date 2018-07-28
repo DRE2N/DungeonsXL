@@ -40,8 +40,7 @@ public abstract class TeamBlock extends GameBlock {
     }
 
     /**
-     * @param owner
-     * the owner group to set
+     * @param owner the owner group to set
      */
     public void setOwner(DGroup owner) {
         this.owner = owner;

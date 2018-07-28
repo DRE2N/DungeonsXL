@@ -93,8 +93,7 @@ public enum DColor {
     }
 
     /**
-     * @param color
-     * the DyeColor to check
+     * @param color the DyeColor to check
      * @return the matching DColor or null
      */
     public static DColor getByDyeColor(DyeColor color) {
@@ -107,8 +106,7 @@ public enum DColor {
     }
 
     /**
-     * @param color
-     * the ChatColor to check
+     * @param color the ChatColor to check
      * @return the matching DColor or null
      */
     public static DColor getByChatColor(ChatColor color) {

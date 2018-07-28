@@ -44,8 +44,7 @@ public class GameWorldStartGameEvent extends GameWorldEvent implements Cancellab
     }
 
     /**
-     * @param game
-     * the game to set
+     * @param game the game to set
      */
     public void setGame(Game game) {
         this.game = game;

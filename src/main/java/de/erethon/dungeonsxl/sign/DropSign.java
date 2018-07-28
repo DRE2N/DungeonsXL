@@ -48,8 +48,7 @@ public class DropSign extends DSign {
     }
 
     /**
-     * @param item
-     * the item to set
+     * @param item the item to set
      */
     public void setItem(ItemStack item) {
         this.item = item;

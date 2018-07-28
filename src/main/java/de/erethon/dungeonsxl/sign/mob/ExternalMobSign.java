@@ -151,8 +151,7 @@ public class ExternalMobSign extends DSign implements MobSign {
     }
 
     /**
-     * @param spawnLocation
-     * the spawnLocation to set
+     * @param spawnLocation the spawnLocation to set
      */
     public void setSpawnLocation(Location spawnLocation) {
         this.spawnLocation = spawnLocation;
@@ -166,8 +165,7 @@ public class ExternalMobSign extends DSign implements MobSign {
     }
 
     /**
-     * @param externalMob
-     * the external mob to set
+     * @param externalMob the external mob to set
      */
     public void setExternalMob(LivingEntity externalMob) {
         this.externalMob = externalMob;
@@ -181,16 +179,14 @@ public class ExternalMobSign extends DSign implements MobSign {
     }
 
     /**
-     * @param externalMob
-     * the externalMob to add
+     * @param externalMob the externalMob to add
      */
     public void addExternalMob(Entity externalMob) {
         externalMobs.add(externalMob);
     }
 
     /**
-     * @param externalMob
-     * the external mob to remove
+     * @param externalMob the external mob to remove
      */
     public void removeExternalMob(Entity externalMob) {
         externalMobs.remove(externalMob);

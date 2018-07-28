@@ -39,6 +39,7 @@ public class DClassCache {
     }
 
     /**
+     * @param name the name to check
      * @return the dClass that has the name
      */
     public DClass getByName(String name) {
@@ -59,16 +60,14 @@ public class DClassCache {
     }
 
     /**
-     * @param dClass
-     * the DClass to add
+     * @param dClass the DClass to add
      */
     public void addDClass(DClass dClass) {
         dClasses.add(dClass);
     }
 
     /**
-     * @param dClass
-     * the DClass to remove
+     * @param dClass the DClass to remove
      */
     public void removeDClass(DClass dClass) {
         dClasses.remove(dClass);

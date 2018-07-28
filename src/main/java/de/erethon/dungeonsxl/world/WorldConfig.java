@@ -42,9 +42,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 
 /**
- * The world configuration is a simple game rule source.
- * Besides game rules, WorldConfig also stores some map specific data such as the invited players.
- * It is used directly in dungeon map config.yml files, but also part of dungeon and main config files.
+ * The world configuration is a simple game rule source. Besides game rules, WorldConfig also stores some map specific data such as the invited players. It is
+ * used directly in dungeon map config.yml files, but also part of dungeon and main config files.
  *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
@@ -372,8 +371,7 @@ public class WorldConfig extends GameRuleProvider {
     }
 
     /**
-     * @param uuid
-     * the player's unique ID
+     * @param uuid the player's unique ID
      */
     public void addInvitedPlayer(String uuid) {
         if (!invitedPlayers.contains(uuid)) {
@@ -382,10 +380,8 @@ public class WorldConfig extends GameRuleProvider {
     }
 
     /**
-     * @param uuid
-     * the player's unique ID
-     * @param name
-     * the player's name
+     * @param uuid the player's unique ID
+     * @param name the player's name
      */
     public void removeInvitedPlayers(String uuid, String name) {
         invitedPlayers.remove(uuid);
@@ -401,8 +397,7 @@ public class WorldConfig extends GameRuleProvider {
     }
 
     /**
-     * @param forcedGameType
-     * the forcedGameType to set
+     * @param forcedGameType the forcedGameType to set
      */
     public void setForcedGameType(GameType forcedGameType) {
         this.forcedGameType = forcedGameType;
@@ -416,8 +411,7 @@ public class WorldConfig extends GameRuleProvider {
     }
 
     /**
-     * @param worldEnvironment
-     * the world environment to set
+     * @param worldEnvironment the world environment to set
      */
     public void setWorldEnvironment(Environment worldEnvironment) {
         this.worldEnvironment = worldEnvironment;

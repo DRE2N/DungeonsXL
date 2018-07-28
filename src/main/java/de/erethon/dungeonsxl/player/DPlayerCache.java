@@ -53,6 +53,7 @@ public class DPlayerCache {
     }
 
     /**
+     * @param player the player to check
      * @return the DGlobalPlayer which represents the player
      */
     public DGlobalPlayer getByPlayer(Player player) {
@@ -65,6 +66,7 @@ public class DPlayerCache {
     }
 
     /**
+     * @param uuid the unique ID to check
      * @return the DGlobalPlayer which represents the player with this UUID
      */
     public DGlobalPlayer getByUniqueId(UUID uuid) {
@@ -123,8 +125,7 @@ public class DPlayerCache {
     }
 
     /**
-     * @param player
-     * an instance of DGlobalPlayer to add
+     * @param player an instance of DGlobalPlayer to add
      */
     public void addPlayer(DGlobalPlayer player) {
         removePlayer(player);
@@ -132,8 +133,7 @@ public class DPlayerCache {
     }
 
     /**
-     * @param player
-     * an instance of DGlobalPlayer to remove
+     * @param player an instance of DGlobalPlayer to remove
      */
     public void removePlayer(DGlobalPlayer player) {
         for (DGlobalPlayer dGlobalPlayer : dGlobalPlayers) {
@@ -153,11 +153,9 @@ public class DPlayerCache {
     }
 
     /**
-     * Checks if an old DGamePlayer instance of the user exists.
-     * If yes, the old Player of the user is replaced with the new object.
+     * Checks if an old DGamePlayer instance of the user exists. If yes, the old Player of the user is replaced with the new object.
      *
-     * @param player
-     * the player to check
+     * @param player the player to check
      * @return if the player exists
      */
     public boolean checkPlayer(Player player) {
@@ -181,6 +179,8 @@ public class DPlayerCache {
 
     /**
      * start a new SecureModeTask
+     *
+     * @param period the period in ticks
      */
     public void startSecureModeTask(long period) {
         secureModeTask = new SecureModeTask().runTaskTimer(plugin, period, period);
@@ -195,6 +195,8 @@ public class DPlayerCache {
 
     /**
      * start a new LazyUpdateTask
+     *
+     * @param period the period in ticks
      */
     public void startUpdateTask(long period) {
         updateTask = new UpdateTask().runTaskTimer(plugin, period, period);
@@ -209,6 +211,8 @@ public class DPlayerCache {
 
     /**
      * start a new LazyUpdateTask
+     *
+     * @param period the period in ticks
      */
     public void startLazyUpdateTask(long period) {
         lazyUpdateTask = new LazyUpdateTask().runTaskTimer(plugin, period, period);

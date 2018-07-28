@@ -96,8 +96,7 @@ public abstract class DSign {
     }
 
     /**
-     * @param sign
-     * the sign to set
+     * @param sign the sign to set
      */
     public void setSign(Sign sign) {
         this.sign = sign;
@@ -111,8 +110,7 @@ public abstract class DSign {
     }
 
     /**
-     * @param lines
-     * the sign lines to set
+     * @param lines the sign lines to set
      */
     public void setLines(String[] lines) {
         this.lines = lines;
@@ -140,16 +138,14 @@ public abstract class DSign {
     }
 
     /**
-     * @param trigger
-     * the trigger to add
+     * @param trigger the trigger to add
      */
     public void addTrigger(Trigger trigger) {
         triggers.add(trigger);
     }
 
     /**
-     * @param trigger
-     * the trigger to remove
+     * @param trigger the trigger to remove
      */
     public void removeTrigger(Trigger trigger) {
         triggers.remove(trigger);
@@ -210,8 +206,7 @@ public abstract class DSign {
     /**
      * Set a placeholder to show that the sign is setup incorrectly.
      *
-     * @param reason
-     * the reason why the sign is marked as erroneous
+     * @param reason the reason why the sign is marked as erroneous
      */
     public void markAsErroneous(String reason) {
         erroneous = true;

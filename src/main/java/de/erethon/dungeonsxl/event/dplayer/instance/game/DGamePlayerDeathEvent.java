@@ -46,8 +46,7 @@ public class DGamePlayerDeathEvent extends DGamePlayerEvent implements Cancellab
     }
 
     /**
-     * @param bukkitEvent
-     * the bukkitEvent to set
+     * @param bukkitEvent the bukkitEvent to set
      */
     public void setBukkitEvent(PlayerDeathEvent bukkitEvent) {
         this.bukkitEvent = bukkitEvent;
@@ -61,8 +60,7 @@ public class DGamePlayerDeathEvent extends DGamePlayerEvent implements Cancellab
     }
 
     /**
-     * @param lostLives
-     * the lostLives to set
+     * @param lostLives the lostLives to set
      */
     public void setLostLives(int lostLives) {
         this.lostLives = lostLives;

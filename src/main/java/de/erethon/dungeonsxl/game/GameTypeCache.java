@@ -47,6 +47,7 @@ public class GameTypeCache {
     }
 
     /**
+     * @param name the name to check
      * @return the game type which has the enum value name
      */
     public GameType getByName(String name) {
@@ -60,6 +61,7 @@ public class GameTypeCache {
     }
 
     /**
+     * @param sign the sign to check
      * @return the game type which has the enum value sign text in the second line of the sign
      */
     public GameType getBySign(DSign sign) {
@@ -82,16 +84,14 @@ public class GameTypeCache {
     }
 
     /**
-     * @param type
-     * the game type to add
+     * @param type the game type to add
      */
     public void addGameType(GameType type) {
         types.add(type);
     }
 
     /**
-     * @param game
-     * the game to remove
+     * @param type the game type to remove
      */
     public void removeGameType(GameType type) {
         types.remove(type);

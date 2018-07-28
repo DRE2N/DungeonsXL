@@ -33,8 +33,7 @@ public class TriggerRegistrationEvent extends TriggerEvent implements Cancellabl
     }
 
     /**
-     * @param trigger
-     * the trigger to set
+     * @param trigger the trigger to set
      */
     public void setTrigger(Trigger trigger) {
         this.trigger = trigger;

@@ -93,8 +93,7 @@ public class DResourceWorld {
     }
 
     /**
-     * @param name
-     * the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         folder.renameTo(new File(folder.getParentFile(), name));
@@ -109,8 +108,7 @@ public class DResourceWorld {
     }
 
     /**
-     * @param generate
-     * if a config should be generated if none exists
+     * @param generate if a config should be generated if none exists
      * @return the WorldConfig
      */
     public WorldConfig getConfig(boolean generate) {
@@ -141,8 +139,7 @@ public class DResourceWorld {
     }
 
     /**
-     * @param player
-     * the player to invite
+     * @param player the player to invite
      */
     public void addInvitedPlayer(OfflinePlayer player) {
         if (config == null) {
@@ -154,8 +151,8 @@ public class DResourceWorld {
     }
 
     /**
-     * @param player
-     * the player to uninvite
+     * @param player the player to uninvite
+     * @return if the action was successful
      */
     public boolean removeInvitedPlayer(OfflinePlayer player) {
         if (config == null) {
@@ -176,8 +173,8 @@ public class DResourceWorld {
     }
 
     /**
-     * @param player
-     * the player to check
+     * @param player the player to check
+     * @return if the player is invited
      */
     public boolean isInvitedPlayer(OfflinePlayer player) {
         if (config == null) {
@@ -191,8 +188,7 @@ public class DResourceWorld {
     /**
      * Creates a backup of the resource
      *
-     * @param async
-     * whether the task shall be performed asyncronously
+     * @param async whether the task shall be performed asyncronously
      */
     public void backup(boolean async) {
         BackupResourceTask task = new BackupResourceTask(this);
@@ -204,8 +200,7 @@ public class DResourceWorld {
     }
 
     /**
-     * @param game
-     * whether the instance is a DGameWorld
+     * @param game whether the instance is a DGameWorld
      * @return an instance of this world
      */
     public DInstanceWorld instantiate(final boolean game) {

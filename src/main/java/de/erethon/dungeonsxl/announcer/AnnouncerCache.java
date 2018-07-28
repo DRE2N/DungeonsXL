@@ -50,6 +50,7 @@ public class AnnouncerCache {
     }
 
     /**
+     * @param name the name
      * @return the announcer that has the name
      */
     public Announcer getByName(String name) {
@@ -63,6 +64,7 @@ public class AnnouncerCache {
     }
 
     /**
+     * @param gui the gui
      * @return the announcer that has the GUI
      */
     public Announcer getByGUI(Inventory gui) {
@@ -83,16 +85,14 @@ public class AnnouncerCache {
     }
 
     /**
-     * @param announcer
-     * the Announcer to add
+     * @param announcer the Announcer to add
      */
     public void addAnnouncer(Announcer announcer) {
         announcers.add(announcer);
     }
 
     /**
-     * @param announcer
-     * the Announcer to remove
+     * @param announcer the Announcer to remove
      */
     public void removeAnnouncer(Announcer announcer) {
         announcers.remove(announcer);
@@ -107,6 +107,8 @@ public class AnnouncerCache {
 
     /**
      * start a new AnnouncerTask
+     *
+     * @param period the period ticks
      */
     public void startAnnouncerTask(long period) {
         if (!announcers.isEmpty()) {

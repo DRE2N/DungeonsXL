@@ -37,16 +37,14 @@ public class MoneyReward extends Reward {
     }
 
     /**
-     * @param money
-     * the money to add
+     * @param money the money to add
      */
     public void addMoney(double money) {
         this.money += money;
     }
 
     /**
-     * @param money
-     * the money to set
+     * @param money the money to set
      */
     public void setMoney(double money) {
         this.money = money;

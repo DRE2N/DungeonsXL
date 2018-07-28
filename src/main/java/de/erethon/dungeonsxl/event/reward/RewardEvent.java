@@ -38,8 +38,7 @@ public abstract class RewardEvent extends Event {
     }
 
     /**
-     * @param reward
-     * the reward to set
+     * @param reward the reward to set
      */
     public void setReward(Reward reward) {
         this.reward = reward;

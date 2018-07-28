@@ -45,6 +45,7 @@ public class GlobalProtectionCache {
     }
 
     /**
+     * @param location the location to check
      * @return the protection which covers this location
      */
     public GlobalProtection getByLocation(Location location) {
@@ -52,6 +53,7 @@ public class GlobalProtectionCache {
     }
 
     /**
+     * @param block the block to check
      * @return the protection which covers this block
      */
     public GlobalProtection getByBlock(Block block) {
@@ -72,8 +74,8 @@ public class GlobalProtectionCache {
     }
 
     /**
-     * @param type
-     * All protections which are an instance of it will be returned.
+     * @param type All protections which are an instance of it will be returned.
+     * @return the protections of the type
      */
     public Set<GlobalProtection> getProtections(Class<? extends GlobalProtection> type) {
         Set<GlobalProtection> protectionsOfType = new HashSet<>();
@@ -86,16 +88,14 @@ public class GlobalProtectionCache {
     }
 
     /**
-     * @param protection
-     * the protection type to add
+     * @param protection the protection type to add
      */
     public void addProtection(GlobalProtection protection) {
         protections.add(protection);
     }
 
     /**
-     * @param protection
-     * the protection to remove
+     * @param protection the protection to remove
      */
     public void removeProtection(GlobalProtection protection) {
         protections.remove(protection);
@@ -109,16 +109,14 @@ public class GlobalProtectionCache {
     }
 
     /**
-     * @param file
-     * the file to save all protections to
+     * @param file the file to save all protections to
      */
     public void saveAll(File file) {
         saveAll(YamlConfiguration.loadConfiguration(file));
     }
 
     /**
-     * @param config
-     * the config to save all protections to
+     * @param config the config to save all protections to
      */
     public void saveAll(FileConfiguration config) {
         config.set("protections", null);
@@ -130,10 +128,8 @@ public class GlobalProtectionCache {
     }
 
     /**
-     * @param type
-     * Each type is stored seperately.
-     * @param world
-     * Each world has its own IDs.
+     * @param type  Each type is stored seperately.
+     * @param world Each world has its own IDs.
      * @return an unused ID number for a new protection
      */
     public int generateId(Class<? extends GlobalProtection> type, World world) {
@@ -147,8 +143,8 @@ public class GlobalProtectionCache {
     }
 
     /**
-     * @param block
-     * the block to check
+     * @param block the block to check
+     * @return if the block is protected by a GlobalProtection
      */
     public boolean isProtectedBlock(Block block) {
         for (GlobalProtection protection : protections) {

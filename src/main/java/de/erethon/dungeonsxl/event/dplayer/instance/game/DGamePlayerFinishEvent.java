@@ -43,8 +43,7 @@ public class DGamePlayerFinishEvent extends DGamePlayerEvent implements Cancella
     }
 
     /**
-     * @param hasToWait
-     * the hasToWait to set
+     * @param hasToWait the hasToWait to set
      */
     public void setHasToWait(boolean hasToWait) {
         this.hasToWait = hasToWait;

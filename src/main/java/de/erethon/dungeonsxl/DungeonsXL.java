@@ -56,8 +56,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 
 /**
- * The main class of DungeonsXL.
- * It contains several important instances and the actions when the plugin is enabled / disabled.
+ * The main class of DungeonsXL. It contains several important instances and the actions when the plugin is enabled / disabled.
  *
  * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
  */
@@ -282,6 +281,8 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of GlobalData
+     *
+     * @param file the file to load from
      */
     public void loadGlobalData(File file) {
         globalData = new GlobalData(file);
@@ -296,6 +297,8 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of MainConfig
+     *
+     * @param file the file to load from
      */
     public void loadMainConfig(File file) {
         mainConfig = new MainConfig(file);
@@ -303,6 +306,8 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of MessageConfig
+     *
+     * @param file the file to load from
      */
     public void loadMessageConfig(File file) {
         messageConfig = new MessageConfig(DMessage.class, file);
@@ -403,9 +408,11 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of DungeonCache
+     *
+     * @param folder the folder to load from
      */
-    public void loadDungeons(File file) {
-        dungeons = new DungeonCache(file);
+    public void loadDungeons(File folder) {
+        dungeons = new DungeonCache(folder);
     }
 
     /**
@@ -459,9 +466,11 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of AnnouncerCache
+     *
+     * @param folder the folder to load from
      */
-    public void loadAnnouncers(File file) {
-        announcers = new AnnouncerCache(file);
+    public void loadAnnouncers(File folder) {
+        announcers = new AnnouncerCache(folder);
     }
 
     /**
@@ -473,26 +482,32 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of DClasseCache
+     *
+     * @param folder the folder to load from
      */
-    public void loadDClasses(File file) {
-        dClasses = new DClassCache(file);
+    public void loadDClasses(File folder) {
+        dClasses = new DClassCache(folder);
     }
 
     /**
      * load / reload loot tables
+     *
+     * @param folder the folder to load from
      */
-    public void loadLootTables(File file) {
-        for (File script : FileUtil.getFilesForFolder(file)) {
+    public void loadLootTables(File folder) {
+        for (File script : FileUtil.getFilesForFolder(folder)) {
             new LootTable(caliburn, script);
         }
     }
 
     /**
      * load / reload DMob types
+     *
+     * @param folder the folder to load from
      */
-    public void loadMobs(File file) {
-        if (file.isDirectory()) {
-            for (File script : FileUtil.getFilesForFolder(file)) {
+    public void loadMobs(File folder) {
+        if (folder.isDirectory()) {
+            for (File script : FileUtil.getFilesForFolder(folder)) {
                 caliburn.getExMobs().add(new DMobType(script));
             }
         }
@@ -508,9 +523,11 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of SignScriptCache
+     *
+     * @param folder the folder to load from
      */
-    public void loadSignScripts(File file) {
-        signScripts = new SignScriptCache(file);
+    public void loadSignScripts(File folder) {
+        signScripts = new SignScriptCache(folder);
     }
 
     /**
@@ -522,6 +539,8 @@ public class DungeonsXL extends DREPlugin {
 
     /**
      * load / reload a new instance of DWorldCache
+     *
+     * @param folder the folder to load from
      */
     public void loadDWorlds(File folder) {
         dWorlds = new DWorldCache(MAPS);

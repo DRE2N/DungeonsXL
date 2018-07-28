@@ -48,16 +48,14 @@ public class DGroupRewardEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param reward
-     * the reward to add
+     * @param reward the reward to add
      */
     public void addRewards(Reward reward) {
         rewards.add(reward);
     }
 
     /**
-     * @param reward
-     * the reward to remove
+     * @param reward the reward to remove
      */
     public void removeRewards(Reward reward) {
         rewards.remove(reward);
@@ -71,16 +69,14 @@ public class DGroupRewardEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param player
-     * the player to add
+     * @param player the player to add
      */
     public void addExcludedPlayer(Player player) {
         excludedPlayers.add(player);
     }
 
     /**
-     * @param player
-     * the player to remove
+     * @param player the player to remove
      */
     public void removeExcludedPlayer(Player player) {
         excludedPlayers.remove(player);

@@ -124,8 +124,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param language
-     * the language to set
+     * @param language the language to set
      */
     public void setLanguage(String language) {
         this.language = language;
@@ -139,72 +138,63 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param enabled
-     * if DungeonsXL should use economy features provided by Vault
+     * @param enabled if DungeonsXL should use economy features provided by Vault
      */
     public void setEconomyEnabled(boolean enabled) {
         enableEconomy = enabled;
     }
 
     /**
-     * @return
-     * if the dungeon chat is enabled
+     * @return if the dungeon chat is enabled
      */
     public boolean isChatEnabled() {
         return chatEnabled;
     }
 
     /**
-     * @param enabled
-     * if the dungeon chat is enabled
+     * @param enabled if the dungeon chat is enabled
      */
     public void setChatEnabled(boolean enabled) {
         chatEnabled = enabled;
     }
 
     /**
-     * @return
-     * the game chat format
+     * @return the game chat format
      */
     public String getChatFormatGame() {
         return chatFormatGame;
     }
 
     /**
-     * @param string
-     * the game chat format to set
+     * @param string the game chat format to set
      */
     public void setChatFormatGame(String string) {
         chatFormatGame = string;
     }
 
     /**
-     * @return
-     * the group chat format
+     * @return the group chat format
      */
     public String getChatFormatGroup() {
         return chatFormatGroup;
     }
 
     /**
-     * @param string
-     * the group chat format to set
+     * @param string the group chat format to set
      */
     public void setChatFormatGroup(String string) {
         chatFormatGroup = string;
     }
 
     /**
-     * @return
-     * the chat spy format
+     * @return the chat spy format
      */
     public String getChatFormatSpy() {
         return chatFormatSpy;
     }
 
     /**
-     * @param string
-     * the chat spy format to set
+     * @param string the chat spy format to set
      */
     public void setChatFormatSpy(String string) {
         chatFormatSpy = string;
@@ -218,8 +208,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param activated
-     * if new players start in a tutorial
+     * @param activated if new players start in a tutorial
      */
     public void setTutorialActivated(boolean activated) {
         tutorialActivated = activated;
@@ -233,8 +222,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param dungeon
-     * the tutorial dungeon to set
+     * @param dungeon the tutorial dungeon to set
      */
     public void setTutorialDungeon(String dungeon) {
         tutorialDungeon = dungeon;
@@ -248,8 +236,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param group
-     * the group the player gets when he plays the tutorial
+     * @param group the group the player gets when he plays the tutorial
      */
     public void setTutorialStartGroup(String group) {
         tutorialStartGroup = group;
@@ -263,8 +250,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param group
-     * the group the player gets when he finshs the tutorial
+     * @param group the group the player gets when he finshs the tutorial
      */
     public void setTutorialEndGroup(String group) {
         tutorialEndGroup = group;
@@ -278,8 +264,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param colors
-     * the colors to set
+     * @param colors the colors to set
      */
     public void setGroupColorPriority(List<DColor> colors) {
         groupColorPriority = colors;
@@ -293,25 +278,21 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param interval
-     * the interval to set
+     * @param interval the interval to set
      */
     public void setAnnouncementInterval(double interval) {
         announcementInterval = interval;
     }
 
     /**
-     * @return
-     * false if death messages shall be sent to players who are not in the dungeon,
-     * true if not
+     * @return false if death messages shall be sent to players who are not in the dungeon, true if not
      */
     public boolean areGlobalDeathMessagesDisabled() {
         return globalDeathMessagesDisabled;
     }
 
     /**
-     * @param disabled
-     * set if death messages shall be sent to players who are not in the dungeon
+     * @param disabled set if death messages shall be sent to players who are not in the dungeon
      */
     public void setGlobalDeathMessagesDisabled(boolean disabled) {
         globalDeathMessagesDisabled = false;
@@ -325,8 +306,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param enabled
-     * if the floor title shall be sent
+     * @param enabled if the floor title shall be sent
      */
     public void setSendFloorTitleEnabled(boolean enabled) {
         sendFloorTitle = enabled;
@@ -354,8 +334,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param maxInstances
-     * the maximum amount of worlds to instantiate at once
+     * @param maxInstances the maximum amount of worlds to instantiate at once
      */
     public void setMaxInstances(int maxInstances) {
         this.maxInstances = maxInstances;
@@ -369,8 +348,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param enabled
-     * if the performance tweaks are enabled
+     * @param enabled if the performance tweaks are enabled
      */
     public void setTweaksEnabled(boolean enabled) {
         tweaksEnabled = enabled;
@@ -384,8 +362,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param enabled
-     * if the secure mode is enabled
+     * @param enabled if the secure mode is enabled
      */
     public void setSecureModeEnabled(boolean enabled) {
         secureModeEnabled = enabled;
@@ -399,8 +376,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param openInventories
-     * if inventories can be opened in edit mode
+     * @param openInventories if inventories can be opened in edit mode
      */
     public void setOpenInventories(boolean openInventories) {
         this.openInventories = openInventories;
@@ -414,8 +390,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param dropItems
-     * if items may be dropped in edit mode
+     * @param dropItems if items may be dropped in edit mode
      */
     public void setDropItems(boolean dropItems) {
         this.dropItems = dropItems;
@@ -429,8 +404,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param interval
-     * the interval for the check task
+     * @param interval the interval for the check task
      */
     public void setSecureModeCheckInterval(double interval) {
         secureModeCheckInterval = interval;
@@ -451,8 +425,7 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @param mode
-     * the BackupMode to set
+     * @param mode the BackupMode to set
      */
     public void setBackupMode(BackupMode mode) {
         backupMode = mode;

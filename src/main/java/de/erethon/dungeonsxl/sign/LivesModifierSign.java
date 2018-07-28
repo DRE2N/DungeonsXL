@@ -57,8 +57,7 @@ public class LivesModifierSign extends DSign {
     }
 
     /**
-     * @param lives
-     * the lives to add / remove
+     * @param lives the lives to add / remove
      */
     public void setLives(int lives) {
         this.lives = lives;

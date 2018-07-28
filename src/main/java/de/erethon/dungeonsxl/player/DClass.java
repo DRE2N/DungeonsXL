@@ -77,16 +77,14 @@ public class DClass {
     }
 
     /**
-     * @param itemStack
-     * the ItemStack to add
+     * @param itemStack the ItemStack to add
      */
     public void addItem(ItemStack itemStack) {
         items.add(itemStack);
     }
 
     /**
-     * @param itemStack
-     * the ItemStack to remove
+     * @param itemStack the ItemStack to remove
      */
     public void removeItem(ItemStack itemStack) {
         items.remove(itemStack);
@@ -100,8 +98,7 @@ public class DClass {
     }
 
     /**
-     * @param dog
-     * set if the class has a dog
+     * @param dog set if the class has a dog
      */
     public void setDog(boolean dog) {
         this.dog = dog;

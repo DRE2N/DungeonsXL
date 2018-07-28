@@ -56,8 +56,7 @@ public class DGroupCreateEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param creator
-     * the creator to set
+     * @param creator the creator to set
      */
     public void setCreator(Player creator) {
         this.creator = creator;
@@ -71,8 +70,7 @@ public class DGroupCreateEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param cause
-     * the cause to set
+     * @param cause the cause to set
      */
     public void setCause(Cause cause) {
         this.cause = cause;

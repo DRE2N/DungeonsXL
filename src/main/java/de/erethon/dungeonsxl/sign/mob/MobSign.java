@@ -29,8 +29,7 @@ public interface MobSign {
     public String getMob();
 
     /**
-     * @param mob
-     * the mob to set
+     * @param mob the mob to set
      */
     public void setMob(String mob);
 
@@ -40,8 +39,7 @@ public interface MobSign {
     public int getMaxInterval();
 
     /**
-     * @param maxInterval
-     * the maximum interval between mob spawns
+     * @param maxInterval the maximum interval between mob spawns
      */
     public void setMaxInterval(int maxInterval);
 
@@ -51,8 +49,7 @@ public interface MobSign {
     public int getInterval();
 
     /**
-     * @param interval
-     * the spawn interval
+     * @param interval the spawn interval
      */
     public void setInterval(int interval);
 
@@ -62,8 +59,7 @@ public interface MobSign {
     public int getAmount();
 
     /**
-     * @param amount
-     * the amount of mobs to set
+     * @param amount the amount of mobs to set
      */
     public void setAmount(int amount);
 
@@ -73,8 +69,7 @@ public interface MobSign {
     public int getInitialAmount();
 
     /**
-     * @param amount
-     * the amount of mobs to set
+     * @param amount the amount of mobs to set
      */
     public void setInitialAmount(int initialAmount);
 
@@ -84,8 +79,7 @@ public interface MobSign {
     public boolean isInitialized();
 
     /**
-     * @param initialized
-     * set the sign initialized
+     * @param initialized set the sign initialized
      */
     public void setInitialized(boolean initialized);
 
@@ -95,8 +89,7 @@ public interface MobSign {
     public boolean isActive();
 
     /**
-     * @param active
-     * set the sign active
+     * @param active set the sign active
      */
     public void setActive(boolean active);
 
@@ -106,8 +99,7 @@ public interface MobSign {
     public BukkitTask getTask();
 
     /**
-     * @param task
-     * the task to set
+     * @param task the task to set
      */
     public void setTask(BukkitTask task);
 

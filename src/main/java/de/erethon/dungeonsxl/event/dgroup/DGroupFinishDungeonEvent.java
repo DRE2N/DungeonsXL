@@ -44,8 +44,7 @@ public class DGroupFinishDungeonEvent extends DGroupEvent implements Cancellable
     }
 
     /**
-     * @param dungeon
-     * the dungeon to set
+     * @param dungeon the dungeon to set
      */
     public void setDisbander(Dungeon dungeon) {
         this.dungeon = dungeon;

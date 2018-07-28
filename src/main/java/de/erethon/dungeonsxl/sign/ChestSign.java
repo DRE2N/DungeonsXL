@@ -57,8 +57,7 @@ public class ChestSign extends DSign {
     }
 
     /**
-     * @param amount
-     * the amount to set
+     * @param amount the amount to set
      */
     public void setMoneyReward(double amount) {
         moneyReward = amount;
@@ -72,8 +71,7 @@ public class ChestSign extends DSign {
     }
 
     /**
-     * @param amount
-     * the amount to set
+     * @param amount the amount to set
      */
     public void setLevelReward(int amount) {
         levelReward = amount;
@@ -90,8 +88,7 @@ public class ChestSign extends DSign {
     }
 
     /**
-     * @param items
-     * the items to set as chest contents
+     * @param items the items to set as chest contents
      */
     public void setItemReward(ItemStack[] items) {
         chestContent = items;
@@ -105,8 +102,7 @@ public class ChestSign extends DSign {
     }
 
     /**
-     * @param lootTable
-     * the loot table to set
+     * @param lootTable the loot table to set
      */
     public void setLootTable(LootTable lootTable) {
         this.lootTable = lootTable;

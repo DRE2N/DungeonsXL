@@ -46,8 +46,7 @@ public class DGroupScoreEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param scorer
-     * the scoerer to set
+     * @param scorer the scoerer to set
      */
     public void setCreator(Player scorer) {
         this.scorer = scorer;
@@ -61,8 +60,7 @@ public class DGroupScoreEvent extends DGroupEvent implements Cancellable {
     }
 
     /**
-     * @param loserGroup
-     * the group that lost a score to the scorers to set
+     * @param loserGroup the group that lost a score to the scorers to set
      */
     public void setLoserGroup(DGroup loserGroup) {
         this.loserGroup = loserGroup;

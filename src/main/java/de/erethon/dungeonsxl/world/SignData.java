@@ -62,12 +62,9 @@ public class SignData {
 
     /* Actions */
     /**
-     * Applies all signs from the file to the DEditWorld.
-     * Also sets the lobby location of the DEditWorld to the location of the lobby sign if one exists.
+     * Applies all signs from the file to the DEditWorld. Also sets the lobby location of the DEditWorld to the location of the lobby sign if one exists.
      *
-     * @param editWorld
-     * the DEditWorld where the signs are
-     * @throws IOException
+     * @param editWorld the DEditWorld where the signs are
      */
     public void deserializeSigns(DEditWorld editWorld) {
         try {
@@ -100,10 +97,7 @@ public class SignData {
     /**
      * Applies all signs from the file to the DGameWorld.
      *
-     * @param gameWorld
-     * the DGameWorld where the signs are
-     * @return a Set of all DSign blocks
-     * @throws IOException
+     * @param gameWorld the DGameWorld where the signs are
      */
     public void deserializeSigns(DGameWorld gameWorld) {
         try {
@@ -132,9 +126,7 @@ public class SignData {
     /**
      * Applies all signs from the DEditWorld to the file.
      *
-     * @param editWorld
-     * the DEditWorld that contains the signs to serialize
-     * @throws IOException
+     * @param editWorld the DEditWorld that contains the signs to serialize
      */
     public void serializeSigns(DEditWorld editWorld) {
         serializeSigns(editWorld.getSigns());
@@ -143,9 +135,7 @@ public class SignData {
     /**
      * Applies all signs from the sign list to the file.
      *
-     * @param signs
-     * the signs to serialize
-     * @throws IOException
+     * @param signs the signs to serialize
      */
     public void serializeSigns(List<Block> signs) {
         try {

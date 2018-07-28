@@ -34,8 +34,8 @@ public class RequirementTypeCache {
     }
 
     /**
-     * @return
-     * the requirement type which has the identifier
+     * @param identifier the identifier to check
+     * @return the requirement type which has the identifier
      */
     public RequirementType getByIdentifier(String identifier) {
         for (RequirementType type : types) {
@@ -48,24 +48,21 @@ public class RequirementTypeCache {
     }
 
     /**
-     * @return
-     * the requirement types
+     * @return the requirement types
      */
     public List<RequirementType> getRequirements() {
         return types;
     }
 
     /**
-     * @param type
-     * the requirement type to add
+     * @param type the requirement type to add
      */
     public void addRequirement(RequirementType type) {
         types.add(type);
     }
 
     /**
-     * @param type
-     * the requirement type to remove
+     * @param type the requirement type to remove
      */
     public void removeRequirement(RequirementType type) {
         types.remove(type);

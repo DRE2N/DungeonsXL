@@ -112,23 +112,17 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param player
-     * the represented Player
-     * @param gameWorld
-     * the player's GameWorld
+     * @param player    the represented Player
+     * @param gameWorld the player's GameWorld
      */
     public static void create(Player player, DGameWorld gameWorld) {
         create(player, gameWorld, null);
     }
 
     /**
-     * @param player
-     * the represented Player
-     * @param gameWorld
-     * the player's GameWorld
-     * @param ready
-     * Any GameType if the player will be ready from the beginning
-     * null if the player will not be ready from the beginning
+     * @param player    the represented Player
+     * @param gameWorld the player's GameWorld
+     * @param ready     Any GameType if the player will be ready from the beginning null if the player will not be ready from the beginning
      */
     public static void create(Player player, DGameWorld gameWorld, GameType ready) {
         new CreateDInstancePlayerTask(player, gameWorld, ready).runTaskTimer(DungeonsXL.getInstance(), 0L, 5L);
@@ -155,8 +149,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param player
-     * the player to set
+     * @param player the player to set
      */
     public void setPlayer(Player player) {
         this.player = player;
@@ -196,8 +189,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param ready
-     * If the player is ready to play the dungeon
+     * @param ready If the player is ready to play the dungeon
      */
     public void setReady(boolean ready) {
         this.ready = ready;
@@ -211,8 +203,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param finished
-     * the finished to set
+     * @param finished the finished to set
      */
     public void setFinished(boolean finished) {
         this.finished = finished;
@@ -226,8 +217,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param dClass
-     * the dClass to set
+     * @param className the name of the class to set
      */
     public void setDClass(String className) {
         Game game = Game.getByWorld(getPlayer().getWorld());
@@ -303,8 +293,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param checkpoint
-     * the checkpoint to set
+     * @param checkpoint the checkpoint to set
      */
     public void setCheckpoint(Location checkpoint) {
         this.checkpoint = checkpoint;
@@ -318,8 +307,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param wolf
-     * the wolf to set
+     * @param wolf the wolf to set
      */
     public void setWolf(Wolf wolf) {
         this.wolf = wolf;
@@ -333,8 +321,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param wolfRespawnTime
-     * the wolfRespawnTime to set
+     * @param wolfRespawnTime the wolfRespawnTime to set
      */
     public void setWolfRespawnTime(int wolfRespawnTime) {
         this.wolfRespawnTime = wolfRespawnTime;
@@ -348,8 +335,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param offlineTime
-     * the offlineTime to set
+     * @param offlineTime the offlineTime to set
      */
     public void setOfflineTime(long offlineTime) {
         this.offlineTime = offlineTime;
@@ -363,8 +349,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param initialLives
-     * the initialLives to set
+     * @param initialLives the initialLives to set
      */
     public void setInitialLives(int initialLives) {
         this.initialLives = initialLives;
@@ -378,8 +363,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param lives
-     * the lives to set
+     * @param lives the lives to set
      */
     public void setLives(int lives) {
         this.lives = lives;
@@ -400,8 +384,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param dGroup
-     * the group whose flag is stolen
+     * @param dGroup the group whose flag is stolen
      */
     public void setRobbedGroup(DGroup dGroup) {
         if (dGroup != null) {
@@ -413,16 +396,14 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @return
-     * the player's group tag
+     * @return the player's group tag
      */
     public DGroupTag getDGroupTag() {
         return groupTag;
     }
 
     /**
-     * @return
-     * the player's group tag
+     * Creates a new group tag for the player.
      */
     public void initDGroupTag() {
         groupTag = new DGroupTag(this);
@@ -470,8 +451,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param message
-     * if messages should be sent
+     * @param message if messages should be sent
      */
     public void leave(boolean message) {
         Game game = Game.getByWorld(getWorld());
@@ -761,8 +741,7 @@ public class DGamePlayer extends DInstancePlayer {
     /**
      * The DGamePlayer finishs the current floor.
      *
-     * @param specifiedFloor
-     * the name of the next floor
+     * @param specifiedFloor the name of the next floor
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
         if (!dGroup.getDungeon().isMultiFloor()) {
@@ -803,8 +782,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     /**
-     * @param message
-     * if messages should be sent
+     * @param message if messages should be sent
      */
     public void finish(boolean message) {
         if (message) {

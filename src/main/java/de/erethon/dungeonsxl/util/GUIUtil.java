@@ -43,8 +43,7 @@ public enum GUIUtil {
     }
 
     /**
-     * @param count
-     * the amount of buttons
+     * @param count the amount of buttons
      */
     public static GUIUtil getRowShapeByButtonCount(int count) {
         if (count >= 1 && count <= 9) {
@@ -59,26 +58,20 @@ public enum GUIUtil {
     }
 
     /**
-     * @param buttons
-     * the buttons to use for the GUI
-     * @return
-     * an Inventory that can easily be shown to a Player
+     * @param plugin  the plugin instance
+     * @param title   the title for the GUI
+     * @param buttons the buttons to use for the GUI
+     * @return an Inventory that can easily be shown to a Player
      */
     public static Inventory createGUI(DungeonsXL plugin, String title, ItemStack... buttons) {
         return createGUI(plugin, title, Arrays.asList(buttons));
     }
 
     /**
-     * @param plugin
-     * the plugin instance
-     * @param title
-     * the GUI title, may contain color codes
-     * @param buttons
-     * the buttons to use for the GUI
-     * @param close
-     * if the GUI may get closed by the viewer
-     * @return
-     * an Inventory that can easily be shown to a Player
+     * @param plugin  the plugin instance
+     * @param title   the GUI title, may contain color codes
+     * @param buttons the buttons to use for the GUI
+     * @return an Inventory that can easily be shown to a Player
      */
     public static Inventory createGUI(DungeonsXL plugin, String title, List<ItemStack> buttons) {
         int rows = (int) Math.ceil(((double) buttons.size()) / 9);

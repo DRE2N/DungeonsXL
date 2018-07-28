@@ -48,8 +48,7 @@ public class OpenDoorSign extends DSign {
     }
 
     /**
-     * @param door
-     * the door to open
+     * @param door the door to open
      */
     public void setDoor(LockedDoor door) {
         this.door = door;
@@ -63,8 +62,7 @@ public class OpenDoorSign extends DSign {
     }
 
     /**
-     * @param active
-     * toggle the sign active
+     * @param active toggle the sign active
      */
     public void setActive(boolean active) {
         this.active = active;

@@ -24,13 +24,11 @@ package de.erethon.dungeonsxl.game;
 public enum GameGoal {
 
     /**
-     * The default goal.
-     * The game ends when the end is reached.
+     * The default goal. The game ends when the end is reached.
      */
     END,
     /**
-     * The game does not end.
-     * Instead, the goal is to survive as long as possible to beat a highscore.
+     * The game does not end. Instead, the goal is to survive as long as possible to beat a highscore.
      */
     HIGHSCORE,
     /**
@@ -42,13 +40,11 @@ public enum GameGoal {
      */
     REACH_SCORE,
     /**
-     * The game ends after a specific time.
-     * The goal is to get the highest score until then.
+     * The game ends after a specific time. The goal is to get the highest score until then.
      */
     TIME_SCORE,
     /**
-     * The game ends after a specific time.
-     * The goal is to survive until then.
+     * The game ends after a specific time. The goal is to survive until then.
      */
     TIME_SURVIVAL;
 

@@ -47,8 +47,7 @@ public class WaveSign extends DSign {
     }
 
     /**
-     * @param mobCountIncreaseRate
-     * the mobCountIncreaseRate to set
+     * @param mobCountIncreaseRate the mobCountIncreaseRate to set
      */
     public void setMobCountIncreaseRate(double mobCountIncreaseRate) {
         this.mobCountIncreaseRate = mobCountIncreaseRate;
@@ -62,8 +61,7 @@ public class WaveSign extends DSign {
     }
 
     /**
-     * @param teleport
-     * Set if the players shall get teleported to the start location
+     * @param teleport Set if the players shall get teleported to the start location
      */
     public void setTeleport(boolean teleport) {
         this.teleport = teleport;

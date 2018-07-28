@@ -53,8 +53,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param initialized
-     * the initialized to set
+     * @param initialized the initialized to set
      */
     public void setInitialized(boolean initialized) {
         this.initialized = initialized;
@@ -68,8 +67,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param active
-     * the active to set
+     * @param active the active to set
      */
     public void setActive(boolean active) {
         this.active = active;
@@ -83,8 +81,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param enableTask
-     * the enableTask to set
+     * @param enableTask the enableTask to set
      */
     public void setEnableTask(BukkitTask enableTask) {
         this.enableTask = enableTask;
@@ -98,8 +95,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param disableTask
-     * the disableTask to set
+     * @param disableTask the disableTask to set
      */
     public void setDisableTask(BukkitTask disableTask) {
         this.disableTask = disableTask;
@@ -113,8 +109,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param block
-     * the block to set
+     * @param block the block to set
      */
     public void setBlock(Block block) {
         this.block = block;
@@ -128,8 +123,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param delay
-     * the delay to set
+     * @param delay the delay to set
      */
     public void setDelay(long delay) {
         this.delay = delay;
@@ -143,8 +137,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param offDelay
-     * the offDelay to set
+     * @param offDelay the offDelay to set
      */
     public void setOffDelay(long offDelay) {
         this.offDelay = offDelay;
@@ -158,8 +151,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param repeat
-     * the repeat to set
+     * @param repeat the repeat to set
      */
     public void setRepeat(int repeat) {
         this.repeat = repeat;
@@ -173,8 +165,7 @@ public class RedstoneSign extends DSign {
     }
 
     /**
-     * @param repeatsToDo
-     * the repeatsToDo to set
+     * @param repeatsToDo the repeatsToDo to set
      */
     public void setRepeatsToDo(int repeatsToDo) {
         this.repeatsToDo = repeatsToDo;

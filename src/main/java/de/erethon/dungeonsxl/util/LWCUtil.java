@@ -26,8 +26,7 @@ public class LWCUtil {
     }
 
     /**
-     * @return
-     * true if LWC is loaded
+     * @return true if LWC is loaded
      */
     public static boolean isLWCLoaded() {
         return Bukkit.getPluginManager().getPlugin("LWC") != null;

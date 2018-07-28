@@ -112,16 +112,14 @@ public abstract class DInstanceWorld {
     }
 
     /**
-     * @param lobby
-     * the spawn location to set
+     * @param lobby the spawn location to set
      */
     public void setLobbyLocation(Location lobby) {
         this.lobby = lobby;
     }
 
     /**
-     * @return
-     * the players in this world
+     * @return the players in this world
      */
     public Collection<DInstancePlayer> getPlayers() {
         Collection<DInstancePlayer> players = new ArrayList<>();
@@ -137,8 +135,7 @@ public abstract class DInstanceWorld {
     /**
      * Sends a message to all players in the instance.
      *
-     * @param message
-     * the message to send
+     * @param message the message to send
      */
     public void sendMessage(String message) {
         for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
@@ -147,9 +144,7 @@ public abstract class DInstanceWorld {
     }
 
     /**
-     * Makes all players leave the world.
-     * Attempts to let them leave properly if they are correct DInstancePlayers;
-     * teleports them to the spawn if they are not.
+     * Makes all players leave the world. Attempts to let them leave properly if they are correct DInstancePlayers; teleports them to the spawn if they are not.
      */
     public void kickAllPlayers() {
         getPlayers().forEach(p -> p.leave());
@@ -158,8 +153,7 @@ public abstract class DInstanceWorld {
     }
 
     /**
-     * @param rules
-     * sets up the time and weather to match the rules
+     * @param rules sets up the time and weather to match the rules
      */
     public void setWeather(GameRuleProvider rules) {
         if (world == null) {

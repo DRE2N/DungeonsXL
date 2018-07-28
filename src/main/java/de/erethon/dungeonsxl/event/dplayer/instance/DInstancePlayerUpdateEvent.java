@@ -53,8 +53,7 @@ public class DInstancePlayerUpdateEvent extends DInstancePlayerEvent implements 
     }
 
     /**
-     * @param locationValid
-     * set if the location is valid
+     * @param locationValid set if the location is valid
      */
     public void setLocationValid(boolean locationValid) {
         this.locationValid = locationValid;
@@ -68,8 +67,7 @@ public class DInstancePlayerUpdateEvent extends DInstancePlayerEvent implements 
     }
 
     /**
-     * @param teleportWolf
-     * set if the wolf gets teleported
+     * @param teleportWolf set if the wolf gets teleported
      */
     public void setTeleportWolf(boolean teleportWolf) {
         this.teleportWolf = teleportWolf;
@@ -83,8 +81,7 @@ public class DInstancePlayerUpdateEvent extends DInstancePlayerEvent implements 
     }
 
     /**
-     * @param respawnInventory
-     * respawn the player's old inventory on this update?
+     * @param respawnInventory respawn the player's old inventory on this update?
      */
     public void setRespawnInventory(boolean respawnInventory) {
         this.respawnInventory = respawnInventory;
@@ -105,8 +102,7 @@ public class DInstancePlayerUpdateEvent extends DInstancePlayerEvent implements 
     }
 
     /**
-     * @param kick
-     * if the player gets kicked from the dungeon
+     * @param kick if the player gets kicked from the dungeon
      */
     public void setKick(boolean kick) {
         this.kick = kick;
@@ -120,8 +116,7 @@ public class DInstancePlayerUpdateEvent extends DInstancePlayerEvent implements 
     }
 
     /**
-     * @param triggerAllInDistance
-     * the triggerAllInDistance to set
+     * @param triggerAllInDistance the triggerAllInDistance to set
      */
     public void setTriggerAllInDistance(boolean triggerAllInDistance) {
         this.triggerAllInDistance = triggerAllInDistance;

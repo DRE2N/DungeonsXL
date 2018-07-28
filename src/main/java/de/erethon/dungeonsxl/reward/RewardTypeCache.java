@@ -37,6 +37,7 @@ public class RewardTypeCache {
     }
 
     /**
+     * @param identifier the identifier to check
      * @return the reward type which has the identifier
      */
     public RewardType getByIdentifier(String identifier) {
@@ -57,16 +58,14 @@ public class RewardTypeCache {
     }
 
     /**
-     * @param type
-     * the reward type to add
+     * @param type the reward type to add
      */
     public void addReward(RewardType type) {
         types.add(type);
     }
 
     /**
-     * @param type
-     * the reward type to remove
+     * @param type the reward type to remove
      */
     public void removeReward(RewardType type) {
         types.remove(type);

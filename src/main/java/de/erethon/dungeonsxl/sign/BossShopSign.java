@@ -52,8 +52,7 @@ public class BossShopSign extends DSign {
     }
 
     /**
-     * @param name
-     * the name of the shop
+     * @param name the name of the shop
      */
     public void setShopName(String name) {
         shopName = name;

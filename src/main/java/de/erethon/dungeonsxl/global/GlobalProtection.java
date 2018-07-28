@@ -55,8 +55,7 @@ public abstract class GlobalProtection {
     }
 
     /**
-     * @param world
-     * the world to set
+     * @param world the world to set
      */
     public void setWorld(World world) {
         this.world = world;
@@ -85,8 +84,7 @@ public abstract class GlobalProtection {
     }
 
     /**
-     * @param file
-     * the file to save the protection to
+     * @param file the file to save the protection to
      */
     public void save(File file) {
         save(YamlConfiguration.loadConfiguration(file));
@@ -107,8 +105,7 @@ public abstract class GlobalProtection {
 
     /* Abstracts */
     /**
-     * @param config
-     * the config to save the protection to
+     * @param config the config to save the protection to
      */
     public abstract void save(FileConfiguration config);
 

@@ -38,8 +38,7 @@ public abstract class DPlayerEvent extends Event {
     }
 
     /**
-     * @param dPlayer
-     * the dPlayer to set
+     * @param dPlayer the dPlayer to set
      */
     public void setDPlayer(DGlobalPlayer dPlayer) {
         this.dPlayer = dPlayer;

@@ -41,15 +41,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Game mostly stores for which purposes and how a {@link de.erethon.dungeonsxl.dungeon.Dungeon} is used,
- * the player groups and the progress.
+ * Game mostly stores for which purposes and how a {@link de.erethon.dungeonsxl.dungeon.Dungeon} is used, the player groups and the progress.
  *
  * @author Daniel Saukel
  */
 public class Game {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    
+
     private boolean tutorial;
     private List<DGroup> dGroups = new ArrayList<>();
     private boolean started;
@@ -135,8 +134,7 @@ public class Game {
     }
 
     /**
-     * @param tutorial
-     * if the DGameWorld is the tutorial
+     * @param tutorial if the DGameWorld is the tutorial
      */
     public void setTutorial(boolean tutorial) {
         this.tutorial = tutorial;
@@ -150,8 +148,7 @@ public class Game {
     }
 
     /**
-     * @param dGroup
-     * the dGroups to add
+     * @param dGroup the dGroups to add
      */
     public void addDGroup(DGroup dGroup) {
         dGroups.add(dGroup);
@@ -162,8 +159,7 @@ public class Game {
     }
 
     /**
-     * @param dGroup
-     * the dGroups to remove
+     * @param dGroup the dGroups to remove
      */
     public void removeDGroup(DGroup dGroup) {
         dGroups.remove(dGroup);
@@ -181,8 +177,7 @@ public class Game {
     }
 
     /**
-     * @param started
-     * set if the Game has started yet
+     * @param started set if the Game has started yet
      */
     public void setStarted(boolean started) {
         this.started = started;
@@ -196,8 +191,7 @@ public class Game {
     }
 
     /**
-     * @param type
-     * the type to set
+     * @param type the type to set
      */
     public void setType(GameType type) {
         this.type = type;
@@ -211,8 +205,7 @@ public class Game {
     }
 
     /**
-     * @param world
-     * the DGameWorld to connect to the Game
+     * @param world the DGameWorld to connect to the Game
      */
     public void setWorld(DGameWorld world) {
         this.world = world;
@@ -226,21 +219,15 @@ public class Game {
     }
 
     /**
-     * @param rules
-     * the GameRules to set
+     * @param rules the GameRules to set
      */
     public void setRules(GameRuleProvider rules) {
         this.rules = rules;
     }
 
     /**
-     * Fetchs the rules with the following priority:
-     * 1. Game type
-     * 2. Dungeon config: Override values
-     * 3. Floor config
-     * 4. Dungeon config: Default values
-     * 5. Main config: Default values
-     * 6. The default values
+     * Fetchs the rules with the following priority: 1. Game type 2. Dungeon config: Override values 3. Floor config 4. Dungeon config: Default values 5. Main
+     * config: Default values 6. The default values
      */
     public void fetchRules() {
         DungeonConfig dungeonConfig = null;
@@ -316,8 +303,7 @@ public class Game {
     }
 
     /**
-     * @param waveCount
-     * the waveCount to set
+     * @param waveCount the waveCount to set
      */
     public void setWaveCount(int waveCount) {
         this.waveCount = waveCount;
@@ -346,8 +332,7 @@ public class Game {
     }
 
     /**
-     * @param killer
-     * the killer; null if the killer is not a player
+     * @param killer the killer; null if the killer is not a player
      */
     public void addKill(String killer) {
         if (killer == null) {
@@ -406,10 +391,8 @@ public class Game {
     }
 
     /**
-     * @param mobCountIncreaseRate
-     * the new mob count will be increased by this rate
-     * @param teleport
-     * whether or not to teleport the players to the start location
+     * @param mobCountIncreaseRate the new mob count will be increased by this rate
+     * @param teleport whether or not to teleport the players to the start location
      */
     public void finishWave(final double mobCountIncreaseRate, final boolean teleport) {
         waveCount++;

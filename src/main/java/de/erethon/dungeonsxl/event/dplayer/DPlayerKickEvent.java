@@ -53,8 +53,7 @@ public class DPlayerKickEvent extends DPlayerEvent implements Cancellable {
     }
 
     /**
-     * @param cause
-     * the cause to set
+     * @param cause the cause to set
      */
     public void setCause(Cause cause) {
         this.cause = cause;

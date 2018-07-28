@@ -47,8 +47,7 @@ public class ClassesSign extends DSign {
     }
 
     /**
-     * @param dClass
-     * the DClass to set
+     * @param dClass the DClass to set
      */
     public void setDClass(DClass dClass) {
         this.dClass = dClass;

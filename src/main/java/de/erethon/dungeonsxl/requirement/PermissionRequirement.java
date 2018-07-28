@@ -40,8 +40,7 @@ public class PermissionRequirement extends Requirement {
     }
 
     /**
-     * @param permissions
-     * the permissions to set
+     * @param permissions the permissions to set
      */
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;

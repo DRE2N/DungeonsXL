@@ -81,8 +81,7 @@ public class DPortal extends GlobalProtection {
     }
 
     /**
-     * @param block1
-     * the block1 to set
+     * @param block1 the block1 to set
      */
     public void setBlock1(Block block1) {
         this.block1 = block1;
@@ -96,8 +95,7 @@ public class DPortal extends GlobalProtection {
     }
 
     /**
-     * @param block2
-     * the block2 to set
+     * @param block2 the block2 to set
      */
     public void setBlock2(Block block2) {
         this.block2 = block2;
@@ -111,8 +109,7 @@ public class DPortal extends GlobalProtection {
     }
 
     /**
-     * @param active
-     * set the DPortal active
+     * @param active set the DPortal active
      */
     public void setActive(boolean active) {
         this.active = active;
@@ -120,6 +117,8 @@ public class DPortal extends GlobalProtection {
 
     /**
      * Create a new DPortal
+     *
+     * @param player the creator
      */
     public void create(DGlobalPlayer player) {
         if (block1 == null || block2 == null) {
@@ -188,8 +187,7 @@ public class DPortal extends GlobalProtection {
     }
 
     /**
-     * @param player
-     * the player to teleport into his dungeon
+     * @param player the player to teleport into his dungeon
      */
     public void teleport(Player player) {
         DGroup dGroup = DGroup.getByPlayer(player);
@@ -330,16 +328,16 @@ public class DPortal extends GlobalProtection {
 
     /* Statics */
     /**
-     * @param location
-     * a location covered by the returned portal
+     * @param location a location covered by the returned portal
+     * @return the portal at the location, null if there is none
      */
     public static DPortal getByLocation(Location location) {
         return getByBlock(location.getBlock());
     }
 
     /**
-     * @param block
-     * a block covered by the returned portal
+     * @param block a block covered by the returned portal
+     * @return the portal that the block belongs to, null if it belongs to none
      */
     public static DPortal getByBlock(Block block) {
         for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(DPortal.class)) {

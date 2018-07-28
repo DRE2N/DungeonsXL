@@ -73,8 +73,7 @@ public class RewardChest extends GameBlock {
     }
 
     /**
-     * @param used
-     * set if the chest is used
+     * @param used set if the chest is used
      */
     public void setUsed(boolean used) {
         this.used = used;
@@ -88,8 +87,7 @@ public class RewardChest extends GameBlock {
     }
 
     /**
-     * @param chest
-     * the chest to set
+     * @param chest the chest to set
      */
     public void setChest(Chest chest) {
         this.chest = chest;
@@ -103,8 +101,7 @@ public class RewardChest extends GameBlock {
     }
 
     /**
-     * @param moneyReward
-     * the moneyReward to set
+     * @param moneyReward the moneyReward to set
      */
     public void setMoneyReward(double moneyReward) {
         this.moneyReward = moneyReward;
@@ -118,8 +115,7 @@ public class RewardChest extends GameBlock {
     }
 
     /**
-     * @param levelReward
-     * the levelReward to set
+     * @param levelReward the levelReward to set
      */
     public void setLevelReward(int levelReward) {
         this.levelReward = levelReward;
@@ -132,8 +128,7 @@ public class RewardChest extends GameBlock {
     }
 
     /**
-     * @param opener
-     * the player who opens the chest
+     * @param opener the player who opens the chest
      */
     public void onOpen(Player opener) {
         if (used) {

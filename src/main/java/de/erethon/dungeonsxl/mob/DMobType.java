@@ -70,18 +70,15 @@ public class DMobType extends ExMob {
     private String ocelotType = null;
 
     /**
-     * @param file
-     * the script file
+     * @param file the script file
      */
     public DMobType(File file) {
         this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
     }
 
     /**
-     * @param name
-     * the name of the DMobType
-     * @param config
-     * the config that stores the information
+     * @param name the name of the DMobType
+     * @param config the config that stores the information
      */
     public DMobType(String name, FileConfiguration config) {
         this.name = name;
@@ -190,10 +187,8 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param name
-     * the name of the DMobType
-     * @param type
-     * the EntityType of the mob
+     * @param name the name of the DMobType
+     * @param type the EntityType of the mob
      */
     public DMobType(String name, EntityType type) {
         this.name = name;
@@ -209,8 +204,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param name
-     * the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -224,8 +218,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param type
-     * the type to set
+     * @param type the type to set
      */
     public void setType(EntityType type) {
         this.type = type;
@@ -239,8 +232,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param maxHealth
-     * the maxHealth to set
+     * @param maxHealth the maxHealth to set
      */
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
@@ -254,8 +246,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param itemHand
-     * the itemHand to set
+     * @param itemHand the itemHand to set
      */
     public void setitemHand(ItemStack itemHand) {
         this.itemHand = itemHand;
@@ -269,8 +260,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param itemHelmet
-     * the itemHelmet to set
+     * @param itemHelmet the itemHelmet to set
      */
     public void setitemHelmet(ItemStack itemHelmet) {
         this.itemHelmet = itemHelmet;
@@ -284,8 +274,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param itemChestplate
-     * the itemChestplate to set
+     * @param itemChestplate the itemChestplate to set
      */
     public void setitemChestplate(ItemStack itemChestplate) {
         this.itemChestplate = itemChestplate;
@@ -299,8 +288,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param itemLeggings
-     * the itemLeggings to set
+     * @param itemLeggings the itemLeggings to set
      */
     public void setitemLeggings(ItemStack itemLeggings) {
         this.itemLeggings = itemLeggings;
@@ -314,8 +302,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param itemBoots
-     * the itemBoots to set
+     * @param itemBoots the itemBoots to set
      */
     public void setitemBoots(ItemStack itemBoots) {
         this.itemBoots = itemBoots;
@@ -329,8 +316,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param drops
-     * the drops to set
+     * @param drops the drops to set
      */
     public void setDrops(Map<ItemStack, Integer> drops) {
         this.drops = drops;
@@ -344,8 +330,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param witherSkeleton
-     * set if the skeleton is a wither skeleton
+     * @param witherSkeleton set if the skeleton is a wither skeleton
      */
     public void setWitherSkeleton(boolean witherSkeleton) {
         this.witherSkeleton = witherSkeleton;
@@ -359,8 +344,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param ocelotType
-     * the ocelotType to set
+     * @param ocelotType the ocelotType to set
      */
     public void setOcelotType(String ocelotType) {
         this.ocelotType = ocelotType;

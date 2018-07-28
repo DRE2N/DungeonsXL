@@ -116,6 +116,8 @@ public class DGlobalPlayer implements PlayerWrapper {
 
     /**
      * Load / reload a new instance of DPlayerData
+     *
+     * @param file the file to load from
      */
     public void loadPlayerData(File file) {
         data = new DPlayerData(file);
@@ -129,8 +131,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param breakMode
-     * sets if the player is in break mode
+     * @param breakMode sets if the player is in break mode
      */
     public void setInBreakMode(boolean breakMode) {
         this.breakMode = breakMode;
@@ -147,8 +148,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param groupChat
-     * set if the player is in group chat
+     * @param groupChat set if the player is in group chat
      */
     public void setInGroupChat(boolean groupChat) {
         this.groupChat = groupChat;
@@ -165,8 +165,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param chatSpyMode
-     * sets if the player is in chat spy mode
+     * @param chatSpyMode sets if the player is in chat spy mode
      */
     public void setInChatSpyMode(boolean chatSpyMode) {
         this.chatSpyMode = chatSpyMode;
@@ -187,8 +186,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param dPortal
-     * the portal to create
+     * @param dPortal the portal to create
      */
     public void setCreatingPortal(DPortal dPortal) {
         creatingPortal = dPortal;
@@ -202,8 +200,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param item
-     * the cached item to set
+     * @param item the cached item to set
      */
     public void setCachedItem(ItemStack item) {
         cachedItem = item;
@@ -217,8 +214,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param enabled
-     * set if the players receives announcer messages
+     * @param enabled set if the players receives announcer messages
      */
     public void setAnnouncerEnabled(boolean enabled) {
         announcerEnabled = enabled;
@@ -232,8 +228,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param respawnInventory
-     * the respawnInventory to set
+     * @param respawnInventory the respawnInventory to set
      */
     public void setRespawnInventory(ItemStack[] respawnInventory) {
         this.respawnInventory = respawnInventory;
@@ -261,16 +256,14 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param respawnArmor
-     * the respawnArmor to set
+     * @param respawnArmor the respawnArmor to set
      */
     public void setRespawnArmor(ItemStack[] respawnArmor) {
         this.respawnArmor = respawnArmor;
     }
 
     /**
-     * @param permission
-     * the permission to check
+     * @param permission the permission to check
      * @return if the player has the permission
      */
     public boolean hasPermission(DPermission permission) {
@@ -292,16 +285,14 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * @param rewardItems
-     * the reward items to set
+     * @param rewardItems the reward items to set
      */
     public void setRewardItems(List<ItemStack> rewardItems) {
         this.rewardItems = rewardItems;
     }
 
     /**
-     * @param permission
-     * the permission to check
+     * @param permission the permission to check
      * @return if the player has the permission
      */
     public boolean hasPermission(String permission) {
@@ -312,8 +303,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     /**
      * Sends a message to the player
      *
-     * @param message
-     * the message to send
+     * @param message the message to send
      */
     public void sendMessage(String message) {
         MessageUtil.sendMessage(player, message);
@@ -321,6 +311,8 @@ public class DGlobalPlayer implements PlayerWrapper {
 
     /**
      * Respawns the player at his old position before he was in a dungeon
+     *
+     * @param keepInventory if the inventory shall be reset
      */
     public void reset(boolean keepInventory) {
         final Location tpLoc = data.getOldLocation().getWorld() != null ? data.getOldLocation() : Bukkit.getWorlds().get(0).getSpawnLocation();

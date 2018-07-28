@@ -51,8 +51,7 @@ public class ResourcePackSign extends DSign {
     }
 
     /**
-     * @param resourcePack
-     * the resource pack to set
+     * @param resourcePack the resource pack to set
      */
     public void setExternalMob(String resourcePack) {
         this.resourcePack = resourcePack;

@@ -38,8 +38,7 @@ public abstract class DSignEvent extends Event {
     }
 
     /**
-     * @param dSign
-     * the dSign to set
+     * @param dSign the dSign to set
      */
     public void setDSign(DSign dSign) {
         this.dSign = dSign;

@@ -30,8 +30,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * A raw resource world instance to edit the dungeon map.
- * There is never more than one DEditWorld per DResourceWorld.
+ * A raw resource world instance to edit the dungeon map. There is never more than one DEditWorld per DResourceWorld.
  *
  * @author Frank Baumann, Daniel Saukel
  */
@@ -61,7 +60,7 @@ public class DEditWorld extends DInstanceWorld {
     }
 
     /**
-     * @return the ID file
+     * Generates an ID file for identification upon server restarts
      */
     public void generateIdFile() {
         try {
@@ -81,8 +80,7 @@ public class DEditWorld extends DInstanceWorld {
     }
 
     /**
-     * @param sign
-     * the sign to set
+     * @param signs the sign to set
      */
     public void setSigns(CopyOnWriteArrayList<Block> signs) {
         this.signs = signs;
@@ -92,8 +90,7 @@ public class DEditWorld extends DInstanceWorld {
     /**
      * Registers the block as a DSign sothat it can later be saved persistently.
      *
-     * @param block
-     * a DSign block
+     * @param block a DSign block
      */
     public void registerSign(Block block) {
         if (block.getState() instanceof Sign) {
@@ -144,8 +141,7 @@ public class DEditWorld extends DInstanceWorld {
     /**
      * Deletes this edit instance.
      *
-     * @param save
-     * whether this world should be saved
+     * @param save whether this world should be saved
      */
     public void delete(final boolean save) {
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
@@ -191,20 +187,16 @@ public class DEditWorld extends DInstanceWorld {
 
     /* Statics */
     /**
-     * @param world
-     * the instance
-     * @return
-     * the DEditWorld that represents the world
+     * @param world the instance
+     * @return the DEditWorld that represents the world
      */
     public static DEditWorld getByWorld(World world) {
         return getByName(world.getName());
     }
 
     /**
-     * @param world
-     * the instance name
-     * @return
-     * the DEditWorld that represents the world
+     * @param name the instance name
+     * @return the DEditWorld that represents the world
      */
     public static DEditWorld getByName(String name) {
         DInstanceWorld instance = DungeonsXL.getInstance().getDWorlds().getInstanceByName(name);

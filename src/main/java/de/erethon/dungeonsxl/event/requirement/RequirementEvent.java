@@ -39,8 +39,7 @@ public abstract class RequirementEvent extends Event {
     }
 
     /**
-     * @param requirement
-     * the requirement to set
+     * @param requirement the requirement to set
      */
     public void setRequirement(Requirement requirement) {
         this.requirement = requirement;

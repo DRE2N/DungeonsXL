@@ -39,6 +39,7 @@ public class SignScriptCache {
     }
 
     /**
+     * @param name the name to check
      * @return the script that has the name
      */
     public SignScript getByName(String name) {
@@ -59,16 +60,14 @@ public class SignScriptCache {
     }
 
     /**
-     * @param script
-     * the SignScript to add
+     * @param script the SignScript to add
      */
     public void addScript(SignScript script) {
         scripts.add(script);
     }
 
     /**
-     * @param script
-     * the SignScript to remove
+     * @param script the SignScript to remove
      */
     public void removeScript(SignScript script) {
         scripts.remove(script);

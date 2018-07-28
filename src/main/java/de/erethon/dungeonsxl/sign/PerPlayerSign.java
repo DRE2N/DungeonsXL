@@ -40,10 +40,8 @@ public abstract class PerPlayerSign extends DSign {
     }
 
     /**
-     * @param player
-     * the player to check
-     * @return
-     * true if the player already triggered the sign
+     * @param player the player to check
+     * @return true if the player already triggered the sign
      */
     public boolean isTriggeredByPlayer(Player player) {
         return triggered.contains(player.getUniqueId());

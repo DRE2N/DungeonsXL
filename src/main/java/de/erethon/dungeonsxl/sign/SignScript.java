@@ -24,8 +24,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
- * Representation of a sign script.
- * Sign scripts allow to merge multiple dungeon signs at one position.
+ * Representation of a sign script. Sign scripts allow to merge multiple dungeon signs at one position.
  *
  * @author Daniel Saukel
  */
@@ -36,18 +35,15 @@ public class SignScript {
     private List<String[]> signs;
 
     /**
-     * @param file
-     * the script file
+     * @param file the script file
      */
     public SignScript(File file) {
         this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
     }
 
     /**
-     * @param name
-     * the name of the Announcer
-     * @param config
-     * the config that stores the information
+     * @param name the name of the Announcer
+     * @param config the config that stores the information
      */
     public SignScript(String name, FileConfiguration config) {
         this.name = name;
@@ -76,8 +72,7 @@ public class SignScript {
     }
 
     /**
-     * @param index
-     * the index number
+     * @param index the index number
      * @return the lines of the sign
      */
     public String[] getLines(int index) {
@@ -85,10 +80,8 @@ public class SignScript {
     }
 
     /**
-     * @param index
-     * the index number
-     * @param lines
-     * the lines to set
+     * @param index the index number
+     * @param lines the lines to set
      */
     public void setLines(int index, String[] lines) {
         signs.set(index, lines);

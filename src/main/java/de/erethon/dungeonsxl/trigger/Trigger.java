@@ -49,8 +49,7 @@ public abstract class Trigger {
     }
 
     /**
-     * @param triggered
-     * the triggered to set
+     * @param triggered the triggered to set
      */
     public void setTriggered(boolean triggered) {
         this.triggered = triggered;
@@ -64,8 +63,7 @@ public abstract class Trigger {
     }
 
     /**
-     * @param player
-     * the player to set
+     * @param player the player to set
      */
     public void setPlayer(Player player) {
         this.player = player;
@@ -79,16 +77,14 @@ public abstract class Trigger {
     }
 
     /**
-     * @param dSign
-     * the dSign to add
+     * @param dSign the dSign to add
      */
     public void addDSign(DSign dSign) {
         dSigns.add(dSign);
     }
 
     /**
-     * @param dSign
-     * the dSign to remove
+     * @param dSign the dSign to remove
      */
     public void removeDSign(DSign dSign) {
         dSigns.remove(dSign);

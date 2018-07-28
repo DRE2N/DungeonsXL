@@ -57,32 +57,28 @@ public class JoinSign extends GlobalProtection {
     }
 
     /**
-     * @return
-     * the dungeon
+     * @return the dungeon
      */
     public Dungeon getDungeon() {
         return dungeon;
     }
 
     /**
-     * @param dungeon
-     * the dungeon to set
+     * @param dungeon the dungeon to set
      */
     public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
     }
 
     /**
-     * @return
-     * the maximum element count per sign
+     * @return the maximum element count per sign
      */
     public int getMaxElements() {
         return maxElements;
     }
 
     /**
-     * @param maxElements
-     * the maximum element count per sign
+     * @param maxElements the maximum element count per sign
      */
     public void setMaxElements(int maxElements) {
         this.maxElements = maxElements;

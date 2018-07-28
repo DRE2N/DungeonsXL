@@ -42,16 +42,14 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
 
     /* Getters and setters */
     /**
-     * @return
-     * the instance
+     * @return the instance
      */
     public World getWorld() {
         return world;
     }
 
     /**
-     * @param world
-     * the instance to set
+     * @param instance the instance to set
      */
     public void setWorld(World instance) {
         world = instance;
@@ -96,8 +94,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
     /**
      * Makes the player send a message to the world.
      *
-     * @param message
-     * the message to send
+     * @param message the message to send
      */
     public void chat(String message) {
         DInstanceWorld instance = plugin.getDWorlds().getInstanceByWorld(world);
@@ -124,9 +121,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
     /**
      * Repeating checks for the player.
      *
-     * @param updateSecond
-     * Not all checks have to be done as often as others;
-     * some are just done in "update seconds".
+     * @param updateSecond Not all checks have to be done as often as others; some are just done in "update seconds".
      */
     public abstract void update(boolean updateSecond);
 

@@ -40,24 +40,21 @@ public class ItemReward extends Reward {
     }
 
     /**
-     * @param items
-     * the reward items to set
+     * @param items the reward items to set
      */
     public void setItems(List<ItemStack> items) {
         this.items = items;
     }
 
     /**
-     * @param items
-     * the reward items to add
+     * @param items the reward items to add
      */
     public void addItems(ItemStack... items) {
         this.items.addAll(Arrays.asList(items));
     }
 
     /**
-     * @param items
-     * the reward items to remove
+     * @param items the reward items to remove
      */
     public void removeItems(ItemStack... items) {
         this.items.addAll(Arrays.asList(items));

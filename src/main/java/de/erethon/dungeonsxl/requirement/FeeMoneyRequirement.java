@@ -42,8 +42,7 @@ public class FeeMoneyRequirement extends Requirement {
     }
 
     /**
-     * @param fee
-     * the fee to set
+     * @param fee the fee to set
      */
     public void setFee(double fee) {
         this.fee = fee;

@@ -37,6 +37,7 @@ public class TriggerTypeCache {
     }
 
     /**
+     * @param identifier the identifier to check
      * @return the trigger which has the identifier
      */
     public TriggerType getByIdentifier(String identifier) {
@@ -57,16 +58,14 @@ public class TriggerTypeCache {
     }
 
     /**
-     * @param type
-     * the type to add
+     * @param type the type to add
      */
     public void addTrigger(TriggerType type) {
         types.add(type);
     }
 
     /**
-     * @param type
-     * the type to remove
+     * @param type the type to remove
      */
     public void removeTrigger(TriggerType type) {
         types.remove(type);
