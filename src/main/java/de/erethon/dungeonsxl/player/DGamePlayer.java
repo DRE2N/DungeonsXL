@@ -249,7 +249,7 @@ public class DGamePlayer extends DInstancePlayer {
         /* Delete Inventory */
         getPlayer().getInventory().clear();
         getPlayer().getInventory().setArmorContents(null);
-        getPlayer().getInventory().setItemInHand(VanillaItem.AIR.toItemStack());
+        getPlayer().getInventory().setItemInMainHand(VanillaItem.AIR.toItemStack());
 
         // Remove Potion Effects
         for (PotionEffect effect : getPlayer().getActivePotionEffects()) {

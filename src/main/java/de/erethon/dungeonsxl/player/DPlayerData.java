@@ -439,9 +439,7 @@ public class DPlayerData extends DREConfig {
         oldLvl = player.getLevel();
         oldArmor = new ArrayList<>(Arrays.asList(player.getInventory().getArmorContents()));
         oldInventory = new ArrayList<>(Arrays.asList(player.getInventory().getContents()));
-        if (is1_9) {
-            oldOffHand = player.getInventory().getItemInOffHand();
-        }
+        oldOffHand = player.getInventory().getItemInOffHand();
         oldLocation = player.getLocation();
         oldPotionEffects = player.getActivePotionEffects();
 

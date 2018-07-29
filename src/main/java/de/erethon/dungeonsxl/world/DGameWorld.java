@@ -592,7 +592,7 @@ public class DGameWorld extends DInstanceWorld {
 
         Map<ExItem, HashSet<ExItem>> whitelist = rules.getBreakWhitelist();
         ExItem material = VanillaItem.get(block.getType());
-        ExItem breakTool = caliburn.getExItem(player.getItemInHand());
+        ExItem breakTool = caliburn.getExItem(player.getInventory().getItemInMainHand());
 
         if (whitelist == null) {
             if (rules.canBreakPlacedBlocks()) {

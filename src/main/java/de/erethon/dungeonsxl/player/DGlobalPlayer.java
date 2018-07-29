@@ -338,9 +338,7 @@ public class DGlobalPlayer implements PlayerWrapper {
                 }
                 player.getInventory().setContents(data.getOldInventory().toArray(new ItemStack[36]));
                 player.getInventory().setArmorContents(data.getOldArmor().toArray(new ItemStack[4]));
-                if (is1_9) {
-                    player.getInventory().setItemInOffHand(data.getOldOffHand());
-                }
+                player.getInventory().setItemInOffHand(data.getOldOffHand());
                 player.setLevel(data.getOldLevel());
                 player.setExp(data.getOldExp());
                 if (is1_9) {

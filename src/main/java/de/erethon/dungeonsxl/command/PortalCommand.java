@@ -73,14 +73,14 @@ public class PortalCommand extends DRECommand {
             dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
-            dGlobalPlayer.setCachedItem(player.getItemInHand());
-            player.getInventory().setItemInHand(VanillaItem.WOODEN_SWORD.toItemStack());
+            dGlobalPlayer.setCachedItem(player.getInventory().getItemInMainHand());
+            player.getInventory().setItemInMainHand(VanillaItem.WOODEN_SWORD.toItemStack());
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_INTRODUCTION.getMessage());
 
         } else {
             dPortal.delete();
             dGlobalPlayer.setCreatingPortal(null);
-            player.setItemInHand(dGlobalPlayer.getCachedItem());
+            player.getInventory().setItemInMainHand(dGlobalPlayer.getCachedItem());
             dGlobalPlayer.setCachedItem(null);
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_ABORT.getMessage());
         }
