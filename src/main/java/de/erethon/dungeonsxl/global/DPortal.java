@@ -26,15 +26,16 @@ import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.MagicValueUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Axis;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Orientable;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -48,7 +49,7 @@ public class DPortal extends GlobalProtection {
     private Block block1;
     private Block block2;
     private ExItem material = VanillaItem.NETHER_PORTAL;
-    private byte axis;
+    private Axis axis;
     private boolean active;
     private Set<Block> blocks;
 
@@ -63,7 +64,7 @@ public class DPortal extends GlobalProtection {
         this.active = active;
     }
 
-    public DPortal(int id, Block block1, Block block2, ExItem material, byte axis, boolean active) {
+    public DPortal(int id, Block block1, Block block2, ExItem material, Axis axis, boolean active) {
         super(block1.getWorld(), id);
 
         this.block1 = block1;
@@ -129,9 +130,9 @@ public class DPortal extends GlobalProtection {
         if (player != null && material == VanillaItem.NETHER_PORTAL) {
             float yaw = player.getPlayer().getLocation().getYaw();
             if (yaw >= 45 & yaw < 135 || yaw >= 225 & yaw < 315) {
-                axis = 2;//z;
+                axis = Axis.Z;
             } else if (yaw >= 315 | yaw < 45 || yaw >= 135 & yaw < 225) {
-                axis = 1;//x;
+                axis = Axis.X;
             }
         }
 
@@ -168,7 +169,7 @@ public class DPortal extends GlobalProtection {
                         Block block = getWorld().getBlockAt(xx, yy, zz);
                         block.setType(material.getMaterial(), false);
                         if (material == VanillaItem.NETHER_PORTAL) {
-                            MagicValueUtil.setBlockData(block, axis);
+                            ((Orientable) block.getBlockData()).setAxis(axis);
                         }
                     }
 
@@ -270,7 +271,7 @@ public class DPortal extends GlobalProtection {
 
         configFile.set(preString + ".material", material.getId());
         if (material == VanillaItem.NETHER_PORTAL) {
-            configFile.set(preString + ".axis", axis == 2 ? "z" : "x");
+            configFile.set(preString + ".axis", axis.name());
         }
     }
 

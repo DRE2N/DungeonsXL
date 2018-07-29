@@ -18,11 +18,13 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DGroup;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -245,7 +247,7 @@ public class GlobalProtectionCache {
                         Block block2 = world.getBlockAt(data.getInt(preString + "loc2.x"), data.getInt(preString + "loc2.y"), data.getInt(preString + "loc2.z"));
                         ExItem material = plugin.getCaliburn().getExItem(data.getString(preString + "material"));
                         String axis = data.getString(preString + "axis");
-                        DPortal dPortal = new DPortal(id, block1, block2, material != null ? material : VanillaItem.NETHER_PORTAL, (byte) (axis != null && axis.equals("z") ? 2 : 1), true);
+                        DPortal dPortal = new DPortal(id, block1, block2, material != null ? material : VanillaItem.NETHER_PORTAL, EnumUtil.getEnumIgnoreCase(Axis.class, axis), true);
                         dPortal.create(null);
                     }
 
