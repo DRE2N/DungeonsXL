@@ -18,10 +18,10 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.misc.NumberUtil;
-import de.erethon.dungeonsxl.util.MagicValueUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 
 /**
  * @author Milan Albrecht, Daniel Saukel
@@ -33,10 +33,10 @@ public class BlockSign extends DSign {
     // Variables
     private boolean initialized;
     private boolean active;
-    private ExItem offBlock = VanillaItem.AIR;
-    private ExItem onBlock = VanillaItem.AIR;
-    private byte offBlockData = 0x0;
-    private byte onBlockData = 0x0;
+    private ExItem offBlock;
+    private ExItem onBlock;
+    private BlockData offBlockData;
+    private BlockData onBlockData;
 
     public BlockSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
@@ -53,14 +53,14 @@ public class BlockSign extends DSign {
             offBlock = VanillaItem.AIR;
 
         } else {
-            String[] line1 = lines[1].split(",");
-            offBlock = plugin.getCaliburn().getExItem(line1[0]);
+            offBlock = plugin.getCaliburn().getExItem(lines[1]);
             if (offBlock == null) {
-                markAsErroneous("Could not recognize offBlock, input: " + lines[1]);
-                return;
-            }
-            if (line1.length > 1) {
-                offBlockData = (byte) NumberUtil.parseInt(line1[1]);
+                try {
+                    offBlockData = Bukkit.createBlockData(lines[1]);
+                } catch (IllegalArgumentException exception) {
+                    markAsErroneous("Could not recognize offBlock, input: " + lines[1]);
+                    return;
+                }
             }
         }
 
@@ -68,48 +68,69 @@ public class BlockSign extends DSign {
             onBlock = VanillaItem.AIR;
 
         } else {
-            String[] line2 = lines[2].split(",");
-            onBlock = plugin.getCaliburn().getExItem(line2[0]);
+            onBlock = plugin.getCaliburn().getExItem(lines[2]);
             if (onBlock == null) {
-                markAsErroneous("Could not recognize onBlock, input: " + lines[2]);
-                return;
-            }
-            if (line2.length > 1) {
-                onBlockData = (byte) NumberUtil.parseInt(line2[1]);
+                try {
+                } catch (IllegalArgumentException exception) {
+                    markAsErroneous("Could not recognize onBlock, input: " + lines[2]);
+                    return;
+                }
             }
         }
 
-        getSign().getBlock().setType(offBlock.getMaterial());
-        try {
-            MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
-        } catch (IllegalArgumentException exception) {
-            markAsErroneous("offBlock data value " + offBlockData + " cannot be applied to given type " + offBlock.getId());
-            return;
+        if (offBlock != null) {
+            getSign().getBlock().setType(offBlock.getMaterial());
+
+        } else if (offBlockData != null) {
+            try {
+                getSign().getBlock().setBlockData(offBlockData);
+
+            } catch (IllegalArgumentException exception) {
+                markAsErroneous("offBlock data value " + offBlockData + " cannot be applied.");
+                return;
+            }
         }
+
         initialized = true;
     }
 
     @Override
     public void onTrigger() {
-        if (initialized && !active) {
+        if (!initialized || active) {
+            return;
+        }
+
+        if (onBlock != null) {
             getSign().getBlock().setType(onBlock.getMaterial());
+
+        } else if (onBlockData != null) {
             try {
-                MagicValueUtil.setBlockData(getSign().getBlock(), onBlockData);
+                getSign().getBlock().setBlockData(onBlockData);
             } catch (IllegalArgumentException exception) {
                 markAsErroneous("onBlock data value " + onBlockData + " cannot be applied to given type " + onBlock.getId());
                 return;
             }
-            active = true;
         }
+
+        active = true;
     }
 
     @Override
     public void onDisable() {
-        if (initialized && active) {
-            getSign().getBlock().setType(offBlock.getMaterial());
-            MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
-            active = false;
+        if (!initialized || !active) {
+            return;
         }
+
+        if (offBlock != null) {
+            getSign().getBlock().setType(offBlock.getMaterial());
+        } else if (offBlockData != null) {
+            try {
+                getSign().getBlock().setBlockData(offBlockData);
+            } catch (IllegalArgumentException exception) {
+            }
+        }
+
+        active = false;
     }
 
     @Override
