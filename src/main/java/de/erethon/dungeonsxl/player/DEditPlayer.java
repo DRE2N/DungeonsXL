@@ -73,7 +73,7 @@ public class DEditPlayer extends DInstancePlayer {
     }
 
     /**
-     * @param player the represented Player
+     * @param player    the represented Player
      * @param editWorld the player's EditWorld
      */
     public static void create(Player player, DEditWorld editWorld) {
@@ -144,10 +144,7 @@ public class DEditPlayer extends DInstancePlayer {
                 MessageUtil.sendMessage(getPlayer(), DMessage.PLAYER_SIGN_COPIED.getMessage());
             }
         } else {
-            String info = "" + block.getType();
-            if (block.getData() != 0) {
-                info = info + "," + block.getData();
-            }
+            String info = block.getBlockData().getAsString();
             MessageUtil.sendMessage(getPlayer(), DMessage.PLAYER_BLOCK_INFO.getMessage(info));
         }
     }
