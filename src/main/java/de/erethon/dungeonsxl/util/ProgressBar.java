@@ -18,8 +18,9 @@ package de.erethon.dungeonsxl.util;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,11 +37,11 @@ public class ProgressBar extends BukkitRunnable {
 
     public static final String BAR = "\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588";
 
-    private Set<UUID> players = new HashSet<>();
+    private List<UUID> players = new ArrayList<>();
     private int seconds;
     private int secondsLeft;
 
-    public ProgressBar(Set<Player> players, int seconds) {
+    public ProgressBar(Collection<Player> players, int seconds) {
         for (Player player : players) {
             this.players.add(player.getUniqueId());
         }
@@ -89,6 +90,10 @@ public class ProgressBar extends BukkitRunnable {
 
     /**
      * Send the progress bar to a player
+     *
+     * @param player  the player
+     * @param seconds the total time in seconds
+     * @return the scheduled BukkitTask
      */
     public static BukkitTask sendProgressBar(Player player, int seconds) {
         return new ProgressBar(player, seconds).runTaskTimer(DungeonsXL.getInstance(), 0L, 20L);
@@ -96,8 +101,12 @@ public class ProgressBar extends BukkitRunnable {
 
     /**
      * Send the progress bar to multiple players
+     *
+     * @param players a Collection of the players who shall see this progress bar
+     * @param seconds the total time in seconds
+     * @return the scheduled BukkitTask
      */
-    public static BukkitTask sendProgressBar(Set<Player> players, int seconds) {
+    public static BukkitTask sendProgressBar(Collection<Player> players, int seconds) {
         return new ProgressBar(players, seconds).runTaskTimer(DungeonsXL.getInstance(), 0L, 20L);
     }
 

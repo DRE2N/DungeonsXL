@@ -69,7 +69,7 @@ public interface MobSign {
     public int getInitialAmount();
 
     /**
-     * @param amount the amount of mobs to set
+     * @param initialAmount the initial amount of mobs to set
      */
     public void setInitialAmount(int initialAmount);
 
