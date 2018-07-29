@@ -104,7 +104,7 @@ public class DungeonsXL extends DREPlugin {
          * ##########################
          * ####~DREPluginSettings~###
          * ##########################
-         * #~Internals~##~~v1_8_R3+~#
+         * #~Internals~##~v1_13_R1+~#
          * #~SpigotAPI~##~~~~true~~~#
          * #~~~~UUID~~~##~~~~true~~~#
          * #~~Economy~~##~~~~true~~~#
@@ -114,7 +114,7 @@ public class DungeonsXL extends DREPlugin {
          * ##########################
          */
 
-        settings = new DREPluginSettings(true, true, true, true, true, 9488, Internals.andHigher(Internals.v1_8_R3));
+        settings = new DREPluginSettings(true, true, true, true, true, 9488, Internals.andHigher(Internals.v1_13_R1));
     }
 
     @Override
