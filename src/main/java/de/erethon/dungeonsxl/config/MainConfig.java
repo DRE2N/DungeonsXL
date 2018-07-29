@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.config;
 
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.util.DColor;
@@ -654,12 +652,7 @@ public class MainConfig extends DREConfig {
         }
 
         if (config.contains("tweaksEnabled")) {
-            if (Internals.isAtLeast(Internals.v1_9_R1)) {
-                tweaksEnabled = config.getBoolean("tweaksEnabled");
-            } else {
-                tweaksEnabled = false;
-                MessageUtil.log(DMessage.LOG_DISABLED_TWEAKS.getMessage());
-            }
+            tweaksEnabled = config.getBoolean("tweaksEnabled");
         }
 
         if (config.contains("secureMode.enabled")) {
