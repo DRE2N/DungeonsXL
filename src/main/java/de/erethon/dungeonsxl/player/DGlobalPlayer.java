@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.commons.player.PlayerWrapper;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -46,8 +45,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class DGlobalPlayer implements PlayerWrapper {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-
-    boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
 
     protected Player player;
 
@@ -341,9 +338,7 @@ public class DGlobalPlayer implements PlayerWrapper {
                 player.getInventory().setItemInOffHand(data.getOldOffHand());
                 player.setLevel(data.getOldLevel());
                 player.setExp(data.getOldExp());
-                if (is1_9) {
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(data.getOldMaxHealth());
-                }
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(data.getOldMaxHealth());
                 player.setHealth(data.getOldHealth() <= data.getOldMaxHealth() ? data.getOldHealth() : data.getOldMaxHealth());
                 player.setFoodLevel(data.getOldFoodLevel());
                 player.setGameMode(data.getOldGameMode());

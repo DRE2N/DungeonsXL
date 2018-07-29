@@ -46,7 +46,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Damageable;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -242,7 +242,7 @@ public class DGamePlayer extends DInstancePlayer {
             wolf.setTamed(true);
             wolf.setOwner(getPlayer());
 
-            double maxHealth = ((Damageable) wolf).getMaxHealth();
+            double maxHealth = wolf.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
             wolf.setHealth(maxHealth);
         }
 

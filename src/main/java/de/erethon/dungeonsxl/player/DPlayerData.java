@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -44,8 +43,6 @@ import org.bukkit.potion.PotionEffect;
  * @author Daniel Saukel
  */
 public class DPlayerData extends DREConfig {
-
-    boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
 
     public static final int CONFIG_VERSION = 4;
 
@@ -431,9 +428,7 @@ public class DPlayerData extends DREConfig {
         oldGameMode = player.getGameMode();
         oldFireTicks = player.getFireTicks();
         oldFoodLevel = player.getFoodLevel();
-        if (is1_9) {
-            oldMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-        }
+        oldMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
         oldHealth = player.getHealth();
         oldExp = player.getExp();
         oldLvl = player.getLevel();
