@@ -14,25 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.sign.mob;
+package de.erethon.dungeonsxl.sign;
 
 import de.erethon.dungeonsxl.mob.DMob;
-import de.erethon.dungeonsxl.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.World;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class ExternalMobSpawnTask extends BukkitRunnable {
+public class MobSpawnTask extends BukkitRunnable {
 
-    private ExternalMobSign sign;
-    private ExternalMobProvider provider;
+    private MobSign sign;
 
-    public ExternalMobSpawnTask(ExternalMobSign sign, ExternalMobProvider provider) {
+    public MobSpawnTask(MobSign sign) {
         this.sign = sign;
-        this.provider = provider;
     }
 
     @Override
@@ -42,16 +40,11 @@ public class ExternalMobSpawnTask extends BukkitRunnable {
             DGameWorld gameWorld = DGameWorld.getByWorld(world);
 
             if (gameWorld != null) {
-                sign.setSpawnLocation(sign.getSign().getLocation().add(0.5, 0, 0.5));
-
-                provider.summon(sign.getMob(), sign.getSpawnLocation());
-
-                sign.setExternalMobs();
-                if (sign.getExternalMob() != null) {
-                    new DMob(sign.getExternalMob(), sign.getGameWorld(), sign.getMob());
+                LivingEntity entity = sign.spawn();
+                if (entity != null) {
+                    new DMob(entity, sign.getGameWorld(), sign.getMob());
                 }
 
-                // Set the amount
                 if (sign.getAmount() != -1) {
                     if (sign.getAmount() > 1) {
                         sign.setAmount(sign.getAmount() - 1);

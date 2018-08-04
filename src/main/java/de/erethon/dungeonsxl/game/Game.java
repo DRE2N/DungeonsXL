@@ -24,7 +24,7 @@ import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.global.GameSign;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.sign.DSign;
-import de.erethon.dungeonsxl.sign.mob.MobSign;
+import de.erethon.dungeonsxl.sign.MobSign;
 import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;

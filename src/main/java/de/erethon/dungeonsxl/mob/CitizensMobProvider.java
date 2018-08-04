@@ -36,8 +36,9 @@ import org.bukkit.event.Listener;
  */
 public class CitizensMobProvider implements ExternalMobProvider, Listener {
 
+    private static final String IDENTIFIER = "CI";
+
     private DNPCRegistry registry = new DNPCRegistry();
-    private String identifier = "CI";
     private Set<NPC> spawnedNPCs = new HashSet<>();
 
     /**
@@ -70,7 +71,7 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
 
     @Override
     public String getIdentifier() {
-        return identifier;
+        return IDENTIFIER;
     }
 
     @Override
@@ -86,19 +87,24 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
     @Override
     public void summon(String mob, Location location) {
         NPC source = CitizensAPI.getNPCRegistry().getById(NumberUtil.parseInt(mob));
-
-        if (source instanceof AbstractNPC) {
-            NPC npc = registry.createTransientClone((AbstractNPC) source);
-            if (npc.isSpawned()) {
-                npc.despawn();
-            }
-
-            npc.spawn(location);
-            spawnedNPCs.add(npc);
-
-            DGameWorld gameWorld = DGameWorld.getByWorld(location.getWorld());
-            new DMob((LivingEntity) npc.getEntity(), gameWorld, mob);
+        if (!(source instanceof AbstractNPC)) {
+            return;
         }
+
+        NPC npc = registry.createTransientClone((AbstractNPC) source);
+        if (npc.isSpawned()) {
+            npc.despawn();
+        }
+
+        npc.spawn(location);
+        spawnedNPCs.add(npc);
+
+        DGameWorld gameWorld = DGameWorld.getByWorld(location.getWorld());
+        if (gameWorld == null) {
+            return;
+        }
+
+        new DMob((LivingEntity) npc.getEntity(), gameWorld, mob);
     }
 
     /* Listeners */

@@ -34,14 +34,16 @@ public class ExternalMobProviderCache {
     DungeonsXL plugin = DungeonsXL.getInstance();
 
     private Set<ExternalMobProvider> providers = new HashSet<>();
+    private CitizensMobProvider citizensMobProvider;
 
     public ExternalMobProviderCache() {
         // Supported providers
         providers.addAll(Arrays.asList(ExternalMobPlugin.values()));
+
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
-            CitizensMobProvider citizens = new CitizensMobProvider();
-            providers.add(citizens);
-            Bukkit.getPluginManager().registerEvents(citizens, plugin);
+            citizensMobProvider = new CitizensMobProvider();
+            providers.add(citizensMobProvider);
+            Bukkit.getPluginManager().registerEvents(citizensMobProvider, plugin);
         } else {
             MessageUtil.log(plugin, "Could not find compatible Citizens plugin. The mob provider Citizens (\"CI\") will not get enabled...");
         }
@@ -77,13 +79,7 @@ public class ExternalMobProviderCache {
      * @return the Citizens provider
      */
     public CitizensMobProvider getCitizensMobProvider() {
-        for (ExternalMobProvider provider : providers) {
-            if (provider instanceof CitizensMobProvider) {
-                return (CitizensMobProvider) provider;
-            }
-        }
-
-        return null;
+        return citizensMobProvider;
     }
 
     /**

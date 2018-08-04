@@ -26,8 +26,6 @@ import de.erethon.dungeonsxl.sign.message.HologramSign;
 import de.erethon.dungeonsxl.sign.message.MessageSign;
 import de.erethon.dungeonsxl.sign.message.SoundMessageSign;
 import de.erethon.dungeonsxl.sign.message.TitleSign;
-import de.erethon.dungeonsxl.sign.mob.DMobSign;
-import de.erethon.dungeonsxl.sign.mob.ExternalMobSign;
 
 /**
  * Default implementation of DSignType.
@@ -47,7 +45,8 @@ public enum DSignTypeDefault implements DSignType {
     COMMAND("CMD", "cmd", false, false, CommandSign.class),
     DROP("Drop", "drop", false, false, DropSign.class),
     END("End", "end", false, true, EndSign.class),
-    EXTERNAL_MOB("ExternalMob", "mob", false, false, ExternalMobSign.class),
+    @Deprecated
+    EXTERNAL_MOB("ExternalMob", "mob", false, false, MobSign.class),
     FLAG("Flag", "flag", false, false, FlagSign.class),
     FLOOR("Floor", "floor", false, true, FloorSign.class),
     HOLOGRAM("Hologram", "hologram", true, false, HologramSign.class),
@@ -55,10 +54,8 @@ public enum DSignTypeDefault implements DSignType {
     LEAVE("Leave", "leave", true, true, LeaveSign.class),
     LIVES_MODIFIER("Lives", "lives", false, false, LivesModifierSign.class),
     LOBBY("Lobby", "lobby", true, false, LobbySign.class),
-    MOB("Mob", "mob", false, false, DMobSign.class),
+    MOB("Mob", "mob", false, false, MobSign.class),
     MESSAGE("MSG", "msg", false, false, MessageSign.class),
-    @Deprecated
-    MYTHIC_MOBS("MythicMobs", "mob", false, false, ExternalMobSign.class),
     OPEN_DOOR("Door", "door", false, false, OpenDoorSign.class),
     PLACE("Place", "place", false, false, PlaceSign.class),
     PROTECTION("Protection", "protection", false, false, ProtectionSign.class),
