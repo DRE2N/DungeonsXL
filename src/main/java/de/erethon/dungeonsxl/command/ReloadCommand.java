@@ -85,9 +85,9 @@ public class ReloadCommand extends DRECommand {
         if (plugins.getPlugin("Vault") != null) {
             vault = plugins.getPlugin("Vault").getDescription().getVersion();
         }
-        String mythicMobs = "";
-        if (plugins.getPlugin("MythicMobs") != null) {
-            mythicMobs = plugins.getPlugin("MythicMobs").getDescription().getVersion();
+        String ixl = "";
+        if (plugins.getPlugin("ItemsXL") != null) {
+            ixl = plugins.getPlugin("ItemsXL").getDescription().getVersion();
         }
 
         plugin.onDisable();
@@ -97,7 +97,7 @@ public class ReloadCommand extends DRECommand {
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_DONE.getMessage());
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, mythicMobs));
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, ixl));
     }
 
 }
