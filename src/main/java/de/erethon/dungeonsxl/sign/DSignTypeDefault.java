@@ -48,7 +48,8 @@ public enum DSignTypeDefault implements DSignType {
     @Deprecated
     EXTERNAL_MOB("ExternalMob", "mob", false, false, MobSign.class),
     FLAG("Flag", "flag", false, false, FlagSign.class),
-    FLOOR("Floor", "floor", false, true, FloorSign.class),
+    @Deprecated
+    FLOOR("Floor", "end", false, true, EndSign.class),
     HOLOGRAM("Hologram", "hologram", true, false, HologramSign.class),
     INTERACT("Interact", "interact", true, true, InteractSign.class),
     LEAVE("Leave", "leave", true, true, LeaveSign.class),

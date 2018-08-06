@@ -18,9 +18,11 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.world.DResourceWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -32,8 +34,24 @@ public class EndSign extends DSign {
 
     private DSignType type = DSignTypeDefault.END;
 
+    private DResourceWorld floor;
+
     public EndSign(Sign sign, String[] lines, DGameWorld gameWorld) {
         super(sign, lines, gameWorld);
+    }
+
+    /**
+     * @return the next floor
+     */
+    public DResourceWorld getFloor() {
+        return floor;
+    }
+
+    /**
+     * @param floor the floor to set
+     */
+    public void setFloor(DResourceWorld floor) {
+        this.floor = floor;
     }
 
     @Override
@@ -43,6 +61,10 @@ public class EndSign extends DSign {
 
     @Override
     public void onInit() {
+        if (!lines[1].isEmpty()) {
+            floor = plugin.getDWorlds().getResourceByName(lines[1]);
+        }
+
         if (!getTriggers().isEmpty()) {
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
             return;
@@ -55,8 +77,17 @@ public class EndSign extends DSign {
         }
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, DMessage.SIGN_END.getMessage());
-        getSign().setLine(2, "");
+        Dungeon dungeon = getGame().getDungeon();
+        if (dungeon.isMultiFloor() && !getGame().getUnplayedFloors().isEmpty() && getGameWorld().getResource() != dungeon.getConfig().getEndFloor()) {
+            getSign().setLine(1, DMessage.SIGN_FLOOR_1.getMessage());
+            if (floor == null) {
+                getSign().setLine(2, DMessage.SIGN_FLOOR_2.getMessage());
+            } else {
+                getSign().setLine(2, ChatColor.DARK_GREEN + floor.getName().replace("_", " "));
+            }
+        } else {
+            getSign().setLine(1, DMessage.SIGN_END.getMessage());
+        }
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
     }
@@ -72,7 +103,7 @@ public class EndSign extends DSign {
             return true;
         }
 
-        dPlayer.finish();
+        dPlayer.finishFloor(floor);
         return true;
     }
 
