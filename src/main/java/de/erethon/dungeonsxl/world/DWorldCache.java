@@ -251,7 +251,7 @@ public class DWorldCache {
         HashSet<DInstanceWorld> instances = new HashSet<>(this.instances);
         for (DInstanceWorld instance : instances) {
             if (backupMode == BackupMode.ON_DISABLE | backupMode == BackupMode.ON_DISABLE_AND_SAVE && instance instanceof DEditWorld) {
-                instance.getResource().backup(mainConfig.areTweaksEnabled());
+                instance.getResource().backup();
             }
 
             instance.delete();

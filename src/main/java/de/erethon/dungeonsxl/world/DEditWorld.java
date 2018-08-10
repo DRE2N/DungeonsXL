@@ -27,7 +27,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * A raw resource world instance to edit the dungeon map. There is never more than one DEditWorld per DResourceWorld.
@@ -116,19 +115,8 @@ public class DEditWorld extends DInstanceWorld {
 
         getWorld().save();
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
-            FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-            DWorldCache.deleteUnusedFiles(getResource().getFolder());
-
-        } else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-                    DWorldCache.deleteUnusedFiles(getResource().getFolder());
-                }
-            }.runTaskAsynchronously(plugin);
-        }
+        FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+        DWorldCache.deleteUnusedFiles(getResource().getFolder());
 
         getResource().getSignData().serializeSigns(signs);
     }
@@ -153,36 +141,17 @@ public class DEditWorld extends DInstanceWorld {
 
         kickAllPlayers();
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
-            if (save) {
-                Bukkit.unloadWorld(getWorld(), true);
-            }
-            FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-            DWorldCache.deleteUnusedFiles(getResource().getFolder());
-            if (!save) {
-                Bukkit.unloadWorld(getWorld(), true);
-            }
-            FileUtil.removeDir(getFolder());
-            worlds.removeInstance(this);
-
-        } else {
-            final DEditWorld editWorld = this;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (save) {
-                        Bukkit.unloadWorld(getWorld(), true);
-                    }
-                    FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-                    DWorldCache.deleteUnusedFiles(getResource().getFolder());
-                    if (!save) {
-                        Bukkit.unloadWorld(getWorld(), true);
-                    }
-                    FileUtil.removeDir(getFolder());
-                    worlds.removeInstance(editWorld);
-                }
-            }.runTaskAsynchronously(plugin);
+        if (save) {
+            Bukkit.unloadWorld(getWorld(), true);
         }
+        FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+        DWorldCache.deleteUnusedFiles(getResource().getFolder());
+        if (!save) {
+            Bukkit.unloadWorld(getWorld(), true);
+        }
+
+        FileUtil.removeDir(getFolder());
+        worlds.removeInstance(this);
     }
 
     /* Statics */

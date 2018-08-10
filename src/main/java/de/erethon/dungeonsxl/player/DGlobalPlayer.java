@@ -399,7 +399,7 @@ public class DGlobalPlayer implements PlayerWrapper {
         DGameWorld gameWorld = dungeon.getMap().instantiateAsGameWorld(true);
         dGroup.setGameWorld(gameWorld);
         new Game(dGroup, gameWorld).setTutorial(true);
-        DGamePlayer.create(player, gameWorld);
+        new DGamePlayer(player, gameWorld);
     }
 
 }

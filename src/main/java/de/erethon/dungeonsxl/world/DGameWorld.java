@@ -69,7 +69,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * A playable resource instance. There may be any amount of DGameWorlds per DResourceWorld.
@@ -488,22 +487,9 @@ public class DGameWorld extends DInstanceWorld {
 
         kickAllPlayers();
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
-            Bukkit.unloadWorld(getWorld(), false);
-            FileUtil.removeDir(getFolder());
-            worlds.removeInstance(this);
-
-        } else {
-            final DGameWorld gameWorld = this;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Bukkit.unloadWorld(getWorld(), false);
-                    FileUtil.removeDir(getFolder());
-                    worlds.removeInstance(gameWorld);
-                }
-            }.runTaskAsynchronously(plugin);
-        }
+        Bukkit.unloadWorld(getWorld(), false);
+        FileUtil.removeDir(getFolder());
+        worlds.removeInstance(this);
     }
 
     /**

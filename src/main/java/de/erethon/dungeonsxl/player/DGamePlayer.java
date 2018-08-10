@@ -111,21 +111,11 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
-    /**
-     * @param player    the represented Player
-     * @param gameWorld the player's GameWorld
-     */
-    public static void create(Player player, DGameWorld gameWorld) {
-        create(player, gameWorld, null);
-    }
-
-    /**
-     * @param player    the represented Player
-     * @param gameWorld the player's GameWorld
-     * @param ready     Any GameType if the player will be ready from the beginning null if the player will not be ready from the beginning
-     */
-    public static void create(Player player, DGameWorld gameWorld, GameType ready) {
-        new CreateDInstancePlayerTask(player, gameWorld, ready).runTaskTimer(DungeonsXL.getInstance(), 0L, 5L);
+    public DGamePlayer(Player player, DGameWorld world, GameType ready) {
+        this(player, world);
+        if (ready != null) {
+            ready(ready);
+        }
     }
 
     /* Getters and setters */

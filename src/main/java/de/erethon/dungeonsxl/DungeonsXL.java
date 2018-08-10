@@ -132,7 +132,6 @@ public class DungeonsXL extends DREPlugin {
 
     @Override
     public void onDisable() {
-        mainConfig.setTweaksEnabled(false);
         // Save
         saveData();
         messageConfig.save();

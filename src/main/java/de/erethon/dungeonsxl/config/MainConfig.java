@@ -94,7 +94,6 @@ public class MainConfig extends DREConfig {
 
     /* Performance */
     private int maxInstances = 10;
-    private boolean tweaksEnabled = false;
 
     /* Secure Mode */
     private boolean secureModeEnabled = false;
@@ -347,20 +346,6 @@ public class MainConfig extends DREConfig {
     }
 
     /**
-     * @return if the performance tweaks are enabled
-     */
-    public boolean areTweaksEnabled() {
-        return tweaksEnabled;
-    }
-
-    /**
-     * @param enabled if the performance tweaks are enabled
-     */
-    public void setTweaksEnabled(boolean enabled) {
-        tweaksEnabled = enabled;
-    }
-
-    /**
      * @return if the secure mode is enabled
      */
     public boolean isSecureModeEnabled() {
@@ -526,10 +511,6 @@ public class MainConfig extends DREConfig {
             config.set("maxInstances", maxInstances);
         }
 
-        if (!config.contains("tweaksEnabled")) {
-            config.set("tweaksEnabled", tweaksEnabled);
-        }
-
         if (!config.contains("secureMode.enabled")) {
             config.set("secureMode.enabled", secureModeEnabled);
         }
@@ -657,15 +638,6 @@ public class MainConfig extends DREConfig {
 
         if (config.contains("maxInstances")) {
             maxInstances = config.getInt("maxInstances");
-        }
-
-        if (config.contains("tweaksEnabled")) {
-            if (Internals.isAtLeast(Internals.v1_9_R1)) {
-                tweaksEnabled = config.getBoolean("tweaksEnabled");
-            } else {
-                tweaksEnabled = false;
-                MessageUtil.log(DMessage.LOG_DISABLED_TWEAKS.getMessage());
-            }
         }
 
         if (config.contains("secureMode.enabled")) {

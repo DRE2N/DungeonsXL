@@ -101,7 +101,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
         }
 
         for (Player player : game.getPlayers()) {
-            DGamePlayer.create(player, game.getWorld());
+            new DGamePlayer(player, game.getWorld());
         }
 
         announcer.endStartTask();

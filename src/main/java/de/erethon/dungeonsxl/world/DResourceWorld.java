@@ -30,7 +30,6 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * This class represents unloaded worlds.
@@ -187,16 +186,10 @@ public class DResourceWorld {
     /* Actions */
     /**
      * Creates a backup of the resource
-     *
-     * @param async whether the task shall be performed asyncronously
      */
-    public void backup(boolean async) {
-        BackupResourceTask task = new BackupResourceTask(this);
-        if (async) {
-            task.runTaskAsynchronously(plugin);
-        } else {
-            task.run();
-        }
+    public void backup() {
+        File target = new File(DungeonsXL.BACKUPS, getName() + "-" + System.currentTimeMillis());
+        FileUtil.copyDir(folder, target);
     }
 
     /**
@@ -206,56 +199,34 @@ public class DResourceWorld {
     public DInstanceWorld instantiate(final boolean game) {
         int id = worlds.generateId();
         String name = worlds.generateName(game, id);
-        File tempIF = new File(Bukkit.getWorldContainer(), name);
-        while (tempIF.exists()) {
+
+        File instanceFolder = new File(Bukkit.getWorldContainer(), name);
+        while (instanceFolder.exists()) {
             World world = Bukkit.getWorld(name);
             boolean removed = false;
             if (world != null && world.getPlayers().isEmpty()) {
                 Bukkit.unloadWorld(name, false);
             }
             if (world == null || world.getPlayers().isEmpty()) {
-                removed = tempIF.delete();
+                removed = instanceFolder.delete();
             }
             if (!removed) {
                 MessageUtil.log(plugin, "&6Warning: An unrecognized junk instance (&4" + name + "&6) has been found, but could not be deleted.");
                 id++;
                 name = worlds.generateName(game, id);
-                tempIF = new File(Bukkit.getWorldContainer(), name);
+                instanceFolder = new File(Bukkit.getWorldContainer(), name);
             }
         }
-        final File instanceFolder = tempIF; // Because Java SUCKS
 
-        final DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
+        DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
-            FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
-            instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment()));
+        FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
+        instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment()));
 
-            if (game) {
-                signData.deserializeSigns((DGameWorld) instance);
-            } else {
-                signData.deserializeSigns((DEditWorld) instance);
-            }
-
+        if (game) {
+            signData.deserializeSigns((DGameWorld) instance);
         } else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
-                    instance.world = WorldLoader.createWorld(WorldCreator.name(instanceFolder.getName()).environment(getWorldEnvironment()));
-
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (game) {
-                                signData.deserializeSigns((DGameWorld) instance);
-                            } else {
-                                signData.deserializeSigns((DEditWorld) instance);
-                            }
-                        }
-                    }.runTask(plugin);
-                }
-            }.runTaskAsynchronously(plugin);
+            signData.deserializeSigns((DEditWorld) instance);
         }
 
         return instance;
@@ -312,21 +283,13 @@ public class DResourceWorld {
             return null;
         }
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
-            editWorld.world = creator.createWorld();
-            editWorld.generateIdFile();
-
-        } else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    FileUtil.copyDir(DWorldCache.RAW, folder, DungeonsXL.EXCLUDED_FILES);
-                    editWorld.generateIdFile();
-                    editWorld.world = WorldLoader.createWorld(creator);
-                    editWorld.generateIdFile();
-                }
-            }.runTaskAsynchronously(plugin);
+        if (!DWorldCache.RAW.exists()) {
+            worlds.createRaw();
         }
+        FileUtil.copyDir(DWorldCache.RAW, folder, DungeonsXL.EXCLUDED_FILES);
+        editWorld.generateIdFile();
+        editWorld.world = WorldLoader.createWorld(creator);
+        editWorld.generateIdFile();
 
         return editWorld;
     }

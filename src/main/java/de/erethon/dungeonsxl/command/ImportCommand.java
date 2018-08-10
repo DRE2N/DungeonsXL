@@ -70,17 +70,7 @@ public class ImportCommand extends DRECommand {
         MessageUtil.log(plugin, DMessage.LOG_NEW_MAP.getMessage());
         MessageUtil.log(plugin, DMessage.LOG_IMPORT_WORLD.getMessage());
 
-        if (!plugin.getMainConfig().areTweaksEnabled()) {
-            FileUtil.copyDir(source, target, "playerdata", "stats");
-
-        } else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    FileUtil.copyDir(source, target, "playerdata", "stats");
-                }
-            }.runTaskAsynchronously(plugin);
-        }
+        FileUtil.copyDir(source, target, "playerdata", "stats");
 
         DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), args[1]);
         if (world.getEnvironment() != Environment.NORMAL) {

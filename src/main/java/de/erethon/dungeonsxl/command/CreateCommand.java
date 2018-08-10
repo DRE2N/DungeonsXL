@@ -97,7 +97,7 @@ public class CreateCommand extends DRECommand {
             MessageUtil.log(plugin, DMessage.LOG_WORLD_GENERATION_FINISHED.getMessage());
 
             // Tp Player
-            DEditPlayer.create(player, editWorld);
+            new DEditPlayer(player, editWorld);
         }
     }
 

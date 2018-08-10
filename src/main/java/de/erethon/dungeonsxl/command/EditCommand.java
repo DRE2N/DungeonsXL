@@ -86,7 +86,7 @@ public class EditCommand extends DRECommand {
             return;
         }
 
-        DEditPlayer.create(player, editWorld);
+        new DEditPlayer(player, editWorld);
     }
 
 }

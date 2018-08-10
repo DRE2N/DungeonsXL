@@ -92,7 +92,7 @@ public class TestCommand extends DRECommand {
                 return;
             }
             Game game = new Game(new DGroup(player, dungeon), GameTypeDefault.TEST, instance);
-            DGamePlayer.create(player, game.getWorld(), GameTypeDefault.TEST);
+            new DGamePlayer(player, game.getWorld(), GameTypeDefault.TEST);
         }
     }
 

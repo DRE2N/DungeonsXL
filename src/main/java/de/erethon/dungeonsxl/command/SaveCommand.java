@@ -50,7 +50,7 @@ public class SaveCommand extends DRECommand {
         if (editWorld != null) {
             BackupMode backupMode = mainConfig.getBackupMode();
             if (backupMode == BackupMode.ON_SAVE || backupMode == BackupMode.ON_DISABLE_AND_SAVE) {
-                editWorld.getResource().backup(mainConfig.areTweaksEnabled());
+                editWorld.getResource().backup();
             }
 
             editWorld.save();

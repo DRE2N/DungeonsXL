@@ -240,7 +240,7 @@ public class DPortal extends GlobalProtection {
             dGroup.setGameWorld(target);
         }
 
-        DGamePlayer.create(player, target);
+        new DGamePlayer(player, target);
     }
 
     @Override
