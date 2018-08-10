@@ -20,6 +20,8 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.misc.EnumUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.util.DColor;
 import static de.erethon.dungeonsxl.util.DColor.*;
 import de.erethon.dungeonsxl.world.WorldConfig;
@@ -59,7 +61,8 @@ public class MainConfig extends DREConfig {
 
     /* Tutorial */
     private boolean tutorialActivated = false;
-    private String tutorialDungeon = "tutorial";
+    private String tutorialDungeonName = "tutorial";
+    private Dungeon tutorialDungeon;
     private String tutorialStartGroup = "default";
     private String tutorialEndGroup = "player";
 
@@ -217,14 +220,17 @@ public class MainConfig extends DREConfig {
     /**
      * @return the tutorial dungeon
      */
-    public String getTutorialDungeon() {
+    public Dungeon getTutorialDungeon() {
+        if (tutorialDungeon == null) {
+            tutorialDungeon = DungeonsXL.getInstance().getDungeons().getByName(tutorialDungeonName, true);
+        }
         return tutorialDungeon;
     }
 
     /**
      * @param dungeon the tutorial dungeon to set
      */
-    public void setTutorialDungeon(String dungeon) {
+    public void setTutorialDungeon(Dungeon dungeon) {
         tutorialDungeon = dungeon;
     }
 
@@ -477,7 +483,7 @@ public class MainConfig extends DREConfig {
         }
 
         if (!config.contains("tutorial.dungeon")) {
-            config.set("tutorial.dungeon", tutorialDungeon);
+            config.set("tutorial.dungeon", tutorialDungeonName);
         }
 
         if (!config.contains("tutorial.startGroup")) {
@@ -596,7 +602,7 @@ public class MainConfig extends DREConfig {
         }
 
         if (config.contains("tutorial.dungeon")) {
-            tutorialDungeon = config.getString("tutorial.dungeon");
+            tutorialDungeonName = config.getString("tutorial.dungeon");
         }
 
         if (config.contains("tutorial.startgroup")) {

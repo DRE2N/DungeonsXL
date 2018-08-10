@@ -17,7 +17,9 @@
 package de.erethon.dungeonsxl.dungeon;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.List;
  * @author Daniel Saukel
  */
 public class DungeonCache {
+
+    DungeonsXL plugin = DungeonsXL.getInstance();
 
     private List<Dungeon> dungeons = new ArrayList<>();
 
@@ -53,9 +57,26 @@ public class DungeonCache {
      * @return the Dungeon that has the name
      */
     public Dungeon getByName(String name) {
+        return getByName(name, false);
+    }
+
+    /**
+     * @param name       the name of the Dungeon
+     * @param artificial if artificial Dungeons shall be included in the check
+     * @return the Dungeon that has the name
+     */
+    public Dungeon getByName(String name, boolean artificial) {
         for (Dungeon dungeon : dungeons) {
             if (dungeon.getName().equalsIgnoreCase(name)) {
                 return dungeon;
+            }
+        }
+
+        if (artificial) {
+            DResourceWorld resource = plugin.getDWorlds().getResourceByName(name);
+            System.out.println("No resource of name " + name + " found");
+            if (resource != null) {
+                return new Dungeon(resource);
             }
         }
 

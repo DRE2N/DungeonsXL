@@ -22,11 +22,11 @@ import de.erethon.commons.player.PlayerUtil;
 import de.erethon.commons.player.PlayerWrapper;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
@@ -370,45 +370,34 @@ public class DGlobalPlayer implements PlayerWrapper {
      * Starts the tutorial
      */
     public void startTutorial() {
-        if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
+        Dungeon dungeon = plugin.getMainConfig().getTutorialDungeon();
+        if (dungeon == null) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_TUTORIAL_NOT_EXIST.getMessage());
             return;
         }
 
-        final String startGroup = plugin.getMainConfig().getTutorialStartGroup();
-        if ((plugin.getMainConfig().getTutorialDungeon() == null || startGroup == null)) {
-            return;
+        if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
+            String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+            if (startGroup == null) {
+                return;
+            }
+            if (plugin.isGroupEnabled(startGroup)) {
+                plugin.getPermissionProvider().playerAddGroup(player, startGroup);
+            }
         }
 
-        if (plugin.isGroupEnabled(startGroup)) {
-            plugin.getPermissionProvider().playerAddGroup(player, startGroup);
-        }
-
-        DGroup dGroup = new DGroup(player, plugin.getMainConfig().getTutorialDungeon(), false);
+        DGroup dGroup = new DGroup("Tutorial", player, dungeon);
 
         DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
         Bukkit.getPluginManager().callEvent(createEvent);
-
         if (createEvent.isCancelled()) {
             dGroup = null;
-        }
-
-        if (dGroup == null) {
             return;
         }
 
-        DGameWorld gameWorld = null;
-
-        if (dGroup.getGameWorld() == null) {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(dGroup.getMapName());
-            if (resource == null) {
-                MessageUtil.sendMessage(player, DMessage.ERROR_TUTORIAL_NOT_EXIST.getMessage());
-                return;
-            }
-
-            gameWorld = resource.instantiateAsGameWorld();
-            dGroup.setGameWorld(gameWorld);
-        }
-
+        // The maxInstances check is already done in the listener
+        DGameWorld gameWorld = dungeon.getMap().instantiateAsGameWorld(true);
+        dGroup.setGameWorld(gameWorld);
         new Game(dGroup, gameWorld).setTutorial(true);
         DGamePlayer.create(player, gameWorld);
     }

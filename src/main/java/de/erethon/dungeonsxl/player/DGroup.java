@@ -94,50 +94,6 @@ public class DGroup {
         floorCount = 0;
     }
 
-    @Deprecated
-    public DGroup(Player player, String identifier, boolean multiFloor) {
-        this(DungeonsXL.getInstance().getMainConfig().getGroupColorPriority().get(DungeonsXL.getInstance().getDGroups().size()).toString(), player, identifier, multiFloor);
-    }
-
-    @Deprecated
-    public DGroup(String name, Player player, String identifier, boolean multiFloor) {
-        this(name, player, new ArrayList<Player>(), identifier, multiFloor);
-    }
-
-    @Deprecated
-    public DGroup(String name, Player captain, List<Player> players, String identifier, boolean multiFloor) {
-        plugin.getDGroups().add(this);
-        this.name = name;
-
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayers().getByPlayer(captain), true, this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (!event.isCancelled()) {
-            this.captain = captain;
-            this.players.add(captain);
-        }
-
-        for (Player player : players) {
-            if (!this.players.contains(player.getUniqueId())) {
-                addPlayer(player);
-            }
-        }
-
-        dungeon = plugin.getDungeons().getByName(identifier);
-        if (multiFloor && dungeon != null) {
-            // Real dungeon
-            unplayedFloors = new ArrayList<>(dungeon.getConfig().getFloors());
-
-        } else {
-            // Artificial dungeon
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(identifier);
-            dungeon = new Dungeon(resource);
-        }
-
-        playing = false;
-        floorCount = 0;
-    }
-
     public DGroup(Player player, Dungeon dungeon) {
         this(DungeonsXL.getInstance().getMainConfig().getGroupColorPriority().get(DungeonsXL.getInstance().getDGroups().size()).toString(), player, dungeon);
     }

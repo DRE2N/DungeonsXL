@@ -70,6 +70,7 @@ public class DPlayerData extends DREConfig {
     // Stats
     private Map<String, Long> timeLastStarted = new HashMap<>();
     private Map<String, Long> timeLastFinished = new HashMap<>();
+    private boolean finishedTutorial;
 
     public DPlayerData(File file) {
         super(file, CONFIG_VERSION);
@@ -333,6 +334,21 @@ public class DPlayerData extends DREConfig {
         save();
     }
 
+    /**
+     * @return if the player has finished the tutorial
+     */
+    public boolean hasFinishedTutorial() {
+        return finishedTutorial;
+    }
+
+    /**
+     * @param finishedTutorial if the player has finished the tutorial
+     */
+    public void setFinishedTutorial(boolean finishedTutorial) {
+        this.finishedTutorial = finishedTutorial;
+        save();
+    }
+
     /* Actions */
     /**
      * @param dungeon the started dungeon
@@ -360,6 +376,10 @@ public class DPlayerData extends DREConfig {
             config.createSection(PREFIX_STATS + "timeLastFinished");
         }
 
+        if (!config.contains(PREFIX_STATS + "finishedTutorial")) {
+            config.set(PREFIX_STATS + "finishedTutorial", finishedTutorial);
+        }
+
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -384,6 +404,8 @@ public class DPlayerData extends DREConfig {
                 timeLastFinished.put(key, config.getLong(PREFIX_STATS + "timeLastFinished." + key));
             }
         }
+
+        finishedTutorial = config.getBoolean(PREFIX_STATS + "finishedTutorial", finishedTutorial);
 
         if (!wasInGame()) {
             return;
@@ -419,6 +441,7 @@ public class DPlayerData extends DREConfig {
     public void save() {
         config.set(PREFIX_STATS + "timeLastStarted", timeLastStarted);
         config.set(PREFIX_STATS + "timeLastFinished", timeLastFinished);
+        config.set(PREFIX_STATS + "finishedTutorial", finishedTutorial);
         super.save();
     }
 

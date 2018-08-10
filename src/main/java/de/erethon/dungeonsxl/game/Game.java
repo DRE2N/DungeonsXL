@@ -88,22 +88,6 @@ public class Game {
         dGroup.setScore(rules.getInitialScore());
     }
 
-    public Game(DGroup dGroup, DResourceWorld resource) {
-        plugin.getGames().add(this);
-
-        tutorial = false;
-        started = false;
-        world = resource.instantiateAsGameWorld();
-        world.setType(DGameWorld.Type.START_FLOOR);
-
-        dGroups.add(dGroup);
-        dGroup.setGameWorld(world);
-        fetchRules();
-        dGroup.setInitialLives(rules.getInitialGroupLives());
-        dGroup.setLives(rules.getInitialGroupLives());
-        dGroup.setScore(rules.getInitialScore());
-    }
-
     public Game(DGroup dGroup, GameType type, DGameWorld world) {
         this(new ArrayList<>(Arrays.asList(dGroup)), type, world);
     }
@@ -392,7 +376,7 @@ public class Game {
 
     /**
      * @param mobCountIncreaseRate the new mob count will be increased by this rate
-     * @param teleport whether or not to teleport the players to the start location
+     * @param teleport             whether or not to teleport the players to the start location
      */
     public void finishWave(final double mobCountIncreaseRate, final boolean teleport) {
         waveCount++;

@@ -29,6 +29,7 @@ import de.erethon.dungeonsxl.trigger.UseItemTrigger;
 import de.erethon.dungeonsxl.util.ParsingUtil;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.world.DWorldCache;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
@@ -66,8 +67,9 @@ import org.bukkit.inventory.meta.BookMeta;
 public class DPlayerListener implements Listener {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
-    DPlayerCache dPlayers;
     MainConfig config = plugin.getMainConfig();
+    DWorldCache worlds = plugin.getDWorlds();
+    DPlayerCache dPlayers;
 
     public static final String ALL = "@all ";
 
@@ -368,42 +370,13 @@ public class DPlayerListener implements Listener {
         if (dPlayer.getData().wasInGame()) {
             dPlayer.reset(dPlayer.getData().getKeepInventoryAfterLogout());
         }
-        if (!player.hasPlayedBefore() && config.isTutorialActivated()) {
-            dPlayer.startTutorial();
-        }
-    }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerLogin(PlayerLoginEvent event) {
-        Player player = event.getPlayer();
-        MainConfig config = plugin.getMainConfig();
-
-        if (!config.isTutorialActivated()) {
-            return;
-        }
-
-        if (DGamePlayer.getByPlayer(player) != null) {
-            return;
-        }
-
-        if (plugin.getPermissionProvider() == null || !plugin.getPermissionProvider().hasGroupSupport()) {
-            return;
-        }
-
-        if ((config.getTutorialDungeon() == null || config.getTutorialStartGroup() == null || config.getTutorialEndGroup() == null)) {
-            return;
-        }
-
-        for (String group : plugin.getPermissionProvider().getPlayerGroups(player)) {
-            if (!config.getTutorialStartGroup().equalsIgnoreCase(group)) {
-                continue;
+        if (!dPlayer.getData().hasFinishedTutorial() && config.isTutorialActivated()) {
+            if (worlds.getInstances().size() < config.getMaxInstances()) {
+                dPlayer.startTutorial();
+            } else {
+                event.getPlayer().kickPlayer(DMessage.ERROR_TOO_MANY_TUTORIALS.getMessage());
             }
-
-            if (plugin.getDWorlds().getGameWorlds().size() >= config.getMaxInstances()) {
-                event.setResult(PlayerLoginEvent.Result.KICK_FULL);
-                event.setKickMessage(DMessage.ERROR_TOO_MANY_TUTORIALS.getMessage());
-            }
-            return;
         }
     }
 
@@ -529,7 +502,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        if (plugin.getDWorlds().getInstanceByWorld(toWorld) != null) {
+        if (worlds.getInstanceByWorld(toWorld) != null) {
             dPlayer.sendMessage(DMessage.ERROR_JOIN_GROUP.getMessage());
             dPlayer.sendMessage(ChatColor.GOLD + DMessage.HELP_CMD_ENTER.getMessage());
             event.setCancelled(true);
