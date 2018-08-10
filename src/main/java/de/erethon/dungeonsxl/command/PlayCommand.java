@@ -28,6 +28,7 @@ import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -89,7 +90,12 @@ public class PlayCommand extends DRECommand {
         }
         dGroup.setDungeon(dungeon);
 
-        new Game(dGroup, dungeon.getMap());
+        DGameWorld gameWorld = dungeon.getMap().instantiateAsGameWorld(false);
+        if (gameWorld == null) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+            return;
+        }
+        new Game(dGroup, gameWorld);
         for (Player groupPlayer : dGroup.getPlayers().getOnlinePlayers()) {
             DGamePlayer.create(groupPlayer, dGroup.getGameWorld());
         }

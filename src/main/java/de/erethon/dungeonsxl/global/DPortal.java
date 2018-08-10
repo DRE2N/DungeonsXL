@@ -218,7 +218,11 @@ public class DPortal extends GlobalProtection {
         if (target == null && dGroup.getDungeon() != null) {
             DResourceWorld resource = dGroup.getDungeon().getMap();
             if (resource != null) {
-                target = resource.instantiateAsGameWorld();
+                target = resource.instantiateAsGameWorld(false);
+                if (target == null) {
+                    MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+                    return;
+                }
                 dGroup.setGameWorld(target);
             }
         }

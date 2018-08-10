@@ -86,7 +86,11 @@ public class TestCommand extends DRECommand {
             editPlayer.leave();
             DResourceWorld resource = editPlayer.getEditWorld().getResource();
             Dungeon dungeon = new Dungeon(resource);
-            DGameWorld instance = resource.instantiateAsGameWorld();
+            DGameWorld instance = resource.instantiateAsGameWorld(false);
+            if (instance == null) {
+                MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+                return;
+            }
             Game game = new Game(new DGroup(player, dungeon), GameTypeDefault.TEST, instance);
             DGamePlayer.create(player, game.getWorld(), GameTypeDefault.TEST);
         }

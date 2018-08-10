@@ -704,7 +704,7 @@ public class DGroup {
 
         Game game = gameWorld.getGame();
         removeUnplayedFloor(gameWorld.getResource(), false);
-        DGameWorld gameWorld = newFloor.instantiateAsGameWorld();
+        DGameWorld gameWorld = newFloor.instantiateAsGameWorld(true);
         gameWorld.setType(type);
         this.gameWorld = gameWorld;
         game.setWorld(gameWorld);

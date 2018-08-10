@@ -125,11 +125,6 @@ public class GameSign extends JoinSign {
     }
 
     public void onPlayerInteract(Block block, Player player) {
-        if (DungeonsXL.getInstance().getDWorlds().getGameWorlds().size() >= DungeonsXL.getInstance().getMainConfig().getMaxInstances()) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
-            return;
-        }
-
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());

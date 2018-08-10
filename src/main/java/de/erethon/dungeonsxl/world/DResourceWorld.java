@@ -262,9 +262,14 @@ public class DResourceWorld {
     }
 
     /**
+     * @param ignoreLimit if the global instance limit shall be ignored
      * @return an old or a new instance of this world.
      */
-    public DEditWorld instantiateAsEditWorld() {
+    public DEditWorld instantiateAsEditWorld(boolean ignoreLimit) {
+        if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= worlds.getInstances().size()) {
+            return null;
+        }
+
         for (DEditWorld instance : worlds.getEditWorlds()) {
             if (instance.getName().equals(getName())) {
                 return instance;
@@ -276,9 +281,13 @@ public class DResourceWorld {
     }
 
     /**
+     * @param ignoreLimit if the global instance limit shall be ignored
      * @return a new instance of this world
      */
-    public DGameWorld instantiateAsGameWorld() {
+    public DGameWorld instantiateAsGameWorld(boolean ignoreLimit) {
+        if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= worlds.getInstances().size()) {
+            return null;
+        }
         return (DGameWorld) instantiate(true);
     }
 

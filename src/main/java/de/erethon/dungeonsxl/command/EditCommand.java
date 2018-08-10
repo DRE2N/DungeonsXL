@@ -67,7 +67,12 @@ public class EditCommand extends DRECommand {
             return;
         }
 
-        DEditWorld editWorld = resource.instantiateAsEditWorld();
+        DEditWorld editWorld = resource.instantiateAsEditWorld(false);
+        if (editWorld == null) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+            return;
+        }
+
         DGroup dGroup = DGroup.getByPlayer(player);
         DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
 
