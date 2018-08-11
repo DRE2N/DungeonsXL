@@ -37,6 +37,7 @@ public class DCommandCache extends DRECommandCache {
     public static EnterCommand ENTER = new EnterCommand();
     public static EscapeCommand ESCAPE = new EscapeCommand();
     public static DeleteCommand DELETE = new DeleteCommand();
+    public static DungeonItemCommand DUNGEON_ITEM = new DungeonItemCommand();
     public static GameCommand GAME = new GameCommand();
     public static GroupCommand GROUP = new GroupCommand();
     public static HelpCommand HELP = new HelpCommand();
@@ -64,6 +65,7 @@ public class DCommandCache extends DRECommandCache {
                 BREAK,
                 CREATE,
                 DELETE,
+                DUNGEON_ITEM,
                 EDIT,
                 ENTER,
                 ESCAPE,

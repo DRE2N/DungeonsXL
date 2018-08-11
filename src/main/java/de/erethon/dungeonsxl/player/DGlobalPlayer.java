@@ -26,6 +26,7 @@ import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.global.DPortal;
+import de.erethon.dungeonsxl.util.NBTUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.io.File;
 import java.util.List;
@@ -355,6 +356,16 @@ public class DGlobalPlayer implements PlayerWrapper {
                 }
 
                 player.addPotionEffects(data.getOldPotionEffects());
+
+            } else {
+                for (ItemStack item : player.getInventory().getStorageContents()) {
+                    if (item == null) {
+                        continue;
+                    }
+                    if (NBTUtil.isDungeonItem(item)) {
+                        item.setAmount(0);
+                    }
+                }
             }
 
         } catch (NullPointerException exception) {
