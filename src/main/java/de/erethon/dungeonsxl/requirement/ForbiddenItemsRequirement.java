@@ -50,7 +50,7 @@ public class ForbiddenItemsRequirement extends Requirement {
     /* Actions */
     @Override
     public void setup(ConfigurationSection config) {
-        caliburn.deserializeExItemList(config, "forbiddenItems");
+        forbiddenItems = caliburn.deserializeExItemList(config, "forbiddenItems");
     }
 
     @Override
