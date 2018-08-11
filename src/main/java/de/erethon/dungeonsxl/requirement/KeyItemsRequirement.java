@@ -58,6 +58,9 @@ public class KeyItemsRequirement extends Requirement {
     public boolean check(Player player) {
         List<ExItem> keyItems = new ArrayList<>(this.keyItems);
         for (ItemStack item : player.getInventory().getStorageContents()) {
+            if (item == null) {
+                continue;
+            }
             keyItems.remove(caliburn.getExItem(item));
         }
         return keyItems.isEmpty();

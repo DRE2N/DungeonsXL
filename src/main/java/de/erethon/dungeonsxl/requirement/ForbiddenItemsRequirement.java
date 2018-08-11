@@ -56,6 +56,9 @@ public class ForbiddenItemsRequirement extends Requirement {
     @Override
     public boolean check(Player player) {
         for (ItemStack item : player.getInventory().getStorageContents()) {
+            if (item == null) {
+                continue;
+            }
             ExItem exItem = caliburn.getExItem(item);
             if (forbiddenItems.contains(exItem)) {
                 return false;
