@@ -1,5 +1,5 @@
-name: DungeonsXL
-main: de.erethon.dungeonsxl.DungeonsXL
+name: ${project.name}
+main: ${project.groupId}.${project.artifactId}.${project.name}
 version: ${project.version}${buildNo}
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 description: ${project.description}
