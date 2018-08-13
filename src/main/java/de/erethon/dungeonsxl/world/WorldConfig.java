@@ -39,7 +39,6 @@ import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 
 /**
  * The world configuration is a simple game rule source. Besides game rules, WorldConfig also stores some map specific data such as the invited players. It is
@@ -166,12 +165,12 @@ public class WorldConfig extends GameRuleProvider {
 
         if (configFile.contains("damageProtectedEntities")) {
             damageProtectedEntities = new HashSet<>();
-            configFile.getStringList("damageProtectedEntities").forEach(e -> damageProtectedEntities.add(EnumUtil.getEnumIgnoreCase(EntityType.class, e)));
+            configFile.getStringList("damageProtectedEntities").forEach(e -> damageProtectedEntities.add(caliburn.getExMob(e)));
         }
 
         if (configFile.contains("interactionProtectedEntities")) {
             interactionProtectedEntities = new HashSet<>();
-            configFile.getStringList("interactionProtectedEntities").forEach(e -> interactionProtectedEntities.add(EnumUtil.getEnumIgnoreCase(EntityType.class, e)));
+            configFile.getStringList("interactionProtectedEntities").forEach(e -> interactionProtectedEntities.add(caliburn.getExMob(e)));
         }
 
         if (configFile.contains("placeBlocks")) {

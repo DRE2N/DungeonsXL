@@ -569,7 +569,7 @@ public class DGameWorld extends DInstanceWorld {
             }
             if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
                 Hanging hanging = (Hanging) entity;
-                if (rules.getDamageProtectedEntities().contains(hanging.getType())) {
+                if (rules.getDamageProtectedEntities().contains(CaliburnAPI.getInstance().getExMob(hanging))) {
                     event.setCancelled(true);
                     break;
                 }

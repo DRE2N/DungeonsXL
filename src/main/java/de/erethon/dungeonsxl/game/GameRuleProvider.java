@@ -17,6 +17,8 @@
 package de.erethon.dungeonsxl.game;
 
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.mob.ExMob;
+import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.dungeonsxl.requirement.Requirement;
 import de.erethon.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
@@ -28,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.EntityType;
 
 /**
  * See {@link de.erethon.dungeonsxl.config.WorldConfig}
@@ -53,13 +54,13 @@ public class GameRuleProvider {
         DEFAULT_VALUES.breakPlacedBlocks = false;
         DEFAULT_VALUES.breakWhitelist = null;
         DEFAULT_VALUES.damageProtectedEntities = new HashSet<>(Arrays.asList(
-                EntityType.ARMOR_STAND,
-                EntityType.ITEM_FRAME,
-                EntityType.PAINTING
+                VanillaMob.ARMOR_STAND,
+                VanillaMob.ITEM_FRAME,
+                VanillaMob.PAINTING
         ));
         DEFAULT_VALUES.interactionProtectedEntities = new HashSet<>(Arrays.asList(
-                EntityType.ARMOR_STAND,
-                EntityType.ITEM_FRAME
+                VanillaMob.ARMOR_STAND,
+                VanillaMob.ITEM_FRAME
         ));
         DEFAULT_VALUES.placeBlocks = false;
         DEFAULT_VALUES.placeWhitelist = null;
@@ -117,8 +118,8 @@ public class GameRuleProvider {
     protected Boolean breakBlocks;
     protected Boolean breakPlacedBlocks;
     protected Map<ExItem, HashSet<ExItem>> breakWhitelist;
-    protected Set<EntityType> damageProtectedEntities;
-    protected Set<EntityType> interactionProtectedEntities;
+    protected Set<ExMob> damageProtectedEntities;
+    protected Set<ExMob> interactionProtectedEntities;
     protected Boolean placeBlocks;
     protected Set<ExItem> placeWhitelist;
     protected Boolean rain;
@@ -235,14 +236,14 @@ public class GameRuleProvider {
     /**
      * @return a Set of all entity types that cannot be damaged
      */
-    public Set<EntityType> getDamageProtectedEntities() {
+    public Set<ExMob> getDamageProtectedEntities() {
         return damageProtectedEntities;
     }
 
     /**
      * @return a Set of all entity types that cannot be damaged
      */
-    public Set<EntityType> getInteractionProtectedEntities() {
+    public Set<ExMob> getInteractionProtectedEntities() {
         return interactionProtectedEntities;
     }
 

@@ -16,10 +16,15 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.game.Game;
+import java.util.Set;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,6 +35,8 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -126,24 +133,37 @@ public class DWorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
-        if (gameWorld == null) {
-            return;
-        }
-        Game game = Game.getByGameWorld(gameWorld);
-        if (game.getRules().getDamageProtectedEntities().contains(event.getEntityType())) {
-            event.setCancelled(true);
-        }
+        onTouch(event, event.getEntity(), false);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onHangingBreak(HangingBreakEvent event) {
+        onTouch(event, event.getEntity(), false);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getPlayer().getWorld());
+        onTouch(event, event.getRightClicked(), true);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
+        onTouch(event, event.getRightClicked(), true);
+    }
+
+    /**
+     * @param event    the event
+     * @param entity   the entity
+     * @param interact true = interact; false = break
+     */
+    public void onTouch(Cancellable event, Entity entity, boolean interact) {
+        DGameWorld gameWorld = DGameWorld.getByWorld(entity.getWorld());
         if (gameWorld == null) {
             return;
         }
         Game game = Game.getByGameWorld(gameWorld);
-        if (game.getRules().getInteractionProtectedEntities().contains(event.getRightClicked().getType())) {
+        Set<ExMob> prot = interact ? game.getRules().getInteractionProtectedEntities() : game.getRules().getDamageProtectedEntities();
+        if (prot.contains(CaliburnAPI.getInstance().getExMob(entity))) {
             event.setCancelled(true);
         }
     }
