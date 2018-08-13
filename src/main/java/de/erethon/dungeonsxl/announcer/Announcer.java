@@ -80,7 +80,7 @@ public class Announcer {
     }
 
     /**
-     * @param name the name of the Announcer
+     * @param name   the name of the Announcer
      * @param config the config that stores the information
      */
     public Announcer(String name, FileConfiguration config) {
@@ -112,12 +112,12 @@ public class Announcer {
     }
 
     /**
-     * @param name the name of the Announcer
-     * @param description the description messages
-     * @param worlds the names of the worlds where the announcement will be seen or null to broadcast it to all worlds
-     * @param identifier the dungeon identifier
-     * @param multiFloor if the identifier refers to an MFD (true) or an SFD (false)
-     * @param maxGroupsPerGame the amount of groups in one game
+     * @param name               the name of the Announcer
+     * @param description        the description messages
+     * @param worlds             the names of the worlds where the announcement will be seen or null to broadcast it to all worlds
+     * @param identifier         the dungeon identifier
+     * @param multiFloor         if the identifier refers to an MFD (true) or an SFD (false)
+     * @param maxGroupsPerGame   the amount of groups in one game
      * @param maxPlayersPerGroup the amount of players in one group
      */
     public Announcer(String name, List<String> description, List<String> worlds, String identifier, boolean multiFloor, short maxGroupsPerGame, int maxPlayersPerGroup) {

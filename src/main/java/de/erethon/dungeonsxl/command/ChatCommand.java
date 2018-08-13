@@ -20,6 +20,7 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -45,7 +46,7 @@ public class ChatCommand extends DRECommand {
         Player player = (Player) sender;
         DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
 
-        if (DGroup.getByPlayer(player) == null) {
+        if (DGroup.getByPlayer(player) == null && !(dPlayer instanceof DEditPlayer)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;
         }

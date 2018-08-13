@@ -56,11 +56,14 @@ public enum ParsingUtil {
      * @return the string with the placeholders replaced
      */
     public static String replaceChatPlaceholders(String string, DGlobalPlayer sender) {
-        DGroup group = DGroup.getByPlayer(sender.getPlayer());
-
         string = string.replaceAll(PLAYER_NAME.getPlaceholder(), sender.getName());
-        string = string.replaceAll(GROUP_COLOR.getPlaceholder(), group.getDColor().getChatColor().toString());
-        string = string.replaceAll(GROUP_NAME.getPlaceholder(), group.getName());
+
+        DGroup group = DGroup.getByPlayer(sender.getPlayer());
+        if (group != null) {
+            string = string.replaceAll(GROUP_COLOR.getPlaceholder(), group.getDColor().getChatColor().toString());
+            string = string.replaceAll(GROUP_NAME.getPlaceholder(), group.getName());
+        }
+
         return string;
     }
 

@@ -20,8 +20,8 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.game.GameRuleProvider;
-import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
+import de.erethon.dungeonsxl.player.DPlayerCache;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +38,7 @@ public abstract class DInstanceWorld {
 
     DungeonsXL plugin = DungeonsXL.getInstance();
     DWorldCache worlds = plugin.getDWorlds();
+    DPlayerCache dPlayers = plugin.getDPlayers();
 
     private DResourceWorld resourceWorld;
     private File folder;
@@ -138,7 +139,7 @@ public abstract class DInstanceWorld {
      * @param message the message to send
      */
     public void sendMessage(String message) {
-        for (DGamePlayer dPlayer : DGamePlayer.getByWorld(world)) {
+        for (DInstancePlayer dPlayer : dPlayers.getByInstance(this)) {
             MessageUtil.sendMessage(dPlayer.getPlayer(), message);
         }
     }

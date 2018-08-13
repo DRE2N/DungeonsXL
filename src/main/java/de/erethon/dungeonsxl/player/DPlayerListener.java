@@ -53,7 +53,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -232,6 +231,13 @@ public class DPlayerListener implements Listener {
         if (!dPlayer.isInGroupChat()) {
             return;
         }
+
+        if (dPlayer instanceof DEditPlayer) {
+            event.setCancelled(true);
+            ((DInstancePlayer) dPlayer).chat(event.getMessage());
+            return;
+        }
+
         DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
             return;

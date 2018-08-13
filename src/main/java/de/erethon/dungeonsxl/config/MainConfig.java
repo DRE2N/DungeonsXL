@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.config;
 
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -48,13 +46,14 @@ public class MainConfig extends DREConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 15;
+    public static final int CONFIG_VERSION = 16;
 
     private String language = "english";
     private boolean enableEconomy = false;
 
     /* Chat */
     private boolean chatEnabled = true;
+    private String chatFormatEdit = "&2[Edit] &r%player_name%: ";
     private String chatFormatGame = "&2[Game] %group_color%%player_name%: &r";
     private String chatFormatGroup = "&2%group_color%[%group_name%] %player_name%: &r";
     private String chatFormatSpy = "&2[Chat Spy] %player_name%: &r";
@@ -158,6 +157,20 @@ public class MainConfig extends DREConfig {
      */
     public void setChatEnabled(boolean enabled) {
         chatEnabled = enabled;
+    }
+
+    /**
+     * @return the edit chat format
+     */
+    public String getChatFormatEdit() {
+        return chatFormatEdit;
+    }
+
+    /**
+     * @param string the edit chat format to set
+     */
+    public void setEditFormatEdit(String string) {
+        chatFormatEdit = string;
     }
 
     /**
@@ -451,16 +464,20 @@ public class MainConfig extends DREConfig {
             config.set("chatEnabled", chatEnabled);
         }
 
-        if (!config.contains("chatFormatGame")) {
-            config.set("chatFormatGame", chatFormatGame);
+        if (!config.contains("chatFormat.edit")) {
+            config.set("chatFormat.edit", chatFormatEdit);
         }
 
-        if (!config.contains("chatFormatGroup")) {
-            config.set("chatFormatGroup", chatFormatGroup);
+        if (!config.contains("chatFormat.game")) {
+            config.set("chatFormat.game", chatFormatGame);
         }
 
-        if (!config.contains("chatFormatSpy")) {
-            config.set("chatFormatSpy", chatFormatSpy);
+        if (!config.contains("chatFormat.group")) {
+            config.set("chatFormat.group", chatFormatGroup);
+        }
+
+        if (!config.contains("chatFormat.spy")) {
+            config.set("chatFormat.spy", chatFormatSpy);
         }
 
         if (!config.contains("tutorial.activated")) {
@@ -562,16 +579,20 @@ public class MainConfig extends DREConfig {
             chatEnabled = config.getBoolean("chatEnabled");
         }
 
-        if (config.contains("chatFormatGame")) {
-            chatFormatGame = config.getString("chatFormatGame");
+        if (config.contains("chatFormat.edit")) {
+            chatFormatEdit = config.getString("chatFormat.edit");
         }
 
-        if (config.contains("chatFormatGroup")) {
-            chatFormatGroup = config.getString("chatFormatGroup");
+        if (config.contains("chatFormat.game")) {
+            chatFormatGame = config.getString("chatFormat.game");
         }
 
-        if (config.contains("chatFormatSpy")) {
-            chatFormatSpy = config.getString("chatFormatSpy");
+        if (config.contains("chatFormat.group")) {
+            chatFormatGroup = config.getString("chatFormat.group");
+        }
+
+        if (config.contains("chatFormat.spy")) {
+            chatFormatSpy = config.getString("chatFormat.spy");
         }
 
         if (config.contains("chatEnabled")) {

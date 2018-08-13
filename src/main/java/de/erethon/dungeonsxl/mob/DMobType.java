@@ -77,7 +77,7 @@ public class DMobType extends ExMob {
     }
 
     /**
-     * @param name the name of the DMobType
+     * @param name   the name of the DMobType
      * @param config the config that stores the information
      */
     public DMobType(String name, FileConfiguration config) {

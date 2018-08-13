@@ -18,7 +18,9 @@ package de.erethon.dungeonsxl.player;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.MainConfig;
+import de.erethon.dungeonsxl.world.DInstanceWorld;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -76,6 +78,16 @@ public class DPlayerCache {
             }
         }
         return null;
+    }
+
+    /**
+     * @param instance the instance to check
+     * @return a Collection of DInstancePlayers in this instance
+     */
+    public Collection<DInstancePlayer> getByInstance(DInstanceWorld instance) {
+        Collection<DInstancePlayer> players = new ArrayList<>();
+        plugin.getDWorlds().getInstances().forEach(i -> i.getPlayers().forEach(p -> players.add(p)));
+        return players;
     }
 
     /**

@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.player;
 
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.util.ParsingUtil;
+import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DInstanceWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -101,7 +102,8 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
         if (instance == null) {
             return;
         }
-        instance.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatGame(), this) + message);
+        String chatFormat = instance instanceof DGameWorld ? config.getChatFormatGame() : config.getChatFormatEdit();
+        instance.sendMessage(ParsingUtil.replaceChatPlaceholders(chatFormat, this) + message);
 
         for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
             if (player.isInChatSpyMode()) {
