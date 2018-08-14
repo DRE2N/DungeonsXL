@@ -25,6 +25,7 @@ import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.global.GameSign;
 import de.erethon.dungeonsxl.global.GlobalProtection;
 import de.erethon.dungeonsxl.global.GroupSign;
+import de.erethon.dungeonsxl.global.JoinSign;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
@@ -99,20 +100,18 @@ public class RenameCommand extends DRECommand {
         }
 
         boolean changed = false;
-        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections()) {
-            if (protection instanceof GroupSign) {
-                Dungeon dungeon = ((GroupSign) protection).getDungeon();
-                if (dungeon.getName().equals(args[1])) {
-                    dungeon.setName(args[2]);
-                    changed = true;
-                }
-
-            } else if (protection instanceof GameSign) {
-                Dungeon dungeon = ((GameSign) protection).getDungeon();
-                if (dungeon.getName().equals(args[1])) {
-                    dungeon.setName(args[2]);
-                    changed = true;
-                }
+        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections().toArray(new GlobalProtection[]{})) {
+            if (!(protection instanceof JoinSign)) {
+                continue;
+            }
+            Dungeon dungeon = ((JoinSign) protection).getDungeon();
+            if (dungeon == null) {
+                protection.delete();
+                continue;
+            }
+            if (dungeon.getName().equals(args[1])) {
+                dungeon.setName(args[2]);
+                changed = true;
             }
         }
 
