@@ -114,4 +114,9 @@ public abstract class GlobalProtection {
      */
     public abstract Collection<Block> getBlocks();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{ID=" + id + "}";
+    }
+
 }

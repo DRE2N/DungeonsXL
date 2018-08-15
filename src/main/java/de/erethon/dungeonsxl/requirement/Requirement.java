@@ -64,4 +64,9 @@ public abstract class Requirement {
 
     public abstract RequirementType getType();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + getType() + "}";
+    }
+
 }

@@ -87,4 +87,9 @@ public class SignScript {
         signs.set(index, lines);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + name + "}";
+    }
+
 }

@@ -46,4 +46,9 @@ public abstract class TeamBlock extends GameBlock {
         this.owner = owner;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{block=" + block + "; owner=" + owner + "}";
+    }
+
 }

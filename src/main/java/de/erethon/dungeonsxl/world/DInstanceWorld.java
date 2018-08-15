@@ -183,4 +183,9 @@ public abstract class DInstanceWorld {
      */
     public abstract void delete();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + getName() + "}";
+    }
+
 }

@@ -95,4 +95,9 @@ public class TeamBed extends TeamBlock implements MultiBlock {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{block=" + block + "; attachedBlock=" + attachedBlock + "; owner=" + owner + "}";
+    }
+
 }

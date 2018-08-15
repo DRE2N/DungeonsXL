@@ -62,4 +62,9 @@ public class LockedDoor extends GameBlock implements MultiBlock {
         state.update(true);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{block=" + block + "; attachedBlock=" + attachedBlock + "}";
+    }
+
 }

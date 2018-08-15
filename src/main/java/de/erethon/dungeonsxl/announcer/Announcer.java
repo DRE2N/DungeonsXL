@@ -450,4 +450,9 @@ public class Announcer {
         }
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + name + /*"; dungeon=" + dungeon + */ "}";
+    }
+
 }

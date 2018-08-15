@@ -62,4 +62,9 @@ public abstract class Reward {
 
     public abstract RewardType getType();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + getType() + "}";
+    }
+
 }

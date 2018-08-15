@@ -56,4 +56,9 @@ public abstract class GameBlock {
      */
     public abstract boolean onBreak(BlockBreakEvent event);
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{block=" + block + "}";
+    }
+
 }

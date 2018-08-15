@@ -215,4 +215,9 @@ public class DungeonConfig extends DREConfig {
         }
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{file=" + file.getPath() + "}";
+    }
+
 }

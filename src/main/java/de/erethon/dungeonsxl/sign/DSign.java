@@ -271,4 +271,9 @@ public abstract class DSign {
 
     public abstract DSignType getType();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{sign=" + sign + "; gameWorld=" + gameWorld + "}";
+    }
+
 }

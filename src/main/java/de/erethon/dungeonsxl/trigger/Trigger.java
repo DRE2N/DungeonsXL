@@ -212,4 +212,9 @@ public abstract class Trigger {
     /* Abstracts */
     public abstract TriggerType getType();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + getType() + "}";
+    }
+
 }

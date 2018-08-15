@@ -463,4 +463,9 @@ public class Game {
         }
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{dungeon=" + getDungeon() + "}";
+    }
+
 }

@@ -130,4 +130,9 @@ public class Dungeon {
         return new File(DungeonsXL.DUNGEONS, name + ".yml");
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + name + "; multiFloor=" + isMultiFloor() + "}";
+    }
+
 }

@@ -402,4 +402,9 @@ public class DGlobalPlayer implements PlayerWrapper {
         new DGamePlayer(player, gameWorld);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{player=" + player + "}";
+    }
+
 }

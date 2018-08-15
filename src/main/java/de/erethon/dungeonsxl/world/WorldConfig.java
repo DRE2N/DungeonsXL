@@ -416,4 +416,9 @@ public class WorldConfig extends GameRuleProvider {
         this.worldEnvironment = worldEnvironment;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{file=" + file.getPath() + "}";
+    }
+
 }

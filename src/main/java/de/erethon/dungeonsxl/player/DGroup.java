@@ -927,4 +927,9 @@ public class DGroup {
         return dGroups;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + name + "; captain=" + captain + "}";
+    }
+
 }
