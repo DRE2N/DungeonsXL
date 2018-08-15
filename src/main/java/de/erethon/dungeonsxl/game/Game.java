@@ -255,11 +255,14 @@ public class Game {
      * @return the unplayed floors
      */
     public List<DResourceWorld> getUnplayedFloors() {
-        List<DResourceWorld> unplayedFloors = new ArrayList<>();
+        List<DResourceWorld> unplayedFloors = null;
         for (DGroup dGroup : dGroups) {
-            if (dGroup.getUnplayedFloors().size() < unplayedFloors.size()) {
+            if (unplayedFloors == null || dGroup.getUnplayedFloors().size() < unplayedFloors.size()) {
                 unplayedFloors = dGroup.getUnplayedFloors();
             }
+        }
+        if (unplayedFloors == null) {
+            unplayedFloors = new ArrayList<>();
         }
         return unplayedFloors;
     }

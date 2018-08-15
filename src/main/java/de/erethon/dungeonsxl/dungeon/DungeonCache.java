@@ -74,7 +74,6 @@ public class DungeonCache {
 
         if (artificial) {
             DResourceWorld resource = plugin.getDWorlds().getResourceByName(name);
-            System.out.println("No resource of name " + name + " found");
             if (resource != null) {
                 return new Dungeon(resource);
             }

@@ -4,7 +4,7 @@
 [![Wiki](http://feuerstern.bplaced.net/ressourcen/buttons/Wiki.png)](../../wiki/)
 [![Issues](http://feuerstern.bplaced.net/ressourcen/buttons/Issues.png)](../../issues/)
 [![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://erethon.de/javadocs/dungeonsxl/)
-[![MCStats](http://feuerstern.bplaced.net/ressourcen/buttons/MCStats.png)](http://mcstats.org/plugin/DungeonsXL/)
+[![MCStats](http://feuerstern.bplaced.net/ressourcen/buttons/MCStats.png)](http://bstats.org/plugin/bukkit/DungeonsXL/)
 
 ![Doge](https://i.imgflip.com/vtpyi.jpg)
 

@@ -634,7 +634,7 @@ public class DGroup {
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
         DungeonConfig dConfig = dungeon.getConfig();
-        int floorsLeft = getUnplayedFloors().size();
+        int floorsLeft = getDungeon().getFloors().size() + 1 - floorCount;//floorCount contains start floor, but dungeon floor list doesn't
         DResourceWorld newFloor = null;
         DGameWorld.Type type = null;
         if (gameWorld.getType() == DGameWorld.Type.END_FLOOR) {

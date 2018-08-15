@@ -294,4 +294,9 @@ public class DResourceWorld {
         return editWorld;
     }
 
+    @Override
+    public String toString() {
+        return "DResourceWorld{name=" + getName() + "}";
+    }
+
 }
