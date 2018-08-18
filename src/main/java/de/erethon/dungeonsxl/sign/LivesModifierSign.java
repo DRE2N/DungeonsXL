@@ -20,6 +20,7 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -44,8 +45,8 @@ public class LivesModifierSign extends DSign {
     private int lives;
     private Target target;
 
-    public LivesModifierSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public LivesModifierSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /* Getters and setters */

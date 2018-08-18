@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.world.block;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
@@ -33,8 +34,8 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public class TeamFlag extends TeamBlock {
 
-    public TeamFlag(Block block, DGroup owner) {
-        super(block, owner);
+    public TeamFlag(DungeonsXL plugin, Block block, DGroup owner) {
+        super(plugin, block, owner);
         reset();
     }
 

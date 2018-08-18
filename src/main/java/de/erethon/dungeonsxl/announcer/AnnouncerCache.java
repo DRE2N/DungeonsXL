@@ -16,14 +16,11 @@
  */
 package de.erethon.dungeonsxl.announcer;
 
-import de.erethon.commons.misc.FileUtil;
-import de.erethon.dungeonsxl.DungeonsXL;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
@@ -33,21 +30,9 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class AnnouncerCache {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     private BukkitTask announcerTask;
 
     private List<Announcer> announcers = new ArrayList<>();
-
-    public AnnouncerCache(File file) {
-        if (file.isDirectory()) {
-            for (File script : FileUtil.getFilesForFolder(file)) {
-                announcers.add(new Announcer(script));
-            }
-        }
-        startAnnouncerTask(plugin.getMainConfig().getAnnouncmentInterval());
-        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(), plugin);
-    }
 
     /**
      * @param name the name
@@ -106,14 +91,10 @@ public class AnnouncerCache {
     }
 
     /**
-     * start a new AnnouncerTask
-     *
-     * @param period the period ticks
+     * @param announcerTask the AnnouncerTask to set
      */
-    public void startAnnouncerTask(long period) {
-        if (!announcers.isEmpty()) {
-            announcerTask = new AnnouncerTask(this).runTaskTimer(plugin, period, period);
-        }
+    public void setAnnouncerTask(BukkitTask announcerTask) {
+        this.announcerTask = announcerTask;
     }
 
 }

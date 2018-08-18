@@ -20,6 +20,7 @@ import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import java.util.Arrays;
@@ -44,8 +45,8 @@ public class ChestSign extends DSign {
     private ItemStack[] chestContent;
     private LootTable lootTable;
 
-    public ChestSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public ChestSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /* Getters and setters */
@@ -178,7 +179,7 @@ public class ChestSign extends DSign {
                 itemReward = list.toArray(new ItemStack[list.size()]);
             }
 
-            getGameWorld().addGameBlock(new RewardChest(chest, moneyReward, levelReward, itemReward));
+            getGameWorld().addGameBlock(new RewardChest(plugin, chest, moneyReward, levelReward, itemReward));
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         } else {

@@ -83,8 +83,8 @@ public class DGameWorld extends DInstanceWorld {
         DEFAULT
     }
 
-    CaliburnAPI caliburn = plugin.getCaliburn();
-    Game game;
+    private CaliburnAPI caliburn;
+    private Game game;
 
     // Variables
     private Type type = Type.DEFAULT;
@@ -108,12 +108,14 @@ public class DGameWorld extends DInstanceWorld {
     private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Trigger> triggers = new CopyOnWriteArrayList<>();
 
-    DGameWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
-        super(resourceWorld, folder, world, id);
+    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
+        super(plugin, resourceWorld, folder, world, id);
+        caliburn = plugin.getCaliburn();
     }
 
-    DGameWorld(DResourceWorld resourceWorld, File folder, int id) {
-        this(resourceWorld, folder, null, id);
+    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
+        this(plugin, resourceWorld, folder, null, id);
+        caliburn = plugin.getCaliburn();
     }
 
     /**
@@ -121,7 +123,7 @@ public class DGameWorld extends DInstanceWorld {
      */
     public Game getGame() {
         if (game == null) {
-            for (Game game : plugin.getGames()) {
+            for (Game game : plugin.getGameCache()) {
                 if (game.getWorld() == this) {
                     this.game = game;
                 }
@@ -428,7 +430,7 @@ public class DGameWorld extends DInstanceWorld {
      * @return the Dungeon that contains the DGameWorld
      */
     public Dungeon getDungeon() {
-        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
+        for (Dungeon dungeon : plugin.getDungeonCache().getDungeons()) {
             if (dungeon.getConfig().containsFloor(getResource())) {
                 return dungeon;
             }
@@ -569,7 +571,7 @@ public class DGameWorld extends DInstanceWorld {
             }
             if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
                 Hanging hanging = (Hanging) entity;
-                if (rules.getDamageProtectedEntities().contains(CaliburnAPI.getInstance().getExMob(hanging))) {
+                if (rules.getDamageProtectedEntities().contains(caliburn.getExMob(hanging))) {
                     event.setCancelled(true);
                     break;
                 }
@@ -646,7 +648,7 @@ public class DGameWorld extends DInstanceWorld {
      * @return the EditWorld that represents the world
      */
     public static DGameWorld getByWorld(World world) {
-        DInstanceWorld instance = DungeonsXL.getInstance().getDWorlds().getInstanceByName(world.getName());
+        DInstanceWorld instance = DungeonsXL.getInstance().getDWorldCache().getInstanceByName(world.getName());
 
         if (instance instanceof DGameWorld) {
             return (DGameWorld) instance;

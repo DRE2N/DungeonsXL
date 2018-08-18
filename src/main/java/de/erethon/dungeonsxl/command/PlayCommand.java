@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
@@ -37,11 +36,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class PlayCommand extends DRECommand {
+public class PlayCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public PlayCommand() {
+    public PlayCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("play");
         setMinArgs(1);
         setMaxArgs(1);
@@ -54,17 +52,17 @@ public class PlayCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
         if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 
-        Dungeon dungeon = plugin.getDungeons().getByName(args[1]);
+        Dungeon dungeon = plugin.getDungeonCache().getByName(args[1]);
         if (dungeon == null) {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[1]);
+            DResourceWorld resource = instances.getResourceByName(args[1]);
             if (resource != null) {
-                dungeon = new Dungeon(resource);
+                dungeon = new Dungeon(plugin, resource);
             } else {
                 MessageUtil.sendMessage(player, DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage(args[1]));
                 return;
@@ -76,11 +74,11 @@ public class PlayCommand extends DRECommand {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
         } else if (dGroup == null) {
-            dGroup = new DGroup(player, dungeon);
+            dGroup = new DGroup(plugin, player, dungeon);
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
-                plugin.getDGroups().remove(dGroup);
+                plugin.getDGroupCache().remove(dGroup);
                 dGroup = null;
             }
         }
@@ -95,9 +93,9 @@ public class PlayCommand extends DRECommand {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
             return;
         }
-        new Game(dGroup, gameWorld);
+        new Game(plugin, dGroup, gameWorld);
         for (Player groupPlayer : dGroup.getPlayers().getOnlinePlayers()) {
-            new DGamePlayer(groupPlayer, dGroup.getGameWorld());
+            new DGamePlayer(plugin, groupPlayer, dGroup.getGameWorld());
         }
     }
 

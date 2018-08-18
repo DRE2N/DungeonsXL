@@ -14,27 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.player;
+package de.erethon.dungeonsxl.global;
 
-import de.erethon.dungeonsxl.DungeonsXL;
-import org.bukkit.scheduler.BukkitRunnable;
+import de.erethon.commons.config.DREConfig;
+import java.io.File;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * Represents the global data.yml.
+ *
+ * @author Daniel Saukel
  */
-public class LazyUpdateTask extends BukkitRunnable {
+public class GlobalData extends DREConfig {
 
-    private DungeonsXL plugin;
+    public static final int CONFIG_VERSION = 2;
 
-    public LazyUpdateTask(DungeonsXL plugin) {
-        this.plugin = plugin;
+    public GlobalData(File file) {
+        super(file, CONFIG_VERSION);
+
+        if (initialize) {
+            initialize();
+        }
+        load();
     }
 
     @Override
-    public void run() {
-        for (DGamePlayer dPlayer : plugin.getDPlayerCache().getDGamePlayers()) {
-            dPlayer.update(true);
-        }
+    public void initialize() {
+        save();
+    }
+
+    @Override
+    public void load() {
+        // Load?
     }
 
 }

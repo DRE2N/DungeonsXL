@@ -39,6 +39,8 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MainConfig extends DREConfig {
 
+    private DungeonsXL plugin;
+
     public enum BackupMode {
         ON_DISABLE,
         ON_DISABLE_AND_SAVE,
@@ -108,8 +110,10 @@ public class MainConfig extends DREConfig {
     /* Default Dungeon Settings */
     private WorldConfig defaultWorldConfig;
 
-    public MainConfig(File file) {
+    public MainConfig(DungeonsXL plugin, File file) {
         super(file, CONFIG_VERSION);
+
+        this.plugin = plugin;
 
         if (initialize) {
             initialize();
@@ -234,7 +238,7 @@ public class MainConfig extends DREConfig {
      */
     public Dungeon getTutorialDungeon() {
         if (tutorialDungeon == null) {
-            tutorialDungeon = DungeonsXL.getInstance().getDungeons().getByName(tutorialDungeonName, true);
+            tutorialDungeon = plugin.getDungeonCache().getByName(tutorialDungeonName, true);
         }
         return tutorialDungeon;
     }
@@ -695,7 +699,7 @@ public class MainConfig extends DREConfig {
         /* Default Dungeon Config */
         ConfigurationSection configSection = config.getConfigurationSection("default");
         if (configSection != null) {
-            defaultWorldConfig = new WorldConfig(configSection);
+            defaultWorldConfig = new WorldConfig(plugin, configSection);
         }
     }
 

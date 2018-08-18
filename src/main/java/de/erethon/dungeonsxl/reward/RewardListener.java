@@ -42,7 +42,11 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    private DungeonsXL plugin;
+
+    public RewardListener(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
 
     /*@EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
@@ -109,8 +113,8 @@ public class RewardListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(player);
-        if (plugin.getDWorlds().getInstanceByWorld(player.getWorld()) != null) {
+        DGlobalPlayer dPlayer = plugin.getDPlayerCache().getByPlayer(player);
+        if (plugin.getDWorldCache().getInstanceByWorld(player.getWorld()) != null) {
             return;
         }
         Block block = player.getLocation().getBlock();

@@ -16,11 +16,9 @@
  */
 package de.erethon.dungeonsxl.reward;
 
-import de.erethon.dungeonsxl.DungeonsXL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.Bukkit;
 
 /**
  * RewardType instance manager.
@@ -33,7 +31,6 @@ public class RewardTypeCache {
 
     public RewardTypeCache() {
         types.addAll(Arrays.asList(RewardTypeDefault.values()));
-        Bukkit.getPluginManager().registerEvents(new RewardListener(), DungeonsXL.getInstance());
     }
 
     /**

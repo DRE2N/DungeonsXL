@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import org.bukkit.block.Block;
@@ -35,8 +36,8 @@ public class OpenDoorSign extends DSign {
     private LockedDoor door;
     private boolean active = true;
 
-    public OpenDoorSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public OpenDoorSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /* Getters and setters */
@@ -84,9 +85,9 @@ public class OpenDoorSign extends DSign {
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
         if (block.getState().getData() instanceof Door) {
             if (block.getRelative(BlockFace.DOWN).getType() == block.getType()) {
-                door = new LockedDoor(block.getRelative(BlockFace.DOWN));
+                door = new LockedDoor(plugin, block.getRelative(BlockFace.DOWN));
             } else {
-                door = new LockedDoor(block);
+                door = new LockedDoor(plugin, block);
             }
             getGameWorld().addGameBlock(door);
 

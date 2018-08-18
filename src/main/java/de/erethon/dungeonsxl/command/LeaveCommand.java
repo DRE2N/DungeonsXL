@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
@@ -36,9 +35,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class LeaveCommand extends DRECommand {
+public class LeaveCommand extends DCommand {
 
-    public LeaveCommand() {
+    public LeaveCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("leave");
         setMinArgs(0);
         setMaxArgs(0);
@@ -50,7 +50,7 @@ public class LeaveCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
         Game game = Game.getByPlayer(player);
 
         if (game != null && game.isTutorial()) {

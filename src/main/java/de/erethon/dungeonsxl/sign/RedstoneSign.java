@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -41,8 +42,8 @@ public class RedstoneSign extends DSign {
     private int repeat = 1;
     private int repeatsToDo = 1;
 
-    public RedstoneSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public RedstoneSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /**

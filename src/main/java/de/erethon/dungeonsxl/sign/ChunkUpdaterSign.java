@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Chunk;
 import org.bukkit.block.Sign;
@@ -29,8 +30,8 @@ public class ChunkUpdaterSign extends DSign {
 
     private DSignType type = DSignTypeDefault.CHUNK_UPDATER;
 
-    public ChunkUpdaterSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public ChunkUpdaterSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

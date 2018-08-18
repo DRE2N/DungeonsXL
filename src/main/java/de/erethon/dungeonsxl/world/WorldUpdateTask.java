@@ -25,9 +25,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class WorldUpdateTask extends BukkitRunnable {
 
+    private DungeonsXL plugin;
+
+    public WorldUpdateTask(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
-        for (DGameWorld gameWorld : DungeonsXL.getInstance().getDWorlds().getGameWorlds()) {
+        for (DGameWorld gameWorld : plugin.getDWorldCache().getGameWorlds()) {
             gameWorld.update();
         }
     }

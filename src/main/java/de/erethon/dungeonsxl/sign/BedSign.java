@@ -20,6 +20,7 @@ import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.TeamBed;
 import org.bukkit.block.Block;
@@ -34,8 +35,8 @@ public class BedSign extends DSign {
 
     private int team;
 
-    public BedSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public BedSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /* Getters and setters */
@@ -57,7 +58,7 @@ public class BedSign extends DSign {
 
         if (Category.BEDS.containsBlock(block)) {
             if (getGame().getDGroups().size() > team) {
-                getGameWorld().addGameBlock(new TeamBed(block, getGame().getDGroups().get(team)));
+                getGameWorld().addGameBlock(new TeamBed(plugin, block, getGame().getDGroups().get(team)));
             }
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
         } else {

@@ -33,12 +33,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class AnnouncerStartGameTask extends BukkitRunnable {
 
+    private DungeonsXL plugin;
+
     private Announcer announcer;
     private ProgressBar bar;
 
-    public AnnouncerStartGameTask(Announcer announcer) {
-        this.announcer = announcer;
+    public AnnouncerStartGameTask(DungeonsXL plugin, Announcer announcer) {
+        this.plugin = plugin;
 
+        this.announcer = announcer;
         HashSet<Player> players = new HashSet<>();
         for (DGroup dGroup : announcer.getDGroups()) {
             if (dGroup == null) {
@@ -49,7 +52,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             }
         }
         bar = new ProgressBar(players, 30);
-        bar.runTaskTimer(DungeonsXL.getInstance(), 0L, 20L);
+        bar.send(plugin);
     }
 
     /**
@@ -74,7 +77,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             }
 
             if (game == null) {
-                DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(announcer.getMapName());
+                DResourceWorld resource = plugin.getDWorldCache().getResourceByName(announcer.getMapName());
                 if (resource == null) {
                     dGroup.sendMessage(DMessage.ERROR_NO_SUCH_MAP.getMessage(announcer.getMapName()));
                     cancel();
@@ -86,7 +89,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
                     cancel();
                     return;
                 }
-                game = new Game(dGroup, gameWorld);
+                game = new Game(plugin, dGroup, gameWorld);
             } else {
                 game.getDGroups().add(dGroup);
             }
@@ -101,7 +104,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
         }
 
         for (Player player : game.getPlayers()) {
-            new DGamePlayer(player, game.getWorld());
+            new DGamePlayer(plugin, player, game.getWorld());
         }
 
         announcer.endStartTask();

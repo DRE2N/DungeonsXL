@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -35,8 +36,8 @@ public class WaveSign extends DSign {
     private double mobCountIncreaseRate;
     private boolean teleport;
 
-    public WaveSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public WaveSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /**

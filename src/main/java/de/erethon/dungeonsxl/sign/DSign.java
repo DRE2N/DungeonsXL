@@ -39,7 +39,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class DSign {
 
-    protected DungeonsXL plugin = DungeonsXL.getInstance();
+    protected DungeonsXL plugin;
 
     public static final String ERROR_0 = ChatColor.DARK_RED + "## ERROR ##";
     public static final String ERROR_1 = ChatColor.WHITE + "Please";
@@ -55,7 +55,9 @@ public abstract class DSign {
 
     private boolean erroneous;
 
-    public DSign(Sign sign, String[] lines, DGameWorld gameWorld) {
+    protected DSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        this.plugin = plugin;
+
         this.sign = sign;
         this.lines = lines;
         this.gameWorld = gameWorld;
@@ -79,7 +81,7 @@ public abstract class DSign {
                 value = triggerString.substring(1);
             }
 
-            Trigger trigger = Trigger.getOrCreate(type, value, this);
+            Trigger trigger = Trigger.getOrCreate(plugin, type, value, this);
             if (trigger != null) {
                 trigger.addListener(this);
                 addTrigger(trigger);
@@ -221,21 +223,21 @@ public abstract class DSign {
     }
 
     /* Statics */
-    public static DSign create(Sign sign, DGameWorld gameWorld) {
-        return create(sign, sign.getLines(), gameWorld);
+    public static DSign create(DungeonsXL plugin, Sign sign, DGameWorld gameWorld) {
+        return create(plugin, sign, sign.getLines(), gameWorld);
     }
 
-    public static DSign create(Sign sign, String[] lines, DGameWorld gameWorld) {
+    public static DSign create(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         DSign dSign = null;
 
-        for (DSignType type : DungeonsXL.getInstance().getDSigns().getDSigns()) {
+        for (DSignType type : plugin.getDSignCache().getDSigns()) {
             if (!lines[0].equalsIgnoreCase("[" + type.getName() + "]")) {
                 continue;
             }
 
             try {
-                Constructor<? extends DSign> constructor = type.getHandler().getConstructor(Sign.class, String[].class, DGameWorld.class);
-                dSign = constructor.newInstance(sign, lines, gameWorld);
+                Constructor<? extends DSign> constructor = type.getHandler().getConstructor(DungeonsXL.class, Sign.class, String[].class, DGameWorld.class);
+                dSign = constructor.newInstance(plugin, sign, lines, gameWorld);
 
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
                 MessageUtil.log("An error occurred while accessing the handler class of the sign " + type.getName() + ": " + exception.getClass().getSimpleName());

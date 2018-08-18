@@ -51,7 +51,7 @@ import org.bukkit.material.Wool;
  */
 public class Announcer {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    private DungeonsXL plugin;
 
     private String name;
 
@@ -73,17 +73,21 @@ public class Announcer {
     private AnnouncerStartGameTask startTask;
 
     /**
-     * @param file the script file
+     * @param plugin the plugin instance
+     * @param file   the script file
      */
-    public Announcer(File file) {
-        this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
+    public Announcer(DungeonsXL plugin, File file) {
+        this(plugin, file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
     }
 
     /**
+     * @param plugin the plugin instance
      * @param name   the name of the Announcer
      * @param config the config that stores the information
      */
-    public Announcer(String name, FileConfiguration config) {
+    public Announcer(DungeonsXL plugin, String name, FileConfiguration config) {
+        this.plugin = plugin;
+
         this.name = name;
 
         description = config.getStringList("description");
@@ -94,7 +98,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
+            Dungeon dungeon = plugin.getDungeonCache().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor().getName();
             }
@@ -128,7 +132,7 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeons().getByName(identifier);
+            Dungeon dungeon = plugin.getDungeonCache().getByName(identifier);
             if (dungeon != null) {
                 mapName = dungeon.getConfig().getStartFloor().getName();
             }
@@ -374,7 +378,7 @@ public class Announcer {
             DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.ANNOUNCER);
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                dGroups.set(buttons.indexOf(button), new DGroup(player, color));
+                dGroups.set(buttons.indexOf(button), new DGroup(plugin, player, color));
             }
 
         } else if (dGroup == null && pGroup != null) {
@@ -391,7 +395,7 @@ public class Announcer {
 
         if (areRequirementsFulfilled()) {
             if (startTask == null) {
-                startTask = new AnnouncerStartGameTask(this);
+                startTask = new AnnouncerStartGameTask(plugin, this);
                 startTask.runTaskLater(plugin, 20 * 30L);
             } else {
                 startTask.getProgressBar().addPlayer(player);
@@ -412,7 +416,7 @@ public class Announcer {
             List<String> lore = new ArrayList<>();
 
             DGroup dGroup = dGroups.get(groupCount);
-            if (!plugin.getDGroups().contains(dGroup)) {
+            if (!plugin.getDGroupCache().contains(dGroup)) {
                 dGroups.set(groupCount, null);
 
             } else if (dGroup != null) {

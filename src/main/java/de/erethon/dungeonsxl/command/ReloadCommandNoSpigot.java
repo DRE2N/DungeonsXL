@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -33,11 +32,10 @@ import org.bukkit.plugin.PluginManager;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class ReloadCommandNoSpigot extends DRECommand {
+public class ReloadCommandNoSpigot extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public ReloadCommandNoSpigot() {
+    public ReloadCommandNoSpigot(DungeonsXL plugin) {
+        super(plugin);
         setCommand("reload");
         setMinArgs(0);
         setMaxArgs(1);
@@ -49,7 +47,7 @@ public class ReloadCommandNoSpigot extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        List<DInstancePlayer> dPlayers = plugin.getDPlayers().getDInstancePlayers();
+        List<DInstancePlayer> dPlayers = this.dPlayers.getDInstancePlayers();
 
         PluginManager plugins = Bukkit.getPluginManager();
 
@@ -65,8 +63,8 @@ public class ReloadCommandNoSpigot extends DRECommand {
 
         int maps = DungeonsXL.MAPS.listFiles().length;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
-        int players = plugin.getDPlayers().getDGamePlayers().size();
+        int loaded = instances.getEditWorlds().size() + instances.getGameWorlds().size();
+        int players = this.dPlayers.getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {
@@ -78,7 +76,9 @@ public class ReloadCommandNoSpigot extends DRECommand {
         }
 
         plugin.onDisable();
-        plugin.loadCore();
+        plugin.initFolders();
+        plugin.createCaches();
+        plugin.initCaches();
         plugin.loadData();
 
         MessageUtil.sendPluginTag(sender, plugin);

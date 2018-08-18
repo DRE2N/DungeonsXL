@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.reward;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import org.bukkit.entity.Player;
 
@@ -28,6 +29,10 @@ public class LevelReward extends Reward {
     private RewardType type = RewardTypeDefault.LEVEL;
 
     private int levels;
+
+    public LevelReward(DungeonsXL plugin) {
+        super(plugin);
+    }
 
     /**
      * @return the levels

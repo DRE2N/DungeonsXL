@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.misc.FileUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,18 @@ import java.util.List;
  */
 public class DClassCache {
 
+    private DungeonsXL plugin;
+
     private List<DClass> dClasses = new ArrayList<>();
 
-    public DClassCache(File file) {
+    public DClassCache(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public void init(File file) {
         if (file.isDirectory()) {
             for (File script : FileUtil.getFilesForFolder(file)) {
-                dClasses.add(new DClass(script));
+                dClasses.add(new DClass(plugin, script));
             }
         }
     }

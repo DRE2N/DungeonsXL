@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -31,16 +30,16 @@ import org.bukkit.plugin.PluginManager;
 /**
  * @author Daniel Saukel
  */
-public class StatusCommand extends DRECommand {
+public class StatusCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    CompatibilityHandler compat = CompatibilityHandler.getInstance();
-    PluginManager manager = Bukkit.getPluginManager();
+    private CompatibilityHandler compat = CompatibilityHandler.getInstance();
+    private PluginManager manager = Bukkit.getPluginManager();
 
     public static final String TRUE = ChatColor.GREEN + "\u2714";
     public static final String FALSE = ChatColor.DARK_RED + "\u2718";
 
-    public StatusCommand() {
+    public StatusCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("status");
         setMinArgs(0);
         setMaxArgs(0);

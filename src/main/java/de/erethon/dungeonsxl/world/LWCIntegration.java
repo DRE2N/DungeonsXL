@@ -26,7 +26,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
  */
 public class LWCIntegration extends JavaModule {
 
-    DungeonsXL plugin;
+    private DungeonsXL plugin;
 
     public LWCIntegration(DungeonsXL plugin) {
         this.plugin = plugin;
@@ -35,7 +35,7 @@ public class LWCIntegration extends JavaModule {
 
     @Override
     public void onRegisterProtection(LWCProtectionRegisterEvent event) {
-        DInstanceWorld instance = plugin.getDWorlds().getInstanceByWorld(event.getBlock().getWorld());
+        DInstanceWorld instance = plugin.getDWorldCache().getInstanceByWorld(event.getBlock().getWorld());
         if (instance != null) {
             event.setCancelled(true);
         }

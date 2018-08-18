@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.announcer.Announcer;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -30,9 +29,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class JoinCommand extends DRECommand {
+public class JoinCommand extends DCommand {
 
-    public JoinCommand() {
+    public JoinCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("join");
         setMinArgs(1);
         setMaxArgs(1);
@@ -43,13 +43,13 @@ public class JoinCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DGlobalPlayer player = DungeonsXL.getInstance().getDPlayers().getByPlayer((Player) sender);
+        DGlobalPlayer player = dPlayers.getByPlayer((Player) sender);
         if (player instanceof DInstancePlayer) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_GAME.getMessage());
             return;
         }
 
-        Announcer announcer = DungeonsXL.getInstance().getAnnouncers().getByName(args[1]);
+        Announcer announcer = plugin.getAnnouncerCache().getByName(args[1]);
         if (announcer != null) {
             announcer.showGUI((Player) sender);
         }

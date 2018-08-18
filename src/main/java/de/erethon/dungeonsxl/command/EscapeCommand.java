@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -30,9 +30,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Milan Albrecht, Daniel Saukel
  */
-public class EscapeCommand extends DRECommand {
+public class EscapeCommand extends DCommand {
 
-    public EscapeCommand() {
+    public EscapeCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("escape");
         setMinArgs(0);
         setMaxArgs(0);

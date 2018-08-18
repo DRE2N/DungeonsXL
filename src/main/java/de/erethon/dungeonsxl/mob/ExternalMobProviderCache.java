@@ -31,12 +31,16 @@ import org.bukkit.Bukkit;
  */
 public class ExternalMobProviderCache {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    private DungeonsXL plugin;
 
     private Set<ExternalMobProvider> providers = new HashSet<>();
     private CitizensMobProvider citizensMobProvider;
 
-    public ExternalMobProviderCache() {
+    public ExternalMobProviderCache(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public void init() {
         // Supported providers
         providers.addAll(Arrays.asList(ExternalMobPlugin.values()));
 

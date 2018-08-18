@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DGroup;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -29,6 +30,10 @@ public class GroupSizeRequirement extends Requirement {
 
     private int minimum;
     private int maximum;
+
+    public GroupSizeRequirement(DungeonsXL plugin) {
+        super(plugin);
+    }
 
     /**
      * @return the group minimum

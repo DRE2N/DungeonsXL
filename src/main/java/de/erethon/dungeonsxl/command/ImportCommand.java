@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -32,11 +31,10 @@ import org.bukkit.command.CommandSender;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class ImportCommand extends DRECommand {
+public class ImportCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public ImportCommand() {
+    public ImportCommand(DungeonsXL plugin) {
+        super(plugin);
         setMinArgs(1);
         setMaxArgs(1);
         setCommand("import");
@@ -71,12 +69,12 @@ public class ImportCommand extends DRECommand {
 
         FileUtil.copyDir(source, target, "playerdata", "stats");
 
-        DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), args[1]);
+        DResourceWorld resource = new DResourceWorld(plugin, args[1]);
         if (world.getEnvironment() != Environment.NORMAL) {
             resource.getConfig(true).setWorldEnvironment(world.getEnvironment());
             resource.getConfig().save();
         }
-        plugin.getDWorlds().addResource(resource);
+        instances.addResource(resource);
         MessageUtil.sendMessage(sender, DMessage.CMD_IMPORT_SUCCESS.getMessage(args[1]));
     }
 

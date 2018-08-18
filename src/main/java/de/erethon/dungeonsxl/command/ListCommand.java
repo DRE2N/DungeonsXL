@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -36,12 +35,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class ListCommand extends DRECommand {
+public class ListCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorldCache worlds = plugin.getDWorlds();
-
-    public ListCommand() {
+    public ListCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("list");
         setMinArgs(0);
         setMaxArgs(3);
@@ -54,7 +51,7 @@ public class ListCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         ArrayList<String> dungeonList = new ArrayList<>();
-        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
+        for (Dungeon dungeon : plugin.getDungeonCache().getDungeons()) {
             dungeonList.add(dungeon.getName());
         }
         ArrayList<String> mapList = new ArrayList<>();
@@ -64,10 +61,10 @@ public class ListCommand extends DRECommand {
             }
         }
         ArrayList<String> loadedList = new ArrayList<>();
-        for (DEditWorld editWorld : worlds.getEditWorlds()) {
+        for (DEditWorld editWorld : instances.getEditWorlds()) {
             loadedList.add(editWorld.getWorld().getWorldFolder().getName() + " / " + editWorld.getName());
         }
-        for (DGameWorld gameWorld : worlds.getGameWorlds()) {
+        for (DGameWorld gameWorld : instances.getGameWorlds()) {
             loadedList.add(gameWorld.getWorld().getWorldFolder().getName() + " / " + gameWorld.getName());
         }
         ArrayList<String> toSend = new ArrayList<>();
@@ -78,7 +75,7 @@ public class ListCommand extends DRECommand {
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("dungeons") || args[1].equalsIgnoreCase("d")) {
                 if (args.length >= 3) {
-                    Dungeon dungeon = plugin.getDungeons().getByName(args[2]);
+                    Dungeon dungeon = plugin.getDungeonCache().getByName(args[2]);
                     if (dungeon != null) {
                         MessageUtil.sendPluginTag(sender, plugin);
                         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dungeon.getName() + " &4&l]");
@@ -133,7 +130,7 @@ public class ListCommand extends DRECommand {
                 for (String map : toSend) {
                     boolean invited = false;
                     if (sender instanceof Player) {
-                        DResourceWorld resource = worlds.getResourceByName(map);
+                        DResourceWorld resource = instances.getResourceByName(map);
                         if (resource != null) {
                             invited = resource.isInvitedPlayer((Player) sender);
                         }
@@ -145,7 +142,7 @@ public class ListCommand extends DRECommand {
             case 1:
                 MessageUtil.sendMessage(sender, "&4Dungeon&7 | &eMap count");
                 for (String dungeon : toSend) {
-                    DungeonConfig dungeonConfig = new DungeonConfig(new File(DungeonsXL.DUNGEONS, dungeon + ".yml"));
+                    DungeonConfig dungeonConfig = new DungeonConfig(plugin, new File(DungeonsXL.DUNGEONS, dungeon + ".yml"));
                     int count = dungeonConfig.getFloors().size() + 2;
                     MessageUtil.sendMessage(sender, "&b" + dungeon + "&7 | &e" + count);
                 }

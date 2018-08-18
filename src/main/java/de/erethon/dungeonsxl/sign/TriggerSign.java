@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -37,8 +38,8 @@ public class TriggerSign extends DSign {
     private int triggerId;
     private boolean initialized;
 
-    public TriggerSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public TriggerSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

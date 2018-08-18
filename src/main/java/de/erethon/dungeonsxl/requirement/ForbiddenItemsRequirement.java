@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.dungeonsxl.DungeonsXL;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -28,11 +29,16 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ForbiddenItemsRequirement extends Requirement {
 
-    CaliburnAPI caliburn = CaliburnAPI.getInstance();
+    private CaliburnAPI caliburn;
 
     private RequirementType type = RequirementTypeDefault.FORBIDDEN_ITEMS;
 
     private List<ExItem> forbiddenItems;
+
+    public ForbiddenItemsRequirement(DungeonsXL plugin) {
+        super(plugin);
+        caliburn = plugin.getCaliburn();
+    }
 
     /* Getters and setters */
     /**

@@ -45,8 +45,8 @@ public class GameSign extends JoinSign {
 
     private Game game;
 
-    public GameSign(int id, Block startSign, String identifier, int maxGroupsPerGame) {
-        super(id, startSign, identifier, maxGroupsPerGame);
+    public GameSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxGroupsPerGame) {
+        super(plugin, id, startSign, identifier, maxGroupsPerGame);
     }
 
     /**
@@ -153,7 +153,7 @@ public class GameSign extends JoinSign {
                 return;
             }
 
-            game = new Game(dGroup);
+            game = new Game(plugin, dGroup);
             dGroup.setDungeon(dungeon);
             update();
 
@@ -165,15 +165,16 @@ public class GameSign extends JoinSign {
 
     /* Statics */
     /**
-     * @param block a block which is protected by the returned GameSign
+     * @param plugin the plugin instance
+     * @param block  a block which is protected by the returned GameSign
      * @return the game sign the block belongs to, null if it belongs to none
      */
-    public static GameSign getByBlock(Block block) {
+    public static GameSign getByBlock(DungeonsXL plugin, Block block) {
         if (!Category.SIGNS.containsBlock(block)) {
             return null;
         }
 
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(GameSign.class)) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(GameSign.class)) {
             GameSign gameSign = (GameSign) protection;
             Block start = gameSign.startSign;
             if (start == block || (start.getX() == block.getX() && start.getZ() == block.getZ() && (start.getY() >= block.getY() && start.getY() - gameSign.verticalSigns <= block.getY()))) {
@@ -185,11 +186,12 @@ public class GameSign extends JoinSign {
     }
 
     /**
-     * @param game the game to check
+     * @param plugin the plugin instance
+     * @param game   the game to check
      * @return the game that this sign creates
      */
-    public static GameSign getByGame(Game game) {
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(GameSign.class)) {
+    public static GameSign getByGame(DungeonsXL plugin, Game game) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(GameSign.class)) {
             GameSign gameSign = (GameSign) protection;
             if (gameSign.game == game) {
                 return gameSign;
@@ -198,7 +200,7 @@ public class GameSign extends JoinSign {
         return null;
     }
 
-    public static GameSign tryToCreate(SignChangeEvent event) {
+    public static GameSign tryToCreate(DungeonsXL plugin, SignChangeEvent event) {
         if (!event.getLine(0).equalsIgnoreCase(SIGN_TAG)) {
             return null;
         }
@@ -209,10 +211,10 @@ public class GameSign extends JoinSign {
         String identifier = event.getLine(2);
         int maxGroupsPerGame = NumberUtil.parseInt(event.getLine(3), 1);
 
-        return tryToCreate(event.getBlock(), identifier, maxGroupsPerGame);
+        return tryToCreate(plugin, event.getBlock(), identifier, maxGroupsPerGame);
     }
 
-    public static GameSign tryToCreate(Block startSign, String identifier, int maxGroupsPerGame) {
+    public static GameSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxGroupsPerGame) {
         World world = startSign.getWorld();
         BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
         int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
@@ -229,7 +231,7 @@ public class GameSign extends JoinSign {
 
             verticalSigns--;
         }
-        GameSign sign = new GameSign(DungeonsXL.getInstance().getGlobalProtections().generateId(GameSign.class, world), startSign, identifier, maxGroupsPerGame);
+        GameSign sign = new GameSign(plugin, plugin.getGlobalProtectionCache().generateId(GameSign.class, world), startSign, identifier, maxGroupsPerGame);
 
         LWCUtil.removeProtection(startSign);
 

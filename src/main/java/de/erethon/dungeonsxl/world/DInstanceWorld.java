@@ -36,9 +36,9 @@ import org.bukkit.World;
  */
 public abstract class DInstanceWorld {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorldCache worlds = plugin.getDWorlds();
-    DPlayerCache dPlayers = plugin.getDPlayers();
+    protected DungeonsXL plugin;
+    protected DWorldCache worlds;
+    protected DPlayerCache dPlayers;
 
     private DResourceWorld resourceWorld;
     private File folder;
@@ -46,7 +46,11 @@ public abstract class DInstanceWorld {
     private int id;
     private Location lobby;
 
-    DInstanceWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
+    DInstanceWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
+        this.plugin = plugin;
+        worlds = plugin.getDWorldCache();
+        dPlayers = plugin.getDPlayerCache();
+
         this.resourceWorld = resourceWorld;
         this.folder = folder;
         this.world = world;
@@ -124,7 +128,7 @@ public abstract class DInstanceWorld {
      */
     public Collection<DInstancePlayer> getPlayers() {
         Collection<DInstancePlayer> players = new ArrayList<>();
-        for (DInstancePlayer player : plugin.getDPlayers().getDInstancePlayers()) {
+        for (DInstancePlayer player : plugin.getDPlayerCache().getDInstancePlayers()) {
             if (player.getWorld().equals(world)) {
                 players.add(player);
             }

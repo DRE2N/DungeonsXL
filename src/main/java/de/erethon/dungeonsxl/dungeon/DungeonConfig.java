@@ -19,7 +19,6 @@ package de.erethon.dungeonsxl.dungeon;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DResourceWorld;
-import de.erethon.dungeonsxl.world.DWorldCache;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.List;
  */
 public class DungeonConfig extends DREConfig {
 
-    DWorldCache worlds = DungeonsXL.getInstance().getDWorlds();
+    private DungeonsXL plugin;
 
     public static final int CONFIG_VERSION = 1;
 
@@ -44,8 +43,10 @@ public class DungeonConfig extends DREConfig {
     private WorldConfig overrideValues;
     private WorldConfig defaultValues;
 
-    public DungeonConfig(File file) {
+    public DungeonConfig(DungeonsXL plugin, File file) {
         super(file, CONFIG_VERSION);
+
+        this.plugin = plugin;
 
         if (initialize) {
             initialize();
@@ -176,14 +177,14 @@ public class DungeonConfig extends DREConfig {
      * @return true if the floor is either in the list or the start / end floor.
      */
     public boolean containsFloor(String mapName) {
-        return containsFloor(worlds.getResourceByName(mapName));
+        return containsFloor(plugin.getDWorldCache().getResourceByName(mapName));
     }
 
     @Override
     public void load() {
         if (config.contains("floors")) {
             for (String floor : config.getStringList("floors")) {
-                DResourceWorld resource = worlds.getResourceByName(floor);
+                DResourceWorld resource = plugin.getDWorldCache().getResourceByName(floor);
                 if (resource != null) {
                     floors.add(resource);
                 }
@@ -191,11 +192,11 @@ public class DungeonConfig extends DREConfig {
         }
 
         if (config.contains("startFloor")) {
-            startFloor = worlds.getResourceByName(config.getString("startFloor"));
+            startFloor = plugin.getDWorldCache().getResourceByName(config.getString("startFloor"));
         }
 
         if (config.contains("endFloor")) {
-            endFloor = worlds.getResourceByName(config.getString("endFloor"));
+            endFloor = plugin.getDWorldCache().getResourceByName(config.getString("endFloor"));
         }
 
         if (config.contains("floorCount")) {
@@ -207,11 +208,11 @@ public class DungeonConfig extends DREConfig {
         }
 
         if (config.contains("overrideValues")) {
-            overrideValues = new WorldConfig(config.getConfigurationSection("overrideValues"));
+            overrideValues = new WorldConfig(plugin, config.getConfigurationSection("overrideValues"));
         }
 
         if (config.contains("defaultValues")) {
-            defaultValues = new WorldConfig(config.getConfigurationSection("defaultValues"));
+            defaultValues = new WorldConfig(plugin, config.getConfigurationSection("defaultValues"));
         }
     }
 

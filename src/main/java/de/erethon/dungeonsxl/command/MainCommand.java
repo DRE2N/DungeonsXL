@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.command;
 
 import static de.erethon.commons.chat.FatLetter.*;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -31,11 +30,10 @@ import org.bukkit.plugin.PluginManager;
 /**
  * @author Daniel Saukel
  */
-public class MainCommand extends DRECommand {
+public class MainCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public MainCommand() {
+    public MainCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("main");
         setHelp(DMessage.HELP_CMD_MAIN.getMessage());
         setPermission(DPermission.MAIN.getNode());
@@ -49,8 +47,8 @@ public class MainCommand extends DRECommand {
 
         int maps = DungeonsXL.MAPS.listFiles().length;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
-        int players = plugin.getDPlayers().getDGamePlayers().size();
+        int loaded = instances.getEditWorlds().size() + instances.getGameWorlds().size();
+        int players = dPlayers.getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {

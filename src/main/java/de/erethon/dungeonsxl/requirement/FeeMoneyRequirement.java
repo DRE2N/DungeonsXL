@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.requirement;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -27,11 +28,16 @@ import org.bukkit.entity.Player;
  */
 public class FeeMoneyRequirement extends Requirement {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    private Economy econ;
 
     private RequirementType type = RequirementTypeDefault.FEE_MONEY;
 
     private double fee;
+
+    public FeeMoneyRequirement(DungeonsXL plugin) {
+        super(plugin);
+        econ = plugin.getEconomyProvider();
+    }
 
     /* Getters and setters */
     /**
@@ -61,21 +67,21 @@ public class FeeMoneyRequirement extends Requirement {
 
     @Override
     public boolean check(Player player) {
-        if (plugin.getEconomyProvider() == null) {
+        if (econ == null) {
             return true;
         }
 
-        return plugin.getEconomyProvider().getBalance(player) >= fee;
+        return econ.getBalance(player) >= fee;
     }
 
     @Override
     public void demand(Player player) {
-        if (plugin.getEconomyProvider() == null) {
+        if (econ == null) {
             return;
         }
 
-        plugin.getEconomyProvider().withdrawPlayer(player, fee);
-        MessageUtil.sendMessage(player, DMessage.REQUIREMENT_FEE.getMessage(plugin.getEconomyProvider().format(fee)));
+        econ.withdrawPlayer(player, fee);
+        MessageUtil.sendMessage(player, DMessage.REQUIREMENT_FEE.getMessage(econ.format(fee)));
     }
 
 }

@@ -31,17 +31,21 @@ import java.util.List;
  */
 public class DungeonCache {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    private DungeonsXL plugin;
 
     private List<Dungeon> dungeons = new ArrayList<>();
 
-    public DungeonCache(File folder) {
+    public DungeonCache(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public void init(File folder) {
         if (!folder.exists()) {
             folder.mkdir();
         }
 
         for (File file : folder.listFiles()) {
-            Dungeon dungeon = new Dungeon(file);
+            Dungeon dungeon = new Dungeon(plugin, file);
 
             if (dungeon.isSetupCorrect()) {
                 dungeons.add(dungeon);
@@ -73,9 +77,9 @@ public class DungeonCache {
         }
 
         if (artificial) {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(name);
+            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(name);
             if (resource != null) {
-                return new Dungeon(resource);
+                return new Dungeon(plugin, resource);
             }
         }
 
@@ -94,7 +98,7 @@ public class DungeonCache {
      * @return the Dungeon that has the name
      */
     public Dungeon loadDungeon(String name) {
-        Dungeon dungeon = new Dungeon(Dungeon.getFileFromName(name));
+        Dungeon dungeon = new Dungeon(plugin, Dungeon.getFileFromName(name));
         dungeons.add(dungeon);
         return dungeon;
     }

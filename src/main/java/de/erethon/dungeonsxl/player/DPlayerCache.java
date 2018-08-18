@@ -35,8 +35,8 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class DPlayerCache {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig mainConfig = plugin.getMainConfig();
+    private DungeonsXL plugin;
+    private MainConfig config;
 
     private BukkitTask secureModeTask;
     private BukkitTask updateTask;
@@ -44,14 +44,20 @@ public class DPlayerCache {
 
     private CopyOnWriteArrayList<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
 
-    public DPlayerCache() {
-        if (mainConfig.isSecureModeEnabled()) {
-            startSecureModeTask(mainConfig.getSecureModeCheckInterval());
+    public DPlayerCache(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public void init() {
+        config = plugin.getMainConfig();
+
+        if (config.isSecureModeEnabled()) {
+            startSecureModeTask(config.getSecureModeCheckInterval());
         }
         startUpdateTask(2L);
         startLazyUpdateTask(20L);
 
-        Bukkit.getPluginManager().registerEvents(new DPlayerListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new DPlayerListener(plugin), plugin);
     }
 
     /**
@@ -64,7 +70,7 @@ public class DPlayerCache {
                 return dGlobalPlayer;
             }
         }
-        return new DGlobalPlayer(player);
+        return new DGlobalPlayer(plugin, player);
     }
 
     /**
@@ -86,7 +92,7 @@ public class DPlayerCache {
      */
     public Collection<DInstancePlayer> getByInstance(DInstanceWorld instance) {
         Collection<DInstancePlayer> players = new ArrayList<>();
-        plugin.getDWorlds().getInstances().forEach(i -> i.getPlayers().forEach(p -> players.add(p)));
+        plugin.getDWorldCache().getInstances().forEach(i -> i.getPlayers().forEach(p -> players.add(p)));
         return players;
     }
 
@@ -160,7 +166,7 @@ public class DPlayerCache {
      */
     public void loadAll() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            new DGlobalPlayer(player);
+            new DGlobalPlayer(plugin, player);
         }
     }
 
@@ -195,7 +201,7 @@ public class DPlayerCache {
      * @param period the period in ticks
      */
     public void startSecureModeTask(long period) {
-        secureModeTask = new SecureModeTask().runTaskTimer(plugin, period, period);
+        secureModeTask = new SecureModeTask(plugin).runTaskTimer(plugin, period, period);
     }
 
     /**
@@ -211,7 +217,7 @@ public class DPlayerCache {
      * @param period the period in ticks
      */
     public void startUpdateTask(long period) {
-        updateTask = new UpdateTask().runTaskTimer(plugin, period, period);
+        updateTask = new UpdateTask(plugin).runTaskTimer(plugin, period, period);
     }
 
     /**
@@ -227,7 +233,7 @@ public class DPlayerCache {
      * @param period the period in ticks
      */
     public void startLazyUpdateTask(long period) {
-        lazyUpdateTask = new LazyUpdateTask().runTaskTimer(plugin, period, period);
+        lazyUpdateTask = new LazyUpdateTask(plugin).runTaskTimer(plugin, period, period);
     }
 
 }

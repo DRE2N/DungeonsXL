@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.sign;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -35,8 +36,8 @@ public class DropSign extends DSign {
     private ItemStack item;
     private double interval = -1;
 
-    public DropSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public DropSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /* Getters and setters */

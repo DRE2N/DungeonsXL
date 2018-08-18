@@ -20,7 +20,6 @@ import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.global.DPortal;
@@ -33,12 +32,12 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class PortalCommand extends DRECommand {
+public class PortalCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
     CaliburnAPI caliburn = plugin.getCaliburn();
 
-    public PortalCommand() {
+    public PortalCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("portal");
         setMinArgs(0);
         setMaxArgs(1);
@@ -50,7 +49,7 @@ public class PortalCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
 
         if (dGlobalPlayer instanceof DGamePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
@@ -70,7 +69,7 @@ public class PortalCommand extends DRECommand {
         DPortal dPortal = dGlobalPlayer.getPortal();
 
         if (dPortal == null) {
-            dPortal = new DPortal(plugin.getGlobalProtections().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
+            dPortal = new DPortal(plugin, plugin.getGlobalProtectionCache().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
             dGlobalPlayer.setCachedItem(player.getItemInHand());

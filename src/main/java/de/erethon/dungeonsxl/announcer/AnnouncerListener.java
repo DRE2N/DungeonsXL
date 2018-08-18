@@ -30,6 +30,12 @@ import org.bukkit.material.Wool;
  */
 public class AnnouncerListener implements Listener {
 
+    private AnnouncerCache announcers;
+
+    public AnnouncerListener(DungeonsXL plugin) {
+        announcers = plugin.getAnnouncerCache();
+    }
+
     @EventHandler
     public void onButtonClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) {
@@ -39,7 +45,7 @@ public class AnnouncerListener implements Listener {
 
         Inventory gui = event.getInventory();
         ItemStack button = event.getCurrentItem();
-        Announcer announcer = DungeonsXL.getInstance().getAnnouncers().getByGUI(gui);
+        Announcer announcer = announcers.getByGUI(gui);
         if (announcer != null && button != null && button.getData() instanceof Wool) {
             announcer.clickGroupButton(player, button);
         }

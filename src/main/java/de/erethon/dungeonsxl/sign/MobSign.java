@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.sign;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.mob.ExternalMobProviderCache;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -36,7 +37,7 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class MobSign extends DSign {
 
-    ExternalMobProviderCache providers = plugin.getExternalMobProviders();
+    private ExternalMobProviderCache providers;
 
     private DSignType type = DSignTypeDefault.MOB;
 
@@ -51,8 +52,9 @@ public class MobSign extends DSign {
     private BukkitTask task;
     private Collection<LivingEntity> spawnedMobs = new ArrayList<>();
 
-    public MobSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public MobSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
+        providers = plugin.getExternalMobProviderCache();
     }
 
     /**

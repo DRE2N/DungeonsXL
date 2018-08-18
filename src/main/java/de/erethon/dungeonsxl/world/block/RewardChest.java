@@ -43,8 +43,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardChest extends GameBlock {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
     // Variables
     private boolean used = false;
     private Chest chest;
@@ -52,8 +50,8 @@ public class RewardChest extends GameBlock {
     private int levelReward;
     private ItemStack[] itemReward;
 
-    public RewardChest(Block chest, double moneyReward, int levelReward, ItemStack[] itemReward) {
-        super(chest);
+    public RewardChest(DungeonsXL plugin, Block chest, double moneyReward, int levelReward, ItemStack[] itemReward) {
+        super(plugin, chest);
 
         if (!(chest.getState() instanceof Chest)) {
             return;
@@ -169,19 +167,19 @@ public class RewardChest extends GameBlock {
         Game game = Game.getByDGroup(dGroup);
         if (game == null || game.getType() == GameTypeDefault.CUSTOM || game.getType().hasRewards()) {
             if (!hasMoneyReward) {
-                Reward reward = Reward.create(RewardTypeDefault.MONEY);
+                Reward reward = Reward.create(plugin, RewardTypeDefault.MONEY);
                 ((MoneyReward) reward).addMoney(moneyReward);
                 dGroup.addReward(reward);
             }
 
             if (!hasLevelReward) {
-                Reward reward = Reward.create(RewardTypeDefault.LEVEL);
+                Reward reward = Reward.create(plugin, RewardTypeDefault.LEVEL);
                 ((LevelReward) reward).addLevels(levelReward);
                 dGroup.addReward(reward);
             }
 
             if (!hasItemReward) {
-                Reward reward = Reward.create(RewardTypeDefault.ITEM);
+                Reward reward = Reward.create(plugin, RewardTypeDefault.ITEM);
                 ((ItemReward) reward).addItems(itemReward);
                 dGroup.addReward(reward);
             }

@@ -46,9 +46,9 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DGlobalPlayer implements PlayerWrapper {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    protected DungeonsXL plugin;
 
-    boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
+    protected boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
 
     protected Player player;
 
@@ -65,11 +65,13 @@ public class DGlobalPlayer implements PlayerWrapper {
     private ItemStack[] respawnArmor;
     private List<ItemStack> rewardItems;
 
-    public DGlobalPlayer(Player player) {
-        this(player, false);
+    public DGlobalPlayer(DungeonsXL plugin, Player player) {
+        this(plugin, player, false);
     }
 
-    public DGlobalPlayer(Player player, boolean reset) {
+    public DGlobalPlayer(DungeonsXL plugin, Player player, boolean reset) {
+        this.plugin = plugin;
+
         this.player = player;
 
         loadPlayerData(new File(DungeonsXL.PLAYERS, player.getUniqueId().toString() + ".yml"));
@@ -77,11 +79,13 @@ public class DGlobalPlayer implements PlayerWrapper {
             reset(false);
         }
 
-        plugin.getDPlayers().addPlayer(this);
+        plugin.getDPlayerCache().addPlayer(this);
     }
 
     public DGlobalPlayer(DGlobalPlayer dPlayer) {
+        plugin = dPlayer.plugin;
         player = dPlayer.getPlayer();
+        data = dPlayer.getData();
         breakMode = dPlayer.isInBreakMode();
         chatSpyMode = dPlayer.isInChatSpyMode();
         creatingPortal = dPlayer.getPortal();
@@ -89,7 +93,7 @@ public class DGlobalPlayer implements PlayerWrapper {
         respawnInventory = dPlayer.getRespawnInventory();
         respawnArmor = dPlayer.getRespawnArmor();
 
-        plugin.getDPlayers().addPlayer(this);
+        plugin.getDPlayerCache().addPlayer(this);
     }
 
     /* Getters and setters */
@@ -397,7 +401,7 @@ public class DGlobalPlayer implements PlayerWrapper {
             }
         }
 
-        DGroup dGroup = new DGroup("Tutorial", player, dungeon);
+        DGroup dGroup = new DGroup(plugin, "Tutorial", player, dungeon);
 
         DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
         Bukkit.getPluginManager().callEvent(createEvent);
@@ -409,8 +413,8 @@ public class DGlobalPlayer implements PlayerWrapper {
         // The maxInstances check is already done in the listener
         DGameWorld gameWorld = dungeon.getMap().instantiateAsGameWorld(true);
         dGroup.setGameWorld(gameWorld);
-        new Game(dGroup, gameWorld).setTutorial(true);
-        new DGamePlayer(player, gameWorld);
+        new Game(plugin, dGroup, gameWorld).setTutorial(true);
+        new DGamePlayer(plugin, player, gameWorld);
     }
 
     @Override

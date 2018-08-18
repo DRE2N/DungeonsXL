@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.reward;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,10 @@ public class ItemReward extends Reward {
     private RewardType type = RewardTypeDefault.ITEM;
 
     private List<ItemStack> items = new ArrayList<>();
+
+    public ItemReward(DungeonsXL plugin) {
+        super(plugin);
+    }
 
     /* Getters and setters */
     /**
@@ -68,7 +73,7 @@ public class ItemReward extends Reward {
     /* Actions */
     @Override
     public void giveTo(Player player) {
-        plugin.getDPlayers().getByPlayer(player).setRewardItems(items);
+        plugin.getDPlayerCache().getByPlayer(player).setRewardItems(items);
     }
 
 }

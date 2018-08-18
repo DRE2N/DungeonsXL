@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -29,9 +28,10 @@ import org.bukkit.command.CommandSender;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class InviteCommand extends DRECommand {
+public class InviteCommand extends DCommand {
 
-    public InviteCommand() {
+    public InviteCommand(DungeonsXL plugin) {
+        super(plugin);
         setMinArgs(2);
         setMaxArgs(2);
         setCommand("invite");
@@ -43,7 +43,7 @@ public class InviteCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(args[2]);
+        DResourceWorld resource = instances.getResourceByName(args[2]);
         OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
 
         if (resource != null) {

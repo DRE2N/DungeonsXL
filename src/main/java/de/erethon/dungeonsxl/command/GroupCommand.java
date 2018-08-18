@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
@@ -33,9 +32,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class GroupCommand extends DRECommand {
+public class GroupCommand extends DCommand {
 
-    public GroupCommand() {
+    public GroupCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("group");
         setMinArgs(0);
         setMaxArgs(2);
@@ -122,7 +122,7 @@ public class GroupCommand extends DRECommand {
             return;
         }
 
-        DGroup dGroup = new DGroup(args[2], player);
+        DGroup dGroup = new DGroup(plugin, args[2], player);
         DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
         Bukkit.getPluginManager().callEvent(event);
 
@@ -266,7 +266,7 @@ public class GroupCommand extends DRECommand {
     }
 
     public void showHelp(String page) {
-        MessageUtil.sendPluginTag(sender, DungeonsXL.getInstance());
+        MessageUtil.sendPluginTag(sender, plugin);
         switch (page) {
             default:
                 MessageUtil.sendCenteredMessage(sender, "&4&l[ &61-5 &4/ &67 &4| &61 &4&l]");

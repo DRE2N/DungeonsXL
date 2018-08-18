@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -31,8 +32,8 @@ public class LockedDoor extends GameBlock implements MultiBlock {
 
     private Block attachedBlock;
 
-    public LockedDoor(Block block) {
-        super(block);
+    public LockedDoor(DungeonsXL plugin, Block block) {
+        super(plugin, block);
         attachedBlock = getAttachedBlock();
     }
 

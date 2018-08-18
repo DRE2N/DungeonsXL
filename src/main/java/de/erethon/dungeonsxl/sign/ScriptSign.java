@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Sign;
 
@@ -28,8 +29,8 @@ public class ScriptSign extends DSign {
 
     private String name;
 
-    public ScriptSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public ScriptSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
         name = lines[1];
     }
 
@@ -42,14 +43,14 @@ public class ScriptSign extends DSign {
 
     @Override
     public boolean check() {
-        return plugin.getSignScripts().getByName(lines[1]) != null;
+        return plugin.getSignScriptCache().getByName(lines[1]) != null;
     }
 
     @Override
     public void onInit() {
-        SignScript script = plugin.getSignScripts().getByName(name);
+        SignScript script = plugin.getSignScriptCache().getByName(name);
         for (String[] lines : script.getSigns()) {
-            DSign dSign = DSign.create(getSign(), lines, getGameWorld());
+            DSign dSign = DSign.create(plugin, getSign(), lines, getGameWorld());
             if (dSign.isErroneous()) {
                 continue;
             }

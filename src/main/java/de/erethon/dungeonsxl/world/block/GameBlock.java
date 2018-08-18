@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -26,9 +27,12 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public abstract class GameBlock {
 
+    protected DungeonsXL plugin;
+
     protected Block block;
 
-    public GameBlock(Block block) {
+    public GameBlock(DungeonsXL plugin, Block block) {
+        this.plugin = plugin;
         this.block = block;
     }
 

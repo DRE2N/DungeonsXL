@@ -17,8 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.config.MessageConfig;
-import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import de.erethon.dungeonsxl.game.Game;
@@ -31,8 +29,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author Daniel Saukel
  */
 public class TimeIsRunningTask extends BukkitRunnable {
-
-    MessageConfig messageConfig = DungeonsXL.getInstance().getMessageConfig();
 
     private DGroup dGroup;
     private int time;

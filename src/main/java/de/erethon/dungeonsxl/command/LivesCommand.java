@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
@@ -29,9 +29,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class LivesCommand extends DRECommand {
+public class LivesCommand extends DCommand {
 
-    public LivesCommand() {
+    public LivesCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("lives");
         setMinArgs(0);
         setMaxArgs(1);

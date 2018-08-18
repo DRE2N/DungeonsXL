@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.sign.lobby;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.sign.LocationSign;
@@ -33,8 +34,8 @@ public class StartSign extends LocationSign {
 
     private int id;
 
-    public StartSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public StartSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /* Getters and setters */

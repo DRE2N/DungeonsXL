@@ -32,15 +32,20 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public abstract class GlobalProtection {
 
-    public static final String SIGN_TAG = "[DXL]";
+    protected DungeonsXL plugin;
+    protected GlobalProtectionCache protections;
+    private FileConfiguration config;
 
-    FileConfiguration config = DungeonsXL.getInstance().getGlobalData().getConfig();
-    GlobalProtectionCache protections = DungeonsXL.getInstance().getGlobalProtections();
+    public static final String SIGN_TAG = "[DXL]";
 
     private World world;
     private int id;
 
-    protected GlobalProtection(World world, int id) {
+    protected GlobalProtection(DungeonsXL plugin, World world, int id) {
+        this.plugin = plugin;
+        protections = plugin.getGlobalProtectionCache();
+        config = plugin.getGlobalData().getConfig();
+
         this.world = world;
         this.id = id;
 

@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.NBTUtil;
@@ -29,9 +29,10 @@ import org.bukkit.inventory.PlayerInventory;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class DungeonItemCommand extends DRECommand {
+public class DungeonItemCommand extends DCommand {
 
-    public DungeonItemCommand() {
+    public DungeonItemCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("dungeonItem");
         setAliases("di");
         setMinArgs(0);

@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
@@ -36,9 +35,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class TestCommand extends DRECommand {
+public class TestCommand extends DCommand {
 
-    public TestCommand() {
+    public TestCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("test");
         setMinArgs(0);
         setMaxArgs(0);
@@ -51,7 +51,7 @@ public class TestCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
 
         if (!(dPlayer instanceof DEditPlayer)) {
             DGroup dGroup = DGroup.getByPlayer(player);
@@ -85,14 +85,14 @@ public class TestCommand extends DRECommand {
             DEditPlayer editPlayer = (DEditPlayer) dPlayer;
             editPlayer.leave();
             DResourceWorld resource = editPlayer.getEditWorld().getResource();
-            Dungeon dungeon = new Dungeon(resource);
+            Dungeon dungeon = new Dungeon(plugin, resource);
             DGameWorld instance = resource.instantiateAsGameWorld(false);
             if (instance == null) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
                 return;
             }
-            Game game = new Game(new DGroup(player, dungeon), GameTypeDefault.TEST, instance);
-            new DGamePlayer(player, game.getWorld(), GameTypeDefault.TEST);
+            Game game = new Game(plugin, new DGroup(plugin, player, dungeon), GameTypeDefault.TEST, instance);
+            new DGamePlayer(plugin, player, game.getWorld(), GameTypeDefault.TEST);
         }
     }
 

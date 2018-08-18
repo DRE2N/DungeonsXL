@@ -21,6 +21,7 @@ import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
@@ -40,8 +41,8 @@ public class HologramSign extends DSign {
 
     private Hologram hologram;
 
-    public HologramSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public HologramSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

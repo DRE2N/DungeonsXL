@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -27,8 +28,8 @@ public abstract class LocationSign extends DSign {
 
     protected Location location;
 
-    public LocationSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public LocationSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

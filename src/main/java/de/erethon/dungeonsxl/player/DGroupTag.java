@@ -28,11 +28,11 @@ public class DGroupTag {
     private DGamePlayer player;
     private Hologram hologram;
 
-    public DGroupTag(DGamePlayer player) {
+    public DGroupTag(DungeonsXL plugin, DGamePlayer player) {
         this.player = player;
         DGroup group = player.getDGroup();
         if (group != null) {
-            hologram = HologramsAPI.createHologram(DungeonsXL.getInstance(), player.getPlayer().getLocation().clone().add(0, 3.5, 0));
+            hologram = HologramsAPI.createHologram(plugin, player.getPlayer().getLocation().clone().add(0, 3.5, 0));
             hologram.appendItemLine(group.getDColor().getWoolMaterial().toItemStack());
             hologram.appendTextLine(group.getName());
         }

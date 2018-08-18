@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DPermission;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,10 @@ public class PermissionRequirement extends Requirement {
     private RequirementType type = RequirementTypeDefault.PERMISSION;
 
     private List<String> permissions = new ArrayList<>();
+
+    public PermissionRequirement(DungeonsXL plugin) {
+        super(plugin);
+    }
 
     /* Getters and setters */
     /**

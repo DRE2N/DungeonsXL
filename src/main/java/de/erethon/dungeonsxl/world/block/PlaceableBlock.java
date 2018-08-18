@@ -16,8 +16,8 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
-import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,14 +41,14 @@ public class PlaceableBlock extends GameBlock {
     private boolean onEast = false;
     private boolean onWest = false;
 
-    public PlaceableBlock(Block block, String ids, String directions) {
-        super(block);
+    public PlaceableBlock(DungeonsXL plugin, Block block, String ids, String directions) {
+        super(plugin, block);
 
         // Split ids
         if (!ids.isEmpty()) {
             String[] splittedIds = ids.split(",");
             for (String id : splittedIds) {
-                ExItem item = CaliburnAPI.getInstance().getExItem(id);
+                ExItem item = plugin.getCaliburn().getExItem(id);
                 if (item != null) {
                     materials.add(item);
                 }
