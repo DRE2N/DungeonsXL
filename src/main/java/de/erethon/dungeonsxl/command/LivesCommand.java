@@ -18,8 +18,10 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.command.DRECommand;
+import de.erethon.commons.config.CommonMessage;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
+import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
@@ -29,7 +31,7 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class LivesCommand extends DRECommand {
+public class LivesCommand extends DRECommand {de.erethon.dungeonsxl.player.DPlayerCache dPlayers = de.erethon.dungeonsxl.DungeonsXL.getInstance().getDPlayers();// 0.17
 
     public LivesCommand() {
         setCommand("lives");
@@ -46,29 +48,31 @@ public class LivesCommand extends DRECommand {
         Player player = null;
 
         if (args.length == 2) {
-            if (Bukkit.getServer().getPlayer(args[1]) != null) {
-                player = Bukkit.getServer().getPlayer(args[1]);
+            if (Bukkit.getPlayer(args[1]) != null) {
+                player = Bukkit.getPlayer(args[1]);
             }
 
         } else if (sender instanceof Player) {
             player = (Player) sender;
 
         } else {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_CONSOLE_COMMAND.getMessage(getCommand()));
+            MessageUtil.sendMessage(sender, CommonMessage.CMD_NO_CONSOLE_COMMAND.getMessage(getCommand()));
             return;
         }
 
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
-        if (dPlayer == null && args.length == 1) {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));
+        DGlobalPlayer globalPlayer = dPlayers.getByPlayer(player);
+        if (!(globalPlayer instanceof DGamePlayer)) {
+            MessageUtil.sendMessage(sender, args.length == 1 ? DMessage.ERROR_NO_GAME.getMessage() : DMessage.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));
             return;
         }
-        DGroup dGroup = dPlayer != null ? dPlayer.getDGroup() : DGroup.getByName(args[1]);
-        if (dPlayer != null) {
-            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_PLAYER.getMessage(dPlayer.getName(), String.valueOf(dPlayer.getLives() == -1 ? "UNLIMITED" : dPlayer.getLives())));
+
+        DGamePlayer gamePlayer = (DGamePlayer) globalPlayer;
+        DGroup dGroup = gamePlayer != null ? gamePlayer.getDGroup() : DGroup.getByName(args[1]);
+        if (gamePlayer != null) {
+            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_PLAYER.getMessage(gamePlayer.getName(), gamePlayer.getLives() == -1 ? DMessage.MISC_UNLIMITED.getMessage() : String.valueOf(gamePlayer.getLives())));
 
         } else if (dGroup != null) {
-            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_GROUP.getMessage(dGroup.getName(), String.valueOf(dGroup.getLives() == -1 ? "UNLIMITED" : dPlayer.getLives())));
+            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_GROUP.getMessage(dGroup.getName(), String.valueOf(dGroup.getLives() == -1 ? "UNLIMITED" : dGroup.getLives())));
 
         } else {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));
