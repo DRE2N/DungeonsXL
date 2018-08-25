@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
@@ -30,9 +29,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class ChatCommand extends DRECommand {
+public class ChatCommand extends DCommand {
 
-    public ChatCommand() {
+    public ChatCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("chat");
         setMinArgs(0);
         setMaxArgs(0);
@@ -44,7 +44,7 @@ public class ChatCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
 
         if (DGroup.getByPlayer(player) == null && !(dPlayer instanceof DEditPlayer)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());

@@ -16,11 +16,9 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.dungeonsxl.DungeonsXL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.Bukkit;
 
 /**
  * TriggerType instance manager.
@@ -33,7 +31,6 @@ public class TriggerTypeCache {
 
     public TriggerTypeCache() {
         types.addAll(Arrays.asList(TriggerTypeDefault.values()));
-        Bukkit.getPluginManager().registerEvents(new TriggerListener(), DungeonsXL.getInstance());
     }
 
     /**

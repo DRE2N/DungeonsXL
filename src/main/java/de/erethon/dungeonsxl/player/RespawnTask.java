@@ -27,10 +27,14 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class RespawnTask extends BukkitRunnable {
 
+    private DPlayerCache dPlayers;
+
     private Player player;
     private Location location;
 
-    public RespawnTask(Player player, Location location) {
+    public RespawnTask(DungeonsXL plugin, Player player, Location location) {
+        dPlayers = plugin.getDPlayerCache();
+
         this.location = location;
         this.player = player;
     }
@@ -41,7 +45,7 @@ public class RespawnTask extends BukkitRunnable {
             PlayerUtil.secureTeleport(player, location);
         }
 
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
 
         if (dPlayer == null) {
             return;

@@ -25,7 +25,9 @@ public enum RequirementTypeDefault implements RequirementType {
 
     FEE_LEVEL("feeLevel", FeeLevelRequirement.class),
     FEE_MONEY("feeMoney", FeeMoneyRequirement.class),
+    FORBIDDEN_ITEMS("forbiddenItems", ForbiddenItemsRequirement.class),
     GROUP_SIZE("groupSize", GroupSizeRequirement.class),
+    KEY_ITEMS("keyItems", KeyItemsRequirement.class),
     PERMISSION("permission", PermissionRequirement.class);
 
     private String identifier;

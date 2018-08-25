@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -38,6 +39,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * @author Frank Baumann, Daniel Saukel
  */
 public class DSignListener implements Listener {
+
+    private DungeonsXL plugin;
+
+    public DSignListener(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -97,7 +104,7 @@ public class DSignListener implements Listener {
             sign.setLine(2, lines[2]);
             sign.setLine(3, lines[3]);
 
-            DSign dsign = DSign.create(sign, null);
+            DSign dsign = DSign.create(plugin, sign, null);
 
             if (dsign == null) {
                 return;

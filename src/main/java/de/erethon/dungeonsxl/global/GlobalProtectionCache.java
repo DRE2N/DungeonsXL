@@ -36,12 +36,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class GlobalProtectionCache {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    private DungeonsXL plugin;
 
     private Set<GlobalProtection> protections = new HashSet<>();
 
-    public GlobalProtectionCache() {
-        Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(), plugin);
+    public GlobalProtectionCache(DungeonsXL plugin) {
+        this.plugin = plugin;
     }
 
     /**
@@ -187,7 +187,7 @@ public class GlobalProtectionCache {
                         int maxGroupsPerGame = data.getInt(preString + ".maxGroupsPerGame");
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GameSign(id, startSign, mapName, maxGroupsPerGame);
+                        new GameSign(plugin, id, startSign, mapName, maxGroupsPerGame);
                     }
 
                 } while (data.contains(preString));
@@ -207,7 +207,7 @@ public class GlobalProtectionCache {
                         int maxPlayersPerGroup = data.getInt(preString + ".maxPlayersPerGroup");
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GroupSign(id, startSign, mapName, maxPlayersPerGroup, groupName);
+                        new GroupSign(plugin, id, startSign, mapName, maxPlayersPerGroup, groupName);
                     }
                 } while (data.contains(preString));
             }
@@ -224,7 +224,7 @@ public class GlobalProtectionCache {
                         Block block = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
                         if (block.getState() instanceof Sign) {
                             Sign sign = (Sign) block.getState();
-                            new LeaveSign(id, sign);
+                            new LeaveSign(plugin, id, sign);
                         }
                     }
 
@@ -245,7 +245,7 @@ public class GlobalProtectionCache {
                         Block block2 = world.getBlockAt(data.getInt(preString + "loc2.x"), data.getInt(preString + "loc2.y"), data.getInt(preString + "loc2.z"));
                         ExItem material = plugin.getCaliburn().getExItem(data.getString(preString + "material"));
                         String axis = data.getString(preString + "axis");
-                        DPortal dPortal = new DPortal(id, block1, block2, material != null ? material : VanillaItem.NETHER_PORTAL, (byte) (axis != null && axis.equals("z") ? 2 : 1), true);
+                        DPortal dPortal = new DPortal(plugin, id, block1, block2, material != null ? material : VanillaItem.NETHER_PORTAL, (byte) (axis != null && axis.equals("z") ? 2 : 1), true);
                         dPortal.create(null);
                     }
 

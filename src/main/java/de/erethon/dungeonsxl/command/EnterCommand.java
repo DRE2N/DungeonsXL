@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -30,9 +30,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class EnterCommand extends DRECommand {
+public class EnterCommand extends DCommand {
 
-    public EnterCommand() {
+    public EnterCommand(DungeonsXL plugin) {
+        super(plugin);
         setMinArgs(1);
         setMaxArgs(2);
         setCommand("enter");
@@ -73,7 +74,7 @@ public class EnterCommand extends DRECommand {
         }
 
         if (joining == null) {
-            joining = new DGroup(captain, game.getDungeon());
+            joining = new DGroup(plugin, captain, game.getDungeon());
         }
 
         if (joining.getCaptain() != captain && !DPermission.hasPermission(sender, DPermission.BYPASS)) {
@@ -86,7 +87,7 @@ public class EnterCommand extends DRECommand {
         joining.sendMessage(DMessage.CMD_ENTER_SUCCESS.getMessage(joining.getName(), target.getName()));
 
         for (Player player : joining.getPlayers().getOnlinePlayers()) {
-            new DGamePlayer(player, game.getWorld(), game.getType());
+            new DGamePlayer(plugin, player, game.getWorld(), game.getType());
         }
     }
 

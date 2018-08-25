@@ -52,19 +52,19 @@ public class DPortal extends GlobalProtection {
     private boolean active;
     private Set<Block> blocks;
 
-    public DPortal(int id, World world, boolean active) {
-        this(id, world, VanillaItem.NETHER_PORTAL, active);
+    public DPortal(DungeonsXL plugin, int id, World world, boolean active) {
+        this(plugin, id, world, VanillaItem.NETHER_PORTAL, active);
     }
 
-    public DPortal(int id, World world, ExItem material, boolean active) {
-        super(world, id);
+    public DPortal(DungeonsXL plugin, int id, World world, ExItem material, boolean active) {
+        super(plugin, world, id);
 
         this.material = material;
         this.active = active;
     }
 
-    public DPortal(int id, Block block1, Block block2, ExItem material, byte axis, boolean active) {
-        super(block1.getWorld(), id);
+    public DPortal(DungeonsXL plugin, int id, Block block1, Block block2, ExItem material, byte axis, boolean active) {
+        super(plugin, block1.getWorld(), id);
 
         this.block1 = block1;
         this.block2 = block2;
@@ -233,14 +233,14 @@ public class DPortal extends GlobalProtection {
         }
 
         if (game == null) {
-            game = new Game(dGroup, target);
+            game = new Game(plugin, dGroup, target);
 
         } else {
             game.setWorld(target);
             dGroup.setGameWorld(target);
         }
 
-        new DGamePlayer(player, target);
+        new DGamePlayer(plugin, player, target);
     }
 
     @Override
@@ -332,19 +332,21 @@ public class DPortal extends GlobalProtection {
 
     /* Statics */
     /**
+     * @param plugin   the plugin instance
      * @param location a location covered by the returned portal
      * @return the portal at the location, null if there is none
      */
-    public static DPortal getByLocation(Location location) {
-        return getByBlock(location.getBlock());
+    public static DPortal getByLocation(DungeonsXL plugin, Location location) {
+        return getByBlock(plugin, location.getBlock());
     }
 
     /**
-     * @param block a block covered by the returned portal
+     * @param plugin the plugin instance
+     * @param block  a block covered by the returned portal
      * @return the portal that the block belongs to, null if it belongs to none
      */
-    public static DPortal getByBlock(Block block) {
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(DPortal.class)) {
+    public static DPortal getByBlock(DungeonsXL plugin, Block block) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(DPortal.class)) {
             DPortal portal = (DPortal) protection;
             if (portal.getBlock1() == null || portal.getBlock2() == null) {
                 continue;

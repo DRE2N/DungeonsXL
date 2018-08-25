@@ -19,7 +19,6 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.command.DRECommandCache;
 import de.erethon.commons.compatibility.CompatibilityHandler;
-import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.dungeonsxl.DungeonsXL;
 
 /**
@@ -29,70 +28,104 @@ import de.erethon.dungeonsxl.DungeonsXL;
  */
 public class DCommandCache extends DRECommandCache {
 
-    public static BreakCommand BREAK = new BreakCommand();
-    public static ChatCommand CHAT = new ChatCommand();
-    public static ChatSpyCommand CHAT_SPY = new ChatSpyCommand();
-    public static CreateCommand CREATE = new CreateCommand();
-    public static EditCommand EDIT = new EditCommand();
-    public static EnterCommand ENTER = new EnterCommand();
-    public static EscapeCommand ESCAPE = new EscapeCommand();
-    public static DeleteCommand DELETE = new DeleteCommand();
-    public static GameCommand GAME = new GameCommand();
-    public static GroupCommand GROUP = new GroupCommand();
-    public static HelpCommand HELP = new HelpCommand();
-    public static ImportCommand IMPORT = new ImportCommand();
-    public static InviteCommand INVITE = new InviteCommand();
-    public static JoinCommand JOIN = new JoinCommand();
-    public static KickCommand KICK = new KickCommand();
-    public static LeaveCommand LEAVE = new LeaveCommand();
-    public static ListCommand LIST = new ListCommand();
-    public static LivesCommand LIVES = new LivesCommand();
-    public static MainCommand MAIN = new MainCommand();
-    public static MsgCommand MESSAGE = new MsgCommand();
-    public static PlayCommand PLAY = new PlayCommand();
-    public static PortalCommand PORTAL = new PortalCommand();
-    public static DRECommand RELOAD = CompatibilityHandler.getInstance().isSpigot() ? new ReloadCommand() : new ReloadCommandNoSpigot();
-    public static RenameCommand RENAME = new RenameCommand();
-    public static ResourcePackCommand RESOURCE_PACK = new ResourcePackCommand();
-    public static SaveCommand SAVE = new SaveCommand();
-    public static StatusCommand STATUS = new StatusCommand();
-    public static TestCommand TEST = new TestCommand();
-    public static UninviteCommand UNINVITE = new UninviteCommand();
+    public static final String LABEL = "dungeonsxl";
 
-    public DCommandCache(DREPlugin plugin) {
-        super("dungeonsxl", plugin,
-                BREAK,
-                CREATE,
-                DELETE,
-                EDIT,
-                ENTER,
-                ESCAPE,
-                GAME,
-                GROUP,
-                HELP,
-                IMPORT,
-                INVITE,
-                JOIN,
-                KICK,
-                LEAVE,
-                LIST,
-                LIVES,
-                MAIN,
-                MESSAGE,
-                PLAY,
-                PORTAL,
-                RELOAD,
-                RENAME,
-                RESOURCE_PACK,
-                SAVE,
-                STATUS,
-                TEST,
-                UNINVITE,
-                new DeletePortalCommand()
-        );
-        if (DungeonsXL.getInstance().getMainConfig().isChatEnabled()) {
-            addCommand(CHAT);
-            addCommand(CHAT_SPY);
+    public BreakCommand breakCmd;
+    public ChatCommand chat;
+    public ChatSpyCommand chatSpy;
+    public CreateCommand create;
+    public EditCommand edit;
+    public EnterCommand enter;
+    public EscapeCommand escape;
+    public DeleteCommand delete;
+    public DungeonItemCommand dungeonItem;
+    public GameCommand game;
+    public GroupCommand group;
+    public HelpCommand help;
+    public ImportCommand importCmd;
+    public InviteCommand invite;
+    public JoinCommand join;
+    public KickCommand kick;
+    public LeaveCommand leave;
+    public ListCommand list;
+    public LivesCommand lives;
+    public MainCommand main;
+    public MsgCommand message;
+    public PlayCommand play;
+    public PortalCommand portal;
+    public DRECommand reload;
+    public RenameCommand rename;
+    public ResourcePackCommand resourcePack;
+    public SaveCommand save;
+    public StatusCommand status;
+    public TestCommand test;
+    public UninviteCommand uninvite;
+
+    public DCommandCache(DungeonsXL plugin) {
+        super(LABEL, plugin);
+
+        breakCmd = new BreakCommand(plugin);
+        chat = new ChatCommand(plugin);
+        chatSpy = new ChatSpyCommand(plugin);
+        create = new CreateCommand(plugin);
+        edit = new EditCommand(plugin);
+        enter = new EnterCommand(plugin);
+        escape = new EscapeCommand(plugin);
+        delete = new DeleteCommand(plugin);
+        dungeonItem = new DungeonItemCommand(plugin);
+        game = new GameCommand(plugin);
+        group = new GroupCommand(plugin);
+        help = new HelpCommand(plugin);
+        importCmd = new ImportCommand(plugin);
+        invite = new InviteCommand(plugin);
+        join = new JoinCommand(plugin);
+        kick = new KickCommand(plugin);
+        leave = new LeaveCommand(plugin);
+        list = new ListCommand(plugin);
+        lives = new LivesCommand(plugin);
+        main = new MainCommand(plugin);
+        message = new MsgCommand(plugin);
+        play = new PlayCommand(plugin);
+        portal = new PortalCommand(plugin);
+        reload = CompatibilityHandler.getInstance().isSpigot() ? new ReloadCommand(plugin) : new ReloadCommandNoSpigot(plugin);
+        rename = new RenameCommand(plugin);
+        resourcePack = new ResourcePackCommand(plugin);
+        save = new SaveCommand(plugin);
+        status = new StatusCommand(plugin);
+        test = new TestCommand(plugin);
+        uninvite = new UninviteCommand(plugin);
+
+        addCommand(breakCmd);
+        addCommand(create);
+        addCommand(delete);
+        addCommand(dungeonItem);
+        addCommand(edit);
+        addCommand(enter);
+        addCommand(escape);
+        addCommand(game);
+        addCommand(group);
+        addCommand(help);
+        addCommand(importCmd);
+        addCommand(invite);
+        addCommand(join);
+        addCommand(kick);
+        addCommand(leave);
+        addCommand(list);
+        addCommand(lives);
+        addCommand(main);
+        addCommand(message);
+        addCommand(play);
+        addCommand(portal);
+        addCommand(reload);
+        addCommand(rename);
+        addCommand(resourcePack);
+        addCommand(save);
+        addCommand(status);
+        addCommand(test);
+        addCommand(uninvite);
+        if (plugin.getMainConfig().isChatEnabled()) {
+            addCommand(chat);
+            addCommand(chatSpy);
         }
     }
 

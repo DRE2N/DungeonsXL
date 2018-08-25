@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
@@ -28,9 +27,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class ChatSpyCommand extends DRECommand {
+public class ChatSpyCommand extends DCommand {
 
-    public ChatSpyCommand() {
+    public ChatSpyCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("chatSpy");
         setMinArgs(0);
         setMaxArgs(0);
@@ -42,7 +42,7 @@ public class ChatSpyCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
 
         dPlayer.setInChatSpyMode(!dPlayer.isInChatSpyMode());
         MessageUtil.sendMessage(player, (dPlayer.isInChatSpyMode() ? DMessage.CMD_CHATSPY_START : DMessage.CMD_CHATSPY_STOPPED).getMessage());

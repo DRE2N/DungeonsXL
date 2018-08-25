@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
@@ -27,18 +26,16 @@ import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
-import de.erethon.dungeonsxl.world.DWorldCache;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class EditCommand extends DRECommand {
+public class EditCommand extends DCommand {
 
-    DWorldCache worlds = DungeonsXL.getInstance().getDWorlds();
-
-    public EditCommand() {
+    public EditCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("edit");
         setMinArgs(1);
         setMaxArgs(1);
@@ -51,12 +48,12 @@ public class EditCommand extends DRECommand {
         Player player = (Player) sender;
         String mapName = args[1];
 
-        if (!worlds.exists(mapName)) {
+        if (!instances.exists(mapName)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage(mapName));
             return;
         }
 
-        DResourceWorld resource = worlds.getResourceByName(mapName);
+        DResourceWorld resource = instances.getResourceByName(mapName);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(mapName));
             return;
@@ -74,7 +71,7 @@ public class EditCommand extends DRECommand {
         }
 
         DGroup dGroup = DGroup.getByPlayer(player);
-        DGlobalPlayer dPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
 
         if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
@@ -86,7 +83,7 @@ public class EditCommand extends DRECommand {
             return;
         }
 
-        new DEditPlayer(player, editWorld);
+        new DEditPlayer(plugin, player, editWorld);
     }
 
 }

@@ -25,9 +25,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class WorldUnloadTask extends BukkitRunnable {
 
+    private DungeonsXL plugin;
+
+    public WorldUnloadTask(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
-        for (DGameWorld gameWorld : DungeonsXL.getInstance().getDWorlds().getGameWorlds()) {
+        for (DGameWorld gameWorld : plugin.getDWorldCache().getGameWorlds()) {
             if (gameWorld.exists()) {
                 if (gameWorld.getWorld().getPlayers().isEmpty()) {
                     if (DGamePlayer.getByWorld(gameWorld.getWorld()).isEmpty()) {
@@ -37,7 +43,7 @@ public class WorldUnloadTask extends BukkitRunnable {
             }
         }
 
-        for (DEditWorld editWorld : DungeonsXL.getInstance().getDWorlds().getEditWorlds()) {
+        for (DEditWorld editWorld : plugin.getDWorldCache().getEditWorlds()) {
             if (editWorld.exists()) {
                 if (editWorld.getWorld().getPlayers().isEmpty()) {
                     editWorld.delete(true);

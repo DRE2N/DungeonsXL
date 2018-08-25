@@ -174,4 +174,9 @@ public class DMob {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + type + "}";
+    }
+
 }

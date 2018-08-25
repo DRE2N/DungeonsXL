@@ -23,15 +23,19 @@ import de.erethon.commons.config.MessageConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.javaplugin.DREPluginSettings;
 import de.erethon.commons.misc.FileUtil;
+import de.erethon.dungeonsxl.announcer.Announcer;
 import de.erethon.dungeonsxl.announcer.AnnouncerCache;
+import de.erethon.dungeonsxl.announcer.AnnouncerListener;
+import de.erethon.dungeonsxl.announcer.AnnouncerTask;
 import de.erethon.dungeonsxl.command.DCommandCache;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.config.GlobalData;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.dungeon.DungeonCache;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.game.GameTypeCache;
+import de.erethon.dungeonsxl.global.GlobalData;
 import de.erethon.dungeonsxl.global.GlobalProtectionCache;
+import de.erethon.dungeonsxl.global.GlobalProtectionListener;
 import de.erethon.dungeonsxl.mob.DMobListener;
 import de.erethon.dungeonsxl.mob.DMobType;
 import de.erethon.dungeonsxl.mob.ExternalMobProviderCache;
@@ -40,9 +44,11 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerCache;
 import de.erethon.dungeonsxl.requirement.RequirementTypeCache;
+import de.erethon.dungeonsxl.reward.RewardListener;
 import de.erethon.dungeonsxl.reward.RewardTypeCache;
 import de.erethon.dungeonsxl.sign.DSignTypeCache;
 import de.erethon.dungeonsxl.sign.SignScriptCache;
+import de.erethon.dungeonsxl.trigger.TriggerListener;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.NoReload;
 import de.erethon.dungeonsxl.world.DWorldCache;
@@ -121,30 +127,23 @@ public class DungeonsXL extends DREPlugin {
     public void onEnable() {
         super.onEnable();
         instance = this;
-
-        DPermission.register();
         initFolders();
-        loadCore();
+        loadCaliburnAPI();
+        DPermission.register();
+        loadConfig();
+        createCaches();
+        initCaches();
         loadData();
-
         new NoReload(this);
     }
 
     @Override
     public void onDisable() {
-        // Save
         saveData();
         messageConfig.save();
-
         dGroups.clear();
-
-        // Delete DWorlds
         dWorlds.deleteAllInstances();
-
-        // Disable listeners
         HandlerList.unregisterAll(this);
-
-        // Stop shedulers
         getServer().getScheduler().cancelTasks(this);
     }
 
@@ -210,31 +209,46 @@ public class DungeonsXL extends DREPlugin {
         }
     }
 
-    public void loadCore() {
-        loadCaliburnAPI();
-        // Load Language
-        loadMessageConfig(new File(LANGUAGES, "english.yml"));
-        // Load Config
-        loadGlobalData(new File(getDataFolder(), "data.yml"));
-        loadMainConfig(new File(getDataFolder(), "config.yml"));
-        // Load Language 2
-        loadMessageConfig(new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
-        loadGameTypes();
-        loadRequirementTypes();
-        loadRewardTypes();
-        loadTriggers();
-        loadDSigns();
-        loadDWorlds(MAPS);
-        loadDungeons(DUNGEONS);
-        loadGlobalProtections();
-        loadExternalMobProviders();
-        loadDPlayers();
-        loadAnnouncers(ANNOUNCERS);
-        loadDClasses(CLASSES);
-        loadLootTables(LOOT_TABLES);
-        loadMobs(MOBS);
-        loadSignScripts(SIGNS);
-        loadDCommandCache();
+    public void loadConfig() {
+        messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, "english.yml"));
+        globalData = new GlobalData(new File(getDataFolder(), "data.yml"));
+        mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
+        messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
+    }
+
+    public void createCaches() {
+        gameTypes = new GameTypeCache();
+        requirementTypes = new RequirementTypeCache();
+        rewardTypes = new RewardTypeCache();
+        triggers = new TriggerTypeCache();
+        dSigns = new DSignTypeCache(this);
+        dWorlds = new DWorldCache(this);
+        dungeons = new DungeonCache(this);
+        protections = new GlobalProtectionCache(this);
+        dMobProviders = new ExternalMobProviderCache(this);
+        dPlayers = new DPlayerCache(this);
+        announcers = new AnnouncerCache();
+        dClasses = new DClassCache(this);
+        signScripts = new SignScriptCache();
+        dCommands = new DCommandCache(this);
+    }
+
+    public void initCaches() {
+        // Game types
+        // Requirements
+        Bukkit.getPluginManager().registerEvents(new RewardListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new TriggerListener(this), this);
+        dSigns.init();
+        dWorlds.init(MAPS);
+        dungeons.init(DUNGEONS);
+        Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(this), this);
+        dMobProviders.init();
+        dPlayers.init();
+        initAnnouncerCache(ANNOUNCERS);
+        dClasses.init(CLASSES);
+        Bukkit.getPluginManager().registerEvents(new DMobListener(), this);
+        signScripts.init(SIGNS);
+        dCommands.register(this);
     }
 
     // Save and load
@@ -264,11 +278,14 @@ public class DungeonsXL extends DREPlugin {
         return caliburn;
     }
 
-    /**
-     * load / reload a new instance of CaliburnAPI if none exists
-     */
     private void loadCaliburnAPI() {
         caliburn = CaliburnAPI.getInstance() == null ? new CaliburnAPI(this) : CaliburnAPI.getInstance();
+        if (LOOT_TABLES.isDirectory()) {
+            FileUtil.getFilesForFolder(LOOT_TABLES).forEach(s -> new LootTable(caliburn, s));
+        }
+        if (MOBS.isDirectory()) {
+            FileUtil.getFilesForFolder(MOBS).forEach(s -> caliburn.getExMobs().add(new DMobType(this, s)));
+        }
     }
 
     /**
@@ -278,13 +295,9 @@ public class DungeonsXL extends DREPlugin {
         return globalData;
     }
 
-    /**
-     * load / reload a new instance of GlobalData
-     *
-     * @param file the file to load from
-     */
-    public void loadGlobalData(File file) {
-        globalData = new GlobalData(file);
+    @Override
+    public DCommandCache getCommandCache() {
+        return dCommands;
     }
 
     /**
@@ -295,267 +308,119 @@ public class DungeonsXL extends DREPlugin {
     }
 
     /**
-     * load / reload a new instance of MainConfig
-     *
-     * @param file the file to load from
-     */
-    public void loadMainConfig(File file) {
-        mainConfig = new MainConfig(file);
-    }
-
-    /**
-     * load / reload a new instance of MessageConfig
-     *
-     * @param file the file to load from
-     */
-    public void loadMessageConfig(File file) {
-        messageConfig = new MessageConfig(DMessage.class, file);
-    }
-
-    /**
-     * @return the loaded instance of DCommandCache
-     */
-    @Override
-    public DCommandCache getCommandCache() {
-        return dCommands;
-    }
-
-    /**
-     * load / reload a new instance of DCommandCache
-     */
-    public void loadDCommandCache() {
-        dCommands = new DCommandCache(this);
-        dCommands.register(this);
-    }
-
-    /**
      * @return the dSigns
      */
-    public DSignTypeCache getDSigns() {
+    public DSignTypeCache getDSignCache() {
         return dSigns;
-    }
-
-    /**
-     * load / reload a new instance of DSignTypeCache
-     */
-    public void loadDSigns() {
-        dSigns = new DSignTypeCache();
     }
 
     /**
      * @return the game types
      */
-    public GameTypeCache getGameTypes() {
+    public GameTypeCache getGameTypeCache() {
         return gameTypes;
-    }
-
-    /**
-     * load / reload a new instance of GameTypeCache
-     */
-    public void loadGameTypes() {
-        gameTypes = new GameTypeCache();
     }
 
     /**
      * @return the requirement types
      */
-    public RequirementTypeCache getRequirementTypes() {
+    public RequirementTypeCache getRequirementTypeCache() {
         return requirementTypes;
-    }
-
-    /**
-     * load / reload a new instance of RequirementTypeCache
-     */
-    public void loadRequirementTypes() {
-        requirementTypes = new RequirementTypeCache();
     }
 
     /**
      * @return the reward types
      */
-    public RewardTypeCache getRewardTypes() {
+    public RewardTypeCache getRewardTypeCache() {
         return rewardTypes;
-    }
-
-    /**
-     * load / reload a new instance of RewardTypeCache
-     */
-    public void loadRewardTypes() {
-        rewardTypes = new RewardTypeCache();
     }
 
     /**
      * @return the triggers
      */
-    public TriggerTypeCache getTriggers() {
+    public TriggerTypeCache getTriggerCache() {
         return triggers;
-    }
-
-    /**
-     * load / reload a new instance of TriggerTypeCache
-     */
-    public void loadTriggers() {
-        triggers = new TriggerTypeCache();
     }
 
     /**
      * @return the loaded instance of DungeonCache
      */
-    public DungeonCache getDungeons() {
+    public DungeonCache getDungeonCache() {
         return dungeons;
-    }
-
-    /**
-     * load / reload a new instance of DungeonCache
-     *
-     * @param folder the folder to load from
-     */
-    public void loadDungeons(File folder) {
-        dungeons = new DungeonCache(folder);
     }
 
     /**
      * @return the loaded instance of GlobalProtectionCache
      */
-    public GlobalProtectionCache getGlobalProtections() {
+    public GlobalProtectionCache getGlobalProtectionCache() {
         return protections;
-    }
-
-    /**
-     * load / reload a new instance of GlobalProtectionCache
-     */
-    public void loadGlobalProtections() {
-        protections = new GlobalProtectionCache();
     }
 
     /**
      * @return the loaded instance of ExternalMobProviderCache
      */
-    public ExternalMobProviderCache getExternalMobProviders() {
+    public ExternalMobProviderCache getExternalMobProviderCache() {
         return dMobProviders;
-    }
-
-    /**
-     * load / reload a new instance of ExternalMobProviderCache
-     */
-    public void loadExternalMobProviders() {
-        dMobProviders = new ExternalMobProviderCache();
     }
 
     /**
      * @return the loaded instance of DPlayerCache
      */
-    public DPlayerCache getDPlayers() {
+    public DPlayerCache getDPlayerCache() {
         return dPlayers;
-    }
-
-    /**
-     * load / reload a new instance of DPlayerCache
-     */
-    public void loadDPlayers() {
-        dPlayers = new DPlayerCache();
     }
 
     /**
      * @return the loaded instance of AnnouncerCache
      */
-    public AnnouncerCache getAnnouncers() {
+    public AnnouncerCache getAnnouncerCache() {
         return announcers;
     }
 
-    /**
-     * load / reload a new instance of AnnouncerCache
-     *
-     * @param folder the folder to load from
-     */
-    public void loadAnnouncers(File folder) {
-        announcers = new AnnouncerCache(folder);
-    }
-
-    /**
-     * @return the loaded instance of DClasseCache
-     */
-    public DClassCache getDClasses() {
-        return dClasses;
-    }
-
-    /**
-     * load / reload a new instance of DClasseCache
-     *
-     * @param folder the folder to load from
-     */
-    public void loadDClasses(File folder) {
-        dClasses = new DClassCache(folder);
-    }
-
-    /**
-     * load / reload loot tables
-     *
-     * @param folder the folder to load from
-     */
-    public void loadLootTables(File folder) {
-        for (File script : FileUtil.getFilesForFolder(folder)) {
-            new LootTable(caliburn, script);
-        }
-    }
-
-    /**
-     * load / reload DMob types
-     *
-     * @param folder the folder to load from
-     */
-    public void loadMobs(File folder) {
-        if (folder.isDirectory()) {
-            for (File script : FileUtil.getFilesForFolder(folder)) {
-                caliburn.getExMobs().add(new DMobType(script));
+    private void initAnnouncerCache(File file) {
+        if (file.isDirectory()) {
+            for (File script : FileUtil.getFilesForFolder(file)) {
+                announcers.addAnnouncer(new Announcer(this, script));
             }
         }
-        Bukkit.getPluginManager().registerEvents(new DMobListener(), this);
+        if (!announcers.getAnnouncers().isEmpty()) {
+            announcers.setAnnouncerTask(new AnnouncerTask(this).runTaskTimer(this, mainConfig.getAnnouncmentInterval(), mainConfig.getAnnouncmentInterval()));
+        }
+        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(this), this);
+    }
+
+    /**
+     * @return the loaded instance of DClassCache
+     */
+    public DClassCache getDClassCache() {
+        return dClasses;
     }
 
     /**
      * @return the loaded instance of SignScriptCache
      */
-    public SignScriptCache getSignScripts() {
+    public SignScriptCache getSignScriptCache() {
         return signScripts;
-    }
-
-    /**
-     * load / reload a new instance of SignScriptCache
-     *
-     * @param folder the folder to load from
-     */
-    public void loadSignScripts(File folder) {
-        signScripts = new SignScriptCache(folder);
     }
 
     /**
      * @return the loaded instance of DWorldCache
      */
-    public DWorldCache getDWorlds() {
+    public DWorldCache getDWorldCache() {
         return dWorlds;
-    }
-
-    /**
-     * load / reload a new instance of DWorldCache
-     *
-     * @param folder the folder to load from
-     */
-    public void loadDWorlds(File folder) {
-        dWorlds = new DWorldCache(MAPS);
     }
 
     /**
      * @return the games
      */
-    public List<Game> getGames() {
+    public List<Game> getGameCache() {
         return games;
     }
 
     /**
      * @return the dGroups
      */
-    public List<DGroup> getDGroups() {
+    public List<DGroup> getDGroupCache() {
         return dGroups;
     }
 

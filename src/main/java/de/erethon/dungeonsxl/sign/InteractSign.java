@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign;
 
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -34,8 +35,8 @@ public class InteractSign extends DSign {
 
     private DSignType type = DSignTypeDefault.INTERACT;
 
-    public InteractSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public InteractSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

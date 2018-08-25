@@ -17,7 +17,9 @@
 package de.erethon.dungeonsxl.reward;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 
 /**
@@ -25,9 +27,16 @@ import org.bukkit.entity.Player;
  */
 public class MoneyReward extends Reward {
 
+    private Economy econ;
+
     private RewardType type = RewardTypeDefault.MONEY;
 
     private double money;
+
+    public MoneyReward(DungeonsXL plugin) {
+        super(plugin);
+        econ = plugin.getEconomyProvider();
+    }
 
     /**
      * @return the money
@@ -52,11 +61,11 @@ public class MoneyReward extends Reward {
 
     @Override
     public void giveTo(Player player) {
-        if (plugin.getEconomyProvider() == null || money == 0) {
+        if (econ == null || money == 0) {
             return;
         }
 
-        plugin.getEconomyProvider().depositPlayer(player, money);
+        econ.depositPlayer(player, money);
         MessageUtil.sendMessage(player, DMessage.REWARD_GENERAL.getMessage(plugin.getEconomyProvider().format(money)));
     }
 

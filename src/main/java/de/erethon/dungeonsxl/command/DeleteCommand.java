@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -25,7 +24,6 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
-import de.erethon.dungeonsxl.world.DWorldCache;
 import java.io.File;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -35,9 +33,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class DeleteCommand extends DRECommand {
+public class DeleteCommand extends DCommand {
 
-    public DeleteCommand() {
+    public DeleteCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("delete");
         setMinArgs(1);
         setMaxArgs(2);
@@ -49,9 +48,7 @@ public class DeleteCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DWorldCache dWorlds = DungeonsXL.getInstance().getDWorlds();
-
-        DResourceWorld resource = dWorlds.getResourceByName(args[1]);
+        DResourceWorld resource = instances.getResourceByName(args[1]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
@@ -72,12 +69,12 @@ public class DeleteCommand extends DRECommand {
             return;
         }
 
-        for (DEditWorld editWorld : dWorlds.getEditWorlds()) {
+        for (DEditWorld editWorld : instances.getEditWorlds()) {
             if (editWorld.getResource().equals(resource)) {
                 editWorld.delete(false);
             }
         }
-        dWorlds.removeResource(resource);
+        instances.removeResource(resource);
         FileUtil.removeDir(resource.getFolder());
 
         if (args[2].equalsIgnoreCase("true")) {

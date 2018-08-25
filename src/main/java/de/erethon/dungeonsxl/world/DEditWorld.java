@@ -35,19 +35,17 @@ import org.bukkit.block.Sign;
  */
 public class DEditWorld extends DInstanceWorld {
 
-    DWorldCache worlds = plugin.getDWorlds();
-
     public static String ID_FILE_PREFIX = ".id_";
 
     private File idFile;
     private CopyOnWriteArrayList<Block> signs = new CopyOnWriteArrayList<>();
 
-    DEditWorld(DResourceWorld resourceWorld, File folder, World world, int id) {
-        super(resourceWorld, folder, world, id);
+    DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
+        super(plugin, resourceWorld, folder, world, id);
     }
 
-    DEditWorld(DResourceWorld resourceWorld, File folder, int id) {
-        this(resourceWorld, folder, null, id);
+    DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
+        this(plugin, resourceWorld, folder, null, id);
     }
 
     /* Getters and setters */
@@ -168,7 +166,7 @@ public class DEditWorld extends DInstanceWorld {
      * @return the DEditWorld that represents the world
      */
     public static DEditWorld getByName(String name) {
-        DInstanceWorld instance = DungeonsXL.getInstance().getDWorlds().getInstanceByName(name);
+        DInstanceWorld instance = DungeonsXL.getInstance().getDWorldCache().getInstanceByName(name);
 
         if (instance instanceof DEditWorld) {
             return (DEditWorld) instance;

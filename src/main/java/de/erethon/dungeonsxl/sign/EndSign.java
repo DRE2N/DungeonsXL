@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -36,8 +37,8 @@ public class EndSign extends DSign {
 
     private DResourceWorld floor;
 
-    public EndSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public EndSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /**
@@ -62,7 +63,7 @@ public class EndSign extends DSign {
     @Override
     public void onInit() {
         if (!lines[1].isEmpty()) {
-            floor = plugin.getDWorlds().getResourceByName(lines[1]);
+            floor = plugin.getDWorldCache().getResourceByName(lines[1]);
         }
 
         if (!getTriggers().isEmpty()) {

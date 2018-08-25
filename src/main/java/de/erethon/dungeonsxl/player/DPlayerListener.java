@@ -65,15 +65,18 @@ import org.bukkit.inventory.meta.BookMeta;
  */
 public class DPlayerListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig config = plugin.getMainConfig();
-    DWorldCache worlds = plugin.getDWorlds();
-    DPlayerCache dPlayers;
+    private DungeonsXL plugin;
+    private MainConfig config;
+    private DWorldCache worlds;
+    private DPlayerCache dPlayers;
 
     public static final String ALL = "@all ";
 
-    public DPlayerListener(DPlayerCache dPlayers) {
-        this.dPlayers = dPlayers;
+    public DPlayerListener(DungeonsXL plugin) {
+        this.plugin = plugin;
+        config = plugin.getMainConfig();
+        worlds = plugin.getDWorldCache();
+        dPlayers = plugin.getDPlayerCache();
     }
 
     @EventHandler
@@ -372,7 +375,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        DGlobalPlayer dPlayer = new DGlobalPlayer(player);
+        DGlobalPlayer dPlayer = new DGlobalPlayer(plugin, player);
         if (dPlayer.getData().wasInGame()) {
             dPlayer.reset(dPlayer.getData().getKeepInventoryAfterLogout());
         }
@@ -447,7 +450,7 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        plugin.getDPlayers().getByPlayer(player).applyRespawnInventory();
+        plugin.getDPlayerCache().getByPlayer(player).applyRespawnInventory();
 
         DGlobalPlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
@@ -485,7 +488,7 @@ public class DPlayerListener implements Listener {
             }
 
             // Because some plugins set another respawn point, DXL teleports a few ticks later.
-            new RespawnTask(player, respawn).runTaskLater(plugin, 10);
+            new RespawnTask(plugin, player, respawn).runTaskLater(plugin, 10);
 
             // Don't forget Doge!
             if (gamePlayer.getWolf() != null) {

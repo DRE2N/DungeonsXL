@@ -82,12 +82,12 @@ public class DGamePlayer extends DInstancePlayer {
 
     private DGroupTag groupTag;
 
-    public DGamePlayer(Player player, DGameWorld world) {
-        super(player, world.getWorld());
+    public DGamePlayer(DungeonsXL plugin, Player player, DGameWorld world) {
+        super(plugin, player, world.getWorld());
 
         Game game = Game.getByGameWorld(world);
         if (game == null) {
-            game = new Game(DGroup.getByPlayer(player));
+            game = new Game(plugin, DGroup.getByPlayer(player));
         }
 
         GameRuleProvider rules = game.getRules();
@@ -112,8 +112,8 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
-    public DGamePlayer(Player player, DGameWorld world, GameType ready) {
-        this(player, world);
+    public DGamePlayer(DungeonsXL plugin, Player player, DGameWorld world, GameType ready) {
+        this(plugin, player, world);
         if (ready != null) {
             ready(ready);
         }
@@ -216,7 +216,7 @@ public class DGamePlayer extends DInstancePlayer {
             return;
         }
 
-        DClass dClass = plugin.getDClasses().getByName(className);
+        DClass dClass = plugin.getDClassCache().getByName(className);
         if (dClass == null || this.dClass == dClass) {
             return;
         }
@@ -397,7 +397,7 @@ public class DGamePlayer extends DInstancePlayer {
      * Creates a new group tag for the player.
      */
     public void initDGroupTag() {
-        groupTag = new DGroupTag(this);
+        groupTag = new DGroupTag(plugin, this);
     }
 
     /* Actions */
@@ -699,7 +699,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         Game game = Game.getByGameWorld(dGroup.getGameWorld());
         if (game == null) {
-            game = new Game(dGroup, gameType, dGroup.getGameWorld());
+            game = new Game(plugin, dGroup, gameType, dGroup.getGameWorld());
 
         } else {
             game.setType(gameType);
@@ -998,7 +998,7 @@ public class DGamePlayer extends DInstancePlayer {
 
     /* Statics */
     public static DGamePlayer getByPlayer(Player player) {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDGamePlayers()) {
             if (dPlayer.getPlayer().equals(player)) {
                 return dPlayer;
             }
@@ -1007,7 +1007,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public static DGamePlayer getByName(String name) {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDGamePlayers()) {
             if (dPlayer.getPlayer().getName().equalsIgnoreCase(name) || dPlayer.getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
@@ -1019,7 +1019,7 @@ public class DGamePlayer extends DInstancePlayer {
     public static List<DGamePlayer> getByWorld(World world) {
         List<DGamePlayer> dPlayers = new ArrayList<>();
 
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDGamePlayers()) {
             if (dPlayer.getWorld() == world) {
                 dPlayers.add(dPlayer);
             }

@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign;
 
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
 import org.bukkit.block.Sign;
@@ -30,8 +31,8 @@ public class FlagSign extends DSign {
 
     private int team;
 
-    public FlagSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public FlagSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     /* Getters and setters */
@@ -50,7 +51,7 @@ public class FlagSign extends DSign {
     public void onInit() {
         this.team = NumberUtil.parseInt(lines[1]);
         if (getGame().getDGroups().size() > team) {
-            getGameWorld().addGameBlock(new TeamFlag(getSign().getBlock(), getGame().getDGroups().get(team)));
+            getGameWorld().addGameBlock(new TeamFlag(plugin, getSign().getBlock(), getGame().getDGroups().get(team)));
         }
     }
 

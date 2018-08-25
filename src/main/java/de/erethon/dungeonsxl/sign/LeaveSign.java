@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -34,8 +35,8 @@ public class LeaveSign extends DSign {
 
     private DSignType type = DSignTypeDefault.LEAVE;
 
-    public LeaveSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public LeaveSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override
@@ -81,7 +82,7 @@ public class LeaveSign extends DSign {
 
     @Override
     public void onTrigger() {
-        for (DGamePlayer dPlayer : plugin.getDPlayers().getDGamePlayers()) {
+        for (DGamePlayer dPlayer : plugin.getDPlayerCache().getDGamePlayers()) {
             DGamePlayerEscapeEvent event = new DGamePlayerEscapeEvent(dPlayer);
             Bukkit.getPluginManager().callEvent(event);
 

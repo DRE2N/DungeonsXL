@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
@@ -33,11 +32,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class CreateCommand extends DRECommand {
+public class CreateCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public CreateCommand() {
+    public CreateCommand(DungeonsXL plugin) {
+        super(plugin);
         setMinArgs(1);
         setMaxArgs(1);
         setCommand("create");
@@ -67,8 +65,8 @@ public class CreateCommand extends DRECommand {
             MessageUtil.log(plugin, DMessage.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
-            plugin.getDWorlds().addResource(resource);
+            DResourceWorld resource = new DResourceWorld(plugin, name);
+            instances.addResource(resource);
             DEditWorld editWorld = resource.generate();
             editWorld.save();
             editWorld.delete();
@@ -89,15 +87,15 @@ public class CreateCommand extends DRECommand {
             MessageUtil.log(plugin, DMessage.LOG_GENERATE_NEW_WORLD.getMessage());
 
             // Create World
-            DResourceWorld resource = new DResourceWorld(plugin.getDWorlds(), name);
-            plugin.getDWorlds().addResource(resource);
+            DResourceWorld resource = new DResourceWorld(plugin, name);
+            instances.addResource(resource);
             DEditWorld editWorld = resource.generate();
 
             // MSG Done
             MessageUtil.log(plugin, DMessage.LOG_WORLD_GENERATION_FINISHED.getMessage());
 
             // Tp Player
-            new DEditPlayer(player, editWorld);
+            new DEditPlayer(plugin, player, editWorld);
         }
     }
 

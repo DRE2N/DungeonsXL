@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,8 +31,8 @@ public abstract class PerPlayerSign extends DSign {
 
     private Set<UUID> triggered = new HashSet<>();
 
-    public PerPlayerSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public PerPlayerSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

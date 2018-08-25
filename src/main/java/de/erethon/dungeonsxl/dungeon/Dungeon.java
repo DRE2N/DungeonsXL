@@ -31,6 +31,8 @@ import java.util.List;
  */
 public class Dungeon {
 
+    private DungeonsXL plugin;
+
     private String name;
     private DungeonConfig config;
     private DResourceWorld map;
@@ -38,20 +40,26 @@ public class Dungeon {
     /**
      * Real dungeon
      *
-     * @param file the file to load from
+     * @param plugin the plugin instance
+     * @param file   the file to load from
      */
-    public Dungeon(File file) {
+    public Dungeon(DungeonsXL plugin, File file) {
+        this.plugin = plugin;
+
         name = file.getName().replaceAll(".yml", "");
-        config = new DungeonConfig(file);
+        config = new DungeonConfig(plugin, file);
         map = config.getStartFloor();
     }
 
     /**
      * Artificial dungeon
      *
+     * @param plugin   the plugin instance
      * @param resource the only resource world
      */
-    public Dungeon(DResourceWorld resource) {
+    public Dungeon(DungeonsXL plugin, DResourceWorld resource) {
+        this.plugin = plugin;
+
         name = resource.getName();
         map = resource;
     }
@@ -113,7 +121,7 @@ public class Dungeon {
      * @return false if there are setup errors
      */
     public boolean isSetupCorrect() {
-        for (DResourceWorld resource : DungeonsXL.getInstance().getDWorlds().getResources()) {
+        for (DResourceWorld resource : plugin.getDWorldCache().getResources()) {
             if (resource.getName().equals(name)) {
                 return false;
             }
@@ -128,6 +136,11 @@ public class Dungeon {
      */
     public static File getFileFromName(String name) {
         return new File(DungeonsXL.DUNGEONS, name + ".yml");
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + name + "; multiFloor=" + isMultiFloor() + "}";
     }
 
 }

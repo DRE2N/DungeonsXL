@@ -19,8 +19,8 @@ package de.erethon.dungeonsxl.player;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
+import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.misc.EnumUtil;
-import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ import org.bukkit.potion.PotionEffect;
  */
 public class DPlayerData extends DREConfig {
 
-    boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
+    protected boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
 
     public static final int CONFIG_VERSION = 4;
 
@@ -418,7 +418,7 @@ public class DPlayerData extends DREConfig {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                MessageUtil.log(DungeonsXL.getInstance(), DMessage.LOG_NEW_PLAYER_DATA.getMessage(file.getName()));
+                MessageUtil.log(DREPlugin.getInstance(), DMessage.LOG_NEW_PLAYER_DATA.getMessage(file.getName()));
             } catch (IOException exception) {
             }
         }

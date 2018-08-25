@@ -39,6 +39,7 @@ public enum DPermission {
     CMD_EDIT("cmdedit", OP),
     CREATE("create", OP),
     DELETE("delete", OP),
+    DUNGEON_ITEM("dungeonitem", OP),
     EDIT("edit", OP),
     ENTER("enter", OP),
     ESCAPE("escape", TRUE),

@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign.lobby;
 
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
 import de.erethon.dungeonsxl.sign.LocationSign;
@@ -30,8 +31,8 @@ public class LobbySign extends LocationSign {
 
     private DSignType type = DSignTypeDefault.LOBBY;
 
-    public LobbySign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public LobbySign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

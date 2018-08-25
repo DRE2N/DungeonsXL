@@ -28,18 +28,24 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class TriggerListener implements Listener {
 
+    private DungeonsXL plugin;
+
+    public TriggerListener(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onRedstoneEvent(final BlockRedstoneEvent event) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (DGameWorld gameWorld : DungeonsXL.getInstance().getDWorlds().getGameWorlds()) {
+                for (DGameWorld gameWorld : plugin.getDWorldCache().getGameWorlds()) {
                     if (event.getBlock().getWorld() == gameWorld.getWorld()) {
                         RedstoneTrigger.updateAll(gameWorld);
                     }
                 }
             }
-        }.runTaskLater(DungeonsXL.getInstance(), 1);
+        }.runTaskLater(plugin, 1);
     }
 
 }

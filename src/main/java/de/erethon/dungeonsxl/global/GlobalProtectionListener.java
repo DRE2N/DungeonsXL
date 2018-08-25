@@ -49,7 +49,11 @@ import org.bukkit.inventory.ItemStack;
  */
 public class GlobalProtectionListener implements Listener {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    private DungeonsXL plugin;
+
+    public GlobalProtectionListener(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockBreakWithSignOnIt(BlockBreakEvent event) {
@@ -79,9 +83,9 @@ public class GlobalProtectionListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = plugin.getDPlayerCache().getByPlayer(player);
 
-        GlobalProtection protection = plugin.getGlobalProtections().getByBlock(block);
+        GlobalProtection protection = plugin.getGlobalProtectionCache().getByBlock(block);
         if (protection != null) {
             if (protection.onBreak(dGlobalPlayer)) {
                 event.setCancelled(true);
@@ -91,7 +95,7 @@ public class GlobalProtectionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (DPortal.getByBlock(event.getBlock()) != null) {
+        if (DPortal.getByBlock(plugin, event.getBlock()) != null) {
             event.setCancelled(true);
         }
     }
@@ -99,7 +103,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
         Block block = event.getBlockClicked();
-        if (DPortal.getByBlock(block) != null) {
+        if (DPortal.getByBlock(plugin, block) != null) {
             event.setCancelled(true);
             // Workaround for a bug of Bukkit
             event.getPlayer().sendBlockChange(block.getLocation(), block.getType(), (byte) 0);
@@ -108,14 +112,14 @@ public class GlobalProtectionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockSpread(BlockSpreadEvent event) {
-        if (DPortal.getByBlock(event.getBlock()) != null) {
+        if (DPortal.getByBlock(plugin, event.getBlock()) != null) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPhysics(BlockPhysicsEvent event) {
-        if (DPortal.getByBlock(event.getBlock()) != null) {
+        if (DPortal.getByBlock(plugin, event.getBlock()) != null) {
             event.setCancelled(true);
         }
     }
@@ -124,7 +128,7 @@ public class GlobalProtectionListener implements Listener {
     public void onEntityExplode(EntityExplodeEvent event) {
         List<Block> blocklist = event.blockList();
         for (Block block : blocklist) {
-            if (plugin.getGlobalProtections().isProtectedBlock(block)) {
+            if (plugin.getGlobalProtectionCache().isProtectedBlock(block)) {
                 event.setCancelled(true);
             }
         }
@@ -133,7 +137,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        DPortal dPortal = DPortal.getByLocation(player.getEyeLocation());
+        DPortal dPortal = DPortal.getByLocation(plugin, player.getEyeLocation());
         if (dPortal == null) {
             return;
         }
@@ -167,14 +171,14 @@ public class GlobalProtectionListener implements Listener {
         Block block7 = block2.getRelative(BlockFace.SOUTH);
         Block block8 = block4.getRelative(BlockFace.NORTH);
         Block block9 = block4.getRelative(BlockFace.SOUTH);
-        return (DPortal.getByBlock(block1) != null || DPortal.getByBlock(block2) != null || DPortal.getByBlock(block3) != null
-                || DPortal.getByBlock(block4) != null || DPortal.getByBlock(block5) != null || DPortal.getByBlock(block6) != null
-                || DPortal.getByBlock(block7) != null || DPortal.getByBlock(block8) != null || DPortal.getByBlock(block9) != null);
+        return (DPortal.getByBlock(plugin, block1) != null || DPortal.getByBlock(plugin, block2) != null || DPortal.getByBlock(plugin, block3) != null
+                || DPortal.getByBlock(plugin, block4) != null || DPortal.getByBlock(plugin, block5) != null || DPortal.getByBlock(plugin, block6) != null
+                || DPortal.getByBlock(plugin, block7) != null || DPortal.getByBlock(plugin, block8) != null || DPortal.getByBlock(plugin, block9) != null);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPortalCreation(PlayerInteractEvent event) {
-        DGlobalPlayer dPlayer = plugin.getDPlayers().getByPlayer(event.getPlayer());
+        DGlobalPlayer dPlayer = plugin.getDPlayerCache().getByPlayer(event.getPlayer());
         if (!dPlayer.isCreatingPortal()) {
             return;
         }
@@ -184,7 +188,7 @@ public class GlobalProtectionListener implements Listener {
             return;
         }
 
-        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections(DPortal.class)) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(DPortal.class)) {
             DPortal dPortal = (DPortal) protection;
             if (dPortal.isActive() || dPortal != dPlayer.getPortal()) {
                 continue;
@@ -209,7 +213,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getDPlayers().getByPlayer(player).isInBreakMode()) {
+        if (plugin.getDPlayerCache().getByPlayer(player).isInBreakMode()) {
             return;
         }
         Block clickedBlock = event.getClickedBlock();
@@ -218,19 +222,19 @@ public class GlobalProtectionListener implements Listener {
         }
 
         if (Category.SIGNS.containsBlock(clickedBlock)) {
-            GroupSign groupSign = GroupSign.getByBlock(clickedBlock);
+            GroupSign groupSign = GroupSign.getByBlock(plugin, clickedBlock);
             if (groupSign != null) {
                 groupSign.onPlayerInteract(clickedBlock, player);
                 event.setCancelled(true);
             }
 
-            GameSign gameSign = GameSign.getByBlock(clickedBlock);
+            GameSign gameSign = GameSign.getByBlock(plugin, clickedBlock);
             if (gameSign != null) {
                 gameSign.onPlayerInteract(clickedBlock, player);
                 event.setCancelled(true);
             }
 
-            LeaveSign leaveSign = LeaveSign.getByBlock(clickedBlock);
+            LeaveSign leaveSign = LeaveSign.getByBlock(plugin, clickedBlock);
             if (leaveSign != null) {
                 leaveSign.onPlayerInteract(player);
                 event.setCancelled(true);
@@ -260,18 +264,18 @@ public class GlobalProtectionListener implements Listener {
             }
 
             if (lines[1].equalsIgnoreCase(GroupSign.GROUP_SIGN_TAG)) {
-                if (GroupSign.tryToCreate(event) != null) {
+                if (GroupSign.tryToCreate(plugin, event) != null) {
                     event.setCancelled(true);
                 }
 
             } else if (lines[1].equalsIgnoreCase(GameSign.GAME_SIGN_TAG)) {
-                if (GameSign.tryToCreate(event) != null) {
+                if (GameSign.tryToCreate(plugin, event) != null) {
                     event.setCancelled(true);
                 }
 
             } else if (lines[1].equalsIgnoreCase(LeaveSign.LEAVE_SIGN_TAG)) {
                 Sign sign = (Sign) state;
-                new LeaveSign(plugin.getGlobalProtections().generateId(LeaveSign.class, sign.getWorld()), sign);
+                new LeaveSign(plugin, plugin.getGlobalProtectionCache().generateId(LeaveSign.class, sign.getWorld()), sign);
                 event.setCancelled(true);
             }
         }

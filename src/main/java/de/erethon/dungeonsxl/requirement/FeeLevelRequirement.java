@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.game.GameRuleProvider;
@@ -34,6 +35,10 @@ public class FeeLevelRequirement extends Requirement {
 
     private int fee;
     private Boolean keepInventory;
+
+    public FeeLevelRequirement(DungeonsXL plugin) {
+        super(plugin);
+    }
 
     /* Getters and setters */
     /**

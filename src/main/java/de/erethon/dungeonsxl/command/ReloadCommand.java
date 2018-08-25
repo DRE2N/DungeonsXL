@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.DefaultFontInfo;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -37,11 +36,10 @@ import org.bukkit.plugin.PluginManager;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class ReloadCommand extends DRECommand {
+public class ReloadCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public ReloadCommand() {
+    public ReloadCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("reload");
         setMinArgs(0);
         setMaxArgs(1);
@@ -53,8 +51,8 @@ public class ReloadCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        List<DInstancePlayer> dPlayers = plugin.getDPlayers().getDInstancePlayers();
-        if (!dPlayers.isEmpty() && args.length == 1 && CompatibilityHandler.getInstance().isSpigot() && sender instanceof Player) {
+        List<DInstancePlayer> dPlayers = this.dPlayers.getDInstancePlayers();
+        if (!dPlayers.isEmpty() && args.length == 1 && sender instanceof Player) {
             MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_PLAYERS.getMessage());
             ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -force");
             String message = DefaultFontInfo.center(DMessage.MISC_OKAY.getMessage());
@@ -78,8 +76,8 @@ public class ReloadCommand extends DRECommand {
 
         int maps = DungeonsXL.MAPS.listFiles().length;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = plugin.getDWorlds().getEditWorlds().size() + plugin.getDWorlds().getGameWorlds().size();
-        int players = plugin.getDPlayers().getDGamePlayers().size();
+        int loaded = instances.getEditWorlds().size() + instances.getGameWorlds().size();
+        int players = this.dPlayers.getDGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {
@@ -91,7 +89,9 @@ public class ReloadCommand extends DRECommand {
         }
 
         plugin.onDisable();
-        plugin.loadCore();
+        plugin.initFolders();
+        plugin.createCaches();
+        plugin.initCaches();
         plugin.loadData();
 
         MessageUtil.sendPluginTag(sender, plugin);

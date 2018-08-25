@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.world;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.game.Game;
 import java.util.Set;
 import org.bukkit.block.Block;
@@ -46,10 +47,12 @@ import org.bukkit.event.world.ChunkUnloadEvent;
  */
 public class DWorldListener implements Listener {
 
-    DWorldCache dWorlds;
+    private CaliburnAPI caliburn;
+    private DWorldCache dWorlds;
 
-    public DWorldListener(DWorldCache dWorlds) {
-        this.dWorlds = dWorlds;
+    public DWorldListener(DungeonsXL plugin) {
+        caliburn = plugin.getCaliburn();
+        dWorlds = plugin.getDWorldCache();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -163,7 +166,7 @@ public class DWorldListener implements Listener {
         }
         Game game = Game.getByGameWorld(gameWorld);
         Set<ExMob> prot = interact ? game.getRules().getInteractionProtectedEntities() : game.getRules().getDamageProtectedEntities();
-        if (prot.contains(CaliburnAPI.getInstance().getExMob(entity))) {
+        if (prot.contains(caliburn.getExMob(entity))) {
             event.setCancelled(true);
         }
     }

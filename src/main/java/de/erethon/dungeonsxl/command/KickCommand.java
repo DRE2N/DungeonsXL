@@ -17,8 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
-import static de.erethon.dungeonsxl.command.DCommandCache.LEAVE;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
@@ -28,9 +27,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class KickCommand extends DRECommand {
+public class KickCommand extends DCommand {
 
-    public KickCommand() {
+    public KickCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("kick");
         setMinArgs(1);
         setMaxArgs(1);
@@ -45,7 +45,7 @@ public class KickCommand extends DRECommand {
         Player player = Bukkit.getPlayer(args[1]);
 
         if (player != null) {
-            LEAVE.onExecute(new String[]{LEAVE.getCommand()}, player);
+            plugin.getCommandCache().leave.onExecute(new String[]{plugin.getCommandCache().leave.getCommand()}, player);
             MessageUtil.sendMessage(sender, DMessage.CMD_KICK_SUCCESS.getMessage(player.getName()));
 
         } else {

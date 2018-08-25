@@ -16,8 +16,8 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
@@ -33,9 +33,9 @@ public class UseItemTrigger extends Trigger {
     private String name;
     private String matchedName;
 
-    public UseItemTrigger(String name) {
+    public UseItemTrigger(DungeonsXL plugin, String name) {
         this.name = name;
-        ExItem item = CaliburnAPI.getInstance().getExItem(name);
+        ExItem item = plugin.getCaliburn().getExItem(name);
         if (item != null) {
             matchedName = item.toString();
         }
@@ -60,12 +60,12 @@ public class UseItemTrigger extends Trigger {
     }
 
     /* Statics */
-    public static UseItemTrigger getOrCreate(String name, DGameWorld gameWorld) {
+    public static UseItemTrigger getOrCreate(DungeonsXL plugin, String name, DGameWorld gameWorld) {
         UseItemTrigger trigger = getByName(name, gameWorld);
         if (trigger != null) {
             return trigger;
         }
-        return new UseItemTrigger(name);
+        return new UseItemTrigger(plugin, name);
     }
 
     public static UseItemTrigger getByName(String name, DGameWorld gameWorld) {

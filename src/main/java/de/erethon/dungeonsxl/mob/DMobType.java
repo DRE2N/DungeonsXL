@@ -22,6 +22,7 @@ import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.io.File;
@@ -50,7 +51,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Deprecated
 public class DMobType extends ExMob {
 
-    CaliburnAPI caliburn = CaliburnAPI.getInstance();
+    private CaliburnAPI caliburn;
 
     private String name;
     private EntityType type;
@@ -70,17 +71,21 @@ public class DMobType extends ExMob {
     private String ocelotType = null;
 
     /**
-     * @param file the script file
+     * @param plugin the plugin instance
+     * @param file   the script file
      */
-    public DMobType(File file) {
-        this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
+    public DMobType(DungeonsXL plugin, File file) {
+        this(plugin, file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
     }
 
     /**
+     * @param plugin the plugin instance
      * @param name   the name of the DMobType
      * @param config the config that stores the information
      */
-    public DMobType(String name, FileConfiguration config) {
+    public DMobType(DungeonsXL plugin, String name, FileConfiguration config) {
+        caliburn = plugin.getCaliburn();
+
         this.name = name;
 
         // Read Mobs
@@ -196,9 +201,7 @@ public class DMobType extends ExMob {
     }
 
     /* Getters and setters */
-    /**
-     * @return the name
-     */
+    @Override
     public String getName() {
         return name;
     }

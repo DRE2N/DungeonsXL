@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +32,20 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DClass {
 
-    CaliburnAPI caliburn = CaliburnAPI.getInstance();
-    CompatibilityHandler compat = CompatibilityHandler.getInstance();
+    private CaliburnAPI caliburn;
 
     private String name;
 
     private List<ItemStack> items = new ArrayList<>();
     private boolean dog;
 
-    public DClass(File file) {
-        this(file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
+    public DClass(DungeonsXL plugin, File file) {
+        this(plugin, file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
     }
 
-    public DClass(String name, FileConfiguration config) {
+    public DClass(DungeonsXL plugin, String name, FileConfiguration config) {
+        caliburn = plugin.getCaliburn();
+
         this.name = name;
 
         if (config.contains("items")) {

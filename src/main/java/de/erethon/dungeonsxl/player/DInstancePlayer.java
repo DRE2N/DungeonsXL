@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.player;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.util.ParsingUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -31,12 +32,15 @@ import org.bukkit.potion.PotionEffect;
  */
 public abstract class DInstancePlayer extends DGlobalPlayer {
 
-    MainConfig config = plugin.getMainConfig();
+    MainConfig config;
 
     private World world;
 
-    DInstancePlayer(Player player, World world) {
-        super(player, false);
+    DInstancePlayer(DungeonsXL plugin, Player player, World world) {
+        super(plugin, player, false);
+
+        config = plugin.getMainConfig();
+
         this.world = world;
         getData().savePlayerState(player);
     }
@@ -88,7 +92,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
             new DGlobalPlayer(this);
 
         } else {
-            plugin.getDPlayers().removePlayer(this);
+            plugin.getDPlayerCache().removePlayer(this);
         }
     }
 
@@ -98,14 +102,14 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
      * @param message the message to send
      */
     public void chat(String message) {
-        DInstanceWorld instance = plugin.getDWorlds().getInstanceByWorld(world);
+        DInstanceWorld instance = plugin.getDWorldCache().getInstanceByWorld(world);
         if (instance == null) {
             return;
         }
         String chatFormat = instance instanceof DGameWorld ? config.getChatFormatGame() : config.getChatFormatEdit();
         instance.sendMessage(ParsingUtil.replaceChatPlaceholders(chatFormat, this) + message);
 
-        for (DGlobalPlayer player : plugin.getDPlayers().getDGlobalPlayers()) {
+        for (DGlobalPlayer player : plugin.getDPlayerCache().getDGlobalPlayers()) {
             if (player.isInChatSpyMode()) {
                 if (!instance.getWorld().getPlayers().contains(player.getPlayer())) {
                     player.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatSpy(), this) + message);

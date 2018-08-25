@@ -14,37 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.config;
+package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.config.DREConfig;
-import java.io.File;
+import de.erethon.commons.command.DRECommand;
+import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.config.MainConfig;
+import de.erethon.dungeonsxl.player.DPlayerCache;
+import de.erethon.dungeonsxl.world.DWorldCache;
 
 /**
- * Represents the global data.yml.
- *
  * @author Daniel Saukel
  */
-public class GlobalData extends DREConfig {
+public abstract class DCommand extends DRECommand {
 
-    public static final int CONFIG_VERSION = 2;
+    protected DungeonsXL plugin;
+    protected MainConfig config;
+    protected DPlayerCache dPlayers;
+    protected DWorldCache instances;
 
-    public GlobalData(File file) {
-        super(file, CONFIG_VERSION);
-
-        if (initialize) {
-            initialize();
-        }
-        load();
-    }
-
-    @Override
-    public void initialize() {
-        save();
-    }
-
-    @Override
-    public void load() {
-        // Load?
+    protected DCommand(DungeonsXL plugin) {
+        this.plugin = plugin;
+        config = plugin.getMainConfig();
+        dPlayers = plugin.getDPlayerCache();
+        instances = plugin.getDWorldCache();
     }
 
 }

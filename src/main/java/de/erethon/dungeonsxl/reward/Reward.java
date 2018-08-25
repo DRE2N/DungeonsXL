@@ -31,14 +31,18 @@ import org.bukkit.entity.Player;
  */
 public abstract class Reward {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
+    protected DungeonsXL plugin;
 
-    public static Reward create(RewardType type) {
+    protected Reward(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public static Reward create(DungeonsXL plugin, RewardType type) {
         Reward reward = null;
 
         try {
-            Constructor<? extends Reward> constructor = type.getHandler().getConstructor();
-            reward = constructor.newInstance();
+            Constructor<? extends Reward> constructor = type.getHandler().getConstructor(DungeonsXL.class);
+            reward = constructor.newInstance(plugin);
 
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
             MessageUtil.log("An error occurred while accessing the handler class of the reward " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
@@ -61,5 +65,10 @@ public abstract class Reward {
     public abstract void giveTo(Player player);
 
     public abstract RewardType getType();
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + getType() + "}";
+    }
 
 }

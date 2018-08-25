@@ -17,14 +17,11 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
-import de.erethon.dungeonsxl.global.GameSign;
 import de.erethon.dungeonsxl.global.GlobalProtection;
-import de.erethon.dungeonsxl.global.GroupSign;
 import de.erethon.dungeonsxl.global.JoinSign;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
@@ -38,11 +35,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 /**
  * @author Daniel Saukel
  */
-public class RenameCommand extends DRECommand {
+public class RenameCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public RenameCommand() {
+    public RenameCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("rename");
         setMinArgs(2);
         setMaxArgs(2);
@@ -54,7 +50,7 @@ public class RenameCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = plugin.getDWorlds().getResourceByName(args[1]);
+        DResourceWorld resource = instances.getResourceByName(args[1]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
@@ -64,13 +60,13 @@ public class RenameCommand extends DRECommand {
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
         resource.getSignData().updateFile(resource);
 
-        for (DEditWorld editWorld : plugin.getDWorlds().getEditWorlds()) {
+        for (DEditWorld editWorld : instances.getEditWorlds()) {
             if (editWorld.getResource() == resource) {
                 editWorld.delete(true);
             }
         }
 
-        for (Dungeon dungeon : plugin.getDungeons().getDungeons()) {
+        for (Dungeon dungeon : plugin.getDungeonCache().getDungeons()) {
             DungeonConfig dConfig = dungeon.getConfig();
             FileConfiguration config = dConfig.getConfig();
             File file = dConfig.getFile();
@@ -100,7 +96,7 @@ public class RenameCommand extends DRECommand {
         }
 
         boolean changed = false;
-        for (GlobalProtection protection : plugin.getGlobalProtections().getProtections().toArray(new GlobalProtection[]{})) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections().toArray(new GlobalProtection[]{})) {
             if (!(protection instanceof JoinSign)) {
                 continue;
             }
@@ -116,7 +112,7 @@ public class RenameCommand extends DRECommand {
         }
 
         if (changed) {
-            plugin.getGlobalProtections().saveAll();
+            plugin.getGlobalProtectionCache().saveAll();
         }
 
         MessageUtil.sendMessage(sender, DMessage.CMD_RENAME_SUCCESS.getMessage(args[1], args[2]));

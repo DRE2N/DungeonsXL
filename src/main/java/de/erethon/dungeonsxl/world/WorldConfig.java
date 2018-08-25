@@ -48,8 +48,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class WorldConfig extends GameRuleProvider {
 
-    CaliburnAPI caliburn = CaliburnAPI.getInstance();
-    CompatibilityHandler compat = CompatibilityHandler.getInstance();
+    private DungeonsXL plugin;
+    private CaliburnAPI caliburn;
+    private CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private File file;
 
@@ -57,16 +58,22 @@ public class WorldConfig extends GameRuleProvider {
     private GameType forcedGameType;
     private Environment worldEnvironment;
 
-    public WorldConfig() {
+    public WorldConfig(DungeonsXL plugin) {
+        this.plugin = plugin;
+        caliburn = plugin.getCaliburn();
     }
 
-    public WorldConfig(File file) {
+    public WorldConfig(DungeonsXL plugin, File file) {
+        this(plugin);
+
         this.file = file;
         FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
         load(configFile);
     }
 
-    public WorldConfig(ConfigurationSection configFile) {
+    public WorldConfig(DungeonsXL plugin, ConfigurationSection configFile) {
+        this(plugin);
+
         load(configFile);
     }
 
@@ -261,7 +268,7 @@ public class WorldConfig extends GameRuleProvider {
 
             ConfigurationSection requirementSection = configFile.getConfigurationSection("requirements");
             for (String identifier : configFile.getConfigurationSection("requirements").getKeys(false)) {
-                Requirement requirement = Requirement.create(DungeonsXL.getInstance().getRequirementTypes().getByIdentifier(identifier));
+                Requirement requirement = Requirement.create(plugin, plugin.getRequirementTypeCache().getByIdentifier(identifier));
                 requirement.setup(requirementSection);
                 requirements.add(requirement);
             }
@@ -292,7 +299,7 @@ public class WorldConfig extends GameRuleProvider {
         }
 
         if (configFile.contains("forcedGameType")) {
-            forcedGameType = DungeonsXL.getInstance().getGameTypes().getByName(configFile.getString("forcedGameType"));
+            forcedGameType = plugin.getGameTypeCache().getByName(configFile.getString("forcedGameType"));
         }
 
         if (configFile.contains("title.title")) {
@@ -414,6 +421,11 @@ public class WorldConfig extends GameRuleProvider {
      */
     public void setWorldEnvironment(Environment worldEnvironment) {
         this.worldEnvironment = worldEnvironment;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{file=" + file.getPath() + "}";
     }
 
 }

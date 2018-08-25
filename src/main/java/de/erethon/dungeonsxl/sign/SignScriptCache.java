@@ -30,7 +30,7 @@ public class SignScriptCache {
 
     private List<SignScript> scripts = new ArrayList<>();
 
-    public SignScriptCache(File file) {
+    public void init(File file) {
         if (file.isDirectory()) {
             for (File script : FileUtil.getFilesForFolder(file)) {
                 scripts.add(new SignScript(script));

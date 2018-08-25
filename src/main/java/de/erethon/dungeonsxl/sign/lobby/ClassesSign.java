@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign.lobby;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DClass;
 import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.sign.DSignType;
@@ -33,9 +34,9 @@ public class ClassesSign extends DSign {
 
     private DClass dClass;
 
-    public ClassesSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
-        dClass = plugin.getDClasses().getByName(sign.getLine(1));
+    public ClassesSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
+        dClass = plugin.getDClassCache().getByName(sign.getLine(1));
     }
 
     /* Getters and setters */
@@ -56,7 +57,7 @@ public class ClassesSign extends DSign {
     /* Actions */
     @Override
     public boolean check() {
-        return plugin.getDClasses().getByName(lines[1]) != null;
+        return plugin.getDClassCache().getByName(lines[1]) != null;
     }
 
     @Override

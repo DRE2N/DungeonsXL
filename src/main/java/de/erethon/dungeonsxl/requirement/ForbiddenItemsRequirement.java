@@ -16,51 +16,36 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
+import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.player.DGroup;
+import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Daniel Saukel
  */
-public class GroupSizeRequirement extends Requirement {
+public class ForbiddenItemsRequirement extends Requirement {
 
-    private RequirementType type = RequirementTypeDefault.GROUP_SIZE;
+    private CaliburnAPI caliburn;
 
-    private int minimum;
-    private int maximum;
+    private RequirementType type = RequirementTypeDefault.FORBIDDEN_ITEMS;
 
-    public GroupSizeRequirement(DungeonsXL plugin) {
+    private List<ExItem> forbiddenItems;
+
+    public ForbiddenItemsRequirement(DungeonsXL plugin) {
         super(plugin);
+        caliburn = plugin.getCaliburn();
     }
 
+    /* Getters and setters */
     /**
-     * @return the group minimum
+     * @return the forbidden items
      */
-    public int getMinimum() {
-        return minimum;
-    }
-
-    /**
-     * @param minimum the minimal group size to set
-     */
-    public void setMinimum(int minimum) {
-        this.minimum = minimum;
-    }
-
-    /**
-     * @return the group size maximum
-     */
-    public int getMaximum() {
-        return maximum;
-    }
-
-    /**
-     * @param maximum the maximal group size to set
-     */
-    public void setMaximum(int maximum) {
-        this.maximum = maximum;
+    public List<ExItem> getForbiddenItems() {
+        return forbiddenItems;
     }
 
     @Override
@@ -71,15 +56,21 @@ public class GroupSizeRequirement extends Requirement {
     /* Actions */
     @Override
     public void setup(ConfigurationSection config) {
-        minimum = config.getInt("groupSize.minimum");
-        maximum = config.getInt("groupSize.maximum");
+        forbiddenItems = caliburn.deserializeExItemList(config, "forbiddenItems");
     }
 
     @Override
     public boolean check(Player player) {
-        DGroup dGroup = DGroup.getByPlayer(player);
-        int size = dGroup.getPlayers().size();
-        return size >= minimum && size <= maximum;
+        for (ItemStack item : player.getInventory().getStorageContents()) {
+            if (item == null) {
+                continue;
+            }
+            ExItem exItem = caliburn.getExItem(item);
+            if (forbiddenItems.contains(exItem)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

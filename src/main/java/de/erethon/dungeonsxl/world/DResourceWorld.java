@@ -38,15 +38,16 @@ import org.bukkit.WorldType;
  */
 public class DResourceWorld {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    DWorldCache worlds;
+    private DungeonsXL plugin;
+    private DWorldCache worlds;
 
     private File folder;
     private WorldConfig config;
     private SignData signData;
 
-    public DResourceWorld(DWorldCache worlds, String name) {
-        this.worlds = worlds;
+    public DResourceWorld(DungeonsXL plugin, String name) {
+        this.plugin = plugin;
+        worlds = plugin.getDWorldCache();
 
         folder = new File(DungeonsXL.MAPS, name);
         if (!folder.exists()) {
@@ -55,25 +56,26 @@ public class DResourceWorld {
 
         File configFile = new File(folder, "config.yml");
         if (configFile.exists()) {
-            config = new WorldConfig(configFile);
+            config = new WorldConfig(plugin, configFile);
         }
 
         File signDataFile = new File(folder, "DXLData.data");
-        signData = new SignData(signDataFile);
+        signData = new SignData(plugin, signDataFile);
     }
 
-    public DResourceWorld(DWorldCache worlds, File folder) {
-        this.worlds = worlds;
+    public DResourceWorld(DungeonsXL plugin, File folder) {
+        this.plugin = plugin;
+        worlds = plugin.getDWorldCache();
 
         this.folder = folder;
 
         File configFile = new File(folder, "config.yml");
         if (configFile.exists()) {
-            config = new WorldConfig(configFile);
+            config = new WorldConfig(plugin, configFile);
         }
 
         File signDataFile = new File(folder, "DXLData.data");
-        signData = new SignData(signDataFile);
+        signData = new SignData(plugin, signDataFile);
     }
 
     /* Getters and setters */
@@ -120,7 +122,7 @@ public class DResourceWorld {
                     exception.printStackTrace();
                 }
             }
-            config = new WorldConfig(file);
+            config = new WorldConfig(plugin, file);
         }
 
         return config;
@@ -142,7 +144,7 @@ public class DResourceWorld {
      */
     public void addInvitedPlayer(OfflinePlayer player) {
         if (config == null) {
-            config = new WorldConfig();
+            config = new WorldConfig(plugin);
         }
 
         config.addInvitedPlayer(player.getUniqueId().toString());
@@ -218,7 +220,7 @@ public class DResourceWorld {
             }
         }
 
-        DInstanceWorld instance = game ? new DGameWorld(this, instanceFolder, id) : new DEditWorld(this, instanceFolder, id);
+        DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder, id) : new DEditWorld(plugin, this, instanceFolder, id);
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment()));
@@ -275,7 +277,7 @@ public class DResourceWorld {
         creator.type(WorldType.FLAT);
         creator.generateStructures(false);
 
-        final DEditWorld editWorld = new DEditWorld(this, folder, id);
+        final DEditWorld editWorld = new DEditWorld(plugin, this, folder, id);
 
         EditWorldGenerateEvent event = new EditWorldGenerateEvent(editWorld);
         Bukkit.getPluginManager().callEvent(event);

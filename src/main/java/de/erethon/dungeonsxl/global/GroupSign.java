@@ -45,8 +45,8 @@ public class GroupSign extends JoinSign {
     private String groupName;
     private DGroup group;
 
-    public GroupSign(int id, Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
-        super(id, startSign, identifier, maxPlayersPerGroup);
+    public GroupSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
+        super(plugin, id, startSign, identifier, maxPlayersPerGroup);
         this.groupName = groupName;
     }
 
@@ -146,9 +146,9 @@ public class GroupSign extends JoinSign {
             }
 
             if (groupName != null) {
-                group = new DGroup(groupName, player, dungeon);
+                group = new DGroup(plugin, groupName, player, dungeon);
             } else {
-                group = new DGroup(player, dungeon);
+                group = new DGroup(plugin, player, dungeon);
             }
             update();
 
@@ -160,15 +160,16 @@ public class GroupSign extends JoinSign {
 
     /* Statics */
     /**
-     * @param block a block which is protected by the returned GroupSign
+     * @param plugin the plugin instance
+     * @param block  a block which is protected by the returned GroupSign
      * @return the group sign the block belongs to, null if it belongs to none
      */
-    public static GroupSign getByBlock(Block block) {
+    public static GroupSign getByBlock(DungeonsXL plugin, Block block) {
         if (!Category.SIGNS.containsBlock(block)) {
             return null;
         }
 
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(GroupSign.class)) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(GroupSign.class)) {
             GroupSign groupSign = (GroupSign) protection;
             Block start = groupSign.startSign;
             if (start == block || (start.getX() == block.getX() && start.getZ() == block.getZ() && (start.getY() >= block.getY() && start.getY() - groupSign.verticalSigns <= block.getY()))) {
@@ -179,7 +180,7 @@ public class GroupSign extends JoinSign {
         return null;
     }
 
-    public static GroupSign tryToCreate(SignChangeEvent event) {
+    public static GroupSign tryToCreate(DungeonsXL plugin, SignChangeEvent event) {
         if (!event.getLine(0).equalsIgnoreCase(SIGN_TAG)) {
             return null;
         }
@@ -199,10 +200,10 @@ public class GroupSign extends JoinSign {
             groupName = data[1];
         }
 
-        return tryToCreate(event.getBlock(), identifier, maxPlayersPerGroup, groupName);
+        return tryToCreate(plugin, event.getBlock(), identifier, maxPlayersPerGroup, groupName);
     }
 
-    public static GroupSign tryToCreate(Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
+    public static GroupSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
         World world = startSign.getWorld();
         BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
         int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
@@ -219,7 +220,7 @@ public class GroupSign extends JoinSign {
 
             verticalSigns--;
         }
-        GroupSign sign = new GroupSign(DungeonsXL.getInstance().getGlobalProtections().generateId(GroupSign.class, world), startSign, identifier, maxPlayersPerGroup, groupName);
+        GroupSign sign = new GroupSign(plugin, plugin.getGlobalProtectionCache().generateId(GroupSign.class, world), startSign, identifier, maxPlayersPerGroup, groupName);
 
         LWCUtil.removeProtection(startSign);
 

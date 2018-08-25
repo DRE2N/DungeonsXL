@@ -43,8 +43,8 @@ public class DEditPlayer extends DInstancePlayer {
     private String[] linesCopy;
     private DEditWorld editWorld;
 
-    public DEditPlayer(Player player, DEditWorld world) {
-        super(player, world.getWorld());
+    public DEditPlayer(DungeonsXL plugin, Player player, DEditWorld world) {
+        super(plugin, player, world.getWorld());
         editWorld = world;
 
         // Set gamemode a few ticks later to avoid incompatibilities with plugins that force a gamemode
@@ -190,7 +190,7 @@ public class DEditPlayer extends DInstancePlayer {
 
     /* Statics */
     public static DEditPlayer getByPlayer(Player player) {
-        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDEditPlayers()) {
+        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDEditPlayers()) {
             if (dPlayer.getPlayer().equals(player)) {
                 return dPlayer;
             }
@@ -199,7 +199,7 @@ public class DEditPlayer extends DInstancePlayer {
     }
 
     public static DEditPlayer getByName(String name) {
-        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDEditPlayers()) {
+        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDEditPlayers()) {
             if (dPlayer.getName().equalsIgnoreCase(name)) {
                 return dPlayer;
             }
@@ -210,7 +210,7 @@ public class DEditPlayer extends DInstancePlayer {
     public static CopyOnWriteArrayList<DEditPlayer> getByWorld(World world) {
         CopyOnWriteArrayList<DEditPlayer> dPlayers = new CopyOnWriteArrayList<>();
 
-        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDEditPlayers()) {
+        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDEditPlayers()) {
             if (dPlayer.getWorld() == world) {
                 dPlayers.add(dPlayer);
             }

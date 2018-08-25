@@ -118,8 +118,8 @@ public abstract class Trigger {
         gameWorld.removeTrigger(this);
     }
 
-    public static Trigger getOrCreate(String identifier, String value, DSign dSign) {
-        TriggerType type = DungeonsXL.getInstance().getTriggers().getByIdentifier(identifier);
+    public static Trigger getOrCreate(DungeonsXL plugin, String identifier, String value, DSign dSign) {
+        TriggerType type = plugin.getTriggerCache().getByIdentifier(identifier);
         Trigger trigger = null;
 
         if (type == TriggerTypeDefault.REDSTONE) {
@@ -168,14 +168,14 @@ public abstract class Trigger {
                     trigger = ProgressTrigger.getOrCreate(floorCount, waveCount, dSign.getGameWorld());
 
                 } else {
-                    trigger = ProgressTrigger.getOrCreate(value, dSign.getGameWorld());
+                    trigger = ProgressTrigger.getOrCreate(plugin, value, dSign.getGameWorld());
                 }
             }
 
         } else if (type == TriggerTypeDefault.USE_ITEM) {
 
             if (value != null) {
-                trigger = UseItemTrigger.getOrCreate(value, dSign.getGameWorld());
+                trigger = UseItemTrigger.getOrCreate(plugin, value, dSign.getGameWorld());
             }
 
         } else if (type == TriggerTypeDefault.WAVE) {
@@ -211,5 +211,10 @@ public abstract class Trigger {
 
     /* Abstracts */
     public abstract TriggerType getType();
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + getType() + "}";
+    }
 
 }

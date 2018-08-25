@@ -29,11 +29,10 @@ import org.bukkit.command.CommandSender;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class HelpCommand extends DRECommand {
+public class HelpCommand extends DCommand {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-
-    public HelpCommand() {
+    public HelpCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("help");
         setMinArgs(0);
         setMaxArgs(1);

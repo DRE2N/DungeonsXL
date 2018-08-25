@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -27,9 +26,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class ResourcePackCommand extends DRECommand {
+public class ResourcePackCommand extends DCommand {
 
-    public ResourcePackCommand() {
+    public ResourcePackCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("resourcepack");
         setMinArgs(1);
         setMaxArgs(1);
@@ -48,7 +48,7 @@ public class ResourcePackCommand extends DRECommand {
             return;
         }
 
-        String url = (String) DungeonsXL.getInstance().getMainConfig().getResourcePacks().get(args[1]);
+        String url = (String) config.getResourcePacks().get(args[1]);
         if (url == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_RESOURCE_PACK.getMessage(args[1]));
             return;

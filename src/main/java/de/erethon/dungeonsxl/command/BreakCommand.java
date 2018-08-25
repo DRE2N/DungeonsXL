@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
@@ -28,9 +27,10 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class BreakCommand extends DRECommand {
+public class BreakCommand extends DCommand {
 
-    public BreakCommand() {
+    public BreakCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("break");
         setMinArgs(0);
         setMaxArgs(0);
@@ -42,7 +42,7 @@ public class BreakCommand extends DRECommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
 
         if (dGlobalPlayer.isInBreakMode()) {
             dGlobalPlayer.setInBreakMode(false);

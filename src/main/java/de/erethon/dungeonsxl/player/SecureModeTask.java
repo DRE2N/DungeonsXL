@@ -26,12 +26,18 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class SecureModeTask extends BukkitRunnable {
 
+    private DungeonsXL plugin;
+
+    public SecureModeTask(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            DGlobalPlayer dGlobalPlayer = DungeonsXL.getInstance().getDPlayers().getByPlayer(player);
+            DGlobalPlayer dGlobalPlayer = plugin.getDPlayerCache().getByPlayer(player);
             if (dGlobalPlayer == null) {
-                dGlobalPlayer = new DGlobalPlayer(player);
+                dGlobalPlayer = new DGlobalPlayer(plugin, player);
             }
 
             if (!(dGlobalPlayer instanceof DGamePlayer || dGlobalPlayer instanceof DEditPlayer)) {

@@ -113,8 +113,8 @@ public class ProgressTrigger extends Trigger {
         return new ProgressTrigger(floorCount, waveCount);
     }
 
-    public static ProgressTrigger getOrCreate(String floor, DGameWorld gameWorld) {
-        DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(floor);
+    public static ProgressTrigger getOrCreate(DungeonsXL plugin, String floor, DGameWorld gameWorld) {
+        DResourceWorld resource = plugin.getDWorldCache().getResourceByName(floor);
 
         if (resource != null) {
             return new ProgressTrigger(resource);

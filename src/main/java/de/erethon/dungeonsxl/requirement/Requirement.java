@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.event.requirement.RequirementRegistrationEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -31,12 +32,18 @@ import org.bukkit.entity.Player;
  */
 public abstract class Requirement {
 
-    public static Requirement create(RequirementType type) {
+    protected DungeonsXL plugin;
+
+    protected Requirement(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public static Requirement create(DungeonsXL plugin, RequirementType type) {
         Requirement requirement = null;
 
         try {
-            Constructor<? extends Requirement> constructor = type.getHandler().getConstructor();
-            requirement = constructor.newInstance();
+            Constructor<? extends Requirement> constructor = type.getHandler().getConstructor(DungeonsXL.class);
+            requirement = constructor.newInstance(plugin);
 
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
             MessageUtil.log("An error occurred while accessing the handler class of the requirement " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
@@ -63,5 +70,10 @@ public abstract class Requirement {
     public abstract void demand(Player player);
 
     public abstract RequirementType getType();
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + getType() + "}";
+    }
 
 }

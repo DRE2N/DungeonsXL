@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.sign.DSign;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,9 +35,13 @@ import org.bukkit.block.Sign;
  */
 public class SignData {
 
+    private DungeonsXL plugin;
+
     private File file;
 
-    public SignData(File file) {
+    public SignData(DungeonsXL plugin, File file) {
+        this.plugin = plugin;
+
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -111,7 +116,7 @@ public class SignData {
 
                 Block block = gameWorld.getWorld().getBlockAt(x, y, z);
                 if (block.getState() instanceof Sign) {
-                    DSign dSign = DSign.create((Sign) block.getState(), gameWorld);
+                    DSign dSign = DSign.create(plugin, (Sign) block.getState(), gameWorld);
                     gameWorld.getDSigns().add(dSign);
                 }
             }

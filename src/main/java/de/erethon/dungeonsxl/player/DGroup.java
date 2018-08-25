@@ -54,8 +54,8 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class DGroup {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    DPlayerCache dPlayers = plugin.getDPlayers();
+    DungeonsXL plugin;
+    DPlayerCache dPlayers;
 
     private String name;
     private Player captain;
@@ -74,16 +74,19 @@ public class DGroup {
     private int initialLives = -1;
     private int lives = -1;
 
-    public DGroup(Player player) {
-        this("Group " + DungeonsXL.getInstance().getDGroups().size(), player);
+    public DGroup(DungeonsXL plugin, Player player) {
+        this(plugin, "Group " + plugin.getDGroupCache().size(), player);
     }
 
-    public DGroup(Player player, DColor color) {
-        this(color.toString().replace("_", " "), player);
+    public DGroup(DungeonsXL plugin, Player player, DColor color) {
+        this(plugin, color.toString().replace("_", " "), player);
     }
 
-    public DGroup(String name, Player player) {
-        plugin.getDGroups().add(this);
+    public DGroup(DungeonsXL plugin, String name, Player player) {
+        this.plugin = plugin;
+        dPlayers = plugin.getDPlayerCache();
+
+        plugin.getDGroupCache().add(this);
         this.name = name;
 
         setCaptain(player);
@@ -93,19 +96,22 @@ public class DGroup {
         floorCount = 0;
     }
 
-    public DGroup(Player player, Dungeon dungeon) {
-        this(DungeonsXL.getInstance().getMainConfig().getGroupColorPriority().get(DungeonsXL.getInstance().getDGroups().size()).toString(), player, dungeon);
+    public DGroup(DungeonsXL plugin, Player player, Dungeon dungeon) {
+        this(plugin, plugin.getMainConfig().getGroupColorPriority().get(plugin.getDGroupCache().size()).toString(), player, dungeon);
     }
 
-    public DGroup(String name, Player player, Dungeon dungeon) {
-        this(name, player, new ArrayList<Player>(), dungeon);
+    public DGroup(DungeonsXL plugin, String name, Player player, Dungeon dungeon) {
+        this(plugin, name, player, new ArrayList<Player>(), dungeon);
     }
 
-    public DGroup(String name, Player captain, List<Player> players, Dungeon dungeon) {
-        plugin.getDGroups().add(this);
+    public DGroup(DungeonsXL plugin, String name, Player captain, List<Player> players, Dungeon dungeon) {
+        this.plugin = plugin;
+        dPlayers = plugin.getDPlayerCache();
+
+        plugin.getDGroupCache().add(this);
         this.name = name;
 
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayers().getByPlayer(captain), true, this);
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayerCache().getByPlayer(captain), true, this);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
@@ -241,7 +247,7 @@ public class DGroup {
      */
     public void removePlayer(Player player, boolean message) {
         players.remove(player.getUniqueId());
-        plugin.getGlobalProtections().updateGroupSigns(this);
+        plugin.getGlobalProtectionCache().updateGroupSigns(this);
 
         if (message) {
             sendMessage(DMessage.PLAYER_LEFT_GROUP.getMessage(player.getName()));
@@ -376,15 +382,15 @@ public class DGroup {
      * @return if the action was successful
      */
     public boolean setDungeon(String name) {
-        dungeon = plugin.getDungeons().getByName(name);
+        dungeon = plugin.getDungeonCache().getByName(name);
         if (dungeon != null) {
             unplayedFloors = dungeon.getConfig().getFloors();
             return true;
 
         } else {
-            DResourceWorld resource = plugin.getDWorlds().getResourceByName(name);
+            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(name);
             if (resource != null) {
-                dungeon = new Dungeon(resource);
+                dungeon = new Dungeon(plugin, resource);
                 return true;
             }
             return false;
@@ -672,7 +678,7 @@ public class DGroup {
     public void delete() {
         Game game = Game.getByDGroup(this);
 
-        plugin.getDGroups().remove(this);
+        plugin.getDGroupCache().remove(this);
 
         if (game != null) {
             game.removeDGroup(this);
@@ -689,7 +695,7 @@ public class DGroup {
             timeIsRunningTask.cancel();
         }
 
-        plugin.getGlobalProtections().updateGroupSigns(this);
+        plugin.getGlobalProtectionCache().updateGroupSigns(this);
     }
 
     public void startGame(Game game) {
@@ -711,7 +717,7 @@ public class DGroup {
             for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
                 DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                 if (dPlayer == null) {
-                    dPlayer = new DGamePlayer(player, gameWorld);
+                    dPlayer = new DGamePlayer(plugin, player, gameWorld);
                 }
                 if (rules.isGroupTagEnabled()) {
                     dPlayer.initDGroupTag();
@@ -802,7 +808,7 @@ public class DGroup {
             }
         }
 
-        plugin.getGlobalProtections().updateGroupSigns(this);
+        plugin.getGlobalProtectionCache().updateGroupSigns(this);
         nextFloor = null;
         initialLives = rules.getInitialGroupLives();
         lives = initialLives;
@@ -875,7 +881,7 @@ public class DGroup {
 
     /* Statics */
     public static DGroup getByName(String name) {
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroups()) {
+        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
             if (dGroup.getName().equalsIgnoreCase(name) || dGroup.getRawName().equalsIgnoreCase(name)) {
                 return dGroup;
             }
@@ -885,7 +891,7 @@ public class DGroup {
     }
 
     public static DGroup getByPlayer(Player player) {
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroups()) {
+        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
             if (dGroup.getPlayers().contains(player)) {
                 return dGroup;
             }
@@ -895,7 +901,7 @@ public class DGroup {
     }
 
     public static void leaveGroup(Player player) {
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroups()) {
+        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
             if (dGroup.getPlayers().contains(player)) {
                 dGroup.getPlayers().remove(player);
             }
@@ -908,13 +914,18 @@ public class DGroup {
      */
     public static List<DGroup> getByGameWorld(DGameWorld gameWorld) {
         List<DGroup> dGroups = new ArrayList<>();
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroups()) {
+        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
             if (dGroup.getGameWorld().equals(gameWorld)) {
                 dGroups.add(dGroup);
             }
         }
 
         return dGroups;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + name + "; captain=" + captain + "}";
     }
 
 }

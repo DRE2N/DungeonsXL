@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.PlaceableBlock;
 import org.bukkit.block.Sign;
@@ -28,8 +29,8 @@ public class PlaceSign extends DSign {
 
     private DSignType type = DSignTypeDefault.PLACE;
 
-    public PlaceSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public PlaceSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class PlaceSign extends DSign {
 
     @Override
     public void onInit() {
-        getGameWorld().addGameBlock(new PlaceableBlock(getSign().getBlock(), lines[1], lines[2]));
+        getGameWorld().addGameBlock(new PlaceableBlock(plugin, getSign().getBlock(), lines[1], lines[2]));
         getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
     }
 

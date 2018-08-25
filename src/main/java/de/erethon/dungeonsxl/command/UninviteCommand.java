@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -29,9 +28,10 @@ import org.bukkit.command.CommandSender;
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class UninviteCommand extends DRECommand {
+public class UninviteCommand extends DCommand {
 
-    public UninviteCommand() {
+    public UninviteCommand(DungeonsXL plugin) {
+        super(plugin);
         setCommand("uninvite");
         setMinArgs(2);
         setMaxArgs(2);
@@ -43,7 +43,7 @@ public class UninviteCommand extends DRECommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(args[2]);
+        DResourceWorld resource = instances.getResourceByName(args[2]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage(args[2]));
             return;

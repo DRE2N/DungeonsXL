@@ -37,15 +37,15 @@ public class JoinSign extends GlobalProtection {
     protected int verticalSigns;
     protected Set<Block> blocks;
 
-    protected JoinSign(int id, Block startSign, String identifier, int maxElements) {
-        super(startSign.getWorld(), id);
+    protected JoinSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxElements) {
+        super(plugin, startSign.getWorld(), id);
 
         this.startSign = startSign;
-        dungeon = DungeonsXL.getInstance().getDungeons().getByName(identifier);
+        dungeon = plugin.getDungeonCache().getByName(identifier);
         if (dungeon == null) {
-            DResourceWorld resource = DungeonsXL.getInstance().getDWorlds().getResourceByName(identifier);
+            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(identifier);
             if (resource != null) {
-                dungeon = new Dungeon(resource);
+                dungeon = new Dungeon(plugin, resource);
             }
         }
 

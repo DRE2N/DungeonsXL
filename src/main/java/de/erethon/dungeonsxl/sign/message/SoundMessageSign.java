@@ -20,6 +20,7 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
@@ -44,8 +45,8 @@ public class SoundMessageSign extends DSign {
     private float pitch;
     private CopyOnWriteArrayList<Player> done = new CopyOnWriteArrayList<>();
 
-    public SoundMessageSign(Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(sign, lines, gameWorld);
+    public SoundMessageSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
+        super(plugin, sign, lines, gameWorld);
     }
 
     @Override

@@ -38,8 +38,8 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class DWorldCache {
 
-    DungeonsXL plugin = DungeonsXL.getInstance();
-    MainConfig mainConfig = plugin.getMainConfig();
+    private DungeonsXL plugin;
+    private MainConfig config;
 
     public static final File RAW = new File(DungeonsXL.MAPS, ".raw");
 
@@ -48,10 +48,16 @@ public class DWorldCache {
     private Set<DResourceWorld> resources = new HashSet<>();
     private Set<DInstanceWorld> instances = new HashSet<>();
 
-    public DWorldCache(File folder) {
+    public DWorldCache(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public void init(File folder) {
+        config = plugin.getMainConfig();
+
         for (File file : folder.listFiles()) {
             if (file.isDirectory() && !file.getName().equals(".raw")) {
-                resources.add(new DResourceWorld(this, file));
+                resources.add(new DResourceWorld(plugin, file));
             }
         }
 
@@ -60,7 +66,7 @@ public class DWorldCache {
         }
 
         startWorldUnloadTask(1200L);
-        Bukkit.getPluginManager().registerEvents(new DWorldListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new DWorldListener(plugin), plugin);
         if (LWCUtil.isLWCLoaded()) {
             new LWCIntegration(plugin);
         }
@@ -247,7 +253,7 @@ public class DWorldCache {
      * Clean up all instances.
      */
     public void deleteAllInstances() {
-        BackupMode backupMode = mainConfig.getBackupMode();
+        BackupMode backupMode = config.getBackupMode();
         HashSet<DInstanceWorld> instances = new HashSet<>(this.instances);
         for (DInstanceWorld instance : instances) {
             if (backupMode == BackupMode.ON_DISABLE | backupMode == BackupMode.ON_DISABLE_AND_SAVE && instance instanceof DEditWorld) {
@@ -325,7 +331,7 @@ public class DWorldCache {
      * @param period the period in ticks
      */
     public void startWorldUnloadTask(long period) {
-        worldUnloadTask = new WorldUnloadTask().runTaskTimer(plugin, period, period);
+        worldUnloadTask = new WorldUnloadTask(plugin).runTaskTimer(plugin, period, period);
     }
 
     /* Util */

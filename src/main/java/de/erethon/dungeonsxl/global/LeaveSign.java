@@ -43,8 +43,8 @@ public class LeaveSign extends GlobalProtection {
     private Sign sign;
     private Set<Block> blocks;
 
-    public LeaveSign(int id, Sign sign) {
-        super(sign.getWorld(), id);
+    public LeaveSign(DungeonsXL plugin, int id, Sign sign) {
+        super(plugin, sign.getWorld(), id);
 
         this.sign = sign;
         setText();
@@ -99,11 +99,12 @@ public class LeaveSign extends GlobalProtection {
 
     /* Statics */
     /**
-     * @param block a block which is protected by the returned LeaveSign
+     * @param plugin the plugin instance
+     * @param block  a block which is protected by the returned LeaveSign
      * @return the leave sign the block belongs to, null if it belongs to none
      */
-    public static LeaveSign getByBlock(Block block) {
-        for (GlobalProtection protection : DungeonsXL.getInstance().getGlobalProtections().getProtections(LeaveSign.class)) {
+    public static LeaveSign getByBlock(DungeonsXL plugin, Block block) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(LeaveSign.class)) {
             LeaveSign leaveSign = (LeaveSign) protection;
 
             if (leaveSign.getBlocks().contains(block)) {

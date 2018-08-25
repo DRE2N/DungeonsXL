@@ -24,9 +24,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class UpdateTask extends BukkitRunnable {
 
+    private DungeonsXL plugin;
+
+    public UpdateTask(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
-        for (DInstancePlayer dPlayer : DungeonsXL.getInstance().getDPlayers().getDInstancePlayers()) {
+        for (DInstancePlayer dPlayer : plugin.getDPlayerCache().getDInstancePlayers()) {
             dPlayer.update(false);
         }
     }
