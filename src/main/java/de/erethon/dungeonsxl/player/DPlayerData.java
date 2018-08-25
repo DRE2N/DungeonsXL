@@ -70,6 +70,7 @@ public class DPlayerData extends DREConfig {
     // Stats
     private Map<String, Long> timeLastStarted = new HashMap<>();
     private Map<String, Long> timeLastFinished = new HashMap<>();
+    private Map<String, Long> timeLastLoot = new HashMap<>();
     private boolean finishedTutorial;
 
     public DPlayerData(File file) {
@@ -335,6 +336,28 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
+     * @param dungeon the dungeon to check
+     * @return the time when the player received loot from the dungeon for the last time
+     */
+    public long getTimeLastLoot(String dungeon) {
+        Long time = timeLastLoot.get(dungeon.toLowerCase());
+        if (time == null) {
+            return -1;
+        } else {
+            return time;
+        }
+    }
+
+    /**
+     * @param dungeon the finished dungeon
+     * @param time    the time when the dungeon was received
+     */
+    public void setTimeLastLoot(String dungeon, long time) {
+        timeLastLoot.put(dungeon.toLowerCase(), time);
+        save();
+    }
+
+    /**
      * @return if the player has finished the tutorial
      */
     public boolean hasFinishedTutorial() {
@@ -366,6 +389,14 @@ public class DPlayerData extends DREConfig {
         save();
     }
 
+    /**
+     * @param dungeon the finished dungeon
+     */
+    public void logTimeLastLoot(String dungeon) {
+        timeLastLoot.put(dungeon.toLowerCase(), System.currentTimeMillis());
+        save();
+    }
+
     @Override
     public void initialize() {
         if (!config.contains(PREFIX_STATS + "timeLastStarted")) {
@@ -374,6 +405,10 @@ public class DPlayerData extends DREConfig {
 
         if (!config.contains(PREFIX_STATS + "timeLastFinished")) {
             config.createSection(PREFIX_STATS + "timeLastFinished");
+        }
+
+        if (!config.contains(PREFIX_STATS + "timeLastLoot")) {
+            config.createSection(PREFIX_STATS + "timeLastLoot");
         }
 
         if (!config.contains(PREFIX_STATS + "finishedTutorial")) {
@@ -402,6 +437,12 @@ public class DPlayerData extends DREConfig {
         if (config.isConfigurationSection(PREFIX_STATS + "timeLastFinished")) {
             for (String key : config.getConfigurationSection(PREFIX_STATS + "timeLastFinished").getKeys(false)) {
                 timeLastFinished.put(key, config.getLong(PREFIX_STATS + "timeLastFinished." + key));
+            }
+        }
+
+        if (config.isConfigurationSection(PREFIX_STATS + "timeLastLoot")) {
+            for (String key : config.getConfigurationSection(PREFIX_STATS + "timeLastLoot").getKeys(false)) {
+                timeLastLoot.put(key, config.getLong(PREFIX_STATS + "timeLastLoot." + key));
             }
         }
 
@@ -441,6 +482,7 @@ public class DPlayerData extends DREConfig {
     public void save() {
         config.set(PREFIX_STATS + "timeLastStarted", timeLastStarted);
         config.set(PREFIX_STATS + "timeLastFinished", timeLastFinished);
+        config.set(PREFIX_STATS + "timeLastLoot", timeLastLoot);
         config.set(PREFIX_STATS + "finishedTutorial", finishedTutorial);
         super.save();
     }

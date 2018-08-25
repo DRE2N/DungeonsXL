@@ -25,7 +25,6 @@ import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import de.erethon.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import de.erethon.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
-import de.erethon.dungeonsxl.event.dgroup.DGroupRewardEvent;
 import de.erethon.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
 import de.erethon.dungeonsxl.event.requirement.RequirementDemandEvent;
@@ -615,16 +614,7 @@ public class DGroup {
         }
 
         Game.getByDGroup(this).resetWaveKills();
-        DGroupRewardEvent dGroupRewardEvent = new DGroupRewardEvent(this);
-        Bukkit.getPluginManager().callEvent(dGroupRewardEvent);
-        for (DGamePlayer player : getDGamePlayers()) {
-            player.leave(false);
-            if (!dGroupRewardEvent.isCancelled()) {
-                for (Reward reward : rewards) {
-                    reward.giveTo(player.getPlayer());
-                }
-            }
-        }
+        getDGamePlayers().forEach(p -> p.leave(false));
     }
 
     /**

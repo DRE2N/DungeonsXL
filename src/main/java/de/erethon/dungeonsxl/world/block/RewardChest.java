@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.misc.SimpleDateUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.game.Game;
@@ -146,6 +147,7 @@ public class RewardChest extends GameBlock {
         if (dGroup == null) {
             return;
         }
+        dGroup.sendMessage(DMessage.GROUP_REWARD_CHEST.getMessage());
 
         boolean hasMoneyReward = false;
         boolean hasLevelReward = false;
@@ -189,7 +191,8 @@ public class RewardChest extends GameBlock {
 
         for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
             DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
-            if (dPlayer == null) {
+            if (dPlayer == null || !dPlayer.canLoot(game.getRules())) {
+                MessageUtil.sendMessage(player, DMessage.ERROR_NO_REWARDS_TIME.getMessage(SimpleDateUtil.ddMMyyyyhhmm(dPlayer.getTimeNextLoot(game.getRules()))));
                 continue;
             }
 

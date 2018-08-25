@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.event.dgroup;
+package de.erethon.dungeonsxl.event.dplayer.instance.game;
 
-import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import org.bukkit.event.HandlerList;
 /**
  * @author Daniel Saukel
  */
-public class DGroupRewardEvent extends DGroupEvent implements Cancellable {
+public class DGamePlayerRewardEvent extends DGamePlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
@@ -35,9 +35,9 @@ public class DGroupRewardEvent extends DGroupEvent implements Cancellable {
     private List<Reward> rewards = new ArrayList<>();
     private List<Player> excludedPlayers = new ArrayList<>();
 
-    public DGroupRewardEvent(DGroup dGroup) {
-        super(dGroup);
-        this.rewards = dGroup.getRewards();
+    public DGamePlayerRewardEvent(DGamePlayer dPlayer) {
+        super(dPlayer);
+        this.rewards = dPlayer.getDGroup().getRewards();
     }
 
     /**

@@ -26,6 +26,7 @@ import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
+import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerRewardEvent;
 import de.erethon.dungeonsxl.event.requirement.RequirementCheckEvent;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.game.GameGoal;
@@ -477,8 +478,10 @@ public class DGamePlayer extends DInstancePlayer {
         if (game != null) {
             if (finished) {
                 if (game.getType() == GameTypeDefault.CUSTOM || game.getType().hasRewards()) {
-                    for (Reward reward : rules.getRewards()) {
-                        reward.giveTo(getPlayer());
+                    DGamePlayerRewardEvent dGroupRewardEvent = new DGamePlayerRewardEvent(this);
+                    Bukkit.getPluginManager().callEvent(dGroupRewardEvent);
+                    if (!dGroupRewardEvent.isCancelled()) {
+                        giveLoot(rules, rules.getRewards(), dGroup.getRewards());
                     }
 
                     getData().logTimeLastFinished(getDGroup().getDungeonName());
@@ -666,6 +669,23 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         return dataTime == -1 || dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
+    }
+
+    public void giveLoot(GameRuleProvider rules, List<Reward> ruleRewards, List<Reward> groupRewards) {
+        if (!canLoot(rules)) {
+            return;
+        }
+        ruleRewards.forEach(r -> r.giveTo(player.getPlayer()));
+        groupRewards.forEach(r -> r.giveTo(player.getPlayer()));
+        getData().logTimeLastLoot(dGroup.getDungeonName());
+    }
+
+    public boolean canLoot(GameRuleProvider rules) {
+        return getTimeNextLoot(rules) <= getData().getTimeLastStarted(getDGroup().getDungeonName());
+    }
+
+    public long getTimeNextLoot(GameRuleProvider rules) {
+        return rules.getTimeToNextLoot() * 60 * 60 * 1000 + getData().getTimeLastLoot(getDGroup().getDungeonName());
     }
 
     public void ready() {
