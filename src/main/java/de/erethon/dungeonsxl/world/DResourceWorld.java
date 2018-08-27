@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.FileUtil;
-import de.erethon.commons.worldloader.WorldLoader;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.event.editworld.EditWorldGenerateEvent;
 import de.erethon.dungeonsxl.player.DEditPlayer;
@@ -290,7 +289,7 @@ public class DResourceWorld {
         }
         FileUtil.copyDir(DWorldCache.RAW, folder, DungeonsXL.EXCLUDED_FILES);
         editWorld.generateIdFile();
-        editWorld.world = WorldLoader.createWorld(creator);
+        editWorld.world = creator.createWorld();
         editWorld.generateIdFile();
 
         return editWorld;
