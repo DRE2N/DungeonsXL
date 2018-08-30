@@ -21,6 +21,8 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
+import de.erethon.dungeonsxl.game.rule.GameRuleProvider;
 import de.erethon.dungeonsxl.global.GameSign;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.sign.DSign;
@@ -69,9 +71,9 @@ public class Game {
         dGroups.add(dGroup);
         dGroup.setGameWorld(world);
         fetchRules();
-        dGroup.setInitialLives(rules.getInitialGroupLives());
-        dGroup.setLives(rules.getInitialGroupLives());
-        dGroup.setScore(rules.getInitialScore());
+        dGroup.setInitialLives(rules.getIntState(GameRuleDefault.INITIAL_LIVES));
+        dGroup.setLives(rules.getIntState(GameRuleDefault.INITIAL_GROUP_LIVES));
+        dGroup.setScore(rules.getIntState(GameRuleDefault.INITIAL_SCORE));
     }
 
     public Game(DungeonsXL plugin, DGroup dGroup, DGameWorld world) {
@@ -85,9 +87,9 @@ public class Game {
         dGroups.add(dGroup);
         dGroup.setGameWorld(world);
         fetchRules();
-        dGroup.setInitialLives(rules.getInitialGroupLives());
-        dGroup.setLives(rules.getInitialGroupLives());
-        dGroup.setScore(rules.getInitialScore());
+        dGroup.setInitialLives(rules.getIntState(GameRuleDefault.INITIAL_GROUP_LIVES));
+        dGroup.setLives(rules.getIntState(GameRuleDefault.INITIAL_GROUP_LIVES));
+        dGroup.setScore(rules.getIntState(GameRuleDefault.INITIAL_SCORE));
     }
 
     public Game(DungeonsXL plugin, DGroup dGroup, GameType type, DGameWorld world) {
@@ -107,9 +109,9 @@ public class Game {
         for (DGroup dGroup : dGroups) {
             dGroup.setGameWorld(world);
             fetchRules();
-            dGroup.setInitialLives(rules.getInitialGroupLives());
-            dGroup.setLives(rules.getInitialGroupLives());
-            dGroup.setScore(rules.getInitialScore());
+            dGroup.setInitialLives(rules.getIntState(GameRuleDefault.INITIAL_LIVES));
+            dGroup.setLives(rules.getIntState(GameRuleDefault.INITIAL_GROUP_LIVES));
+            dGroup.setScore(rules.getIntState(GameRuleDefault.INITIAL_SCORE));
         }
     }
 
@@ -141,8 +143,9 @@ public class Game {
         dGroups.add(dGroup);
 
         dGroup.setGameWorld(world);
-        dGroup.setInitialLives(rules.getInitialGroupLives());
-        dGroup.setLives(rules.getInitialGroupLives());
+        dGroup.setInitialLives(rules.getIntState(GameRuleDefault.INITIAL_GROUP_LIVES));
+        dGroup.setLives(rules.getIntState(GameRuleDefault.INITIAL_GROUP_LIVES));
+        dGroup.setScore(rules.getIntState(GameRuleDefault.INITIAL_SCORE));
     }
 
     /**
@@ -395,7 +398,7 @@ public class Game {
             }
         }
 
-        int delay = rules.getTimeToNextWave();
+        int delay = rules.getIntState(GameRuleDefault.TIME_TO_NEXT_WAVE);
         sendMessage(DMessage.GROUP_WAVE_FINISHED.getMessage(String.valueOf(waveCount), String.valueOf(delay)));
 
         new BukkitRunnable() {

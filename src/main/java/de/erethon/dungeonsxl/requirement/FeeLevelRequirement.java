@@ -20,7 +20,8 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
+import de.erethon.dungeonsxl.game.rule.GameRuleProvider;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPlayerData;
 import org.bukkit.configuration.ConfigurationSection;
@@ -104,11 +105,11 @@ public class FeeLevelRequirement extends Requirement {
             rules = game.getRules();
         }
         if (rules != null) {
-            keepInventory = rules.getKeepInventoryOnEnter();
+            keepInventory = rules.getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_ENTER);
             return keepInventory;
         }
 
-        keepInventory = GameRuleProvider.DEFAULT_VALUES.getKeepInventoryOnEnter();
+        keepInventory = (Boolean) GameRuleDefault.KEEP_INVENTORY_ON_ENTER.getDefaultValue();
         return keepInventory;
     }
 

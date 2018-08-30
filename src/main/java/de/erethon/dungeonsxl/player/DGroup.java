@@ -30,7 +30,8 @@ import de.erethon.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
 import de.erethon.dungeonsxl.event.requirement.RequirementDemandEvent;
 import de.erethon.dungeonsxl.event.reward.RewardAdditionEvent;
 import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
+import de.erethon.dungeonsxl.game.rule.GameRuleProvider;
 import de.erethon.dungeonsxl.requirement.Requirement;
 import de.erethon.dungeonsxl.reward.Reward;
 import de.erethon.dungeonsxl.util.DColor;
@@ -44,6 +45,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -719,7 +721,7 @@ public class DGroup {
                 if (dPlayer == null) {
                     dPlayer = new DGamePlayer(plugin, player, gameWorld);
                 }
-                if (rules.isGroupTagEnabled()) {
+                if (rules.getBooleanState(GameRuleDefault.GROUP_TAG_ENABLED)) {
                     dPlayer.initDGroupTag();
                 }
                 if (!dPlayer.isReady()) {
@@ -755,16 +757,17 @@ public class DGroup {
                 continue;
             }
             dPlayer.getData().logTimeLastStarted(getDungeonName());
-            dPlayer.getData().setKeepInventoryAfterLogout(rules.getKeepInventoryOnEscape());
+            dPlayer.getData().setKeepInventoryAfterLogout(rules.getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_ESCAPE));
 
             dPlayer.respawn();
 
             if (plugin.getMainConfig().isSendFloorTitleEnabled()) {
-                if (rules.getTitle() != null || rules.getSubTitle() != null) {
-                    String title = rules.getTitle() == null ? "" : rules.getTitle();
-                    String subtitle = rules.getSubTitle() == null ? "" : rules.getSubTitle();
-
-                    MessageUtil.sendTitleMessage(player, title, subtitle, rules.getTitleFadeIn(), rules.getTitleShow(), rules.getTitleFadeOut());
+                String title = rules.getStringState(GameRuleDefault.TITLE) == null ? "" : rules.getStringState(GameRuleDefault.TITLE);
+                String subtitle = rules.getStringState(GameRuleDefault.SUBTITLE) == null ? "" : rules.getStringState(GameRuleDefault.SUBTITLE);
+                String actionBar = rules.getStringState(GameRuleDefault.ACTION_BAR);
+                String chat = rules.getStringState(GameRuleDefault.CHAT);
+                if (title != null || subtitle != null) {
+                    MessageUtil.sendTitleMessage(player, title, subtitle, rules.getIntState(GameRuleDefault.TITLE_FADE_IN), rules.getIntState(GameRuleDefault.TITLE_SHOW), rules.getIntState(GameRuleDefault.TITLE_FADE_OUT));
 
                 } else if (!getDungeonName().equals(getMapName())) {
                     MessageUtil.sendTitleMessage(player, "&b&l" + getDungeonName().replaceAll("_", " "), "&4&l" + getMapName().replaceAll("_", " "));
@@ -773,16 +776,16 @@ public class DGroup {
                     MessageUtil.sendTitleMessage(player, "&4&l" + getMapName().replaceAll("_", " "));
                 }
 
-                if (rules.getActionBar() != null) {
-                    MessageUtil.sendActionBarMessage(player, rules.getActionBar());
+                if (actionBar != null) {
+                    MessageUtil.sendActionBarMessage(player, actionBar);
                 }
 
-                if (rules.getChatText() != null) {
-                    MessageUtil.sendCenteredMessage(player, rules.getChatText());
+                if (chat != null) {
+                    MessageUtil.sendCenteredMessage(player, chat);
                 }
             }
 
-            for (Requirement requirement : rules.getRequirements()) {
+            for (Requirement requirement : (List<Requirement>) rules.getState(GameRuleDefault.REQUIREMENTS)) {
                 RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
                 Bukkit.getPluginManager().callEvent(event);
 
@@ -795,14 +798,14 @@ public class DGroup {
                 }
             }
 
-            player.setGameMode(rules.getGameMode());
-            if (rules.isTimeIsRunning()) {
-                timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
+            player.setGameMode((GameMode) rules.getState(GameRuleDefault.GAME_MODE));
+            if (rules.getIntState(GameRuleDefault.TIME_TO_FINISH) != -1) {
+                timeIsRunningTask = new TimeIsRunningTask(this, rules.getIntState(GameRuleDefault.TIME_TO_FINISH)).runTaskTimer(plugin, 20, 20);
             }
 
             // Permission bridge
             if (plugin.getPermissionProvider() != null) {
-                for (String permission : rules.getGamePermissions()) {
+                for (String permission : (List<String>) rules.getState(GameRuleDefault.GAME_PERMISSIONS)) {
                     plugin.getPermissionProvider().playerRemoveTransient(gameWorld.getWorld().getName(), player, permission);
                 }
             }
@@ -810,7 +813,7 @@ public class DGroup {
 
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
         nextFloor = null;
-        initialLives = rules.getInitialGroupLives();
+        initialLives = rules.getIntState(GameRuleDefault.INITIAL_GROUP_LIVES);
         lives = initialLives;
     }
 

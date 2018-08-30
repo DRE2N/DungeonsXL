@@ -24,6 +24,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
 import de.erethon.dungeonsxl.mob.DMob;
 import de.erethon.dungeonsxl.trigger.UseItemTrigger;
 import de.erethon.dungeonsxl.util.ParsingUtil;
@@ -32,6 +33,7 @@ import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DWorldCache;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -138,8 +140,8 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        boolean pvp = game.getRules().isPlayerVersusPlayer();
-        boolean friendlyFire = game.getRules().isFriendlyFire();
+        boolean pvp = game.getRules().getBooleanState(GameRuleDefault.PLAYER_VERSUS_PLAYER);
+        boolean friendlyFire = game.getRules().getBooleanState(GameRuleDefault.FRIENDLY_FIRE);
 
         Entity attackerEntity = event.getDamager();
         Entity attackedEntity = event.getEntity();
@@ -286,7 +288,7 @@ public class DPlayerListener implements Listener {
 
         } else if (game != null) {
             if (game.getRules() != null) {
-                commandWhitelist.addAll(game.getRules().getGameCommandWhitelist());
+                commandWhitelist.addAll((List<String>) game.getRules().getState(GameRuleDefault.GAME_COMMAND_WHITELIST));
             }
         }
 
@@ -359,7 +361,7 @@ public class DPlayerListener implements Listener {
 
         Game game = Game.getByWorld(gamePlayer.getWorld());
 
-        for (ExItem item : game.getRules().getSecureObjects()) {
+        for (ExItem item : (List<ExItem>) game.getRules().getState(GameRuleDefault.SECURE_OBJECTS)) {
             if (event.getItemDrop().getItemStack().isSimilar(item.toItemStack())) {
                 event.setCancelled(true);
                 MessageUtil.sendMessage(player, DMessage.ERROR_DROP.getMessage());
@@ -426,7 +428,7 @@ public class DPlayerListener implements Listener {
             }
 
         } else if (game != null) {
-            int timeUntilKickOfflinePlayer = game.getRules().getTimeUntilKickOfflinePlayer();
+            int timeUntilKickOfflinePlayer = game.getRules().getIntState(GameRuleDefault.TIME_UNTIL_KICK_OFFLINE_PLAYER);
 
             if (timeUntilKickOfflinePlayer == 0) {
                 ((DGamePlayer) dPlayer).leave();

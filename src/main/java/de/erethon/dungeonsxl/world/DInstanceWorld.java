@@ -19,7 +19,8 @@ package de.erethon.dungeonsxl.world;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
+import de.erethon.dungeonsxl.game.rule.GameRuleProvider;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPlayerCache;
 import java.io.File;
@@ -165,8 +166,8 @@ public abstract class DInstanceWorld {
             return;
         }
 
-        if (rules.isThundering() != null) {
-            if (rules.isThundering()) {
+        if (rules.getBooleanState(GameRuleDefault.THUNDER) != null) {
+            if (rules.getBooleanState(GameRuleDefault.THUNDER)) {
                 world.setThundering(true);
                 world.setStorm(true);
                 world.setThunderDuration(Integer.MAX_VALUE);
@@ -176,8 +177,8 @@ public abstract class DInstanceWorld {
             }
         }
 
-        if (rules.getTime() != null) {
-            world.setTime(rules.getTime());
+        if (rules.getState(GameRuleDefault.TIME) != null) {
+            world.setTime((long) rules.getState(GameRuleDefault.TIME));
         }
     }
 

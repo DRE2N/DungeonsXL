@@ -30,9 +30,10 @@ import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerRewardEvent;
 import de.erethon.dungeonsxl.event.requirement.RequirementCheckEvent;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.game.GameGoal;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
 import de.erethon.dungeonsxl.game.GameType;
 import de.erethon.dungeonsxl.game.GameTypeDefault;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
+import de.erethon.dungeonsxl.game.rule.GameRuleProvider;
 import de.erethon.dungeonsxl.mob.DMob;
 import de.erethon.dungeonsxl.requirement.Requirement;
 import de.erethon.dungeonsxl.reward.Reward;
@@ -42,6 +43,7 @@ import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -93,15 +95,15 @@ public class DGamePlayer extends DInstancePlayer {
         GameRuleProvider rules = game.getRules();
         player.setGameMode(GameMode.SURVIVAL);
 
-        if (!rules.getKeepInventoryOnEnter()) {
+        if (!rules.getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_ENTER)) {
             clearPlayerData();
         }
 
-        if (rules.isLobbyDisabled()) {
+        if (rules.getBooleanState(GameRuleDefault.LOBBY_DISABLED)) {
             ready();
         }
 
-        initialLives = rules.getInitialLives();
+        initialLives = rules.getIntState(GameRuleDefault.INITIAL_LIVES);
         lives = initialLives;
 
         Location teleport = world.getLobbyLocation();
@@ -416,7 +418,7 @@ public class DGamePlayer extends DInstancePlayer {
         GameRuleProvider rules = game.getRules();
 
         getDGroup().setScore(getDGroup().getScore() + 1);
-        if (rules.getScoreGoal() == dGroup.getScore()) {
+        if (rules.getIntState(GameRuleDefault.SCORE_GOAL) == dGroup.getScore()) {
             dGroup.winGame();
         }
 
@@ -458,15 +460,15 @@ public class DGamePlayer extends DInstancePlayer {
 
         if (player.isOnline()) {
             if (finished) {
-                reset(rules.getKeepInventoryOnFinish());
+                reset(rules.getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_FINISH));
             } else {
-                reset(rules.getKeepInventoryOnEscape());
+                reset(rules.getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_ESCAPE));
             }
         }
 
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
-            for (String permission : rules.getGamePermissions()) {
+            for (String permission : (Collection<String>) rules.getState(GameRuleDefault.GAME_PERMISSIONS)) {
                 plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
             }
         }
@@ -481,7 +483,7 @@ public class DGamePlayer extends DInstancePlayer {
                     DGamePlayerRewardEvent dGroupRewardEvent = new DGamePlayerRewardEvent(this);
                     Bukkit.getPluginManager().callEvent(dGroupRewardEvent);
                     if (!dGroupRewardEvent.isCancelled()) {
-                        giveLoot(rules, rules.getRewards(), dGroup.getRewards());
+                        giveLoot(rules, (List<Reward>) rules.getState(GameRuleDefault.REWARDS), dGroup.getRewards());
                     }
 
                     getData().logTimeLastFinished(getDGroup().getDungeonName());
@@ -562,7 +564,7 @@ public class DGamePlayer extends DInstancePlayer {
 
             GameRuleProvider rules = Game.getByPlayer(player).getRules();
             leave();
-            if (rules.getKeepInventoryOnEscape() && rules.getKeepInventoryOnDeath()) {
+            if (rules.getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_ESCAPE) && rules.getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_DEATH)) {
                 applyRespawnInventory();
             }
         }
@@ -576,20 +578,21 @@ public class DGamePlayer extends DInstancePlayer {
         GameRuleProvider rules = game.getRules();
 
         if (!checkTimeAfterStart(game) && !checkTimeAfterFinish(game)) {
-            int longestTime = rules.getTimeToNextPlayAfterStart() >= rules.getTimeToNextPlayAfterFinish() ? rules.getTimeToNextPlayAfterStart() : rules.getTimeToNextPlayAfterFinish();
+            int longestTime = rules.getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_START) >= rules.getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_FINISH)
+                    ? rules.getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_START) : rules.getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_FINISH);
             MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(longestTime)));
             return false;
 
         } else if (!checkTimeAfterStart(game)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterStart())));
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_START))));
             return false;
 
         } else if (!checkTimeAfterFinish(game)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterFinish())));
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_FINISH))));
             return false;
         }
 
-        for (Requirement requirement : rules.getRequirements()) {
+        for (Requirement requirement : (List<Requirement>) rules.getState(GameRuleDefault.REQUIREMENTS)) {
             RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
             Bukkit.getPluginManager().callEvent(event);
 
@@ -602,25 +605,27 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        if (rules.getFinished() != null && rules.getFinishedAll() != null) {
-            if (!rules.getFinished().isEmpty()) {
+        List<String> finished = rules.getFinished();
+        List<String> finishedAll = (List<String>) rules.getState(GameRuleDefault.FINISHED_ALL);
+        if (finished != null && finishedAll != null) {
+            if (!finished.isEmpty()) {
 
                 long bestTime = 0;
                 int numOfNeeded = 0;
                 boolean doneTheOne = false;
 
-                if (rules.getFinished().size() == rules.getFinishedAll().size()) {
+                if (finished.size() == finishedAll.size()) {
                     doneTheOne = true;
                 }
 
-                for (String played : rules.getFinished()) {
+                for (String played : finished) {
                     for (String dungeonName : DungeonsXL.MAPS.list()) {
                         if (new File(DungeonsXL.MAPS, dungeonName).isDirectory()) {
                             if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
 
                                 Long time = getData().getTimeLastFinished(dungeonName);
                                 if (time != -1) {
-                                    if (rules.getFinishedAll().contains(played)) {
+                                    if (finishedAll.contains(played)) {
                                         numOfNeeded++;
                                     } else {
                                         doneTheOne = true;
@@ -639,13 +644,13 @@ public class DGamePlayer extends DInstancePlayer {
                 if (bestTime == 0) {
                     return false;
 
-                } else if (rules.getTimeLastPlayed() != 0) {
-                    if (System.currentTimeMillis() - bestTime > rules.getTimeLastPlayed() * (long) 3600000) {
+                } else if (rules.getIntState(GameRuleDefault.TIME_LAST_PLAYED) != 0) {
+                    if (System.currentTimeMillis() - bestTime > rules.getIntState(GameRuleDefault.TIME_LAST_PLAYED) * (long) 3600000) {
                         return false;
                     }
                 }
 
-                if (numOfNeeded < rules.getFinishedAll().size() || !doneTheOne) {
+                if (numOfNeeded < finishedAll.size() || !doneTheOne) {
                     return false;
                 }
 
@@ -656,11 +661,11 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public boolean checkTimeAfterStart(Game game) {
-        return checkTime(game.getDungeon(), game.getRules().getTimeToNextPlayAfterStart(), getData().getTimeLastStarted(game.getDungeon().getName()));
+        return checkTime(game.getDungeon(), game.getRules().getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_START), getData().getTimeLastStarted(game.getDungeon().getName()));
     }
 
     public boolean checkTimeAfterFinish(Game game) {
-        return checkTime(game.getDungeon(), game.getRules().getTimeToNextPlayAfterFinish(), getData().getTimeLastFinished(game.getDungeon().getName()));
+        return checkTime(game.getDungeon(), game.getRules().getIntState(GameRuleDefault.TIME_TO_NEXT_PLAY_AFTER_FINISH), getData().getTimeLastFinished(game.getDungeon().getName()));
     }
 
     public boolean checkTime(Dungeon dungeon, int requirement, long dataTime) {
@@ -685,7 +690,7 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public long getTimeNextLoot(GameRuleProvider rules) {
-        return rules.getTimeToNextLoot() * 60 * 60 * 1000 + getData().getTimeLastLoot(getDGroup().getDungeonName());
+        return rules.getIntState(GameRuleDefault.TIME_TO_NEXT_LOOT) * 60 * 60 * 1000 + getData().getTimeLastLoot(getDGroup().getDungeonName());
     }
 
     public void ready() {
@@ -746,7 +751,7 @@ public class DGamePlayer extends DInstancePlayer {
         // Respawn Items
         Game game = Game.getByWorld(getWorld());
 
-        if (game != null && game.getRules().getKeepInventoryOnDeath()) {
+        if (game != null && game.getRules().getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_DEATH)) {
             applyRespawnInventory();
         }
     }
@@ -845,7 +850,7 @@ public class DGamePlayer extends DInstancePlayer {
             event.setDeathMessage(null);
         }
 
-        if (game.getRules().getKeepInventoryOnDeath()) {
+        if (game.getRules().getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_DEATH)) {
             setRespawnInventory(event.getEntity().getInventory().getContents());
             setRespawnArmor(event.getEntity().getInventory().getArmorContents());
             // Delete all drops

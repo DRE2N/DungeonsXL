@@ -21,6 +21,7 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
 import java.util.Set;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -165,7 +166,7 @@ public class DWorldListener implements Listener {
             return;
         }
         Game game = Game.getByGameWorld(gameWorld);
-        Set<ExMob> prot = interact ? game.getRules().getInteractionProtectedEntities() : game.getRules().getDamageProtectedEntities();
+        Set<ExMob> prot = interact ? (Set<ExMob>) game.getRules().getState(GameRuleDefault.INTERACTION_PROTECTED_ENTITIES) : (Set<ExMob>) game.getRules().getState(GameRuleDefault.DAMAGE_PROTECTED_ENTITIES);
         if (prot.contains(caliburn.getExMob(entity))) {
             event.setCancelled(true);
         }
@@ -187,7 +188,7 @@ public class DWorldListener implements Listener {
             event.setCancelled(true);
         } else if (dWorld instanceof DGameWorld) {
             Game game = Game.getByGameWorld((DGameWorld) dWorld);
-            Boolean raining = game.getRules().isRaining();
+            Boolean raining = game.getRules().getBooleanState(GameRuleDefault.RAIN);
             if (raining == null) {
                 return;
             }

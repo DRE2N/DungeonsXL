@@ -20,6 +20,7 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -66,7 +67,7 @@ public class TimeIsRunningTask extends BukkitRunnable {
 
                 if (!dPlayerKickEvent.isCancelled()) {
                     MessageUtil.broadcastMessage(DMessage.PLAYER_TIME_KICK.getMessage(player.getName()));
-                    boolean keepInventory = Game.getByDGroup(dGroup).getRules().getKeepInventoryOnEscape();
+                    boolean keepInventory = Game.getByDGroup(dGroup).getRules().getBooleanState(GameRuleDefault.KEEP_INVENTORY_ON_ESCAPE);
                     dPlayer.leave();
                     if (keepInventory) {
                         dPlayer.applyRespawnInventory();

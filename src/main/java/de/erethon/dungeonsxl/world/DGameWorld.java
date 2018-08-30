@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.world;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -26,7 +27,8 @@ import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
 import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
+import de.erethon.dungeonsxl.game.rule.GameRuleDefault;
+import de.erethon.dungeonsxl.game.rule.GameRuleProvider;
 import de.erethon.dungeonsxl.mob.DMob;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.sign.DSign;
@@ -560,7 +562,9 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         GameRuleProvider rules = game.getRules();
-        if (!rules.canBreakBlocks() && !rules.canBreakPlacedBlocks()) {
+        boolean breakBlocks = rules.getBooleanState(GameRuleDefault.BREAK_BLOCKS);
+        boolean breakPlacedBlocks = rules.getBooleanState(GameRuleDefault.BREAK_PLACED_BLOCKS);
+        if (!breakBlocks && !breakPlacedBlocks) {
             return true;
         }
 
@@ -571,28 +575,28 @@ public class DGameWorld extends DInstanceWorld {
             }
             if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
                 Hanging hanging = (Hanging) entity;
-                if (rules.getDamageProtectedEntities().contains(caliburn.getExMob(hanging))) {
+                if (((Set<ExMob>) rules.getState(GameRuleDefault.DAMAGE_PROTECTED_ENTITIES)).contains(caliburn.getExMob(hanging))) {
                     event.setCancelled(true);
                     break;
                 }
             }
         }
 
-        Map<ExItem, HashSet<ExItem>> whitelist = rules.getBreakWhitelist();
+        Map<ExItem, HashSet<ExItem>> whitelist = (Map<ExItem, HashSet<ExItem>>) rules.getState(GameRuleDefault.BREAK_WHITELIST);
         ExItem material = VanillaItem.get(block.getType());
         ExItem breakTool = caliburn.getExItem(player.getItemInHand());
 
         if (whitelist == null) {
-            if (rules.canBreakPlacedBlocks()) {
+            if (breakPlacedBlocks) {
                 return (!placedBlocks.contains(block));
-            } else if (rules.canBreakBlocks()) {
+            } else if (breakBlocks) {
                 return false;
             }
 
         } else if (whitelist.containsKey(material) && whitelist.get(material) == null | whitelist.get(material).isEmpty() | whitelist.get(material).contains(breakTool)) {
-            if (rules.canBreakPlacedBlocks()) {
+            if (breakPlacedBlocks) {
                 return (!placedBlocks.contains(block));
-            } else if (rules.canBreakBlocks()) {
+            } else if (breakBlocks) {
                 return false;
             }
         }
@@ -616,7 +620,7 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         GameRuleProvider rules = game.getRules();
-        if (!rules.canPlaceBlocks() && !PlaceableBlock.canBuildHere(block, block.getFace(against), caliburn.getExItem(hand), this)) {
+        if (!rules.getBooleanState(GameRuleDefault.PLACE_BLOCKS) && !PlaceableBlock.canBuildHere(block, block.getFace(against), caliburn.getExItem(hand), this)) {
             // Workaround for a bug that would allow 3-Block-high jumping
             Location loc = player.getLocation();
             if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
@@ -633,7 +637,7 @@ public class DGameWorld extends DInstanceWorld {
             return true;
         }
 
-        Set<ExItem> whitelist = rules.getPlaceWhitelist();
+        Set<ExItem> whitelist = (Set<ExItem>) rules.getState(GameRuleDefault.PLACE_WHITELIST);
         if (whitelist == null || whitelist.contains(VanillaItem.get(block.getType()))) {
             placedBlocks.add(block);
             return false;
