@@ -45,8 +45,8 @@ public class GroupSign extends JoinSign {
     private String groupName;
     private DGroup group;
 
-    public GroupSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
-        super(plugin, id, startSign, identifier, maxPlayersPerGroup);
+    public GroupSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxPlayersPerGroup, int startIfElementsAtLeast, String groupName) {
+        super(plugin, id, startSign, identifier, maxPlayersPerGroup, startIfElementsAtLeast);
         this.groupName = groupName;
     }
 
@@ -77,9 +77,15 @@ public class GroupSign extends JoinSign {
         Sign sign = (Sign) startSign.getState();
 
         if (group == null) {
+            loadedWorld = false;
             sign.setLine(0, DMessage.SIGN_GLOBAL_NEW_GROUP.getMessage());
             sign.update();
             return;
+        }
+
+        if (group.getPlayers().size() >= startIfElementsAtLeast && startIfElementsAtLeast != -1 && !loadedWorld) {
+            loadedWorld = true;
+            group.teleport();
         }
 
         if (group.isPlaying()) {
@@ -124,6 +130,7 @@ public class GroupSign extends JoinSign {
         }
         config.set(preString + ".groupName", groupName);
         config.set(preString + ".maxPlayersPerGroup", maxElements);
+        config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
     }
 
     public void onPlayerInteract(Block block, Player player) {
@@ -193,17 +200,21 @@ public class GroupSign extends JoinSign {
         String[] data = event.getLine(3).split(",");
         int maxPlayersPerGroup = 1;
         String groupName = null;
+        int startIfElementsAtLeast = -1;
         if (data.length >= 1) {
             maxPlayersPerGroup = NumberUtil.parseInt(data[0], 1);
         }
-        if (data.length == 2) {
+        if (data.length >= 2) {
             groupName = data[1];
         }
+        if (data.length == 3) {
+            startIfElementsAtLeast = NumberUtil.parseInt(data[2], -1);
+        }
 
-        return tryToCreate(plugin, event.getBlock(), identifier, maxPlayersPerGroup, groupName);
+        return tryToCreate(plugin, event.getBlock(), identifier, maxPlayersPerGroup, startIfElementsAtLeast, groupName);
     }
 
-    public static GroupSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxPlayersPerGroup, String groupName) {
+    public static GroupSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxPlayersPerGroup, int startIfElementsAtLeast, String groupName) {
         World world = startSign.getWorld();
         BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
         int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
@@ -220,7 +231,8 @@ public class GroupSign extends JoinSign {
 
             verticalSigns--;
         }
-        GroupSign sign = new GroupSign(plugin, plugin.getGlobalProtectionCache().generateId(GroupSign.class, world), startSign, identifier, maxPlayersPerGroup, groupName);
+        GroupSign sign = new GroupSign(plugin, plugin.getGlobalProtectionCache().generateId(GroupSign.class, world), startSign, identifier, maxPlayersPerGroup,
+                startIfElementsAtLeast, groupName);
 
         LWCUtil.removeProtection(startSign);
 

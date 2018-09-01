@@ -44,6 +44,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -609,6 +610,65 @@ public class DGroup {
     }
 
     /* Actions */
+    public boolean teleport() {
+        if (dungeon == null || dungeon.getMap() == null) {
+            sendMessage(DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage());
+            return false;
+        }
+
+        DGameWorld target = dungeon.getMap().instantiateAsGameWorld(false);
+        Game game = Game.getByDGroup(this);
+
+        if (target == null && game != null) {
+            target = game.getWorld();
+        }
+
+        if (target == null) {
+            if (game != null) {
+                for (DGroup otherTeam : game.getDGroups()) {
+                    if (otherTeam.getGameWorld() != null) {
+                        target = otherTeam.getGameWorld();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (target == null && dungeon != null) {
+            DResourceWorld resource = dungeon.getMap();
+            if (resource != null) {
+                target = resource.instantiateAsGameWorld(false);
+                if (target == null) {
+                    sendMessage(DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+                    return false;
+                }
+                gameWorld = target;
+            }
+        }
+
+        if (target == null) {
+            sendMessage(DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage());
+            return false;
+        }
+
+        if (game == null) {
+            game = new Game(plugin, this, target);
+
+        } else {
+            game.setWorld(target);
+            gameWorld = target;
+        }
+
+        for (OfflinePlayer offline : players.getOfflinePlayers()) {
+            if (!offline.isOnline()) {
+                players.remove(offline);
+            }
+            Player player = offline.getPlayer();
+            new DGamePlayer(plugin, player, target);
+        }
+        return true;
+    }
+
     /**
      * The group finishs the dungeon.
      */

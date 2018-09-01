@@ -33,11 +33,13 @@ public class JoinSign extends GlobalProtection {
 
     protected Dungeon dungeon;
     protected int maxElements;
+    protected int startIfElementsAtLeast = -1;
     protected Block startSign;
     protected int verticalSigns;
     protected Set<Block> blocks;
+    protected boolean loadedWorld;
 
-    protected JoinSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxElements) {
+    protected JoinSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxElements, int startIfElementsAtLeast) {
         super(plugin, startSign.getWorld(), id);
 
         this.startSign = startSign;
@@ -52,6 +54,9 @@ public class JoinSign extends GlobalProtection {
         verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
 
         this.maxElements = maxElements;
+        if (startIfElementsAtLeast > 0 && startIfElementsAtLeast <= maxElements) {
+            this.startIfElementsAtLeast = startIfElementsAtLeast;
+        }
 
         update();
     }
@@ -78,10 +83,33 @@ public class JoinSign extends GlobalProtection {
     }
 
     /**
-     * @param maxElements the maximum element count per sign
+     * @param amount the maximum element count per sign
      */
-    public void setMaxElements(int maxElements) {
-        this.maxElements = maxElements;
+    public void setMaxElements(int amount) {
+        maxElements = amount;
+    }
+
+    /**
+     * Returns the minimum amount of elements required to start the dungeon countdown
+     *
+     * @return the minimum amount of elements required to start the dungeon countdown;<br>
+     * -1 if the dungeon is not instantiated only through the sign.
+     */
+    public int getStartIfElementsAtLeastAmount() {
+        return startIfElementsAtLeast;
+    }
+
+    /**
+     * Sets the minimum amount of elements required to start the dungeon countdown
+     *
+     * @param amount the amount to set
+     */
+    public void setStartIfElementsAtLeastAmount(int amount) {
+        if ((amount > 0 || amount == -1) && amount < maxElements) {
+            startIfElementsAtLeast = amount;
+        } else {
+            throw new IllegalArgumentException("startIfElementsAtLeastAmount is < 0 or < maxElements");
+        }
     }
 
     @Override

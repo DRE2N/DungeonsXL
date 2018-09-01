@@ -45,8 +45,8 @@ public class GameSign extends JoinSign {
 
     private Game game;
 
-    public GameSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxGroupsPerGame) {
-        super(plugin, id, startSign, identifier, maxGroupsPerGame);
+    public GameSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxGroupsPerGame, int startIfElementsAtLeast) {
+        super(plugin, id, startSign, identifier, maxGroupsPerGame, startIfElementsAtLeast);
     }
 
     /**
@@ -76,9 +76,15 @@ public class GameSign extends JoinSign {
         Sign sign = (Sign) startSign.getState();
 
         if (game == null || game.getDGroups().isEmpty()) {
+            loadedWorld = false;
             sign.setLine(0, DMessage.SIGN_GLOBAL_NEW_GAME.getMessage());
             sign.update();
             return;
+        }
+
+        if (game.getDGroups().size() >= startIfElementsAtLeast && startIfElementsAtLeast != -1) {
+            loadedWorld = true;
+            game.getDGroups().forEach(g -> g.teleport());
         }
 
         if (game.getDGroups().get(0).isPlaying()) {
@@ -122,6 +128,7 @@ public class GameSign extends JoinSign {
             config.set(preString + ".dungeon", dungeon.getName());
         }
         config.set(preString + ".maxGroupsPerGame", maxElements);
+        config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
     }
 
     public void onPlayerInteract(Block block, Player player) {
@@ -209,12 +216,17 @@ public class GameSign extends JoinSign {
         }
 
         String identifier = event.getLine(2);
-        int maxGroupsPerGame = NumberUtil.parseInt(event.getLine(3), 1);
+        String[] data = event.getLine(3).split(",");
+        int maxGroupsPerGame = NumberUtil.parseInt(data[0], 1);
+        int startIfElementsAtLeast = -1;
+        if (data.length > 1) {
+            startIfElementsAtLeast = NumberUtil.parseInt(data[1], -1);
+        }
 
-        return tryToCreate(plugin, event.getBlock(), identifier, maxGroupsPerGame);
+        return tryToCreate(plugin, event.getBlock(), identifier, maxGroupsPerGame, startIfElementsAtLeast);
     }
 
-    public static GameSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxGroupsPerGame) {
+    public static GameSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxGroupsPerGame, int startIfElementsAtLeast) {
         World world = startSign.getWorld();
         BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
         int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
@@ -231,7 +243,7 @@ public class GameSign extends JoinSign {
 
             verticalSigns--;
         }
-        GameSign sign = new GameSign(plugin, plugin.getGlobalProtectionCache().generateId(GameSign.class, world), startSign, identifier, maxGroupsPerGame);
+        GameSign sign = new GameSign(plugin, plugin.getGlobalProtectionCache().generateId(GameSign.class, world), startSign, identifier, maxGroupsPerGame, startIfElementsAtLeast);
 
         LWCUtil.removeProtection(startSign);
 

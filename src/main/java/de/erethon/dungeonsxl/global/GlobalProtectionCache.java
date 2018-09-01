@@ -185,9 +185,10 @@ public class GlobalProtectionCache {
                     if (data.contains(preString)) {
                         String mapName = data.getString(preString + ".dungeon");
                         int maxGroupsPerGame = data.getInt(preString + ".maxGroupsPerGame");
+                        int startIfElementsAtLeast = data.getInt(preString + ".startIfElementsAtLeast");
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GameSign(plugin, id, startSign, mapName, maxGroupsPerGame);
+                        new GameSign(plugin, id, startSign, mapName, maxGroupsPerGame, startIfElementsAtLeast);
                     }
 
                 } while (data.contains(preString));
@@ -205,9 +206,10 @@ public class GlobalProtectionCache {
                         String mapName = data.getString(preString + ".dungeon");
                         String groupName = data.getString(preString + ".groupName");
                         int maxPlayersPerGroup = data.getInt(preString + ".maxPlayersPerGroup");
+                        int startIfElementsAtLeast = data.getInt(preString + ".startIfElementsAtLeast");
                         Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
 
-                        new GroupSign(plugin, id, startSign, mapName, maxPlayersPerGroup, groupName);
+                        new GroupSign(plugin, id, startSign, mapName, maxPlayersPerGroup, startIfElementsAtLeast, groupName);
                     }
                 } while (data.contains(preString));
             }
