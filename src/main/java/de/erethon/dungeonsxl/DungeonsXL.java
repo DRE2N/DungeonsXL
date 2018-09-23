@@ -212,7 +212,7 @@ public class DungeonsXL extends DREPlugin {
 
     public void loadConfig() {
         messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, "english.yml"));
-        globalData = new GlobalData(new File(getDataFolder(), "data.yml"));
+        globalData = new GlobalData(this, new File(getDataFolder(), "data.yml"));
         mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
         messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
     }

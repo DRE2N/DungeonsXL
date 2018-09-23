@@ -22,8 +22,10 @@ import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -56,6 +58,37 @@ public class JoinSign extends GlobalProtection {
         this.maxElements = maxElements;
         if (startIfElementsAtLeast > 0 && startIfElementsAtLeast <= maxElements) {
             this.startIfElementsAtLeast = startIfElementsAtLeast;
+        }
+
+        update();
+    }
+
+    protected JoinSign(DungeonsXL plugin, World world, int id, ConfigurationSection config) {
+        super(plugin, world, id);
+
+        startSign = world.getBlockAt(config.getInt("x"), config.getInt("y"), config.getInt("z"));
+        String identifier = config.getString("dungeon");
+        dungeon = plugin.getDungeonCache().getByName(identifier);
+        if (dungeon == null) {
+            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(identifier);
+            if (resource != null) {
+                dungeon = new Dungeon(plugin, resource);
+            }
+        }
+
+        verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
+
+        // LEGACY
+        if (config.contains("maxElements")) {
+            maxElements = config.getInt("maxElements");
+        } else if (config.contains("maxGroupsPerGame")) {
+            maxElements = config.getInt("maxGroupsPerGame");
+        } else if (config.contains("maxPlayersPerGroup")) {
+            maxElements = config.getInt("maxPlayersPerGroup");
+        }
+
+        if (startIfElementsAtLeast > 0 && startIfElementsAtLeast <= maxElements) {
+            startIfElementsAtLeast = config.getInt("startIfElementsAtLeast");
         }
 
         update();
@@ -159,6 +192,16 @@ public class JoinSign extends GlobalProtection {
 
     @Override
     public void save(FileConfiguration config) {
+        String preString = "protections.groupSigns." + getWorld().getName() + "." + getId();
+
+        config.set(preString + ".x", startSign.getX());
+        config.set(preString + ".y", startSign.getY());
+        config.set(preString + ".z", startSign.getZ());
+        if (dungeon != null) {
+            config.set(preString + ".dungeon", dungeon.getName());
+        }
+        config.set(preString + ".maxElements", maxElements);
+        config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
     }
 
 }

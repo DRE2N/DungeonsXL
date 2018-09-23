@@ -29,7 +29,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.material.Attachable;
@@ -47,6 +47,10 @@ public class GameSign extends JoinSign {
 
     public GameSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxGroupsPerGame, int startIfElementsAtLeast) {
         super(plugin, id, startSign, identifier, maxGroupsPerGame, startIfElementsAtLeast);
+    }
+
+    public GameSign(DungeonsXL plugin, World world, int id, ConfigurationSection config) {
+        super(plugin, world, id, config);
     }
 
     /**
@@ -115,20 +119,6 @@ public class GameSign extends JoinSign {
         }
 
         sign.update();
-    }
-
-    @Override
-    public void save(FileConfiguration config) {
-        String preString = "protections.gameSigns." + getWorld().getName() + "." + getId();
-
-        config.set(preString + ".x", startSign.getX());
-        config.set(preString + ".y", startSign.getY());
-        config.set(preString + ".z", startSign.getZ());
-        if (dungeon != null) {
-            config.set(preString + ".dungeon", dungeon.getName());
-        }
-        config.set(preString + ".maxGroupsPerGame", maxElements);
-        config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
     }
 
     public void onPlayerInteract(Block block, Player player) {

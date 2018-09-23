@@ -28,6 +28,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
@@ -48,6 +49,11 @@ public class GroupSign extends JoinSign {
     public GroupSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxPlayersPerGroup, int startIfElementsAtLeast, String groupName) {
         super(plugin, id, startSign, identifier, maxPlayersPerGroup, startIfElementsAtLeast);
         this.groupName = groupName;
+    }
+
+    public GroupSign(DungeonsXL plugin, World world, int id, ConfigurationSection config) {
+        super(plugin, world, id, config);
+        groupName = config.getString("groupName");
     }
 
     /**
@@ -120,17 +126,9 @@ public class GroupSign extends JoinSign {
 
     @Override
     public void save(FileConfiguration config) {
+        super.save(config);
         String preString = "protections.groupSigns." + getWorld().getName() + "." + getId();
-
-        config.set(preString + ".x", startSign.getX());
-        config.set(preString + ".y", startSign.getY());
-        config.set(preString + ".z", startSign.getZ());
-        if (dungeon != null) {
-            config.set(preString + ".dungeon", dungeon.getName());
-        }
         config.set(preString + ".groupName", groupName);
-        config.set(preString + ".maxPlayersPerGroup", maxElements);
-        config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
     }
 
     public void onPlayerInteract(Block block, Player player) {

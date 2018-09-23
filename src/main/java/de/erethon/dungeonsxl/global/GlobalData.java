@@ -17,7 +17,11 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.commons.config.DREConfig;
+import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Represents the global data.yml.
@@ -26,10 +30,14 @@ import java.io.File;
  */
 public class GlobalData extends DREConfig {
 
+    private DungeonsXL plugin;
+
     public static final int CONFIG_VERSION = 2;
 
-    public GlobalData(File file) {
+    public GlobalData(DungeonsXL plugin, File file) {
         super(file, CONFIG_VERSION);
+
+        this.plugin = plugin;
 
         if (initialize) {
             initialize();
@@ -44,7 +52,27 @@ public class GlobalData extends DREConfig {
 
     @Override
     public void load() {
-        // Load?
+        for (World world : Bukkit.getWorlds()) {
+            ConfigurationSection gameSigns = config.getConfigurationSection("protections.gameSigns." + world.getName());
+            ConfigurationSection groupSigns = config.getConfigurationSection("protections.groupSigns." + world.getName());
+            if (gameSigns == null && groupSigns == null) {
+                continue;
+            }
+
+            int i = 0;
+            while (true) {
+                String key = String.valueOf("i");
+                if (gameSigns != null && gameSigns.contains(key)) {
+                    new GameSign(plugin, world, i, gameSigns.getConfigurationSection(key));
+                }
+                if (groupSigns != null && groupSigns.contains(key)) {
+                    new GroupSign(plugin, world, i, groupSigns.getConfigurationSection(key));
+
+                } else if ((gameSigns == null || !gameSigns.contains(key)) && (groupSigns == null || !groupSigns.contains(key))) {
+                    break;
+                }
+            }
+        }
     }
 
 }
