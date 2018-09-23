@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.SimpleDateUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -29,8 +30,6 @@ import de.erethon.dungeonsxl.reward.LevelReward;
 import de.erethon.dungeonsxl.reward.MoneyReward;
 import de.erethon.dungeonsxl.reward.Reward;
 import de.erethon.dungeonsxl.reward.RewardTypeDefault;
-import net.milkbowl.vault.item.ItemInfo;
-import net.milkbowl.vault.item.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -197,33 +196,18 @@ public class RewardChest extends GameBlock {
             if (itemReward != null) {
                 String msg = "";
                 for (ItemStack itemStack : itemReward) {
-
                     if (itemStack == null) {
                         continue;
                     }
-
                     String name = null;
-
                     if (itemStack.hasItemMeta()) {
                         if (itemStack.getItemMeta().hasDisplayName()) {
                             name = itemStack.getItemMeta().getDisplayName();
                         }
                     }
-
                     if (name == null) {
-                        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-                            ItemInfo itemInfo = Items.itemByStack(itemStack);
-                            if (itemInfo != null) {
-                                name = itemInfo.getName();
-                            } else {
-                                name = itemStack.getType().name();
-                            }
-
-                        } else {
-                            name = itemStack.getType().toString();
-                        }
+                        name = VanillaItem.get(itemStack.getType()).getNewName().replace("_", " ");
                     }
-
                     msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
                 }
 
