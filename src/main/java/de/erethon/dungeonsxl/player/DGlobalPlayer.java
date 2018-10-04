@@ -350,8 +350,10 @@ public class DGlobalPlayer implements PlayerWrapper {
                 player.setExp(data.getOldExp());
                 if (is1_9) {
                     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(data.getOldMaxHealth());
+                    player.setHealth(data.getOldHealth() <= data.getOldMaxHealth() ? data.getOldHealth() : data.getOldMaxHealth());
+                } else {
+                    player.setHealth(player.getMaxHealth());
                 }
-                player.setHealth(data.getOldHealth() <= data.getOldMaxHealth() ? data.getOldHealth() : data.getOldMaxHealth());
                 player.setFoodLevel(data.getOldFoodLevel());
                 player.setGameMode(data.getOldGameMode());
                 player.setFireTicks(data.getOldFireTicks());
