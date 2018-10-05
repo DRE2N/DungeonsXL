@@ -57,13 +57,12 @@ public class StatusCommand extends DCommand {
         String dungeonsxlVersion = plugin.getDescription().getVersion();
 
         String internalsVersionCorrect = getSymbol(plugin.getSettings().getInternals().contains(compat.getInternals()));
-        String bukkitVersionCorrect = getSymbol(bukkitVersion.contains("Spigot"));
         String dungeonsxlVersionCorrect = getSymbol(!dungeonsxlVersion.contains("SNAPSHOT"));
 
         MessageUtil.sendCenteredMessage(sender, "&4&l=> &6STATUS &4&l<=");
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Version info:");
         MessageUtil.sendMessage(sender, "= Minecraft: " + minecraftVersion + " " + internalsVersionCorrect);
-        MessageUtil.sendMessage(sender, "= Bukkit: " + bukkitVersion + " " + bukkitVersionCorrect);
+        MessageUtil.sendMessage(sender, "= Bukkit: " + bukkitVersion + " " + internalsVersionCorrect);
         MessageUtil.sendMessage(sender, "= Internals (package version): " + internalsVersion + " " + internalsVersionCorrect);
         MessageUtil.sendMessage(sender, "= DungeonsXL: " + dungeonsxlVersion + " " + dungeonsxlVersionCorrect);
 
@@ -114,16 +113,16 @@ public class StatusCommand extends DCommand {
             holographicdisplaysVersion = holographicdisplays.getDescription().getVersion();
         }
 
-        String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.6"));
+        String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.7"));
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
         String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
         String commandsxlVersionCorrect = getSymbol(commandsxlVersion.startsWith("2.1"));
-        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals("0.4.5"));
+        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals("0.5.2"));
         String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));
         String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
         String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("3."));
         String mythicmobsVersionCorrect = getSymbol(mythicmobsVersion.startsWith("4."));
-        String holographicdisplaysVersionCorrect = getSymbol(holographicdisplaysVersion.startsWith("2.2"));
+        String holographicdisplaysVersionCorrect = getSymbol(holographicdisplaysVersion.startsWith("2.3"));
 
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Dependency info:");
         MessageUtil.sendMessage(sender, "= Vault: " + vaultVersion + " " + vaultVersionCorrect);

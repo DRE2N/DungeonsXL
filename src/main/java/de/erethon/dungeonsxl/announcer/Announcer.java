@@ -18,7 +18,9 @@ package de.erethon.dungeonsxl.announcer;
 
 import de.erethon.commons.chat.DefaultFontInfo;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.chat.chat.BaseComponent;
+import de.erethon.commons.chat.chat.ClickEvent;
+import de.erethon.commons.chat.chat.TextComponent;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
@@ -31,9 +33,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -319,23 +318,18 @@ public class Announcer {
             MessageUtil.sendCenteredMessage(player, message);
         }
 
-        if (CompatibilityHandler.getInstance().isSpigot()) {
-            ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl join " + name);
+        ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl join " + name);
 
-            BaseComponent[] message = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', DMessage.ANNOUNCER_CLICK.getMessage()));
-            for (BaseComponent slice : message) {
-                slice.setClickEvent(onClick);
-            }
-
-            TextComponent center = new TextComponent(DefaultFontInfo.center(BaseComponent.toPlainText(message)).replaceAll(BaseComponent.toPlainText(message), ""));
-
-            ArrayList<BaseComponent> toSend = new ArrayList<>(Arrays.asList(message));
-            toSend.add(0, center);
-            player.spigot().sendMessage(toSend.toArray(new BaseComponent[]{}));
-
-        } else {
-            MessageUtil.sendCenteredMessage(player, DMessage.ANNOUNCER_CMD.getMessage(getName().toUpperCase()));
+        BaseComponent[] message = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', DMessage.ANNOUNCER_CLICK.getMessage()));
+        for (BaseComponent slice : message) {
+            slice.setClickEvent(onClick);
         }
+
+        TextComponent center = new TextComponent(DefaultFontInfo.center(BaseComponent.toPlainText(message)).replaceAll(BaseComponent.toPlainText(message), ""));
+
+        ArrayList<BaseComponent> toSend = new ArrayList<>(Arrays.asList(message));
+        toSend.add(0, center);
+        MessageUtil.sendMessage(player, toSend.toArray(new BaseComponent[]{}));
     }
 
     /**

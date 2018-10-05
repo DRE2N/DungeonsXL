@@ -17,7 +17,8 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.commons.chat.chat.ClickEvent;
+import de.erethon.commons.chat.chat.TextComponent;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -25,8 +26,6 @@ import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -54,7 +53,7 @@ public class DeleteCommand extends DCommand {
             return;
         }
 
-        if (args.length == 2 && CompatibilityHandler.getInstance().isSpigot() && sender instanceof Player) {
+        if (args.length == 2 && sender instanceof Player) {
             ClickEvent onClickConfirm = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl delete " + args[1] + " true");
             TextComponent confirm = new TextComponent(DMessage.MISC_YES.getMessage());
             confirm.setClickEvent(onClickConfirm);
@@ -64,7 +63,7 @@ public class DeleteCommand extends DCommand {
             deny.setClickEvent(onClickDeny);
 
             MessageUtil.sendMessage(sender, DMessage.CMD_DELETE_BACKUPS.getMessage());
-            ((Player) sender).spigot().sendMessage(confirm, new TextComponent(" "), deny);
+            MessageUtil.sendMessage(sender, confirm, new TextComponent(" "), deny);
 
             return;
         }

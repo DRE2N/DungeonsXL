@@ -106,22 +106,13 @@ public class DungeonsXL extends DREPlugin {
     private CopyOnWriteArrayList<DGroup> dGroups = new CopyOnWriteArrayList<>();
 
     public DungeonsXL() {
-        /*
-         * ##########################
-         * ####~DREPluginSettings~###
-         * ##########################
-         * #~Internals~##~~v1_8_R3+~#
-         * #~SpigotAPI~##~~~~true~~~#
-         * #~PaperAPI~~##~~~false~~~#
-         * #~~~~UUID~~~##~~~~true~~~#
-         * #~~Economy~~##~~~~true~~~#
-         * #Permissions##~~~~true~~~#
-         * #~~Metrics~~##~~~~true~~~#
-         * #Resource ID##~~~~9488~~~#
-         * ##########################
-         */
-
-        settings = new DREPluginSettings(true, false, true, true, true, true, 9488, Internals.andHigher(Internals.v1_8_R3));
+        settings = DREPluginSettings.builder()
+                .internals(Internals.andHigher(Internals.v1_8_R3))
+                .economy(true)
+                .permissions(true)
+                .metrics(true)
+                .spigotMCResourceId(9488)
+                .build();
     }
 
     @Override

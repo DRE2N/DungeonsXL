@@ -18,6 +18,8 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.DefaultFontInfo;
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.chat.chat.ClickEvent;
+import de.erethon.commons.chat.chat.TextComponent;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -26,8 +28,6 @@ import de.erethon.dungeonsxl.event.DataReloadEvent;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import java.util.List;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,7 +58,7 @@ public class ReloadCommand extends DCommand {
             String message = DefaultFontInfo.center(DMessage.MISC_OKAY.getMessage());
             TextComponent text = new TextComponent(message);
             text.setClickEvent(onClick);
-            ((Player) sender).spigot().sendMessage(text);
+            MessageUtil.sendMessage(sender, text);
             return;
         }
 

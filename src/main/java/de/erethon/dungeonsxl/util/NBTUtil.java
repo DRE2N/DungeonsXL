@@ -17,8 +17,6 @@
 package de.erethon.dungeonsxl.util;
 
 import static de.erethon.commons.misc.ReflectionUtil.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -30,20 +28,6 @@ public class NBTUtil {
 
     public static final String DUNGEON_ITEM_KEY = "DungeonItem";
 
-    private static Method HAS_KEY;
-    private static Method REMOVE;
-    private static Method SET_BOOLEAN;
-
-    static {
-        try {
-            HAS_KEY = NBT_TAG_COMPOUND.getDeclaredMethod("hasKey", String.class);
-            REMOVE = NBT_TAG_COMPOUND.getDeclaredMethod("remove", String.class);
-            SET_BOOLEAN = NBT_TAG_COMPOUND.getDeclaredMethod("setBoolean", String.class, boolean.class);
-        } catch (NoSuchMethodException | SecurityException exception) {
-            exception.printStackTrace();
-        }
-    }
-
     /**
      * Returns the NBT data of an ItemStack
      *
@@ -51,12 +35,7 @@ public class NBTUtil {
      * @return the NBT data of the ItemStack
      */
     public static Object getTag(ItemStack item) {
-        try {
-            return ITEM_STACK_GET_TAG.invoke(CRAFT_ITEM_STACK_AS_NMS_COPY.invoke(null, item));
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            exception.printStackTrace();
-            return null;
-        }
+        return invoke(ITEM_STACK_GET_TAG, invoke(CRAFT_ITEM_STACK_AS_NMS_COPY, null, item));
     }
 
     /**
@@ -65,12 +44,7 @@ public class NBTUtil {
      * @return a new NBTTagCompound
      */
     public static Object createTag() {
-        try {
-            return NBT_TAG_COMPOUND.newInstance();
-        } catch (IllegalAccessException | InstantiationException exception) {
-            exception.printStackTrace();
-            return null;
-        }
+        return newInstance(NBT_TAG_COMPOUND);
     }
 
     /**
@@ -81,14 +55,9 @@ public class NBTUtil {
      * @return a new copy of the Bukkit ItemStack with the applied changes
      */
     public static ItemStack setTag(ItemStack item, Object tag) {
-        try {
-            Object nmsStack = CRAFT_ITEM_STACK_AS_NMS_COPY.invoke(null, item);
-            ITEM_STACK_SET_TAG.invoke(nmsStack, tag);
-            return (ItemStack) CRAFT_ITEM_STACK_AS_BUKKIT_COPY.invoke(null, nmsStack);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            exception.printStackTrace();
-            return null;
-        }
+        Object nmsStack = invoke(CRAFT_ITEM_STACK_AS_NMS_COPY, null, item);
+        invoke(ITEM_STACK_SET_TAG, nmsStack, tag);
+        return (ItemStack) invoke(CRAFT_ITEM_STACK_AS_BUKKIT_COPY, null, nmsStack);
     }
 
     /**
@@ -99,12 +68,7 @@ public class NBTUtil {
      * @return if the NBTTagCompound contains the key
      */
     public static boolean hasKey(Object tag, String key) {
-        try {
-            return (boolean) HAS_KEY.invoke(tag, key);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            exception.printStackTrace();
-            return false;
-        }
+        return (boolean) invoke(NBT_TAG_COMPOUND_HAS_KEY, tag, key);
     }
 
     /**
@@ -115,11 +79,7 @@ public class NBTUtil {
      * @param value the value to add
      */
     public static void addBoolean(Object tag, String key, boolean value) {
-        try {
-            SET_BOOLEAN.invoke(tag, key, value);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            exception.printStackTrace();
-        }
+        invoke(NBT_TAG_COMPOUND_SET_BOOLEAN, tag, key, value);
     }
 
     /**
@@ -129,11 +89,7 @@ public class NBTUtil {
      * @param key the key to remove
      */
     public static void removeKey(Object tag, String key) {
-        try {
-            REMOVE.invoke(tag, key);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            exception.printStackTrace();
-        }
+        invoke(NBT_TAG_COMPOUND_REMOVE, tag, key);
     }
 
     /**

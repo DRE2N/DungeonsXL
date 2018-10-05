@@ -27,7 +27,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public enum DMessage implements Message {
 
-    ANNOUNCER_CMD("Announcer_Cmd", "&4&l=> &6USE &4/DXL JOIN &v1 &6TO JOIN &4&l<="),
     ANNOUNCER_CLICK("Announcer_Click", "&4&l=> &6CLICK HERE TO JOIN &4&l<="),
     CMD_BREAK_PROTECTED_MODE("Cmd_Break_ProtectedMode", "&6You may not break blocks protected by DungeonsXL anymore."),
     CMD_BREAK_BREAK_MODE("Cmd_Break_BreakMode", "&6You may break a block protected by DungeonsXL."),

@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.command.DRECommand;
 import de.erethon.commons.command.DRECommandCache;
-import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.dungeonsxl.DungeonsXL;
 
 /**
@@ -87,7 +86,7 @@ public class DCommandCache extends DRECommandCache {
         message = new MsgCommand(plugin);
         play = new PlayCommand(plugin);
         portal = new PortalCommand(plugin);
-        reload = CompatibilityHandler.getInstance().isSpigot() ? new ReloadCommand(plugin) : new ReloadCommandNoSpigot(plugin);
+        reload = new ReloadCommand(plugin);
         rename = new RenameCommand(plugin);
         resourcePack = new ResourcePackCommand(plugin);
         save = new SaveCommand(plugin);

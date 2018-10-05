@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.util;
 
 import de.erethon.commons.misc.ReflectionUtil;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.bukkit.block.Block;
 
@@ -37,10 +36,7 @@ public class MagicValueUtil {
     }
 
     public static void setBlockData(Block block, byte data) {
-        try {
-            CRAFT_BLOCK_SET_DATA.invoke(block, data);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-        }
+        ReflectionUtil.invoke(CRAFT_BLOCK_SET_DATA, block, data);
     }
 
 }
