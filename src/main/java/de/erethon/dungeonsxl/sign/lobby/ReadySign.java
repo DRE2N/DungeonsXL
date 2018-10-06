@@ -34,19 +34,19 @@ import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class ReadySign extends DSign {
-    
+
     private DSignType type = DSignTypeDefault.READY;
-    
+
     private GameType gameType;
     private double autoStart = -1;
     private boolean triggered = false;
-    
+    private ProgressBar bar;
+
     public ReadySign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -78,101 +78,103 @@ public class ReadySign extends DSign {
     public void setTimeToAutoStart(double time) {
         autoStart = time;
     }
-    
+
     @Override
     public boolean check() {
         return true;
     }
-    
+
     @Override
     public void onInit() {
         if (plugin.getGameTypeCache().getBySign(this) != null) {
             gameType = plugin.getGameTypeCache().getBySign(this);
-            
+
         } else {
             gameType = GameTypeDefault.CUSTOM;
         }
-        
+
         if (!lines[2].isEmpty()) {
             autoStart = NumberUtil.parseDouble(lines[2], -1);
         }
-        
+
         if (!getTriggers().isEmpty()) {
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
             return;
         }
-        
+
         InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), getGameWorld());
         if (trigger != null) {
             trigger.addListener(this);
             addTrigger(trigger);
         }
-        
+
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
         getSign().setLine(1, DMessage.SIGN_READY.getMessage());
         getSign().setLine(2, ChatColor.DARK_RED + gameType.getSignName());
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
     }
-    
+
     @Override
     public boolean onPlayerTrigger(Player player) {
         ready(DGamePlayer.getByPlayer(player));
-        
+
         if (!triggered && autoStart >= 0) {
             triggered = true;
-            
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    onTrigger();
-                }
-            }.runTaskLater(plugin, (long) (autoStart * 20));
-            
+
             if (!DGroup.getByPlayer(player).isPlaying()) {
-                new ProgressBar(getGame().getPlayers(), (int) Math.ceil(autoStart)).send(plugin);
+                bar = new ProgressBar(getGame().getPlayers(), (int) Math.ceil(autoStart)) {
+                    @Override
+                    public void onFinish() {
+                        onTrigger();
+                    }
+                };
+                bar.send(plugin);
             }
         }
-        
+
         return true;
     }
-    
+
     @Override
     public void onTrigger() {
         if (getGame() == null) {
             return;
         }
-        
+
+        if (bar != null) {
+            bar.cancel();
+        }
+
         for (Player player : getGame().getPlayers()) {
             ready(DGamePlayer.getByPlayer(player));
         }
     }
-    
+
     private void ready(DGamePlayer dPlayer) {
-        if (dPlayer == null) {
+        if (dPlayer == null || dPlayer.isReady()) {
             return;
         }
-        
-        if (dPlayer.isReady()) {
-            return;
-        }
-        
+
         if (getGameWorld().getClassesSigns().isEmpty() || dPlayer.getDClass() != null) {
             GameType forced = null;
             if (getGameWorld().getConfig() != null) {
                 forced = getGameWorld().getConfig().getForcedGameType();
             }
-            dPlayer.ready(forced == null ? gameType : forced);
+            boolean ready = dPlayer.ready(forced == null ? gameType : forced);
+            if (ready && bar != null) {
+                bar.cancel();
+            }
         }
-        
+
         if (dPlayer.isReady()) {
             MessageUtil.sendMessage(dPlayer.getPlayer(), (dPlayer.isReady() ? DMessage.PLAYER_READY : DMessage.ERROR_READY).getMessage());
         }
     }
-    
+
     @Override
     public DSignType getType() {
         return type;
     }
-    
+
 }

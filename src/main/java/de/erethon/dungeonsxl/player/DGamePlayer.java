@@ -692,9 +692,9 @@ public class DGamePlayer extends DInstancePlayer {
         ready(GameTypeDefault.DEFAULT);
     }
 
-    public void ready(GameType gameType) {
+    public boolean ready(GameType gameType) {
         if (getDGroup() == null) {
-            return;
+            return false;
         }
 
         Game game = Game.getByGameWorld(dGroup.getGameWorld());
@@ -708,21 +708,24 @@ public class DGamePlayer extends DInstancePlayer {
 
         if (!checkRequirements(game)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_REQUIREMENTS.getMessage());
-            return;
+            return false;
         }
 
         ready = true;
 
+        boolean start = true;
         for (DGroup gameGroup : game.getDGroups()) {
             if (!gameGroup.isPlaying()) {
-                gameGroup.startGame(game);
-
+                if (!gameGroup.startGame(game)) {
+                    start = false;
+                }
             } else {
                 respawn();
             }
         }
 
         game.setStarted(true);
+        return start;
     }
 
     public void respawn() {

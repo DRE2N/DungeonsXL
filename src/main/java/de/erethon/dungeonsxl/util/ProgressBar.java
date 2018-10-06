@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.util;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.javaplugin.DREPlugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -83,10 +82,17 @@ public class ProgressBar extends BukkitRunnable {
         }
 
         if (secondsLeft == 0) {
+            onFinish();
             cancel();
         } else {
             secondsLeft--;
         }
+    }
+
+    /**
+     * Method to override to set actions when no seconds are left.
+     */
+    public void onFinish() {
     }
 
     /**

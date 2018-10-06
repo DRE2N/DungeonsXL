@@ -758,9 +758,9 @@ public class DGroup {
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
     }
 
-    public void startGame(Game game) {
+    public boolean startGame(Game game) {
         if (game == null) {
-            return;
+            return false;
         }
         game.fetchRules();
         GameRuleProvider rules = game.getRules();
@@ -788,7 +788,7 @@ public class DGroup {
             }
 
             if (!ready) {
-                return;
+                return false;
             }
         }
 
@@ -796,7 +796,7 @@ public class DGroup {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            return;
+            return false;
         }
 
         playing = true;
@@ -872,6 +872,7 @@ public class DGroup {
         nextFloor = null;
         initialLives = rules.getInitialGroupLives();
         lives = initialLives;
+        return true;
     }
 
     public void winGame() {
