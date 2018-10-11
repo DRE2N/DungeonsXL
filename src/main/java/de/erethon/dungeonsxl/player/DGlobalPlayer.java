@@ -364,7 +364,7 @@ public class DGlobalPlayer implements PlayerWrapper {
                 player.addPotionEffects(data.getOldPotionEffects());
 
             } else {
-                for (ItemStack item : player.getInventory().getStorageContents()) {
+                for (ItemStack item : player.getInventory().getContents()) {
                     if (item == null) {
                         continue;
                     }

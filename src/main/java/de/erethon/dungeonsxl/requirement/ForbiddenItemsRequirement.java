@@ -61,7 +61,7 @@ public class ForbiddenItemsRequirement extends Requirement {
 
     @Override
     public boolean check(Player player) {
-        for (ItemStack item : player.getInventory().getStorageContents()) {
+        for (ItemStack item : player.getInventory().getContents()) {
             if (item == null) {
                 continue;
             }

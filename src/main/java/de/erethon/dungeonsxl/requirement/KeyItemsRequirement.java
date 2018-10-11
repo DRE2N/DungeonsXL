@@ -63,7 +63,7 @@ public class KeyItemsRequirement extends Requirement {
     @Override
     public boolean check(Player player) {
         List<ExItem> keyItems = new ArrayList<>(this.keyItems);
-        for (ItemStack item : player.getInventory().getStorageContents()) {
+        for (ItemStack item : player.getInventory().getContents()) {
             if (item == null) {
                 continue;
             }
