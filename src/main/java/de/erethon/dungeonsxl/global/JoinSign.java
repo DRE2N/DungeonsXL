@@ -76,8 +76,6 @@ public class JoinSign extends GlobalProtection {
             }
         }
 
-        verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
-
         // LEGACY
         if (config.contains("maxElements")) {
             maxElements = config.getInt("maxElements");
@@ -86,6 +84,8 @@ public class JoinSign extends GlobalProtection {
         } else if (config.contains("maxPlayersPerGroup")) {
             maxElements = config.getInt("maxPlayersPerGroup");
         }
+
+        verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
 
         if (startIfElementsAtLeast > 0 && startIfElementsAtLeast <= maxElements) {
             startIfElementsAtLeast = config.getInt("startIfElementsAtLeast");
@@ -138,7 +138,7 @@ public class JoinSign extends GlobalProtection {
      * @param amount the amount to set
      */
     public void setStartIfElementsAtLeastAmount(int amount) {
-        if ((amount > 0 || amount == -1) && amount < maxElements) {
+        if ((amount > 0 || amount == -1) && amount <= maxElements) {
             startIfElementsAtLeast = amount;
         } else {
             throw new IllegalArgumentException("startIfElementsAtLeastAmount is < 0 or < maxElements");
@@ -201,7 +201,9 @@ public class JoinSign extends GlobalProtection {
             config.set(preString + ".dungeon", dungeon.getName());
         }
         config.set(preString + ".maxElements", maxElements);
-        config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
+        if (startIfElementsAtLeast != -1) {
+            config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
+        }
     }
 
 }

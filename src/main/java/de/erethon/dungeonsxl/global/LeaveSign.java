@@ -26,8 +26,11 @@ import de.erethon.dungeonsxl.util.LWCUtil;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -40,16 +43,25 @@ public class LeaveSign extends GlobalProtection {
 
     public static final String LEAVE_SIGN_TAG = "Leave";
 
-    private Sign sign;
+    private Block sign;
     private Set<Block> blocks;
 
     public LeaveSign(DungeonsXL plugin, int id, Sign sign) {
         super(plugin, sign.getWorld(), id);
 
-        this.sign = sign;
+        this.sign = sign.getBlock();
         setText();
 
         LWCUtil.removeProtection(sign.getBlock());
+    }
+
+    public LeaveSign(DungeonsXL plugin, World world, int id, ConfigurationSection config) {
+        super(plugin, world, id);
+
+        sign = world.getBlockAt(config.getInt("x"), config.getInt("y"), config.getInt("z"));
+        setText();
+
+        LWCUtil.removeProtection(sign);
     }
 
     /* Getters and setters */
@@ -58,8 +70,8 @@ public class LeaveSign extends GlobalProtection {
         if (blocks == null) {
             blocks = new HashSet<>();
 
-            blocks.add(sign.getBlock());
-            blocks.add(BlockUtil.getAttachedBlock(sign.getBlock()));
+            blocks.add(sign);
+            blocks.add(BlockUtil.getAttachedBlock(sign));
         }
 
         return blocks;
@@ -67,11 +79,15 @@ public class LeaveSign extends GlobalProtection {
 
     /* Actions */
     public void setText() {
-        sign.setLine(0, ChatColor.BLUE + "############");
-        sign.setLine(1, DMessage.SIGN_LEAVE.getMessage());
-        sign.setLine(2, "");
-        sign.setLine(3, ChatColor.BLUE + "############");
-        sign.update();
+        BlockState state = sign.getState();
+        if (state instanceof Sign) {
+            Sign sign = (Sign) state;
+            sign.setLine(0, ChatColor.BLUE + "############");
+            sign.setLine(1, DMessage.SIGN_LEAVE.getMessage());
+            sign.setLine(2, "");
+            sign.setLine(3, ChatColor.BLUE + "############");
+            sign.update();
+        }
     }
 
     public void onPlayerInteract(Player player) {

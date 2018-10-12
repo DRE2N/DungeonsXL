@@ -17,8 +17,11 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.commons.config.DREConfig;
+import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
+import java.util.Map.Entry;
+import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -42,7 +45,6 @@ public class GlobalData extends DREConfig {
         if (initialize) {
             initialize();
         }
-        load();
     }
 
     @Override
@@ -55,21 +57,27 @@ public class GlobalData extends DREConfig {
         for (World world : Bukkit.getWorlds()) {
             ConfigurationSection gameSigns = config.getConfigurationSection("protections.gameSigns." + world.getName());
             ConfigurationSection groupSigns = config.getConfigurationSection("protections.groupSigns." + world.getName());
-            if (gameSigns == null && groupSigns == null) {
-                continue;
-            }
-
-            int i = 0;
-            while (true) {
-                String key = String.valueOf("i");
-                if (gameSigns != null && gameSigns.contains(key)) {
-                    new GameSign(plugin, world, i, gameSigns.getConfigurationSection(key));
+            ConfigurationSection leaveSigns = config.getConfigurationSection("protections.leaveSigns." + world.getName());
+            ConfigurationSection portals = config.getConfigurationSection("protections.portals." + world.getName());
+            Random random = new Random();
+            if (gameSigns != null) {
+                for (Entry<String, Object> entry : gameSigns.getValues(false).entrySet()) {
+                    new GameSign(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), gameSigns.getConfigurationSection(entry.getKey()));
                 }
-                if (groupSigns != null && groupSigns.contains(key)) {
-                    new GroupSign(plugin, world, i, groupSigns.getConfigurationSection(key));
-
-                } else if ((gameSigns == null || !gameSigns.contains(key)) && (groupSigns == null || !groupSigns.contains(key))) {
-                    break;
+            }
+            if (groupSigns != null) {
+                for (Entry<String, Object> entry : groupSigns.getValues(false).entrySet()) {
+                    new GroupSign(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), groupSigns.getConfigurationSection(entry.getKey()));
+                }
+            }
+            if (leaveSigns != null) {
+                for (Entry<String, Object> entry : leaveSigns.getValues(false).entrySet()) {
+                    new LeaveSign(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), leaveSigns.getConfigurationSection(entry.getKey()));
+                }
+            }
+            if (portals != null) {
+                for (Entry<String, Object> entry : portals.getValues(false).entrySet()) {
+                    new DPortal(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), portals.getConfigurationSection(entry.getKey()));
                 }
             }
         }

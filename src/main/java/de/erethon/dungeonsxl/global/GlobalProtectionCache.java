@@ -16,18 +16,14 @@
  */
 package de.erethon.dungeonsxl.global;
 
-import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DGroup;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -164,94 +160,6 @@ public class GlobalProtectionCache {
                     groupSign.setGroup(null);
                 }
                 groupSign.update();
-            }
-        }
-    }
-
-    /* SUBJECT TO CHANGE */
-    @Deprecated
-    public void loadAll() {
-        FileConfiguration data = plugin.getGlobalData().getConfig();
-
-        for (World world : Bukkit.getWorlds()) {
-            // GameSigns
-            if (data.contains("protections.gameSigns." + world.getName())) {
-                int id = 0;
-                String preString;
-
-                do {
-                    id++;
-                    preString = "protections.gameSigns." + world.getName() + "." + id + ".";
-                    if (data.contains(preString)) {
-                        String mapName = data.getString(preString + ".dungeon");
-                        int maxGroupsPerGame = data.getInt(preString + ".maxGroupsPerGame");
-                        int startIfElementsAtLeast = data.getInt(preString + ".startIfElementsAtLeast");
-                        Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
-
-                        new GameSign(plugin, id, startSign, mapName, maxGroupsPerGame, startIfElementsAtLeast);
-                    }
-
-                } while (data.contains(preString));
-            }
-
-            // GroupSigns
-            if (data.contains("protections.groupSigns." + world.getName())) {
-                int id = 0;
-                String preString;
-
-                do {
-                    id++;
-                    preString = "protections.groupSigns." + world.getName() + "." + id + ".";
-                    if (data.contains(preString)) {
-                        String mapName = data.getString(preString + ".dungeon");
-                        String groupName = data.getString(preString + ".groupName");
-                        int maxPlayersPerGroup = data.getInt(preString + ".maxPlayersPerGroup");
-                        int startIfElementsAtLeast = data.getInt(preString + ".startIfElementsAtLeast");
-                        Block startSign = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
-
-                        new GroupSign(plugin, id, startSign, mapName, maxPlayersPerGroup, startIfElementsAtLeast, groupName);
-                    }
-                } while (data.contains(preString));
-            }
-
-            if (data.contains("protections.leaveSigns." + world.getName())) {
-
-                int id = 0;
-                String preString;
-
-                do {
-                    id++;
-                    preString = "protections.leaveSigns." + world.getName() + "." + id + ".";
-                    if (data.contains(preString)) {
-                        Block block = world.getBlockAt(data.getInt(preString + ".x"), data.getInt(preString + ".y"), data.getInt(preString + ".z"));
-                        if (block.getState() instanceof Sign) {
-                            Sign sign = (Sign) block.getState();
-                            new LeaveSign(plugin, id, sign);
-                        }
-                    }
-
-                } while (data.contains(preString));
-            }
-
-            // DPortals
-            if (data.contains("protections.portals." + world.getName())) {
-                int id = 0;
-                String preString;
-
-                do {
-                    id++;
-                    preString = "protections.portals." + world.getName() + "." + id + ".";
-
-                    if (data.contains(preString)) {
-                        Block block1 = world.getBlockAt(data.getInt(preString + "loc1.x"), data.getInt(preString + "loc1.y"), data.getInt(preString + "loc1.z"));
-                        Block block2 = world.getBlockAt(data.getInt(preString + "loc2.x"), data.getInt(preString + "loc2.y"), data.getInt(preString + "loc2.z"));
-                        ExItem material = plugin.getCaliburn().getExItem(data.getString(preString + "material"));
-                        String axis = data.getString(preString + "axis");
-                        DPortal dPortal = new DPortal(plugin, id, block1, block2, material != null ? material : VanillaItem.NETHER_PORTAL, (byte) (axis != null && axis.equals("z") ? 2 : 1), true);
-                        dPortal.create(null);
-                    }
-
-                } while (data.contains(preString));
             }
         }
     }

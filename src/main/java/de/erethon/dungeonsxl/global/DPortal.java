@@ -35,6 +35,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -71,6 +72,21 @@ public class DPortal extends GlobalProtection {
         this.material = material;
         this.axis = axis;
         this.active = active;
+    }
+
+    public DPortal(DungeonsXL plugin, World world, int id, ConfigurationSection config) {
+        super(plugin, world, id);
+
+        block1 = world.getBlockAt(config.getInt("loc1.x"), config.getInt("loc1.y"), config.getInt("loc1.z"));
+        block2 = world.getBlockAt(config.getInt("loc2.x"), config.getInt("loc2.y"), config.getInt("loc2.z"));
+        material = plugin.getCaliburn().getExItem(config.getString("material"));
+        if (material == null) {
+            material = VanillaItem.NETHER_PORTAL;
+        }
+        String axis = config.getString("axis");
+        this.axis = (byte) (axis != null && axis.equalsIgnoreCase("z") ? 2 : 1);
+        active = true;
+        create(null);
     }
 
     /**

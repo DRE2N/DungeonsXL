@@ -203,7 +203,6 @@ public class DungeonsXL extends DREPlugin {
 
     public void loadConfig() {
         messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, "english.yml"));
-        globalData = new GlobalData(this, new File(getDataFolder(), "data.yml"));
         mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
         messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
     }
@@ -234,6 +233,8 @@ public class DungeonsXL extends DREPlugin {
         dWorlds.init(MAPS);
         dungeons.init(DUNGEONS);
         Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(this), this);
+        globalData = new GlobalData(this, new File(getDataFolder(), "data.yml"));
+        globalData.load();
         dMobProviders.init();
         dPlayers.init();
         initAnnouncerCache(ANNOUNCERS);
@@ -250,7 +251,6 @@ public class DungeonsXL extends DREPlugin {
     }
 
     public void loadData() {
-        protections.loadAll();
         dPlayers.loadAll();
         dWorlds.check();
     }
