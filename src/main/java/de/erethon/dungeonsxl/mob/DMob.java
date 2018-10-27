@@ -17,6 +17,8 @@
 package de.erethon.dungeonsxl.mob;
 
 import de.erethon.caliburn.mob.ExMob;
+import de.erethon.caliburn.mob.VanillaMob;
+import de.erethon.caliburn.util.compatibility.Version;
 import de.erethon.dungeonsxl.event.dmob.DMobDeathEvent;
 import de.erethon.dungeonsxl.event.dmob.DMobSpawnEvent;
 import de.erethon.dungeonsxl.game.Game;
@@ -42,7 +44,7 @@ public class DMob {
 
     private String trigger;
 
-    public DMob(LivingEntity entity, DGameWorld gameWorld) {
+    private DMob(LivingEntity entity, DGameWorld gameWorld) {
         gameWorld.addDMob(this);
 
         this.entity = entity;
@@ -54,6 +56,9 @@ public class DMob {
             this.entity.getEquipment().setLeggingsDropChance(0);
             this.entity.getEquipment().setBootsDropChance(0);
             this.entity.getEquipment().setItemInHandDropChance(0);
+            if (Version.isAtLeast(Version.MC1_9)) {
+                this.entity.getEquipment().setItemInOffHandDropChance(0);
+            }
         }
 
         DMobSpawnEvent event = new DMobSpawnEvent(this, entity);
@@ -72,10 +77,12 @@ public class DMob {
     public DMob(LivingEntity entity, DGameWorld gameWorld, ExMob type) {
         this(entity, gameWorld);
         this.type = type;
+        this.trigger = type.getId();
     }
 
     public DMob(LivingEntity entity, DGameWorld gameWorld, ExMob type, String trigger) {
-        this(entity, gameWorld, type);
+        this(entity, gameWorld);
+        this.type = type;
         this.trigger = trigger;
     }
 
@@ -137,13 +144,13 @@ public class DMob {
                 }
             }
 
-            name = type.getName();
+            name = type.getId();
 
         } else if (isExternalMob() && trigger != null) {
             name = trigger;
 
         } else {
-            name = victim.getType().getName();
+            name = VanillaMob.get(victim.getType()).getId();
         }
 
         MobTrigger mobTrigger = MobTrigger.getByName(name, gameWorld);
