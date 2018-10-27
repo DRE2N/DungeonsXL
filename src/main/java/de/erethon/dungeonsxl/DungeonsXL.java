@@ -50,7 +50,6 @@ import de.erethon.dungeonsxl.sign.DSignTypeCache;
 import de.erethon.dungeonsxl.sign.SignScriptCache;
 import de.erethon.dungeonsxl.trigger.TriggerListener;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
-import de.erethon.dungeonsxl.util.NoReload;
 import de.erethon.dungeonsxl.world.DWorldCache;
 import java.io.File;
 import java.util.HashSet;
@@ -126,7 +125,6 @@ public class DungeonsXL extends DREPlugin {
         createCaches();
         initCaches();
         loadData();
-        new NoReload(this);
     }
 
     @Override
