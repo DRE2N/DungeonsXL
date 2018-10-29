@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.util;
 
-import static de.erethon.commons.misc.ReflectionUtil.*;
+import static de.erethon.dungeonsxl.util.ReflectionUtil.*;
 import org.bukkit.inventory.ItemStack;
 
 /**

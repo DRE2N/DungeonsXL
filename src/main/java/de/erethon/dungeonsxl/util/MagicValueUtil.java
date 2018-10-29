@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.util;
 
-import de.erethon.commons.misc.ReflectionUtil;
-import java.lang.reflect.Method;
 import org.bukkit.block.Block;
 
 /**
@@ -26,17 +24,8 @@ import org.bukkit.block.Block;
 @Deprecated
 public class MagicValueUtil {
 
-    private static Method CRAFT_BLOCK_SET_DATA;
-
-    static {
-        try {
-            CRAFT_BLOCK_SET_DATA = Class.forName(ReflectionUtil.ORG_BUKKIT_CRAFTBUKKIT + ".block.CraftBlock").getDeclaredMethod("setData", byte.class);
-        } catch (NoSuchMethodException | SecurityException | ClassNotFoundException exception) {
-        }
-    }
-
     public static void setBlockData(Block block, byte data) {
-        ReflectionUtil.invoke(CRAFT_BLOCK_SET_DATA, block, data);
+        ReflectionUtil.invoke(ReflectionUtil.CRAFT_BLOCK_SET_DATA, block, data);
     }
 
 }

@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.erethon</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.17.2</version>
+    <version>0.17.3</version>
     <packaging>jar</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
@@ -83,7 +83,7 @@
         <dependency>
             <groupId>de.erethon</groupId>
             <artifactId>commons</artifactId>
-            <version>5.1.2</version>
+            <version>5.1.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
