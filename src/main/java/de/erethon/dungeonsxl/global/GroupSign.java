@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.global;
 import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -27,7 +28,9 @@ import de.erethon.dungeonsxl.util.LWCUtil;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Directional;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -212,28 +215,10 @@ public class GroupSign extends JoinSign {
         return tryToCreate(plugin, event.getBlock(), identifier, maxPlayersPerGroup, startIfElementsAtLeast, groupName);
     }
 
-    public static GroupSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxPlayersPerGroup, int startIfElementsAtLeast, String groupName) {
-        World world = startSign.getWorld();
-        BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
-        int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
-
-        int verticalSigns = (int) Math.ceil((float) (1 + maxPlayersPerGroup) / 4);
-        while (verticalSigns > 1) {
-            Block block = world.getBlockAt(x, y - verticalSigns + 1, z);
-            block.setType(VanillaItem.WALL_SIGN.getMaterial(), false);
-            org.bukkit.material.Sign signData = new org.bukkit.material.Sign(VanillaItem.WALL_SIGN.getMaterial());
-            signData.setFacingDirection(facing);
-            org.bukkit.block.Sign sign = (org.bukkit.block.Sign) block.getState();
-            sign.setData(signData);
-            sign.update(true, false);
-
-            verticalSigns--;
-        }
-        GroupSign sign = new GroupSign(plugin, plugin.getGlobalProtectionCache().generateId(GroupSign.class, world), startSign, identifier, maxPlayersPerGroup,
-                startIfElementsAtLeast, groupName);
-
-        LWCUtil.removeProtection(startSign);
-
+    public static GroupSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxElements, int startIfElementsAtLeast, String groupName) {
+        onCreation(plugin, startSign, identifier, maxElements, startIfElementsAtLeast);
+        GroupSign sign = new GroupSign(plugin, plugin.getGlobalProtectionCache().generateId(GroupSign.class, startSign.getWorld()), startSign, identifier,
+                maxElements, startIfElementsAtLeast, groupName);
         return sign;
     }
 

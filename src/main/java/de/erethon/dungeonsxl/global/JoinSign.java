@@ -16,17 +16,22 @@
  */
 package de.erethon.dungeonsxl.global;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.material.Attachable;
 
 /**
  * @author Daniel Saukel
@@ -204,6 +209,33 @@ public class JoinSign extends GlobalProtection {
         if (startIfElementsAtLeast != -1) {
             config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
         }
+    }
+
+    protected static void onCreation(DungeonsXL plugin, Block startSign, String identifier, int maxElements, int startIfElementsAtLeast) {
+        // TODO: Replace as soon as versions older than 1.13 are dropped
+
+        World world = startSign.getWorld();
+        BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
+        //BlockFace facing = ((Directional) startSign.getBlockData()).getFacing().getOppositeFace();
+        int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
+
+        int verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
+        while (verticalSigns > 1) {
+            Block block = world.getBlockAt(x, y - verticalSigns + 1, z);
+            block.setType(VanillaItem.WALL_SIGN.getMaterial(), false);
+            BlockState state = block.getState();
+            org.bukkit.material.Sign signData = (org.bukkit.material.Sign) state.getData();
+            signData.setFacingDirection(facing);
+            state.setData(signData);
+            state.update(true, false);
+            // Directional directional = (Directional) block.getBlockData();
+            // directional.setFacing(facing);
+            // block.setBlockData(directional, false);
+
+            verticalSigns--;
+        }
+
+        LWCUtil.removeProtection(startSign);
     }
 
 }

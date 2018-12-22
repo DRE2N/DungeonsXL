@@ -216,27 +216,10 @@ public class GameSign extends JoinSign {
         return tryToCreate(plugin, event.getBlock(), identifier, maxGroupsPerGame, startIfElementsAtLeast);
     }
 
-    public static GameSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxGroupsPerGame, int startIfElementsAtLeast) {
-        World world = startSign.getWorld();
-        BlockFace facing = ((Attachable) startSign.getState().getData()).getAttachedFace().getOppositeFace();
-        int x = startSign.getX(), y = startSign.getY(), z = startSign.getZ();
-
-        int verticalSigns = (int) Math.ceil((float) (1 + maxGroupsPerGame) / 4);
-        while (verticalSigns > 1) {
-            Block block = world.getBlockAt(x, y - verticalSigns + 1, z);
-            block.setType(VanillaItem.WALL_SIGN.getMaterial(), false);
-            org.bukkit.material.Sign signData = new org.bukkit.material.Sign(VanillaItem.WALL_SIGN.getMaterial());
-            signData.setFacingDirection(facing);
-            org.bukkit.block.Sign sign = (org.bukkit.block.Sign) block.getState();
-            sign.setData(signData);
-            sign.update(true, false);
-
-            verticalSigns--;
-        }
-        GameSign sign = new GameSign(plugin, plugin.getGlobalProtectionCache().generateId(GameSign.class, world), startSign, identifier, maxGroupsPerGame, startIfElementsAtLeast);
-
-        LWCUtil.removeProtection(startSign);
-
+    public static GameSign tryToCreate(DungeonsXL plugin, Block startSign, String identifier, int maxElements, int startIfElementsAtLeast) {
+        onCreation(plugin, startSign, identifier, maxElements, startIfElementsAtLeast);
+        GameSign sign = new GameSign(plugin, plugin.getGlobalProtectionCache().generateId(GameSign.class, startSign.getWorld()), startSign, identifier,
+                maxElements, startIfElementsAtLeast);
         return sign;
     }
 
