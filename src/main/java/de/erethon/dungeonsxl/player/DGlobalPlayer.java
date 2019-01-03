@@ -337,6 +337,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     private void reset(Location tpLoc, boolean keepInventory) {
         try {
             PlayerUtil.secureTeleport(player, tpLoc);
+            player.setGameMode(data.getOldGameMode());
             if (!keepInventory) {
                 while (data.getOldInventory().size() > 36) {
                     data.getOldInventory().remove(36);
@@ -355,7 +356,6 @@ public class DGlobalPlayer implements PlayerWrapper {
                     player.setHealth(player.getMaxHealth());
                 }
                 player.setFoodLevel(data.getOldFoodLevel());
-                player.setGameMode(data.getOldGameMode());
                 player.setFireTicks(data.getOldFireTicks());
                 for (PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
