@@ -39,11 +39,13 @@ public enum DSignTypeDefault implements DSignType {
     BLOCK("Block", "block", false, true, BlockSign.class),
     BOSS_SHOP("BossShop", "bossshop", false, true, BossShopSign.class),
     CHECKPOINT("Checkpoint", "checkpoint", false, false, CheckpointSign.class),
-    CHEST("Chest", "chest", false, false, ChestSign.class),
+    @Deprecated
+    CHEST("Chest", "chest", false, false, RewardChestSign.class),
     CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, false, ChunkUpdaterSign.class),
     CLASSES("Classes", "classes", true, true, ClassesSign.class),
     COMMAND("CMD", "cmd", false, false, CommandSign.class),
     DROP("Drop", "drop", false, false, DropSign.class),
+    DUNGEON_CHEST("DungeonChest", "dungeonchest", true, false, DungeonChestSign.class),
     END("End", "end", false, true, EndSign.class),
     @Deprecated
     EXTERNAL_MOB("ExternalMob", "mob", false, false, MobSign.class),
@@ -63,6 +65,7 @@ public enum DSignTypeDefault implements DSignType {
     READY("Ready", "ready", true, true, ReadySign.class),
     REDSTONE("Redstone", "redstone", false, false, RedstoneSign.class),
     RESOURCE_PACK("ResourcePack", "resourcepack", true, true, ResourcePackSign.class),
+    REWARD_CHEST("RewardChest", "rewardchest", false, false, RewardChestSign.class),
     SCRIPT("Script", "script", false, false, ScriptSign.class),
     SOUND_MESSAGE("SoundMSG", "soundmsg", false, false, SoundMessageSign.class),
     START("Start", "start", true, false, StartSign.class),
