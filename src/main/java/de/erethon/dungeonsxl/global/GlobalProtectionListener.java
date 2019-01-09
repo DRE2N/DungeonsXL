@@ -23,7 +23,10 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -42,6 +45,7 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -277,6 +281,16 @@ public class GlobalProtectionListener implements Listener {
                 Sign sign = (Sign) state;
                 new LeaveSign(plugin, plugin.getGlobalProtectionCache().generateId(LeaveSign.class, sign.getWorld()), sign);
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        World world = event.getWorld();
+        for (Entry<UnloadedProtection, String> entry : new HashSet<>(plugin.getGlobalProtectionCache().getUnloadedProtections().entrySet())) {
+            if (world.getName().equals(entry.getValue())) {
+                entry.getKey().load(world);
             }
         }
     }

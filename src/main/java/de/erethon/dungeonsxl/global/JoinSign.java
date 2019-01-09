@@ -36,7 +36,7 @@ import org.bukkit.material.Attachable;
 /**
  * @author Daniel Saukel
  */
-public class JoinSign extends GlobalProtection {
+public abstract class JoinSign extends GlobalProtection {
 
     protected Dungeon dungeon;
     protected int maxElements;
@@ -195,9 +195,14 @@ public class JoinSign extends GlobalProtection {
         }
     }
 
+    /**
+     * @return the path in the global data file
+     */
+    public abstract String getDataPath();
+
     @Override
     public void save(FileConfiguration config) {
-        String preString = "protections.groupSigns." + getWorld().getName() + "." + getId();
+        String preString = getDataPath() + "." + getWorld().getName() + "." + getId();
 
         config.set(preString + ".x", startSign.getX());
         config.set(preString + ".y", startSign.getY());

@@ -17,22 +17,18 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.category.Category;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.LWCUtil;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.material.Attachable;
 
 /**
  * Basically a GroupSign, but to form a game of multiple groups.
@@ -119,6 +115,11 @@ public class GameSign extends JoinSign {
         }
 
         sign.update();
+    }
+
+    @Override
+    public String getDataPath() {
+        return "protections.gameSigns";
     }
 
     public void onPlayerInteract(Block block, Player player) {

@@ -19,7 +19,9 @@ package de.erethon.dungeonsxl.global;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DGroup;
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -35,6 +37,7 @@ public class GlobalProtectionCache {
     private DungeonsXL plugin;
 
     private Set<GlobalProtection> protections = new HashSet<>();
+    private Map<UnloadedProtection, String> unloaded = new HashMap<>();
 
     public GlobalProtectionCache(DungeonsXL plugin) {
         this.plugin = plugin;
@@ -67,6 +70,13 @@ public class GlobalProtectionCache {
      */
     public Set<GlobalProtection> getProtections() {
         return protections;
+    }
+
+    /**
+     * @return the protections that are known but not loaded yet
+     */
+    public Map<UnloadedProtection, String> getUnloadedProtections() {
+        return unloaded;
     }
 
     /**
@@ -131,8 +141,8 @@ public class GlobalProtectionCache {
     public int generateId(Class<? extends GlobalProtection> type, World world) {
         int id = 1;
         for (GlobalProtection protection : protections) {
-            if (protection.getClass() == type) {
-                id++;
+            if (protection.getClass() == type && id <= protection.getId()) {
+                id = protection.getId() + 1;
             }
         }
         return id;

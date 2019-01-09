@@ -21,7 +21,6 @@ import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.Map.Entry;
-import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -54,30 +53,62 @@ public class GlobalData extends DREConfig {
 
     @Override
     public void load() {
-        for (World world : Bukkit.getWorlds()) {
-            ConfigurationSection gameSigns = config.getConfigurationSection("protections.gameSigns." + world.getName());
-            ConfigurationSection groupSigns = config.getConfigurationSection("protections.groupSigns." + world.getName());
-            ConfigurationSection leaveSigns = config.getConfigurationSection("protections.leaveSigns." + world.getName());
-            ConfigurationSection portals = config.getConfigurationSection("protections.portals." + world.getName());
-            Random random = new Random();
-            if (gameSigns != null) {
-                for (Entry<String, Object> entry : gameSigns.getValues(false).entrySet()) {
-                    new GameSign(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), gameSigns.getConfigurationSection(entry.getKey()));
+        ConfigurationSection gameSigns = config.getConfigurationSection("protections.gameSigns");
+        ConfigurationSection groupSigns = config.getConfigurationSection("protections.groupSigns");
+        ConfigurationSection leaveSigns = config.getConfigurationSection("protections.leaveSigns");
+        ConfigurationSection portals = config.getConfigurationSection("protections.portals");
+        if (gameSigns != null) {
+            for (String worldName : gameSigns.getValues(false).keySet()) {
+                ConfigurationSection ws = gameSigns.getConfigurationSection(worldName);
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        new GameSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    } else {
+                        new UnloadedProtection<>(plugin, GameSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    }
                 }
             }
-            if (groupSigns != null) {
-                for (Entry<String, Object> entry : groupSigns.getValues(false).entrySet()) {
-                    new GroupSign(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), groupSigns.getConfigurationSection(entry.getKey()));
+        }
+
+        if (groupSigns != null) {
+            for (String worldName : groupSigns.getValues(false).keySet()) {
+                ConfigurationSection ws = groupSigns.getConfigurationSection(worldName);
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        new GroupSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    } else {
+                        new UnloadedProtection<>(plugin, GroupSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    }
                 }
             }
-            if (leaveSigns != null) {
-                for (Entry<String, Object> entry : leaveSigns.getValues(false).entrySet()) {
-                    new LeaveSign(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), leaveSigns.getConfigurationSection(entry.getKey()));
+        }
+
+        if (leaveSigns != null) {
+            for (String worldName : leaveSigns.getValues(false).keySet()) {
+                ConfigurationSection ws = leaveSigns.getConfigurationSection(worldName);
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        new LeaveSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    } else {
+                        new UnloadedProtection<>(plugin, LeaveSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    }
                 }
             }
-            if (portals != null) {
-                for (Entry<String, Object> entry : portals.getValues(false).entrySet()) {
-                    new DPortal(plugin, world, NumberUtil.parseInt(entry.getKey(), random.nextInt()), portals.getConfigurationSection(entry.getKey()));
+        }
+
+        if (portals != null) {
+            for (String worldName : portals.getValues(false).keySet()) {
+                ConfigurationSection ws = portals.getConfigurationSection(worldName);
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        new DPortal(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    } else {
+                        new UnloadedProtection<>(plugin, DPortal.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                    }
                 }
             }
         }

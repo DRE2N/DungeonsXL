@@ -17,25 +17,18 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.category.Category;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.LWCUtil;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.Directional;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.material.Attachable;
 
 /**
  * A sign to form a group and to define its dungeon.
@@ -128,9 +121,14 @@ public class GroupSign extends JoinSign {
     }
 
     @Override
+    public String getDataPath() {
+        return "protections.groupSigns";
+    }
+
+    @Override
     public void save(FileConfiguration config) {
         super.save(config);
-        String preString = "protections.groupSigns." + getWorld().getName() + "." + getId();
+        String preString = getDataPath() + "." + getWorld().getName() + "." + getId();
         config.set(preString + ".groupName", groupName);
     }
 
