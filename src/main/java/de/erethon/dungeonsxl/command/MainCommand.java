@@ -45,7 +45,7 @@ public class MainCommand extends DCommand {
     public void onExecute(String[] args, CommandSender sender) {
         PluginManager plugins = Bukkit.getServer().getPluginManager();
 
-        int maps = DungeonsXL.MAPS.listFiles().length;
+        int maps = DungeonsXL.MAPS.listFiles().length - 1;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
         int loaded = instances.getEditWorlds().size() + instances.getGameWorlds().size();
         int players = dPlayers.getDGamePlayers().size();

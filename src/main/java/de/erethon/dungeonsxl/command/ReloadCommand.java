@@ -74,7 +74,7 @@ public class ReloadCommand extends DCommand {
             dPlayer.leave();
         }
 
-        int maps = DungeonsXL.MAPS.listFiles().length;
+        int maps = DungeonsXL.MAPS.listFiles().length - 1;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
         int loaded = instances.getEditWorlds().size() + instances.getGameWorlds().size();
         int players = this.dPlayers.getDGamePlayers().size();
