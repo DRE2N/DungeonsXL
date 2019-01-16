@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.announcer;
 
+import de.erethon.commons.chat.BaseComponent;
+import de.erethon.commons.chat.ClickEvent;
 import de.erethon.commons.chat.DefaultFontInfo;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.chat.chat.BaseComponent;
-import de.erethon.commons.chat.chat.ClickEvent;
-import de.erethon.commons.chat.chat.TextComponent;
+import de.erethon.commons.chat.TextComponent;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;

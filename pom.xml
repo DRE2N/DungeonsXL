@@ -78,7 +78,7 @@
         <dependency>
             <groupId>de.erethon</groupId>
             <artifactId>commons</artifactId>
-            <version>5.1.4</version>
+            <version>5.1.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
