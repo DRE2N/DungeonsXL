@@ -1,4 +1,3 @@
-Announcer_Cmd: '&4&l=> &6使用指令 &4/DXL JOIN &v1 &6來加入 &4&l<='
 Announcer_Click: '&4&l=> &6點擊這裡加入 &4&l<='
 Cmd_Break_ProtectedMode: '&6您不能再破壞被 DungeonsXL 保護的方塊了。'
 Cmd_Break_BreakMode: '&6您現在可以破壞被 DungeonsXL 保護的方塊了。'
@@ -8,6 +7,10 @@ Cmd_Chatspy_Stopped: '&6您已經停止監聽 dungeon 對話頻道'
 Cmd_Chatspy_Start: '&6您已經開始監聽 dungeon 對話頻道'
 Cmd_Delete_Backups: '&6您確定要刪除所有已儲存的備份嗎？'
 Cmd_Delete_Success: '&6成功刪除了地圖 &4&v1&6'
+Cmd_DungeonItem_Info_Dungeon: '&6此物品為 &4副本物品&6。'
+Cmd_DungeonItem_Info_Global: '&6此物品為 &4一般物品&6。'
+Cmd_DungeonItem_Set_Dungeon: '&6成功將此物品設定為 &4副本物品&6。'
+Cmd_DungeonItem_Set_Global: '&6成功將此物品設定為 &4一般物品&6。'
 Cmd_Enter: '&6團隊 &4&v1 &6成功進入了團隊 &4&v2 &6的遊戲'
 Cmd_Import: '&6成功新增了世界 &4&v1&6'
 Cmd_Invite_Success: '&6已經成功邀請了玩家 &4&v1 &6編輯 &4&v2 &6地圖'
@@ -37,22 +40,25 @@ Error_Drop: '&4您不可以丟棄這個物品'
 Error_DungeonNotExist: '&4這個副本不存在'
 Error_Enderchest: '&4您不能在副本中使用終界箱！'
 Error_InGroup: '&4玩家 &6&v1&4 已經在一個團隊中了'
-Error_JoinGroup: '&您必須先加入一個團隊！'
+Error_JoinGroup: '&4您必須先加入一個團隊！'
 Error_LeaveDungeon: '&4您必須先退出您目前的副本！'
 Error_LeaveGame: '&4您必須先退出您目前的遊戲！'
 Error_LeaveGroup: '&4您必須先退出您目前的團隊！'
 Error_MsgIdNotExist: '&4ID 為 &6&v1&4 的訊息不存在！'
-Error_MsgFormat: '&請使用 &6" &4把訊息括起來！'
+Error_MsgFormat: '&4請使用 &6" &4把訊息括起來！'
 Error_MsgNoInt: '&4參數 [id] 必須包含數字！'
 Error_NameInUse: '&4名稱 &6&v1 &4已經存在'
 Error_NameToLong: '&4名稱不能超過 15 字元'
 Error_NoConsoleCommand: '&6/dxl &v1&4 不能在控制台 (console) 執行！'
 Error_NoGame: '&4您目前並沒有在遊戲中'
+Error_NoItemInMainHand: '&4您的慣用手中沒有物品。'
 Error_NoLeaveInTutorial: '&4您不能在教學模式使用這個指令！'
 Error_NoPermissions: '&4您沒有權限執行這個操作！'
 Error_NoPlayerCommand: '&6/dxl &v1&4 不能被玩家執行！'
 Error_NoDXLBlock: '&4這不是一個被 DungeonsXL 保護的方塊'
 Error_NoRewardsLeft: '&4您沒有其他的獎勵了'
+error:
+  noRewardsTime: '&4在 &6&v1&4 之前，您無法獲得獎勵。'
 Error_NoSuchGroup: '&4團隊 &6&v1&4 不存在！'
 Error_NoSuchMap: '&4世界 &6&v1&4 不存在！'
 Error_NoSuchPlayer: '&4玩家 &6&v1&4 不存在！'
@@ -76,6 +82,7 @@ Help_Cmd_Chat: /dxl chat - 切換對話頻道
 Help_Cmd_Chatspy: /dxl chatspy - 切換監聽模式
 Help_Cmd_Create: /dxl create [name] - 創建新的副本地圖
 Help_Cmd_Delete: /dxl delete [name] - 刪除一個副本地圖
+Help_Cmd_DungeonItem: /dxl dungeonItem [true|false|info] - 將玩家手中的物品設定為無法帶出副本的物品
 Help_Cmd_Edit: /dxl edit [map] - 編輯一個現有的副本地圖
 Help_Cmd_Enter: /dxl enter ([joining group]) [target group] - 讓團隊進入一個目標團隊的遊戲
 Help_Cmd_Escape: /dxl escape - 不儲存就離開編輯中的世界
@@ -109,6 +116,8 @@ Help_Cmd_Status: /dxl status - 顯示插件的技術性狀態 (Shows the technic
 Help_Cmd_Settings: /dxl settings ([edit|global|player])- 開啟設定選單
 Help_Cmd_Test: /dxl test - 在測試模式中開始遊戲
 Help_Cmd_Uninvite: /dxl uninvite [player] [dungeon] - 取消邀請一個玩家編輯副本
+Help_DungeonItem: '&6完成一場遊戲後，即使對應的副本設定允許保留背包，&4副本物品 &6仍會自玩家的背包中移除。'
+Help_GlobalItem: '&6完成一場遊戲後，若對應的副本設定允許保留背包，&4一般物品 &6將能夠帶出副本。'
 Group_BedDestroyed: '&6團隊 &4&v1 &6的床已經被 &4&v2 &6摧毀！'
 Group_Congrats: '&6恭喜 Congratulations!'
 Group_CongratsSub: '&l&4您的團隊 &v1 &4贏得了對戰！'
@@ -129,8 +138,9 @@ Group_LivesRemoved: '&6您的團對失去了 &4&v1 &6生命！'
 Group_UninvitedPlayer: '&4&v1 &6收回了 &4&v2 &6進入團隊 &4&v3 &6的邀請'
 Group_KickedPlayer: '&4&v1 &6從 &4&v3 &6踢出了 &4&v2'
 Group_PlayerJoined: '&6玩家 &4&v1 &6加入了團隊！'
+group:
+  rewardChest: '&6您的團隊發現了一個獎勵箱。'
 Group_WaveFinished: '&6您的團隊擊敗了第 &4&v1&6 波攻擊，下一波攻擊將在 &4&v2 &6秒後開始'
-Log_DisabledTweaks: '&4因為不支援伺服器軟體，因此關閉了效能調整。'
 Log_Error_DungeonSetup: '&4給副本 &6&v1&4 的配置不正確，請參考 https://github.com/DRE2N/DungeonsXL/wiki/dungeon-configuration'
 Log_Error_MobEnchantment: '&4在讀取 mob.yml 的時候發生了錯誤: 附魔效果 &6&v1 &4不存在！'
 Log_Error_MobType: '&4在讀取 mob.yml 的時候發生了錯誤: 怪物 &6&v1 &4不存在！'
@@ -210,4 +220,3 @@ sign:
   wave:
     '1': '&2開始'
     '2': '&2下一波'
-    
