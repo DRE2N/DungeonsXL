@@ -70,7 +70,7 @@ public class DungeonItemCommand extends DCommand {
                 NBTUtil.removeKey(tag, NBTUtil.DUNGEON_ITEM_KEY);
                 inv.setItemInHand(NBTUtil.setTag(bukkitStack, tag));
             }
-            MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_INFO_GLOBAL.getMessage());
+            MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_SET_GLOBAL.getMessage());
             MessageUtil.sendMessage(sender, DMessage.HELP_GLOBAL_ITEM.getMessage());
 
         } else {
