@@ -81,6 +81,11 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
+        if (is1_9) {
+            player.setCollidable(true);
+            player.setInvulnerable(false);
+        }
+        player.setAllowFlight(false);
     }
 
     /**

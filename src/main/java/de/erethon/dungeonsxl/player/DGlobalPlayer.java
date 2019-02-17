@@ -363,6 +363,12 @@ public class DGlobalPlayer implements PlayerWrapper {
 
                 player.addPotionEffects(data.getOldPotionEffects());
 
+                if (is1_9) {
+                    player.setCollidable(data.getOldCollidabilityState());
+                    player.setInvulnerable(data.getOldInvulnerabilityState());
+                }
+                player.setAllowFlight(data.getOldFlyingState());
+
             } else {
                 for (ItemStack item : player.getInventory().getContents()) {
                     if (item == null) {

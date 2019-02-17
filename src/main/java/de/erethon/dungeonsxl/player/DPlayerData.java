@@ -66,6 +66,9 @@ public class DPlayerData extends DREConfig {
     private int oldFireTicks;
     private GameMode oldGameMode;
     private Collection<PotionEffect> oldPotionEffects;
+    private boolean oldCollidabilityState;
+    private boolean oldFlyingState;
+    private boolean oldInvulnerabilityState;
 
     // Stats
     private Map<String, Long> timeLastStarted = new HashMap<>();
@@ -278,6 +281,48 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
+     * @return if the player was collidable
+     */
+    public boolean getOldCollidabilityState() {
+        return oldCollidabilityState;
+    }
+
+    /**
+     * @param collidableState the collidable state to set
+     */
+    public void setOldCollidabilityState(boolean collidableState) {
+        oldCollidabilityState = collidableState;
+    }
+
+    /**
+     * @return if the player was flying
+     */
+    public boolean getOldFlyingState() {
+        return oldFlyingState;
+    }
+
+    /**
+     * @param flyingState the flying state to set
+     */
+    public void setOldFlyingState(boolean flyingState) {
+        oldFlyingState = flyingState;
+    }
+
+    /**
+     * @return if the player was invulnerable
+     */
+    public boolean getOldInvulnerabilityState() {
+        return oldInvulnerabilityState;
+    }
+
+    /**
+     * @param invulnerabilityState the invulnerability state to set
+     */
+    public void setOldInvulnerabilityState(boolean invulnerabilityState) {
+        oldFlyingState = invulnerabilityState;
+    }
+
+    /**
      * @return a map of the player's started dungeons with dates.
      */
     public Map<String, Long> getTimeLastStarted() {
@@ -476,6 +521,10 @@ public class DPlayerData extends DREConfig {
         } catch (IllegalArgumentException exception) {
             oldLocation = Bukkit.getWorlds().get(0).getSpawnLocation();
         }
+
+        oldCollidabilityState = config.getBoolean(PREFIX_STATE_PERSISTENCE + "oldCollidabilityState", true);
+        oldFlyingState = config.getBoolean(PREFIX_STATE_PERSISTENCE + "oldFlyingState", false);
+        oldInvulnerabilityState = config.getBoolean(PREFIX_STATE_PERSISTENCE + "oldInvulnerabilityState", false);
     }
 
     @Override
@@ -509,6 +558,11 @@ public class DPlayerData extends DREConfig {
         }
         oldLocation = player.getLocation();
         oldPotionEffects = player.getActivePotionEffects();
+        if (is1_9) {
+            oldCollidabilityState = player.isCollidable();
+            oldInvulnerabilityState = player.isInvulnerable();
+        }
+        oldFlyingState = player.getAllowFlight();
 
         config.set(PREFIX_STATE_PERSISTENCE + "oldGameMode", oldGameMode.toString());
         config.set(PREFIX_STATE_PERSISTENCE + "oldFireTicks", oldFireTicks);
@@ -522,6 +576,9 @@ public class DPlayerData extends DREConfig {
         config.set(PREFIX_STATE_PERSISTENCE + "oldOffHand", oldOffHand);
         config.set(PREFIX_STATE_PERSISTENCE + "oldLocation", oldLocation);
         config.set(PREFIX_STATE_PERSISTENCE + "oldPotionEffects", oldPotionEffects);
+        config.set(PREFIX_STATE_PERSISTENCE + "oldCollidabilityState", oldCollidabilityState);
+        config.set(PREFIX_STATE_PERSISTENCE + "oldFlyingState", oldFlyingState);
+        config.set(PREFIX_STATE_PERSISTENCE + "oldInvulnerabilityState", oldInvulnerabilityState);
 
         save();
     }
@@ -542,6 +599,9 @@ public class DPlayerData extends DREConfig {
         oldOffHand = null;
         oldLocation = null;
         oldPotionEffects = null;
+        oldCollidabilityState = true;
+        oldFlyingState = false;
+        oldInvulnerabilityState = false;
 
         if (wasInGame()) {
             config.set("savePlayer", null);
