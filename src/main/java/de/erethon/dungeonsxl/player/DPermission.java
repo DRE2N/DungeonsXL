@@ -32,6 +32,7 @@ import static org.bukkit.permissions.PermissionDefault.*;
 public enum DPermission {
 
     // Main nodes
+    BED("bed", OP),
     BREAK("break", OP),
     BYPASS("bypass", OP),
     CHAT("chat", TRUE),
@@ -41,6 +42,8 @@ public enum DPermission {
     DELETE("delete", OP),
     DUNGEON_ITEM("dungeonitem", OP),
     EDIT("edit", OP),
+    ENDER_CHEST("enderchest", OP),
+    DISPENSER("dispenser", OP),
     ENTER("enter", OP),
     ESCAPE("escape", TRUE),
     GAME("game", TRUE),

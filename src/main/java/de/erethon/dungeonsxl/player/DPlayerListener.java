@@ -536,13 +536,13 @@ public class DPlayerListener implements Listener {
             if (dGameWorld != null || DEditWorld.getByWorld(player.getWorld()) != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (VanillaItem.ENDER_CHEST.is(clickedBlock)) {
-                        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
+                        if (!DPermission.hasPermission(player, DPermission.BYPASS) && !DPermission.hasPermission(player, DPermission.ENDER_CHEST)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_ENDERCHEST.getMessage());
                             event.setCancelled(true);
                         }
 
                     } else if (Category.BEDS.containsBlock(clickedBlock)) {
-                        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
+                        if (!DPermission.hasPermission(player, DPermission.BYPASS) && !DPermission.hasPermission(player, DPermission.BED)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_BED.getMessage());
                             event.setCancelled(true);
                         }
@@ -554,7 +554,7 @@ public class DPlayerListener implements Listener {
             if (dGameWorld != null) {
                 if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
                     if (VanillaItem.DISPENSER.is(clickedBlock)) {
-                        if (!DPermission.hasPermission(player, DPermission.BYPASS)) {
+                        if (!DPermission.hasPermission(player, DPermission.BYPASS) && !DPermission.hasPermission(player, DPermission.DISPENSER)) {
                             MessageUtil.sendMessage(player, DMessage.ERROR_DISPENSER.getMessage());
                             event.setCancelled(true);
                         }
