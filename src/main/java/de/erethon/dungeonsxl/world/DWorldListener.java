@@ -187,6 +187,9 @@ public class DWorldListener implements Listener {
             event.setCancelled(true);
         } else if (dWorld instanceof DGameWorld) {
             Game game = Game.getByGameWorld((DGameWorld) dWorld);
+            if (game == null || game.getRules() == null) {
+                return;
+            }
             Boolean raining = game.getRules().isRaining();
             if (raining == null) {
                 return;
