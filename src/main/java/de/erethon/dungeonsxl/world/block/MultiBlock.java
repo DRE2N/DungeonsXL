@@ -25,6 +25,6 @@ import org.bukkit.block.Block;
  */
 public interface MultiBlock {
 
-    public Block getAttachedBlock();
+    Block getAttachedBlock();
 
 }

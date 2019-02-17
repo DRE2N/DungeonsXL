@@ -26,11 +26,11 @@ public interface RewardType {
     /**
      * @return the identifier
      */
-    public String getIdentifier();
+    String getIdentifier();
 
     /**
      * @return the handler
      */
-    public Class<? extends Reward> getHandler();
+    Class<? extends Reward> getHandler();
 
 }

@@ -28,121 +28,121 @@ public interface GameType {
     /**
      * @return the displayName
      */
-    public String getDisplayName();
+    String getDisplayName();
 
     /**
      * @param displayName the displayName to set
      */
-    public void setDisplayName(String displayName);
+    void setDisplayName(String displayName);
 
     /**
      * @return the signName
      */
-    public String getSignName();
+    String getSignName();
 
     /**
      * @param signName the signName to set
      */
-    public void setSignName(String signName);
+    void setSignName(String signName);
 
     /**
      * @return the goal of the game
      */
-    public GameGoal getGameGoal();
+    GameGoal getGameGoal();
 
     /**
      * @param gameGoal the goal of the game to set
      */
-    public void setGameGoal(GameGoal gameGoal);
+    void setGameGoal(GameGoal gameGoal);
 
     /**
      * @return the playerVersusPlayer
      */
-    public Boolean isPlayerVersusPlayer();
+    Boolean isPlayerVersusPlayer();
 
     /**
      * @param playerVersusPlayer the playerVersusPlayer to set
      */
-    public void setPlayerVersusPlayer(Boolean playerVersusPlayer);
+    void setPlayerVersusPlayer(Boolean playerVersusPlayer);
 
     /**
      * @return the friendlyFire
      */
-    public Boolean isFriendlyFire();
+    Boolean isFriendlyFire();
 
     /**
      * @param friendlyFire the friendlyFire to set
      */
-    public void setFriendlyFire(Boolean friendlyFire);
+    void setFriendlyFire(Boolean friendlyFire);
 
     /**
      * @return if players get rewards after the dungeon
      */
-    public Boolean hasRewards();
+    Boolean hasRewards();
 
     /**
      * @param rewards enable / disable rewards
      */
-    public void setRewards(Boolean rewards);
+    void setRewards(Boolean rewards);
 
     /**
      * @return if players shall see how long they play
      */
-    public Boolean getShowTime();
+    Boolean getShowTime();
 
     /**
      * @param showTime set if players shall see how long they play
      */
-    public void setShowTime(Boolean showTime);
+    void setShowTime(Boolean showTime);
 
     /**
      * @return if all blocks may be destroyed
      */
-    public Boolean canBreakBlocks();
+    Boolean canBreakBlocks();
 
     /**
      * @param breakBlocks if blocks may be destroyed
      */
-    public void setBreakBlocks(Boolean breakBlocks);
+    void setBreakBlocks(Boolean breakBlocks);
 
     /**
      * @return if blocks placed in game may be destroyed
      */
-    public Boolean canBreakPlacedBlocks();
+    Boolean canBreakPlacedBlocks();
 
     /**
      * @param breakPlacedBlocks if placed blocks may be destroyed
      */
-    public void setBreakPlacedBlocks(Boolean breakPlacedBlocks);
+    void setBreakPlacedBlocks(Boolean breakPlacedBlocks);
 
     /**
      * @return if blocks may be placed
      */
-    public Boolean canPlaceBlocks();
+    Boolean canPlaceBlocks();
 
     /**
      * @param placeBlocks if blocks may be placed
      */
-    public void setPlaceBlocks(Boolean placeBlocks);
+    void setPlaceBlocks(Boolean placeBlocks);
 
     /**
      * @return the gameMode
      */
-    public GameMode getGameMode();
+    GameMode getGameMode();
 
     /**
      * @param gameMode the gameMode to set
      */
-    public void setGameMode(GameMode gameMode);
+    void setGameMode(GameMode gameMode);
 
     /**
      * @return if players lose lives
      */
-    public Boolean hasLives();
+    Boolean hasLives();
 
     /**
      * @param lives set if the gametype uses player lives
      */
-    public void setLives(Boolean lives);
+    void setLives(Boolean lives);
 
 }

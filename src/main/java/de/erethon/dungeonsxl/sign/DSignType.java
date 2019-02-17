@@ -26,26 +26,26 @@ public interface DSignType {
     /**
      * @return the name
      */
-    public String getName();
+    String getName();
 
     /**
      * @return the buildPermission
      */
-    public String getBuildPermission();
+    String getBuildPermission();
 
     /**
      * @return if the sign gets initialized when the dungeon is loaded instead of when the game starts
      */
-    public boolean isOnDungeonInit();
+    boolean isOnDungeonInit();
 
     /**
      * @return if the sign block should be destroyable after the initialization
      */
-    public boolean isProtected();
+    boolean isProtected();
 
     /**
      * @return the handler
      */
-    public Class<? extends DSign> getHandler();
+    Class<? extends DSign> getHandler();
 
 }

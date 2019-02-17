@@ -26,11 +26,11 @@ public interface TriggerType {
     /**
      * @return the identifier
      */
-    public String getIdentifier();
+    String getIdentifier();
 
     /**
      * @return the handler
      */
-    public Class<? extends Trigger> getHandler();
+    Class<? extends Trigger> getHandler();
 
 }

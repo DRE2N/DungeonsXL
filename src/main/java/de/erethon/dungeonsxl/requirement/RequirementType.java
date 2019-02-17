@@ -26,11 +26,11 @@ public interface RequirementType {
     /**
      * @return the identifier
      */
-    public String getIdentifier();
+    String getIdentifier();
 
     /**
      * @return the handler
      */
-    public Class<? extends Requirement> getHandler();
+    Class<? extends Requirement> getHandler();
 
 }
