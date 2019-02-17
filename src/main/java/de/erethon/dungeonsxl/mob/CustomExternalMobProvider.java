@@ -17,8 +17,6 @@
 package de.erethon.dungeonsxl.mob;
 
 import java.util.Map.Entry;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 
 /**
  * A custom external mob provider like defined in the main config file.
@@ -51,16 +49,6 @@ public class CustomExternalMobProvider implements ExternalMobProvider {
     @Override
     public String getRawCommand() {
         return command;
-    }
-
-    @Override
-    public String getCommand(String mob, String world, double x, double y, double z) {
-        return command.replaceAll("%mob%", mob).replaceAll("%world%", world).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z));
-    }
-
-    @Override
-    public void summon(String mob, Location location) {
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), getCommand(mob, location.getWorld().getName(), location.getX(), location.getY(), location.getZ()));
     }
 
 }

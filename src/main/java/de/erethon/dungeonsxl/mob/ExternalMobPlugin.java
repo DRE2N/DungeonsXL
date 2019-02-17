@@ -16,9 +16,6 @@
  */
 package de.erethon.dungeonsxl.mob;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-
 /**
  * Officially supported external mob plugins.
  *
@@ -26,7 +23,7 @@ import org.bukkit.Location;
  */
 public enum ExternalMobPlugin implements ExternalMobProvider {
 
-    CUSTOM_MOBS("CM", "ccmob spawn %mob% %world% %x% %y% %z%"),
+    CUSTOM_MOBS("CM", "ccmob spawn %mob% %world% %block_x% %block_y% %block_z%"),
     INSANE_MOBS("IM", "insanemobs %mob% %x% %y% %z% %world%"),
     MYTHIC_MOBS("MM", "mythicmobs mobs spawn %mob% 1 %world%,%x%,%y%,%z%");
 
@@ -46,26 +43,6 @@ public enum ExternalMobPlugin implements ExternalMobProvider {
     @Override
     public String getRawCommand() {
         return command;
-    }
-
-    @Override
-    public String getCommand(String mob, String world, double x, double y, double z) {
-        String xStr, yStr, zStr;
-        if (this == CUSTOM_MOBS) {
-            xStr = String.valueOf(Location.locToBlock(x));
-            yStr = String.valueOf(Location.locToBlock(y));
-            zStr = String.valueOf(Location.locToBlock(z));
-        } else {
-            xStr = String.valueOf(x);
-            yStr = String.valueOf(y);
-            zStr = String.valueOf(z);
-        }
-        return command.replaceAll("%mob%", mob).replaceAll("%world%", world).replaceAll("%x%", xStr).replaceAll("%y%", yStr).replaceAll("%z%", zStr);
-    }
-
-    @Override
-    public void summon(String mob, Location location) {
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), getCommand(mob, location.getWorld().getName(), location.getX(), location.getY(), location.getZ()));
     }
 
 }

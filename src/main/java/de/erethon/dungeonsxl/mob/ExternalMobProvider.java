@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.mob;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 /**
@@ -28,12 +29,12 @@ public interface ExternalMobProvider {
     /**
      * @return the name of the provider plugin
      */
-    public String getIdentifier();
+    String getIdentifier();
 
     /**
      * @return the raw command without replaced variables
      */
-    public String getRawCommand();
+    String getRawCommand();
 
     /**
      * @param mob   the mob identifier
@@ -43,12 +44,20 @@ public interface ExternalMobProvider {
      * @param z     the z coordinate
      * @return the command with replaced variables
      */
-    public String getCommand(String mob, String world, double x, double y, double z);
+    default String getCommand(String mob, String world, double x, double y, double z) {
+        return getRawCommand().replace("%mob%", mob).replace("%world%", world)
+                .replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z))
+                .replace("%block_x%", String.valueOf(Location.locToBlock(x)))
+                .replace("%block_y%", String.valueOf(Location.locToBlock(y)))
+                .replace("%block_z%", String.valueOf(Location.locToBlock(z)));
+    }
 
     /**
      * @param mob      the mob identifier
      * @param location the location where the mob will be spawned
      */
-    public void summon(String mob, Location location);
+    default void summon(String mob, Location location) {
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), getCommand(mob, location.getWorld().getName(), location.getX(), location.getY(), location.getZ()));
+    }
 
 }
