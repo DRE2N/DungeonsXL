@@ -423,6 +423,10 @@ public class Game {
         }.runTaskLater(plugin, delay * 20);
     }
 
+    public boolean isFinished() {
+        return dGroups.stream().allMatch(DGroup::isFinished);
+    }
+
     /**
      * @param message the message to send
      */
