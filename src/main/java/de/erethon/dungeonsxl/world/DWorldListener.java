@@ -165,6 +165,9 @@ public class DWorldListener implements Listener {
             return;
         }
         Game game = Game.getByGameWorld(gameWorld);
+        if (game == null) {
+            return;
+        }
         Set<ExMob> prot = interact ? game.getRules().getInteractionProtectedEntities() : game.getRules().getDamageProtectedEntities();
         if (prot.contains(caliburn.getExMob(entity))) {
             event.setCancelled(true);
@@ -187,7 +190,7 @@ public class DWorldListener implements Listener {
             event.setCancelled(true);
         } else if (dWorld instanceof DGameWorld) {
             Game game = Game.getByGameWorld((DGameWorld) dWorld);
-            if (game == null || game.getRules() == null) {
+            if (game == null) {
                 return;
             }
             Boolean raining = game.getRules().isRaining();
