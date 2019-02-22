@@ -101,11 +101,11 @@ public class MainConfig extends DREConfig {
     private double secureModeCheckInterval = 5;
     private boolean openInventories = false;
     private boolean dropItems = false;
-    private List<String> editCommandWhitelist = new ArrayList<>();
+    private List<String> editCommandWhitelist;
     private BackupMode backupMode = BackupMode.ON_DISABLE_AND_SAVE;
 
     /* Permissions bridge */
-    private List<String> editPermissions = new ArrayList<>();
+    private List<String> editPermissions;
 
     /* Default Dungeon Settings */
     private WorldConfig defaultWorldConfig;
@@ -570,54 +570,18 @@ public class MainConfig extends DREConfig {
 
     @Override
     public void load() {
-        /* Main Config */
-        if (config.contains("language")) {
-            language = config.getString("language");
-        }
-
-        if (config.contains("enableEconomy")) {
-            enableEconomy = config.getBoolean("enableEconomy");
-        }
-
-        if (config.contains("chatEnabled")) {
-            chatEnabled = config.getBoolean("chatEnabled");
-        }
-
-        if (config.contains("chatFormat.edit")) {
-            chatFormatEdit = config.getString("chatFormat.edit");
-        }
-
-        if (config.contains("chatFormat.game")) {
-            chatFormatGame = config.getString("chatFormat.game");
-        }
-
-        if (config.contains("chatFormat.group")) {
-            chatFormatGroup = config.getString("chatFormat.group");
-        }
-
-        if (config.contains("chatFormat.spy")) {
-            chatFormatSpy = config.getString("chatFormat.spy");
-        }
-
-        if (config.contains("chatEnabled")) {
-            chatEnabled = config.getBoolean("chatEnabled");
-        }
-
-        if (config.contains("tutorial.activated")) {
-            tutorialActivated = config.getBoolean("tutorial.activated");
-        }
-
-        if (config.contains("tutorial.dungeon")) {
-            tutorialDungeonName = config.getString("tutorial.dungeon");
-        }
-
-        if (config.contains("tutorial.startgroup")) {
-            tutorialStartGroup = config.getString("tutorial.startgroup");
-        }
-
-        if (config.contains("tutorial.endgroup")) {
-            tutorialEndGroup = config.getString("tutorial.endgroup");
-        }
+        language = config.getString("language", language);
+        enableEconomy = config.getBoolean("enableEconomy", enableEconomy);
+        chatEnabled = config.getBoolean("chatEnabled", chatEnabled);
+        chatFormatEdit = config.getString("chatFormat.edit", chatFormatEdit);
+        chatFormatGame = config.getString("chatFormat.game", chatFormatGame);
+        chatFormatGroup = config.getString("chatFormat.group", chatFormatGroup);
+        chatFormatSpy = config.getString("chatFormat.spy", chatFormatSpy);
+        chatEnabled = config.getBoolean("chatEnabled", chatEnabled);
+        tutorialActivated = config.getBoolean("tutorial.activated", tutorialActivated);
+        tutorialDungeonName = config.getString("tutorial.dungeon", tutorialDungeonName);
+        tutorialStartGroup = config.getString("tutorial.startgroup", tutorialStartGroup);
+        tutorialEndGroup = config.getString("tutorial.endgroup", tutorialEndGroup);
 
         if (config.contains("groupColorPriority")) {
             if (config.getStringList("groupColorPriority").size() < 15) {
@@ -641,65 +605,36 @@ public class MainConfig extends DREConfig {
             }
         }
 
-        if (config.contains("announcementInterval")) {
-            announcementInterval = config.getDouble("announcementInterval");
+        announcementInterval = config.getDouble("announcementInterval", announcementInterval);
+        sendFloorTitle = config.getBoolean("sendFloorTitle", sendFloorTitle);
+        globalDeathMessagesDisabled = config.getBoolean("globalDeathMessagesDisabled", globalDeathMessagesDisabled);
+
+        ConfigurationSection externalMobProvidersSection = config.getConfigurationSection("externalMobProviders");
+        if (externalMobProvidersSection != null) {
+            externalMobProviders = externalMobProvidersSection.getValues(false);
+        }
+        ConfigurationSection resourcePacksSection = config.getConfigurationSection("resourcePacks");
+        if (resourcePacksSection != null) {
+            resourcePacks = resourcePacksSection.getValues(false);
         }
 
-        if (config.contains("sendFloorTitle")) {
-            sendFloorTitle = config.getBoolean("sendFloorTitle");
+        maxInstances = config.getInt("maxInstances", maxInstances);
+        secureModeEnabled = config.getBoolean("secureMode.enabled", secureModeEnabled);
+        openInventories = config.getBoolean("secureMode.openInventories", openInventories);
+        dropItems = config.getBoolean("secureMode.dropItems", dropItems);
+        secureModeCheckInterval = config.getDouble("secureMode.checkInterval", secureModeCheckInterval);
+        editCommandWhitelist = config.getStringList("secureMode.editCommandWhitelist");
+
+        String mode = config.getString("backupMode");
+        if (EnumUtil.isValidEnum(BackupMode.class, mode)) {
+            backupMode = BackupMode.valueOf(mode);
         }
 
-        if (config.contains("globalDeathMessagesDisabled")) {
-            globalDeathMessagesDisabled = config.getBoolean("globalDeathMessagesDisabled");
-        }
+        editPermissions = config.getStringList("editPermissions");
 
-        if (config.contains("externalMobProviders")) {
-            externalMobProviders = config.getConfigurationSection("externalMobProviders").getValues(false);
-        }
-
-        if (config.contains("resourcePacks")) {
-            resourcePacks = config.getConfigurationSection("resourcePacks").getValues(false);
-        }
-
-        if (config.contains("maxInstances")) {
-            maxInstances = config.getInt("maxInstances");
-        }
-
-        if (config.contains("secureMode.enabled")) {
-            secureModeEnabled = config.getBoolean("secureMode.enabled");
-        }
-
-        if (config.contains("secureMode.openInventories")) {
-            openInventories = config.getBoolean("secureMode.openInventories");
-        }
-
-        if (config.contains("secureMode.dropItems")) {
-            dropItems = config.getBoolean("secureMode.dropItems");
-        }
-
-        if (config.contains("secureMode.checkInterval")) {
-            secureModeCheckInterval = config.getDouble("secureMode.checkInterval");
-        }
-
-        if (config.contains("secureMode.editCommandWhitelist")) {
-            editCommandWhitelist = config.getStringList("secureMode.editCommandWhitelist");
-        }
-
-        if (config.contains("backupMode")) {
-            String mode = config.getString("backupMode");
-            if (EnumUtil.isValidEnum(BackupMode.class, mode)) {
-                backupMode = BackupMode.valueOf(mode);
-            }
-        }
-
-        if (config.contains("editPermissions")) {
-            editPermissions = config.getStringList("editPermissions");
-        }
-
-        /* Default Dungeon Config */
-        ConfigurationSection configSection = config.getConfigurationSection("default");
-        if (configSection != null) {
-            defaultWorldConfig = new WorldConfig(plugin, configSection);
+        ConfigurationSection defaultWorldSection = config.getConfigurationSection("default");
+        if (defaultWorldSection != null) {
+            defaultWorldConfig = new WorldConfig(plugin, defaultWorldSection);
         }
     }
 

@@ -23,6 +23,7 @@ import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Represents a dungeon script. See {@link de.erethon.dungeonsxl.dungeon.Dungeon}.
@@ -182,37 +183,24 @@ public class DungeonConfig extends DREConfig {
 
     @Override
     public void load() {
-        if (config.contains("floors")) {
-            for (String floor : config.getStringList("floors")) {
-                DResourceWorld resource = plugin.getDWorldCache().getResourceByName(floor);
-                if (resource != null) {
-                    floors.add(resource);
-                }
+        for (String floor : config.getStringList("floors")) {
+            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(floor);
+            if (resource != null) {
+                floors.add(resource);
             }
         }
+        startFloor = plugin.getDWorldCache().getResourceByName(config.getString("startFloor"));
+        endFloor = plugin.getDWorldCache().getResourceByName(config.getString("endFloor"));
+        floorCount = config.getInt("floorCount", floors.size() + 2);
+        removeWhenPlayed = config.getBoolean("removeWhenPlayed", removeWhenPlayed);
 
-        if (config.contains("startFloor")) {
-            startFloor = plugin.getDWorldCache().getResourceByName(config.getString("startFloor"));
+        ConfigurationSection overrideSection = config.getConfigurationSection("overrideValues");
+        if (overrideSection != null) {
+            overrideValues = new WorldConfig(plugin, overrideSection);
         }
-
-        if (config.contains("endFloor")) {
-            endFloor = plugin.getDWorldCache().getResourceByName(config.getString("endFloor"));
-        }
-
-        if (config.contains("floorCount")) {
-            floorCount = config.getInt("floorCount");
-        }
-
-        if (config.contains("removeWhenPlayed")) {
-            removeWhenPlayed = config.getBoolean("removeWhenPlayed");
-        }
-
-        if (config.contains("overrideValues")) {
-            overrideValues = new WorldConfig(plugin, config.getConfigurationSection("overrideValues"));
-        }
-
-        if (config.contains("defaultValues")) {
-            defaultValues = new WorldConfig(plugin, config.getConfigurationSection("defaultValues"));
+        ConfigurationSection defaultSection = config.getConfigurationSection("defaultValues");
+        if (defaultValues != null) {
+            defaultValues = new WorldConfig(plugin, defaultSection);
         }
     }
 
