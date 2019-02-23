@@ -129,10 +129,9 @@ public class DEditWorld extends DInstanceWorld {
      *
      * @param save whether this world should be saved
      */
-    public void delete(final boolean save) {
+    public void delete(boolean save) {
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
         Bukkit.getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
             return;
         }

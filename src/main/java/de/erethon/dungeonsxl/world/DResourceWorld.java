@@ -274,14 +274,14 @@ public class DResourceWorld {
      * @return the automatically created DEditWorld instance
      */
     public DEditWorld generate() {
-        final String name = worlds.generateName(false);
+        String name = worlds.generateName(false);
         int id = worlds.generateId();
-        final File folder = new File(Bukkit.getWorldContainer(), name);
-        final WorldCreator creator = new WorldCreator(name);
+        File folder = new File(Bukkit.getWorldContainer(), name);
+        WorldCreator creator = new WorldCreator(name);
         creator.type(WorldType.FLAT);
         creator.generateStructures(false);
 
-        final DEditWorld editWorld = new DEditWorld(plugin, this, folder, id);
+        DEditWorld editWorld = new DEditWorld(plugin, this, folder, id);
 
         EditWorldGenerateEvent event = new EditWorldGenerateEvent(editWorld);
         Bukkit.getPluginManager().callEvent(event);

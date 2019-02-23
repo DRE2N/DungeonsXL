@@ -38,27 +38,26 @@ public class MobSpawnTask extends BukkitRunnable {
         if (sign.getInterval() <= 0) {
             World world = sign.getSign().getWorld();
             DGameWorld gameWorld = DGameWorld.getByWorld(world);
-
-            if (gameWorld != null) {
-                LivingEntity entity = sign.spawn();
-                if (entity != null) {
-                    new DMob(entity, sign.getGameWorld(), sign.getMob());
-                }
-
-                if (sign.getAmount() != -1) {
-                    if (sign.getAmount() > 1) {
-                        sign.setAmount(sign.getAmount() - 1);
-
-                    } else {
-                        sign.killTask();
-                    }
-                }
-
-                sign.setInterval(sign.getMaxInterval());
-
-            } else {
+            if (gameWorld == null) {
                 sign.killTask();
+                return;
             }
+
+            LivingEntity entity = sign.spawn();
+            if (entity != null) {
+                new DMob(entity, sign.getGameWorld(), sign.getMob());
+            }
+
+            if (sign.getAmount() != -1) {
+                if (sign.getAmount() > 1) {
+                    sign.setAmount(sign.getAmount() - 1);
+
+                } else {
+                    sign.killTask();
+                }
+            }
+
+            sign.setInterval(sign.getMaxInterval());
         }
 
         sign.setInterval(sign.getInterval() - 1);

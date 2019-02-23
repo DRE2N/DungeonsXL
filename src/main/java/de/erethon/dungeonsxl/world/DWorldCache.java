@@ -43,8 +43,6 @@ public class DWorldCache {
 
     public static final File RAW = new File(DungeonsXL.MAPS, ".raw");
 
-    private BukkitTask worldUnloadTask;
-
     private Set<DResourceWorld> resources = new HashSet<>();
     private Set<DInstanceWorld> instances = new HashSet<>();
 
@@ -65,7 +63,7 @@ public class DWorldCache {
             createRaw();
         }
 
-        startWorldUnloadTask(1200L);
+        new WorldUnloadTask(plugin).runTaskTimer(plugin, 20L, 20L);//1200L
         Bukkit.getPluginManager().registerEvents(new DWorldListener(plugin), plugin);
         if (LWCUtil.isLWCLoaded()) {
             new LWCIntegration(plugin);
@@ -317,23 +315,6 @@ public class DWorldCache {
         FileUtil.removeDir(worldFolder);
     }
 
-    /* Tasks */
-    /**
-     * @return the worldUnloadTask
-     */
-    public BukkitTask getWorldUnloadTask() {
-        return worldUnloadTask;
-    }
-
-    /**
-     * start a new WorldUnloadTask
-     *
-     * @param period the period in ticks
-     */
-    public void startWorldUnloadTask(long period) {
-        worldUnloadTask = new WorldUnloadTask(plugin).runTaskTimer(plugin, period, period);
-    }
-
     /* Util */
     /**
      * Removes files that are not needed from a world
@@ -341,8 +322,7 @@ public class DWorldCache {
      * @param dir the directory to purge
      */
     public static void deleteUnusedFiles(File dir) {
-        File[] files = dir.listFiles();
-        for (File file : files) {
+        for (File file : dir.listFiles()) {
             if (file.getName().equalsIgnoreCase("uid.dat") || file.getName().contains(".id_")) {
                 file.delete();
             }

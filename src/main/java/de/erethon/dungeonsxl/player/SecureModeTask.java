@@ -40,7 +40,7 @@ public class SecureModeTask extends BukkitRunnable {
                 dGlobalPlayer = new DGlobalPlayer(plugin, player);
             }
 
-            if (!(dGlobalPlayer instanceof DGamePlayer || dGlobalPlayer instanceof DEditPlayer)) {
+            if (!(dGlobalPlayer instanceof DInstancePlayer)) {
                 if (player.getWorld().getName().startsWith("DXL_Game_") | player.getWorld().getName().startsWith("DXL_Edit_") && !DPermission.hasPermission(player, DPermission.INSECURE)) {
                     player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
                 }

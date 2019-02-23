@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.world;
 
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
-import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -50,7 +49,6 @@ public class WorldConfig extends GameRuleProvider {
 
     private DungeonsXL plugin;
     private CaliburnAPI caliburn;
-    private CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     private File file;
 

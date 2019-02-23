@@ -45,7 +45,7 @@ public class TriggerListener implements Listener {
                     }
                 }
             }
-        }.runTaskLater(plugin, 1);
+        }.runTaskLater(plugin, 1L);
     }
 
 }

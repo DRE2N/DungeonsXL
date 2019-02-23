@@ -46,8 +46,8 @@ public class ImportCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        final File target = new File(DungeonsXL.MAPS, args[1]);
-        final File source = new File(Bukkit.getWorldContainer(), args[1]);
+        File target = new File(DungeonsXL.MAPS, args[1]);
+        File source = new File(Bukkit.getWorldContainer(), args[1]);
 
         if (!source.exists()) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));

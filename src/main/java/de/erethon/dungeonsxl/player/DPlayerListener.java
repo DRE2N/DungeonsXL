@@ -488,7 +488,7 @@ public class DPlayerListener implements Listener {
             }
 
             // Because some plugins set another respawn point, DXL teleports a few ticks later.
-            new RespawnTask(plugin, player, respawn).runTaskLater(plugin, 10);
+            new RespawnTask(plugin, player, respawn).runTaskLater(plugin, 10L);
 
             // Don't forget Doge!
             if (gamePlayer.getWolf() != null) {

@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * DGlobalPlayer instance manager.
@@ -38,10 +37,6 @@ public class DPlayerCache {
     private DungeonsXL plugin;
     private MainConfig config;
 
-    private BukkitTask secureModeTask;
-    private BukkitTask updateTask;
-    private BukkitTask lazyUpdateTask;
-
     private CopyOnWriteArrayList<DGlobalPlayer> dGlobalPlayers = new CopyOnWriteArrayList<>();
 
     public DPlayerCache(DungeonsXL plugin) {
@@ -52,10 +47,10 @@ public class DPlayerCache {
         config = plugin.getMainConfig();
 
         if (config.isSecureModeEnabled()) {
-            startSecureModeTask(config.getSecureModeCheckInterval());
+            new SecureModeTask(plugin).runTaskTimer(plugin, config.getSecureModeCheckInterval(), config.getSecureModeCheckInterval());
         }
-        startUpdateTask(2L);
-        startLazyUpdateTask(20L);
+        new UpdateTask(plugin).runTaskTimer(plugin, 2L, 2L);
+        new LazyUpdateTask(plugin).runTaskTimer(plugin, 20L, 20L);
 
         Bukkit.getPluginManager().registerEvents(new DPlayerListener(plugin), plugin);
     }
@@ -185,55 +180,6 @@ public class DPlayerCache {
         dPlayer.setPlayer(player);
         dPlayer.setOfflineTime(0);
         return true;
-    }
-
-    /* Tasks */
-    /**
-     * @return the secureModeTask
-     */
-    public BukkitTask getSecureModeTask() {
-        return secureModeTask;
-    }
-
-    /**
-     * start a new SecureModeTask
-     *
-     * @param period the period in ticks
-     */
-    public void startSecureModeTask(long period) {
-        secureModeTask = new SecureModeTask(plugin).runTaskTimer(plugin, period, period);
-    }
-
-    /**
-     * @return the updateTask
-     */
-    public BukkitTask getUpdateTask() {
-        return updateTask;
-    }
-
-    /**
-     * start a new LazyUpdateTask
-     *
-     * @param period the period in ticks
-     */
-    public void startUpdateTask(long period) {
-        updateTask = new UpdateTask(plugin).runTaskTimer(plugin, period, period);
-    }
-
-    /**
-     * @return the lazyUpdateTask
-     */
-    public BukkitTask getLazyUpdateTask() {
-        return lazyUpdateTask;
-    }
-
-    /**
-     * start a new LazyUpdateTask
-     *
-     * @param period the period in ticks
-     */
-    public void startLazyUpdateTask(long period) {
-        lazyUpdateTask = new LazyUpdateTask(plugin).runTaskTimer(plugin, period, period);
     }
 
 }
