@@ -167,9 +167,7 @@ public class ReadySign extends DSign {
             }
         }
 
-        if (dPlayer.isReady()) {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), (dPlayer.isReady() ? DMessage.PLAYER_READY : DMessage.ERROR_READY).getMessage());
-        }
+        dPlayer.sendMessage((dPlayer.isReady() ? DMessage.PLAYER_READY : DMessage.ERROR_READY).getMessage());
     }
 
     @Override
