@@ -50,6 +50,7 @@ public class GameRuleProvider {
 
         /* World */
         DEFAULT_VALUES.gameMode = GameMode.SURVIVAL;
+        DEFAULT_VALUES.fly = false;
         DEFAULT_VALUES.breakBlocks = false;
         DEFAULT_VALUES.breakPlacedBlocks = false;
         DEFAULT_VALUES.breakWhitelist = null;
@@ -115,6 +116,7 @@ public class GameRuleProvider {
 
     /* World */
     protected GameMode gameMode;
+    protected Boolean fly;
     protected Boolean breakBlocks;
     protected Boolean breakPlacedBlocks;
     protected Map<ExItem, HashSet<ExItem>> breakWhitelist;
@@ -210,6 +212,10 @@ public class GameRuleProvider {
      */
     public GameMode getGameMode() {
         return gameMode;
+    }
+
+    public boolean canFly() {
+        return fly;
     }
 
     /**
@@ -682,6 +688,10 @@ public class GameRuleProvider {
         /* World */
         if (gameMode == null) {
             gameMode = defaultValues.gameMode;
+        }
+
+        if (fly == null) {
+            fly = defaultValues.fly;
         }
 
         if (breakBlocks == null) {

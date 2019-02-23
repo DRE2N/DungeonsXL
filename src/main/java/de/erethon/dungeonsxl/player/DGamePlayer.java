@@ -96,6 +96,7 @@ public class DGamePlayer extends DInstancePlayer {
         if (!rules.getKeepInventoryOnEnter()) {
             clearPlayerData();
         }
+        player.setAllowFlight(rules.canFly());
 
         if (rules.isLobbyDisabled()) {
             ready();

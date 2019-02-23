@@ -69,6 +69,8 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
     /* Actions */
     /**
      * Clear the player's inventory, potion effects etc.
+     * <p>
+     * Does NOT handle flight.
      */
     public void clearPlayerData() {
         player.getInventory().clear();
@@ -85,7 +87,6 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
             player.setCollidable(true);
             player.setInvulnerable(false);
         }
-        player.setAllowFlight(false);
     }
 
     /**

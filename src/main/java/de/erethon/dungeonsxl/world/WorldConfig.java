@@ -143,6 +143,10 @@ public class WorldConfig extends GameRuleProvider {
             }
         }
 
+        if (configFile.contains("fly")) {
+            fly = configFile.getBoolean("fly");
+        }
+
         if (configFile.contains("breakBlocks")) {
             breakBlocks = configFile.getBoolean("breakBlocks");
         }
