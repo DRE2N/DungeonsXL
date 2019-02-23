@@ -197,7 +197,7 @@ public class DResourceWorld {
      * @param game whether the instance is a DGameWorld
      * @return an instance of this world
      */
-    public DInstanceWorld instantiate(final boolean game) {
+    public DInstanceWorld instantiate(boolean game) {
         int id = worlds.generateId();
         String name = worlds.generateName(game, id);
 
@@ -223,7 +223,7 @@ public class DResourceWorld {
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment()));
-        if (Bukkit.getPluginManager().getPlugin("dynmap") != null) {
+        if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause all");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dmap worldset " + name + " enabled:false");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause none");

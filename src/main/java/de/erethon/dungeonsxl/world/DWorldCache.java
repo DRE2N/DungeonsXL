@@ -29,7 +29,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * World instance manager.
@@ -252,8 +251,7 @@ public class DWorldCache {
      */
     public void deleteAllInstances() {
         BackupMode backupMode = config.getBackupMode();
-        HashSet<DInstanceWorld> instances = new HashSet<>(this.instances);
-        for (DInstanceWorld instance : instances) {
+        for (DInstanceWorld instance : instances.toArray(new DInstanceWorld[instances.size()])) {
             if (backupMode == BackupMode.ON_DISABLE | backupMode == BackupMode.ON_DISABLE_AND_SAVE && instance instanceof DEditWorld) {
                 instance.getResource().backup();
             }

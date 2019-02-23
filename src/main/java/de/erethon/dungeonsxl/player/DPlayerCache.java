@@ -26,6 +26,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * DGlobalPlayer instance manager.
@@ -49,8 +50,19 @@ public class DPlayerCache {
         if (config.isSecureModeEnabled()) {
             new SecureModeTask(plugin).runTaskTimer(plugin, config.getSecureModeCheckInterval(), config.getSecureModeCheckInterval());
         }
-        new UpdateTask(plugin).runTaskTimer(plugin, 2L, 2L);
-        new LazyUpdateTask(plugin).runTaskTimer(plugin, 20L, 20L);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                plugin.getDPlayerCache().getDGamePlayers().forEach(p -> p.update(false));
+            }
+        }.runTaskTimer(plugin, 2L, 2L);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                plugin.getDPlayerCache().getDGamePlayers().forEach(p -> p.update(true));
+            }
+        }.runTaskTimer(plugin, 20L, 20L);
 
         Bukkit.getPluginManager().registerEvents(new DPlayerListener(plugin), plugin);
     }
