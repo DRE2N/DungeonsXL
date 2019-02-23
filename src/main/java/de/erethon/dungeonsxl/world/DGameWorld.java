@@ -495,33 +495,6 @@ public class DGameWorld extends DInstanceWorld {
     }
 
     /**
-     * Ongoing updates
-     */
-    public void update() {
-        if (getWorld() == null) {
-            return;
-        }
-
-        // Update Spiders
-        for (LivingEntity mob : getWorld().getLivingEntities()) {
-            if (mob.getType() == EntityType.SPIDER || mob.getType() == EntityType.CAVE_SPIDER) {
-                Spider spider = (Spider) mob;
-                if (spider.getTarget() != null) {
-                    if (spider.getTarget().getType() == EntityType.PLAYER) {
-                        continue;
-                    }
-                }
-
-                for (Entity player : spider.getNearbyEntities(10, 10, 10)) {
-                    if (player.getType() == EntityType.PLAYER) {
-                        spider.setTarget((LivingEntity) player);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Handles what happens when a player breaks a block.
      *
      * @param event the passed Bukkit event
