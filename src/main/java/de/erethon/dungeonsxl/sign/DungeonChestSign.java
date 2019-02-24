@@ -50,14 +50,15 @@ public class DungeonChestSign extends ChestSign {
 
     @Override
     public void onInit() {
+        // For consistency with reward chests but also for intuitiveness, both lines should be possible
+        if (!lines[1].isEmpty()) {
+            lootTable = plugin.getCaliburn().getLootTable(lines[1]);
+        }
         if (!lines[2].isEmpty()) {
             lootTable = plugin.getCaliburn().getLootTable(lines[2]);
         }
 
-        if (chest == null) {
-            checkChest();
-        }
-
+        checkChest();
         if (chest != null) {
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
         } else {
@@ -65,28 +66,23 @@ public class DungeonChestSign extends ChestSign {
             chest = getSign().getBlock();
         }
 
-        Chest state = (Chest) chest.getState();
         List<ItemStack> list = null;
         if (lootTable != null) {
             list = lootTable.generateLootList();
         }
         if (chestContent != null) {
             if (list != null) {
-                list = Arrays.asList(chestContent);
-            } else {
                 list.addAll(Arrays.asList(chestContent));
+            } else {
+                list = Arrays.asList(chestContent);
             }
         }
         if (list == null) {
             return;
         }
-        ItemStack[] contents = list.toArray(new ItemStack[list.size()]);
-        if (contents.length > state.getBlockInventory().getSize()) {
-            contents = Arrays.copyOfRange(contents, 0, state.getBlockInventory().getSize());
-        }
-        state.getBlockInventory().setContents(contents);
-        state.update();
-        System.out.println(Arrays.toString(state.getBlockInventory().getContents()));
+
+        chestContent = Arrays.copyOfRange(list.toArray(new ItemStack[list.size()]), 0, 26);
+        ((Chest) chest.getState()).getBlockInventory().setContents(chestContent);
     }
 
 }

@@ -96,10 +96,7 @@ public class RewardChestSign extends ChestSign {
             lootTable = plugin.getCaliburn().getLootTable(lines[2]);
         }
 
-        if (chest == null) {
-            checkChest();
-        }
-
+        checkChest();
         if (chest != null) {
             getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
         } else {
@@ -113,9 +110,9 @@ public class RewardChestSign extends ChestSign {
         }
         if (chestContent != null) {
             if (list != null) {
-                list = Arrays.asList(chestContent);
-            } else {
                 list.addAll(Arrays.asList(chestContent));
+            } else {
+                list = Arrays.asList(chestContent);
             }
         }
         if (list == null) {
