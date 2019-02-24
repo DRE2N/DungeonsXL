@@ -74,8 +74,8 @@ public class SignData {
     public void deserializeSigns(DEditWorld editWorld) {
         try {
             ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
-            int length = os.readInt();
 
+            int length = os.readInt();
             for (int i = 0; i < length; i++) {
                 int x = os.readInt();
                 int y = os.readInt();
@@ -93,6 +93,8 @@ public class SignData {
                     }
                 }
             }
+
+            os.close();
 
         } catch (IOException exception) {
             exception.printStackTrace();
