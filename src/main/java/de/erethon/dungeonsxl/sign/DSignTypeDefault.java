@@ -108,6 +108,17 @@ public enum DSignTypeDefault implements DSignType {
         return isProtected;
     }
 
+    public boolean isLegacy() {
+        switch (this) {
+            case CHEST:
+            case EXTERNAL_MOB:
+            case FLOOR:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     public Class<? extends DSign> getHandler() {
         return handler;

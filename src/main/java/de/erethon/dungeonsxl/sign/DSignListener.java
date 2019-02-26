@@ -104,6 +104,17 @@ public class DSignListener implements Listener {
             sign.setLine(2, lines[2]);
             sign.setLine(3, lines[3]);
 
+            for (DSignTypeDefault type : DSignTypeDefault.values()) {
+                if (!lines[0].equalsIgnoreCase("[" + type.getName() + "]")) {
+                    continue;
+                }
+                if (type.isLegacy()) {
+                    MessageUtil.sendMessage(player, ChatColor.RED + "https://erethon.de/resources/dxl-signs/deprecated.gif");
+                    MessageUtil.sendMessage(player, ChatColor.LIGHT_PURPLE + "https://github.com/DRE2N/DungeonsXL/wiki/Legacy-support#updating");
+                    return;
+                }
+            }
+
             DSign dsign = DSign.create(plugin, sign, null);
 
             if (dsign == null) {
