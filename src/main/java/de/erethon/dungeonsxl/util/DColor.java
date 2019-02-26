@@ -43,7 +43,7 @@ public enum DColor {
     LIGHT_RED(ChatColor.RED, DyeColor.RED, VanillaItem.RED_WOOL),
     ORANGE(ChatColor.GOLD, DyeColor.ORANGE, VanillaItem.ORANGE_WOOL),
     YELLOW(ChatColor.YELLOW, DyeColor.YELLOW, VanillaItem.YELLOW_WOOL),
-    DEFAULT(ChatColor.BLUE, DyeColor.PINK, VanillaItem.PINK_WOOL);
+    PINK(ChatColor.BLUE, DyeColor.PINK, VanillaItem.PINK_WOOL);
 
     private ChatColor chat;
     private DyeColor dye;

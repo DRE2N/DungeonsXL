@@ -58,6 +58,9 @@ public class DGroup {
     DungeonsXL plugin;
     DPlayerCache dPlayers;
 
+    private static int counter;
+
+    private int id;
     private String name;
     private Player captain;
     private PlayerCollection players = new PlayerCollection();
@@ -76,11 +79,11 @@ public class DGroup {
     private int lives = -1;
 
     public DGroup(DungeonsXL plugin, Player player) {
-        this(plugin, "Group " + plugin.getDGroupCache().size(), player);
+        this(plugin, "Group#" + counter, player);
     }
 
     public DGroup(DungeonsXL plugin, Player player, DColor color) {
-        this(plugin, color.toString().replace("_", " "), player);
+        this(plugin, color.toString() + "#" + counter, player);
     }
 
     public DGroup(DungeonsXL plugin, String name, Player player) {
@@ -95,10 +98,12 @@ public class DGroup {
 
         playing = false;
         floorCount = 0;
+
+        id = counter++;
     }
 
     public DGroup(DungeonsXL plugin, Player player, Dungeon dungeon) {
-        this(plugin, plugin.getMainConfig().getGroupColorPriority().get(plugin.getDGroupCache().size()).toString(), player, dungeon);
+        this(plugin, "Group#" + counter, player, dungeon);
     }
 
     public DGroup(DungeonsXL plugin, String name, Player player, Dungeon dungeon) {
@@ -129,14 +134,23 @@ public class DGroup {
         setDungeon(dungeon);
         playing = false;
         floorCount = 0;
+
+        id = counter++;
     }
 
     // Getters and setters
     /**
+     * @return the group ID
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
      * @return the name; formatted
      */
     public String getName() {
-        return (color != null ? color.getChatColor().toString() : new String()) + name;
+        return getDColor().getChatColor() + name;
     }
 
     /**
@@ -157,7 +171,7 @@ public class DGroup {
      * @param color the color to fetch the name from
      */
     public void setName(DColor color) {
-        name = color.toString().replace("_", " ");
+        name = color.toString() + "#" + id;
     }
 
     /**
@@ -520,7 +534,7 @@ public class DGroup {
      * @return if the group has been customized with a command
      */
     public boolean isCustom() {
-        return !name.matches("Group_[0-9]{1,}");
+        return !name.matches("Group#[0-9]{1,}");
     }
 
     /**
@@ -544,7 +558,7 @@ public class DGroup {
         if (color != null) {
             return color;
         } else {
-            return DColor.DEFAULT;
+            return DColor.WHITE;
         }
     }
 
@@ -766,7 +780,9 @@ public class DGroup {
         GameRuleProvider rules = game.getRules();
         gameWorld.setWeather(rules);
 
-        color = plugin.getMainConfig().getGroupColorPriority().get(game.getDGroups().indexOf(this));
+        if (color == null) {
+            color = plugin.getMainConfig().getGroupColorPriority((game.getDGroups().indexOf(this)));
+        }
 
         for (DGroup dGroup : game.getDGroups()) {
             if (dGroup == null) {

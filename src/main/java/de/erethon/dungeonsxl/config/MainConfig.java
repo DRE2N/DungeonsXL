@@ -75,7 +75,6 @@ public class MainConfig extends DREConfig {
             LIGHT_GREEN,
             PURPLE,
             ORANGE,
-            WHITE,
             BLACK,
             LIGHT_BLUE,
             DARK_GREEN,
@@ -83,7 +82,8 @@ public class MainConfig extends DREConfig {
             LIGHT_GRAY,
             CYAN,
             MAGENTA,
-            DARK_GRAY
+            DARK_GRAY,
+            PINK
     ));
     private double announcementInterval = 30;
 
@@ -283,6 +283,14 @@ public class MainConfig extends DREConfig {
      */
     public List<DColor> getGroupColorPriority() {
         return groupColorPriority;
+    }
+
+    /**
+     * @param count the group count
+     * @return the group color for the count
+     */
+    public DColor getGroupColorPriority(int count) {
+        return (count < groupColorPriority.size() && count >= 0) ? groupColorPriority.get(count) : DColor.WHITE;
     }
 
     /**
@@ -583,24 +591,23 @@ public class MainConfig extends DREConfig {
         tutorialStartGroup = config.getString("tutorial.startgroup", tutorialStartGroup);
         tutorialEndGroup = config.getString("tutorial.endgroup", tutorialEndGroup);
 
-        if (config.contains("groupColorPriority")) {
-            if (config.getStringList("groupColorPriority").size() < 15) {
-                ArrayList<String> strings = new ArrayList<>();
-                for (DColor color : groupColorPriority) {
-                    strings.add(color.toString());
-                }
-                config.set("groupColorPriority", strings);
-                try {
-                    config.save(file);
-                } catch (IOException exception) {
-                }
+        if (config.getStringList("groupColorPriority").size() < 14) {
+            ArrayList<String> strings = new ArrayList<>();
+            for (DColor color : groupColorPriority) {
+                strings.add(color.toString());
+            }
+            config.set("groupColorPriority", strings);
+            try {
+                config.save(file);
+            } catch (IOException exception) {
+            }
 
-            } else {
-                groupColorPriority.clear();
-                for (String color : config.getStringList("groupColorPriority")) {
-                    if (EnumUtil.isValidEnum(DColor.class, color)) {
-                        groupColorPriority.add(DColor.valueOf(color));
-                    }
+        } else {
+            groupColorPriority.clear();
+            for (String color : config.getStringList("groupColorPriority")) {
+                DColor dColor = EnumUtil.getEnum(DColor.class, color);
+                if (dColor != null && dColor != DColor.WHITE) {
+                    groupColorPriority.add(dColor);
                 }
             }
         }

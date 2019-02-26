@@ -52,7 +52,7 @@ public class StatusCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         String minecraftVersion = compat.getVersion().toString();
-        String bukkitVersion = Bukkit.getName() + (compat.isSpigot() ? " (Spigot)" : new String()) + " " + Bukkit.getBukkitVersion();
+        String bukkitVersion = Bukkit.getName() + (compat.isSpigot() ? " (Spigot)" : "") + " " + Bukkit.getBukkitVersion();
         String internalsVersion = compat.getInternals().toString();
         String dungeonsxlVersion = plugin.getDescription().getVersion();
 
