@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.announcer;
 
+import de.erethon.caliburn.category.Category;
 import de.erethon.dungeonsxl.DungeonsXL;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Wool;
 
 /**
  * @author Daniel Saukel
@@ -46,7 +46,7 @@ public class AnnouncerListener implements Listener {
         Inventory gui = event.getInventory();
         ItemStack button = event.getCurrentItem();
         Announcer announcer = announcers.getByGUI(gui);
-        if (announcer != null && button != null && button.getData() instanceof Wool) {
+        if (announcer != null && button != null && Category.WOOL.containsMaterial(button.getType())) {
             announcer.clickGroupButton(player, button);
         }
     }

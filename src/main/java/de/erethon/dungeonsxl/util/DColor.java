@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.util;
 
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.compatibility.Version;
 import org.bukkit.ChatColor;
@@ -93,6 +94,19 @@ public enum DColor {
     }
 
     /**
+     * @param color the ChatColor to check
+     * @return the matching DColor or null
+     */
+    public static DColor getByChatColor(ChatColor color) {
+        for (DColor dColor : values()) {
+            if (dColor.chat == color) {
+                return dColor;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param color the DyeColor to check
      * @return the matching DColor or null
      */
@@ -106,12 +120,12 @@ public enum DColor {
     }
 
     /**
-     * @param color the ChatColor to check
+     * @param wool the wool item to check
      * @return the matching DColor or null
      */
-    public static DColor getByChatColor(ChatColor color) {
+    public static DColor getByWoolType(ExItem wool) {
         for (DColor dColor : values()) {
-            if (dColor.chat == color) {
+            if (dColor.woolMaterial == wool) {
                 return dColor;
             }
         }

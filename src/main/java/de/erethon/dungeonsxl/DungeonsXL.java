@@ -23,10 +23,7 @@ import de.erethon.commons.config.MessageConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.javaplugin.DREPluginSettings;
 import de.erethon.commons.misc.FileUtil;
-import de.erethon.dungeonsxl.announcer.Announcer;
 import de.erethon.dungeonsxl.announcer.AnnouncerCache;
-import de.erethon.dungeonsxl.announcer.AnnouncerListener;
-import de.erethon.dungeonsxl.announcer.AnnouncerTask;
 import de.erethon.dungeonsxl.command.DCommandCache;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.config.MainConfig;
@@ -216,7 +213,7 @@ public class DungeonsXL extends DREPlugin {
         protections = new GlobalProtectionCache(this);
         dMobProviders = new ExternalMobProviderCache(this);
         dPlayers = new DPlayerCache(this);
-        announcers = new AnnouncerCache();
+        announcers = new AnnouncerCache(this);
         dClasses = new DClassCache(this);
         signScripts = new SignScriptCache();
         dCommands = new DCommandCache(this);
@@ -235,7 +232,7 @@ public class DungeonsXL extends DREPlugin {
         globalData.load();
         dMobProviders.init();
         dPlayers.init();
-        initAnnouncerCache(ANNOUNCERS);
+        announcers.init(ANNOUNCERS);
         dClasses.init(CLASSES);
         Bukkit.getPluginManager().registerEvents(new DMobListener(), this);
         signScripts.init(SIGNS);
@@ -365,18 +362,6 @@ public class DungeonsXL extends DREPlugin {
      */
     public AnnouncerCache getAnnouncerCache() {
         return announcers;
-    }
-
-    private void initAnnouncerCache(File file) {
-        if (file.isDirectory()) {
-            for (File script : FileUtil.getFilesForFolder(file)) {
-                announcers.addAnnouncer(new Announcer(this, script));
-            }
-        }
-        if (!announcers.getAnnouncers().isEmpty()) {
-            announcers.setAnnouncerTask(new AnnouncerTask(this).runTaskTimer(this, mainConfig.getAnnouncmentInterval(), mainConfig.getAnnouncmentInterval()));
-        }
-        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(this), this);
     }
 
     /**

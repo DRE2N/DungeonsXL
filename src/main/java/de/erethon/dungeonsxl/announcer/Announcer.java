@@ -41,7 +41,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Wool;
 
 /**
  * Represents a game announcement.
@@ -351,7 +350,7 @@ public class Announcer {
     public void clickGroupButton(Player player, ItemStack button) {
         DGroup dGroup = getDGroupByButton(button);
         DGroup pGroup = DGroup.getByPlayer(player);
-        DColor color = DColor.getByDyeColor(((Wool) button.getData()).getColor());
+        DColor color = DColor.getByWoolType(plugin.getCaliburn().getExItem(button));
 
         for (DGroup group : dGroups) {
             if (dGroups.contains(pGroup) && pGroup != null && pGroup.isCustom() && pGroup.getCaptain() == player) {

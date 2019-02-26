@@ -16,11 +16,13 @@
  */
 package de.erethon.dungeonsxl.announcer;
 
+import de.erethon.dungeonsxl.DungeonsXL;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Announcer instance manager.
@@ -29,9 +31,26 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class AnnouncerCache {
 
-    private BukkitTask announcerTask;
+    private DungeonsXL plugin;
 
     private List<Announcer> announcers = new ArrayList<>();
+
+    public AnnouncerCache(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
+    public void init(File folder) {
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        for (File file : folder.listFiles()) {
+            addAnnouncer(new Announcer(plugin, file));
+        }
+        if (!announcers.isEmpty()) {
+            new AnnouncerTask(plugin).runTaskTimer(plugin, plugin.getMainConfig().getAnnouncmentInterval(), plugin.getMainConfig().getAnnouncmentInterval());
+        }
+        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(plugin), plugin);
+    }
 
     /**
      * @param name the name
@@ -80,20 +99,6 @@ public class AnnouncerCache {
      */
     public void removeAnnouncer(Announcer announcer) {
         announcers.remove(announcer);
-    }
-
-    /**
-     * @return the AnnouncerTask
-     */
-    public BukkitTask getAnnouncerTask() {
-        return announcerTask;
-    }
-
-    /**
-     * @param announcerTask the AnnouncerTask to set
-     */
-    public void setAnnouncerTask(BukkitTask announcerTask) {
-        this.announcerTask = announcerTask;
     }
 
 }
