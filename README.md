@@ -32,7 +32,6 @@ DungeonsXL also provides custom game mechanics to make these worlds interesting.
 * A powerful API: [Read more...](../../wiki/api-tutorial)
 * Different game types allow you to use your maps dynamically for different purposes. [Read more...](../../wiki/game-types)
 * Announcements sothat users can join the next match easily. [Read more...](../../wiki/announcements)
-* Great performance due to a custom, asynchronous world loading and creation method and several other performance tweaks
 * Per dungeon resource packs
 * ...and many more!
 
