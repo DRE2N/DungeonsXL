@@ -37,8 +37,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class HologramSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.HOLOGRAM;
-
     private Hologram hologram;
 
     public HologramSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -83,7 +81,7 @@ public class HologramSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.HOLOGRAM;
     }
 
 }

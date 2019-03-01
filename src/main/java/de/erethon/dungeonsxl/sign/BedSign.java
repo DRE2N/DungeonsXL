@@ -31,8 +31,6 @@ import org.bukkit.block.Sign;
  */
 public class BedSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.BED;
-
     private int team;
 
     public BedSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -42,7 +40,7 @@ public class BedSign extends DSign {
     /* Getters and setters */
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.BED;
     }
 
     /* Actions */

@@ -40,8 +40,6 @@ public class LivesModifierSign extends DSign {
         PLAYER,
     }
 
-    private DSignType type = DSignTypeDefault.LIVES_MODIFIER;
-
     private int lives;
     private Target target;
 
@@ -129,7 +127,7 @@ public class LivesModifierSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.LIVES_MODIFIER;
     }
 
 }

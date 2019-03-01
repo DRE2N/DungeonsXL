@@ -33,8 +33,6 @@ import org.bukkit.entity.Player;
  */
 public class InteractSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.INTERACT;
-
     public InteractSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -53,7 +51,7 @@ public class InteractSign extends DSign {
 
             if (block.getState() instanceof Sign) {
                 Sign rsign = (Sign) block.getState();
-                if (rsign.getLine(0).equalsIgnoreCase("[" + type.getName() + "]")) {
+                if (rsign.getLine(0).equalsIgnoreCase("[" + getType().getName() + "]")) {
                     used.add(NumberUtil.parseInt(rsign.getLine(1)));
                 }
             }
@@ -106,7 +104,7 @@ public class InteractSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.INTERACT;
     }
 
 }

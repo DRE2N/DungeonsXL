@@ -39,8 +39,6 @@ public class MobSign extends DSign {
 
     private ExternalMobProviderCache providers;
 
-    private DSignType type = DSignTypeDefault.MOB;
-
     private String mob;
     private int maxInterval = 1;
     private int interval = 0;
@@ -285,7 +283,7 @@ public class MobSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.MOB;
     }
 
 }

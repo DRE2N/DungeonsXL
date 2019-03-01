@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
  */
 public class ActionBarSign extends PerPlayerSign {
 
-    private DSignType type = DSignTypeDefault.ACTION_BAR;
-
     private String text;
 
     public ActionBarSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -78,7 +76,7 @@ public class ActionBarSign extends PerPlayerSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.ACTION_BAR;
     }
 
 }

@@ -33,8 +33,6 @@ import org.bukkit.entity.Player;
  */
 public class MessageSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.MESSAGE;
-
     // Variables
     private String msg = "UNKNOWN MESSAGE";
     private boolean initialized;
@@ -96,7 +94,7 @@ public class MessageSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.MESSAGE;
     }
 
 }

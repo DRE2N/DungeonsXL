@@ -32,8 +32,6 @@ import org.bukkit.block.Sign;
  */
 public class TriggerSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.TRIGGER;
-
     // Variables
     private int triggerId;
     private boolean initialized;
@@ -56,7 +54,7 @@ public class TriggerSign extends DSign {
 
             if (block.getState() instanceof Sign) {
                 Sign rsign = (Sign) block.getState();
-                if (rsign.getLine(0).equalsIgnoreCase("[" + type.getName() + "]")) {
+                if (rsign.getLine(0).equalsIgnoreCase("[" + getType().getName() + "]")) {
                     used.add(NumberUtil.parseInt(rsign.getLine(1)));
                 }
             }
@@ -120,7 +118,7 @@ public class TriggerSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.TRIGGER;
     }
 
 }

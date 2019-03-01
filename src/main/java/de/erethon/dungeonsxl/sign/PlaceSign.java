@@ -27,8 +27,6 @@ import org.bukkit.block.Sign;
  */
 public class PlaceSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.PLACE;
-
     public PlaceSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -46,7 +44,7 @@ public class PlaceSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.PLACE;
     }
 
 }

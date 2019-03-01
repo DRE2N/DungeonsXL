@@ -29,8 +29,6 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class RedstoneSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.REDSTONE;
-
     // Variables
     private boolean initialized;
     private boolean active;
@@ -261,7 +259,7 @@ public class RedstoneSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.REDSTONE;
     }
 
 }

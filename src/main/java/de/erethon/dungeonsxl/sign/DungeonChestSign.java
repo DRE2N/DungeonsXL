@@ -30,8 +30,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DungeonChestSign extends ChestSign {
 
-    private DSignType type = DSignTypeDefault.DUNGEON_CHEST;
-
     public DungeonChestSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -39,7 +37,7 @@ public class DungeonChestSign extends ChestSign {
     /* Getters and setters */
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.DUNGEON_CHEST;
     }
 
     /* Actions */

@@ -31,8 +31,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardChestSign extends ChestSign {
 
-    private DSignType type = DSignTypeDefault.REWARD_CHEST;
-
     private double moneyReward;
     private int levelReward;
 
@@ -71,7 +69,7 @@ public class RewardChestSign extends ChestSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.REWARD_CHEST;
     }
 
     /* Actions */

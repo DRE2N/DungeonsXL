@@ -28,8 +28,6 @@ import org.bukkit.block.Sign;
  */
 public class ProtectionSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.PROTECTION;
-
     public ProtectionSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -37,7 +35,7 @@ public class ProtectionSign extends DSign {
     /* Getters and setters */
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.PROTECTION;
     }
 
     /* Actions */

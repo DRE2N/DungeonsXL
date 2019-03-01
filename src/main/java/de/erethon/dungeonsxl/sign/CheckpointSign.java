@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
  */
 public class CheckpointSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.CHECKPOINT;
-
     // Variables
     private boolean initialized;
     private CopyOnWriteArrayList<DGamePlayer> done = new CopyOnWriteArrayList<>();
@@ -91,7 +89,7 @@ public class CheckpointSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.CHECKPOINT;
     }
 
 }

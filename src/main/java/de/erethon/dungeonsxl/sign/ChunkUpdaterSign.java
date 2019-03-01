@@ -28,8 +28,6 @@ import org.bukkit.block.Sign;
  */
 public class ChunkUpdaterSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.CHUNK_UPDATER;
-
     public ChunkUpdaterSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -63,7 +61,7 @@ public class ChunkUpdaterSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.CHUNK_UPDATER;
     }
 
 }

@@ -29,8 +29,6 @@ import org.bukkit.block.Sign;
  */
 public class LobbySign extends LocationSign {
 
-    private DSignType type = DSignTypeDefault.LOBBY;
-
     public LobbySign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -49,7 +47,7 @@ public class LobbySign extends LocationSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.LOBBY;
     }
 
 }

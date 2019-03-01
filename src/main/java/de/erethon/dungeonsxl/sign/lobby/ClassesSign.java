@@ -30,8 +30,6 @@ import org.bukkit.block.Sign;
  */
 public class ClassesSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.CLASSES;
-
     private DClass dClass;
 
     public ClassesSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -77,7 +75,7 @@ public class ClassesSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.CLASSES;
     }
 
 }

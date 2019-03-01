@@ -35,8 +35,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class CommandSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.COMMAND;
-
     // Variables
     private CCommand cCommand;
     private long delay;
@@ -135,7 +133,7 @@ public class CommandSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.COMMAND;
     }
 
 }

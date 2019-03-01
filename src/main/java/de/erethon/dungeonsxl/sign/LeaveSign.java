@@ -33,8 +33,6 @@ import org.bukkit.entity.Player;
  */
 public class LeaveSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.LEAVE;
-
     public LeaveSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -96,7 +94,7 @@ public class LeaveSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.LEAVE;
     }
 
 }

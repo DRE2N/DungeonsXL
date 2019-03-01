@@ -29,8 +29,6 @@ import org.bukkit.block.Sign;
  */
 public class BlockSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.BLOCK;
-
     // Variables
     private boolean initialized;
     private boolean active;
@@ -115,7 +113,7 @@ public class BlockSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.BLOCK;
     }
 
 }

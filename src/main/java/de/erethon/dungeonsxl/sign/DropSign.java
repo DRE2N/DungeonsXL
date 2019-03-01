@@ -31,8 +31,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DropSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.DROP;
-
     private ItemStack item;
     private double interval = -1;
 
@@ -100,7 +98,7 @@ public class DropSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.DROP;
     }
 
 }

@@ -31,8 +31,6 @@ import org.bukkit.material.Door;
  */
 public class OpenDoorSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.OPEN_DOOR;
-
     private LockedDoor door;
     private boolean active = true;
 
@@ -71,7 +69,7 @@ public class OpenDoorSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.OPEN_DOOR;
     }
 
     /* Actions */

@@ -27,8 +27,6 @@ import org.bukkit.block.Sign;
  */
 public class FlagSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.FLAG;
-
     private int team;
 
     public FlagSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -38,7 +36,7 @@ public class FlagSign extends DSign {
     /* Getters and setters */
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.FLAG;
     }
 
     /* Actions */

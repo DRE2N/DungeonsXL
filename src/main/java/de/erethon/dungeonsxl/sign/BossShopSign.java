@@ -36,8 +36,6 @@ public class BossShopSign extends DSign {
 
     BossShop bossShop = (BossShop) Bukkit.getPluginManager().getPlugin("BossShop");
 
-    private DSignType type = DSignTypeDefault.BOSS_SHOP;
-
     private String shopName;
 
     public BossShopSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -103,7 +101,7 @@ public class BossShopSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.BOSS_SHOP;
     }
 
     public void openShop(Player player, String shopName) {

@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
  */
 public class TitleSign extends PerPlayerSign {
 
-    private DSignType type = DSignTypeDefault.TITLE;
-
     private String title;
     private String subtitle;
 
@@ -93,7 +91,7 @@ public class TitleSign extends PerPlayerSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.TITLE;
     }
 
 }

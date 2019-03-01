@@ -30,8 +30,6 @@ import org.bukkit.block.Sign;
  */
 public class StartSign extends LocationSign {
 
-    private DSignType type = DSignTypeDefault.START;
-
     private int id;
 
     public StartSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -68,7 +66,7 @@ public class StartSign extends LocationSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.START;
     }
 
 }

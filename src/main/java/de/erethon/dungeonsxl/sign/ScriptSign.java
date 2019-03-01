@@ -25,8 +25,6 @@ import org.bukkit.block.Sign;
  */
 public class ScriptSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.SCRIPT;
-
     private String name;
 
     public ScriptSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -65,7 +63,7 @@ public class ScriptSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.SCRIPT;
     }
 
 }

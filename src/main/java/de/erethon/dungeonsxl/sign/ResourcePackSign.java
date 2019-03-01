@@ -30,8 +30,6 @@ import org.bukkit.entity.Player;
  */
 public class ResourcePackSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.RESOURCE_PACK;
-
     private String resourcePack;
 
     public ResourcePackSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -41,7 +39,7 @@ public class ResourcePackSign extends DSign {
     /* Getters and setters */
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.RESOURCE_PACK;
     }
 
     /**

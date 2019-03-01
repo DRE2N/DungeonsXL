@@ -39,8 +39,6 @@ import org.bukkit.entity.Player;
  */
 public class ReadySign extends DSign {
 
-    private DSignType type = DSignTypeDefault.READY;
-
     private GameType gameType;
     private double autoStart = -1;
     private boolean triggered = false;
@@ -171,7 +169,7 @@ public class ReadySign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.READY;
     }
 
 }

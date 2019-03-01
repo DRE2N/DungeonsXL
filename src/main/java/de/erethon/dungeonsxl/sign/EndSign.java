@@ -33,8 +33,6 @@ import org.bukkit.entity.Player;
  */
 public class EndSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.END;
-
     private DResourceWorld floor;
 
     public EndSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
@@ -117,7 +115,7 @@ public class EndSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.END;
     }
 
 }

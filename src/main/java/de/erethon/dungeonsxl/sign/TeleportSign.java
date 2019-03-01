@@ -28,8 +28,6 @@ import org.bukkit.entity.Player;
  */
 public class TeleportSign extends LocationSign {
 
-    private DSignType type = DSignTypeDefault.TELEPORT;
-
     public TeleportSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
     }
@@ -97,7 +95,7 @@ public class TeleportSign extends LocationSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.TELEPORT;
     }
 
 }

@@ -35,8 +35,6 @@ import org.bukkit.entity.Player;
  */
 public class SoundMessageSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.SOUND_MESSAGE;
-
     // Variables
     private boolean initialized;
     private String sound;
@@ -116,7 +114,7 @@ public class SoundMessageSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.SOUND_MESSAGE;
     }
 
 }

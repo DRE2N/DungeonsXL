@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
  */
 public class WaveSign extends DSign {
 
-    private DSignType type = DSignTypeDefault.WAVE;
-
     private double mobCountIncreaseRate;
     private boolean teleport;
 
@@ -114,7 +112,7 @@ public class WaveSign extends DSign {
 
     @Override
     public DSignType getType() {
-        return type;
+        return DSignTypeDefault.WAVE;
     }
 
 }
