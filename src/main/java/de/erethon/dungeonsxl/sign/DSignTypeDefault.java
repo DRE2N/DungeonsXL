@@ -59,6 +59,7 @@ public enum DSignTypeDefault implements DSignType {
     LOBBY("Lobby", "lobby", true, false, LobbySign.class),
     MOB("Mob", "mob", false, false, MobSign.class),
     MESSAGE("MSG", "msg", false, false, MessageSign.class),
+    NOTE("Note", "note", false, false, NoteSign.class),
     OPEN_DOOR("Door", "door", false, false, OpenDoorSign.class),
     PLACE("Place", "place", false, false, PlaceSign.class),
     PROTECTION("Protection", "protection", false, false, ProtectionSign.class),
