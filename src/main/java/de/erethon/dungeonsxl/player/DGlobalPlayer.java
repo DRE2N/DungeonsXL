@@ -143,6 +143,13 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * @return the DGroup of this player
+     */
+    public DGroup getDGroup() {
+        return DGroup.getByPlayer(player);
+    }
+
+    /**
      * @return if the player is in group chat
      */
     public boolean isInGroupChat() {

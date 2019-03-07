@@ -4,7 +4,7 @@ version: ${project.version}${buildNo}
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 description: ${project.description}
 website: ${project.url}
-softdepend: [CommandsXL, ItemsXL, Vault, Citizens, CustomMobs, InsaneMobs, MythicMobs, HolographicDisplays, LWC]
+softdepend: [CommandsXL, ItemsXL, Vault, Citizens, CustomMobs, InsaneMobs, MythicMobs, HolographicDisplays, LWC, PlaceholderAPI]
 commands:
   dungeonsxl:
     description: Reference command for DungeonsXL.

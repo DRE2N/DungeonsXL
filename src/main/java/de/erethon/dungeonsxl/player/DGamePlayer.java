@@ -130,9 +130,7 @@ public class DGamePlayer extends DInstancePlayer {
         return name;
     }
 
-    /**
-     * @return the DGroup of this player
-     */
+    @Override
     public DGroup getDGroup() {
         if (dGroup == null) {
             dGroup = DGroup.getByPlayer(player);

@@ -111,6 +111,12 @@
             <version>2.1.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.9.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -135,6 +141,10 @@
         <repository>
             <id>filoghost-repo</id>
             <url>https://ci.filoghost.me/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
             <id>dre-repo</id>
