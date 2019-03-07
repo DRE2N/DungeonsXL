@@ -72,7 +72,9 @@ public class CommandSign extends DSign {
 
         command = lines[1];
         delay = NumberUtil.parseInt(attributes[0]);
-        executor = attributes[1];
+        if (attributes.length >= 2) {
+            executor = attributes[1];
+        }
 
         cCommand = CommandsXL.getPlugin().getCCommands().getCCommand(command);
 
@@ -98,10 +100,10 @@ public class CommandSign extends DSign {
 
     @Override
     public boolean onPlayerTrigger(final Player player) {
-        if (executor.equalsIgnoreCase("Console")) {
+        if ("Console".equalsIgnoreCase(executor)) {
             new CCommandExecutorTask(player, cCommand, Bukkit.getConsoleSender(), true).runTaskLater(plugin, delay * 20);
 
-        } else if (executor.equalsIgnoreCase("OP")) {
+        } else if ("OP".equalsIgnoreCase(executor)) {
             boolean isOp = player.isOp();
 
             player.setOp(true);
