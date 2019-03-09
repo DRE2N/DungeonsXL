@@ -54,7 +54,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
@@ -125,7 +124,7 @@ public class DungeonsXL extends DREPlugin {
         initCaches();
         loadData();
         if (manager.isPluginEnabled("PlaceholderAPI")) {
-            PlaceholderAPI.registerPlaceholderHook("dxl", new PlaceholderUtil(this, "dxl"));
+            new PlaceholderUtil(this, "dxl").register();
         }
     }
 
