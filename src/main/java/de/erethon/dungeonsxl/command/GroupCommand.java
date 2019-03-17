@@ -59,7 +59,7 @@ public class GroupCommand extends DCommand {
         if (args.length == 2) {
 
             if (args[1].equalsIgnoreCase("disband")) {
-                disbandGroup(dGroup);
+                disbandGroup(dGroup, null);
                 return;
 
             } else if (args[1].equalsIgnoreCase("show")) {
@@ -90,7 +90,7 @@ public class GroupCommand extends DCommand {
                 return;
 
             } else if (args[1].equalsIgnoreCase("disband") && DPermission.hasPermission(sender, DPermission.GROUP_ADMIN)) {
-                disbandGroup(DGroup.getByName(args[2]));
+                disbandGroup(DGroup.getByName(args[2]), args[2]);
                 return;
 
             } else if (args[1].equalsIgnoreCase("join")) {
@@ -135,9 +135,11 @@ public class GroupCommand extends DCommand {
         }
     }
 
-    public void disbandGroup(DGroup dGroup) {
-        if (dGroup == null) {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_GROUP.getMessage());
+    public void disbandGroup(DGroup dGroup, String name) {
+        if (dGroup == null) { // only gets here
+            MessageUtil.sendMessage(sender,
+                    name == null ? DMessage.ERROR_SELF_NOT_IN_GROUP.getMessage()
+                            : DMessage.ERROR_NO_SUCH_GROUP.getMessage(name));
             return;
         }
 

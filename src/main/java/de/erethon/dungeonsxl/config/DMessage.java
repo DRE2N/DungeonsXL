@@ -87,6 +87,7 @@ public enum DMessage implements Message {
     ERROR_NO_PROTECTED_BLOCK("Error_NoDXLBlock", "&4This is not a block protected by DungeonsXL!"),
     ERROR_NO_REWARDS_LEFT("Error_NoRewardsLeft", "&4You do not have any item rewards left."),
     ERROR_NO_REWARDS_TIME("error.noRewardsTime", "&4You cannot receive rewards before &6&v1&4."),
+    ERROR_SELF_NOT_IN_GROUP("Error_SelfNoGroup", "&4You are not in any group."),
     ERROR_NO_SUCH_GROUP("Error_NoSuchGroup", "&4The group &6&v1&4 does not exist!"),
     ERROR_NO_SUCH_MAP("Error_NoSuchMap", "&4The world &6&v1&4 does not exist!"),
     ERROR_NO_SUCH_PLAYER("Error_NoSuchPlayer", "&4The player &6&v1&4 does not exist!"),
