@@ -36,7 +36,7 @@ public class WorldUnloadTask extends BukkitRunnable {
         Set<DInstanceWorld> instances = plugin.getDWorldCache().getInstances();
         for (DInstanceWorld instance : instances.toArray(new DInstanceWorld[instances.size()])) {
             if (instance.exists()) {
-                if (instance.getWorld().getPlayers().isEmpty()) {
+                if (instance.getPlayers().isEmpty()) {
                     instance.delete();
                 }
             }
