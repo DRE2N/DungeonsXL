@@ -17,11 +17,10 @@
 package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.util.MagicValueUtil;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.material.Door;
 
 /**
  * A locked door that may be opened with a trigger.
@@ -58,9 +57,10 @@ public class LockedDoor extends GameBlock implements MultiBlock {
      * Opens the door.
      */
     public void open() {
-        BlockState state = block.getState();
-        ((Door) state.getData()).setOpen(true);
-        state.update(true);
+        /*Openable data = ((Openable) block.getBlockData());
+        data.setOpen(true);
+        block.setBlockData(data);*/
+        MagicValueUtil.setBlockData(block, (byte) (block.getData() + 4));
     }
 
     @Override
