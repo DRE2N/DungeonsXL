@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.erethon</groupId>
     <artifactId>dungeonsxl</artifactId>
-    <version>0.17.7</version>
+    <version>0.17.8-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
@@ -126,13 +126,6 @@
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
-            <!--Repo ded :C-->
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
         <repository>
             <id>citizens-repo</id>
