@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
-import de.erethon.commons.misc.NumberUtil;
+import de.erethon.commons.chat.MessageUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +49,15 @@ public class SignScript {
         this.name = name;
         signs = new ArrayList<>(config.getKeys(false).size());
 
+        int i = 0;
         for (String key : config.getKeys(false)) {
-            int index = NumberUtil.parseInt(key);
-            String[] lines = new String[]{};
-            lines = config.getStringList(key).toArray(lines);
-            signs.add(index, lines);
+            List<String> lines = config.getStringList(key);
+            if (lines.size() != 4) {
+                MessageUtil.log("Found an invalid sign (ID: " + key + ") in script \"" + name + "\". Every sign must have 4 text lines.");
+                continue;
+            }
+            signs.add(i, lines.toArray(new String[4]));
+            i++;
         }
     }
 
