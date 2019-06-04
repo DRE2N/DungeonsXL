@@ -40,7 +40,6 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 
 /**
  * @author Daniel Saukel, Frank Baumann, Milan Albrecht
@@ -106,16 +105,6 @@ public class DWorldListener implements Listener {
         DInstanceWorld instance = dWorlds.getInstanceByWorld(block.getWorld());
         if (instance != null && VanillaItem.VINE.is(block)) {
             event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event) {
-        DInstanceWorld instance = dWorlds.getInstanceByWorld(event.getWorld());
-        if (instance instanceof DGameWorld) {
-            if (((DGameWorld) instance).getLoadedChunks().contains(event.getChunk())) {
-                event.setCancelled(true);
-            }
         }
     }
 

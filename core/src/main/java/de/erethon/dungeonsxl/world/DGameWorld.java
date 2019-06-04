@@ -56,7 +56,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -99,7 +98,6 @@ public class DGameWorld extends DInstanceWorld {
     private Set<TeamFlag> teamFlags = new HashSet<>();
 
     private List<ItemStack> secureObjects = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Chunk> loadedChunks = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Sign> classesSigns = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<>();
@@ -283,20 +281,6 @@ public class DGameWorld extends DInstanceWorld {
      */
     public void setSecureObjects(List<ItemStack> secureObjects) {
         this.secureObjects = secureObjects;
-    }
-
-    /**
-     * @return the loadedChunks
-     */
-    public CopyOnWriteArrayList<Chunk> getLoadedChunks() {
-        return loadedChunks;
-    }
-
-    /**
-     * @param loadedChunks the loadedChunks to set
-     */
-    public void setLoadedChunks(CopyOnWriteArrayList<Chunk> loadedChunks) {
-        this.loadedChunks = loadedChunks;
     }
 
     /**

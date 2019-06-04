@@ -41,7 +41,6 @@ public enum DSignTypeDefault implements DSignType {
     CHECKPOINT("Checkpoint", "checkpoint", false, false, CheckpointSign.class),
     @Deprecated
     CHEST("Chest", "chest", false, false, RewardChestSign.class),
-    CHUNK_UPDATER("ChunkUpdater", "chunkupdater", true, false, ChunkUpdaterSign.class),
     CLASSES("Classes", "classes", true, true, ClassesSign.class),
     COMMAND("CMD", "cmd", false, false, CommandSign.class),
     DROP("Drop", "drop", false, false, DropSign.class),
