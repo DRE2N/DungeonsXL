@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
 /**
  * Announcer instance manager.
@@ -70,7 +70,7 @@ public class AnnouncerCache {
      * @param gui the gui
      * @return the announcer that has the GUI
      */
-    public Announcer getByGUI(Inventory gui) {
+    public Announcer getByGUI(InventoryView gui) {
         for (Announcer announcer : announcers) {
             if ((ChatColor.DARK_RED + announcer.getName()).equals(gui.getTitle())) {
                 return announcer;
