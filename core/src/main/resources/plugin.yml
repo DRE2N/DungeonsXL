@@ -1,9 +1,9 @@
-name: ${project.name}
-main: ${project.groupId}.${project.artifactId}.${project.name}
-version: ${project.version}${buildNo}
+name: ${project.parent.name}
+main: de.erethon.dungeonsxl.DungeonsXL
+version: ${project.parent.version}${buildNo}
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
-description: ${project.description}
-website: ${project.url}
+description: ${project.parent.description}
+website: ${project.parent.url}
 softdepend: [CommandsXL, ItemsXL, Vault, Citizens, CustomMobs, InsaneMobs, MythicMobs, HolographicDisplays, LWC, PlaceholderAPI]
 commands:
   dungeonsxl:
