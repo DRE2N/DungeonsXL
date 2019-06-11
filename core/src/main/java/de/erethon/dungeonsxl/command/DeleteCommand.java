@@ -16,9 +16,7 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.chat.ClickEvent;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.chat.TextComponent;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -26,6 +24,8 @@ import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

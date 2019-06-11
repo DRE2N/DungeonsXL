@@ -23,8 +23,8 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
             <version>1.14.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
@@ -41,9 +41,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>de.erethon</groupId>
-            <artifactId>commons</artifactId>
-            <version>5.1.5</version>
+            <groupId>de.erethon.commons</groupId>
+            <artifactId>commons-dist</artifactId>
+            <version>6.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
