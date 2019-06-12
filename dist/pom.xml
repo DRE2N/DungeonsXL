@@ -26,7 +26,8 @@
                             <artifactSet>
                                 <includes>
                                     <include>de.erethon:caliburn</include>
-                                    <include>de.erethon:commons</include>
+                                    <include>de.erethon.commons:commons-dist</include>
+                                    <include>de.erethon.vignette:vignette-dist</include>
                                     <include>de.erethon.dungeonsxl:*</include>
                                 </includes>
                             </artifactSet>
@@ -54,9 +55,15 @@
             <version>0.5.4</version>
         </dependency>
         <dependency>
-            <groupId>de.erethon</groupId>
-            <artifactId>commons</artifactId>
-            <version>5.1.5</version>
+            <groupId>de.erethon.vignette</groupId>
+            <artifactId>vignette-dist</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.commons</groupId>
+            <artifactId>commons-dist</artifactId>
+            <version>6.0</version>
         </dependency>
     </dependencies>
 </project>

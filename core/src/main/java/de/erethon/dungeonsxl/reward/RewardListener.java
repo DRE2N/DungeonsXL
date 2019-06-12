@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.reward;
 
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.gui.PageGUI;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
@@ -25,6 +24,8 @@ import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
+import de.erethon.vignette.api.PaginatedInventoryGUI;
+import de.erethon.vignette.api.component.InventoryButton;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -121,10 +122,12 @@ public class RewardListener implements Listener {
         if (dPlayer.hasRewardItemsLeft() && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 1, 0)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, -1, 0))
                 && !VanillaItem.NETHER_PORTAL.is(block.getRelative(1, 0, 0)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(-1, 0, 0))
                 && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, 1)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, -1))) {
-            PageGUI lootInventory = new PageGUI(DMessage.PLAYER_TREASURES.getMessage(), true);
+            PaginatedInventoryGUI lootInventory = new PaginatedInventoryGUI(DMessage.PLAYER_TREASURES.getMessage());
             for (ItemStack item : dPlayer.getRewardItems()) {
                 if (item != null) {
-                    lootInventory.addButton(item);
+                    InventoryButton button = new InventoryButton(item);
+                    button.setStealable(true);
+                    lootInventory.add(button);
                 }
             }
             lootInventory.open(player);
