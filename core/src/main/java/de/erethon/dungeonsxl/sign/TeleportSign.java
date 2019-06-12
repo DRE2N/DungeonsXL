@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -36,7 +37,7 @@ public class TeleportSign extends LocationSign {
     public boolean check() {
         for (int i = 1; i <= 2; i++) {
             if (!lines[i].isEmpty()) {
-                if (letterToYaw(lines[i].charAt(0)) == -1) {
+                if (BlockUtil.lettersToYaw(lines[i]) == -1) {
                     String[] loc = lines[i].split(",");
                     if (loc.length != 3) {
                         return false;
@@ -52,7 +53,7 @@ public class TeleportSign extends LocationSign {
         super.onInit();
         for (int i = 1; i <= 2; i++) {
             if (!lines[i].isEmpty()) {
-                int yaw = letterToYaw(lines[i].charAt(0));
+                int yaw = BlockUtil.lettersToYaw(lines[i]);
                 if (yaw != -1) {
                     location.setYaw(yaw);
                 } else {

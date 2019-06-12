@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Location;
@@ -37,7 +38,7 @@ public abstract class LocationSign extends DSign {
         double x = getSign().getX() + 0.5;
         double y = getSign().getY();
         double z = getSign().getZ() + 0.5;
-        float yaw = letterToYaw(((org.bukkit.material.Sign) getSign().getData()).getFacing().getOppositeFace().name().charAt(0));
+        float yaw = BlockUtil.blockFaceToYaw(((org.bukkit.material.Sign) getSign().getData()).getFacing().getOppositeFace());
         float pitch = 0;
         location = new Location(getGameWorld().getWorld(), x, y, z, yaw, pitch);
     }
@@ -47,25 +48,6 @@ public abstract class LocationSign extends DSign {
      */
     public Location getLocation() {
         return location;
-    }
-
-    public static int letterToYaw(char c) {
-        switch (c) {
-            case 'S':
-            case 's':
-                return 0;
-            case 'W':
-            case 'w':
-                return 90;
-            case 'N':
-            case 'n':
-                return 180;
-            case 'E':
-            case 'e':
-                return -90;
-            default:
-                return -1;
-        }
     }
 
 }
