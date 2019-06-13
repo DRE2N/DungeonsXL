@@ -36,6 +36,10 @@
                                     <pattern>de.erethon.commons</pattern>
                                     <shadedPattern>de.erethon.dungeonsxl.util.commons</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>de.erethon.vignette</pattern>
+                                    <shadedPattern>de.erethon.dungeonsxl.util.vignette</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
