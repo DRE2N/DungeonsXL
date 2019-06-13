@@ -78,15 +78,6 @@ public enum DColor {
     }
 
     /**
-     * @deprecated Use getDyeColor() or getMaterial() instead
-     * @return the wool DV
-     */
-    @Deprecated
-    public byte getWoolData() {
-        return dye.getWoolData();
-    }
-
-    /**
      * @return the wool material
      */
     public VanillaItem getWoolMaterial() {

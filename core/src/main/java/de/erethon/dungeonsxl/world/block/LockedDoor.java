@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.util.MagicValueUtil;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -57,10 +56,7 @@ public class LockedDoor extends GameBlock implements MultiBlock {
      * Opens the door.
      */
     public void open() {
-        /*Openable data = ((Openable) block.getBlockData());
-        data.setOpen(true);
-        block.setBlockData(data);*/
-        MagicValueUtil.setBlockData(block, (byte) (block.getData() + 4));
+        DungeonsXL.BLOCK_ADAPTER.openDoor(block);
     }
 
     @Override

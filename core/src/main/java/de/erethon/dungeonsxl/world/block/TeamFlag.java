@@ -18,13 +18,10 @@ package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.DColor;
-import de.erethon.dungeonsxl.util.MagicValueUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -44,7 +41,7 @@ public class TeamFlag extends TeamBlock {
      * Reset a team flag when the capturer dies.
      */
     public void reset() {
-        setBlockWoolColor(block, owner.getDColor());
+        DungeonsXL.BLOCK_ADAPTER.setBlockWoolColor(block, owner.getDColor());
     }
 
     @Override
@@ -64,13 +61,6 @@ public class TeamFlag extends TeamBlock {
         gamePlayer.setRobbedGroup(owner);
         event.getBlock().setType(VanillaItem.AIR.getMaterial());
         return true;
-    }
-
-    public static void setBlockWoolColor(Block block, DColor color) {
-        block.setType(color.getWoolMaterial().getMaterial());
-        if (!CompatibilityHandler.getInstance().getVersion().useNewMaterials()) {
-            MagicValueUtil.setBlockData(block, color.getWoolData());
-        }
     }
 
 }

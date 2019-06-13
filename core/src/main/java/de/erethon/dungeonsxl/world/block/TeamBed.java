@@ -27,7 +27,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.material.Bed;
 
 /**
  * @author Daniel Saukel
@@ -86,7 +85,7 @@ public class TeamBed extends TeamBlock implements MultiBlock {
 
         owner.getGameWorld().sendMessage(DMessage.GROUP_BED_DESTROYED.getMessage(owner.getName(), DGamePlayer.getByPlayer(breaker).getName()));
         Block block1 = event.getBlock();
-        if (((Bed) block1.getState().getData()).isHeadOfBed()) {
+        if (DungeonsXL.BLOCK_ADAPTER.isBedHead(block)) {
             Block block2 = getAttachedBlock(block1);
             if (block2 != null) {
                 block2.setType(VanillaItem.AIR.getMaterial());

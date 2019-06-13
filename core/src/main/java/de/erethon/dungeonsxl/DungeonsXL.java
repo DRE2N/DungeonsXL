@@ -19,10 +19,14 @@ package de.erethon.dungeonsxl;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.commons.compatibility.Internals;
+import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.config.MessageConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.javaplugin.DREPluginSettings;
 import de.erethon.commons.misc.FileUtil;
+import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
+import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
+import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
 import de.erethon.dungeonsxl.announcer.AnnouncerCache;
 import de.erethon.dungeonsxl.command.DCommandCache;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -67,6 +71,8 @@ public class DungeonsXL extends DREPlugin {
 
     private static DungeonsXL instance;
     private CaliburnAPI caliburn;
+
+    public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
     public static File BACKUPS;

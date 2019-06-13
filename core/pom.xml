@@ -23,6 +23,24 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-bukkit_blockdata</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-bukkit_magicvalues</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.14.2-R0.1-SNAPSHOT</version>
@@ -33,24 +51,6 @@
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.erethon</groupId>
-            <artifactId>caliburn</artifactId>
-            <version>0.5.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.erethon.commons</groupId>
-            <artifactId>commons-dist</artifactId>
-            <version>6.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.erethon.vignette</groupId>
-            <artifactId>vignette-dist</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.dre2n</groupId>
