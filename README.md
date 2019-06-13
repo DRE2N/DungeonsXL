@@ -6,8 +6,6 @@
 [![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://erethon.de/javadocs/dungeonsxl/)
 [![MCStats](http://feuerstern.bplaced.net/ressourcen/buttons/MCStats.png)](http://bstats.org/plugin/bukkit/DungeonsXL/)
 
-![Doge](https://i.imgflip.com/vtpyi.jpg)
-
 DungeonsXL is a server mod that allows you to instantiate worlds.
 
 Its main goal is to offer a way to use a world in a set state multiple times by a player (like for a jump'n'run), a group of players (e.g. for a quest dungeon, an adventure map or a PvE arena) or even by groups of groups of players (e.g. for PvP arenas).
@@ -47,7 +45,7 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with 1.8.8 and higher. However, support for 1.13.x / 1.12.x / 1.11.x / 1.10.x / 1.9.x has a higher priority than support for 1.8.8. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. Some cosmetic features require the Spigot API and will therefore not work with CraftBukkit.
+DungeonsXL works with Spigot 1.8 and higher. However, support for 1.14 / 1.13 has a higher priority than support for 1.8-1.12. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. DungeonsXL only works with Spigot and does not support CraftBukkit builds.
 
 ### Building information and dependencies
 Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org/).
@@ -58,6 +56,9 @@ Maven automatically fetches all dependencies and builds DungeonsXL; just run _bu
 
 #### Caliburn API
 [Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files.
+
+#### Vignette
+[Vignette](https://github.com/DRE2N/Vignette) is a Bukkit GUI Framework.
 
 ### Java
 Make sure that your server uses Java 8 or higher.
