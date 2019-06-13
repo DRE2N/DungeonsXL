@@ -24,6 +24,7 @@ import de.erethon.commons.config.MessageConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.javaplugin.DREPluginSettings;
 import de.erethon.commons.misc.FileUtil;
+import de.erethon.commons.spiget.comparator.VersionComparator;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
@@ -115,6 +116,7 @@ public class DungeonsXL extends DREPlugin {
                 .permissions(true)
                 .metrics(true)
                 .spigotMCResourceId(9488)
+                .versionComparator(VersionComparator.EQUAL)
                 .build();
     }
 
