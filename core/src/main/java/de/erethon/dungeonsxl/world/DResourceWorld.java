@@ -198,6 +198,7 @@ public class DResourceWorld {
      * @return an instance of this world
      */
     public DInstanceWorld instantiate(boolean game) {
+        plugin.setLoadingWorld(true);
         int id = worlds.generateId();
         String name = worlds.generateName(game, id);
 
@@ -235,6 +236,7 @@ public class DResourceWorld {
             signData.deserializeSigns((DEditWorld) instance);
         }
 
+        plugin.setLoadingWorld(false);
         return instance;
     }
 
@@ -243,6 +245,9 @@ public class DResourceWorld {
      * @return an old or a new instance of this world.
      */
     public DEditWorld instantiateAsEditWorld(boolean ignoreLimit) {
+        if (plugin.isLoadingWorld()) {
+            return null;
+        }
         if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= worlds.getInstances().size()) {
             return null;
         }
@@ -262,6 +267,9 @@ public class DResourceWorld {
      * @return a new instance of this world
      */
     public DGameWorld instantiateAsGameWorld(boolean ignoreLimit) {
+        if (plugin.isLoadingWorld()) {
+            return null;
+        }
         if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= worlds.getInstances().size()) {
             return null;
         }

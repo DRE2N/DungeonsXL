@@ -205,8 +205,11 @@ public class DPortal extends GlobalProtection {
      * @param player the player to teleport into his dungeon
      */
     public void teleport(Player player) {
-        DGroup dGroup = DGroup.getByPlayer(player);
+        if (plugin.isLoadingWorld()) {
+            return;
+        }
 
+        DGroup dGroup = DGroup.getByPlayer(player);
         if (dGroup == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;

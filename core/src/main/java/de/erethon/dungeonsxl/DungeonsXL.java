@@ -60,6 +60,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 
@@ -87,6 +88,8 @@ public class DungeonsXL extends DREPlugin {
     public static File LOOT_TABLES;
     public static File MOBS;
     public static File SIGNS;
+
+    private boolean loadingWorld;
 
     private GlobalData globalData;
     private MainConfig mainConfig;
@@ -285,6 +288,26 @@ public class DungeonsXL extends DREPlugin {
         if (MOBS.isDirectory()) {
             FileUtil.getFilesForFolder(MOBS).forEach(s -> caliburn.getExMobs().add(new DMobType(this, s)));
         }
+    }
+
+    /**
+     * Returns true if the plugin is currently loading a world, false if not.<p>
+     * If the plugin is loading a world, it is locked in order to prevent loading two at once.
+     *
+     * @return true if the plugin is currently loading a world, false if not
+     */
+    public boolean isLoadingWorld() {
+        return loadingWorld;
+    }
+
+    /**
+     * Notifies the plugin that a world is being loaded.<p>
+     * If the plugin is loading a world, it is locked in order to prevent loading two at once.
+     *
+     * @param loadingWorld if a world is being loaded
+     */
+    public void setLoadingWorld(boolean loadingWorld) {
+        this.loadingWorld = loadingWorld;
     }
 
     /**
