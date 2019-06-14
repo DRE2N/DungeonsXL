@@ -222,7 +222,7 @@ public abstract class JoinSign extends GlobalProtection {
         int verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
         while (verticalSigns > 1) {
             Block block = world.getBlockAt(x, y - verticalSigns + 1, z);
-            block.setType(VanillaItem.WALL_SIGN.getMaterial(), false);
+            block.setType(startSign.getType(), false);
             DungeonsXL.BLOCK_ADAPTER.setFacing(block, facing);
             verticalSigns--;
         }

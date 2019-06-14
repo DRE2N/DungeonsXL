@@ -30,7 +30,7 @@
         <dependency>
             <groupId>de.erethon</groupId>
             <artifactId>caliburn</artifactId>
-            <version>0.5.4</version>
+            <version>0.5.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

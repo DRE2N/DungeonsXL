@@ -37,6 +37,10 @@
                                     <shadedPattern>de.erethon.dungeonsxl.util.commons</shadedPattern>
                                 </relocation>
                                 <relocation>
+                                    <pattern>de.erethon.caliburn.util.compatibility</pattern>
+                                    <shadedPattern>de.erethon.dungeonsxl.util.commons.compatibility</shadedPattern>
+                                </relocation>
+                                <relocation>
                                     <pattern>de.erethon.vignette</pattern>
                                     <shadedPattern>de.erethon.dungeonsxl.util.vignette</shadedPattern>
                                 </relocation>
@@ -52,22 +56,6 @@
             <groupId>de.erethon.dungeonsxl</groupId>
             <artifactId>dungeonsxl-core</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.erethon</groupId>
-            <artifactId>caliburn</artifactId>
-            <version>0.5.4</version>
-        </dependency>
-        <dependency>
-            <groupId>de.erethon.vignette</groupId>
-            <artifactId>vignette-dist</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.erethon.commons</groupId>
-            <artifactId>commons-dist</artifactId>
-            <version>6.0</version>
         </dependency>
     </dependencies>
 </project>

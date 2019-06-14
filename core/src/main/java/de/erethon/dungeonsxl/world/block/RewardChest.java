@@ -206,7 +206,7 @@ public class RewardChest extends GameBlock {
                         }
                     }
                     if (name == null) {
-                        name = VanillaItem.get(itemStack.getType()).getNewName().replace("_", " ");
+                        name = VanillaItem.get(itemStack.getType()).getName().replace("_", " ");
                     }
                     msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
                 }

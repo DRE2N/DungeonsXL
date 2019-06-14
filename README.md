@@ -1,6 +1,6 @@
 ![DungeonsXL](http://feuerstern.bplaced.net/ressourcen/logos/DungeonsXL.png)
 
-[![Builds](http://feuerstern.bplaced.net/ressourcen/buttons/Builds.png)](http://erethon.de/repo/de/erethon/dungeonsxl)
+[![Builds](http://feuerstern.bplaced.net/ressourcen/buttons/Builds.png)](http://erethon.de/repo/de/erethon/dungeonsxl/dungeonsxl-dist)
 [![Wiki](http://feuerstern.bplaced.net/ressourcen/buttons/Wiki.png)](../../wiki/)
 [![Issues](http://feuerstern.bplaced.net/ressourcen/buttons/Issues.png)](../../issues/)
 [![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://erethon.de/javadocs/dungeonsxl/)

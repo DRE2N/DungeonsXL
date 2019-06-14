@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -163,10 +164,11 @@ public class DWorldListener implements Listener {
         }
     }
 
+    // TODO: Is this necessary?
     @EventHandler
     public void onItemSpawn(ItemSpawnEvent event) {
         if (DGameWorld.getByWorld(event.getLocation().getWorld()) != null) {
-            if (VanillaItem.SIGN.is(event.getEntity().getItemStack())) {
+            if (Category.SIGNS.containsItem(event.getEntity().getItemStack())) {
                 event.setCancelled(true);
             }
         }
