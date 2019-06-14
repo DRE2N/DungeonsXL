@@ -20,9 +20,11 @@ import de.erethon.dungeonsxl.util.DColor;
 import org.bukkit.Axis;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Orientable;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Bed;
 
 /**
@@ -55,19 +57,25 @@ public class BlockAdapterBlockData implements BlockAdapter {
 
     @Override
     public BlockFace getFacing(Block block) {
-        if (!(block.getBlockData() instanceof Directional)) {
-            throw new IllegalArgumentException("Block is not Directional");
+        if (block.getBlockData() instanceof Directional) {
+            return ((Directional) block.getBlockData()).getFacing();
+        } else if (block.getBlockData() instanceof Rotatable) {
+            return ((Rotatable) block.getBlockData()).getRotation();
+        } else {
+            throw new IllegalArgumentException("Block is not Directional or Rotatable");
         }
-        return ((Directional) block.getBlockData()).getFacing();
     }
 
     @Override
     public void setFacing(Block block, BlockFace facing) {
-        if (!(block.getBlockData() instanceof Directional)) {
-            throw new IllegalArgumentException("Block is not Directional");
+        BlockData data = block.getBlockData();
+        if (data instanceof Directional) {
+            ((Directional) data).setFacing(facing);
+        } else if (data instanceof Rotatable) {
+            ((Rotatable) data).setRotation(facing);
+        } else {
+            throw new IllegalArgumentException("Block is not Directional or Rotatable");
         }
-        Directional data = (Directional) block.getBlockData();
-        data.setFacing(facing);
         block.setBlockData(data, false);
     }
 
