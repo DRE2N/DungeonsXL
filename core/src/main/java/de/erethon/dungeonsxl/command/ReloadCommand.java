@@ -90,6 +90,7 @@ public class ReloadCommand extends DCommand {
 
         plugin.onDisable();
         plugin.initFolders();
+        plugin.loadConfig();
         plugin.createCaches();
         plugin.initCaches();
         plugin.loadData();
