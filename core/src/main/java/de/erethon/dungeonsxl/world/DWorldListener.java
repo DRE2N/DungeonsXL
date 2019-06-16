@@ -23,6 +23,7 @@ import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.game.Game;
 import java.util.Set;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -41,6 +42,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.world.WorldInitEvent;
 
 /**
  * @author Daniel Saukel, Frank Baumann, Milan Albrecht
@@ -53,6 +55,14 @@ public class DWorldListener implements Listener {
     public DWorldListener(DungeonsXL plugin) {
         caliburn = plugin.getCaliburn();
         dWorlds = plugin.getDWorldCache();
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onInit(WorldInitEvent event) {
+        World world = event.getWorld();
+        if (dWorlds.isInstance(world)) {
+            world.setKeepSpawnInMemory(false);
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

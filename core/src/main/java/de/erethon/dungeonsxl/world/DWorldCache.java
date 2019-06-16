@@ -188,6 +188,14 @@ public class DWorldCache {
     }
 
     /**
+     * @param world the world
+     * @return true if the world is a DXL instance, false if not
+     */
+    public boolean isInstance(World world) {
+        return world.getName().startsWith("DXL_");
+    }
+
+    /**
      * @param name the name of the map; can either be the resource name or the instance name
      * @return if a map with this name exists
      */
