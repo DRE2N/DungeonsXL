@@ -52,25 +52,26 @@ public class TeleportSign extends LocationSign {
     public void onInit() {
         super.onInit();
         for (int i = 1; i <= 2; i++) {
-            if (!lines[i].isEmpty()) {
-                int yaw = BlockUtil.lettersToYaw(lines[i]);
-                if (yaw != -1) {
-                    location.setYaw(yaw);
-                } else {
-                    String[] loc = lines[i].split(",");
-                    if (loc.length == 3) {
-                        double x = NumberUtil.parseDouble(loc[0]);
-                        double y = NumberUtil.parseDouble(loc[1]);
-                        double z = NumberUtil.parseDouble(loc[2]);
+            if (lines[i].isEmpty()) {
+                continue;
+            }
+            Integer yaw = BlockUtil.lettersToYaw(lines[i]);
+            if (yaw != null) {
+                location.setYaw(yaw);
+            } else {
+                String[] loc = lines[i].split(",");
+                if (loc.length == 3) {
+                    double x = NumberUtil.parseDouble(loc[0]);
+                    double y = NumberUtil.parseDouble(loc[1]);
+                    double z = NumberUtil.parseDouble(loc[2]);
 
-                        // If round number, add 0.5 to tp to middle of block
-                        x = NumberUtil.parseInt(loc[0]) + 0.5;
-                        z = NumberUtil.parseInt(loc[2]) + 0.5;
+                    // If round number, add 0.5 to tp to middle of block
+                    x = NumberUtil.parseInt(loc[0]) + 0.5;
+                    z = NumberUtil.parseInt(loc[2]) + 0.5;
 
-                        location.setX(x);
-                        location.setY(y);
-                        location.setZ(z);
-                    }
+                    location.setX(x);
+                    location.setY(y);
+                    location.setZ(z);
                 }
             }
         }
