@@ -247,7 +247,7 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         // Reset lvl
-        getPlayer().setTotalExperience(0);
+        getPlayer().setExp(0f);
         getPlayer().setLevel(0);
 
         /* Set Inventory */

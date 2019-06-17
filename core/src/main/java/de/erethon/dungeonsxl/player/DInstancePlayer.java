@@ -75,7 +75,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
     public void clearPlayerData() {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
-        player.setTotalExperience(0);
+        player.setExp(0f);
         player.setLevel(0);
         player.setMaxHealth(20);
         player.setHealth(20);
