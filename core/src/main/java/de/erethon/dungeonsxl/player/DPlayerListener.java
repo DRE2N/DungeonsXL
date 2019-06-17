@@ -420,7 +420,6 @@ public class DPlayerListener implements Listener {
         Game game = Game.getByWorld(player.getWorld());
 
         if (!(dPlayer instanceof DInstancePlayer)) {
-            dPlayers.removePlayer(dPlayer);
             if (dGroup != null) {
                 dGroup.removePlayer(player);
             }
@@ -442,6 +441,8 @@ public class DPlayerListener implements Listener {
         } else if (dPlayer instanceof DEditPlayer) {
             ((DEditPlayer) dPlayer).leave();
         }
+
+        dPlayers.removePlayer(dPlayer);
     }
 
     @EventHandler

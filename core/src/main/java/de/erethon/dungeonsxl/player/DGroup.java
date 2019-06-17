@@ -200,7 +200,7 @@ public class DGroup {
      */
     public Set<DGlobalPlayer> getDGlobalPlayers() {
         Set<DGlobalPlayer> players = new HashSet<>();
-        for (UUID uuid : this.players.getUniqueIds()) {
+        for (UUID uuid : this.players) {
             players.add(dPlayers.getByUniqueId(uuid));
         }
         return players;
@@ -211,7 +211,7 @@ public class DGroup {
      */
     public Set<DGamePlayer> getDGamePlayers() {
         Set<DGamePlayer> players = new HashSet<>();
-        for (UUID uuid : this.players.getUniqueIds()) {
+        for (UUID uuid : this.players) {
             DGlobalPlayer dPlayer = dPlayers.getByUniqueId(uuid);
             if (dPlayer instanceof DGamePlayer) {
                 players.add((DGamePlayer) dPlayer);
