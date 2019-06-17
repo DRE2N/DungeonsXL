@@ -30,16 +30,14 @@ public class DInstancePlayerUpdateEvent extends DInstancePlayerEvent implements 
 
     private boolean locationValid;
     private boolean teleportWolf;
-    private boolean respawnInventory;
     private boolean offline;
     private boolean kick;
     private boolean triggerAllInDistance;
 
-    public DInstancePlayerUpdateEvent(DInstancePlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean respawnInventory, boolean offline, boolean kick, boolean triggerAllInDistance) {
+    public DInstancePlayerUpdateEvent(DInstancePlayer dPlayer, boolean locationValid, boolean teleportWolf, boolean offline, boolean kick, boolean triggerAllInDistance) {
         super(dPlayer);
         this.locationValid = locationValid;
         this.teleportWolf = teleportWolf;
-        this.respawnInventory = respawnInventory;
         this.offline = offline;
         this.kick = kick;
         this.triggerAllInDistance = triggerAllInDistance;
@@ -71,20 +69,6 @@ public class DInstancePlayerUpdateEvent extends DInstancePlayerEvent implements 
      */
     public void setTeleportWolf(boolean teleportWolf) {
         this.teleportWolf = teleportWolf;
-    }
-
-    /**
-     * @return if the player's inventory gets respawned
-     */
-    public boolean isRespawnInventory() {
-        return respawnInventory;
-    }
-
-    /**
-     * @param respawnInventory respawn the player's old inventory on this update?
-     */
-    public void setRespawnInventory(boolean respawnInventory) {
-        this.respawnInventory = respawnInventory;
     }
 
     /**

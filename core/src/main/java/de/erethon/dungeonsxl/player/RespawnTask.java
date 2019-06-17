@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.player.PlayerUtil;
-import de.erethon.dungeonsxl.DungeonsXL;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,14 +26,10 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class RespawnTask extends BukkitRunnable {
 
-    private DPlayerCache dPlayers;
-
     private Player player;
     private Location location;
 
-    public RespawnTask(DungeonsXL plugin, Player player, Location location) {
-        dPlayers = plugin.getDPlayerCache();
-
+    public RespawnTask(Player player, Location location) {
         this.location = location;
         this.player = player;
     }
@@ -47,14 +42,6 @@ public class RespawnTask extends BukkitRunnable {
         if (player.getWorld() != location.getWorld() || player.getLocation().distance(location) > 2) {
             PlayerUtil.secureTeleport(player, location);
         }
-
-        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
-
-        if (dPlayer == null) {
-            return;
-        }
-
-        dPlayer.applyRespawnInventory();
     }
 
 }

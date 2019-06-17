@@ -450,7 +450,6 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        plugin.getDPlayerCache().getByPlayer(player).applyRespawnInventory();
 
         DGlobalPlayer dPlayer = DGamePlayer.getByPlayer(player);
         if (dPlayer == null) {
@@ -488,7 +487,7 @@ public class DPlayerListener implements Listener {
             }
 
             // Because some plugins set another respawn point, DXL teleports a few ticks later.
-            new RespawnTask(plugin, player, respawn).runTaskLater(plugin, 10L);
+            new RespawnTask(player, respawn).runTaskLater(plugin, 10L);
 
             // Don't forget Doge!
             if (gamePlayer.getWolf() != null) {

@@ -176,7 +176,7 @@ public class DEditPlayer extends DInstancePlayer {
             }
         }
 
-        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, false, false, false, false, false);
+        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, false, false, false, false);
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {

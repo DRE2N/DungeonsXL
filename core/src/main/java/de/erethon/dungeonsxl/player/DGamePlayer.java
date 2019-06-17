@@ -559,11 +559,7 @@ public class DGamePlayer extends DInstancePlayer {
                 gameWorld.sendMessage(DMessage.GROUP_DEATH_KICK.getMessage(getName(), dGroup.getName()));
             }
 
-            GameRuleProvider rules = Game.getByPlayer(player).getRules();
             leave();
-            if (rules.getKeepInventoryOnEscape() && rules.getKeepInventoryOnDeath()) {
-                applyRespawnInventory();
-            }
         }
     }
 
@@ -744,13 +740,6 @@ public class DGamePlayer extends DInstancePlayer {
         if (wolf != null) {
             wolf.teleport(getPlayer());
         }
-
-        // Respawn Items
-        Game game = Game.getByWorld(getWorld());
-
-        if (game != null && game.getRules().getKeepInventoryOnDeath()) {
-            applyRespawnInventory();
-        }
     }
 
     /**
@@ -848,12 +837,9 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         if (game.getRules().getKeepInventoryOnDeath()) {
-            setRespawnInventory(event.getEntity().getInventory().getContents());
-            setRespawnArmor(event.getEntity().getInventory().getArmorContents());
-            // Delete all drops
-            for (ItemStack item : event.getDrops()) {
-                item.setType(VanillaItem.AIR.getMaterial());
-            }
+            event.setKeepInventory(true);
+            event.setKeepLevel(true);
+            event.setDroppedExp(0);
         }
 
         if (getDGroup() != null && dGroup.getLives() != -1) {
@@ -904,7 +890,6 @@ public class DGamePlayer extends DInstancePlayer {
         boolean locationValid = true;
         Location teleportLocation = player.getLocation();
         boolean teleportWolf = false;
-        boolean respawnInventory = false;
         boolean offline = false;
         boolean kick = false;
         boolean triggerAllInDistance = false;
@@ -925,11 +910,6 @@ public class DGamePlayer extends DInstancePlayer {
                     // Don't forget Doge!
                     if (getWolf() != null) {
                         teleportWolf = true;
-                    }
-
-                    // Respawn Items
-                    if (getRespawnInventory() != null || getRespawnArmor() != null) {
-                        respawnInventory = true;
                     }
                 }
             }
@@ -965,7 +945,7 @@ public class DGamePlayer extends DInstancePlayer {
             triggerAllInDistance = true;
         }
 
-        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, teleportWolf, respawnInventory, offline, kick, triggerAllInDistance);
+        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, teleportWolf, offline, kick, triggerAllInDistance);
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
@@ -978,10 +958,6 @@ public class DGamePlayer extends DInstancePlayer {
 
         if (teleportWolf) {
             getWolf().teleport(teleportLocation);
-        }
-
-        if (respawnInventory) {
-            applyRespawnInventory();
         }
 
         if (kick) {

@@ -61,8 +61,6 @@ public class DGlobalPlayer implements PlayerWrapper {
     private ItemStack cachedItem;
     private boolean announcerEnabled = true;
 
-    private ItemStack[] respawnInventory;
-    private ItemStack[] respawnArmor;
     private List<ItemStack> rewardItems;
 
     public DGlobalPlayer(DungeonsXL plugin, Player player) {
@@ -90,8 +88,6 @@ public class DGlobalPlayer implements PlayerWrapper {
         chatSpyMode = dPlayer.isInChatSpyMode();
         creatingPortal = dPlayer.getPortal();
         announcerEnabled = dPlayer.isAnnouncerEnabled();
-        respawnInventory = dPlayer.getRespawnInventory();
-        respawnArmor = dPlayer.getRespawnArmor();
 
         plugin.getDPlayerCache().addPlayer(this);
     }
@@ -230,48 +226,6 @@ public class DGlobalPlayer implements PlayerWrapper {
      */
     public void setAnnouncerEnabled(boolean enabled) {
         announcerEnabled = enabled;
-    }
-
-    /**
-     * @return the respawnInventory
-     */
-    public ItemStack[] getRespawnInventory() {
-        return respawnInventory;
-    }
-
-    /**
-     * @param respawnInventory the respawnInventory to set
-     */
-    public void setRespawnInventory(ItemStack[] respawnInventory) {
-        this.respawnInventory = respawnInventory;
-    }
-
-    /**
-     * Give the saved respawn inventory to the player
-     */
-    public void applyRespawnInventory() {
-        if (respawnInventory == null || respawnArmor == null) {
-            return;
-        }
-
-        player.getInventory().setContents(respawnInventory);
-        player.getInventory().setArmorContents(respawnArmor);
-        respawnInventory = null;
-        respawnArmor = null;
-    }
-
-    /**
-     * @return the respawnArmor
-     */
-    public ItemStack[] getRespawnArmor() {
-        return respawnArmor;
-    }
-
-    /**
-     * @param respawnArmor the respawnArmor to set
-     */
-    public void setRespawnArmor(ItemStack[] respawnArmor) {
-        this.respawnArmor = respawnArmor;
     }
 
     /**
