@@ -26,6 +26,8 @@ import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import de.erethon.vignette.api.PaginatedInventoryGUI;
 import de.erethon.vignette.api.component.InventoryButton;
+import de.erethon.vignette.api.layout.PaginatedFlowInventoryLayout;
+import de.erethon.vignette.api.pagination.PaginatedInventoryLayout.PaginationButtonPosition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -123,6 +125,10 @@ public class RewardListener implements Listener {
                 && !VanillaItem.NETHER_PORTAL.is(block.getRelative(1, 0, 0)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(-1, 0, 0))
                 && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, 1)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, -1))) {
             PaginatedInventoryGUI lootInventory = new PaginatedInventoryGUI(DMessage.PLAYER_TREASURES.getMessage());
+            PaginatedFlowInventoryLayout layout = new PaginatedFlowInventoryLayout(lootInventory, 54, PaginationButtonPosition.BOTTOM);
+            layout.setSwitchButtonLinePlaceholdersEnabled(true);
+            lootInventory.setLayout(layout);
+            lootInventory.register();
             for (ItemStack item : dPlayer.getRewardItems()) {
                 if (item != null) {
                     InventoryButton button = new InventoryButton(item);

@@ -54,6 +54,7 @@ import de.erethon.dungeonsxl.trigger.TriggerListener;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
 import de.erethon.dungeonsxl.world.DWorldCache;
+import de.erethon.vignette.api.VignetteAPI;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -136,6 +137,7 @@ public class DungeonsXL extends DREPlugin {
         if (manager.isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderUtil(this, "dxl").register();
         }
+        VignetteAPI.init(this);
     }
 
     @Override
