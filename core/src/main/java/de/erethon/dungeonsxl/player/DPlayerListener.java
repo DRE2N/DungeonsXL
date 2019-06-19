@@ -25,7 +25,6 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.mob.DMob;
-import de.erethon.dungeonsxl.trigger.UseItemTrigger;
 import de.erethon.dungeonsxl.util.ParsingUtil;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -58,7 +57,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 
 /**
  * @author Daniel Saukel, Frank Baumann, Milan Albrecht
@@ -583,34 +581,6 @@ public class DPlayerListener implements Listener {
                             dPlayer.poke(clickedBlock);
                             event.setCancelled(true);
                         }
-                    }
-                }
-            }
-
-            // Trigger UseItem Signs
-            DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
-            if (gameWorld != null) {
-                if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                    String name = null;
-                    if (item.hasItemMeta()) {
-                        if (item.getItemMeta().hasDisplayName()) {
-                            name = item.getItemMeta().getDisplayName();
-
-                        } else if (VanillaItem.WRITTEN_BOOK.is(item) || VanillaItem.WRITABLE_BOOK.is(item)) {
-                            if (item.getItemMeta() instanceof BookMeta) {
-                                BookMeta meta = (BookMeta) item.getItemMeta();
-                                if (meta.hasTitle()) {
-                                    name = meta.getTitle();
-                                }
-                            }
-                        }
-                    }
-                    if (name == null) {
-                        name = item.getType().toString();
-                    }
-                    UseItemTrigger trigger = UseItemTrigger.getByName(name, gameWorld);
-                    if (trigger != null) {
-                        trigger.onTrigger(player);
                     }
                 }
             }

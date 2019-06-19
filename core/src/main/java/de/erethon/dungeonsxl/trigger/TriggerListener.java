@@ -16,11 +16,18 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
+import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -35,7 +42,7 @@ public class TriggerListener implements Listener {
     }
 
     @EventHandler
-    public void onRedstoneEvent(final BlockRedstoneEvent event) {
+    public void onBlockRedstone(final BlockRedstoneEvent event) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -46,6 +53,49 @@ public class TriggerListener implements Listener {
                 }
             }
         }.runTaskLater(plugin, 1L);
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
+        if (gameWorld == null) {
+            return;
+        }
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) {
+            return;
+        }
+
+        ItemStack item = event.getItem();
+        if (item == null) {
+            return;
+        }
+        String name = null;
+        if (item.hasItemMeta()) {
+            if (item.getItemMeta().hasDisplayName()) {
+                name = item.getItemMeta().getDisplayName();
+
+            } else if (VanillaItem.WRITTEN_BOOK.is(item) || VanillaItem.WRITABLE_BOOK.is(item)) {
+                if (item.getItemMeta() instanceof BookMeta) {
+                    BookMeta meta = (BookMeta) item.getItemMeta();
+                    if (meta.hasTitle()) {
+                        name = meta.getTitle();
+                    }
+                }
+            }
+        }
+        if (name == null) {
+            ExItem exItem = plugin.getCaliburn().getExItem(item);
+            if (item != null) {
+                name = exItem.getName();
+            }
+        }
+
+        UseItemTrigger trigger = UseItemTrigger.getByName(name, gameWorld);
+        if (trigger != null) {
+            trigger.onTrigger(player);
+        }
     }
 
 }
