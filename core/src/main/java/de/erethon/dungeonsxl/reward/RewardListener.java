@@ -27,7 +27,7 @@ import de.erethon.dungeonsxl.world.block.RewardChest;
 import de.erethon.vignette.api.PaginatedInventoryGUI;
 import de.erethon.vignette.api.component.InventoryButton;
 import de.erethon.vignette.api.layout.PaginatedFlowInventoryLayout;
-import de.erethon.vignette.api.pagination.PaginatedInventoryLayout.PaginationButtonPosition;
+import de.erethon.vignette.api.layout.PaginatedInventoryLayout.PaginationButtonPosition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
