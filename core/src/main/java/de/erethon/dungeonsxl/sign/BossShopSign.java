@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class BossShopSign extends DSign {
 
-    BossShop bossShop = (BossShop) Bukkit.getPluginManager().getPlugin("BossShop");
+    private BossShop bossShop;
 
     private String shopName;
 
@@ -65,6 +65,11 @@ public class BossShopSign extends DSign {
 
     @Override
     public void onInit() {
+        if (Bukkit.getPluginManager().isPluginEnabled("BossShopPro")) {
+            bossShop = (BossShop) Bukkit.getPluginManager().getPlugin("BossShopPro");
+        } else {
+            bossShop = (BossShop) Bukkit.getPluginManager().getPlugin("BossShop");
+        }
         if (bossShop == null) {
             markAsErroneous("BossShop not enabled");
             return;
