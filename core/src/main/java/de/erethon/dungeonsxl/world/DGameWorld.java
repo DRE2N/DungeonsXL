@@ -536,19 +536,14 @@ public class DGameWorld extends DInstanceWorld {
         ExItem material = VanillaItem.get(block.getType());
         ExItem breakTool = caliburn.getExItem(player.getItemInHand());
 
-        if (whitelist == null) {
-            if (rules.canBreakPlacedBlocks()) {
-                return (!placedBlocks.contains(block));
-            } else if (rules.canBreakBlocks()) {
-                return false;
-            }
-
-        } else if (whitelist.containsKey(material) && whitelist.get(material) == null | whitelist.get(material).isEmpty() | whitelist.get(material).contains(breakTool)) {
-            if (rules.canBreakPlacedBlocks()) {
-                return (!placedBlocks.contains(block));
-            } else if (rules.canBreakBlocks()) {
-                return false;
-            }
+        if (rules.canBreakPlacedBlocks() && placedBlocks.contains(block)) {
+            return false;
+        }
+        if (whitelist != null && whitelist.containsKey(material)
+                && (whitelist.get(material) == null
+                || whitelist.get(material).isEmpty()
+                || whitelist.get(material).contains(breakTool))) {
+            return false;
         }
 
         return true;
