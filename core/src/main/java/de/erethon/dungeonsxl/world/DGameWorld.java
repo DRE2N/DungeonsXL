@@ -470,7 +470,7 @@ public class DGameWorld extends DInstanceWorld {
 
         kickAllPlayers();
 
-        Bukkit.unloadWorld(getWorld(), false);
+        Bukkit.unloadWorld(getWorld(), true);
         FileUtil.removeDir(getFolder());
         worlds.removeInstance(this);
     }
