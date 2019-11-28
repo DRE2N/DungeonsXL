@@ -838,6 +838,7 @@ public class DGamePlayer extends DInstancePlayer {
 
         if (game.getRules().getKeepInventoryOnDeath()) {
             event.setKeepInventory(true);
+            event.getDrops().clear();
             event.setKeepLevel(true);
             event.setDroppedExp(0);
         }
