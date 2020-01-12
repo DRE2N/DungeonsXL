@@ -8,6 +8,7 @@
     <url>https://dre2n.github.io</url>
     <description>Create custom dungeons and adventure maps with ease!</description>
     <modules>
+        <module>adapter</module>
         <module>api</module>
         <module>bukkit_blockdata</module>
         <module>bukkit_magicvalues</module>

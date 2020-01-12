@@ -12,6 +12,12 @@
     <dependencies>
         <dependency>
             <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-adapter</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
             <artifactId>dungeonsxl-api</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
