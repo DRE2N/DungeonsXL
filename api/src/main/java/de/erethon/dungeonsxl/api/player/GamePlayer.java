@@ -23,6 +23,7 @@ import org.bukkit.Location;
  *
  * @author Daniel Saukel
  */
+// Implementation-specific methods: isInTestMode, setReady, [wolf, group tag, requirement, loot check methods], finishFloor
 public interface GamePlayer extends InstancePlayer {
 
     /**

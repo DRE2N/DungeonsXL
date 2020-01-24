@@ -29,6 +29,8 @@ import org.bukkit.entity.Player;
  *
  * @author Daniel Saukel
  */
+// Implementation-specific methods: setDungeon, setPlaying, [color, unplayed floor, floor count, reward methods], isEmpty, isCustom, isFinished, teleport,
+// finish, finishFloor, startGame, winGame, requirements methods
 public interface PlayerGroup {
 
     /**

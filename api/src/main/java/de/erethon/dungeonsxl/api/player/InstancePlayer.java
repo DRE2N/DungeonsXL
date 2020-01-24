@@ -23,6 +23,7 @@ import org.bukkit.World;
  *
  * @author Daniel Saukel
  */
+// Implementation-specific methods: setWorld, clearPlayerData, delete, chat, update
 public interface InstancePlayer extends GlobalPlayer {
 
     /**

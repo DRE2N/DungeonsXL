@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Daniel Saukel
  */
+// Implementation-specific methods: getters and setters: data, portal, cached item, announcer, reward items; startTutorial
 public interface GlobalPlayer extends PlayerWrapper {
 
     /**
@@ -104,6 +105,8 @@ public interface GlobalPlayer extends PlayerWrapper {
 
     /**
      * Sends a message to the player.
+     * <p>
+     * Supports color codes.
      *
      * @param message the message to send
      */
