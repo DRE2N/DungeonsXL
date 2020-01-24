@@ -16,6 +16,7 @@ package de.erethon.dungeonsxl.api.player;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
@@ -309,6 +310,22 @@ public interface PlayerGroup {
     boolean isPlaying();
 
     /**
+     * Returns the initial amount of lives or -1 if group lives are not used.
+     *
+     * @return the initial amount of lives or -1 if group lives are not used
+     */
+    int getInitialLives();
+
+    /**
+     * Sets the initial amount of lives.
+     * <p>
+     * The value must be >=0 or -1, which means unlimited lives.
+     *
+     * @param lives the new amount of lives known as the initial amount
+     */
+    void setInitialLives(int lives);
+
+    /**
      * Returns the amount of lives the group currently has left or -1 if group lives are not used.
      *
      * @return the amount of lives the group currently has left or -1 if group lives are not used
@@ -323,5 +340,33 @@ public interface PlayerGroup {
      * @param lives the amount of lives the group currently has left
      */
     void setLives(int lives);
+
+    /**
+     * Disbands the group.
+     */
+    void delete();
+
+    /**
+     * Sends a message to all players in the group.
+     * <p>
+     * Supports color codes.
+     *
+     * @param message the message to sent
+     * @param except  Players who shall not receive the message
+     */
+    default void sendMessage(String message, Player... except) {
+        members:
+        for (Player player : getMembers().getOnlinePlayers()) {
+            if (!player.isOnline()) {
+                continue;
+            }
+            for (Player nope : except) {
+                if (player == nope) {
+                    continue members;
+                }
+            }
+            MessageUtil.sendMessage(player, message);
+        }
+    }
 
 }
