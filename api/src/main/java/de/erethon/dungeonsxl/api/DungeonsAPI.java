@@ -14,12 +14,15 @@
  */
 package de.erethon.dungeonsxl.api;
 
+import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.misc.Registry;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.io.File;
 import java.util.Collection;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -57,7 +60,9 @@ public interface DungeonsAPI extends Plugin {
      * Returns a {@link Registry} of the trigger types.
      *
      * @return a {@link Registry} of the trigger types
+     * @deprecated stub
      */
+    @Deprecated
     Registry<String, Class<? extends Trigger>> getTriggerRegistry();
 
     /**
@@ -113,5 +118,54 @@ public interface DungeonsAPI extends Plugin {
      * @return a new group or null if values are invalid
      */
     PlayerGroup createGroup(Player leader, Collection<Player> members, String name, Dungeon dungeon);
+
+    /**
+     * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
+     *
+     * @param entity    the entity
+     * @param gameWorld the game world where the entity is
+     * @return the wrapped DungeonMob
+     */
+    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld);
+
+    /**
+     * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
+     *
+     * @param entity    the entity
+     * @param gameWorld the game world where the entity is
+     * @param triggerId the identifier used in mob triggers
+     * @return the wrapped DungeonMob
+     */
+    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, String triggerId);
+
+    /**
+     * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
+     *
+     * @param entity    the entity
+     * @param gameWorld the game world where the entity is
+     * @param type      the ExMob type of the entity
+     * @return the wrapped DungeonMob
+     */
+    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type);
+
+    /**
+     * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
+     *
+     * @param entity    the entity
+     * @param gameWorld the game world where the entity is
+     * @param type      the ExMob type of the entity
+     * @param triggerId the identifier used in mob triggers
+     * @return the wrapped DungeonMob
+     */
+    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type, String triggerId);
+
+    /* Getters */
+    /**
+     * Returns an existing {@link DungeonMob} object that wraps the given {@link LivingEntity} object or null if none exists.
+     *
+     * @param entity the entity
+     * @return an existing {@link DungeonMob} object that wraps the given {@link LivingEntity} object or null if none exists
+     */
+    DungeonMob getDungeonMob(LivingEntity entity);
 
 }
