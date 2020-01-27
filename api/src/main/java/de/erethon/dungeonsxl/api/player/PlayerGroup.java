@@ -20,7 +20,10 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.Dungeon;
+import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Player;
@@ -308,6 +311,27 @@ public interface PlayerGroup {
      * @return if the group is already playing its remembered {@link #getDungeon() dungeon}
      */
     boolean isPlaying();
+
+    /**
+     * Returns the rewards that are memorized for the group. These are given when the game is finished.
+     *
+     * @return the rewards
+     */
+    List<Reward> getRewards();
+
+    /**
+     * Memorizes the given reward for the group. These are given when the game is finished.
+     *
+     * @param reward the reward
+     */
+    void addReward(Reward reward);
+
+    /**
+     * Removes the given reward.
+     *
+     * @param reward the reward
+     */
+    void removeReward(Reward reward);
 
     /**
      * Returns the initial amount of lives or -1 if group lives are not used.

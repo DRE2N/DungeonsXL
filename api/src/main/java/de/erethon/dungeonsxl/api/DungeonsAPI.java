@@ -60,6 +60,13 @@ public interface DungeonsAPI extends Plugin {
      */
     Registry<String, Class<? extends Trigger>> getTriggerRegistry();
 
+    /**
+     * Returns a {@link Registry} of the reward types.
+     *
+     * @return a {@link Registry} of the reward types
+     */
+    Registry<String, Class<? extends Reward>> getRewardRegistry();
+
     /* Object initialization */
     /**
      * Creates a new group.
