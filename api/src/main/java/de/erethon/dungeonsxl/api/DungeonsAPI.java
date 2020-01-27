@@ -80,6 +80,20 @@ public interface DungeonsAPI extends Plugin {
     Registry<String, Class<? extends Reward>> getRewardRegistry();
 
     /**
+     * Returns a {@link Registry} of the resources worlds.
+     *
+     * @return a {@link Registry} of the resources worlds
+     */
+    Registry<String, ResourceWorld> getMapRegistry();
+
+    /**
+     * Returns a {@link Registry} of the instance worlds.
+     *
+     * @return a {@link Registry} of the instance worlds
+     */
+    Registry<Integer, InstanceWorld> getInstanceRegistry();
+
+    /**
      * Returns a {@link Registry} of the external mob providers.
      *
      * @return a {@link Registry} of the external mob providers
