@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api;
+package de.erethon.dungeonsxl.api.mob;
 
 import de.erethon.caliburn.mob.ExMob;
 import org.bukkit.entity.LivingEntity;
