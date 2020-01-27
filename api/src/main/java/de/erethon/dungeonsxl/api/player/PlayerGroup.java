@@ -23,7 +23,6 @@ import de.erethon.dungeonsxl.api.Dungeon;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Player;
@@ -33,7 +32,7 @@ import org.bukkit.entity.Player;
  *
  * @author Daniel Saukel
  */
-// Implementation-specific methods: setDungeon, setPlaying, [color, unplayed floor, floor count, reward methods], isEmpty, isCustom, isFinished, teleport,
+// Implementation-specific methods: setDungeon, setPlaying, [color, unplayed floor, floor count methods], isEmpty, isCustom, isFinished, teleport,
 // finish, finishFloor, startGame, winGame, requirements methods
 public interface PlayerGroup {
 
