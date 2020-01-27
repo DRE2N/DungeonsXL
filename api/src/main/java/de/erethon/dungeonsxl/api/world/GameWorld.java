@@ -14,14 +14,16 @@
  */
 package de.erethon.dungeonsxl.api.world;
 
-import de.erethon.dungeonsxl.api.Dungeon;
-import de.erethon.dungeonsxl.api.game.Game;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import java.util.Collection;
 import org.bukkit.Location;
 
 /**
  * A playable resource instance. There may be any amount of GameWorlds per {@link ResourceWorld}.
  * <p>
- * A game world is not equal to a {@link de.erethon.dungeonsxl.api.Dungeon}.
+ * A game world is not equal to a {@link de.erethon.dungeonsxl.api.dungeon.Dungeon}.
  *
  * @author Daniel Saukel
  */
@@ -63,6 +65,27 @@ public interface GameWorld extends InstanceWorld {
      * @return the dungeon that the game world is part of
      */
     Dungeon getDungeon();
+
+    /**
+     * Returns the living dungeon mobs
+     *
+     * @return the living dungeon mobs
+     */
+    Collection<DungeonMob> getMobs();
+
+    /**
+     * Registers the given dungeon mob
+     *
+     * @param mob the mob
+     */
+    void addMob(DungeonMob mob);
+
+    /**
+     * Unregisters the given dungeon mob
+     *
+     * @param mob the mob
+     */
+    public void removeMob(DungeonMob mob);
 
     /**
      * Returns if the game has begun in the game world.
