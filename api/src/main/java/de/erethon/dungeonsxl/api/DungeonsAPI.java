@@ -51,14 +51,14 @@ public interface DungeonsAPI extends Plugin {
      *
      * @return a {@link Registry} of the sign types
      */
-    Registry<String, Class<? extends DungeonSign>> getSignTypes();
+    Registry<String, Class<? extends DungeonSign>> getSignRegistry();
 
     /**
      * Returns a {@link Registry} of the trigger types.
      *
      * @return a {@link Registry} of the trigger types
      */
-    Registry<String, Class<? extends Trigger>> getTriggerTypes();
+    Registry<String, Class<? extends Trigger>> getTriggerRegistry();
 
     /* Object initialization */
     /**
