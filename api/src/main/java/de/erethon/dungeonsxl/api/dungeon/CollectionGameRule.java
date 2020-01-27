@@ -12,23 +12,29 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api;
+package de.erethon.dungeonsxl.api.dungeon;
 
-import org.bukkit.entity.Player;
+import java.util.Collection;
 
 /**
- * Something players are given when they successfully finish a {@link de.erethon.dungeonsxl.api.game.Dungeon}.
- * <p>
- * @see de.erethon.dungeonsxl.api.player.PlayerGroup#getRewards()
+ * A {@link GameRule} where the value is a {@link java.util.Collection}.
+ *
+ * @param <T> the type of the collection
+ * @param <V> the type of the game rule value
  * @author Daniel Saukel
  */
-public interface Reward {
+public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> {
 
-    /**
-     * Gives the reward to the given player.
-     *
-     * @param player the player
-     */
-    void giveTo(Player player);
+    public CollectionGameRule(Class type, String key, V defaultValue) {
+        super(type, key, defaultValue);
+    }
+
+    @Override
+    public void merge(GameRuleContainer overriding, GameRuleContainer subsidiary, GameRuleContainer writeTo) {
+        V write = writeTo.getState(this);
+        write.addAll(subsidiary.getState(this));
+        write.addAll(overriding.getState(this));
+        writeTo.setState(this, write);
+    }
 
 }

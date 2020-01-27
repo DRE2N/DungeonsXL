@@ -94,6 +94,13 @@ public interface DungeonsAPI extends Plugin {
     Registry<Integer, InstanceWorld> getInstanceRegistry();
 
     /**
+     * Returns a {@link Registry} of the game rules.
+     *
+     * @return a {@link Registry} of the game rules
+     */
+    Registry<String, GameRule> getGameRuleRegistry();
+
+    /**
      * Returns a {@link Registry} of the external mob providers.
      *
      * @return a {@link Registry} of the external mob providers

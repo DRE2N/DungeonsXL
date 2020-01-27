@@ -19,8 +19,8 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.player.PlayerCollection;
-import de.erethon.dungeonsxl.api.Dungeon;
 import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
  *
  * @author Daniel Saukel
  */
-// Implementation-specific methods: setDungeon, setPlaying, [color, unplayed floor, floor count methods], isEmpty, isCustom, isFinished, teleport,
+// Implementation-specific methods: setDungeon, setPlaying, [color, unplayed floor, floor count methods], isEmpty, isCustom, teleport,
 // finish, finishFloor, startGame, winGame, requirements methods
 public interface PlayerGroup {
 
@@ -363,6 +363,13 @@ public interface PlayerGroup {
      * @param lives the amount of lives the group currently has left
      */
     void setLives(int lives);
+
+    /**
+     * Returns true if all players of the group have finished the game; false if not.
+     *
+     * @return true if all players of the group have finished the game; false if not
+     */
+    boolean isFinished();
 
     /**
      * Disbands the group.

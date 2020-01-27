@@ -148,7 +148,6 @@ public interface GamePlayer extends InstancePlayer {
      */
     void setRobbedGroup(PlayerGroup group);
 
-    /* Actions */
     /**
      * Scores a point.
      */
