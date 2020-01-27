@@ -15,18 +15,18 @@
 package de.erethon.dungeonsxl.api;
 
 import de.erethon.commons.misc.Registry;
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
-import de.erethon.dungeonsxl.api.sign.DungeonSignType;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import java.io.File;
 import java.util.Collection;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 /**
  * @author Daniel Saukel
  */
-public interface DungeonsAPI {
+public interface DungeonsAPI extends Plugin {
 
     static final File PLUGIN_ROOT = new File("plugins/DungeonsXL");
     static final File BACKUPS = new File(PLUGIN_ROOT, "backups");
@@ -45,6 +45,20 @@ public interface DungeonsAPI {
      * @return a {@link Registry} of the loaded classes
      */
     Registry<String, PlayerClass> getClassRegistry();
+
+    /**
+     * Returns a {@link Registry} of the sign types.
+     *
+     * @return a {@link Registry} of the sign types
+     */
+    Registry<String, Class<? extends DungeonSign>> getSignTypes();
+
+    /**
+     * Returns a {@link Registry} of the trigger types.
+     *
+     * @return a {@link Registry} of the trigger types
+     */
+    Registry<String, Class<? extends Trigger>> getTriggerTypes();
 
     /* Object initialization */
     /**

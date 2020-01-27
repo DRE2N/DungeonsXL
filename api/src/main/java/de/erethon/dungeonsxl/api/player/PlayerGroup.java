@@ -19,7 +19,7 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.player.PlayerCollection;
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.Dungeon;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
