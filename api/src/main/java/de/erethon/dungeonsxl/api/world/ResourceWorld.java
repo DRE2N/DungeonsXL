@@ -14,6 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.world;
 
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import java.io.File;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World.Environment;
@@ -93,5 +94,12 @@ public interface ResourceWorld {
      * @return a new game instance of this resource
      */
     GameWorld instantiateGameWorld();
+
+    /**
+     * Returns the single floor dungeon of this resource.
+     *
+     * @return the single floor dungeon of this resource
+     */
+    Dungeon getSingleFloorDungeon();
 
 }

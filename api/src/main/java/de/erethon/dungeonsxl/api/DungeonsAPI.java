@@ -16,10 +16,16 @@ package de.erethon.dungeonsxl.api;
 
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.misc.Registry;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import java.io.File;
 import java.util.Collection;
 import org.bukkit.entity.LivingEntity;
@@ -78,6 +84,13 @@ public interface DungeonsAPI extends Plugin {
      * @return a {@link Registry} of the reward types
      */
     Registry<String, Class<? extends Reward>> getRewardRegistry();
+
+    /**
+     * Returns a {@link Registry} of the dungeons.
+     *
+     * @return a {@link Registry} of the dungeons
+     */
+    Registry<String, Dungeon> getDungeonRegistry();
 
     /**
      * Returns a {@link Registry} of the resources worlds.
