@@ -79,6 +79,13 @@ public interface DungeonsAPI extends Plugin {
      */
     Registry<String, Class<? extends Reward>> getRewardRegistry();
 
+    /**
+     * Returns a {@link Registry} of the external mob providers.
+     *
+     * @return a {@link Registry} of the external mob providers
+     */
+    Registry<String, ExternalMobProvider> getExternalMobProviderRegistry();
+
     /* Object initialization */
     /**
      * Creates a new group.
