@@ -21,6 +21,7 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
+import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
@@ -124,6 +125,13 @@ public interface DungeonsAPI extends Plugin {
      * @return a {@link Registry} of the external mob providers
      */
     Registry<String, ExternalMobProvider> getExternalMobProviderRegistry();
+
+    /**
+     * Makes DungeonsXL track external group and synchronize them with its own groups.
+     *
+     * @param groupAdapter the group adapter to register
+     */
+    void registerGroupAdapter(GroupAdapter groupAdapter);
 
     /* Object initialization */
     /**
