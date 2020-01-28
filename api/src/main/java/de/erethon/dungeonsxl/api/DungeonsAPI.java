@@ -17,22 +17,27 @@ package de.erethon.dungeonsxl.api;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.misc.Registry;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import java.io.File;
 import java.util.Collection;
+import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 /**
+ * The API main interface.
+ *
  * @author Daniel Saukel
  */
 public interface DungeonsAPI extends Plugin {
@@ -215,5 +220,53 @@ public interface DungeonsAPI extends Plugin {
      * @return an existing {@link DungeonMob} object that wraps the given {@link LivingEntity} object or null if none exists
      */
     DungeonMob getDungeonMob(LivingEntity entity);
+
+    /**
+     * Returns the game the given group plays.
+     *
+     * @param group the group
+     * @return the game the given group plays
+     */
+    Game getGame(PlayerGroup group);
+
+    /**
+     * Returns the game the given player plays.
+     *
+     * @param player the player
+     * @return the game the given player plays
+     */
+    Game getGame(Player player);
+
+    /**
+     * Returns the game played in the given instance world.
+     *
+     * @param world the instance world
+     * @return the game played in the given instance world
+     */
+    Game getGame(World world);
+
+    /**
+     * Returns the GameWorld that wraps the given instance world.
+     *
+     * @param world the instance world
+     * @return the GameWorld that wraps the given instance world
+     */
+    GameWorld getGameWorld(World world);
+
+    /**
+     * Returns the EditWorld that wraps the given instance world.
+     *
+     * @param world the instance world
+     * @return the EditWorld that wraps the given instance worl
+     */
+    EditWorld getEditWorld(World world);
+
+    /**
+     * Returns if the given world is an instance.
+     *
+     * @param world the world
+     * @return if the given world is an instance
+     */
+    boolean isInstance(World world);
 
 }
