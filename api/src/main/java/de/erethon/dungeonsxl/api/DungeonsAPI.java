@@ -21,6 +21,7 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
@@ -31,6 +32,7 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import java.io.File;
 import java.util.Collection;
+import java.util.UUID;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -55,74 +57,81 @@ public interface DungeonsAPI extends Plugin {
     static final File SIGNS = new File(SCRIPTS, "signs");
 
     /**
-     * Returns a {@link Registry} of the loaded classes.
+     * Returns a cache of player wrapper objects.
      *
-     * @return a {@link Registry} of the loaded classes
+     * @return a cache of player wrapper objects
+     */
+    Registry<UUID, GlobalPlayer> getPlayerCache();
+
+    /**
+     * Returns a registry of the loaded classes.
+     *
+     * @return a registry of the loaded classes
      */
     Registry<String, PlayerClass> getClassRegistry();
 
     /**
-     * Returns a {@link Registry} of the sign types.
+     * Returns a registry of the sign types.
      *
-     * @return a {@link Registry} of the sign types
+     * @return a registry of the sign types
      */
     Registry<String, Class<? extends DungeonSign>> getSignRegistry();
 
     /**
-     * Returns a {@link Registry} of the trigger types.
+     * Returns a registry of the trigger types.
      *
-     * @return a {@link Registry} of the trigger types
+     * @return a registry of the trigger types
      * @deprecated stub
      */
     @Deprecated
     Registry<String, Class<? extends Trigger>> getTriggerRegistry();
 
     /**
-     * Returns a {@link Registry} of the requirement types.
+     * Returns a registry of the requirement types.
      *
-     * @return a {@link Registry} of the requirement types
+     * @return a registry of the requirement types
      */
     Registry<String, Class<? extends Requirement>> getRequirementRegistry();
 
     /**
-     * Returns a {@link Registry} of the reward types.
+     * Returns a registry of the reward types.
      *
-     * @return a {@link Registry} of the reward types
+     * @return a registry of the reward types
      */
     Registry<String, Class<? extends Reward>> getRewardRegistry();
 
     /**
-     * Returns a {@link Registry} of the dungeons.
+     * Returns a registry of the dungeons.
      *
-     * @return a {@link Registry} of the dungeons
+     * @return a registry of the dungeons
      */
     Registry<String, Dungeon> getDungeonRegistry();
 
     /**
-     * Returns a {@link Registry} of the resources worlds.
+     * Returns a registry of the resources worlds.
      *
-     * @return a {@link Registry} of the resources worlds
+     * @return a registry of the resources worlds
      */
     Registry<String, ResourceWorld> getMapRegistry();
 
     /**
-     * Returns a {@link Registry} of the instance worlds.
+     * Returns a registry of the instance worlds.
      *
-     * @return a {@link Registry} of the instance worlds
+     * @return a registry of the instance worlds
      */
     Registry<Integer, InstanceWorld> getInstanceRegistry();
 
     /**
-     * Returns a {@link Registry} of the game rules.
+     * Returns a registry of the game rules.
      *
-     * @return a {@link Registry} of the game rules
+     * @return a registry of the game rules
      */
     Registry<String, GameRule> getGameRuleRegistry();
 
     /**
-     * Returns a {@link Registry} of the external mob providers.
+     * Returns a registry of the external mob providers.
      *
-     * @return a {@link Registry} of the external mob providers
+     * @return a registry of the external mob providers
      */
     Registry<String, ExternalMobProvider> getExternalMobProviderRegistry();
 

@@ -24,6 +24,9 @@ import org.bukkit.inventory.ItemStack;
  * Represents a player anywhere on the server.
  * <p>
  * All players on the server, including the ones in dungeons, have one wrapper object that is an instance of GlobalPlayer.
+ * <p>
+ * Do not cache this for the whole runtime (or use {@link de.erethon.commons.player.PlayerCollection}). The object may be deleted and replaced with an object of
+ * the appropriate type when the player enters or leaves an instance.
  *
  * @author Daniel Saukel
  */
