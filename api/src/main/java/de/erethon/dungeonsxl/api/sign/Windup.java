@@ -19,6 +19,9 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import org.bukkit.block.Sign;
 
 /**
+ * A sign with an attached task that does actions in a set interval <i>n</i> times, like a mob sign that spawns <i>n</i> mobs. It is similar to a {@link Rocker}
+ * as it expires (=is deactivated).
+ *
  * @author Daniel Saukel
  */
 public abstract class Windup extends Deactivatable {

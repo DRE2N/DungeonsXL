@@ -21,6 +21,10 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 /**
+ * A sign that performs a specific action every time it is triggered.
+ * <p>
+ * For example, a classes sign with the default interact trigger sets your class every time you punch it.
+ *
  * @author Daniel Saukel
  */
 public abstract class Button extends AbstractDSign {

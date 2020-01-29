@@ -20,6 +20,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 /**
+ * A sign that does not do anything on its own. Its function is mostly to mark locations or blocks, like lobby or bed signs.
+ *
  * @author Daniel Saukel
  */
 public abstract class Passive extends AbstractDSign {

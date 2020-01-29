@@ -20,7 +20,10 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 /**
- * A {@link Deactivatable} that, if triggered, and already activated, is deactivated.
+ * A sign that has a <i>deactivated</i> and an <i>activated state</i> and can switch between these two.
+ * <p>
+ * For example, if a door sign is activated, the door opens - if it is deactivated, the door closes. The state may be set for the whole game world or for the
+ * player who triggered the sign depending on the context.
  *
  * @author Daniel Saukel
  */
