@@ -34,7 +34,7 @@ public interface InstanceWorld {
     /**
      * Returns the name of the resource world of this instance.
      * <p>
-     * Use {@link #getWorld()#getName()} to get the name of the instantiated world (like e.g. DXL_Game_1).
+     * Use {@link #getWorld()}{@link org.bukkit.World#getName() #getName()} to get the name of the instantiated world (like e.g. DXL_Game_1).
      *
      * @return the name of the resource world of this instance
      */

@@ -342,7 +342,7 @@ public interface PlayerGroup {
     /**
      * Sets the initial amount of lives.
      * <p>
-     * The value must be >=0 or -1, which means unlimited lives.
+     * The value must be &gt;=0 or -1, which means unlimited lives.
      *
      * @param lives the new amount of lives known as the initial amount
      */
@@ -358,7 +358,7 @@ public interface PlayerGroup {
     /**
      * Sets the amount of lives the group currently has left.
      * <p>
-     * The value must be >=0 or -1, which means unlimited lives.
+     * The value must be &gt;=0 or -1, which means unlimited lives.
      *
      * @param lives the amount of lives the group currently has left
      */

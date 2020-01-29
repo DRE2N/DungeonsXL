@@ -77,7 +77,7 @@ public interface GamePlayer extends InstancePlayer {
     /**
      * Sets the location of the last checkpoint the player reached.
      * <p>
-     * This is where the player respawns if they die and have -1 or >0 {@link #getLives() lives} left.
+     * This is where the player respawns if they die and have -1 or &gt;0 {@link #getLives() lives} left.
      *
      * @param checkpoint the checkpoint location
      */

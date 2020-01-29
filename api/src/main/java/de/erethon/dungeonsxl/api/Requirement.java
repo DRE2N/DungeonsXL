@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 public interface Requirement {
 
     /**
-     * Sets up the requirement from the given requirements {@link de.erethon.dungeonsxl.api.game.GameRule} section.
+     * Sets up the requirement from the given requirements {@link de.erethon.dungeonsxl.api.dungeon.GameRule} section.
      *
      * @param config the requirements config section
      */

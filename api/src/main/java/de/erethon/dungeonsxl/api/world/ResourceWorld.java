@@ -34,7 +34,7 @@ public interface ResourceWorld {
     /**
      * Returns the name of this resource world.
      * <p>
-     * Equals {@link #getFolder()#getName()}.
+     * Equals {@link #getFolder()}{@link File#getName() #getName()}.
      *
      * @return name of this resource world
      */

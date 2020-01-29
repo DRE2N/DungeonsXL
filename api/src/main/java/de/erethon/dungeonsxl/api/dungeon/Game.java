@@ -96,7 +96,7 @@ public interface Game {
     /**
      * Returns the rules of the dungeon of this game.
      * <p>
-     * This is not necessarily represented 1:1 by a config file because it is usually merged together through {@link #setupRules()}.
+     * This is not necessarily represented 1:1 by a config file because it is usually merged together through {@link Dungeon#setupRules()}.
      *
      * @return the rules of the dungeon of this game
      */
