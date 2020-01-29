@@ -21,7 +21,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 /**
- * A sign that performs a specific action every time it is triggered.
+ * A sign that performs a specific action every time it is triggered. It can have, but typically does not have a state. Consider using {@link Deactivatable) for
+ * sign that change themselves when they are triggered.
  * <p>
  * For example, a classes sign with the default interact trigger sets your class every time you punch it.
  *
@@ -33,10 +34,31 @@ public abstract class Button extends AbstractDSign {
         super(api, sign, lines, gameWorld);
     }
 
+    /**
+     * When the sign is triggered without one particular player being the cause.
+     * <p>
+     * <b>Note that the default implementation of {@link #push(org.bukkit.entity.Player)} assumes that the sign does not need player specific behavior and
+     * simply calls this method, while the default implementation of this method assumes that the sign should perform {@link #push(org.bukkit.entity.Player)}
+     * for each player in the game world. This leaves a button sign with a stackoverflow if not one of both methods at least is overriden. Consider using a
+     * {@link Passive} sign instead if you need a sign that simply marks places and ignores being triggered.</b>
+     */
     public void push() {
         getGameWorld().getPlayers().forEach(p -> push(p.getPlayer()));
     }
 
+    /**
+     * When the sign is triggered.
+     * <p>
+     * This is the default {@link #trigger(org.bukkit.entity.Player)} behavior.
+     * <p>
+     * <b>Note that the default implementation of this method assumes that the sign does not need player specific behavior and simply calls {@link #push()},
+     * while the default implementation of {@link #push()} assumes that the sign should perform {@link #push(org.bukkit.entity.Player)} for each player in the
+     * game world. This leaves a button sign with a stackoverflow if not one of both methods at least is overriden. Consider using a {@link Passive} sign
+     * instead if you need a sign that simply marks places and ignores being triggered.</b>
+     *
+     * @param player the player who triggered the sign
+     * @return if the action is done successfully
+     */
     public boolean push(Player player) {
         push();
         return true;
@@ -68,7 +90,7 @@ public abstract class Button extends AbstractDSign {
     /**
      * This is the same as {@link #push(org.bukkit.entity.Player)}.
      *
-     * @param player the player
+     * @param player the player who triggered the sign or null if no one in particular triggered it
      */
     @Override
     public void trigger(Player player) {

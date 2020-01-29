@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 
 /**
  * A {@link DungeonSign} that changes its state when triggered.
- * 
+ *
  * @author Daniel Saukel
  */
 public abstract class Deactivatable extends AbstractDSign {
@@ -35,26 +35,61 @@ public abstract class Deactivatable extends AbstractDSign {
         super(api, sign, lines, gameWorld);
     }
 
+    /**
+     * Sets the state to active.
+     * <p>
+     * This might not be meaningful if the sign uses {@link #activate(org.bukkit.entity.Player)}.
+     */
     public void activate() {
         active = true;
     }
 
+    /**
+     * Sets the state to active for the given player.
+     *
+     * @param player the player
+     * @return if the action was successful
+     */
     public boolean activate(Player player) {
         return playersActivated.add(player);
     }
 
+    /**
+     * Sets the state to inactive.
+     * <p>
+     * This might not be meaningful if the sign uses {@link #deactivate(org.bukkit.entity.Player)}.
+     */
     public void deactivate() {
         active = false;
     }
 
+    /**
+     * Sets the state to inactive for the given player.
+     *
+     * @param player the player
+     * @return if the action was successful
+     */
     public boolean deactivate(Player player) {
         return playersActivated.remove(player);
     }
 
+    /**
+     * Returns if the sign is currently in its activated state.
+     * <p>
+     * This might not be meaningful if the sign uses {@link #isActive(org.bukkit.entity.Player)}.
+     *
+     * @return if the sign is currently in its activated state
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * Returns if the sign is activated for the given player.
+     *
+     * @param player the player
+     * @return if the sign is activated for the given player
+     */
     public boolean isActive(Player player) {
         return playersActivated.contains(player);
     }

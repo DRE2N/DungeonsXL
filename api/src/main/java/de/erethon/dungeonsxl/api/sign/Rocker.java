@@ -33,6 +33,11 @@ public abstract class Rocker extends Deactivatable {
         super(api, sign, lines, gameWorld);
     }
 
+    /**
+     * Activates the sign if it is not yet active and deactivates it if it is already active.
+     *
+     * @param player the player who triggered the sign or null if no one in particular triggered it
+     */
     @Override
     public void trigger(Player player) {
         if (!isActive()) {

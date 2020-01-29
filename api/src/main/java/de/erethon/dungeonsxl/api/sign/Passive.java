@@ -30,10 +30,18 @@ public abstract class Passive extends AbstractDSign {
         super(api, sign, lines, gameWorld);
     }
 
+    /**
+     * Does nothing.
+     */
     @Override
     public final void update() {
     }
 
+    /**
+     * Does nothing.
+     *
+     * @param player unused
+     */
     @Override
     public final void trigger(Player player) {
     }

@@ -131,7 +131,7 @@ public interface DungeonSign {
     /**
      * Triggers the sign. The effects are defined by the implementation.
      *
-     * @param player the player that triggered the sign or null
+     * @param player the player who triggered the sign or null if no one in particular triggered it
      */
     void trigger(Player player);
 
@@ -142,6 +142,9 @@ public interface DungeonSign {
 
     /**
      * Sets the sign to air if it is not erroneous and if its type requires this.
+     * <p>
+     * Signs are usually to be set to air upon initialization, but this is not done automatically because some signs need different behavior. Script signs for
+     * example are not set to air because this would override whatever a block sign in its script does.
      *
      * @return if the sign type was set to air
      */
@@ -149,6 +152,8 @@ public interface DungeonSign {
 
     /**
      * Returns if the sign is valid.
+     * <p>
+     * A sign is invalid when it lacks needed parameters or if illegal arguments have been entered.
      *
      * @return if the sign is valid
      */
