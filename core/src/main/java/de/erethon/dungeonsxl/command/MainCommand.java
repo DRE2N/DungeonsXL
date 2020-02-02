@@ -67,7 +67,7 @@ public class MainCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, "&b&l###### " + DMessage.CMD_MAIN_WELCOME.getMessage() + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, itemsxl));
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP.getMessage());
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP_INFO.getMessage());
         MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2020 Frank Baumann & contributors; lcsd. under GPLv3.");
     }
 
