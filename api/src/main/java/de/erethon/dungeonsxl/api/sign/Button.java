@@ -21,8 +21,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 /**
- * A sign that performs a specific action every time it is triggered. It can have, but typically does not have a state. Consider using {@link Deactivatable) for
- * sign that change themselves when they are triggered.
+ * A sign that performs a specific action every time it is triggered. It can have, but typically does not have a state. Consider using {@link Deactivatable)}
+ * for signs that change themselves when they are triggered.
  * <p>
  * For example, a classes sign with the default interact trigger sets your class every time you punch it.
  *
