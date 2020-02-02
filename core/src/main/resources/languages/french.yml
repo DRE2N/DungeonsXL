@@ -1,0 +1,232 @@
+announcer:
+  click: '&4&l=> &6CLIQUEZ ICI POUR REJOINDRE &4&l<='
+cmd:
+  break:
+    breakMode: '&6Vous pouvez casser un bloc protégé par DungeonsXL.'
+    help: /dxl break - Casser un bloc protégé par DungeonsXL
+    protectedMode: '&6Vous ne pouvez plus casser des blocs protégés par DungeonsXL.'
+  chat:
+    dungeonChat: '&6Vous êtes entrés dans l''espace de discussion du donjon.'
+    help: /dxl chat - Changer le mode de discussion
+    normalChat: '&6Vous êtes maintenant dans l''espace de discussion public.'
+  chatspy:
+    help: /dxl chatspy - Activer/désactiver le mode espionnage
+    started: '&6Vous avez commencé à espionner l''espace de discussion du donjon.'
+    stopped: '&6Vous avez arrêté d''espionner l''espace de discussion du donjon.'
+  create:
+    help: /dxl create [name] - Créer une nouvelle carte de donjon
+  delete:
+    backups: ###
+    help: ###
+    success: ###
+  dungeonItem:
+    dungeonItemHelp: ###
+    globalItemHelp: ###
+    help: ###
+    info:
+      dungeon: ###
+      global: ###
+    set:
+      dungeon: ###
+      global: ###
+  edit:
+    help: /dxl edit [name] - Editer une carte existante de donjon
+  enter:
+    help: /dxl enter ([joining group]) [target group] - Laisser le groupe en train de rejoindre, entrer dans la partie du groupe cible
+    success: '&6Le groupe &4&v1 &6est rentré avec succès dans la partie du groupe &4&v2&6.'
+  escape:
+    help: /dxl escape - Quitter le monde actuel en cours d'édition sans sauvegarder
+  game:
+    help: /dxl game - Montrer les informations à propos de la partie de jeu actuel
+  group:
+    help:
+      create: /dxl group create [group] - Créer un nouveau groupe
+      disband: /dxl group disband ([group]) - Dissoudre un groupe
+      invite: /dxl group invite [player]- Inviter quelqu'un a votre groupe
+      join: /dxl group join [group]- Rejoindre un groupe
+      kick: /dxl group kick [player] - Éjecter un joueur
+      main: /dxl group - Montrer l'aide des commandes de groupe
+      show: /dxl group show [group] - Montrer un groupe
+      uninvite: /dxl group uninvite [player] - Retirer une invitation à votre groupe
+  help:
+    help: /dxl help [page] - Montrer la page d''aide
+  import:
+    help: ###
+    success: ###
+  invite:
+    help: /dxl invite [player] [dungeon] - Inviter un joueur à éditer un donjon
+    success: '&6Le joueur &4&v1&6 a été invité avec succès à éditer la carte &4&v2&6.'
+  join:
+    help: /dxl join [announcement] - Ouvrir l'interface pour rejoindre un groupe dans une prochaine partie
+  kick:
+    help: ###
+    success: ###
+  leave:
+    help: /dxl leave - Quitter le groupe et le donjon ou le monde en cours d''édition
+    success: '&6Vous avez quitté le groupe avec succès.'
+  list:
+    help: /dxl list ([dungeon|map|loaded]) ([dungeon]) - Lister tous les donjons
+  lives:
+    group: '&4&v1&6 ont &4&v2 &6vies restantes.'
+    help: /dxl lives [player] - Montrer les vies d''un joueur venant de partir
+    player: '&4&v1&6 a &4&v2 &6vies restantes.'
+  main:
+    compatibility: '&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]'
+    help: /dxl - Informations générales
+    helpInfo: '&7Tapez dans &o/dxl help&r&7 pour plus d''information.'
+    loaded: '&eCartes: &o[&v1] &eDonjons: &o[&v2] &eChargés: &o[&v3] &eJoueurs:&o[&v4]'
+    welcome: '&7Bienvenue sur &4Dungeons&fXL'
+  msg:
+    added: '&6Nouveaux messages (&4&v1&6) ajoutés.'
+    help: /dxl msg [id] '[msg]' - Montrer ou éditer un message
+    updated: '&6Messages (&4&v1&6) mis à jour.'
+  play:
+    help: /dxl play [name] - Permettre au joueur de jouer à un donjon sans un portail
+  portal:
+    help: /dxl portal - Créer un portail qui mène à un donjon
+  reload:
+    help: /dxl reload - Recharge le plugin
+    players: '&4Attention: Si vous rechargez le plugin, tous les joueurs seront éjectés de leur jeu.'
+    success: '&7DungeonsXL a été rechargé avec succès.'
+  rename:
+    help: ###
+    success: ###
+  resourcePack:
+    help: ###
+  save:
+    help: /dxl save - Sauvegarder le donjon actuel
+    success: '&6Carte sauvegardée.'
+  status:
+    help: ###
+  test:
+    help: /dxl test - Lance une partie en mode test
+  uninvite:
+    help: /dxl uninvite [player] [dungeon] - Désinvite un joueur à éditer un donjon
+    success: '&4&v1&6 a été désinviter avec succès à éditer la carte &4&v1&6.'
+error:
+  bed: '&4Vous ne pouvez utiliser un lit en étant dans un donjon.'
+  chestIsOpened: '&4Ce coffre a déjà été ouvert.'
+  cmd: '&4Les commandes ne sont pas autorisées pendant un donjon.'
+  cooldown: '&4Vous ne pouvez entrer dans ce donjon que toutes les &6&v1&4 heures.'
+  dispenser: '&4Vous ne pouvez accéder à ce distributeur.'
+  drop: '&4Vous ne pouvez pas lâcher cet objet protégé.'
+  enderchest: '&4Vous ne pouvez utiliser un coffre de l''ender quand vous êtes dans un donjon.'
+  inGroup: '&4Le joueur &6&v1&4 est déjà membre d''un groupe.'
+  joinGroup: '&4Vous devez d''abord rejoindre un groupe.'
+  leaveDungeon: '&4Vous devez d''abord quitter votre donjon actuel.'
+  leaveGame: '&4Vous devez d''abord quitter votre partie actuelle.'
+  leaveGroup: '&4Vous devez d''abord quitter votre groupe.'
+  msgIdDoesNotExist: '&4Le message avec  l''Id &6&v1&4 n''existe pas.'
+  msgFormat: '&4Les messages doivent être entre ".'
+  msgNoInt: '&4L''argument [id] doit inclure un nombre.'
+  nameInUse: '&4Le nom &6&v1 &4est déjà utilisé.'
+  nameTooLong: '&4Le nom ne devrait pas être plus long que 15 caractères.'
+  noGame: '&4Vous ne prenez actuellement pas part à une partie.'
+  noItemInMainHand: 
+  noLeaveInTutorial: '&4Vous ne pouvez utiliser cette commande dans le tutoriel.'
+  noPermissions: '&4Vous n''avez pas la permission de faire ça.'
+  noProtectedBlock: '&4Ce n''est pas un bloc protégé par DungeonsXL.'
+  noRewardsTime: 
+  noSuchDungeon: '&4Le donjon &6&v1&4 n''existe pas.'
+  noSuchGroup: '&4Le groupe &6&v1&4 n''existe pas.'
+  noSuchMap: '&4La carte &6&v1&4 n''existe pas.'
+  noSuchPlayer: '&4Le joueur &6&v1&4 n''existe pas.'
+  noSuchResourcePack: 
+  noSuchShop: '&4Shop &v1 &4not found...'
+  notInDungeon: '&4Vous n''êtes pas dans un donjon.'
+  notInGame: '&4Le groupe &6&v1&4 n''est pas membre d''une partie.'
+  notInGroup: '&4Le joueur &6&v1&4 n''est pas membre du groupe &6&v2&v4.'
+  notInvited: '&4Vous n''êtes pas invité au groupe &6&v1&4.'
+  notLeader: '&4Vous n''êtes pas le capitaine de votre groupe.'
+  notSaved: '&4La carte &6&v1&4 n''a pas encore été sauvegardée dans le dossier &6DungeonsXL/maps/&4.'
+  blockOwnTeam: 
+  ready: '&4Choisissez d''abord votre classe.'
+  requirements: '&4Vous ne remplissez pas les prérequis pour ce donjon.'
+  selfNotInGroup: 
+  signWrongFormat: '&4Le panneau n''est pas rédigé correctement.'
+  tooManyInstances: '&4Il y a actuellement trop de carte instanciées. Réessayez dans quelques minutes.'
+  tooManyTutorials: '&4Il y a actuellement trop de tutoriel en cours. Réessayez dans quelques minutes.'
+  tutorialDoesNotExist: '&4Le tutoriel du donjon n''existe pas.'
+group:
+  bedDestroyed: ###
+  congrats: ###
+  congratsSub: ###
+  created: '&4&v1&6 a créé le groupe &4&v2&6.'
+  death: ###
+  deathKick: ###
+  defeated: ###
+  disbanded: '&4&v1&6 a dissous le groupe &4&v2&6.'
+  flagCaptured: ###
+  flagLost: ###
+  flagStealing: ###
+  invitedPlayer: '&4&v1&6 a invité le joueur &4&v2&6 au groupe &4&v3&6.'
+  joinedGame: '&6Votre groupe a rejoint la partie avec succès.'
+  kickedPlayer: '&4&v1&6 a éjecté &4&v2&6 du groupe &4&v3&6.'
+  killed: ###
+  killedKick: ###
+  livesAdded: ###
+  livesRemoved: ###
+  playerJoined: '&6Le joueur &4&v1&6 a rejoint le groupe.'
+  rewardChest: ###
+  uninvitedPlayer: '&4&v1&6 a repris l''invitation de &4&v2&6 pour le groupe &4&v3&6.'
+  waveFinished: '&6Votre groupe a fini la vague numéro &4&v1&6. La suivante va commencer dans &4&v2&6 secondes.'
+misc:
+  no: ###
+  okay: ###
+  unlimited: ###
+  yes: ###
+player:
+  blockInfo: '&6Block ID: &2&v1'
+  checkpointReached: '&6Point de sauvegarde atteint.'
+  death: '&6Vous êtes mort, vies restantes: &2&v1'
+  deathKick: '&2&v1&6 est mort et a perdu sa dernière vie.'
+  finishedDungeon: '&6Vous avez terminé le donjon avec succès.'
+  finished_Floor: '&6Vous avez terminé l''étage avec succès.'
+  invited: '&4&v1&6 vous a invité au groupe &4&v2&6.'
+  uninvited: '&4&v1&6 a annulé votre invitation au groupe &4&v2&6.'
+  joinGroup: '&6Vous avez rejoint le groupe avec succès.'
+  kicked: '&4Vous avez été éjecté du groupe &6&v1&4.'
+  killed: ###
+  killedKick: ###
+  leaveGroup: '&6Vous avez quitté le groupe avec succès.'
+  leftGroup: '&6Le joueur &4&v1&6 a quitté le groupe.'
+  livesAdded: ###
+  livesRemoved: ###
+  lootAdded: '&4&v1&6 a été rajouté à votre inventaire de récompenses.'
+  newLeader: '&6Vous êtes maintenant le nouveau capitaine du groupe.'
+  offline: '&Le joueur &4&v1&6 est passé hors ligne. Dans &4&v2&6 secondes il va être automatiquement éjecté du donjon.'
+  offlineNever: '&6Le joueur &4&v1&6 est passé hors ligne. Il ne va &4pas&6 être éjecté du donjon automatiquement.'
+  portalAbort: '&6Création de portails annulée.'
+  portalIntroduction: '&6Cliquez sur les deux bords du portail avec l''épée en bois.'
+  portalCreated: '&6Portail créé.'
+  portalProgress: '&6Le premier bord a été marqué avec succès. Vous devez maintenant cliquer sur le deuxième bord.'
+  protectedBlockDeleted: '&6Protection retirée avec succès.'
+  ready: '&6Vous êtes maintenant prêt à démarrer le donjon.'
+  signCreated: '&6Création avec succès d''un panneau de donjon.'
+  signCopied: '&6Données du panneau copiées.'
+  timeLeft: '&v1Il vous reste &6&v2 &v1secondes pour finir le donjon.'
+  timeKick: 'Temps de &2&v1&6 écoulé.'
+  treasures: '&1trésors'
+  waitForOtherPlayers: '&6En attente des membres de l''équipe...'
+requirement:
+  fee: '&6Vous avez été débité de &4&v1 &6pour entrer dans le donjon.'
+reward:
+  general: '&6Vous avez reçu &4&v1 &6pour avoir fini le donjon.'
+sign:
+  end: '&2END'
+  floor:
+    '1': '&2FINIR'
+    '2': '&2ÉTAGE SUIVANT'
+  global:
+    full: '&4PLEIN'
+    isPlaying: '&4EN JEU'
+    joinGame: '&2INSCRIRE AU JEU'
+    joinGroup: '&2INSCRIRE AU GROUPE'
+    newGame: '&2NOUVEAU JEU'
+    newGroup: '&2NOUVEAU GROUPE'
+  leave: '&2QUITTER'
+  ready: '&2PRÊT'
+  resourcePack: '&2TÉLÉCHARGER'
+  wave:
+    '1': '&2COMMENCER'
+    '2': '&2VAGUE SUIVANTE'
