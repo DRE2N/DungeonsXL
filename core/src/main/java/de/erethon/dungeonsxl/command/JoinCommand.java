@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public class JoinCommand extends DCommand {
         setCommand("join");
         setMinArgs(1);
         setMaxArgs(1);
-        setHelp(DMessage.HELP_CMD_JOIN.getMessage());
+        setHelp(DMessage.CMD_JOIN_HELP.getMessage());
         setPermission(DPermission.JOIN.getNode());
         setPlayerCommand(true);
     }

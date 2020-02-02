@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public class ChatCommand extends DCommand {
         setCommand("chat");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(DMessage.HELP_CMD_CHAT.getMessage());
+        setHelp(DMessage.CMD_CHAT_HELP.getMessage());
         setPermission(DPermission.CHAT.getNode());
         setPlayerCommand(true);
     }

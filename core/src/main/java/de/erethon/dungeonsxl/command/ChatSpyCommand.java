@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ public class ChatSpyCommand extends DCommand {
         setCommand("chatSpy");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(DMessage.HELP_CMD_CHATSPY.getMessage());
+        setHelp(DMessage.CMD_CHATSPY_HELP.getMessage());
         setPermission(DPermission.CHAT_SPY.getNode());
         setPlayerCommand(true);
     }
@@ -45,7 +45,7 @@ public class ChatSpyCommand extends DCommand {
         DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
 
         dPlayer.setInChatSpyMode(!dPlayer.isInChatSpyMode());
-        MessageUtil.sendMessage(player, (dPlayer.isInChatSpyMode() ? DMessage.CMD_CHATSPY_START : DMessage.CMD_CHATSPY_STOPPED).getMessage());
+        MessageUtil.sendMessage(player, (dPlayer.isInChatSpyMode() ? DMessage.CMD_CHATSPY_STARTED : DMessage.CMD_CHATSPY_STOPPED).getMessage());
     }
 
 }

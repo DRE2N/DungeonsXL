@@ -54,6 +54,26 @@
     <dependencies>
         <dependency>
             <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-adapter</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-bukkit_blockdata</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-bukkit_magicvalues</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
             <artifactId>dungeonsxl-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

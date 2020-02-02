@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class InviteCommand extends DCommand {
         setMinArgs(2);
         setMaxArgs(2);
         setCommand("invite");
-        setHelp(DMessage.HELP_CMD_INVITE.getMessage());
+        setHelp(DMessage.CMD_INVITE_HELP.getMessage());
         setPermission(DPermission.INVITE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -56,7 +56,7 @@ public class InviteCommand extends DCommand {
             }
 
         } else {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage(args[2]));
+            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[2]));
         }
     }
 

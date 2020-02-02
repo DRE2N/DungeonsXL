@@ -17,6 +17,7 @@
                 <directory>src/main/resources/</directory>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>languages/*</include>
                 </includes>
             </resource>
         </resources>

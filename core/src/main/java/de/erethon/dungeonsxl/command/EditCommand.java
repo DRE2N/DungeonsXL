@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.config.CommonMessage;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
@@ -39,7 +40,7 @@ public class EditCommand extends DCommand {
         setCommand("edit");
         setMinArgs(1);
         setMaxArgs(1);
-        setHelp(DMessage.HELP_CMD_EDIT.getMessage());
+        setHelp(DMessage.CMD_EDIT_HELP.getMessage());
         setPlayerCommand(true);
     }
 
@@ -49,7 +50,7 @@ public class EditCommand extends DCommand {
         String mapName = args[1];
 
         if (!instances.exists(mapName)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage(mapName));
+            MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(mapName));
             return;
         }
 
@@ -60,7 +61,7 @@ public class EditCommand extends DCommand {
         }
 
         if (!resource.isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.EDIT)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_NO_PERMISSIONS.getMessage());
+            MessageUtil.sendMessage(player, CommonMessage.CMD_NO_PERMISSION.getMessage());
             return;
         }
 

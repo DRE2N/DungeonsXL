@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class ReloadCommand extends DCommand {
         setCommand("reload");
         setMinArgs(0);
         setMaxArgs(1);
-        setHelp(DMessage.HELP_CMD_RELOAD.getMessage());
+        setHelp(DMessage.CMD_RELOAD_HELP.getMessage());
         setPermission(DPermission.RELOAD.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -96,7 +96,7 @@ public class ReloadCommand extends DCommand {
         plugin.loadData();
 
         MessageUtil.sendPluginTag(sender, plugin);
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_DONE.getMessage());
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, ixl));
     }

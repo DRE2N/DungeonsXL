@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public class PortalCommand extends DCommand {
         setCommand("portal");
         setMinArgs(0);
         setMaxArgs(1);
-        setHelp(DMessage.HELP_CMD_PORTAL.getMessage());
+        setHelp(DMessage.CMD_PORTAL_HELP.getMessage());
         setPermission(DPermission.PORTAL.getNode());
         setPlayerCommand(true);
     }

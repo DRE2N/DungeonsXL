@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.misc.EnumUtil;
-import de.erethon.dungeonsxl.config.DMessage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -463,7 +462,7 @@ public class DPlayerData extends DREConfig {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                MessageUtil.log(DREPlugin.getInstance(), DMessage.LOG_NEW_PLAYER_DATA.getMessage(file.getName()));
+                MessageUtil.log(DREPlugin.getInstance(), "&6A new player data file has been created and saved as " + file.getName());
             } catch (IOException exception) {
             }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.io.File;
 import java.util.Arrays;
@@ -163,7 +162,7 @@ public class DMobType extends ExMob {
                                 itemMeta.addEnchant(Enchantment.getByName(splittedEnchantment[0].toUpperCase()), 1, true);
                             }
                         } else {
-                            MessageUtil.log(DMessage.LOG_ERROR_MOB_ENCHANTMENT.getMessage(splittedEnchantment[0]));
+                            MessageUtil.log("&4An error occurred while loading mob.yml: Enchantment &6" + splittedEnchantment[0] + "&4 doesn''t exist!");
                         }
                     }
                 }

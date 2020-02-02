@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ public class GameSign extends JoinSign {
             return;
         }
         if (!dGroup.getCaptain().equals(player)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_NOT_CAPTAIN.getMessage());
+            MessageUtil.sendMessage(player, DMessage.ERROR_NOT_LEADER.getMessage());
             return;
         }
 

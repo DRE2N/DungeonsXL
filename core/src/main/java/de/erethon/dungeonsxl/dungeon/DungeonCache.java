@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.dungeon;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.util.ArrayList;
@@ -51,7 +50,8 @@ public class DungeonCache {
                 dungeons.add(dungeon);
 
             } else {
-                MessageUtil.log(DMessage.LOG_ERROR_DUNGEON_SETUP.getMessage(file.getName()));
+                MessageUtil.log(plugin, "&4The setup of dungeon &6" + file.getName()
+                        + "&4 is incorrect. See https://github.com/DRE2N/DungeonsXL/wiki/dungeon-configuration for reference.");
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class DeleteCommand extends DCommand {
         setCommand("delete");
         setMinArgs(1);
         setMaxArgs(2);
-        setHelp(DMessage.HELP_CMD_DELETE.getMessage());
+        setHelp(DMessage.CMD_DELETE_HELP.getMessage());
         setPermission(DPermission.DELETE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);

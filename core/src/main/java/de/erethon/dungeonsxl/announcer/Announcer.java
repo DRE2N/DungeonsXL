@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,11 @@ package de.erethon.dungeonsxl.announcer;
 import de.erethon.commons.chat.DefaultFontInfo;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.DColor;
 import de.erethon.dungeonsxl.util.GUIUtil;
 import java.io.File;
 import java.util.ArrayList;
@@ -350,7 +350,7 @@ public class Announcer {
     public void clickGroupButton(Player player, ItemStack button) {
         DGroup dGroup = getDGroupByButton(button);
         DGroup pGroup = DGroup.getByPlayer(player);
-        DColor color = DColor.getByWoolType(plugin.getCaliburn().getExItem(button));
+        Color color = Color.getByWoolType(plugin.getCaliburn().getExItem(button));
 
         for (DGroup group : dGroups) {
             if (dGroups.contains(pGroup) && pGroup != null && pGroup.isCustom() && pGroup.getCaptain() == player) {
@@ -422,7 +422,7 @@ public class Announcer {
 
             boolean full = playerCount >= maxPlayersPerGroup;
 
-            DColor color = plugin.getMainConfig().getGroupColorPriority(groupCount);
+            Color color = plugin.getMainConfig().getGroupColorPriority(groupCount);
             ItemStack button = color.getWoolMaterial().toItemStack();
             ItemMeta meta = button.getItemMeta();
             meta.setDisplayName(name + (full ? ChatColor.DARK_RED : ChatColor.GREEN) + " [" + playerCount + "/" + maxPlayersPerGroup + "]");

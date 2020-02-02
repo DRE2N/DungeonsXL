@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public class ListCommand extends DCommand {
         setCommand("list");
         setMinArgs(0);
         setMaxArgs(3);
-        setHelp(DMessage.HELP_CMD_LIST.getMessage());
+        setHelp(DMessage.CMD_LIST_HELP.getMessage());
         setPermission(DPermission.LIST.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.player;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
@@ -33,7 +34,6 @@ import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.game.GameRuleProvider;
 import de.erethon.dungeonsxl.requirement.Requirement;
 import de.erethon.dungeonsxl.reward.Reward;
-import de.erethon.dungeonsxl.util.DColor;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class DGroup {
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
     private DResourceWorld nextFloor;
-    private DColor color;
+    private Color color;
     private int score = 0;
     private int initialLives = -1;
     private int lives = -1;
@@ -82,7 +82,7 @@ public class DGroup {
         this(plugin, "Group#" + counter, player);
     }
 
-    public DGroup(DungeonsXL plugin, Player player, DColor color) {
+    public DGroup(DungeonsXL plugin, Player player, Color color) {
         this(plugin, color.toString() + "#" + counter, player);
     }
 
@@ -170,7 +170,7 @@ public class DGroup {
     /**
      * @param color the color to fetch the name from
      */
-    public void setName(DColor color) {
+    public void setName(Color color) {
         name = color.toString() + "#" + id;
     }
 
@@ -554,18 +554,18 @@ public class DGroup {
     /**
      * @return the color that represents this group
      */
-    public DColor getDColor() {
+    public Color getDColor() {
         if (color != null) {
             return color;
         } else {
-            return DColor.WHITE;
+            return Color.WHITE;
         }
     }
 
     /**
      * @param color the group color to set
      */
-    public void setDColor(DColor color) {
+    public void setDColor(Color color) {
         this.color = color;
     }
 
@@ -626,7 +626,7 @@ public class DGroup {
     /* Actions */
     public boolean teleport() {
         if (dungeon == null || dungeon.getMap() == null) {
-            sendMessage(DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage());
+            sendMessage(DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
             return false;
         }
 
@@ -661,7 +661,7 @@ public class DGroup {
         }
 
         if (target == null) {
-            sendMessage(DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage());
+            sendMessage(DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
             return false;
         }
 

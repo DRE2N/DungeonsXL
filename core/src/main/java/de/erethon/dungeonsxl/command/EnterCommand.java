@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class EnterCommand extends DCommand {
         setMinArgs(1);
         setMaxArgs(2);
         setCommand("enter");
-        setHelp(DMessage.HELP_CMD_ENTER.getMessage());
+        setHelp(DMessage.CMD_ENTER_HELP.getMessage());
         setPermission(DPermission.ENTER.getNode());
         setPlayerCommand(true);
     }
@@ -78,7 +78,7 @@ public class EnterCommand extends DCommand {
         }
 
         if (joining.getCaptain() != captain && !DPermission.hasPermission(sender, DPermission.BYPASS)) {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_CAPTAIN.getMessage());
+            MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_LEADER.getMessage());
             return;
         }
 

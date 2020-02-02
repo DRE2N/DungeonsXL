@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class EscapeCommand extends DCommand {
         setCommand("escape");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(DMessage.HELP_CMD_ESCAPE.getMessage());
+        setHelp(DMessage.CMD_ESCAPE_HELP.getMessage());
         setPermission(DPermission.ESCAPE.getNode());
         setPlayerCommand(true);
     }

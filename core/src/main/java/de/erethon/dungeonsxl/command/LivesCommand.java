@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class LivesCommand extends DCommand {
         setCommand("lives");
         setMinArgs(0);
         setMaxArgs(1);
-        setHelp(DMessage.HELP_CMD_LIVES.getMessage());
+        setHelp(DMessage.CMD_LIVES_HELP.getMessage());
         setPermission(DPermission.LIVES.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
