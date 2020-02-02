@@ -60,7 +60,7 @@ cmd:
     help: /dxl join [announcement] - Opens the GUI to join a group in an upcoming game
   kick:
     help: /dxl kick [player] - Kicks the player out of his group and dungeon
-    success: '&6Successfully attempted to kick &4&v1&6.'
+    success: '&6Successfully kicked &4&v1&6 out of the group.'
   leave:
     help: /dxl leave - Leaves the current group and dungeon or edit world
     success: '&6You have successfully left your group.'
@@ -161,11 +161,11 @@ group:
   flagStealing: '&4&v1&6 is stealing the flag of the group &4&v2&6.'
   invitedPlayer: '&4&v1&6 invited the player &4&v2&6 to the group &4&v3&6.'
   joinedGame: '&6Your group successfully joined the game.'
+  kickedPlayer: '&4&v1&6 kicked the player &4&v2&6 from the group &4&v3&6.'
   killed: '&4&v1 &6was killed by &4&v2&6. &4&v3&6 have &4&v4 &6lives left.'
   killedKick: '&4&v1&6 was killed by &4&v2&6. &4&v3 have no lives left.'
   livesAdded: '&6Your group received a bonus of &4&v1&6 lives.'
   livesRemoved: '&6Your group lost &4&v1&6 lives.'
-  kickedPlayer: '&4&v1&6 kicked the player &4&v2&6 from the group &4&v3&6.'
   playerJoined: '&6Player &4&v1&6 has joined the group.'
   rewardChest: '&6Your group has found a reward chest.'
   uninvitedPlayer: '&4&v1&6 took back the invitation for &4&v2&6 to the group &4&v3&6.'
