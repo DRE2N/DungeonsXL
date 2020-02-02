@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class MainCommand extends DCommand {
     public MainCommand(DungeonsXL plugin) {
         super(plugin);
         setCommand("main");
-        setHelp(DMessage.HELP_CMD_MAIN.getMessage());
+        setHelp(DMessage.CMD_MAIN_HELP.getMessage());
         setPermission(DPermission.MAIN.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -68,7 +68,7 @@ public class MainCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, itemsxl));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP.getMessage());
-        MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2019 Frank Baumann & contributors; lcsd. under GPLv3.");
+        MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2020 Frank Baumann & contributors; lcsd. under GPLv3.");
     }
 
 }

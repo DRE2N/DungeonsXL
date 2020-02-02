@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public class RenameCommand extends DCommand {
         setCommand("rename");
         setMinArgs(2);
         setMaxArgs(2);
-        setHelp(DMessage.HELP_CMD_RENAME.getMessage());
+        setHelp(DMessage.CMD_RENAME_HELP.getMessage());
         setPermission(DPermission.RENAME.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);

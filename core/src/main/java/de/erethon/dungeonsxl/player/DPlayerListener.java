@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -511,7 +511,7 @@ public class DPlayerListener implements Listener {
 
         if (worlds.getInstanceByWorld(toWorld) != null) {
             dPlayer.sendMessage(DMessage.ERROR_JOIN_GROUP.getMessage());
-            dPlayer.sendMessage(ChatColor.GOLD + DMessage.HELP_CMD_ENTER.getMessage());
+            dPlayer.sendMessage(ChatColor.GOLD + DMessage.CMD_ENTER_HELP.getMessage());
             event.setCancelled(true);
         }
     }

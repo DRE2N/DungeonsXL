@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public class TestCommand extends DCommand {
         setCommand("test");
         setMinArgs(0);
         setMaxArgs(0);
-        setHelp(DMessage.HELP_CMD_TEST.getMessage());
+        setHelp(DMessage.CMD_TEST_HELP.getMessage());
         setPermission(DPermission.TEST.getNode());
         setPlayerCommand(true);
         setConsoleCommand(false);
@@ -61,7 +61,7 @@ public class TestCommand extends DCommand {
             }
 
             if (!dGroup.getCaptain().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
-                MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_CAPTAIN.getMessage());
+                MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_LEADER.getMessage());
                 return;
             }
 

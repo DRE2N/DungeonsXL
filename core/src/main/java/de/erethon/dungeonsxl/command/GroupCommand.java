@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class GroupCommand extends DCommand {
         setCommand("group");
         setMinArgs(0);
         setMaxArgs(2);
-        setHelp(DMessage.HELP_CMD_GROUP.getMessage());
+        setHelp(DMessage.CMD_GROUP_HELP_MAIN.getMessage());
         setPermission(DPermission.GROUP.getNode());
         setPlayerCommand(true);
     }
@@ -272,19 +272,18 @@ public class GroupCommand extends DCommand {
         switch (page) {
             default:
                 MessageUtil.sendCenteredMessage(sender, "&4&l[ &61-5 &4/ &67 &4| &61 &4&l]");
-                MessageUtil.sendMessage(sender, "&bcreate" + "&7 - " + DMessage.HELP_CMD_GROUP_CREATE.getMessage());
-                MessageUtil.sendMessage(sender, "&bdisband" + "&7 - " + DMessage.HELP_CMD_GROUP_DISBAND.getMessage());
-                MessageUtil.sendMessage(sender, "&binvite" + "&7 - " + DMessage.HELP_CMD_GROUP_INVITE.getMessage());
-                MessageUtil.sendMessage(sender, "&buninvite" + "&7 - " + DMessage.HELP_CMD_GROUP_UNINVITE.getMessage());
-                MessageUtil.sendMessage(sender, "&bjoin" + "&7 - " + DMessage.HELP_CMD_GROUP_JOIN.getMessage());
+                MessageUtil.sendMessage(sender, "&bcreate" + "&7 - " + DMessage.CMD_GROUP_HELP_CREATE.getMessage());
+                MessageUtil.sendMessage(sender, "&bdisband" + "&7 - " + DMessage.CMD_GROUP_HELP_DISBAND.getMessage());
+                MessageUtil.sendMessage(sender, "&binvite" + "&7 - " + DMessage.CMD_GROUP_HELP_INVITE.getMessage());
+                MessageUtil.sendMessage(sender, "&buninvite" + "&7 - " + DMessage.CMD_GROUP_HELP_UNINVITE.getMessage());
+                MessageUtil.sendMessage(sender, "&bjoin" + "&7 - " + DMessage.CMD_GROUP_HELP_JOIN.getMessage());
                 break;
             case "2":
                 MessageUtil.sendCenteredMessage(sender, "&4&l[ &66-10 &4/ &67 &4| &62 &4&l]");
-                MessageUtil.sendMessage(sender, "&bkick" + "&7 - " + DMessage.HELP_CMD_GROUP_KICK.getMessage());
-                MessageUtil.sendMessage(sender, "&bshow" + "&7 - " + DMessage.HELP_CMD_GROUP_SHOW.getMessage());
+                MessageUtil.sendMessage(sender, "&bkick" + "&7 - " + DMessage.CMD_GROUP_HELP_KICK.getMessage());
+                MessageUtil.sendMessage(sender, "&bshow" + "&7 - " + DMessage.CMD_GROUP_HELP_SHOW.getMessage());
                 break;
         }
-
     }
 
 }

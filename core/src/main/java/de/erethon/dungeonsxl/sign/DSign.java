@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dsign.DSignRegistrationEvent;
 import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.trigger.Trigger;
@@ -218,7 +217,7 @@ public abstract class DSign {
         sign.setLine(3, ERROR_3);
         sign.update();
 
-        MessageUtil.log(plugin, DMessage.LOG_ERROR_SIGN_SETUP.getMessage(sign.getX() + ", " + sign.getY() + ", " + sign.getZ()));
+        MessageUtil.log(plugin, "&4A sign at &6" + sign.getX() + ", " + sign.getY() + ", " + sign.getZ() + "&4 is erroneous!");
         MessageUtil.log(plugin, getType().getName() + ": " + reason);
     }
 

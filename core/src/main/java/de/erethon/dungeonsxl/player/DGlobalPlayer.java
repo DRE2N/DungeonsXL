@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -344,7 +344,7 @@ public class DGlobalPlayer implements PlayerWrapper {
         } catch (NullPointerException exception) {
             exception.printStackTrace();
             player.setHealth(0);
-            MessageUtil.log(plugin, DMessage.LOG_KILLED_CORRUPTED_PLAYER.getMessage(player.getName()));
+            MessageUtil.log(plugin, "&4Killed player &6" + player.getName() + "&4 because the data to restore his main inventory is corrupted :(");
         }
 
         data.clearPlayerState();
@@ -356,7 +356,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     public void startTutorial() {
         Dungeon dungeon = plugin.getMainConfig().getTutorialDungeon();
         if (dungeon == null) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_TUTORIAL_NOT_EXIST.getMessage());
+            MessageUtil.sendMessage(player, DMessage.ERROR_TUTORIAL_DOES_NOT_EXIST.getMessage());
             return;
         }
 

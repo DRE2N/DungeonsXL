@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class CreateCommand extends DCommand {
         setMinArgs(1);
         setMaxArgs(1);
         setCommand("create");
-        setHelp(DMessage.HELP_CMD_CREATE.getMessage());
+        setHelp(DMessage.CMD_CREATE_HELP.getMessage());
         setPermission(DPermission.CREATE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -55,14 +55,14 @@ public class CreateCommand extends DCommand {
         }
 
         if (name.length() > 15) {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_NAME_TO_LONG.getMessage());
+            MessageUtil.sendMessage(sender, DMessage.ERROR_NAME_TOO_LONG.getMessage());
             return;
         }
 
         if (sender instanceof ConsoleCommandSender) {
             // Msg create
-            MessageUtil.log(plugin, DMessage.LOG_NEW_MAP.getMessage());
-            MessageUtil.log(plugin, DMessage.LOG_GENERATE_NEW_WORLD.getMessage());
+            MessageUtil.log(plugin, "&6Creating new map.");
+            MessageUtil.log(plugin, "&6Generating new world...");
 
             // Create World
             DResourceWorld resource = new DResourceWorld(plugin, name);
@@ -72,7 +72,7 @@ public class CreateCommand extends DCommand {
             editWorld.delete();
 
             // MSG Done
-            MessageUtil.log(plugin, DMessage.LOG_WORLD_GENERATION_FINISHED.getMessage());
+            MessageUtil.log(plugin, "&6World generation finished.");
 
         } else if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -83,8 +83,8 @@ public class CreateCommand extends DCommand {
             }
 
             // Msg create
-            MessageUtil.log(plugin, DMessage.LOG_NEW_MAP.getMessage());
-            MessageUtil.log(plugin, DMessage.LOG_GENERATE_NEW_WORLD.getMessage());
+            MessageUtil.log(plugin, "&6Creating new map.");
+            MessageUtil.log(plugin, "&6Generating new world...");
 
             // Create World
             DResourceWorld resource = new DResourceWorld(plugin, name);
@@ -92,7 +92,7 @@ public class CreateCommand extends DCommand {
             DEditWorld editWorld = resource.generate();
 
             // MSG Done
-            MessageUtil.log(plugin, DMessage.LOG_WORLD_GENERATION_FINISHED.getMessage());
+            MessageUtil.log(plugin, "&6World generation finished.");
 
             // Tp Player
             new DEditPlayer(plugin, player, editWorld);

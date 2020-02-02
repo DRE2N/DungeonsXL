@@ -8,6 +8,7 @@
     <url>https://dre2n.github.io</url>
     <description>Create custom dungeons and adventure maps with ease!</description>
     <modules>
+        <module>adapter</module>
         <module>api</module>
         <module>bukkit_blockdata</module>
         <module>bukkit_magicvalues</module>
@@ -19,13 +20,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spigotVersion.latest>1.14.4-R0.1-SNAPSHOT</spigotVersion.latest>
+        <spigotVersion.latest>1.15.2-R0.1-SNAPSHOT</spigotVersion.latest>
     </properties>
     <dependencies>
         <dependency>
             <groupId>de.erethon.commons</groupId>
             <artifactId>commons-dist</artifactId>
-            <version>6.0</version>
+            <version>6.1.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

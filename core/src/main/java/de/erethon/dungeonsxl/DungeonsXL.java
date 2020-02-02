@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.compatibility.Version;
-import de.erethon.commons.config.MessageConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.javaplugin.DREPluginSettings;
 import de.erethon.commons.misc.FileUtil;
@@ -30,7 +29,6 @@ import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
 import de.erethon.dungeonsxl.announcer.AnnouncerCache;
 import de.erethon.dungeonsxl.command.DCommandCache;
-import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.dungeon.DungeonCache;
 import de.erethon.dungeonsxl.game.Game;
@@ -78,7 +76,6 @@ public class DungeonsXL extends DREPlugin {
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
     public static File BACKUPS;
-    public static File LANGUAGES;
     public static File MAPS;
     public static File PLAYERS;
     public static File SCRIPTS;
@@ -143,7 +140,6 @@ public class DungeonsXL extends DREPlugin {
     @Override
     public void onDisable() {
         saveData();
-        messageConfig.save();
         dGroups.clear();
         dWorlds.deleteAllInstances();
         HandlerList.unregisterAll(this);
@@ -159,11 +155,6 @@ public class DungeonsXL extends DREPlugin {
         BACKUPS = new File(getDataFolder(), "backups");
         if (!BACKUPS.exists()) {
             BACKUPS.mkdir();
-        }
-
-        LANGUAGES = new File(getDataFolder(), "languages");
-        if (!LANGUAGES.exists()) {
-            LANGUAGES.mkdir();
         }
 
         MAPS = new File(getDataFolder(), "maps");
@@ -213,9 +204,7 @@ public class DungeonsXL extends DREPlugin {
     }
 
     public void loadConfig() {
-        messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, "english.yml"));
         mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
-        messageConfig = new MessageConfig(DMessage.class, new File(LANGUAGES, mainConfig.getLanguage() + ".yml"));
     }
 
     public void createCaches() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class PlayCommand extends DCommand {
         setCommand("play");
         setMinArgs(1);
         setMaxArgs(1);
-        setHelp(DMessage.HELP_CMD_PLAY.getMessage());
+        setHelp(DMessage.CMD_PLAY_HELP.getMessage());
         setPermission(DPermission.PLAY.getNode());
         setPlayerCommand(true);
         setConsoleCommand(false);
@@ -64,7 +64,7 @@ public class PlayCommand extends DCommand {
             if (resource != null) {
                 dungeon = new Dungeon(plugin, resource);
             } else {
-                MessageUtil.sendMessage(player, DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage(args[1]));
+                MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(args[1]));
                 return;
             }
         }
@@ -83,7 +83,7 @@ public class PlayCommand extends DCommand {
             }
         }
         if (!dGroup.getCaptain().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_NOT_CAPTAIN.getMessage());
+            MessageUtil.sendMessage(player, DMessage.ERROR_NOT_LEADER.getMessage());
             return;
         }
         dGroup.setDungeon(dungeon);

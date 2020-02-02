@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class UninviteCommand extends DCommand {
         setCommand("uninvite");
         setMinArgs(2);
         setMaxArgs(2);
-        setHelp(DMessage.HELP_CMD_UNINVITE.getMessage());
+        setHelp(DMessage.CMD_UNINVITE_HELP.getMessage());
         setPermission(DPermission.UNINVITE.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -45,7 +45,7 @@ public class UninviteCommand extends DCommand {
     public void onExecute(String[] args, CommandSender sender) {
         DResourceWorld resource = instances.getResourceByName(args[2]);
         if (resource == null) {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_DUNGEON_NOT_EXIST.getMessage(args[2]));
+            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[2]));
             return;
         }
 

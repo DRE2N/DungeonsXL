@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.adapter.block;
 
-import de.erethon.dungeonsxl.util.DColor;
+import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
@@ -29,7 +29,7 @@ public interface BlockAdapter {
 
     void openDoor(Block block);
 
-    void setBlockWoolColor(Block block, DColor color);
+    void setBlockWoolColor(Block block, Color color);
 
     BlockFace getFacing(Block block);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -540,7 +540,7 @@ public class DGamePlayer extends DInstancePlayer {
                 }
                 dGroup.setCaptain(newCaptain);
                 if (message) {
-                    MessageUtil.sendMessage(newCaptain, DMessage.PLAYER_NEW_CAPTAIN.getMessage());
+                    MessageUtil.sendMessage(newCaptain, DMessage.PLAYER_NEW_LEADER.getMessage());
                 }
                 // ...*flies away*
             }

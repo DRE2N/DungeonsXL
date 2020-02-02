@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class DungeonItemCommand extends DCommand {
         setAliases("di");
         setMinArgs(0);
         setMaxArgs(1);
-        setHelp(DMessage.HELP_CMD_DUNGEON_ITEM.getMessage());
+        setHelp(DMessage.CMD_DUNGEON_ITEM_HELP.getMessage());
         setPermission(DPermission.DUNGEON_ITEM.getNode());
         setPlayerCommand(true);
         setConsoleCommand(false);
@@ -63,7 +63,7 @@ public class DungeonItemCommand extends DCommand {
             NBTUtil.addBoolean(tag, NBTUtil.DUNGEON_ITEM_KEY, true);
             inv.setItemInHand(NBTUtil.setTag(bukkitStack, tag));
             MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_SET_DUNGEON.getMessage());
-            MessageUtil.sendMessage(sender, DMessage.HELP_DUNGEON_ITEM.getMessage());
+            MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_DUNGEON_ITEM_HELP.getMessage());
 
         } else if (action.equalsIgnoreCase("false")) {
             if (tag != null) {
@@ -71,15 +71,15 @@ public class DungeonItemCommand extends DCommand {
                 inv.setItemInHand(NBTUtil.setTag(bukkitStack, tag));
             }
             MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_SET_GLOBAL.getMessage());
-            MessageUtil.sendMessage(sender, DMessage.HELP_GLOBAL_ITEM.getMessage());
+            MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_GLOBAL_ITEM_HELP.getMessage());
 
         } else {
             if (tag != null && NBTUtil.hasKey(tag, NBTUtil.DUNGEON_ITEM_KEY)) {
                 MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_INFO_DUNGEON.getMessage());
-                MessageUtil.sendMessage(sender, DMessage.HELP_DUNGEON_ITEM.getMessage());
+                MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_DUNGEON_ITEM_HELP.getMessage());
             } else {
                 MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_INFO_GLOBAL.getMessage());
-                MessageUtil.sendMessage(sender, DMessage.HELP_GLOBAL_ITEM.getMessage());
+                MessageUtil.sendMessage(sender, DMessage.CMD_DUNGEON_ITEM_GLOBAL_ITEM_HELP.getMessage());
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2019 Frank Baumann
+ * Copyright (C) 2012-2020 Frank Baumann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class ImportCommand extends DCommand {
         setMinArgs(1);
         setMaxArgs(1);
         setCommand("import");
-        setHelp(DMessage.HELP_CMD_IMPORT.getMessage());
+        setHelp(DMessage.CMD_IMPORT_HELP.getMessage());
         setPermission(DPermission.IMPORT.getNode());
         setPlayerCommand(true);
         setConsoleCommand(true);
@@ -64,8 +64,8 @@ public class ImportCommand extends DCommand {
             world.save();
         }
 
-        MessageUtil.log(plugin, DMessage.LOG_NEW_MAP.getMessage());
-        MessageUtil.log(plugin, DMessage.LOG_IMPORT_WORLD.getMessage());
+        MessageUtil.log(plugin, "&6Creating new map.");
+        MessageUtil.log(plugin, "&6Importing world...");
 
         FileUtil.copyDir(source, target, "playerdata", "stats");
 
