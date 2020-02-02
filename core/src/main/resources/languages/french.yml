@@ -213,10 +213,10 @@ requirement:
 reward:
   general: '&6Vous avez reçu &4&v1 &6pour avoir fini le donjon.'
 sign:
-  end: '&2END'
+  end: '&2FINIR'
   floor:
-    '1': '&2FINIR'
-    '2': '&2ÉTAGE SUIVANT'
+    '1': '&2ENTRER AU PRO-'
+    '2': '&2CHAIN ÉTAGE'
   global:
     full: '&4PLEIN'
     isPlaying: '&4EN JEU'
