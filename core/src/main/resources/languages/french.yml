@@ -42,7 +42,7 @@ cmd:
     help:
       create: /dxl group create [group] - Créer un nouveau groupe
       disband: /dxl group disband ([group]) - Dissoudre un groupe
-      invite: /dxl group invite [player]- Inviter quelqu'un a votre groupe
+      invite: /dxl group invite [player] - Inviter quelqu'un a votre groupe
       join: /dxl group join [group]- Rejoindre un groupe
       kick: /dxl group kick [player] - Éjecter un joueur
       main: /dxl group - Montrer l'aide des commandes de groupe
@@ -83,7 +83,7 @@ cmd:
   play:
     help: /dxl play [name] - Permettre au joueur de jouer à un donjon sans un portail
   portal:
-    help: /dxl portal - Créer un portail qui mène à un donjon
+    help: /dxl portal ([material=portal]) - Créer un portail qui mène à un donjon
   reload:
     help: /dxl reload - Recharge le plugin
     players: '&4Attention: Si vous rechargez le plugin, tous les joueurs seront éjectés de leur jeu.'

@@ -1,0 +1,232 @@
+announcer:
+  click: '&4&l=> &6KLICKE HIER ZUM BEITRETEN &4&l<='
+cmd:
+  break:
+    breakMode: '&6Du darfst jetzt von DungeonsXL geschützte Blöcke zerstören.'
+    help: /dxl break - Zerstöre einen von DungeonsXL geschützten Block
+    protectedMode: '&6Du darfst keine von DungeonsXL geschützten Blöcke mehr zerstören.'
+  chat:
+    dungeonChat: '&6Du hast den Dungeon-Chat betreten.'
+    help: /dxl chat - Chat-Modus wechseln
+    normalChat: '&6Du bist jetzt im öffentlichen Chat.'
+  chatspy:
+    help: /dxl chatspy - (De-)Aktiviert den Chat-Spy
+    started: '&6Du liest jetzt den Dungeon-Chat mit.'
+    stopped: '&6Du hast aufgehört, den Dungeon-Chat mitzulesen.'
+  create:
+    help: /dxl create [name] - Erstellt eine neue Dungeon-Map
+  delete:
+    backups: '&6Möchtest Du auch alle gespeicherten Backups löschen?'
+    help: /dxl delete [name] - Löscht eine Dungeon-Map
+    success: '&6Die Welt &4&v1&6 wurde erfolgreich gelöscht.'
+  dungeonItem:
+    dungeonItemHelp: '&6Nachdem ein Spiel beendet wurde, werden &4Dungeon-Items &6selbst dann aus dem Inventar entfernt, wenn die Spielregeln das eigentlich erlauben.'
+    globalItemHelp: '&6Nachdem ein Spiel beendet wurde, können &4globale Items &6aus den Dungeons mit herausgenommen werden, wenn die Spielregeln das erlauben.'
+    help: /dxl dungeonItem [true|false|info] - Stellt den Item-Stack in der Hand des Spielers so ein, dass er nicht aus dem Dungeon mit herausgenommen werden kann
+    info:
+      dungeon: '&6Dieses Item ist ein &4Dungeon-Item&6.'
+      global: '&6Dieses Item ist ein &4globales Item&6.'
+    set:
+      dungeon: '&6Das Item wurde erfolgreich als &4Dungeon-Item&6 eingestellt.'
+      global: '&6Das Item wurde erfolgreich als &4globales Item&6 eingestellt.'
+  edit:
+    help: /dxl edit [map] - Eine vorhandene Welt bearbeiten
+  enter:
+    help: /dxl enter ([joining group]) [target group] - Lässt eine Gruppe das Spiel einer anderen betreten.
+    success: '&6Die Gruppe &4&v1 &6ist erfolgreich dem Spiel der Gruppe &4&v2&6 beigetreten.'
+  escape:
+    help: /dxl escape - Die Welt ohne zu speichern verlassen
+  game:
+    help: /dxl game - Zeigt Informationen über das laufende Spiel an
+  group:
+    help:
+      create: /dxl group create [group] - Erstellt eine neue Gruppe
+      disband: /dxl group disband ([group]) - Löst eine Gruppe auf
+      invite: /dxl group invite [player] - Lädt jemanden in die Gruppe ein
+      join: /dxl group join [group]- Einer Gruppe beitreten
+      kick: /dxl group kick [player] - Einen Spieler aus einer Gruppe herauswerfen
+      main: /dxl group - Zeigt die Hilfeseiten des group-Befehls
+      show: /dxl group show [group] - Zeigt eine Gruppe an
+      uninvite: /dxl group uninvite [player] - Nimmt eine Einladung für die Gruppe zurück
+  help:
+    help: /dxl help [page] - Zeigt die Hilfeseite
+  import:
+    help: /dxl import [world] - Importiert eine Welt aus dem World-Container als Dungeon-Map
+    success: '&6Die Welt &4&v1&6 wurde erfolgreich importiert.'
+  invite:
+    help: /dxl invite [player] [dungeon] - Lädt einen Spieler ein, eine Dungeon-Welt zu bearbeiten
+    success: '&6Der Spieler &4&v1&6 wurde erfolgreich dazu eingeladen, die Welt &4&v2&6 zu bearbeiten.'
+  join:
+    help: /dxl join [announcement] - Öffnet ein GUI, um einer Gruppe in einem zukünftigen Spiel beizutreten
+  kick:
+    help: /dxl kick [player] - Wirft den Spieler aus seiner Gruppe und damit aus dem Dungeon heraus
+    success: '&4&v1&6 wurde erfolgreich aus der Gruppe geworfen.'
+  leave:
+    help: /dxl leave - Die Gruppe und Instanz verlassen
+    success: '&6Du hast Deine Gruppe erfolgreich verlassen.'
+  list:
+    help: /dxl list ([dungeon|map|loaded]) ([dungeon]) - Listet alle Dungeons auf
+  lives:
+    group: '&4&v1 &6haben &4&v2 &6Leben übrig.'
+    help: /dxl lives [player] - Zeigt die Leben, die ein Spieler übrig hat
+    player: '&4&v1 &6hat &4&v2 &6Leben übrig.'
+  main:
+    compatibility: '&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]'
+    help: /dxl - Grundlegende Statusinformationen
+    helpInfo: '&7Gib &o/dxl help&r&7 für weitere Informationen ein.'
+    loaded: '&eWelten: &o[&v1] &eDungeons: &o[&v2] &eGeladen: &o[&v3] &eSpieler: &o[&v4]'
+    welcome: '&7Willkommen bei &4Dungeons&fXL'
+  msg:
+    added: '&6Neue Nachrichten (&4&v1&6) hinzugefügt.'
+    help: /dxl msg [id] '[msg]' - Zeigt oder bearbeitet eine Nachricht
+    updated: '&6Nachrichten (&4&v1&6) aktualisiert.'
+  play:
+    help: /dxl play [name] - Erlaubt dem Spieler, einen Dungeon ohne Portal zu spielen
+  portal:
+    help: /dxl portal ([material=portal]) - Erstellt ein Portal, das in einen Dungeon führt
+  reload:
+    help: /dxl reload - Lädt das Plugin neu
+    players: '&4Warnung: Wenn Du das Plugin neu lädst, werden alle Spieler aus ihrem Spiel geworfen.'
+    success: '&7DungeonsXL wurde erfolgreich neugeladen.'
+  rename:
+    help: /dxl rename [old name] [new name] - Ändert den Namen des Dungeons in einen neuen. Dieser Befehl updatet auch Namensreferenzen zu dem Dungeon
+    success: '&4&v1&6 wurde erfolgreich zu &4&v2&6 umbenannt.'
+  resourcePack:
+    help: /dxl resourcepack [ID] - Downloadet ein in der Haupt-Config registriertes Ressourcenpaket; nutze 'reset' um es zurückzusetzen
+  save:
+    help: /dxl save - Speichert den Dungeon
+    success: '&6Welt gespeichert.'
+  status:
+    help: /dxl status - Zeigt den technischen Status von DungeonsXL
+  test:
+    help: /dxl test - Startet das Spiel im Testmodus
+  uninvite:
+    help: /dxl uninvite [player] [map] - Lädt einen Spieler davon aus, eine Welt zu bearbeiten
+    success: '&4&v1&6''s Berechtigung zum Bearbeiten der Welt &4&v2&6 wurde erfolgreich entfernt.'
+error:
+  bed: '&4Du kannst im Dungeon kein Bett benutzen.'
+  chestIsOpened: '&4Diese Truhe wurde schon geöffnet.'
+  cmd: '&4Befehle sind im Dungeon nicht erlaubt.'
+  cooldown: '&4Du kannst diesen Dungeon nur alle &6&v1&4 Stunden betreten.'
+  dispenser: '&4Du kannst auf diesen Werfer nicht zugreifen.'
+  drop: '&4Du kannst keine gesicherten Items wegwerfen.'
+  enderchest: '&4Du kannst im Dungeon keine Endertruhen benutzen.'
+  inGroup: '&4Der Spieler &6&v1&4 ist schon Mitglied einer Gruppe.'
+  joinGroup: '&4Du musst zuerst einer Gruppe beitreten.'
+  leaveDungeon: '&4Du musst zuerst Deinen Dungeon verlassen.'
+  leaveGame: '&4Du musst zuerst Dein Spiel verlassen.'
+  leaveGroup: '&4Du musst zuerst Deine Gruppe verlassen.'
+  msgIdDoesNotExist: '&4Eine Nachricht mit der ID &6&v1&4 gibt es nicht.'
+  msgFormat: '&4Bitte benutze &6"&4-Zeichen um den Anfang und das Ende der Nachricht zu markieren.'
+  msgNoInt: '&4Das Argument [id] muss numerisch sein.'
+  nameInUse: '&4Der Name &6&v1 &4wird bereits verwendet.'
+  nameTooLong: '&4Der Name darf nicht länger als 15 Zeichen sein.'
+  noGame: '&4Du nimmst momentan nicht an einem Spiel teil.'
+  noItemInMainHand: '&4Du hast kein Item in Deiner Haupthand.'
+  noLeaveInTutorial: '&4Du kannst diesen Befehl im Tutorial nicht benutzen.'
+  noPermissions: '&4Du hast nicht die nötigen Berechtigungen, um das zu tun.'
+  noProtectedBlock: '&4Das ist kein von DungeonsXL geschützter Block.'
+  noRewardsTime: '&4Du kannst vor &6&v1&4 keine Belohnungen bekommen.'
+  noSuchDungeon: '&4Dieser Dungeon existiert nicht.'
+  noSuchGroup: '&4Die Gruppe &6&v1&4 gibt es nicht.'
+  noSuchMap: '&4Die Welt &6&v1&4 gibt es nicht.'
+  noSuchPlayer: '&4Den Spieler &6&v1&4 gibt es nicht.'
+  noSuchResourcePack: '&4Das Ressourcenpaket &6&v1 &4ist in der Hauptkonfigurationsdatei nicht registriert.'
+  noSuchShop: '&4Der Shop &v1 &4wurde nicht gefunden...'
+  notInDungeon: '&4Du bist nicht in einem Dungeon.'
+  notInGame: '&4Die Gruppe &6&v1&4 ist kein Mitglied des Spiels.'
+  notInGroup: '&4Der Spieler &6&v1&4 ist kein Mitglied der Gruppe &6&v2&v4.'
+  notInvited: '&4Du wurdest in die Gruppe &6&v1&4 nicht eingeladen.'
+  notLeader: '&4Du bist nicht der Kapitän der Gruppe.'
+  notSaved: '&4Die Welt &6&v1&4 wurde noch nicht im &6DungeonsXL/maps/&4-Ordner abgespeichert.'
+  blockOwnTeam: '&4Dieser Block gehört zu Deiner eigenen Gruppe.'
+  ready: '&4Wähle erst Deine Klasse.'
+  requirements: '&4Du erfüllst nicht alle Voraussetzungen, um diesen Dungeon zu spielen.'
+  selfNotInGroup: '&4Du bist in keiner Gruppe.'
+  signWrongFormat: '&4Das Schild ist nicht richtig beschriftet.'
+  tooManyInstances: '&4Im Moment sind zu viele Welten instanziert. Versuche es in ein paar Minuten nochmal.'
+  tooManyTutorials: '&4Im Moment laufen zu viele Tutorials. Versuche es in ein paar Minuten nochmal.'
+  tutorialDoesNotExist: '&4Der Tutorial-Dungeon existiert nicht.'
+group:
+  bedDestroyed: '&6Das Bett der Gruppe &4&v1 &6wurde von &4&v2&6 zerstört.'
+  congrats: '&6Herzlichen Glückwunsch!'
+  congratsSub: '&l&4Deine Gruppe &v1 &4hat das Spiel gewonnen.'
+  created: '&4&v1&6 hat die Gruppe &4&v2&6 erstellt.'
+  death: '&4&v1 &6ist gestorben. &4&v2 &6haben jetzt &4&v3 &6Leben übrig.'
+  deathKick: '&4&v1 &6wurde gekickt, weil &4&v2 &6keine Leben mehr übrig haben.'
+  defeated: '&4Die Gruppe &4v1 &6wurde besiegt, weil sie ihren letzten Punkt verloren hat.'
+  disbanded: '&4&v1&6 hat die Gruppe &4&v2&6 aufgelöst.'
+  flagCaptured: '&4&v1&6 hat die Flagge der Gruppe &4&v2&6 gestohlen.'
+  flagLost: '&4&v1&6 ist gestorben und hat die Flagge der Gruppe &4&v2&6 verloren.'
+  flagStealing: '&4&v1&6 stiehlt die Flagge der Gruppe &4&v2&6.'
+  invitedPlayer: '&4&v1&6 hat den Spieler &4&v2&6 in die Gruppe &4&v3&6 eingeladen.'
+  joinedGame: '&6Deine Gruppe ist dem Spiel erfolgreich beigetreten.'
+  kickedPlayer: '&4&v1&6 hat den Spieler &4&v2&6 aus der Gruppe &4&v3&6 herausgeworfen.'
+  killed: '&4&v1 &6wurde von &4&v2&6 getötet. &4&v3&6 haben jetzt &4&v4 &6Leben übrig.'
+  killedKick: '&4&v1&6 wurde von &4&v2&6 getötet. &4&v3 haben keine Leben mehr übrig.'
+  livesAdded: '&6Deine Gruppe hat &4&v1&6 Extraleben bekommen.'
+  livesRemoved: '&6Deine Gruppe hat &4&v1&6 Leben verloren.'
+  playerJoined: '&6Der Spieler &4&v1&6 hat die Gruppe betreten.'
+  rewardChest: '&6Deine Gruppe hat eine Schatztruhe gefunden.'
+  uninvitedPlayer: '&4&v1&6 hat die Einladung für &4&v2&6 in die Gruppe &4&v3&6 zurückgezogen.'
+  waveFinished: '&6Deine Gruppe hat die &4&v1&6te Welle beendet. Die nächste fängt in &4&v2&6 Sekunden an.'
+misc:
+  no: '&4[ NEIN ]'
+  okay: '&a[ OK ]'
+  unlimited: unendlich viele
+  yes: '&a[ JA ]'
+player:
+  blockInfo: '&6Block-ID: &2&v1'
+  checkpointReached: '&6Checkpoint erreicht.'
+  death: '&4&v1 &6ist gestorben und hat &4&v2 &6Leben übrig.'
+  deathKick: '&2&v1 &6hat sein letztes Leben verloren und wurde aus dem Spiel geworfen.'
+  finishedDungeon: '&6Du hast den Dungeon erfolgreich beendet.'
+  finished_Floor: '&6Du hast das Level erfolgreich beendet.'
+  invited: '&4&v1&6 hat Dich eingeladen, der Gruppe &4&v2&6 beizutreten.'
+  uninvited: '&4&v1&6 hat Deine Einladung zur Gruppe &4&v2&6 zurückgezogen.'
+  joinGroup: '&6Du bist der Gruppe erfolgreich beigetreten.'
+  kicked: '&4Du wurdest aus der Gruppe &6&v1&4 herausgeworfen.'
+  killed: '&4&v1 &6wurde von &4&v2 &6getötet und hat &4&v3 &6Leben übrig.'
+  killedKick: '&4&v1&6 wurde von &4&v2 &6getötet und hat das letzte Leben verloren.'
+  leaveGroup: '&6Du hast die Gruppe erfolgreich verlassen.'
+  leftGroup: '&6Der Spieler &4&v1&6 hat die Gruppe verlassen.'
+  livesAdded: '&6Du hast &4&v1&6 Extraleben bekommen.'
+  livesRemoved: '&6Du hast &4&v1&6 Leben verloren.'
+  lootAdded: '&4&v1&6 wurden Deinem Belohnungsinventar hinzugefügt.'
+  newLeader: '&6Du bist jetzt der neue Kapitän Deiner Gruppe.'
+  offline: '&Der Spieler &4&v1&6 hat den Server verlassen. In &4&v2&6 Sekunden wird er automatisch aus dem Spiel geworfen.'
+  offlineNever: '&6Der Spieler &4&v1&6 hat den Server verlassen. Er wird aber &4nicht&6 automatisch aus dem Spiel geworfen.'
+  portalAbort: '&6Das Erstellen des Portals wurde abgebrochen.'
+  portalIntroduction: '&6Klicke die zwei Ecken des Portals mit dem Holzschwert an.'
+  portalCreated: '&6Das Portal wurde erstellt.'
+  portalProgress: '&6Das erste Eck wurde erfolgreich markiert. Klicke nun das zweite Eck an.'
+  protectedBlockDeleted: '&6Die Sicherung wurde erfolgreich entfernt.'
+  ready: '&6Du bist jetzt bereit, das Spiel zu starten.'
+  signCreated: '&6Das Dungeon-Schild wurde erfolgreich erstellt.'
+  signCopied: '&6Schilddaten kopiert.'
+  timeLeft: '&v1Du hast &6&v2 &v1Sekunden übrig, um den Dungeon zu beenden.'
+  timeKick: '&6Die Zeit von &2&v1&6 ist abgelaufen.'
+  treasures: '&1Schätze'
+  waitForOtherPlayers: '&6Warte auf andere Gruppenmitglieder...'
+requirement:
+  fee: '&6Du hast &4&v1 &6bezahlt, um den Dungeon zu betreten.'
+reward:
+  general: '&6Du hast &4&v1 &6für das Beenden des Dungeons erhalten.'
+sign:
+  end: '&2ENDE'
+  floor:
+    '1': '&2NÄCHSTES LEVEL'
+    '2': '&2BETRETEN'
+  global:
+    full: '&4VOLL'
+    isPlaying: '&4AM SPIELEN'
+    joinGame: '&2SPIEL BEITRETEN'
+    joinGroup: '&2GRUPPE BEITRETEN'
+    newGame: '&2NEUES SPIEL'
+    newGroup: '&2NEUE GRUPPE'
+  leave: '&2VERLASSEN'
+  ready: '&2BEREIT'
+  resourcePack: '&2DOWNLOAD'
+  wave:
+    '1': '&2BEGINNE'
+    '2': '&2NÄCHSTE WELLE'

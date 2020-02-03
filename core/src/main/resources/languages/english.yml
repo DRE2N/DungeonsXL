@@ -42,7 +42,7 @@ cmd:
     help:
       create: /dxl group create [group] - Creates a new group
       disband: /dxl group disband ([group]) - Disbands a group
-      invite: /dxl group invite [player]- Invites someone to your group
+      invite: /dxl group invite [player] - Invites someone to your group
       join: /dxl group join [group]- Join a group
       kick: /dxl group kick [player] - Kicks a player
       main: /dxl group - Shows group command help
@@ -83,7 +83,7 @@ cmd:
   play:
     help: /dxl play [name] - Allows the player to play a dungeon without a portal
   portal:
-    help: /dxl portal ([material=portal])- Creates a portal that leads into a dungeon
+    help: /dxl portal ([material=portal]) - Creates a portal that leads into a dungeon
   reload:
     help: /dxl reload - Reloads the plugin
     players: '&4Warning: If you reload the plugin, all players will be kicked out of their game.'
@@ -101,7 +101,7 @@ cmd:
   test:
     help: /dxl test - Starts the game in test mode
   uninvite:
-    help: /dxl uninvite [player] [dungeon] - Uninvite a player to edit a dungeon
+    help: /dxl uninvite [player] [map] - Uninvite a player from editing a map
     success: '&4&v1&6''s permission to edit the map &4&v2&6 has been removed successfully.'
 error:
   bed: '&4You cannot use a bed while in a dungeon.'
@@ -149,7 +149,7 @@ error:
   tutorialDoesNotExist: '&4Tutorial dungeon does not exist.'
 group:
   bedDestroyed: '&6The bed of the group &4&v1 &6has been destroyed by &4&v2&6.'
-  congrats: '&6Congratulations.'
+  congrats: '&6Congratulations!'
   congratsSub: '&l&4Your group &v1 &4won the match.'
   created: '&4&v1&6 created the group &4&v2&6.'
   death: '&4&v1 &6died. &4&v2 &6have &4&v3 &6lives left.'
@@ -197,9 +197,9 @@ player:
   offline: '&Player &4&v1&6 went offline. In &4&v2&6 seconds he will autmatically be kicked from the dungeon.'
   offlineNever: '&6The player &4&v1&6 went offline. He will &4not&6 be kicked from the dungeon automatically.'
   portalAbort: '&6Portal creation cancelled.'
-  portalIntroduction: '&6Click the two edges of the portal with the wooden sword.'
+  portalIntroduction: '&6Click on the two edges of the portal with the wooden sword.'
   portalCreated: '&6Portal created.'
-  portalProgress: '&6First edge successfully marked. You may now click at the other edge.'
+  portalProgress: '&6First edge successfully marked. You may now click on the other edge.'
   protectedBlockDeleted: '&6Successfully removed the protection.'
   ready: '&6You are now ready to start the dungeon.'
   signCreated: '&6Successfully created a dungeon sign.'
