@@ -565,7 +565,15 @@ public class DGameWorld extends DInstanceWorld {
         }
 
         GameRuleProvider rules = game.getRules();
-        if (!rules.canPlaceBlocks() && !PlaceableBlock.canBuildHere(block, block.getFace(against), caliburn.getExItem(hand), this)) {
+
+        PlaceableBlock placeableBlock = null;
+        for (PlaceableBlock gamePlaceableBlock : placeableBlocks) {
+            if (gamePlaceableBlock.canPlace(block, caliburn.getExItem(hand))) {
+                placeableBlock = gamePlaceableBlock;
+                break;
+            }
+        }
+        if (!rules.canPlaceBlocks() && placeableBlock == null) {
             // Workaround for a bug that would allow 3-Block-high jumping
             Location loc = player.getLocation();
             if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
@@ -580,6 +588,9 @@ public class DGameWorld extends DInstanceWorld {
             }
 
             return true;
+        }
+        if (placeableBlock != null) {
+            placeableBlock.onPlace();
         }
 
         Set<ExItem> whitelist = rules.getPlaceWhitelist();

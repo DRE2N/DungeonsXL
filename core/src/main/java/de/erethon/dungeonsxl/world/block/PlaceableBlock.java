@@ -18,7 +18,9 @@ package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.commons.misc.BlockUtil;
+import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.trigger.SignTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,12 +33,16 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public class PlaceableBlock extends GameBlock {
 
-    // Variables
+    private DGameWorld gameWorld;
+
     private Set<ExItem> materials = new HashSet<>();
     private Set<BlockFace> faces = new HashSet<>();
+    private int triggerId = -1;
 
-    public PlaceableBlock(DungeonsXL plugin, Block block, String ids, String directions) {
+    public PlaceableBlock(DungeonsXL plugin, DGameWorld gameWorld, Block block, String ids, String args) {
         super(plugin, block);
+
+        this.gameWorld = gameWorld;
 
         for (String id : ids.split(",")) {
             ExItem item = plugin.getCaliburn().getExItem(id);
@@ -46,8 +52,13 @@ public class PlaceableBlock extends GameBlock {
         }
 
         faces.add(BlockFace.SELF);
-        for (String direction : directions.split(",")) {
-            faces.add(BlockUtil.lettersToBlockFace(direction));
+        for (String arg : args.split(",")) {
+            int id = NumberUtil.parseInt(arg, -1);
+            if (id != -1) {
+                triggerId = id;
+            } else {
+                faces.add(BlockUtil.lettersToBlockFace(arg));
+            }
         }
     }
 
@@ -57,11 +68,17 @@ public class PlaceableBlock extends GameBlock {
         return false;
     }
 
+    public void onPlace() {
+        if (triggerId != -1) {
+            SignTrigger.getById(triggerId, gameWorld).onTrigger(true);
+        }
+    }
+
     public boolean canPlace(Block toPlace, ExItem material) {
         return faces.contains(toPlace.getFace(block)) && (materials.isEmpty() || materials.contains(material));
     }
 
-    public static boolean canBuildHere(Block block, BlockFace blockFace, ExItem material, DGameWorld gameWorld) {
+    public static boolean canBuildHere(Block block, ExItem material, DGameWorld gameWorld) {
         for (PlaceableBlock gamePlaceableBlock : gameWorld.getPlaceableBlocks()) {
             if (gamePlaceableBlock.canPlace(block, material)) {
                 return true;
