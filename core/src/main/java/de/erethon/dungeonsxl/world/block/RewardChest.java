@@ -33,7 +33,7 @@ import de.erethon.dungeonsxl.reward.RewardTypeDefault;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -45,19 +45,19 @@ public class RewardChest extends GameBlock {
 
     // Variables
     private boolean used = false;
-    private Chest chest;
+    private Container container;
     private double moneyReward;
     private int levelReward;
     private ItemStack[] itemReward;
 
-    public RewardChest(DungeonsXL plugin, Block chest, double moneyReward, int levelReward, ItemStack[] itemReward) {
-        super(plugin, chest);
+    public RewardChest(DungeonsXL plugin, Block container, double moneyReward, int levelReward, ItemStack[] itemReward) {
+        super(plugin, container);
 
-        if (!(chest.getState() instanceof Chest)) {
+        if (!(container.getState() instanceof Container)) {
             return;
         }
 
-        this.chest = (Chest) chest.getState();
+        this.container = (Container) container.getState();
         this.moneyReward = moneyReward;
         this.levelReward = levelReward;
         this.itemReward = itemReward;
@@ -80,15 +80,15 @@ public class RewardChest extends GameBlock {
     /**
      * @return the chest
      */
-    public Chest getChest() {
-        return chest;
+    public Container getContainer() {
+        return container;
     }
 
     /**
-     * @param chest the chest to set
+     * @param container the container to set
      */
-    public void setChest(Chest chest) {
-        this.chest = chest;
+    public void setContainer(Container container) {
+        this.container = container;
     }
 
     /**
@@ -134,7 +134,7 @@ public class RewardChest extends GameBlock {
             return;
         }
 
-        if (chest.getLocation().distance(chest.getLocation()) < 1) {
+        if (container.getLocation().distance(container.getLocation()) < 1) {
             addTreasure(DGroup.getByPlayer(opener));
             used = true;
         }

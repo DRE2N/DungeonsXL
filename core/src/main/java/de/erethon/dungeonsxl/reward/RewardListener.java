@@ -30,7 +30,7 @@ import de.erethon.vignette.api.layout.PaginatedFlowInventoryLayout;
 import de.erethon.vignette.api.layout.PaginatedInventoryLayout.PaginationButtonPosition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -90,19 +90,20 @@ public class RewardListener implements Listener {
             return;
         }
 
-        if (!(inventory.getTopInventory().getHolder() instanceof Chest)) {
+        if (!(inventory.getTopInventory().getHolder() instanceof Container)) {
             return;
         }
 
-        Chest chest = (Chest) inventory.getTopInventory().getHolder();
+        Container container = (Container) inventory.getTopInventory().getHolder();
 
         for (RewardChest rewardChest : gameWorld.getRewardChests()) {
-            if (!rewardChest.getChest().equals(chest)) {
+            if (!rewardChest.getBlock().equals(container.getBlock())) {
                 continue;
             }
 
             rewardChest.onOpen((Player) event.getPlayer());
             event.setCancelled(true);
+            break;
         }
 
         if (!plugin.getMainConfig().getOpenInventories() && !DPermission.hasPermission(event.getPlayer(), DPermission.INSECURE)) {

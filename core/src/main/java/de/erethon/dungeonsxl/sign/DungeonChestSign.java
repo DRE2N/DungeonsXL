@@ -21,7 +21,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
@@ -80,7 +80,7 @@ public class DungeonChestSign extends ChestSign {
         }
 
         chestContent = Arrays.copyOfRange(list.toArray(new ItemStack[list.size()]), 0, 26);
-        ((Chest) chest.getState()).getBlockInventory().setContents(chestContent);
+        ((Container) chest.getState()).getInventory().setContents(chestContent);
     }
 
 }

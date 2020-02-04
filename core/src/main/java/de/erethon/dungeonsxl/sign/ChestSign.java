@@ -16,12 +16,11 @@
  */
 package de.erethon.dungeonsxl.sign;
 
-import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
@@ -82,21 +81,21 @@ public abstract class ChestSign extends DSign {
             Block yRelative = sign.getRelative(0, i, 0);
             Block zRelative = sign.getRelative(0, 0, i);
 
-            if (Category.CHESTS.containsBlock(xRelative)) {
+            if (xRelative.getState() instanceof Container) {
                 if (chestContent == null) {
-                    chestContent = ((Chest) xRelative.getState()).getBlockInventory().getContents();
+                    chestContent = ((Container) xRelative.getState()).getInventory().getContents();
                 }
                 chest = xRelative;
 
-            } else if (Category.CHESTS.containsBlock(yRelative)) {
+            } else if (yRelative.getState() instanceof Container) {
                 if (chestContent == null) {
-                    chestContent = ((Chest) yRelative.getState()).getBlockInventory().getContents();
+                    chestContent = ((Container) yRelative.getState()).getInventory().getContents();
                 }
                 chest = yRelative;
 
-            } else if (Category.CHESTS.containsBlock(zRelative)) {
+            } else if (zRelative.getState() instanceof Container) {
                 if (chestContent == null) {
-                    chestContent = ((Chest) zRelative.getState()).getBlockInventory().getContents();
+                    chestContent = ((Container) zRelative.getState()).getInventory().getContents();
                 }
                 chest = zRelative;
             }
