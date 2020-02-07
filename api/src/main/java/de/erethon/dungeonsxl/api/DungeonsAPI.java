@@ -51,10 +51,8 @@ public interface DungeonsAPI extends Plugin {
     static final File MAPS = new File(PLUGIN_ROOT, "maps");
     static final File PLAYERS = new File(PLUGIN_ROOT, "players");
     static final File SCRIPTS = new File(PLUGIN_ROOT, "scripts");
-    static final File ANNOUNCERS = new File(SCRIPTS, "announcers");
     static final File CLASSES = new File(SCRIPTS, "classes");
     static final File DUNGEONS = new File(SCRIPTS, "dungeons");
-    static final File SIGNS = new File(SCRIPTS, "signs");
 
     /**
      * Returns a cache of player wrapper objects.
