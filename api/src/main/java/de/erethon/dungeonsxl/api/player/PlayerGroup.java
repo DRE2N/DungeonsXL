@@ -333,6 +333,20 @@ public interface PlayerGroup {
     void removeReward(Reward reward);
 
     /**
+     * Returns the score number, which is used for capture the flag and similar game types.
+     *
+     * @return the score number
+     */
+    int getScore();
+
+    /**
+     * Sets the score of this group to a new value.
+     *
+     * @param score the value
+     */
+    void setScore(int score);
+
+    /**
      * Returns the initial amount of lives or -1 if group lives are not used.
      *
      * @return the initial amount of lives or -1 if group lives are not used
