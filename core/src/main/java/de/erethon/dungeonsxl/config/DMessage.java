@@ -141,7 +141,7 @@ public enum DMessage implements Message {
     GROUP_BED_DESTROYED("group.bedDestroyed"),
     GROUP_CONGRATS("group.congrats"),
     GROUP_CONGRATS_SUB("group.congratsSub"),
-    GROUP_CREATED("group.create"),
+    GROUP_CREATED("group.created"),
     GROUP_DEATH("group.death"),
     GROUP_DEATH_KICK("group.deathKick"),
     GROUP_DEFEATED("group.defeated"),
