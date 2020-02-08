@@ -16,19 +16,19 @@ cmd:
   create: 
     help: "/dxl create [name] - Créer une nouvelle carte de donjon"
   delete: 
-    backups: ~
-    help: ~
-    success: ~
+    backups: "&6Voulez-vous vraiment supprimer toutes les sauvegardes ?"
+    help: "/dxl create [name] - créé une nouvelle carte donjon"
+    success: "&6 &4&v1&6 a été supprimé avec succès."
   dungeonItem: 
-    dungeonItemHelp: ~
-    globalItemHelp: ~
-    help: ~
+    dungeonItemHelp: "&6Après avoir fini une partie, &4les objets du donjons &6sont supprimés de l'inventaire du joueur sauf si les paramètres du donjons autorisent à les conserver."
+    globalItemHelp: "&6Après avoir fini une partie, &4les objets globaux &6peuvent être sortis du donjon si les paramètres du donjon l'autorise."
+    help: "/dxl dungeonItem [true|false|info] - Défini la pile d'objet dans les mains du joueur comme ne pouvant être sortie du donjon."
     info: 
-      dungeon: ~
-      global: ~
+      dungeon: "&6C'est un &4objet de donjon&6."
+      global: "&6C'est un &4objet global&6."
     set: 
-      dungeon: ~
-      global: ~
+      dungeon: "&6Vous avez réussi à en faire un &4objet de donjon&6."
+      global: "&6Vous avez réussi à en faire un &4objet global&6."
   edit: 
     help: "/dxl edit [name] - Editer une carte existante de donjon"
   enter: 
@@ -51,16 +51,16 @@ cmd:
   help: 
     help: "/dxl help [page] - Montrer la page d''aide"
   import: 
-    help: ~
-    success: ~
+    help: "/dxl import [world] - Importe un monde du conteneur de monde en tant que carte de donjon"
+    success: "&6Importation du monde &4&v1&6 avec succès."
   invite: 
     help: "/dxl invite [player] [dungeon] - Inviter un joueur à éditer un donjon"
     success: "&6Le joueur &4&v1&6 a été invité avec succès à éditer la carte &4&v2&6."
   join: 
     help: "/dxl join [announcement] - Ouvrir l'interface pour rejoindre un groupe dans une prochaine partie"
   kick: 
-    help: ~
-    success: ~
+    help: "/dxl kick [player] - Éjecte le joueur hors de son groupe et du donjon en cours"
+    success: "&6Éjection de &4&v1&6 du groupe réussite."
   leave: 
     help: "/dxl leave - Quitter le groupe et le donjon ou le monde en cours d''édition"
     success: "&6Vous avez quitté le groupe avec succès."
@@ -89,15 +89,15 @@ cmd:
     players: "&4Attention: Si vous rechargez le plugin, tous les joueurs seront éjectés de leur jeu."
     success: "&7DungeonsXL a été rechargé avec succès."
   rename: 
-    help: ~
-    success: ~
+    help: "/dxl rename [old name] [new name] - Change le nom de la carte en un nouveau. Cette commande NE casse PAS les donjons comportant cette carte."
+    success: &6Carte &4&v1&6 renommée en &4&v2&6 avec succès."
   resourcePack: 
-    help: ~
+    help: "/dxl resourcepack [ID] - Télécharge un pack de ressources enregistré dans le fichier configuration principale; utilisez 'reset' pour réinitialisé"
   save: 
     help: "/dxl save - Sauvegarder le donjon actuel"
     success: "&6Carte sauvegardée."
   status: 
-    help: ~
+    help: "/dxl status - Affiche le status technique de DungeonsXL"
   test: 
     help: "/dxl test - Lance une partie en mode test"
   uninvite: 
@@ -105,7 +105,7 @@ cmd:
     success: "&4&v1&6 a été désinviter avec succès à éditer la carte &4&v1&6."
 error: 
   bed: "&4Vous ne pouvez utiliser un lit en étant dans un donjon."
-  blockOwnTeam: ~
+  blockOwnTeam: "&4Ce bloque appartient à votre groupe."
   chestIsOpened: "&4Ce coffre a déjà été ouvert."
   cmd: "&4Les commandes ne sont pas autorisées pendant un donjon."
   cooldown: "&4Vous ne pouvez entrer dans ce donjon que toutes les &6&v1&4 heures."
@@ -123,16 +123,16 @@ error:
   nameInUse: "&4Le nom &6&v1 &4est déjà utilisé."
   nameTooLong: "&4Le nom ne devrait pas être plus long que 15 caractères."
   noGame: "&4Vous ne prenez actuellement pas part à une partie."
-  noItemInMainHand: ~
+  noItemInMainHand: "&4Vous n'avez pas d'objet dans votre main principale."
   noLeaveInTutorial: "&4Vous ne pouvez utiliser cette commande dans le tutoriel."
   noPermissions: "&4Vous n'avez pas la permission de faire ça."
   noProtectedBlock: "&4Ce n'est pas un bloc protégé par DungeonsXL."
-  noRewardsTime: ~
+  noRewardsTime: "&4Vous ne pouvez pas recevoir de récompense avant &6&v1&4."
   noSuchDungeon: "&4Le donjon &6&v1&4 n'existe pas."
   noSuchGroup: "&4Le groupe &6&v1&4 n'existe pas."
   noSuchMap: "&4La carte &6&v1&4 n'existe pas."
   noSuchPlayer: "&4Le joueur &6&v1&4 n'existe pas."
-  noSuchResourcePack: ~
+  noSuchResourcePack: "&4Le paque de ressources &6&v1 &4n'est pas enregistré dans le fichier de configuration principal."
   noSuchShop: "&4Shop &v1 &4not found..."
   notInDungeon: "&4Vous n'êtes pas dans un donjon."
   notInGame: "&4Le groupe &6&v1&4 n'est pas membre d'une partie."
@@ -142,39 +142,39 @@ error:
   notSaved: "&4La carte &6&v1&4 n'a pas encore été sauvegardée dans le dossier &6DungeonsXL/maps/&4."
   ready: "&4Choisissez d'abord votre classe."
   requirements: "&4Vous ne remplissez pas les prérequis pour ce donjon."
-  selfNotInGroup: ~
+  selfNotInGroup: "Vous n'êtes dans aucun groupe."
   signWrongFormat: "&4Le panneau n'est pas rédigé correctement."
   tooManyInstances: "&4Il y a actuellement trop de carte instanciées. Réessayez dans quelques minutes."
   tooManyTutorials: "&4Il y a actuellement trop de tutoriel en cours. Réessayez dans quelques minutes."
   tutorialDoesNotExist: "&4Le tutoriel du donjon n'existe pas."
 group: 
-  bedDestroyed: ~
-  congrats: ~
-  congratsSub: ~
+  bedDestroyed: "&6Le lit du groupe &4&v1 &6a été détruit par &4&v2&6."
+  congrats: "&6Félicitations !"
+  congratsSub: "&l&4Votre groupe &v1 &4gagne le match."
   created: "&4&v1&6 a créé le groupe &4&v2&6."
-  death: ~
-  deathKick: ~
-  defeated: ~
+  death: "&4&v1 &6est mort. &4&v2 &6a &4&v3 &6vies restantes."
+  deathKick: "&4&v1 &6a été éjecté car &4&v2 &6n'a plus de vie restante."
+  defeated: "&4Le groupe &4v1 &6a été défait car il a perdu son dernier point de score."
   disbanded: "&4&v1&6 a dissous le groupe &4&v2&6."
-  flagCaptured: ~
-  flagLost: ~
-  flagStealing: ~
+  flagCaptured: "&4&v1&6 a capturé le drapeau du groupe &4&v2&6."
+  flagLost: "&4&v1&6 est mort et a perdu le drapeau de &4&v2&6."
+  flagStealing: "&4&v1&6 is stealing the flag of the group &4&v2&6."
   invitedPlayer: "&4&v1&6 a invité le joueur &4&v2&6 au groupe &4&v3&6."
   joinedGame: "&6Votre groupe a rejoint la partie avec succès."
   kickedPlayer: "&4&v1&6 a éjecté &4&v2&6 du groupe &4&v3&6."
-  killed: ~
-  killedKick: ~
-  livesAdded: ~
-  livesRemoved: ~
+  killed: "&4&v1 &6a été tué par &4&v2&6. &4&v3&6 a &4&v4 &6vies restantes."
+  killedKick: "&4&v1&6 a été tué par &4&v2&6. &4&v3 n'a plus de vies restantes."
+  livesAdded: "&6Votre groupe a reçu un bonus de &4&v1&6 vies."
+  livesRemoved: "&6Votre groupe a perdu &4&v1&6 vies."
   playerJoined: "&6Le joueur &4&v1&6 a rejoint le groupe."
-  rewardChest: ~
+  rewardChest: "&6Votre groupe a trouvé un coffre de récompenses."
   uninvitedPlayer: "&4&v1&6 a repris l'invitation de &4&v2&6 pour le groupe &4&v3&6."
   waveFinished: "&6Votre groupe a fini la vague numéro &4&v1&6. La suivante va commencer dans &4&v2&6 secondes."
 misc: 
-  false: ~
-  okay: ~
-  true: ~
-  unlimited: ~
+  false: "&4[ NON ]"
+  okay: "&a[ OK ]"
+  true: "&a[ OUI ]"
+  unlimited: Illimité
 player: 
   blockInfo: "&6Block ID: &2&v1"
   checkpointReached: "&6Point de sauvegarde atteint."
@@ -185,12 +185,12 @@ player:
   invited: "&4&v1&6 vous a invité au groupe &4&v2&6."
   joinGroup: "&6Vous avez rejoint le groupe avec succès."
   kicked: "&4Vous avez été éjecté du groupe &6&v1&4."
-  killed: ~
-  killedKick: ~
+  killed: &4&v1 &6a été tué par &4&v2 &6et a &4&v3 &6vies restantes."
+  killedKick: "&4&v1&6 a été tué par &4&v2 &6et a perdu sa dernière vie."
   leaveGroup: "&6Vous avez quitté le groupe avec succès."
   leftGroup: "&6Le joueur &4&v1&6 a quitté le groupe."
-  livesAdded: ~
-  livesRemoved: ~
+  livesAdded: "&6Received a bonus of &4&v1&6 lives."
+  livesRemoved: "&6Vous perdez &4&v1&6 vies."
   lootAdded: "&4&v1&6 a été rajouté à votre inventaire de récompenses."
   newLeader: "&6Vous êtes maintenant le nouveau capitaine du groupe."
   offline: "&Le joueur &4&v1&6 est passé hors ligne. Dans &4&v2&6 secondes il va être automatiquement éjecté du donjon."
