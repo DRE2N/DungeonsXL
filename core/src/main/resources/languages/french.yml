@@ -90,7 +90,7 @@ cmd:
     success: "&7DungeonsXL a été rechargé avec succès."
   rename: 
     help: "/dxl rename [old name] [new name] - Change le nom de la carte en un nouveau. Cette commande NE casse PAS les donjons comportant cette carte."
-    success: &6Carte &4&v1&6 renommée en &4&v2&6 avec succès."
+    success: "&6Carte &4&v1&6 renommée en &4&v2&6 avec succès."
   resourcePack: 
     help: "/dxl resourcepack [ID] - Télécharge un pack de ressources enregistré dans le fichier configuration principale; utilisez 'reset' pour réinitialisé"
   save: 
@@ -185,7 +185,7 @@ player:
   invited: "&4&v1&6 vous a invité au groupe &4&v2&6."
   joinGroup: "&6Vous avez rejoint le groupe avec succès."
   kicked: "&4Vous avez été éjecté du groupe &6&v1&4."
-  killed: &4&v1 &6a été tué par &4&v2 &6et a &4&v3 &6vies restantes."
+  killed: "&4&v1 &6a été tué par &4&v2 &6et a &4&v3 &6vies restantes."
   killedKick: "&4&v1&6 a été tué par &4&v2 &6et a perdu sa dernière vie."
   leaveGroup: "&6Vous avez quitté le groupe avec succès."
   leftGroup: "&6Le joueur &4&v1&6 a quitté le groupe."
