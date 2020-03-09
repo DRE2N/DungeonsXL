@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.mob;
 
+import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import java.util.Map.Entry;
 
 /**

@@ -17,6 +17,8 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import org.bukkit.Bukkit;
@@ -29,12 +31,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class TimeIsRunningTask extends BukkitRunnable {
 
-    private DGroup dGroup;
+    private DungeonsXL plugin;
+
+    private PlayerGroup group;
     private int time;
     private int timeLeft;
 
-    public TimeIsRunningTask(DGroup dGroup, int time) {
-        this.dGroup = dGroup;
+    public TimeIsRunningTask(DungeonsXL plugin, PlayerGroup group, int time) {
+        this.plugin = plugin;
+        this.group = group;
         this.time = time;
         this.timeLeft = time;
     }
@@ -52,10 +57,10 @@ public class TimeIsRunningTask extends BukkitRunnable {
             color = ChatColor.DARK_RED.toString();
 
         } finally {
-            for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
+            for (Player player : group.getMembers().getOnlinePlayers()) {
                 MessageUtil.sendActionBarMessage(player, DMessage.PLAYER_TIME_LEFT.getMessage(color, String.valueOf(timeLeft)));
 
-                DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+                DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
                 if (timeLeft > 0) {
                     continue;
                 }

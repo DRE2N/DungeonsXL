@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.sign.lobby;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.player.DClass;
+import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.DSignTypeDefault;
@@ -30,7 +30,7 @@ import org.bukkit.block.Sign;
  */
 public class ClassesSign extends DSign {
 
-    private DClass dClass;
+    private PlayerClass dClass;
 
     public ClassesSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
         super(plugin, sign, lines, gameWorld);
@@ -39,16 +39,16 @@ public class ClassesSign extends DSign {
 
     /* Getters and setters */
     /**
-     * @return the DClass of the sign
+     * @return the PlayerClass of the sign
      */
-    public DClass getDClass() {
+    public PlayerClass getDClass() {
         return dClass;
     }
 
     /**
-     * @param dClass the DClass to set
+     * @param dClass the PlayerClass to set
      */
-    public void setDClass(DClass dClass) {
+    public void setDClass(PlayerClass dClass) {
         this.dClass = dClass;
     }
 

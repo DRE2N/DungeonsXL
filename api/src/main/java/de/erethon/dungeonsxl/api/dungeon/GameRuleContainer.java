@@ -24,6 +24,32 @@ import java.util.Map;
  */
 public class GameRuleContainer {
 
+    /**
+     * A container of all rules with their default value. This is used internally as the most subsidiary container that fills missing rules if they are not set.
+     */
+    public static final GameRuleContainer DEFAULT_VALUES = new GameRuleContainer();
+
+    static {
+        for (GameRule rule : GameRule.VALUES) {
+            DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
+        }
+    }
+
+    /**
+     * Initializes an emtpy GameRuleContainer.
+     */
+    public GameRuleContainer() {
+    }
+
+    /**
+     * Copies a GameRuleContainer.
+     *
+     * @param container the container to copy
+     */
+    public GameRuleContainer(GameRuleContainer container) {
+        rules = new HashMap<>(container.rules);
+    }
+
     private Map<GameRule<?>, Object> rules = new HashMap<>();
 
     /**

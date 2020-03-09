@@ -20,22 +20,26 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Requirement;
+import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.dungeon.GameGoal;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.player.PlayerClass;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerRewardEvent;
 import de.erethon.dungeonsxl.event.requirement.RequirementCheckEvent;
-import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameGoal;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
-import de.erethon.dungeonsxl.game.GameType;
-import de.erethon.dungeonsxl.game.GameTypeDefault;
-import de.erethon.dungeonsxl.mob.DMob;
-import de.erethon.dungeonsxl.requirement.Requirement;
-import de.erethon.dungeonsxl.reward.Reward;
 import de.erethon.dungeonsxl.trigger.DistanceTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
@@ -46,7 +50,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -56,19 +59,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 /**
- * Represents a player in a DGameWorld.
- *
  * @author Frank Baumann, Tobias Schmitz, Milan Albrecht, Daniel Saukel
  */
-public class DGamePlayer extends DInstancePlayer {
+public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
-    // Variables
     private DGroup dGroup;
 
     private boolean ready = false;
     private boolean finished = false;
 
-    private DClass dClass;
+    private PlayerClass dClass;
     private Location checkpoint;
     private Wolf wolf;
     private int wolfRespawnTime = 30;
@@ -78,31 +78,32 @@ public class DGamePlayer extends DInstancePlayer {
     private int lives;
 
     private ItemStack oldHelmet;
-    private DGroup stealing;
+    private PlayerGroup stealing;
 
     private DGroupTag groupTag;
 
-    public DGamePlayer(DungeonsXL plugin, Player player, DGameWorld world) {
-        super(plugin, player, world.getWorld());
+    public DGamePlayer(DungeonsXL plugin, Player player, GameWorld world) {
+        super(plugin, player, world);
 
-        Game game = Game.getByGameWorld(world);
+        Game game = world.getGame();
+        dGroup = (DGroup) plugin.getPlayerGroup(player);
         if (game == null) {
-            game = new Game(plugin, DGroup.getByPlayer(player));
+            game = new DGame(plugin, dGroup);
         }
 
-        GameRuleProvider rules = game.getRules();
+        GameRuleContainer rules = game.getRules();
         player.setGameMode(GameMode.SURVIVAL);
 
-        if (!rules.getKeepInventoryOnEnter()) {
+        if (!rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER)) {
             clearPlayerData();
         }
-        player.setAllowFlight(rules.canFly());
+        player.setAllowFlight(rules.getState(GameRule.FLY));
 
-        if (rules.isLobbyDisabled()) {
+        if (rules.getState(GameRule.IS_LOBBY_DISABLED)) {
             ready();
         }
 
-        initialLives = rules.getInitialLives();
+        initialLives = rules.getState(GameRule.INITIAL_LIVES);
         lives = initialLives;
 
         Location teleport = world.getLobbyLocation();
@@ -113,34 +114,21 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
-    public DGamePlayer(DungeonsXL plugin, Player player, DGameWorld world, GameType ready) {
-        this(plugin, player, world);
-        if (ready != null) {
-            ready(ready);
-        }
-    }
-
     /* Getters and setters */
     @Override
     public String getName() {
         String name = player.getName();
-        if (getDGroup() != null && dGroup.getDColor() != null) {
-            name = getDGroup().getDColor().getChatColor() + name;
+        if (getGroup() != null && dGroup.getDColor() != null) {
+            name = getGroup().getDColor().getChatColor() + name;
         }
         return name;
     }
 
     @Override
-    public DGroup getDGroup() {
-        if (dGroup == null) {
-            dGroup = DGroup.getByPlayer(player);
-        }
+    public DGroup getGroup() {
         return dGroup;
     }
 
-    /**
-     * @param player the player to set
-     */
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -149,77 +137,44 @@ public class DGamePlayer extends DInstancePlayer {
      * @return if the player is in test mode
      */
     public boolean isInTestMode() {
-        if (getDGroup() == null) {
+        if (getGroup() == null) {
             return false;
         }
 
-        DGameWorld gameWorld = dGroup.getGameWorld();
-        if (gameWorld == null) {
+        if (getGame() == null) {
             return false;
         }
 
-        Game game = gameWorld.getGame();
-        if (game == null) {
-            return false;
-        }
-
-        GameType gameType = game.getType();
-        if (gameType == GameTypeDefault.TEST) {
-            return true;
-        }
-
-        return false;
+        return getGame().hasRewards();
     }
 
-    /**
-     * @return the isReady
-     */
+    @Override
     public boolean isReady() {
         return ready;
     }
 
-    /**
-     * @param ready If the player is ready to play the dungeon
-     */
     public void setReady(boolean ready) {
         this.ready = ready;
     }
 
-    /**
-     * @return the finished
-     */
+    @Override
     public boolean isFinished() {
         return finished;
     }
 
-    /**
-     * @param finished the finished to set
-     */
+    @Override
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
 
-    /**
-     * @return the dClass
-     */
-    public DClass getDClass() {
+    @Override
+    public PlayerClass getPlayerClass() {
         return dClass;
     }
 
-    /**
-     * @param className the name of the class to set
-     */
-    public void setDClass(String className) {
-        Game game = Game.getByWorld(getPlayer().getWorld());
-        if (game == null) {
-            return;
-        }
-
-        DClass dClass = plugin.getDClassCache().getByName(className);
-        if (dClass == null || this.dClass == dClass) {
-            return;
-        }
-        this.dClass = dClass;
+    @Override
+    public void setPlayerClass(PlayerClass playerClass) {
+        dClass = playerClass;
 
         /* Set Dog */
         if (wolf != null) {
@@ -275,153 +230,116 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
-    /**
-     * @return the checkpoint
-     */
-    public Location getCheckpoint() {
+    @Override
+    public Location getLastCheckpoint() {
         return checkpoint;
     }
 
-    /**
-     * @param checkpoint the checkpoint to set
-     */
-    public void setCheckpoint(Location checkpoint) {
+    @Override
+    public void setLastCheckpoint(Location checkpoint) {
         this.checkpoint = checkpoint;
     }
 
-    /**
-     * @return the wolf
-     */
-    public Wolf getWolf() {
-        return wolf;
-    }
-
-    /**
-     * @param wolf the wolf to set
-     */
-    public void setWolf(Wolf wolf) {
-        this.wolf = wolf;
-    }
-
-    /**
-     * @return the wolfRespawnTime
-     */
-    public int getWolfRespawnTime() {
-        return wolfRespawnTime;
-    }
-
-    /**
-     * @param wolfRespawnTime the wolfRespawnTime to set
-     */
-    public void setWolfRespawnTime(int wolfRespawnTime) {
-        this.wolfRespawnTime = wolfRespawnTime;
-    }
-
-    /**
-     * @return the offlineTime
-     */
-    public long getOfflineTime() {
+    @Override
+    public long getOfflineTimeMillis() {
         return offlineTime;
     }
 
-    /**
-     * @param offlineTime the offlineTime to set
-     */
-    public void setOfflineTime(long offlineTime) {
+    @Override
+    public void setOfflineTimeMillis(long offlineTime) {
         this.offlineTime = offlineTime;
     }
 
-    /**
-     * @return the initialLives
-     */
+    @Override
     public int getInitialLives() {
         return initialLives;
     }
 
-    /**
-     * @param initialLives the initialLives to set
-     */
+    @Override
     public void setInitialLives(int initialLives) {
         this.initialLives = initialLives;
     }
 
-    /**
-     * @return the lives
-     */
+    @Override
     public int getLives() {
         return lives;
     }
 
-    /**
-     * @param lives the lives to set
-     */
+    @Override
     public void setLives(int lives) {
         this.lives = lives;
     }
 
-    /**
-     * @return if the player is stealing a flag
-     */
-    public boolean isStealing() {
+    @Override
+    public Wolf getWolf() {
+        return wolf;
+    }
+
+    @Override
+    public void setWolf(Wolf wolf) {
+        this.wolf = wolf;
+    }
+
+    public int getWolfRespawnTime() {
+        return wolfRespawnTime;
+    }
+
+    public void setWolfRespawnTime(int wolfRespawnTime) {
+        this.wolfRespawnTime = wolfRespawnTime;
+    }
+
+    @Override
+    public boolean isStealingFlag() {
         return stealing != null;
     }
 
-    /**
-     * @return the group whose flag is stolen
-     */
-    public DGroup getRobbedGroup() {
+    @Override
+    public PlayerGroup getRobbedGroup() {
         return stealing;
     }
 
-    /**
-     * @param dGroup the group whose flag is stolen
-     */
-    public void setRobbedGroup(DGroup dGroup) {
-        if (dGroup != null) {
+    @Override
+    public void setRobbedGroup(PlayerGroup group) {
+        if (group != null) {
             oldHelmet = player.getInventory().getHelmet();
-            player.getInventory().setHelmet(getDGroup().getDColor().getWoolMaterial().toItemStack());
+            player.getInventory().setHelmet(getGroup().getDColor().getWoolMaterial().toItemStack());
         }
 
-        stealing = dGroup;
+        stealing = group;
     }
 
-    /**
-     * @return the player's group tag
-     */
     public DGroupTag getDGroupTag() {
         return groupTag;
     }
 
-    /**
-     * Creates a new group tag for the player.
-     */
     public void initDGroupTag() {
         groupTag = new DGroupTag(plugin, this);
     }
 
     /* Actions */
+    @Override
     public void captureFlag() {
         if (stealing == null) {
             return;
         }
 
-        Game game = Game.getByWorld(getWorld());
+        Game game = plugin.getGame(getWorld());
         if (game == null) {
             return;
         }
 
         game.sendMessage(DMessage.GROUP_FLAG_CAPTURED.getMessage(getName(), stealing.getName()));
 
-        GameRuleProvider rules = game.getRules();
+        GameRuleContainer rules = game.getRules();
 
-        getDGroup().setScore(getDGroup().getScore() + 1);
-        if (rules.getScoreGoal() == dGroup.getScore()) {
-            dGroup.winGame();
+        getGroup().setScore(getGroup().getScore() + 1);
+        if (rules.getState(GameRule.SCORE_GOAL) == getGroup().getScore()) {
+            getGroup().winGame();
         }
 
         stealing.setScore(stealing.getScore() - 1);
         if (stealing.getScore() == -1) {
-            for (DGamePlayer member : stealing.getDGamePlayers()) {
+            for (GamePlayer member : ((DGroup) stealing).getDGamePlayers()) {
                 member.kill();
             }
             game.sendMessage(DMessage.GROUP_DEFEATED.getMessage(stealing.getName()));
@@ -430,7 +348,7 @@ public class DGamePlayer extends DInstancePlayer {
         stealing = null;
         player.getInventory().setHelmet(oldHelmet);
 
-        if (game.getDGroups().size() == 1) {
+        if (game.getGroups().size() == 1) {
             dGroup.winGame();
         }
     }
@@ -440,71 +358,65 @@ public class DGamePlayer extends DInstancePlayer {
         leave(true);
     }
 
-    /**
-     * @param message if messages should be sent
-     */
+    @Override
     public void leave(boolean message) {
-        Game game = Game.getByWorld(getWorld());
+        Game game = plugin.getGame(getWorld());
         if (game == null) {
             return;
         }
-        DGameWorld gameWorld = game.getWorld();
+        DGameWorld gameWorld = (DGameWorld) game.getWorld();
         if (gameWorld == null) {
             return;
         }
-        GameRuleProvider rules = game.getRules();
+        GameRuleContainer rules = game.getRules();
         delete();
 
         if (player.isOnline()) {
             if (finished) {
-                reset(rules.getKeepInventoryOnFinish());
+                reset(rules.getState(GameRule.KEEP_INVENTORY_ON_FINISH));
             } else {
-                reset(rules.getKeepInventoryOnEscape());
+                reset(rules.getState(GameRule.KEEP_INVENTORY_ON_ESCAPE));
             }
         }
 
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
-            for (String permission : rules.getGamePermissions()) {
+            for (String permission : rules.getState(GameRule.GAME_PERMISSIONS)) {
                 plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
             }
         }
 
-        if (getDGroup() != null) {
+        if (getGroup() != null) {
             dGroup.removePlayer(getPlayer(), message);
         }
 
-        if (game != null) {
-            if (finished) {
-                if (game.getType() == GameTypeDefault.CUSTOM || game.getType().hasRewards()) {
-                    DGamePlayerRewardEvent dGroupRewardEvent = new DGamePlayerRewardEvent(this);
-                    Bukkit.getPluginManager().callEvent(dGroupRewardEvent);
-                    if (!dGroupRewardEvent.isCancelled()) {
-                        giveLoot(rules, rules.getRewards(), dGroup.getRewards());
+        if (game != null && finished && game.hasRewards()) {
+            DGamePlayerRewardEvent dGroupRewardEvent = new DGamePlayerRewardEvent(this);
+            Bukkit.getPluginManager().callEvent(dGroupRewardEvent);
+            if (!dGroupRewardEvent.isCancelled()) {
+                giveLoot(rules, rules.getState(GameRule.REWARDS), dGroup.getRewards());
+            }
+
+            getData().logTimeLastFinished(getGroup().getDungeonName());
+
+            // Tutorial Permissions
+            if (game.isTutorial()) {
+                getData().setFinishedTutorial(true);
+                if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
+                    String endGroup = plugin.getMainConfig().getTutorialEndGroup();
+                    if (plugin.isGroupEnabled(endGroup)) {
+                        plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
                     }
 
-                    getData().logTimeLastFinished(getDGroup().getDungeonName());
-
-                    // Tutorial Permissions
-                    if (game.isTutorial()) {
-                        getData().setFinishedTutorial(true);
-                        if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
-                            String endGroup = plugin.getMainConfig().getTutorialEndGroup();
-                            if (plugin.isGroupEnabled(endGroup)) {
-                                plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
-                            }
-
-                            String startGroup = plugin.getMainConfig().getTutorialStartGroup();
-                            if (plugin.isGroupEnabled(startGroup)) {
-                                plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
-                            }
-                        }
+                    String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+                    if (plugin.isGroupEnabled(startGroup)) {
+                        plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
                     }
                 }
             }
         }
 
-        if (getDGroup() != null) {
+        if (getGroup() != null) {
             if (!dGroup.isEmpty()) {
                 /*if (dGroup.finishIfMembersFinished()) {
                     return;
@@ -512,7 +424,7 @@ public class DGamePlayer extends DInstancePlayer {
 
                 // Give secure objects to other players
                 Player groupPlayer = null;
-                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
+                for (Player player : dGroup.getMembers().getOnlinePlayers()) {
                     if (player.isOnline()) {
                         groupPlayer = player;
                         break;
@@ -529,16 +441,16 @@ public class DGamePlayer extends DInstancePlayer {
                 }
             }
 
-            if (dGroup.getCaptain().equals(getPlayer()) && dGroup.getPlayers().size() > 0) {
+            if (dGroup.getLeader().equals(getPlayer()) && dGroup.getMembers().size() > 0) {
                 // Captain here!
                 Player newCaptain = null;
-                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
+                for (Player player : dGroup.getMembers().getOnlinePlayers()) {
                     if (player.isOnline()) {
                         newCaptain = player;
                         break;
                     }
                 }
-                dGroup.setCaptain(newCaptain);
+                dGroup.setLeader(newCaptain);
                 if (message) {
                     MessageUtil.sendMessage(newCaptain, DMessage.PLAYER_NEW_LEADER.getMessage());
                 }
@@ -547,15 +459,16 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
+    @Override
     public void kill() {
         DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.DEATH);
         Bukkit.getPluginManager().callEvent(dPlayerKickEvent);
 
         if (!dPlayerKickEvent.isCancelled()) {
-            DGameWorld gameWorld = getDGroup().getGameWorld();
+            GameWorld gameWorld = getGroup().getGameWorld();
             if (lives != -1) {
                 gameWorld.sendMessage(DMessage.PLAYER_DEATH_KICK.getMessage(getName()));
-            } else if (getDGroup().getLives() != -1) {
+            } else if (getGroup().getLives() != -1) {
                 gameWorld.sendMessage(DMessage.GROUP_DEATH_KICK.getMessage(getName(), dGroup.getName()));
             }
 
@@ -563,28 +476,29 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
-    public boolean checkRequirements(Game game) {
+    public boolean checkRequirements(Dungeon dungeon) {
         if (DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS)) {
             return true;
         }
 
-        GameRuleProvider rules = game.getRules();
+        GameRuleContainer rules = dungeon.getRules();
 
-        if (!checkTimeAfterStart(game) && !checkTimeAfterFinish(game)) {
-            int longestTime = rules.getTimeToNextPlayAfterStart() >= rules.getTimeToNextPlayAfterFinish() ? rules.getTimeToNextPlayAfterStart() : rules.getTimeToNextPlayAfterFinish();
+        if (!checkTimeAfterStart(dungeon) && !checkTimeAfterFinish(dungeon)) {
+            int longestTime = rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START) >= rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH)
+                    ? rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START) : rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH);
             MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(longestTime)));
             return false;
 
-        } else if (!checkTimeAfterStart(game)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterStart())));
+        } else if (!checkTimeAfterStart(dungeon)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START))));
             return false;
 
-        } else if (!checkTimeAfterFinish(game)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getTimeToNextPlayAfterFinish())));
+        } else if (!checkTimeAfterFinish(dungeon)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH))));
             return false;
         }
 
-        for (Requirement requirement : rules.getRequirements()) {
+        for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
             RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
             Bukkit.getPluginManager().callEvent(event);
 
@@ -597,25 +511,30 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        if (rules.getFinished() != null && rules.getFinishedAll() != null) {
-            if (!rules.getFinished().isEmpty()) {
+        if (rules.getState(GameRule.MUST_FINISH_ALL) != null) {
+            List<String> finished = new ArrayList<>(rules.getState(GameRule.MUST_FINISH_ALL));
+            if (rules.getState(GameRule.MUST_FINISH_ONE) != null) {
+                finished.addAll(rules.getState(GameRule.MUST_FINISH_ONE));
+            }
+
+            if (!finished.isEmpty()) {
 
                 long bestTime = 0;
                 int numOfNeeded = 0;
                 boolean doneTheOne = false;
 
-                if (rules.getFinished().size() == rules.getFinishedAll().size()) {
+                if (finished.size() == rules.getState(GameRule.MUST_FINISH_ALL).size()) {
                     doneTheOne = true;
                 }
 
-                for (String played : rules.getFinished()) {
+                for (String played : finished) {
                     for (String dungeonName : DungeonsXL.MAPS.list()) {
                         if (new File(DungeonsXL.MAPS, dungeonName).isDirectory()) {
                             if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
 
                                 Long time = getData().getTimeLastFinished(dungeonName);
                                 if (time != -1) {
-                                    if (rules.getFinishedAll().contains(played)) {
+                                    if (rules.getState(GameRule.MUST_FINISH_ALL).contains(played)) {
                                         numOfNeeded++;
                                     } else {
                                         doneTheOne = true;
@@ -634,13 +553,13 @@ public class DGamePlayer extends DInstancePlayer {
                 if (bestTime == 0) {
                     return false;
 
-                } else if (rules.getTimeLastPlayed() != 0) {
-                    if (System.currentTimeMillis() - bestTime > rules.getTimeLastPlayed() * (long) 3600000) {
+                } else if (rules.getState(GameRule.TIME_LAST_PLAYED_REQUIRED_DUNGEONS) != 0) {
+                    if (System.currentTimeMillis() - bestTime > rules.getState(GameRule.TIME_LAST_PLAYED_REQUIRED_DUNGEONS) * (long) 3600000) {
                         return false;
                     }
                 }
 
-                if (numOfNeeded < rules.getFinishedAll().size() || !doneTheOne) {
+                if (numOfNeeded < rules.getState(GameRule.MUST_FINISH_ALL).size() || !doneTheOne) {
                     return false;
                 }
 
@@ -650,12 +569,14 @@ public class DGamePlayer extends DInstancePlayer {
         return true;
     }
 
-    public boolean checkTimeAfterStart(Game game) {
-        return checkTime(game.getDungeon(), game.getRules().getTimeToNextPlayAfterStart(), getData().getTimeLastStarted(game.getDungeon().getName()));
+    public boolean checkTimeAfterStart(Dungeon dungeon) {
+        return checkTime(dungeon, dungeon.getRules().getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START),
+                getData().getTimeLastStarted(dungeon.getName()));
     }
 
-    public boolean checkTimeAfterFinish(Game game) {
-        return checkTime(game.getDungeon(), game.getRules().getTimeToNextPlayAfterFinish(), getData().getTimeLastFinished(game.getDungeon().getName()));
+    public boolean checkTimeAfterFinish(Dungeon dungeon) {
+        return checkTime(dungeon, dungeon.getRules().getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH),
+                getData().getTimeLastFinished(dungeon.getName()));
     }
 
     public boolean checkTime(Dungeon dungeon, int requirement, long dataTime) {
@@ -666,42 +587,40 @@ public class DGamePlayer extends DInstancePlayer {
         return dataTime == -1 || dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
     }
 
-    public void giveLoot(GameRuleProvider rules, List<Reward> ruleRewards, List<Reward> groupRewards) {
+    public void giveLoot(GameRuleContainer rules, List<Reward> ruleRewards, List<Reward> groupRewards) {
         if (!canLoot(rules)) {
             return;
         }
         ruleRewards.forEach(r -> r.giveTo(player.getPlayer()));
         groupRewards.forEach(r -> r.giveTo(player.getPlayer()));
-        getData().logTimeLastLoot(dGroup.getDungeonName());
+        getData().logTimeLastLoot(dGroup.getDungeon().getName());
     }
 
-    public boolean canLoot(GameRuleProvider rules) {
-        return getTimeNextLoot(rules) <= getData().getTimeLastStarted(getDGroup().getDungeonName());
+    public boolean canLoot(GameRuleContainer rules) {
+        return getTimeNextLoot(rules) <= getData().getTimeLastStarted(getGroup().getDungeonName());
     }
 
-    public long getTimeNextLoot(GameRuleProvider rules) {
-        return rules.getTimeToNextLoot() * 60 * 60 * 1000 + getData().getTimeLastLoot(getDGroup().getDungeonName());
+    public long getTimeNextLoot(GameRuleContainer rules) {
+        return rules.getState(GameRule.TIME_TO_NEXT_LOOT) * 60 * 60 * 1000 + getData().getTimeLastLoot(getGroup().getDungeonName());
     }
 
-    public void ready() {
-        ready(GameTypeDefault.DEFAULT);
+    @Override
+    public boolean ready() {
+        return ready(true);
     }
 
-    public boolean ready(GameType gameType) {
-        if (getDGroup() == null) {
+    public boolean ready(boolean rewards) {
+        if (dGroup == null) {
             return false;
         }
 
-        Game game = Game.getByGameWorld(dGroup.getGameWorld());
+        Game game = dGroup.getGame();
         if (game == null) {
-            game = new Game(plugin, dGroup, gameType, dGroup.getGameWorld());
-
-        } else {
-            game.setType(gameType);
+            game = new DGame(plugin, dGroup, dGroup.getGameWorld());
         }
-        game.fetchRules();
+        game.setRewards(rewards);
 
-        if (!checkRequirements(game)) {
+        if (!checkRequirements(game.getDungeon())) {
             MessageUtil.sendMessage(player, DMessage.ERROR_REQUIREMENTS.getMessage());
             return false;
         }
@@ -709,9 +628,9 @@ public class DGamePlayer extends DInstancePlayer {
         ready = true;
 
         boolean start = true;
-        for (DGroup gameGroup : game.getDGroups()) {
+        for (PlayerGroup gameGroup : game.getGroups()) {
             if (!gameGroup.isPlaying()) {
-                if (!gameGroup.startGame(game)) {
+                if (!((DGroup) gameGroup).startGame(game)) {
                     start = false;
                 }
             } else {
@@ -723,11 +642,12 @@ public class DGamePlayer extends DInstancePlayer {
         return start;
     }
 
+    @Override
     public void respawn() {
         Location respawn = checkpoint;
 
         if (respawn == null) {
-            respawn = getDGroup().getGameWorld().getStartLocation(dGroup);
+            respawn = getGroup().getGameWorld().getStartLocation(dGroup);
         }
 
         if (respawn == null) {
@@ -757,7 +677,7 @@ public class DGamePlayer extends DInstancePlayer {
         finished = true;
 
         boolean hasToWait = false;
-        if (getDGroup() == null) {
+        if (getGroup() == null) {
             return;
         }
         if (!dGroup.isPlaying()) {
@@ -778,16 +698,12 @@ public class DGamePlayer extends DInstancePlayer {
         }
     }
 
-    /**
-     * The DGamePlayer finishs the current game.
-     */
+    @Override
     public void finish() {
         finish(true);
     }
 
-    /**
-     * @param message if messages should be sent
-     */
+    @Override
     public void finish(boolean message) {
         if (message) {
             MessageUtil.sendMessage(getPlayer(), DMessage.PLAYER_FINISHED_DUNGEON.getMessage());
@@ -795,7 +711,7 @@ public class DGamePlayer extends DInstancePlayer {
         finished = true;
 
         boolean hasToWait = false;
-        if (!getDGroup().isPlaying()) {
+        if (!getGroup().isPlaying()) {
             return;
         }
         if (dGroup.isFinished()) {
@@ -815,12 +731,12 @@ public class DGamePlayer extends DInstancePlayer {
     }
 
     public void onDeath(PlayerDeathEvent event) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(player.getLocation().getWorld());
+        DGameWorld gameWorld = (DGameWorld) getGameWorld();
         if (gameWorld == null) {
             return;
         }
 
-        Game game = Game.getByGameWorld(gameWorld);
+        DGame game = (DGame) getGame();
         if (game == null) {
             return;
         }
@@ -836,14 +752,14 @@ public class DGamePlayer extends DInstancePlayer {
             event.setDeathMessage(null);
         }
 
-        if (game.getRules().getKeepInventoryOnDeath()) {
+        if (game.getRules().getState(GameRule.KEEP_INVENTORY_ON_DEATH)) {
             event.setKeepInventory(true);
             event.getDrops().clear();
             event.setKeepLevel(true);
             event.setDroppedExp(0);
         }
 
-        if (getDGroup() != null && dGroup.getLives() != -1) {
+        if (getGroup() != null && dGroup.getLives() != -1) {
             int newLives = dGroup.getLives() - dPlayerDeathEvent.getLostLives();
             dGroup.setLives(newLives < 0 ? 0 : newLives);// If the group already has 0 lives, don't remove any
             gameWorld.sendMessage(DMessage.GROUP_DEATH.getMessage(getName(), dGroup.getName(), String.valueOf(dGroup.getLives())));
@@ -853,7 +769,7 @@ public class DGamePlayer extends DInstancePlayer {
                 lives = lives - dPlayerDeathEvent.getLostLives();
             }
 
-            DGamePlayer killer = DGamePlayer.getByPlayer(player.getKiller());
+            GamePlayer killer = plugin.getPlayerCache().getGamePlayer(player.getKiller());
             String newLives = lives == -1 ? DMessage.MISC_UNLIMITED.getMessage() : String.valueOf(this.lives);
             if (killer != null) {
                 gameWorld.sendMessage(DMessage.PLAYER_KILLED.getMessage(getName(), killer.getName(), newLives));
@@ -862,7 +778,7 @@ public class DGamePlayer extends DInstancePlayer {
             }
         }
 
-        if (isStealing()) {
+        if (isStealingFlag()) {
             for (TeamFlag teamFlag : gameWorld.getTeamFlags()) {
                 if (teamFlag.getOwner().equals(stealing)) {
                     teamFlag.reset();
@@ -879,8 +795,8 @@ public class DGamePlayer extends DInstancePlayer {
         GameType gameType = game.getType();
         if (gameType != null && gameType != GameTypeDefault.CUSTOM) {
             if (gameType.getGameGoal() == GameGoal.LAST_MAN_STANDING) {
-                if (game.getDGroups().size() == 1) {
-                    game.getDGroups().get(0).winGame();
+                if (game.getGroups().size() == 1) {
+                    ((DGroup) game.getGroups().get(0)).winGame();
                 }
             }
         }
@@ -895,17 +811,15 @@ public class DGamePlayer extends DInstancePlayer {
         boolean kick = false;
         boolean triggerAllInDistance = false;
 
-        DGameWorld gameWorld = DGameWorld.getByWorld(getWorld());
-
         if (!updateSecond) {
             if (!getPlayer().getWorld().equals(getWorld())) {
                 locationValid = false;
 
-                if (gameWorld != null) {
-                    teleportLocation = getCheckpoint();
+                if (getGameWorld() != null) {
+                    teleportLocation = getLastCheckpoint();
 
                     if (teleportLocation == null) {
-                        teleportLocation = getDGroup().getGameWorld().getStartLocation(getDGroup());
+                        teleportLocation = getGameWorld().getStartLocation(getGroup());
                     }
 
                     // Don't forget Doge!
@@ -915,7 +829,7 @@ public class DGamePlayer extends DInstancePlayer {
                 }
             }
 
-        } else if (gameWorld != null) {
+        } else if (getGameWorld() != null) {
             // Update Wolf
             if (getWolf() != null) {
                 if (getWolf().isDead()) {
@@ -928,17 +842,18 @@ public class DGamePlayer extends DInstancePlayer {
                     wolfRespawnTime--;
                 }
 
-                DMob dMob = DMob.getByEntity(getWolf());
+                // TODO Is doge even DMob?
+                DungeonMob dMob = plugin.getDungeonMob(getWolf());
                 if (dMob != null) {
-                    gameWorld.removeDMob(dMob);
+                    getGameWorld().removeMob(dMob);
                 }
             }
 
             // Kick offline players
-            if (getOfflineTime() > 0) {
+            if (getOfflineTimeMillis() > 0) {
                 offline = true;
 
-                if (getOfflineTime() < System.currentTimeMillis()) {
+                if (getOfflineTimeMillis() < System.currentTimeMillis()) {
                     kick = true;
                 }
             }
@@ -971,40 +886,8 @@ public class DGamePlayer extends DInstancePlayer {
         }
 
         if (triggerAllInDistance) {
-            DistanceTrigger.triggerAllInDistance(getPlayer(), gameWorld);
+            DistanceTrigger.triggerAllInDistance(getPlayer(), (DGameWorld) getGameWorld());
         }
-    }
-
-    /* Statics */
-    public static DGamePlayer getByPlayer(Player player) {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDGamePlayers()) {
-            if (dPlayer.getPlayer().equals(player)) {
-                return dPlayer;
-            }
-        }
-        return null;
-    }
-
-    public static DGamePlayer getByName(String name) {
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDGamePlayers()) {
-            if (dPlayer.getPlayer().getName().equalsIgnoreCase(name) || dPlayer.getName().equalsIgnoreCase(name)) {
-                return dPlayer;
-            }
-        }
-
-        return null;
-    }
-
-    public static List<DGamePlayer> getByWorld(World world) {
-        List<DGamePlayer> dPlayers = new ArrayList<>();
-
-        for (DGamePlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDGamePlayers()) {
-            if (dPlayer.getWorld() == world) {
-                dPlayers.add(dPlayer);
-            }
-        }
-
-        return dPlayers;
     }
 
 }

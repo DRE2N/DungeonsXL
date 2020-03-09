@@ -19,8 +19,8 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.announcer.Announcer;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.command.CommandSender;
@@ -43,7 +43,7 @@ public class JoinCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DGlobalPlayer player = dPlayers.getByPlayer((Player) sender);
+        GlobalPlayer player = dPlayers.get((Player) sender);
         if (player instanceof DInstancePlayer) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_GAME.getMessage());
             return;

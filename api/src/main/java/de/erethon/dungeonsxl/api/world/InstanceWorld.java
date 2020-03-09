@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Collection;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 /**
  * Super interface for worlds that are instantiated by DungeonsXL.
@@ -83,11 +84,26 @@ public interface InstanceWorld {
     void addDungeonSign(DungeonSign sign);
 
     /**
-     * Removes a dungeon sign from this instance.
+     * Removes the given dungeon sign from this instance.
      *
      * @param sign the sign
      */
     void removeDungeonSign(DungeonSign sign);
+
+    /**
+     * Removes the dungeon sign represented by the given sign block from this instance.
+     *
+     * @param sign the sign block
+     */
+    void removeDungeonSign(Block sign);
+
+    /**
+     * Returns the DungeonSign represented by the given sign block.
+     *
+     * @param sign the sign block
+     * @return the DungeonSign represented by the given sign block
+     */
+    DungeonSign getDungeonSign(Block sign);
 
     /**
      * Returns the location of the lobby where players spawn by default when they are teleported into the dungeon.

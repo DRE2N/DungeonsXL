@@ -19,10 +19,9 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -47,7 +46,7 @@ public class DeleteCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = instances.getResourceByName(args[1]);
+        ResourceWorld resource = plugin.getMapRegistry().get(args[1]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
@@ -68,12 +67,10 @@ public class DeleteCommand extends DCommand {
             return;
         }
 
-        for (DEditWorld editWorld : instances.getEditWorlds()) {
-            if (editWorld.getResource().equals(resource)) {
-                editWorld.delete(false);
-            }
+        if (resource.getEditWorld() != null) {
+            resource.getEditWorld().delete(false);
         }
-        instances.removeResource(resource);
+        plugin.getMapRegistry().remove(resource);
         FileUtil.removeDir(resource.getFolder());
 
         if (args[2].equalsIgnoreCase("true")) {

@@ -18,17 +18,16 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGamePlayer;
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -52,50 +51,44 @@ public class PlayCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
+        GlobalPlayer dPlayer = dPlayers.get(player);
         if (dPlayer instanceof DInstancePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
 
-        Dungeon dungeon = plugin.getDungeonCache().getByName(args[1]);
+        Dungeon dungeon = plugin.getDungeonRegistry().get(args[1]);
         if (dungeon == null) {
-            DResourceWorld resource = instances.getResourceByName(args[1]);
-            if (resource != null) {
-                dungeon = new Dungeon(plugin, resource);
-            } else {
-                MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(args[1]));
-                return;
-            }
+            MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(args[1]));
         }
 
-        DGroup dGroup = DGroup.getByPlayer(player);
-        if (dGroup != null && dGroup.isPlaying()) {
+        DGroup group = (DGroup) dPlayer.getGroup();
+        if (group != null && group.isPlaying()) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
-        } else if (dGroup == null) {
-            dGroup = new DGroup(plugin, player, dungeon);
-            DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
+        } else if (group == null) {
+            group = new DGroup(plugin, player, dungeon);
+            DGroupCreateEvent event = new DGroupCreateEvent(group, player, DGroupCreateEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
-                plugin.getDGroupCache().remove(dGroup);
-                dGroup = null;
+                plugin.getPlayerGroupCache().remove(group);
+                group = null;
             }
         }
-        if (!dGroup.getCaptain().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
+        if (!group.getLeader().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NOT_LEADER.getMessage());
             return;
         }
-        dGroup.setDungeon(dungeon);
+        group.setDungeon(dungeon);
 
-        DGameWorld gameWorld = dungeon.getMap().instantiateAsGameWorld(false);
+        GameWorld gameWorld = dungeon.getMap().instantiateGameWorld(false);
         if (gameWorld == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
             return;
         }
-        new Game(plugin, dGroup, gameWorld);
-        for (Player groupPlayer : dGroup.getPlayers().getOnlinePlayers()) {
-            new DGamePlayer(plugin, groupPlayer, dGroup.getGameWorld());
+        new DGame(plugin, group, gameWorld);
+        for (Player groupPlayer : group.getMembers().getOnlinePlayers()) {
+            new DGamePlayer(plugin, groupPlayer, group.getGameWorld());
         }
     }
 

@@ -19,14 +19,13 @@ package de.erethon.dungeonsxl.player;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.EditPlayer;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
-import de.erethon.dungeonsxl.world.DEditWorld;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -34,17 +33,15 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Represents a player in a DEditWorld.
- *
  * @author Daniel Saukel
  */
-public class DEditPlayer extends DInstancePlayer {
+public class DEditPlayer extends DInstancePlayer implements EditPlayer {
 
     private String[] linesCopy;
-    private DEditWorld editWorld;
+    private EditWorld editWorld;
 
-    public DEditPlayer(DungeonsXL plugin, Player player, DEditWorld world) {
-        super(plugin, player, world.getWorld());
+    public DEditPlayer(DungeonsXL plugin, Player player, EditWorld world) {
+        super(plugin, player, world);
         editWorld = world;
 
         // Set gamemode a few ticks later to avoid incompatibilities with plugins that force a gamemode
@@ -74,25 +71,19 @@ public class DEditPlayer extends DInstancePlayer {
 
 
     /* Getters and setters */
-    /**
-     * @return the linesCopy
-     */
-    public String[] getLinesCopy() {
+    @Override
+    public EditWorld getEditWorld() {
+        return editWorld;
+    }
+
+    @Override
+    public String[] getCopiedLines() {
         return linesCopy;
     }
 
-    /**
-     * @param linesCopy the linesCopy to set
-     */
-    public void setLinesCopy(String[] linesCopy) {
+    @Override
+    public void setCopiedLines(String[] linesCopy) {
         this.linesCopy = linesCopy;
-    }
-
-    /**
-     * @return the DEditWorld
-     */
-    public DEditWorld getEditWorld() {
-        return editWorld;
     }
 
     /* Actions */
@@ -111,6 +102,7 @@ public class DEditPlayer extends DInstancePlayer {
     /**
      * Escape the DEditWorld without saving.
      */
+    @Override
     public void escape() {
         delete();
         reset(false);
@@ -151,7 +143,6 @@ public class DEditPlayer extends DInstancePlayer {
 
         reset(false);
 
-        DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
         if (editWorld != null) {
             editWorld.save();
         }
@@ -161,8 +152,6 @@ public class DEditPlayer extends DInstancePlayer {
     public void update(boolean updateSecond) {
         boolean locationValid = true;
         Location teleportLocation = player.getLocation();
-
-        DEditWorld editWorld = DEditWorld.getByWorld(getWorld());
 
         if (!getPlayer().getWorld().equals(getWorld())) {
             locationValid = false;
@@ -186,37 +175,6 @@ public class DEditPlayer extends DInstancePlayer {
         if (!locationValid) {
             PlayerUtil.secureTeleport(getPlayer(), teleportLocation);
         }
-    }
-
-    /* Statics */
-    public static DEditPlayer getByPlayer(Player player) {
-        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDEditPlayers()) {
-            if (dPlayer.getPlayer().equals(player)) {
-                return dPlayer;
-            }
-        }
-        return null;
-    }
-
-    public static DEditPlayer getByName(String name) {
-        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDEditPlayers()) {
-            if (dPlayer.getName().equalsIgnoreCase(name)) {
-                return dPlayer;
-            }
-        }
-        return null;
-    }
-
-    public static CopyOnWriteArrayList<DEditPlayer> getByWorld(World world) {
-        CopyOnWriteArrayList<DEditPlayer> dPlayers = new CopyOnWriteArrayList<>();
-
-        for (DEditPlayer dPlayer : DungeonsXL.getInstance().getDPlayerCache().getDEditPlayers()) {
-            if (dPlayer.getWorld() == world) {
-                dPlayers.add(dPlayer);
-            }
-        }
-
-        return dPlayers;
     }
 
 }

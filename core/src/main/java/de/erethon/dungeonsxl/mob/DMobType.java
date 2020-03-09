@@ -23,7 +23,7 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,6 +50,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Deprecated
 public class DMobType extends ExMob {
 
+    private DungeonsXL plugin;
     private CaliburnAPI caliburn;
 
     private String name;
@@ -83,6 +84,7 @@ public class DMobType extends ExMob {
      * @param config the config that stores the information
      */
     public DMobType(DungeonsXL plugin, String name, FileConfiguration config) {
+        this.plugin = plugin;
         caliburn = plugin.getCaliburn();
 
         this.name = name;
@@ -356,7 +358,7 @@ public class DMobType extends ExMob {
     @Override
     public Entity toEntity(Location loc) {
         World world = loc.getWorld();
-        DGameWorld gameWorld = DGameWorld.getByWorld(world);
+        GameWorld gameWorld = plugin.getGameWorld(world);
         if (gameWorld == null) {
             return null;
         }

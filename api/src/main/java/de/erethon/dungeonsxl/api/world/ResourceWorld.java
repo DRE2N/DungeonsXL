@@ -15,6 +15,7 @@
 package de.erethon.dungeonsxl.api.world;
 
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import java.io.File;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World.Environment;
@@ -28,7 +29,7 @@ import org.bukkit.World.Environment;
  *
  * @author Daniel Saukel
  */
-// Implementation-specific methods: getConfig, getSignData, generate
+// Implementation-specific methods: getSignData, generate
 public interface ResourceWorld {
 
     /**
@@ -55,6 +56,17 @@ public interface ResourceWorld {
     File getFolder();
 
     /**
+     * Returns the {@link de.erethon.dungeonsxl.api.dungeon.GameRule}s of this world.
+     * <p>
+     * Note that these are only the rules that are specific to the map itself. They are not the rules that are actually used in a game instance instantiated
+     * from this resource world as these ones may be supplemented or overriden by other rules taken from the main config, dungeon config or the
+     * {@link GameRuleContainer#DEFAULT_VALUES}.
+     *
+     * @return the {@link de.erethon.dungeonsxl.api.dungeon.GameRule}s of this world
+     */
+    GameRuleContainer getRules();
+
+    /**
      * Returns the environment of the world as defined in the config or {@link org.bukkit.World.Environment#NORMAL} if nothing is set.
      *
      * @return the environment of the world as defined in the config or {@link org.bukkit.World.Environment#NORMAL} if nothing is set
@@ -67,6 +79,14 @@ public interface ResourceWorld {
      * @param player the player
      */
     void addInvitedPlayer(OfflinePlayer player);
+
+    /**
+     * Removes a player from the list of players that are invited to edit the resource.
+     *
+     * @param player the player
+     * @return if the action was successful
+     */
+    boolean removeInvitedPlayer(OfflinePlayer player);
 
     /**
      * Returns if the player is invited to edit the resource.
@@ -82,18 +102,27 @@ public interface ResourceWorld {
     void backup();
 
     /**
+     * Returns the loaded edit instance of this world or null if none exists.
+     *
+     * @return the loaded edit instance of this world or null if none exists
+     */
+    EditWorld getEditWorld();
+
+    /**
      * Returns the loaded edit instance of this world or generates a new one if none exists.
      *
+     * @param ignoreLimit if the instance limit set in the main config shall be ignored
      * @return the loaded edit instance of this world or generates a new one if none exists
      */
-    EditWorld getOrInstantiateEditWorld();
+    EditWorld getOrInstantiateEditWorld(boolean ignoreLimit);
 
     /**
      * Returns a new game instance of this resource.
      *
+     * @param ignoreLimit if the instance limit set in the main config shall be ignored
      * @return a new game instance of this resource
      */
-    GameWorld instantiateGameWorld();
+    GameWorld instantiateGameWorld(boolean ignoreLimit);
 
     /**
      * Returns the single floor dungeon of this resource.

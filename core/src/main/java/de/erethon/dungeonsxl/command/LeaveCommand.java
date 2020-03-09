@@ -18,10 +18,11 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
-import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
@@ -50,15 +51,15 @@ public class LeaveCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
-        Game game = Game.getByPlayer(player);
+        DGlobalPlayer dPlayer = (DGlobalPlayer) dPlayers.get(player);
+        Game game = plugin.getGame(player);
 
         if (game != null && game.isTutorial()) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NO_LEAVE_IN_TUTORIAL.getMessage());
             return;
         }
 
-        DGroup dGroup = DGroup.getByPlayer(player);
+        PlayerGroup dGroup = dPlayer.getGroup();
 
         if (dGroup == null && !(dPlayer instanceof DEditPlayer)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
@@ -73,7 +74,7 @@ public class LeaveCommand extends DCommand {
             }
         }
 
-        DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, dGroup);
+        DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, (DGroup) dGroup);
         Bukkit.getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
         if (dPlayerLeaveDGroupEvent.isCancelled()) {
             return;

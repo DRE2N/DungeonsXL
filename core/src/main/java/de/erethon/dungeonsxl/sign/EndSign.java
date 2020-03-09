@@ -19,7 +19,7 @@ package de.erethon.dungeonsxl.sign;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -76,7 +76,7 @@ public class EndSign extends DSign {
         }
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        Dungeon dungeon = getGame().getDungeon();
+        DDungeon dungeon = getGame().getDungeon();
         if (dungeon.isMultiFloor() && !getGame().getUnplayedFloors().isEmpty() && getGameWorld().getResource() != dungeon.getConfig().getEndFloor()) {
             getSign().setLine(1, DMessage.SIGN_FLOOR_1.getMessage());
             if (floor == null) {

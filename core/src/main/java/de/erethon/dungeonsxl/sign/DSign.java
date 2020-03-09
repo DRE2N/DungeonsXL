@@ -18,8 +18,8 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dsign.DSignRegistrationEvent;
-import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.trigger.Trigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.lang.reflect.Constructor;
@@ -127,8 +127,8 @@ public abstract class DSign {
     /**
      * @return the game
      */
-    public Game getGame() {
-        return Game.getByGameWorld(gameWorld);
+    public DGame getGame() {
+        return DGame.getByGameWorld(gameWorld);
     }
 
     /**

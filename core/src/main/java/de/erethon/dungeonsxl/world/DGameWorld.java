@@ -22,15 +22,17 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
-import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
-import de.erethon.dungeonsxl.mob.DMob;
-import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.sign.DSign;
-import de.erethon.dungeonsxl.sign.DSignType;
 import de.erethon.dungeonsxl.sign.LocationSign;
 import de.erethon.dungeonsxl.sign.MobSign;
 import de.erethon.dungeonsxl.sign.lobby.StartSign;
@@ -49,12 +51,12 @@ import de.erethon.dungeonsxl.world.block.TeamBed;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -67,27 +69,17 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * A playable resource instance. There may be any amount of DGameWorlds per DResourceWorld.
- *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class DGameWorld extends DInstanceWorld {
-
-    public enum Type {
-        START_FLOOR,
-        END_FLOOR,
-        DEFAULT
-    }
+public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     private CaliburnAPI caliburn;
     private Game game;
 
-    // Variables
     private Type type = Type.DEFAULT;
 
     private boolean isPlaying = false;
 
-    // TO DO: Which lists actually need to be CopyOnWriteArrayLists?
     private List<Block> placedBlocks = new LinkedList<>();
 
     private Set<GameBlock> gameBlocks = new HashSet<>();
@@ -97,11 +89,10 @@ public class DGameWorld extends DInstanceWorld {
     private Set<TeamBed> teamBeds = new HashSet<>();
     private Set<TeamFlag> teamFlags = new HashSet<>();
 
-    private List<ItemStack> secureObjects = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Sign> classesSigns = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<DMob> dMobs = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<DSign> dSigns = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Trigger> triggers = new CopyOnWriteArrayList<>();
+    private List<ItemStack> secureObjects = new ArrayList<>();
+    private List<Sign> classesSigns = new ArrayList<>();
+    private List<DungeonMob> mobs = new ArrayList<>();
+    private List<Trigger> triggers = new ArrayList<>();
 
     DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
         super(plugin, resourceWorld, folder, world, id);
@@ -113,9 +104,17 @@ public class DGameWorld extends DInstanceWorld {
         caliburn = plugin.getCaliburn();
     }
 
-    /**
-     * @return the Game connected to the DGameWorld
-     */
+    @Override
+    public Type getType() {
+        return type;
+    }
+
+    @Override
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    @Override
     public Game getGame() {
         if (game == null) {
             for (Game game : plugin.getGameCache()) {
@@ -128,56 +127,23 @@ public class DGameWorld extends DInstanceWorld {
         return game;
     }
 
-    /**
-     * @return the type of the floor
-     */
-    public Type getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    /**
-     * @return the isPlaying
-     */
-    public boolean isPlaying() {
-        return isPlaying;
-    }
-
-    /**
-     * @param isPlaying the isPlaying to set
-     */
-    public void setPlaying(boolean isPlaying) {
-        this.isPlaying = isPlaying;
-    }
-
-    /**
-     * Returns the start location of the respective group.
-     *
-     * @param dGroup the group
-     * @return the start location
-     */
-    public Location getStartLocation(DGroup dGroup) {
-        int index = getGame().getDGroups().indexOf(dGroup);
+    @Override
+    public Location getStartLocation(PlayerGroup dGroup) {
+        int index = getGame().getGroups().indexOf(dGroup);
 
         // Try the matching location
-        for (DSign dSign : dSigns) {
-            if (dSign instanceof StartSign) {
-                if (((StartSign) dSign).getId() == index) {
-                    return ((LocationSign) dSign).getLocation();
+        for (DungeonSign sign : getDungeonSigns()) {
+            if (sign instanceof StartSign) {
+                if (((StartSign) sign).getId() == index) {
+                    return ((LocationSign) sign).getLocation();
                 }
             }
         }
 
         // Try any location
-        for (DSign dSign : dSigns) {
-            if (dSign instanceof StartSign) {
-                return ((LocationSign) dSign).getLocation();
+        for (DungeonSign sign : getDungeonSigns()) {
+            if (sign instanceof StartSign) {
+                return ((LocationSign) sign).getLocation();
             }
         }
 
@@ -286,70 +252,45 @@ public class DGameWorld extends DInstanceWorld {
     /**
      * @return the classes signs
      */
-    public CopyOnWriteArrayList<Sign> getClassesSigns() {
+    public List<Sign> getClassesSigns() {
         return classesSigns;
     }
 
     /**
      * @param signs the classes signs to set
      */
-    public void setClasses(CopyOnWriteArrayList<Sign> signs) {
+    public void setClasses(List<Sign> signs) {
         classesSigns = signs;
     }
 
-    /**
-     * @return the dMobs
-     */
-    public CopyOnWriteArrayList<DMob> getDMobs() {
-        return dMobs;
+    @Override
+    public Collection<DungeonMob> getMobs() {
+        return mobs;
     }
 
-    /**
-     * @param dMob the dMob to add
-     */
-    public void addDMob(DMob dMob) {
-        dMobs.add(dMob);
+    @Override
+    public void addMob(DungeonMob mob) {
+        mobs.add(mob);
     }
 
-    /**
-     * @param dMob the dMob to remove
-     */
-    public void removeDMob(DMob dMob) {
-        dMobs.remove(dMob);
+    @Override
+    public void removeMob(DungeonMob mob) {
+        mobs.remove(mob);
     }
 
-    /**
-     * @return the dSigns
-     */
-    public CopyOnWriteArrayList<DSign> getDSigns() {
-        return dSigns;
+    @Override
+    public boolean isPlaying() {
+        return isPlaying;
     }
 
-    /**
-     * @param type the DSignType to filter
-     * @return the triggers with the type
-     */
-    public List<DSign> getDSigns(DSignType type) {
-        List<DSign> dSignsOfType = new ArrayList<>();
-        for (DSign dSign : dSigns) {
-            if (dSign.getType() == type) {
-                dSignsOfType.add(dSign);
-            }
-        }
-        return dSignsOfType;
-    }
-
-    /**
-     * @param dSigns the dSigns to set
-     */
-    public void setDSigns(CopyOnWriteArrayList<DSign> dSigns) {
-        this.dSigns = dSigns;
+    public void setPlaying(boolean isPlaying) {
+        this.isPlaying = isPlaying;
     }
 
     /**
      * @return the triggers
      */
-    public CopyOnWriteArrayList<Trigger> getTriggers() {
+    public List<Trigger> getTriggers() {
         return triggers;
     }
 
@@ -388,12 +329,13 @@ public class DGameWorld extends DInstanceWorld {
         int mobCount = 0;
 
         signs:
-        for (DSign dSign : dSigns) {
-            if (!(dSign instanceof MobSign)) {
+        for (DungeonSign sign : getDungeonSigns()) {
+            if (!(sign instanceof MobSign)) {
                 continue;
             }
 
-            for (Trigger trigger : dSign.getTriggers()) {
+            for (de.erethon.dungeonsxl.api.Trigger apiTrigger : sign.getTriggers()) {
+                Trigger trigger = (Trigger) apiTrigger;
                 if (trigger.getType() == TriggerTypeDefault.PROGRESS) {
                     if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
                         break signs;
@@ -401,18 +343,16 @@ public class DGameWorld extends DInstanceWorld {
                 }
             }
 
-            mobCount += ((MobSign) dSign).getInitialAmount();
+            mobCount += ((MobSign) sign).getInitialAmount();
         }
 
         return mobCount;
     }
 
-    /**
-     * @return the Dungeon that contains the DGameWorld
-     */
+    @Override
     public Dungeon getDungeon() {
-        for (Dungeon dungeon : plugin.getDungeonCache().getDungeons()) {
-            if (dungeon.getConfig().containsFloor(getResource())) {
+        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
+            if (dungeon.containsFloor(getResource())) {
                 return dungeon;
             }
         }
@@ -424,7 +364,7 @@ public class DGameWorld extends DInstanceWorld {
      * Set up the instance for the game
      */
     public void startGame() {
-        GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, getGame());
+        GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, (DGame) getGame());
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
@@ -433,10 +373,10 @@ public class DGameWorld extends DInstanceWorld {
 
         isPlaying = true;
 
-        for (DSign dSign : dSigns) {
-            if (dSign != null) {
-                if (!dSign.getType().isOnDungeonInit()) {
-                    dSign.onInit();
+        for (DungeonSign sign : getDungeonSigns()) {
+            if (sign != null) {
+                if (!sign.isOnDungeonInit()) {
+                    sign.initialize();
                 }
             }
         }
@@ -449,9 +389,9 @@ public class DGameWorld extends DInstanceWorld {
             ((FortuneTrigger) trigger).onTrigger();
         }
 
-        for (DSign dSign : dSigns) {
-            if (dSign != null && !dSign.isErroneous() && !dSign.hasTriggers()) {
-                dSign.onTrigger();
+        for (DungeonSign sign : getDungeonSigns()) {
+            if (sign != null && !sign.isErroneous() && !sign.hasTriggers()) {
+                sign.trigger(null);
             }
         }
     }
@@ -472,7 +412,11 @@ public class DGameWorld extends DInstanceWorld {
 
         Bukkit.unloadWorld(getWorld(), true);
         FileUtil.removeDir(getFolder());
-        worlds.removeInstance(this);
+        plugin.getInstanceCache().remove(this);
+    }
+
+    private GameRuleContainer getRules() {
+        return getDungeon().getRules();
     }
 
     /**
@@ -484,11 +428,11 @@ public class DGameWorld extends DInstanceWorld {
     public boolean onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        for (DSign dSign : dSigns) {
-            if (dSign == null) {
+        for (DungeonSign sign : getDungeonSigns()) {
+            if (sign == null) {
                 continue;
             }
-            if ((block.equals(dSign.getSign().getBlock()) || block.equals(BlockUtil.getAttachedBlock(dSign.getSign().getBlock()))) && dSign.getType().isProtected()) {
+            if ((block.equals(sign.getSign().getBlock()) || block.equals(BlockUtil.getAttachedBlock(sign.getSign().getBlock()))) && sign.isProtected()) {
                 return true;
             }
         }
@@ -513,8 +457,7 @@ public class DGameWorld extends DInstanceWorld {
             return true;
         }
 
-        GameRuleProvider rules = game.getRules();
-        if (!rules.canBreakBlocks() && !rules.canBreakPlacedBlocks()) {
+        if (!getRules().getState(GameRule.BREAK_BLOCKS) && !getRules().getState(GameRule.BREAK_PLACED_BLOCKS)) {
             return true;
         }
 
@@ -525,18 +468,18 @@ public class DGameWorld extends DInstanceWorld {
             }
             if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
                 Hanging hanging = (Hanging) entity;
-                if (rules.getDamageProtectedEntities().contains(caliburn.getExMob(hanging))) {
+                if (getRules().getState(GameRule.DAMAGE_PROTECTED_ENTITIES).contains(caliburn.getExMob(hanging))) {
                     event.setCancelled(true);
                     break;
                 }
             }
         }
 
-        Map<ExItem, HashSet<ExItem>> whitelist = rules.getBreakWhitelist();
+        Map<ExItem, HashSet<ExItem>> whitelist = getRules().getState(GameRule.BREAK_WHITELIST);
         ExItem material = VanillaItem.get(block.getType());
         ExItem breakTool = caliburn.getExItem(player.getItemInHand());
 
-        if (rules.canBreakPlacedBlocks() && placedBlocks.contains(block)) {
+        if (getRules().getState(GameRule.BREAK_PLACED_BLOCKS) && placedBlocks.contains(block)) {
             return false;
         }
         if (whitelist != null && whitelist.containsKey(material)
@@ -564,8 +507,6 @@ public class DGameWorld extends DInstanceWorld {
             return true;
         }
 
-        GameRuleProvider rules = game.getRules();
-
         PlaceableBlock placeableBlock = null;
         for (PlaceableBlock gamePlaceableBlock : placeableBlocks) {
             if (gamePlaceableBlock.canPlace(block, caliburn.getExItem(hand))) {
@@ -573,7 +514,7 @@ public class DGameWorld extends DInstanceWorld {
                 break;
             }
         }
-        if (!rules.canPlaceBlocks() && placeableBlock == null) {
+        if (!getRules().getState(GameRule.PLACE_BLOCKS) && placeableBlock == null) {
             // Workaround for a bug that would allow 3-Block-high jumping
             Location loc = player.getLocation();
             if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
@@ -593,29 +534,13 @@ public class DGameWorld extends DInstanceWorld {
             placeableBlock.onPlace();
         }
 
-        Set<ExItem> whitelist = rules.getPlaceWhitelist();
+        Set<ExItem> whitelist = getRules().getState(GameRule.PLACE_WHITELIST);
         if (whitelist == null || whitelist.contains(VanillaItem.get(block.getType()))) {
             placedBlocks.add(block);
             return false;
         }
 
         return true;
-    }
-
-    /* Statics */
-    /**
-     * @param world the instance
-     * @return the EditWorld that represents the world
-     */
-    public static DGameWorld getByWorld(World world) {
-        DInstanceWorld instance = DungeonsXL.getInstance().getDWorldCache().getInstanceByName(world.getName());
-
-        if (instance instanceof DGameWorld) {
-            return (DGameWorld) instance;
-
-        } else {
-            return null;
-        }
     }
 
 }

@@ -18,9 +18,11 @@ package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Requirement;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPlayerData;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,15 +31,15 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class FeeLevelRequirement extends Requirement {
+public class FeeLevelRequirement implements Requirement {
 
-    private RequirementType type = RequirementTypeDefault.FEE_LEVEL;
+    private DungeonsXL plugin;
 
     private int fee;
     private Boolean keepInventory;
 
     public FeeLevelRequirement(DungeonsXL plugin) {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /* Getters and setters */
@@ -55,11 +57,6 @@ public class FeeLevelRequirement extends Requirement {
         this.fee = fee;
     }
 
-    @Override
-    public RequirementType getType() {
-        return type;
-    }
-
     /* Actions */
     @Override
     public void setup(ConfigurationSection config) {
@@ -72,7 +69,7 @@ public class FeeLevelRequirement extends Requirement {
             return player.getLevel() >= fee;
         }
 
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
         return dPlayer != null ? dPlayer.getData().getOldLevel() >= fee : true;
     }
 
@@ -82,7 +79,7 @@ public class FeeLevelRequirement extends Requirement {
             player.setLevel(player.getLevel() - fee);
 
         } else {
-            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+            DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
             if (dPlayer == null) {
                 return;
             }
@@ -98,17 +95,17 @@ public class FeeLevelRequirement extends Requirement {
             return keepInventory;
         }
 
-        Game game = Game.getByPlayer(player);
-        GameRuleProvider rules = null;
+        Game game = plugin.getGame(player);
+        GameRuleContainer rules = null;
         if (game != null) {
             rules = game.getRules();
         }
         if (rules != null) {
-            keepInventory = rules.getKeepInventoryOnEnter();
+            keepInventory = rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER);
             return keepInventory;
         }
 
-        keepInventory = GameRuleProvider.DEFAULT_VALUES.getKeepInventoryOnEnter();
+        keepInventory = GameRuleContainer.DEFAULT_VALUES.getState(GameRule.KEEP_INVENTORY_ON_ENTER);
         return keepInventory;
     }
 

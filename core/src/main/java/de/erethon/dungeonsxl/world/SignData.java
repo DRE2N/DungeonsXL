@@ -17,6 +17,8 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.sign.DSign;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
+import java.util.Collection;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -53,7 +55,6 @@ public class SignData {
         this.file = file;
     }
 
-    /* Getters and setters */
     /**
      * @return the file
      */
@@ -65,13 +66,12 @@ public class SignData {
         file = new File(resource.getFolder(), "DXLData.data");
     }
 
-    /* Actions */
     /**
-     * Applies all signs from the file to the DEditWorld. Also sets the lobby location of the DEditWorld to the location of the lobby sign if one exists.
+     * Loads all signs from the file to the instance.
      *
-     * @param editWorld the DEditWorld where the signs are
+     * @param instance the instance where the signs are
      */
-    public void deserializeSigns(DEditWorld editWorld) {
+    public void deserializeSigns(InstanceWorld instance) {
         try {
             ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
 
@@ -81,15 +81,14 @@ public class SignData {
                 int y = os.readInt();
                 int z = os.readInt();
 
-                Block block = editWorld.getWorld().getBlockAt(x, y, z);
-                editWorld.getSigns().add(block);
-
+                Block block = instance.getWorld().getBlockAt(x, y, z);
                 if (block.getState() instanceof Sign) {
+                    instance.addDungeonSign(DSign.create(plugin, (Sign) block.getState(), instance));
                     Sign sign = (Sign) block.getState();
                     String[] lines = sign.getLines();
 
                     if (lines[0].equalsIgnoreCase("[lobby]")) {
-                        editWorld.setLobbyLocation(block.getLocation());
+                        instance.setLobbyLocation(block.getLocation());
                     }
                 }
             }
@@ -102,57 +101,28 @@ public class SignData {
     }
 
     /**
-     * Applies all signs from the file to the DGameWorld.
+     * Saves all signs from an instance to the file.
      *
-     * @param gameWorld the DGameWorld where the signs are
+     * @param instance the instance that contains the signs to serialize
      */
-    public void deserializeSigns(DGameWorld gameWorld) {
-        try {
-            ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
-
-            int length = os.readInt();
-            for (int i = 0; i < length; i++) {
-                int x = os.readInt();
-                int y = os.readInt();
-                int z = os.readInt();
-
-                Block block = gameWorld.getWorld().getBlockAt(x, y, z);
-                if (block.getState() instanceof Sign) {
-                    DSign dSign = DSign.create(plugin, (Sign) block.getState(), gameWorld);
-                    gameWorld.getDSigns().add(dSign);
-                }
-            }
-
-            os.close();
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+    public void serializeSigns(InstanceWorld instance) {
+        serializeSigns(instance.getDungeonSigns());
     }
 
     /**
-     * Applies all signs from the DEditWorld to the file.
-     *
-     * @param editWorld the DEditWorld that contains the signs to serialize
-     */
-    public void serializeSigns(DEditWorld editWorld) {
-        serializeSigns(editWorld.getSigns());
-    }
-
-    /**
-     * Applies all signs from the sign list to the file.
+     * Saves all signs from the sign list to the file.
      *
      * @param signs the signs to serialize
      */
-    public void serializeSigns(List<Block> signs) {
+    public void serializeSigns(Collection<DungeonSign> signs) {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
             out.writeInt(signs.size());
 
-            for (Block sign : signs) {
-                out.writeInt(sign.getX());
-                out.writeInt(sign.getY());
-                out.writeInt(sign.getZ());
+            for (DungeonSign sign : signs) {
+                out.writeInt(sign.getSign().getX());
+                out.writeInt(sign.getSign().getY());
+                out.writeInt(sign.getSign().getZ());
             }
 
             out.close();

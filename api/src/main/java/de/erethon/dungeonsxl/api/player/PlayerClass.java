@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Represents a class and a class script.
  *
- * @author Frank Baumann, Daniel Saukel
+ * @author Daniel Saukel
  */
 public class PlayerClass {
 

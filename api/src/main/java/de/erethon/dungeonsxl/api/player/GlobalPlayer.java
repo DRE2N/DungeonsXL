@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Daniel Saukel
  */
-// Implementation-specific methods: getters and setters: data, portal, cached item, announcer, reward items; startTutorial
+// Implementation-specific methods: getters and setters: data, portal, cached item, announcer; startTutorial
 public interface GlobalPlayer extends PlayerWrapper {
 
     /**
@@ -74,23 +74,28 @@ public interface GlobalPlayer extends PlayerWrapper {
      * @param permission the permission
      * @return if the player has the given permission
      */
-    default boolean hasPermission(String permission) {
-        return getPlayer().hasPermission(permission);
-    }
+    boolean hasPermission(String permission);
 
     /**
-     * Returns the reward items a player collected in a dungeon game.
+     * Returns the reward items the player gets after leaving the dungeon.
      *
-     * @return the reward items a player collected in a dungeon game
+     * @return the reward items the player gets after leaving the dungeon
      */
-    public List<ItemStack> getRewardItems();
+    List<ItemStack> getRewardItems();
+
+    /**
+     * Sets the reward items the player gets after leaving the dungeon.
+     *
+     * @param rewardItems the reward items the player gets after leaving the dungeon
+     */
+    void setRewardItems(List<ItemStack> rewardItems);
 
     /**
      * Returns if the player has any reward items left.
      *
      * @return if the player has any reward items left
      */
-    public boolean hasRewardItemsLeft();
+    boolean hasRewardItemsLeft();
 
     /**
      * Returns if the player is currently breaking a global protection (=using /dxl break).

@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import java.util.Set;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -33,14 +33,7 @@ public class WorldUnloadTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        Set<DInstanceWorld> instances = plugin.getDWorldCache().getInstances();
-        for (DInstanceWorld instance : instances.toArray(new DInstanceWorld[instances.size()])) {
-            if (instance.exists()) {
-                if (instance.getPlayers().isEmpty()) {
-                    instance.delete();
-                }
-            }
-        }
+        plugin.getInstanceCache().getAllIf(i -> ((DInstanceWorld) i).exists() && i.getPlayers().isEmpty()).forEach(InstanceWorld::delete);
     }
 
 }

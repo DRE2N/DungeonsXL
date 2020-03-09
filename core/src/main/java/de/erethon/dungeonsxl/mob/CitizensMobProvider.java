@@ -17,7 +17,9 @@
 package de.erethon.dungeonsxl.mob;
 
 import de.erethon.commons.misc.NumberUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import net.citizensnpcs.api.CitizensAPI;
@@ -99,7 +101,7 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
         npc.spawn(location);
         spawnedNPCs.add(npc);
 
-        DGameWorld gameWorld = DGameWorld.getByWorld(location.getWorld());
+        GameWorld gameWorld = DungeonsXL.getInstance().getGameWorld(location.getWorld());
         if (gameWorld == null) {
             return;
         }

@@ -22,7 +22,7 @@ import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -82,7 +82,7 @@ public class LivesModifierSign extends DSign {
     public boolean onPlayerTrigger(Player player) {
         switch (target) {
             case GAME:
-                for (Player gamePlayer : Game.getByPlayer(player).getPlayers()) {
+                for (Player gamePlayer : DGame.getByPlayer(player).getPlayers()) {
                     DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
                     if (gamePlayer != null) {
                         modifyLives(dPlayer);

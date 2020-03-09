@@ -18,7 +18,7 @@ package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Requirement;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,17 +28,14 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Daniel Saukel
  */
-public class KeyItemsRequirement extends Requirement {
+public class KeyItemsRequirement implements Requirement {
 
     private CaliburnAPI caliburn;
 
-    private RequirementType type = RequirementTypeDefault.KEY_ITEMS;
-
     private List<ExItem> keyItems;
 
-    public KeyItemsRequirement(DungeonsXL plugin) {
-        super(plugin);
-        caliburn = plugin.getCaliburn();
+    public KeyItemsRequirement(CaliburnAPI caliburn) {
+        this.caliburn = caliburn;
     }
 
     /* Getters and setters */
@@ -47,11 +44,6 @@ public class KeyItemsRequirement extends Requirement {
      */
     public List<ExItem> getKeyItems() {
         return keyItems;
-    }
-
-    @Override
-    public RequirementType getType() {
-        return type;
     }
 
     /* Actions */

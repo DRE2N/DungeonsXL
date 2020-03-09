@@ -20,8 +20,9 @@ import de.erethon.caliburn.category.Category;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGroup;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -39,7 +40,7 @@ public class GameSign extends JoinSign {
 
     public static final String GAME_SIGN_TAG = "Game";
 
-    private Game game;
+    private DGame game;
 
     public GameSign(DungeonsXL plugin, int id, Block startSign, String identifier, int maxGroupsPerGame, int startIfElementsAtLeast) {
         super(plugin, id, startSign, identifier, maxGroupsPerGame, startIfElementsAtLeast);
@@ -52,14 +53,14 @@ public class GameSign extends JoinSign {
     /**
      * @return the attached game
      */
-    public Game getGame() {
+    public DGame getGame() {
         return game;
     }
 
     /**
      * @param game the game to set
      */
-    public void setGame(Game game) {
+    public void setGame(DGame game) {
         this.game = game;
     }
 
@@ -75,22 +76,22 @@ public class GameSign extends JoinSign {
         super.update();
         Sign sign = (Sign) startSign.getState();
 
-        if (game == null || game.getDGroups().isEmpty()) {
+        if (game == null || game.getGroups().isEmpty()) {
             loadedWorld = false;
             sign.setLine(0, DMessage.SIGN_GLOBAL_NEW_GAME.getMessage());
             sign.update();
             return;
         }
 
-        if (game.getDGroups().size() >= startIfElementsAtLeast && startIfElementsAtLeast != -1) {
+        if (game.getGroups().size() >= startIfElementsAtLeast && startIfElementsAtLeast != -1) {
             loadedWorld = true;
-            game.getDGroups().forEach(g -> g.teleport());
+            game.getGroups().forEach(g -> ((DGroup) g).teleport());
         }
 
-        if (game.getDGroups().get(0).isPlaying()) {
+        if (game.getGroups().get(0).isPlaying()) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_IS_PLAYING.getMessage());
 
-        } else if (game.getDGroups().size() >= maxElements) {
+        } else if (game.getGroups().size() >= maxElements) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_FULL.getMessage());
 
         } else {
@@ -100,7 +101,7 @@ public class GameSign extends JoinSign {
         int j = 1;
         Sign rowSign = sign;
 
-        for (DGroup dGroup : game.getDGroups()) {
+        for (PlayerGroup dGroup : game.getGroups()) {
             if (j > 3) {
                 j = 0;
                 rowSign = (Sign) sign.getBlock().getRelative(0, -1, 0).getState();
@@ -123,17 +124,17 @@ public class GameSign extends JoinSign {
     }
 
     public void onPlayerInteract(Block block, Player player) {
-        DGroup dGroup = DGroup.getByPlayer(player);
+        DGroup dGroup = (DGroup) plugin.getPlayerGroup(player);
         if (dGroup == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;
         }
-        if (!dGroup.getCaptain().equals(player)) {
+        if (!dGroup.getLeader().equals(player)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NOT_LEADER.getMessage());
             return;
         }
 
-        if (Game.getByDGroup(dGroup) != null) {
+        if (dGroup.getGame() != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GAME.getMessage());
             return;
         }
@@ -151,12 +152,12 @@ public class GameSign extends JoinSign {
                 return;
             }
 
-            game = new Game(plugin, dGroup);
+            game = new DGame(plugin, dGroup);
             dGroup.setDungeon(dungeon);
             update();
 
         } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GAME.getMessage())) {
-            game.addDGroup(dGroup);
+            game.addGroup(dGroup);
             update();
         }
     }
@@ -188,7 +189,7 @@ public class GameSign extends JoinSign {
      * @param game   the game to check
      * @return the game that this sign creates
      */
-    public static GameSign getByGame(DungeonsXL plugin, Game game) {
+    public static GameSign getByGame(DungeonsXL plugin, DGame game) {
         for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(GameSign.class)) {
             GameSign gameSign = (GameSign) protection;
             if (gameSign.game == game) {

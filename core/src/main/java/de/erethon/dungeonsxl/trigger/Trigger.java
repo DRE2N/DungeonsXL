@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  *
  * @author Frank Baumann, Daniel Saukel
  */
-public abstract class Trigger {
+public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
 
     private boolean triggered;
     private Player player; // Holds Player for Player specific TriggerTypes

@@ -20,16 +20,14 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.SimpleDateUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameTypeDefault;
 import de.erethon.dungeonsxl.player.DGamePlayer;
-import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.reward.ItemReward;
 import de.erethon.dungeonsxl.reward.LevelReward;
 import de.erethon.dungeonsxl.reward.MoneyReward;
-import de.erethon.dungeonsxl.reward.Reward;
-import de.erethon.dungeonsxl.reward.RewardTypeDefault;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -43,7 +41,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardChest extends GameBlock {
 
-    // Variables
     private boolean used = false;
     private Container container;
     private double moneyReward;
@@ -135,59 +132,59 @@ public class RewardChest extends GameBlock {
         }
 
         if (container.getLocation().distance(container.getLocation()) < 1) {
-            addTreasure(DGroup.getByPlayer(opener));
+            addTreasure(plugin.getPlayerGroup(opener));
             used = true;
         }
     }
 
-    public void addTreasure(DGroup dGroup) {
-        if (dGroup == null) {
+    public void addTreasure(PlayerGroup group) {
+        if (group == null) {
             return;
         }
-        dGroup.sendMessage(DMessage.GROUP_REWARD_CHEST.getMessage());
+        group.sendMessage(DMessage.GROUP_REWARD_CHEST.getMessage());
 
         boolean hasMoneyReward = false;
         boolean hasLevelReward = false;
         boolean hasItemReward = false;
 
-        for (Reward reward : dGroup.getRewards()) {
-            if (reward.getType() == RewardTypeDefault.MONEY) {
+        for (Reward reward : group.getRewards()) {
+            if (reward instanceof MoneyReward) {
                 hasMoneyReward = true;
                 ((MoneyReward) reward).addMoney(moneyReward);
 
-            } else if (reward.getType() == RewardTypeDefault.LEVEL) {
+            } else if (reward instanceof LevelReward) {
                 hasLevelReward = true;
                 ((LevelReward) reward).addLevels(levelReward);
 
-            } else if (reward.getType() == RewardTypeDefault.ITEM) {
+            } else if (reward instanceof ItemReward) {
                 hasItemReward = true;
                 ((ItemReward) reward).addItems(itemReward);
             }
         }
 
-        Game game = Game.getByDGroup(dGroup);
-        if (game == null || game.getType() == GameTypeDefault.CUSTOM || game.getType().hasRewards()) {
+        Game game = group.getGame();
+        if (game == null || game.hasRewards()) {
             if (!hasMoneyReward) {
-                Reward reward = Reward.create(plugin, RewardTypeDefault.MONEY);
-                ((MoneyReward) reward).addMoney(moneyReward);
-                dGroup.addReward(reward);
+                MoneyReward reward = new MoneyReward(plugin);
+                reward.addMoney(moneyReward);
+                group.addReward(reward);
             }
 
             if (!hasLevelReward) {
-                Reward reward = Reward.create(plugin, RewardTypeDefault.LEVEL);
-                ((LevelReward) reward).addLevels(levelReward);
-                dGroup.addReward(reward);
+                LevelReward reward = new LevelReward();
+                reward.addLevels(levelReward);
+                group.addReward(reward);
             }
 
             if (!hasItemReward) {
-                Reward reward = Reward.create(plugin, RewardTypeDefault.ITEM);
-                ((ItemReward) reward).addItems(itemReward);
-                dGroup.addReward(reward);
+                ItemReward reward = new ItemReward(plugin);
+                reward.addItems(itemReward);
+                group.addReward(reward);
             }
         }
 
-        for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
-            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        for (Player player : group.getMembers().getOnlinePlayers()) {
+            DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
             if (dPlayer == null || !dPlayer.canLoot(game.getRules())) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_NO_REWARDS_TIME.getMessage(SimpleDateUtil.ddMMyyyyhhmm(dPlayer.getTimeNextLoot(game.getRules()))));
                 continue;

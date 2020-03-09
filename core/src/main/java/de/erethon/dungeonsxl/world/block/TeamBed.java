@@ -73,7 +73,7 @@ public class TeamBed extends TeamBlock implements MultiBlock {
     @Override
     public boolean onBreak(BlockBreakEvent event) {
         Player breaker = event.getPlayer();
-        if (owner.getPlayers().contains(breaker)) {
+        if (owner.getMembers().contains(breaker)) {
             MessageUtil.sendMessage(breaker, DMessage.ERROR_BLOCK_OWN_TEAM.getMessage());
             return true;
         }
@@ -83,7 +83,7 @@ public class TeamBed extends TeamBlock implements MultiBlock {
         }
         owner.setLives(0);
 
-        owner.getGameWorld().sendMessage(DMessage.GROUP_BED_DESTROYED.getMessage(owner.getName(), DGamePlayer.getByPlayer(breaker).getName()));
+        owner.getGameWorld().sendMessage(DMessage.GROUP_BED_DESTROYED.getMessage(owner.getName(), plugin.getPlayerCache().getGamePlayer(breaker).getName()));
         Block block1 = event.getBlock();
         if (DungeonsXL.BLOCK_ADAPTER.isBedHead(block)) {
             Block block2 = getAttachedBlock(block1);

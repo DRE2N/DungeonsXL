@@ -19,8 +19,8 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.player.DEditPlayer;
-import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
@@ -60,41 +60,35 @@ public class CreateCommand extends DCommand {
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            // Msg create
             MessageUtil.log(plugin, "&6Creating new map.");
             MessageUtil.log(plugin, "&6Generating new world...");
 
-            // Create World
             DResourceWorld resource = new DResourceWorld(plugin, name);
-            instances.addResource(resource);
+            plugin.getMapRegistry().add(name, resource);
             DEditWorld editWorld = resource.generate();
             editWorld.save();
             editWorld.delete();
 
-            // MSG Done
             MessageUtil.log(plugin, "&6World generation finished.");
 
         } else if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (DGamePlayer.getByPlayer(player) != null) {
+            if (dPlayers.getGamePlayer(player) != null) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
                 return;
             }
 
-            // Msg create
             MessageUtil.log(plugin, "&6Creating new map.");
             MessageUtil.log(plugin, "&6Generating new world...");
 
-            // Create World
             DResourceWorld resource = new DResourceWorld(plugin, name);
-            instances.addResource(resource);
+            plugin.getMapRegistry().add(name, resource);
+            plugin.getDungeonRegistry().add(name, new DDungeon(plugin, resource));
             DEditWorld editWorld = resource.generate();
 
-            // MSG Done
             MessageUtil.log(plugin, "&6World generation finished.");
 
-            // Tp Player
             new DEditPlayer(plugin, player, editWorld);
         }
     }

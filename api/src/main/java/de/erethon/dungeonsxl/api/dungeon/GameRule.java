@@ -22,6 +22,7 @@ import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,6 +149,10 @@ public class GameRule<V> {
      */
     public static final GameRule<Integer> SCORE_GOAL = new GameRule<>(Integer.class, "scoreGoal", -1);
     /**
+     * Maximum time in hours since the dungeons specified by other rules were finished. 0 = ignore.
+     */
+    public static final GameRule<Integer> TIME_LAST_PLAYED_REQUIRED_DUNGEONS = new GameRule<>(Integer.class, "timeLastPlayedRequiredDungeons", 0);
+    /**
      * Time in hours when the game may be played again after it has been started.
      */
     public static final GameRule<Integer> TIME_TO_NEXT_PLAY_AFTER_START = new GameRule<>(Integer.class, "timeToNextPlayAfterStart", 0);
@@ -237,6 +242,28 @@ public class GameRule<V> {
      */
     public static final GameRule<Boolean> GROUP_TAG_ENABLED = new GameRule<>(Boolean.class, "groupTagEnabled", false);
 
+    /**
+     * An array of all game rules that exist natively in DungeonsXL.
+     */
+    public static final GameRule[] VALUES = values();
+
+    private static GameRule[] values() {
+        Field[] fields = GameRule.class.getFields();
+        GameRule[] values = new GameRule[fields.length - 1];
+        int i = 0;
+        for (Field field : fields) {
+            try {
+                Object object = field.get(null);
+                if (object instanceof GameRule) {
+                    values[i++] = (GameRule) object;
+                }
+            } catch (IllegalArgumentException | IllegalAccessException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return values;
+    }
+
     protected Class<V> type;
     private String key;
     private V defaultValue;
@@ -278,8 +305,7 @@ public class GameRule<V> {
     /**
      * Returns the state of the game rule fetched from the config.
      * <p>
-     * If the type of this game rule is an enum, Strings as config values that are the {@link Enum#name()} of an enum value are converted
-     * automatically.
+     * If the type of this game rule is an enum, Strings as config values that are the {@link Enum#name()} of an enum value are converted automatically.
      *
      * @param api       the API instance
      * @param caliburn  the CaliburnAPI instance
@@ -297,7 +323,12 @@ public class GameRule<V> {
             value = EnumUtil.getEnumIgnoreCase((Class<? extends Enum>) type, (String) value);
         }
 
-        return isValidValue(value) ? (V) value : null;
+        if (isValidValue(value)) {
+            container.setState(this, (V) value);
+            return (V) value;
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -18,9 +18,8 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.util.LWCUtil;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.World;
@@ -47,14 +46,7 @@ public abstract class JoinSign extends GlobalProtection {
         super(plugin, startSign.getWorld(), id);
 
         this.startSign = startSign;
-        dungeon = plugin.getDungeonCache().getByName(identifier);
-        if (dungeon == null) {
-            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(identifier);
-            if (resource != null) {
-                dungeon = new Dungeon(plugin, resource);
-            }
-        }
-
+        dungeon = plugin.getDungeonRegistry().get(identifier);
         verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
 
         this.maxElements = maxElements;
@@ -70,13 +62,7 @@ public abstract class JoinSign extends GlobalProtection {
 
         startSign = world.getBlockAt(config.getInt("x"), config.getInt("y"), config.getInt("z"));
         String identifier = config.getString("dungeon");
-        dungeon = plugin.getDungeonCache().getByName(identifier);
-        if (dungeon == null) {
-            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(identifier);
-            if (resource != null) {
-                dungeon = new Dungeon(plugin, resource);
-            }
-        }
+        dungeon = plugin.getDungeonRegistry().get(identifier);
 
         // LEGACY
         if (config.contains("maxElements")) {

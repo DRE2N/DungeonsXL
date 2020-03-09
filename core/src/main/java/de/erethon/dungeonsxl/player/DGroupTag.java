@@ -30,7 +30,7 @@ public class DGroupTag {
 
     public DGroupTag(DungeonsXL plugin, DGamePlayer player) {
         this.player = player;
-        DGroup group = player.getDGroup();
+        DGroup group = player.getGroup();
         if (group != null) {
             hologram = HologramsAPI.createHologram(plugin, player.getPlayer().getLocation().clone().add(0, 3.5, 0));
             hologram.appendItemLine(group.getDColor().getWoolMaterial().toItemStack());

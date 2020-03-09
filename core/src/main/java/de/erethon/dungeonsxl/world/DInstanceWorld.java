@@ -17,29 +17,33 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.misc.Registry;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
-import de.erethon.dungeonsxl.player.DInstancePlayer;
-import de.erethon.dungeonsxl.player.DPlayerCache;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
+import de.erethon.dungeonsxl.api.player.PlayerCache;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 /**
- * An instance of a resource world.
- *
  * @author Daniel Saukel
  */
-public abstract class DInstanceWorld {
+public abstract class DInstanceWorld implements InstanceWorld {
 
     protected DungeonsXL plugin;
-    protected DWorldCache worlds;
-    protected DPlayerCache dPlayers;
+    protected PlayerCache dPlayers;
 
+    protected Map<Block, DungeonSign> signs = new HashMap<>();
     private DResourceWorld resourceWorld;
     private File folder;
     World world;
@@ -48,109 +52,98 @@ public abstract class DInstanceWorld {
 
     DInstanceWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
         this.plugin = plugin;
-        worlds = plugin.getDWorldCache();
-        dPlayers = plugin.getDPlayerCache();
+        dPlayers = plugin.getPlayerCache();
 
         this.resourceWorld = resourceWorld;
         this.folder = folder;
         this.world = world;
         this.id = id;
 
-        worlds.addInstance(this);
+        plugin.getInstanceCache().add(id, this);
     }
 
     /* Getters and setters */
-    /**
-     * @return the name of the DResourceWorld
-     */
+    @Override
     public String getName() {
         return resourceWorld.getName();
     }
 
-    /**
-     * @return the WorldConfig
-     */
-    public WorldConfig getConfig() {
-        return resourceWorld.getConfig();
-    }
-
-    /**
-     * @return the DResourceWorld of that this world is an instance
-     */
+    @Override
     public DResourceWorld getResource() {
         return resourceWorld;
     }
 
-    /**
-     * @return the folder of the instance
-     */
+    @Override
     public File getFolder() {
         return folder;
     }
 
-    /**
-     * @return the instance
-     */
+    @Override
     public World getWorld() {
         return world;
     }
 
     /**
+     * Returns false if this instance does not have a world, yet
+     *
      * @return false if this instance does not have a world, yet
      */
     public boolean exists() {
         return world != null;
     }
 
-    /**
-     * @return the unique ID
-     */
+    @Override
     public int getId() {
         return id;
     }
 
-    /**
-     * @return the location where the player spawns
-     */
+    @Override
+    public Collection<DungeonSign> getDungeonSigns() {
+        return signs.values();
+    }
+
+    @Override
+    public void addDungeonSign(DungeonSign sign) {
+        signs.put(sign.getSign().getBlock(), sign);
+    }
+
+    @Override
+    public void removeDungeonSign(DungeonSign sign) {
+        signs.remove(sign.getSign().getBlock());
+    }
+
+    @Override
+    public void removeDungeonSign(Block sign) {
+        signs.remove(sign);
+    }
+
+    @Override
+    public DungeonSign getDungeonSign(Block sign) {
+        return signs.get(sign);
+    }
+
+    @Override
     public Location getLobbyLocation() {
         return lobby;
     }
 
-    /**
-     * @param lobby the spawn location to set
-     */
+    @Override
     public void setLobbyLocation(Location lobby) {
         this.lobby = lobby;
     }
 
-    /**
-     * @return the players in this world
-     */
-    public Collection<DInstancePlayer> getPlayers() {
-        Collection<DInstancePlayer> players = new ArrayList<>();
-        for (DInstancePlayer player : plugin.getDPlayerCache().getDInstancePlayers()) {
-            if (player.getWorld().equals(world)) {
-                players.add(player);
-            }
-        }
-        return players;
+    @Override
+    public Collection<InstancePlayer> getPlayers() {
+        return plugin.getPlayerCache().getAllInstancePlayersIf(p -> p.getInstanceWorld() == this);
     }
 
     /* Actions */
-    /**
-     * Sends a message to all players in the instance.
-     *
-     * @param message the message to send
-     */
+    @Override
     public void sendMessage(String message) {
-        for (DInstancePlayer dPlayer : dPlayers.getByInstance(this)) {
-            MessageUtil.sendMessage(dPlayer.getPlayer(), message);
-        }
+        getPlayers().forEach(p -> MessageUtil.sendMessage(p.getPlayer(), message));
     }
 
-    /**
-     * Makes all players leave the world. Attempts to let them leave properly if they are correct DInstancePlayers; teleports them to the spawn if they are not.
-     */
+    @Override
     public void kickAllPlayers() {
         getPlayers().forEach(p -> p.leave());
         // Players who shouldn't be in the dungeon but still are for some reason
@@ -160,13 +153,13 @@ public abstract class DInstanceWorld {
     /**
      * @param rules sets up the time and weather to match the rules
      */
-    public void setWeather(GameRuleProvider rules) {
+    public void setWeather(GameRuleContainer rules) {
         if (world == null) {
             return;
         }
 
-        if (rules.isThundering() != null) {
-            if (rules.isThundering()) {
+        if (rules.getState(GameRule.THUNDER) != null) {
+            if (rules.getState(GameRule.THUNDER)) {
                 world.setThundering(true);
                 world.setStorm(true);
                 world.setThunderDuration(Integer.MAX_VALUE);
@@ -176,16 +169,33 @@ public abstract class DInstanceWorld {
             }
         }
 
-        if (rules.getTime() != null) {
-            world.setTime(rules.getTime());
+        if (rules.getState(GameRule.TIME) != null) {
+            world.setTime(rules.getState(GameRule.TIME));
         }
     }
 
-    /* Abstracts */
     /**
-     * Deletes this instance.
+     * @param instanceCache the used instance cache
+     * @return an ID for the instance
      */
-    public abstract void delete();
+    public static int generateId(Registry<Integer, InstanceWorld> instanceCache) {
+        int id = 0;
+        for (InstanceWorld instance : instanceCache) {
+            if (instance.getId() >= id) {
+                id = instance.getId() + 1;
+            }
+        }
+        return id;
+    }
+
+    /**
+     * @return a name for the instance
+     * @param game whether the instance is a GameWorld
+     * @param id   the id to use
+     */
+    public static String generateName(boolean game, int id) {
+        return "DXL_" + (game ? "Game" : "Edit") + "_" + id;
+    }
 
     @Override
     public String toString() {

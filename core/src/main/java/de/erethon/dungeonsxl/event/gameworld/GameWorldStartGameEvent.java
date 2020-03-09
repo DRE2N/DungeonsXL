@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.event.gameworld;
 
-import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -29,9 +29,9 @@ public class GameWorldStartGameEvent extends GameWorldEvent implements Cancellab
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Game game;
+    private DGame game;
 
-    public GameWorldStartGameEvent(DGameWorld gameWorld, Game game) {
+    public GameWorldStartGameEvent(DGameWorld gameWorld, DGame game) {
         super(gameWorld);
         this.game = game;
     }
@@ -39,14 +39,14 @@ public class GameWorldStartGameEvent extends GameWorldEvent implements Cancellab
     /**
      * @return the game
      */
-    public Game getGame() {
+    public DGame getGame() {
         return game;
     }
 
     /**
      * @param game the game to set
      */
-    public void setGame(Game game) {
+    public void setGame(DGame game) {
         this.game = game;
     }
 

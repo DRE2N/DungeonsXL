@@ -18,8 +18,9 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -47,13 +48,13 @@ public class EnterCommand extends DCommand {
         Player captain = (Player) sender;
         String targetName = args.length == 3 ? args[2] : args[1];
 
-        DGroup joining = args.length == 3 ? DGroup.getByName(args[1]) : DGroup.getByPlayer(captain);
-        DGroup target = DGroup.getByName(targetName);
+        PlayerGroup joining = args.length == 3 ? plugin.getPlayerGroupCache().get(args[1]) : plugin.getPlayerGroup(captain);
+        PlayerGroup target = plugin.getPlayerGroupCache().get(targetName);
 
         if (target == null) {
             Player targetPlayer = Bukkit.getPlayer(targetName);
             if (targetPlayer != null) {
-                target = DGroup.getByPlayer(targetPlayer);
+                target = plugin.getPlayerGroup(targetPlayer);
             }
         }
 
@@ -62,13 +63,13 @@ public class EnterCommand extends DCommand {
             return;
         }
 
-        Game game = Game.getByDGroup(target);
+        Game game = target.getGame();
         if (game == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_IN_GAME.getMessage(targetName));
             return;
         }
 
-        if (Game.getByDGroup(joining) != null) {
+        if (joining.getGame() != null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_GAME.getMessage());
             return;
         }
@@ -77,17 +78,17 @@ public class EnterCommand extends DCommand {
             joining = new DGroup(plugin, captain, game.getDungeon());
         }
 
-        if (joining.getCaptain() != captain && !DPermission.hasPermission(sender, DPermission.BYPASS)) {
+        if (joining.getLeader() != captain && !DPermission.hasPermission(sender, DPermission.BYPASS)) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_LEADER.getMessage());
             return;
         }
 
         joining.setGameWorld(game.getWorld());
-        game.addDGroup(joining);
+        game.addGroup(joining);
         joining.sendMessage(DMessage.CMD_ENTER_SUCCESS.getMessage(joining.getName(), target.getName()));
 
-        for (Player player : joining.getPlayers().getOnlinePlayers()) {
-            new DGamePlayer(plugin, player, game.getWorld(), game.getType());
+        for (Player player : joining.getMembers().getOnlinePlayers()) {
+            new DGamePlayer(plugin, player, game.getWorld());
         }
     }
 

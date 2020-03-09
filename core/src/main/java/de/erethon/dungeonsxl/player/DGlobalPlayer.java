@@ -19,15 +19,16 @@ package de.erethon.dungeonsxl.player;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.player.PlayerUtil;
-import de.erethon.commons.player.PlayerWrapper;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.util.NBTUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
@@ -40,11 +41,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Represents a player in the non-DXL worlds of the server.
- *
  * @author Daniel Saukel
  */
-public class DGlobalPlayer implements PlayerWrapper {
+public class DGlobalPlayer implements GlobalPlayer {
 
     protected DungeonsXL plugin;
 
@@ -77,7 +76,7 @@ public class DGlobalPlayer implements PlayerWrapper {
             reset(false);
         }
 
-        plugin.getDPlayerCache().addPlayer(this);
+        plugin.getPlayerCache().add(player, this);
     }
 
     public DGlobalPlayer(DGlobalPlayer dPlayer) {
@@ -89,7 +88,7 @@ public class DGlobalPlayer implements PlayerWrapper {
         creatingPortal = dPlayer.getPortal();
         announcerEnabled = dPlayer.isAnnouncerEnabled();
 
-        plugin.getDPlayerCache().addPlayer(this);
+        plugin.getPlayerCache().add(player, this);
     }
 
     /* Getters and setters */
@@ -109,6 +108,8 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * Returns the saved data.
+     *
      * @return the saved data
      */
     public DPlayerData getData() {
@@ -116,7 +117,7 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
-     * Load / reload a new instance of DPlayerData
+     * Load / reload a new instance of DPlayerData.
      *
      * @param file the file to load from
      */
@@ -124,30 +125,12 @@ public class DGlobalPlayer implements PlayerWrapper {
         data = new DPlayerData(file);
     }
 
-    /**
-     * @return if the player is in break mode
-     */
-    public boolean isInBreakMode() {
-        return breakMode;
+    @Override
+    public PlayerGroup getGroup() {
+        return plugin.getPlayerGroup(player);
     }
 
-    /**
-     * @param breakMode sets if the player is in break mode
-     */
-    public void setInBreakMode(boolean breakMode) {
-        this.breakMode = breakMode;
-    }
-
-    /**
-     * @return the DGroup of this player
-     */
-    public DGroup getDGroup() {
-        return DGroup.getByPlayer(player);
-    }
-
-    /**
-     * @return if the player is in group chat
-     */
+    @Override
     public boolean isInGroupChat() {
         if (!plugin.getMainConfig().isChatEnabled()) {
             return false;
@@ -155,16 +138,12 @@ public class DGlobalPlayer implements PlayerWrapper {
         return groupChat;
     }
 
-    /**
-     * @param groupChat set if the player is in group chat
-     */
+    @Override
     public void setInGroupChat(boolean groupChat) {
         this.groupChat = groupChat;
     }
 
-    /**
-     * @return if the player spies the DXL chat channels
-     */
+    @Override
     public boolean isInChatSpyMode() {
         if (!plugin.getMainConfig().isChatEnabled()) {
             return false;
@@ -172,14 +151,24 @@ public class DGlobalPlayer implements PlayerWrapper {
         return chatSpyMode;
     }
 
-    /**
-     * @param chatSpyMode sets if the player is in chat spy mode
-     */
+    @Override
     public void setInChatSpyMode(boolean chatSpyMode) {
         this.chatSpyMode = chatSpyMode;
     }
 
+    @Override
+    public boolean isInBreakMode() {
+        return breakMode;
+    }
+
+    @Override
+    public void setInBreakMode(boolean breakMode) {
+        this.breakMode = breakMode;
+    }
+
     /**
+     * Returns if the player is creating a DPortal.
+     *
      * @return if the player is creating a DPortal
      */
     public boolean isCreatingPortal() {
@@ -187,6 +176,8 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * Returns the portal the player is creating.
+     *
      * @return the portal the player is creating
      */
     public DPortal getPortal() {
@@ -194,6 +185,8 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * Sets the portal the player is creating.
+     *
      * @param dPortal the portal to create
      */
     public void setCreatingPortal(DPortal dPortal) {
@@ -201,6 +194,8 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * Returns the item the player had in his hand before he started to create a portal.
+     *
      * @return the item the player had in his hand before he started to create a portal
      */
     public ItemStack getCachedItem() {
@@ -208,6 +203,8 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * Sets the cached item.
+     *
      * @param item the cached item to set
      */
     public void setCachedItem(ItemStack item) {
@@ -215,6 +212,8 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * Returns if the player has announcers enabled.
+     *
      * @return if the players receives announcer messages
      */
     public boolean isAnnouncerEnabled() {
@@ -222,64 +221,45 @@ public class DGlobalPlayer implements PlayerWrapper {
     }
 
     /**
+     * Sets if the player has announcers enabled.
+     *
      * @param enabled set if the players receives announcer messages
      */
     public void setAnnouncerEnabled(boolean enabled) {
         announcerEnabled = enabled;
     }
 
-    /**
-     * @param permission the permission to check
-     * @return if the player has the permission
-     */
-    public boolean hasPermission(DPermission permission) {
-        return DPermission.hasPermission(player, permission);
-    }
-
-    /**
-     * @return the reward items
-     */
+    @Override
     public List<ItemStack> getRewardItems() {
         return rewardItems;
     }
 
-    /**
-     * @return if the player has reward items left
-     */
+    @Override
     public boolean hasRewardItemsLeft() {
         return rewardItems != null;
     }
 
-    /**
-     * @param rewardItems the reward items to set
-     */
+    @Override
     public void setRewardItems(List<ItemStack> rewardItems) {
         this.rewardItems = rewardItems;
     }
 
-    /**
-     * @param permission the permission to check
-     * @return if the player has the permission
-     */
+    @Override
     public boolean hasPermission(String permission) {
         return DPermission.hasPermission(player, permission);
     }
 
+    public boolean hasPermission(DPermission permission) {
+        return DPermission.hasPermission(player, permission);
+    }
+
     /* Actions */
-    /**
-     * Sends a message to the player
-     *
-     * @param message the message to send
-     */
+    @Override
     public void sendMessage(String message) {
         MessageUtil.sendMessage(player, message);
     }
 
-    /**
-     * Respawns the player at his old position before he was in a dungeon
-     *
-     * @param keepInventory if the inventory shall be reset
-     */
+    @Override
     public void reset(boolean keepInventory) {
         final Location tpLoc = data.getOldLocation().getWorld() != null ? data.getOldLocation() : Bukkit.getWorlds().get(0).getSpawnLocation();
         if (player.isDead()) {
@@ -295,7 +275,8 @@ public class DGlobalPlayer implements PlayerWrapper {
         }
     }
 
-    private void reset(Location tpLoc, boolean keepInventory) {
+    @Override
+    public void reset(Location tpLoc, boolean keepInventory) {
         try {
             PlayerUtil.secureTeleport(player, tpLoc);
             player.setGameMode(data.getOldGameMode());
@@ -380,9 +361,9 @@ public class DGlobalPlayer implements PlayerWrapper {
         }
 
         // The maxInstances check is already done in the listener
-        DGameWorld gameWorld = dungeon.getMap().instantiateAsGameWorld(true);
+        GameWorld gameWorld = dungeon.getMap().instantiateGameWorld(true);
         dGroup.setGameWorld(gameWorld);
-        new Game(plugin, dGroup, gameWorld).setTutorial(true);
+        new DGame(plugin, dGroup, gameWorld).setTutorial(true);
         new DGamePlayer(plugin, player, gameWorld);
     }
 

@@ -21,6 +21,7 @@ import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -280,6 +281,15 @@ public interface PlayerGroup {
      * Removes all invitations for players who are not online.
      */
     void clearOfflineInvitedPlayers();
+
+    /**
+     * Returns the game of the game world the group is in.
+     *
+     * @return the game of the game world the group is in.
+     */
+    default Game getGame() {
+        return getGameWorld() != null ? getGameWorld().getGame() : null;
+    }
 
     /**
      * Returns the game world the group is in.

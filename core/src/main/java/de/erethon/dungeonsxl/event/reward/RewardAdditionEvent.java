@@ -16,8 +16,8 @@
  */
 package de.erethon.dungeonsxl.event.reward;
 
+import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.reward.Reward;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 

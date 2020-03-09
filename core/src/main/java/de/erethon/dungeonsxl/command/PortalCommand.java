@@ -49,7 +49,7 @@ public class PortalCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dGlobalPlayer = dPlayers.getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = (DGlobalPlayer) dPlayers.get(player);
 
         if (dGlobalPlayer instanceof DGamePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());

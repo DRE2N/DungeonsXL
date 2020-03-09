@@ -19,9 +19,22 @@ package de.erethon.dungeonsxl.player;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Requirement;
+import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
+import de.erethon.dungeonsxl.api.player.PlayerCache;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import de.erethon.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
@@ -30,14 +43,10 @@ import de.erethon.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
 import de.erethon.dungeonsxl.event.requirement.RequirementDemandEvent;
 import de.erethon.dungeonsxl.event.reward.RewardAdditionEvent;
-import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.game.GameRuleProvider;
-import de.erethon.dungeonsxl.requirement.Requirement;
-import de.erethon.dungeonsxl.reward.Reward;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -49,14 +58,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
- * Represents a group of players.
- *
  * @author Frank Baumann, Daniel Saukel
  */
-public class DGroup {
+public class DGroup implements PlayerGroup {
 
-    DungeonsXL plugin;
-    DPlayerCache dPlayers;
+    private DungeonsXL plugin;
+    private PlayerCache dPlayers;
 
     private static int counter;
 
@@ -66,13 +73,13 @@ public class DGroup {
     private PlayerCollection players = new PlayerCollection();
     private PlayerCollection invitedPlayers = new PlayerCollection();
     private Dungeon dungeon;
-    private List<DResourceWorld> unplayedFloors = new ArrayList<>();
-    private DGameWorld gameWorld;
+    private List<ResourceWorld> unplayedFloors = new ArrayList<>();
+    private GameWorld gameWorld;
     private boolean playing;
     private int floorCount;
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
-    private DResourceWorld nextFloor;
+    private ResourceWorld nextFloor;
     private Color color;
     private int score = 0;
     private int initialLives = -1;
@@ -88,12 +95,12 @@ public class DGroup {
 
     public DGroup(DungeonsXL plugin, String name, Player player) {
         this.plugin = plugin;
-        dPlayers = plugin.getDPlayerCache();
+        dPlayers = plugin.getPlayerCache();
 
-        plugin.getDGroupCache().add(this);
+        plugin.getPlayerGroupCache().add(name, this);
         this.name = name;
 
-        setCaptain(player);
+        setLeader(player);
         addPlayer(player);
 
         playing = false;
@@ -110,14 +117,14 @@ public class DGroup {
         this(plugin, name, player, new ArrayList<Player>(), dungeon);
     }
 
-    public DGroup(DungeonsXL plugin, String name, Player captain, List<Player> players, Dungeon dungeon) {
+    public DGroup(DungeonsXL plugin, String name, Player captain, Collection<Player> players, Dungeon dungeon) {
         this.plugin = plugin;
-        dPlayers = plugin.getDPlayerCache();
+        dPlayers = plugin.getPlayerCache();
 
-        plugin.getDGroupCache().add(this);
+        plugin.getPlayerGroupCache().add(name, this);
         this.name = name;
 
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(plugin.getDPlayerCache().getByPlayer(captain), true, this);
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent((DGlobalPlayer) dPlayers.get(captain), true, this);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
@@ -139,59 +146,38 @@ public class DGroup {
     }
 
     // Getters and setters
-    /**
-     * @return the group ID
-     */
+    @Override
     public int getId() {
         return id;
     }
 
-    /**
-     * @return the name; formatted
-     */
+    @Override
     public String getName() {
         return getDColor().getChatColor() + name;
     }
 
-    /**
-     * @return the name; not formatted
-     */
+    @Override
     public String getRawName() {
         return name;
     }
 
-    /**
-     * @param name the name to set
-     */
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * @param color the color to fetch the name from
-     */
-    public void setName(Color color) {
-        name = color.toString() + "#" + id;
-    }
-
-    /**
-     * @return the captain
-     */
-    public Player getCaptain() {
+    @Override
+    public Player getLeader() {
         return captain;
     }
 
-    /**
-     * @param captain the captain to set
-     */
-    public void setCaptain(Player captain) {
-        this.captain = captain;
+    @Override
+    public void setLeader(Player player) {
+        captain = player;
     }
 
-    /**
-     * @return the players
-     */
-    public PlayerCollection getPlayers() {
+    @Override
+    public PlayerCollection getMembers() {
         return players;
     }
 
@@ -201,18 +187,15 @@ public class DGroup {
     public Set<DGlobalPlayer> getDGlobalPlayers() {
         Set<DGlobalPlayer> players = new HashSet<>();
         for (UUID uuid : this.players) {
-            players.add(dPlayers.getByUniqueId(uuid));
+            players.add((DGlobalPlayer) dPlayers.get(uuid));
         }
         return players;
     }
 
-    /**
-     * @return the players as a Set&lt;DGamePlayer&gt;
-     */
     public Set<DGamePlayer> getDGamePlayers() {
         Set<DGamePlayer> players = new HashSet<>();
         for (UUID uuid : this.players) {
-            DGlobalPlayer dPlayer = dPlayers.getByUniqueId(uuid);
+            GlobalPlayer dPlayer = dPlayers.get(uuid);
             if (dPlayer instanceof DGamePlayer) {
                 players.add((DGamePlayer) dPlayer);
             }
@@ -220,21 +203,9 @@ public class DGroup {
         return players;
     }
 
-    /**
-     * Sends messages by default.
-     *
-     * @param player the player to add
-     */
-    public void addPlayer(Player player) {
-        addPlayer(player, true);
-    }
-
-    /**
-     * @param player  the player to add
-     * @param message if messages should be sent
-     */
+    @Override
     public void addPlayer(Player player, boolean message) {
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent(DGamePlayer.getByPlayer(player), false, this);
+        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent((DGlobalPlayer) dPlayers.getGamePlayer(player), false, this);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
@@ -247,19 +218,12 @@ public class DGroup {
         }
     }
 
-    /**
-     * Sends messages by default.
-     *
-     * @param player the player to remove
-     */
+    @Override
     public void removePlayer(Player player) {
         removePlayer(player, true);
     }
 
-    /**
-     * @param player  the player to remove
-     * @param message if messages should be sent
-     */
+    @Override
     public void removePlayer(Player player, boolean message) {
         players.remove(player.getUniqueId());
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
@@ -278,54 +242,46 @@ public class DGroup {
         }
     }
 
-    /**
-     * @return the players
-     */
+    @Override
     public PlayerCollection getInvitedPlayers() {
         return invitedPlayers;
     }
 
-    /**
-     * @param player the player to add
-     * @param silent if messages shall be sent
-     */
+    @Override
     public void addInvitedPlayer(Player player, boolean silent) {
         if (player == null) {
             return;
         }
 
-        if (DGroup.getByPlayer(player) != null) {
+        if (plugin.getPlayerGroup(player) != null) {
             if (!silent) {
-                MessageUtil.sendMessage(getCaptain(), DMessage.ERROR_IN_GROUP.getMessage(player.getName()));
+                MessageUtil.sendMessage(getLeader(), DMessage.ERROR_IN_GROUP.getMessage(player.getName()));
             }
             return;
         }
 
         if (!silent) {
-            MessageUtil.sendMessage(player, DMessage.PLAYER_INVITED.getMessage(getCaptain().getName(), name));
+            MessageUtil.sendMessage(player, DMessage.PLAYER_INVITED.getMessage(getLeader().getName(), name));
         }
 
         // Send message
         if (!silent) {
-            sendMessage(DMessage.GROUP_INVITED_PLAYER.getMessage(getCaptain().getName(), player.getName(), name));
+            sendMessage(DMessage.GROUP_INVITED_PLAYER.getMessage(getLeader().getName(), player.getName(), name));
         }
 
         // Add player
         invitedPlayers.add(player.getUniqueId());
     }
 
-    /**
-     * @param player the player to remove
-     * @param silent if messages shall be sent
-     */
+    @Override
     public void removeInvitedPlayer(Player player, boolean silent) {
         if (player == null) {
             return;
         }
 
-        if (DGroup.getByPlayer(player) != this) {
+        if (plugin.getPlayerGroup(player) != this) {
             if (!silent) {
-                MessageUtil.sendMessage(getCaptain(), DMessage.ERROR_NOT_IN_GROUP.getMessage(player.getName(), name));
+                MessageUtil.sendMessage(getLeader(), DMessage.ERROR_NOT_IN_GROUP.getMessage(player.getName(), name));
             }
             return;
         }
@@ -337,16 +293,14 @@ public class DGroup {
         // Send message
         if (!silent) {
             for (Player groupPlayer : players.getOnlinePlayers()) {
-                MessageUtil.sendMessage(groupPlayer, DMessage.GROUP_UNINVITED_PLAYER.getMessage(getCaptain().getName(), player.getName(), name));
+                MessageUtil.sendMessage(groupPlayer, DMessage.GROUP_UNINVITED_PLAYER.getMessage(getLeader().getName(), player.getName(), name));
             }
         }
 
         invitedPlayers.remove(player.getUniqueId());
     }
 
-    /**
-     * Remove all invitations for players who are not online
-     */
+    @Override
     public void clearOfflineInvitedPlayers() {
         ArrayList<UUID> toRemove = new ArrayList<>();
         for (UUID uuid : invitedPlayers.getUniqueIds()) {
@@ -357,23 +311,17 @@ public class DGroup {
         invitedPlayers.removeAll(toRemove);
     }
 
-    /**
-     * @return the gameWorld
-     */
-    public DGameWorld getGameWorld() {
+    @Override
+    public GameWorld getGameWorld() {
         return gameWorld;
     }
 
-    /**
-     * @param gameWorld the gameWorld to set
-     */
-    public void setGameWorld(DGameWorld gameWorld) {
+    @Override
+    public void setGameWorld(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 
-    /**
-     * @return the dungeon
-     */
+    @Override
     public Dungeon getDungeon() {
         return dungeon;
     }
@@ -386,7 +334,7 @@ public class DGroup {
     public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
         if (dungeon.isMultiFloor()) {
-            unplayedFloors = new ArrayList<>(dungeon.getConfig().getFloors());
+            unplayedFloors = new ArrayList<>(dungeon.getFloors());
         }
     }
 
@@ -397,24 +345,21 @@ public class DGroup {
      * @return if the action was successful
      */
     public boolean setDungeon(String name) {
-        dungeon = plugin.getDungeonCache().getByName(name);
+        dungeon = plugin.getDungeonRegistry().get(name);
         if (dungeon != null) {
-            unplayedFloors = dungeon.getConfig().getFloors();
+            unplayedFloors = dungeon.getFloors();
             return true;
 
         } else {
-            DResourceWorld resource = plugin.getDWorldCache().getResourceByName(name);
+            ResourceWorld resource = plugin.getMapRegistry().get(name);
             if (resource != null) {
-                dungeon = new Dungeon(plugin, resource);
+                dungeon = resource.getSingleFloorDungeon();
                 return true;
             }
             return false;
         }
     }
 
-    /**
-     * @return the dungeonName
-     */
     public String getDungeonName() {
         if (dungeon == null) {
             return null;
@@ -422,17 +367,11 @@ public class DGroup {
         return dungeon.getName();
     }
 
-    /**
-     * @return if the group is playing
-     */
     public String getMapName() {
         return gameWorld == null ? null : gameWorld.getName();
     }
 
-    /**
-     * @return the unplayed floors
-     */
-    public List<DResourceWorld> getUnplayedFloors() {
+    public List<ResourceWorld> getUnplayedFloors() {
         return unplayedFloors;
     }
 
@@ -448,49 +387,34 @@ public class DGroup {
      * @param force         remove the floor even if removeWhenPlayed is disabled
      */
     public void removeUnplayedFloor(DResourceWorld unplayedFloor, boolean force) {
-        if (getDungeon().getConfig().getRemoveWhenPlayed() || force) {
+        if (getDungeon().getRemoveWhenPlayed() || force) {
             unplayedFloors.remove(unplayedFloor);
         }
     }
 
-    /**
-     * @return if the group is playing
-     */
+    @Override
     public boolean isPlaying() {
         return playing;
     }
 
-    /**
-     * @param playing set if the group is playing
-     */
     public void setPlaying(boolean playing) {
         this.playing = playing;
     }
 
-    /**
-     * @return the floorCount
-     */
     public int getFloorCount() {
         return floorCount;
     }
 
-    /**
-     * @param floorCount the floorCount to set
-     */
     public void setFloorCount(int floorCount) {
         this.floorCount = floorCount;
     }
 
-    /**
-     * @return the rewards
-     */
+    @Override
     public List<Reward> getRewards() {
         return rewards;
     }
 
-    /**
-     * @param reward the rewards to add
-     */
+    @Override
     public void addReward(Reward reward) {
         RewardAdditionEvent event = new RewardAdditionEvent(reward, this);
         Bukkit.getPluginManager().callEvent(event);
@@ -502,56 +426,38 @@ public class DGroup {
         rewards.add(reward);
     }
 
-    /**
-     * @param reward the rewards to remove
-     */
+    @Override
     public void removeReward(Reward reward) {
         rewards.remove(reward);
     }
 
-    /**
-     * @return the "Time is Running" task of the game
-     */
     public BukkitTask getTimeIsRunningTask() {
         return timeIsRunningTask;
     }
 
-    /**
-     * @param task the task to set
-     */
     public void setTimeIsRunningTask(BukkitTask task) {
         this.timeIsRunningTask = task;
     }
 
-    /**
-     * @return whether there are players in the group
-     */
     public boolean isEmpty() {
         return players.size() == 0;
     }
 
-    /**
-     * @return if the group has been customized with a command
-     */
     public boolean isCustom() {
         return !name.matches("Group#[0-9]{1,}");
     }
 
-    /**
-     * @return the next floor the group will enter
-     */
-    public DResourceWorld getNextFloor() {
+    public ResourceWorld getNextFloor() {
         return nextFloor;
     }
 
-    /**
-     * @param floor the next floor to set
-     */
     public void setNextFloor(DResourceWorld floor) {
         nextFloor = floor;
     }
 
     /**
+     * Returns the color that represents this group.
+     *
      * @return the color that represents this group
      */
     public Color getDColor() {
@@ -563,60 +469,48 @@ public class DGroup {
     }
 
     /**
+     * Sets the color that represents this group.
+     *
      * @param color the group color to set
      */
     public void setDColor(Color color) {
         this.color = color;
     }
 
-    /**
-     * @return the current score
-     */
+    @Override
     public int getScore() {
         return score;
     }
 
-    /**
-     * @param score the score to set
-     */
+    @Override
     public void setScore(int score) {
         this.score = score;
     }
 
-    /**
-     * @return the initial group lives
-     */
+    @Override
     public int getInitialLives() {
         return initialLives;
     }
 
-    /**
-     * @param initialLives the initial group lives to set
-     */
+    @Override
     public void setInitialLives(int initialLives) {
         this.initialLives = initialLives;
     }
 
-    /**
-     * @return the group lives
-     */
+    @Override
     public int getLives() {
         return lives;
     }
 
-    /**
-     * @param lives the group lives to set
-     */
+    @Override
     public void setLives(int lives) {
         this.lives = lives;
     }
 
-    /**
-     * @return true if all players are finished
-     */
+    @Override
     public boolean isFinished() {
-        for (DGamePlayer dPlayer : getDGamePlayers()) {
-            if (!dPlayer.isFinished()) {
+        for (DGamePlayer player : getDGamePlayers()) {
+            if (!player.isFinished()) {
                 return false;
             }
         }
@@ -630,8 +524,8 @@ public class DGroup {
             return false;
         }
 
-        DGameWorld target = dungeon.getMap().instantiateAsGameWorld(false);
-        Game game = Game.getByDGroup(this);
+        GameWorld target = dungeon.getMap().instantiateGameWorld(false);
+        Game game = getGame();
 
         if (target == null && game != null) {
             target = game.getWorld();
@@ -639,7 +533,7 @@ public class DGroup {
 
         if (target == null) {
             if (game != null) {
-                for (DGroup otherTeam : game.getDGroups()) {
+                for (PlayerGroup otherTeam : game.getGroups()) {
                     if (otherTeam.getGameWorld() != null) {
                         target = otherTeam.getGameWorld();
                         break;
@@ -649,9 +543,9 @@ public class DGroup {
         }
 
         if (target == null && dungeon != null) {
-            DResourceWorld resource = dungeon.getMap();
+            ResourceWorld resource = dungeon.getMap();
             if (resource != null) {
-                target = resource.instantiateAsGameWorld(false);
+                target = resource.instantiateGameWorld(false);
                 if (target == null) {
                     sendMessage(DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
                     return false;
@@ -666,7 +560,7 @@ public class DGroup {
         }
 
         if (game == null) {
-            game = new Game(plugin, this, target);
+            game = new DGame(plugin, this, target);
 
         } else {
             game.setWorld(target);
@@ -687,13 +581,13 @@ public class DGroup {
      * The group finishs the dungeon.
      */
     public void finish() {
-        DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent(dungeon, this);
+        DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent((DDungeon) dungeon, this);
         Bukkit.getPluginManager().callEvent(dGroupFinishDungeonEvent);
         if (dGroupFinishDungeonEvent.isCancelled()) {
             return;
         }
 
-        Game.getByDGroup(this).resetWaveKills();
+        ((DGame) getGame()).resetWaveKills();
         getDGamePlayers().forEach(p -> p.leave(false));
     }
 
@@ -703,65 +597,63 @@ public class DGroup {
      * @param specifiedFloor the name of the next floor
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
-        DungeonConfig dConfig = dungeon.getConfig();
+        DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
         int floorsLeft = getDungeon().getFloors().size() + 1 - floorCount;//floorCount contains start floor, but dungeon floor list doesn't
-        DResourceWorld newFloor = null;
-        DGameWorld.Type type = null;
-        if (gameWorld.getType() == DGameWorld.Type.END_FLOOR) {
+        ResourceWorld newFloor = null;
+        GameWorld.Type type = null;
+        if (gameWorld.getType() == GameWorld.Type.END_FLOOR) {
             finish();
             return;
         } else if (specifiedFloor != null) {
             newFloor = specifiedFloor;
-            type = DGameWorld.Type.DEFAULT;
+            type = GameWorld.Type.DEFAULT;
         } else if (floorsLeft > 0) {
             int random = new Random().nextInt(floorsLeft);
             newFloor = getUnplayedFloors().get(random);
-            type = DGameWorld.Type.DEFAULT;
+            type = GameWorld.Type.DEFAULT;
         } else {
             newFloor = dConfig.getEndFloor();
-            type = DGameWorld.Type.END_FLOOR;
+            type = GameWorld.Type.END_FLOOR;
         }
 
-        DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(this, gameWorld, newFloor);
+        DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(this, (DGameWorld) gameWorld, (DResourceWorld) newFloor);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
 
-        Game game = gameWorld.getGame();
-        removeUnplayedFloor(gameWorld.getResource(), false);
-        DGameWorld gameWorld = newFloor.instantiateAsGameWorld(true);
+        Game game = getGame();
+        removeUnplayedFloor((DResourceWorld) gameWorld.getResource(), false);
+        GameWorld gameWorld = newFloor.instantiateGameWorld(true);
         gameWorld.setType(type);
         this.gameWorld = gameWorld;
         game.setWorld(gameWorld);
 
         for (DGamePlayer player : getDGamePlayers()) {
             player.setWorld(gameWorld.getWorld());
-            player.setCheckpoint(gameWorld.getStartLocation(this));
+            player.setLastCheckpoint(gameWorld.getStartLocation(this));
             if (player.getWolf() != null) {
-                player.getWolf().teleport(player.getCheckpoint());
+                player.getWolf().teleport(player.getLastCheckpoint());
             }
             player.setFinished(false);
         }
         startGame(game);
     }
 
-    /**
-     * Remove the group from the List
-     */
+    @Override
     public void delete() {
-        Game game = Game.getByDGroup(this);
+        Game game = getGame();
 
-        plugin.getDGroupCache().remove(this);
+        plugin.getPlayerGroupCache().remove(this);
 
         if (game != null) {
-            game.removeDGroup(this);
+            game.removeGroup(this);
         }
 
         for (UUID uuid : players.getUniqueIds()) {
-            DGlobalPlayer member = dPlayers.getByUniqueId(uuid);
-            if (member instanceof DInstancePlayer) {
-                ((DInstancePlayer) member).leave();
+            GlobalPlayer member = dPlayers.get(uuid);
+            if (member instanceof InstancePlayer) {
+                ((InstancePlayer) member).leave();
             }
         }
 
@@ -776,26 +668,26 @@ public class DGroup {
         if (game == null) {
             return false;
         }
-        game.fetchRules();
-        GameRuleProvider rules = game.getRules();
-        gameWorld.setWeather(rules);
+        GameRuleContainer rules = game.getRules();
+        ((DGameWorld) gameWorld).setWeather(rules);
 
         if (color == null) {
-            color = plugin.getMainConfig().getGroupColorPriority((game.getDGroups().indexOf(this)));
+            color = plugin.getMainConfig().getGroupColorPriority((game.getGroups().indexOf(this)));
         }
 
-        for (DGroup dGroup : game.getDGroups()) {
+        for (PlayerGroup group : game.getGroups()) {
+            DGroup dGroup = (DGroup) group;
             if (dGroup == null) {
                 continue;
             }
 
             boolean ready = true;
-            for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
-                DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+            for (Player player : dGroup.getMembers().getOnlinePlayers()) {
+                DGamePlayer dPlayer = (DGamePlayer) dPlayers.get(player);
                 if (dPlayer == null) {
                     dPlayer = new DGamePlayer(plugin, player, gameWorld);
                 }
-                if (rules.isGroupTagEnabled()) {
+                if (rules.getState(GameRule.GROUP_TAG_ENABLED)) {
                     dPlayer.initDGroupTag();
                 }
                 if (!dPlayer.isReady()) {
@@ -808,7 +700,7 @@ public class DGroup {
             }
         }
 
-        DGroupStartFloorEvent event = new DGroupStartFloorEvent(this, gameWorld);
+        DGroupStartFloorEvent event = new DGroupStartFloorEvent(this, (DGameWorld) gameWorld);
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
@@ -819,28 +711,29 @@ public class DGroup {
 
         if (gameWorld != null) {
             if (!gameWorld.isPlaying()) {
-                gameWorld.startGame();
+                ((DGameWorld) gameWorld).startGame();
             }
         }
 
         floorCount++;
 
         for (Player player : players.getOnlinePlayers()) {
-            DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+            DGamePlayer dPlayer = (DGamePlayer) dPlayers.getGamePlayer(player);
             if (dPlayer == null) {
                 continue;
             }
             dPlayer.getData().logTimeLastStarted(getDungeonName());
-            dPlayer.getData().setKeepInventoryAfterLogout(rules.getKeepInventoryOnEscape());
+            dPlayer.getData().setKeepInventoryAfterLogout(rules.getState(GameRule.KEEP_INVENTORY_ON_ESCAPE));
 
             dPlayer.respawn();
 
             if (plugin.getMainConfig().isSendFloorTitleEnabled()) {
-                if (rules.getTitle() != null || rules.getSubTitle() != null) {
-                    String title = rules.getTitle() == null ? "" : rules.getTitle();
-                    String subtitle = rules.getSubTitle() == null ? "" : rules.getSubTitle();
+                if (rules.getState(GameRule.TITLE) != null || rules.getState(GameRule.SUBTITLE) != null) {
+                    String title = rules.getState(GameRule.TITLE) == null ? "" : rules.getState(GameRule.TITLE);
+                    String subtitle = rules.getState(GameRule.SUBTITLE) == null ? "" : rules.getState(GameRule.SUBTITLE);
 
-                    MessageUtil.sendTitleMessage(player, title, subtitle, rules.getTitleFadeIn(), rules.getTitleShow(), rules.getTitleFadeOut());
+                    MessageUtil.sendTitleMessage(player, title, subtitle,
+                            rules.getState(GameRule.TITLE_FADE_IN), rules.getState(GameRule.TITLE_SHOW), rules.getState(GameRule.TITLE_FADE_OUT));
 
                 } else if (!getDungeonName().equals(getMapName())) {
                     MessageUtil.sendTitleMessage(player, "&b&l" + getDungeonName().replaceAll("_", " "), "&4&l" + getMapName().replaceAll("_", " "));
@@ -849,16 +742,16 @@ public class DGroup {
                     MessageUtil.sendTitleMessage(player, "&4&l" + getMapName().replaceAll("_", " "));
                 }
 
-                if (rules.getActionBar() != null) {
-                    MessageUtil.sendActionBarMessage(player, rules.getActionBar());
+                if (rules.getState(GameRule.ACTION_BAR) != null) {
+                    MessageUtil.sendActionBarMessage(player, rules.getState(GameRule.ACTION_BAR));
                 }
 
-                if (rules.getChatText() != null) {
-                    MessageUtil.sendCenteredMessage(player, rules.getChatText());
+                if (rules.getState(GameRule.CHAT) != null) {
+                    MessageUtil.sendCenteredMessage(player, rules.getState(GameRule.CHAT));
                 }
             }
 
-            for (Requirement requirement : rules.getRequirements()) {
+            for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
                 RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
                 Bukkit.getPluginManager().callEvent(event);
 
@@ -871,14 +764,14 @@ public class DGroup {
                 }
             }
 
-            player.setGameMode(rules.getGameMode());
-            if (rules.isTimeIsRunning()) {
-                timeIsRunningTask = new TimeIsRunningTask(this, rules.getTimeToFinish()).runTaskTimer(plugin, 20, 20);
+            player.setGameMode(rules.getState(GameRule.GAME_MODE));
+            if (rules.getState(GameRule.TIME_TO_FINISH) != -1) {
+                timeIsRunningTask = new TimeIsRunningTask(plugin, this, rules.getState(GameRule.TIME_TO_FINISH)).runTaskTimer(plugin, 20, 20);
             }
 
             // Permission bridge
             if (plugin.getPermissionProvider() != null) {
-                for (String permission : rules.getGamePermissions()) {
+                for (String permission : rules.getState(GameRule.GAME_PERMISSIONS)) {
                     plugin.getPermissionProvider().playerRemoveTransient(gameWorld.getWorld().getName(), player, permission);
                 }
             }
@@ -886,7 +779,7 @@ public class DGroup {
 
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
         nextFloor = null;
-        initialLives = rules.getInitialGroupLives();
+        initialLives = rules.getState(GameRule.INITIAL_GROUP_LIVES);
         lives = initialLives;
         return true;
     }
@@ -900,13 +793,13 @@ public class DGroup {
         }
     }
 
-    public boolean checkTime(Game game) {
-        if (DPermission.hasPermission(getCaptain(), DPermission.IGNORE_TIME_LIMIT)) {
+    public boolean checkTime() {
+        if (DPermission.hasPermission(getLeader(), DPermission.IGNORE_TIME_LIMIT)) {
             return true;
         }
 
         for (DGamePlayer dPlayer : getDGamePlayers()) {
-            if (!dPlayer.checkTimeAfterStart(game) || !dPlayer.checkTimeAfterFinish(game)) {
+            if (!dPlayer.checkTimeAfterStart(dungeon) || !dPlayer.checkTimeAfterFinish(dungeon)) {
                 return false;
             }
         }
@@ -914,13 +807,13 @@ public class DGroup {
         return true;
     }
 
-    public boolean checkRequirements(Game game) {
-        if (DPermission.hasPermission(getCaptain(), DPermission.IGNORE_REQUIREMENTS)) {
+    public boolean checkRequirements() {
+        if (DPermission.hasPermission(getLeader(), DPermission.IGNORE_REQUIREMENTS)) {
             return true;
         }
 
         for (DGamePlayer dPlayer : getDGamePlayers()) {
-            if (!dPlayer.checkRequirements(game)) {
+            if (!dPlayer.checkRequirements(dungeon)) {
                 return false;
             }
         }
@@ -939,65 +832,6 @@ public class DGroup {
                 MessageUtil.sendMessage(player, message);
             }
         }
-    }
-
-    /**
-     * Sends a message to all players in the group.
-     *
-     * @param message the message to sent
-     * @param except  Players who shall not receive the message
-     */
-    public void sendMessage(String message, Player... except) {
-        HashSet<Player> exceptSet = new HashSet<>(Arrays.asList(except));
-        for (Player player : players.getOnlinePlayers()) {
-            if (player.isOnline() && !exceptSet.contains(player)) {
-                MessageUtil.sendMessage(player, message);
-            }
-        }
-    }
-
-    /* Statics */
-    public static DGroup getByName(String name) {
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
-            if (dGroup.getName().equalsIgnoreCase(name) || dGroup.getRawName().equalsIgnoreCase(name)) {
-                return dGroup;
-            }
-        }
-
-        return null;
-    }
-
-    public static DGroup getByPlayer(Player player) {
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
-            if (dGroup.getPlayers().contains(player)) {
-                return dGroup;
-            }
-        }
-
-        return null;
-    }
-
-    public static void leaveGroup(Player player) {
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
-            if (dGroup.getPlayers().contains(player)) {
-                dGroup.getPlayers().remove(player);
-            }
-        }
-    }
-
-    /**
-     * @param gameWorld the DGameWorld to check
-     * @return a List of DGroups in this DGameWorld
-     */
-    public static List<DGroup> getByGameWorld(DGameWorld gameWorld) {
-        List<DGroup> dGroups = new ArrayList<>();
-        for (DGroup dGroup : DungeonsXL.getInstance().getDGroupCache()) {
-            if (dGroup.getGameWorld().equals(gameWorld)) {
-                dGroups.add(dGroup);
-            }
-        }
-
-        return dGroups;
     }
 
     @Override
