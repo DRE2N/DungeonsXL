@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.player.DGroup;
 import org.bukkit.block.Block;
 
@@ -27,8 +27,8 @@ public abstract class TeamBlock extends GameBlock {
 
     protected DGroup owner;
 
-    public TeamBlock(DungeonsXL plugin, Block block, DGroup owner) {
-        super(plugin, block);
+    public TeamBlock(DungeonsAPI api, Block block, DGroup owner) {
+        super(api, block);
         this.owner = owner;
     }
 

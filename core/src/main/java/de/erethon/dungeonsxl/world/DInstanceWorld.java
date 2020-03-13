@@ -20,6 +20,7 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.Registry;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
@@ -27,6 +28,8 @@ import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +37,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 
 /**
  * @author Daniel Saukel
@@ -103,8 +107,20 @@ public abstract class DInstanceWorld implements InstanceWorld {
     }
 
     @Override
-    public void addDungeonSign(DungeonSign sign) {
-        signs.put(sign.getSign().getBlock(), sign);
+    public DungeonSign createDungeonSign(Sign sign, String[] lines) {
+        String type = lines[0].substring(1, lines[0].length() - 2);
+        try {
+            Class<? extends DungeonSign> clss = plugin.getSignRegistry().get(type);
+            Constructor constructor = clss.getConstructor(DungeonsAPI.class, Sign.class, String[].class, InstanceWorld.class);
+            DungeonSign dSign = (DungeonSign) constructor.newInstance(plugin, sign, lines, this);
+            signs.put(sign.getBlock(), dSign);
+            return dSign;
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException exception) {
+            MessageUtil.log(plugin, "&4Could not create a dungeon sign of the type \"" + type
+                    + "\". A dungeon sign implementation needs a constructor with the types (DungeonsAPI, org.bukkit.block.Sign, String[], InstanceWorld).");
+            return null;
+        }
     }
 
     @Override

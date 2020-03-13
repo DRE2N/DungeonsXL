@@ -18,36 +18,26 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import org.bukkit.Location;
-import org.bukkit.block.Sign;
 
 /**
  * @author Daniel Saukel
  */
-public abstract class LocationSign extends DSign {
-
-    protected Location location;
-
-    public LocationSign(DungeonsXL plugin, Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(plugin, sign, lines, gameWorld);
-    }
+public interface LocationSign extends DungeonSign {
 
     @Override
-    public void onInit() {
+    default void initialize() {
         double x = getSign().getX() + 0.5;
         double y = getSign().getY();
         double z = getSign().getZ() + 0.5;
         float yaw = BlockUtil.blockFaceToYaw(DungeonsXL.BLOCK_ADAPTER.getFacing(getSign().getBlock()).getOppositeFace());
         float pitch = 0;
-        location = new Location(getGameWorld().getWorld(), x, y, z, yaw, pitch);
+        setLocation(new Location(getGameWorld().getWorld(), x, y, z, yaw, pitch));
     }
 
-    /**
-     * @return the location marked by this sign
-     */
-    public Location getLocation() {
-        return location;
-    }
+    Location getLocation();
+
+    void setLocation(Location location);
 
 }

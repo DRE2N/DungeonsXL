@@ -29,6 +29,8 @@ public interface BlockAdapter {
 
     void openDoor(Block block);
 
+    void closeDoor(Block block);
+
     void setBlockWoolColor(Block block, Color color);
 
     BlockFace getFacing(Block block);

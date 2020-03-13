@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.reward;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.config.DMessage;
 import net.milkbowl.vault.economy.Economy;
@@ -32,8 +31,8 @@ public class MoneyReward implements Reward {
 
     private double money;
 
-    public MoneyReward(DungeonsXL plugin) {
-        econ = plugin.getEconomyProvider();
+    public MoneyReward(Economy econ) {
+        this.econ = econ;
     }
 
     /**

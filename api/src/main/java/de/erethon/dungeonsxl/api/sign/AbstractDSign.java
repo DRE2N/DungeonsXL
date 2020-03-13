@@ -18,7 +18,9 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Trigger;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
@@ -39,16 +41,16 @@ public abstract class AbstractDSign implements DungeonSign {
     protected DungeonsAPI api;
     private Sign sign;
     private String[] lines;
-    private GameWorld gameWorld;
+    private InstanceWorld instance;
     private Set<Trigger> triggers = new HashSet<>();
     private boolean initialized;
     private boolean erroneous;
 
-    protected AbstractDSign(DungeonsAPI api, Sign sign, String[] lines, GameWorld gameWorld) {
+    protected AbstractDSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         this.api = api;
         this.sign = sign;
         this.lines = lines;
-        this.gameWorld = gameWorld;
+        this.instance = instance;
     }
 
     @Override
@@ -62,8 +64,13 @@ public abstract class AbstractDSign implements DungeonSign {
     }
 
     @Override
+    public EditWorld getEditWorld() {
+        return instance instanceof EditWorld ? (EditWorld) instance : null;
+    }
+
+    @Override
     public GameWorld getGameWorld() {
-        return gameWorld;
+        return instance instanceof GameWorld ? (GameWorld) instance : null;
     }
 
     @Override

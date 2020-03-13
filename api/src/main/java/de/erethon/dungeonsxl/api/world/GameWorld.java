@@ -16,7 +16,6 @@ package de.erethon.dungeonsxl.api.world;
 
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
-import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import java.util.Collection;
@@ -104,5 +103,19 @@ public interface GameWorld extends InstanceWorld {
      * @return the start location of the world
      */
     Location getStartLocation(PlayerGroup group);
+
+    /**
+     * Returns if it is required to choose a class in order to start the game.
+     *
+     * @return if it is required to choose a class in order to start the game
+     */
+    boolean areClassesEnabled();
+
+    /**
+     * Sets if it is required to choose a class in order to start the game.
+     *
+     * @param enabled if it is required to choose a class in order to start the game
+     */
+    void setClassesEnabled(boolean enabled);
 
 }

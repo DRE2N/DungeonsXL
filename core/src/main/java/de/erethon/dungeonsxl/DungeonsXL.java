@@ -16,6 +16,9 @@
  */
 package de.erethon.dungeonsxl;
 
+import de.erethon.dungeonsxl.sign.rocker.TriggerSign;
+import de.erethon.dungeonsxl.sign.button.CheckpointSign;
+import de.erethon.dungeonsxl.sign.button.SoundMessageSign;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.caliburn.mob.ExMob;
@@ -70,8 +73,10 @@ import de.erethon.dungeonsxl.player.SecureModeTask;
 import de.erethon.dungeonsxl.requirement.*;
 import de.erethon.dungeonsxl.reward.*;
 import de.erethon.dungeonsxl.sign.DSignListener;
-import de.erethon.dungeonsxl.sign.DSignTypeDefault;
-import de.erethon.dungeonsxl.sign.SignScriptCache;
+import de.erethon.dungeonsxl.sign.button.*;
+import de.erethon.dungeonsxl.sign.passive.*;
+import de.erethon.dungeonsxl.sign.rocker.*;
+import de.erethon.dungeonsxl.sign.windup.*;
 import de.erethon.dungeonsxl.trigger.TriggerListener;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.LWCUtil;
@@ -110,6 +115,13 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final File LOOT_TABLES = new File(SCRIPTS, "loottables");
     public static final File MOBS = new File(SCRIPTS, "mobs");
     public static final File SIGNS = new File(SCRIPTS, "signs");
+    public static final Set<String> LEGACY_SIGNS = new HashSet<>();
+
+    static {
+        LEGACY_SIGNS.add("CHEST");
+        LEGACY_SIGNS.add("EXTERNALMOB");
+        LEGACY_SIGNS.add("FLOOR");
+    }
 
     private PlayerCache playerCache = new PlayerCache();
     private Collection<Game> gameCache = new ArrayList<>();
@@ -133,7 +145,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private TriggerTypeCache triggers;
     private GlobalProtectionCache protections;
     private AnnouncerCache announcers;
-    private SignScriptCache signScripts;
+    private Registry<String, SignScript> signScriptRegistry;
 
     public DungeonsXL() {
         settings = DREPluginSettings.builder()
@@ -206,7 +218,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         triggers = new TriggerTypeCache();
         protections = new GlobalProtectionCache(this);
         announcers = new AnnouncerCache(this);
-        signScripts = new SignScriptCache();
+        signScriptRegistry = new Registry<>();
         dCommands = new DCommandCache(this);
     }
 
@@ -216,9 +228,45 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         Bukkit.getPluginManager().registerEvents(new TriggerListener(this), this);
 
         // Signs
-        for (DSignTypeDefault sign : DSignTypeDefault.values()) {
-            signRegistry.add(sign.getName(), sign.getHandler());
-        }
+        signRegistry.add("ActionBar", ActionBarSign.class);
+        signRegistry.add("Bed", BedSign.class);
+        signRegistry.add("Block", BlockSign.class);
+        signRegistry.add("BossShop", BossShopSign.class);
+        signRegistry.add("Checkpoint", CheckpointSign.class);
+        // Deprecated
+        signRegistry.add("Chest", RewardChestSign.class);
+        signRegistry.add("Classes", ClassesSign.class);
+        //signRegistry.add("CMD", CommandSign.class); TODO: REIMPLEMENT
+        signRegistry.add("Drop", DropSign.class);
+        signRegistry.add("DungeonChest", DungeonChestSign.class);
+        signRegistry.add("End", EndSign.class);
+        // Deprecated
+        signRegistry.add("ExternalMob", MobSign.class);
+        signRegistry.add("Flag", FlagSign.class);
+        // Deprecated
+        signRegistry.add("Floor", EndSign.class);
+        signRegistry.add("Hologram", HologramSign.class);
+        signRegistry.add("Interact", InteractSign.class);
+        signRegistry.add("Leave", LeaveSign.class);
+        signRegistry.add("Lives", LivesModifierSign.class);
+        signRegistry.add("Lobby", LobbySign.class);
+        signRegistry.add("Mob", MobSign.class);
+        signRegistry.add("MSG", ChatMessageSign.class);
+        signRegistry.add("Note", NoteSign.class);
+        signRegistry.add("Door", OpenDoorSign.class);
+        signRegistry.add("Place", PlaceSign.class);
+        signRegistry.add("Protection", ProtectionSign.class);
+        signRegistry.add("Ready", ReadySign.class);
+        signRegistry.add("Redstone", RedstoneSign.class);
+        signRegistry.add("ResourcePack", ResourcePackSign.class);
+        signRegistry.add("RewardChest", RewardChestSign.class);
+        signRegistry.add("Script", ScriptSign.class);
+        signRegistry.add("SoundMSG", SoundMessageSign.class);
+        signRegistry.add("Start", StartSign.class);
+        signRegistry.add("Teleport", TeleportSign.class);
+        signRegistry.add("Title", TitleSign.class);
+        signRegistry.add("Trigger", TriggerSign.class);
+        signRegistry.add("Wave", WaveSign.class);
         Bukkit.getPluginManager().registerEvents(new DSignListener(this), this);
 
         // Maps
@@ -298,11 +346,15 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             classRegistry.add(clss.getName(), clss);
         }
         Bukkit.getPluginManager().registerEvents(new DMobListener(this), this);
-        signScripts.init(SIGNS);
+
+        for (File script : FileUtil.getFilesForFolder(SIGNS)) {
+            SignScript sign = new SignScript(script);
+            signScriptRegistry.add(sign.getName(), sign);
+        }
+
         dCommands.register(this);
     }
 
-    // Save and load
     public void saveData() {
         protections.saveAll();
         instanceCache.getAllIf(i -> i instanceof EditWorld).forEach(i -> ((EditWorld) i).save());
@@ -354,9 +406,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         return instance;
     }
 
-    /**
-     * @return the loaded instance of CaliburnAPI
-     */
+    @Override
     public CaliburnAPI getCaliburn() {
         return caliburn;
     }
@@ -499,10 +549,12 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     }
 
     /**
-     * @return the loaded instance of SignScriptCache
+     * Returns a registry of the loaded sign scripts.
+     *
+     * @return a registry of the loaded sign scripts
      */
-    public SignScriptCache getSignScriptCache() {
-        return signScripts;
+    public Registry<String, SignScript> getSignScriptRegistry() {
+        return signScriptRegistry;
     }
 
     @Deprecated

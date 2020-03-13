@@ -21,6 +21,7 @@ import java.util.Collection;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 
 /**
  * Super interface for worlds that are instantiated by DungeonsXL.
@@ -77,11 +78,13 @@ public interface InstanceWorld {
     Collection<DungeonSign> getDungeonSigns();
 
     /**
-     * Adds a dungeon sign to this instance.
+     * Creates a dungeon sign in this instance.
      *
-     * @param sign the sign
+     * @param sign  the sign block
+     * @param lines the lines of the sign
+     * @return the created sign
      */
-    void addDungeonSign(DungeonSign sign);
+    DungeonSign createDungeonSign(Sign sign, String[] lines);
 
     /**
      * Removes the given dungeon sign from this instance.

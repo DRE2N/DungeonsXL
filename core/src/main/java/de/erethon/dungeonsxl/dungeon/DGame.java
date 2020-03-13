@@ -28,7 +28,7 @@ import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.global.GameSign;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.sign.MobSign;
+import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.ArrayList;
@@ -303,9 +303,8 @@ public class DGame implements Game {
                     MobSign mobSign = (MobSign) dSign;
                     int newAmount = (int) Math.ceil(mobSign.getInitialAmount() * mobCountIncreaseRate);
 
-                    mobSign.setAmount(newAmount);
-                    mobSign.setInitialAmount(newAmount);
-                    mobSign.initializeTask();
+                    mobSign.setN(newAmount);
+                    mobSign.startTask();
                 }
             }
         }.runTaskLater(plugin, delay * 20);

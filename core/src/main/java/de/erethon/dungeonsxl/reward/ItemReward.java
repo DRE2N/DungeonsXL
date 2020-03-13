@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.reward;
 
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Reward;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,12 +29,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ItemReward implements Reward {
 
-    private DungeonsXL plugin;
+    private DungeonsAPI api;
     
     private List<ItemStack> items = new ArrayList<>();
 
-    public ItemReward(DungeonsXL plugin) {
-        this.plugin = plugin;
+    public ItemReward(DungeonsAPI api) {
+        this.api = api;
     }
 
     /* Getters and setters */
@@ -69,7 +69,7 @@ public class ItemReward implements Reward {
     /* Actions */
     @Override
     public void giveTo(Player player) {
-        plugin.getPlayerCache().get(player).setRewardItems(items);
+        api.getPlayerCache().get(player).setRewardItems(items);
     }
 
 }

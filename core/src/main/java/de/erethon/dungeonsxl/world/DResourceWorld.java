@@ -62,8 +62,7 @@ public class DResourceWorld implements ResourceWorld {
             config = new WorldConfig(plugin, configFile);
         }
 
-        File signDataFile = new File(folder, "DXLData.data");
-        signData = new SignData(plugin, signDataFile);
+        signData = new SignData(new File(folder, "DXLData.data"));
     }
 
     public DResourceWorld(DungeonsXL plugin, File folder) {
@@ -76,8 +75,7 @@ public class DResourceWorld implements ResourceWorld {
             config = new WorldConfig(plugin, configFile);
         }
 
-        File signDataFile = new File(folder, "DXLData.data");
-        signData = new SignData(plugin, signDataFile);
+        signData = new SignData(new File(folder, "DXLData.data"));
     }
 
     /* Getters and setters */

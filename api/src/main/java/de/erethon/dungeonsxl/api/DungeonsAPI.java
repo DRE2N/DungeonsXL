@@ -14,6 +14,7 @@
  */
 package de.erethon.dungeonsxl.api;
 
+import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.misc.Registry;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
@@ -52,6 +53,13 @@ public interface DungeonsAPI extends Plugin {
     static final File SCRIPTS = new File(PLUGIN_ROOT, "scripts");
     static final File CLASSES = new File(SCRIPTS, "classes");
     static final File DUNGEONS = new File(SCRIPTS, "dungeons");
+
+    /**
+     * Returns the loaded instance of the Caliburn API.
+     *
+     * @return the loaded instance of the Caliburn API
+     */
+    CaliburnAPI getCaliburn();
 
     /**
      * Returns a cache of player wrapper objects.

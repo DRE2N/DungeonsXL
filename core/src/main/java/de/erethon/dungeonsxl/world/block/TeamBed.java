@@ -20,6 +20,7 @@ import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
@@ -35,8 +36,8 @@ public class TeamBed extends TeamBlock implements MultiBlock {
 
     private Block attachedBlock;
 
-    public TeamBed(DungeonsXL plugin, Block block, DGroup owner) {
-        super(plugin, block, owner);
+    public TeamBed(DungeonsAPI api, Block block, DGroup owner) {
+        super(api, block, owner);
         attachedBlock = getAttachedBlock();
     }
 
@@ -83,7 +84,7 @@ public class TeamBed extends TeamBlock implements MultiBlock {
         }
         owner.setLives(0);
 
-        owner.getGameWorld().sendMessage(DMessage.GROUP_BED_DESTROYED.getMessage(owner.getName(), plugin.getPlayerCache().getGamePlayer(breaker).getName()));
+        owner.getGameWorld().sendMessage(DMessage.GROUP_BED_DESTROYED.getMessage(owner.getName(), api.getPlayerCache().getGamePlayer(breaker).getName()));
         Block block1 = event.getBlock();
         if (DungeonsXL.BLOCK_ADAPTER.isBedHead(block)) {
             Block block2 = getAttachedBlock(block1);

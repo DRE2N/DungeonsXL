@@ -28,6 +28,7 @@ import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.reward.ItemReward;
 import de.erethon.dungeonsxl.reward.LevelReward;
 import de.erethon.dungeonsxl.reward.MoneyReward;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -41,6 +42,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RewardChest extends GameBlock {
 
+    private Economy econ;
+
     private boolean used = false;
     private Container container;
     private double moneyReward;
@@ -49,6 +52,7 @@ public class RewardChest extends GameBlock {
 
     public RewardChest(DungeonsXL plugin, Block container, double moneyReward, int levelReward, ItemStack[] itemReward) {
         super(plugin, container);
+        econ = plugin.getEconomyProvider();
 
         if (!(container.getState() instanceof Container)) {
             return;
@@ -132,7 +136,7 @@ public class RewardChest extends GameBlock {
         }
 
         if (container.getLocation().distance(container.getLocation()) < 1) {
-            addTreasure(plugin.getPlayerGroup(opener));
+            addTreasure(api.getPlayerGroup(opener));
             used = true;
         }
     }
@@ -165,7 +169,7 @@ public class RewardChest extends GameBlock {
         Game game = group.getGame();
         if (game == null || game.hasRewards()) {
             if (!hasMoneyReward) {
-                MoneyReward reward = new MoneyReward(plugin);
+                MoneyReward reward = new MoneyReward(econ);
                 reward.addMoney(moneyReward);
                 group.addReward(reward);
             }
@@ -177,14 +181,14 @@ public class RewardChest extends GameBlock {
             }
 
             if (!hasItemReward) {
-                ItemReward reward = new ItemReward(plugin);
+                ItemReward reward = new ItemReward(api);
                 reward.addItems(itemReward);
                 group.addReward(reward);
             }
         }
 
         for (Player player : group.getMembers().getOnlinePlayers()) {
-            DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
+            DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
             if (dPlayer == null || !dPlayer.canLoot(game.getRules())) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_NO_REWARDS_TIME.getMessage(SimpleDateUtil.ddMMyyyyhhmm(dPlayer.getTimeNextLoot(game.getRules()))));
                 continue;
@@ -215,8 +219,8 @@ public class RewardChest extends GameBlock {
                 MessageUtil.sendMessage(player, DMessage.PLAYER_LOOT_ADDED.getMessage(msg));
             }
 
-            if (moneyReward != 0 && plugin.getEconomyProvider() != null) {
-                MessageUtil.sendMessage(player, DMessage.PLAYER_LOOT_ADDED.getMessage(plugin.getEconomyProvider().format(moneyReward)));
+            if (moneyReward != 0 && econ != null) {
+                MessageUtil.sendMessage(player, DMessage.PLAYER_LOOT_ADDED.getMessage(econ.format(moneyReward)));
             }
 
             if (levelReward != 0) {

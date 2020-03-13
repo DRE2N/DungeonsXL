@@ -19,8 +19,8 @@ package de.erethon.dungeonsxl.trigger;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.event.trigger.TriggerRegistrationEvent;
-import de.erethon.dungeonsxl.sign.DSign;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -39,7 +39,7 @@ public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
     private boolean triggered;
     private Player player; // Holds Player for Player specific TriggerTypes
 
-    private Set<DSign> dSigns = new HashSet<>();
+    private Set<DungeonSign> dSigns = new HashSet<>();
 
     /**
      * @return the triggered
@@ -72,41 +72,41 @@ public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
     /**
      * @return the dSigns
      */
-    public Set<DSign> getDSigns() {
+    public Set<DungeonSign> getDSigns() {
         return dSigns;
     }
 
     /**
      * @param dSign the dSign to add
      */
-    public void addDSign(DSign dSign) {
+    public void addDSign(DungeonSign dSign) {
         dSigns.add(dSign);
     }
 
     /**
      * @param dSign the dSign to remove
      */
-    public void removeDSign(DSign dSign) {
+    public void removeDSign(DungeonSign dSign) {
         dSigns.remove(dSign);
     }
 
-    public void addListener(DSign dSign) {
+    public void addListener(DungeonSign dSign) {
         if (dSigns.isEmpty()) {
-            register(dSign.getGameWorld());
+            register((DGameWorld) dSign.getGameWorld());
         }
         dSigns.add(dSign);
     }
 
-    public void removeListener(DSign dSign) {
+    public void removeListener(DungeonSign dSign) {
         dSigns.remove(dSign);
         if (dSigns.isEmpty()) {
-            unregister(dSign.getGameWorld());
+            unregister((DGameWorld) dSign.getGameWorld());
         }
     }
 
     public void updateDSigns() {
-        for (DSign dSign : dSigns.toArray(new DSign[dSigns.size()])) {
-            dSign.onUpdate();
+        for (DungeonSign dSign : dSigns.toArray(new DungeonSign[dSigns.size()])) {
+            dSign.update();
         }
     }
 
@@ -118,13 +118,14 @@ public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
         gameWorld.removeTrigger(this);
     }
 
-    public static Trigger getOrCreate(DungeonsXL plugin, String identifier, String value, DSign dSign) {
+    public static Trigger getOrCreate(DungeonsXL plugin, String identifier, String value, DungeonSign dSign) {
         TriggerType type = plugin.getTriggerCache().getByIdentifier(identifier);
+        DGameWorld gameWorld = (DGameWorld) dSign.getGameWorld();
         Trigger trigger = null;
 
         if (type == TriggerTypeDefault.REDSTONE) {
 
-            trigger = RedstoneTrigger.getOrCreate(dSign.getSign(), dSign.getGameWorld());
+            trigger = RedstoneTrigger.getOrCreate(dSign.getSign(), gameWorld);
 
         } else if (type == TriggerTypeDefault.DISTANCE) {
 
@@ -144,19 +145,19 @@ public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
         } else if (type == TriggerTypeDefault.SIGN) {
 
             if (value != null) {
-                trigger = SignTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
+                trigger = SignTrigger.getOrCreate(NumberUtil.parseInt(value), gameWorld);
             }
 
         } else if (type == TriggerTypeDefault.INTERACT) {
 
             if (value != null) {
-                trigger = InteractTrigger.getOrCreate(NumberUtil.parseInt(value), dSign.getGameWorld());
+                trigger = InteractTrigger.getOrCreate(NumberUtil.parseInt(value), gameWorld);
             }
 
         } else if (type == TriggerTypeDefault.MOB) {
 
             if (value != null) {
-                trigger = MobTrigger.getOrCreate(value, dSign.getGameWorld());
+                trigger = MobTrigger.getOrCreate(value, gameWorld);
             }
 
         } else if (type == TriggerTypeDefault.PROGRESS) {
@@ -165,23 +166,23 @@ public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
                 if (value.matches("[0-99]/[0-999]")) {
                     int floorCount = NumberUtil.parseInt(value.split("/")[0]);
                     int waveCount = NumberUtil.parseInt(value.split("/")[1]);
-                    trigger = ProgressTrigger.getOrCreate(floorCount, waveCount, dSign.getGameWorld());
+                    trigger = ProgressTrigger.getOrCreate(floorCount, waveCount, gameWorld);
 
                 } else {
-                    trigger = ProgressTrigger.getOrCreate(plugin, value, dSign.getGameWorld());
+                    trigger = ProgressTrigger.getOrCreate(plugin, value, gameWorld);
                 }
             }
 
         } else if (type == TriggerTypeDefault.USE_ITEM) {
 
             if (value != null) {
-                trigger = UseItemTrigger.getOrCreate(plugin, value, dSign.getGameWorld());
+                trigger = UseItemTrigger.getOrCreate(plugin, value, gameWorld);
             }
 
         } else if (type == TriggerTypeDefault.WAVE) {
 
             if (value != null) {
-                trigger = WaveTrigger.getOrCreate(NumberUtil.parseDouble(value, 1), dSign.getGameWorld());
+                trigger = WaveTrigger.getOrCreate(NumberUtil.parseDouble(value, 1), gameWorld);
             }
 
         } else if (type != null) {

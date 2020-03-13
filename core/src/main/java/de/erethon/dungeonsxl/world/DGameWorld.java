@@ -34,8 +34,8 @@ import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
 import de.erethon.dungeonsxl.sign.LocationSign;
-import de.erethon.dungeonsxl.sign.MobSign;
-import de.erethon.dungeonsxl.sign.lobby.StartSign;
+import de.erethon.dungeonsxl.sign.passive.StartSign;
+import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.FortuneTrigger;
 import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.trigger.RedstoneTrigger;
@@ -61,7 +61,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
@@ -79,6 +78,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     private Type type = Type.DEFAULT;
 
     private boolean isPlaying = false;
+    private boolean classes = false;
 
     private List<Block> placedBlocks = new LinkedList<>();
 
@@ -90,7 +90,6 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     private Set<TeamFlag> teamFlags = new HashSet<>();
 
     private List<ItemStack> secureObjects = new ArrayList<>();
-    private List<Sign> classesSigns = new ArrayList<>();
     private List<DungeonMob> mobs = new ArrayList<>();
     private List<Trigger> triggers = new ArrayList<>();
 
@@ -153,6 +152,16 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         return getWorld().getSpawnLocation();
+    }
+
+    @Override
+    public boolean areClassesEnabled() {
+        return classes;
+    }
+
+    @Override
+    public void setClassesEnabled(boolean enabled) {
+        classes = enabled;
     }
 
     /**
@@ -247,20 +256,6 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
      */
     public void setSecureObjects(List<ItemStack> secureObjects) {
         this.secureObjects = secureObjects;
-    }
-
-    /**
-     * @return the classes signs
-     */
-    public List<Sign> getClassesSigns() {
-        return classesSigns;
-    }
-
-    /**
-     * @param signs the classes signs to set
-     */
-    public void setClasses(List<Sign> signs) {
-        classesSigns = signs;
     }
 
     @Override
