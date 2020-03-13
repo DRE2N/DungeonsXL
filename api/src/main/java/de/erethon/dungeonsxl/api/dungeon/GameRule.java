@@ -64,6 +64,10 @@ public class GameRule<V> {
      */
     public static final GameRule<Boolean> IS_LOBBY_DISABLED = new GameRule<>(Boolean.class, "isLobbyDisabled", false);
     /**
+     * The goal of the game that defines what makes it end.
+     */
+    public static final GameRule<GameGoal> GAME_GOAL = new GameRule<>(GameGoal.class, "gameGoal", GameGoal.END);
+    /**
      * The game mode.
      */
     public static final GameRule<GameMode> GAME_MODE = new GameRule<>(GameMode.class, "gameMode", GameMode.SURVIVAL);

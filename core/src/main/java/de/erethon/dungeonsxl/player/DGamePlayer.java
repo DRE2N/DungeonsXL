@@ -752,7 +752,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             event.setDeathMessage(null);
         }
 
-        if (game.getRules().getState(GameRule.KEEP_INVENTORY_ON_DEATH)) {
+        GameRuleContainer rules = game.getRules();
+        if (rules.getState(GameRule.KEEP_INVENTORY_ON_DEATH)) {
             event.setKeepInventory(true);
             event.getDrops().clear();
             event.setKeepLevel(true);
@@ -792,12 +793,9 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             kill();
         }
 
-        GameType gameType = game.getType();
-        if (gameType != null && gameType != GameTypeDefault.CUSTOM) {
-            if (gameType.getGameGoal() == GameGoal.LAST_MAN_STANDING) {
-                if (game.getGroups().size() == 1) {
-                    ((DGroup) game.getGroups().get(0)).winGame();
-                }
+        if (rules.getState(GameRule.GAME_GOAL) == GameGoal.LAST_MAN_STANDING) {
+            if (game.getGroups().size() == 1) {
+                ((DGroup) game.getGroups().get(0)).winGame();
             }
         }
     }
