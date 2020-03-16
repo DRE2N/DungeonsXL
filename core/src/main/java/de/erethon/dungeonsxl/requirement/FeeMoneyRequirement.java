@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
 import net.milkbowl.vault.economy.Economy;
@@ -33,8 +34,8 @@ public class FeeMoneyRequirement implements Requirement {
 
     private double fee;
 
-    public FeeMoneyRequirement(DungeonsXL plugin) {
-        econ = plugin.getEconomyProvider();
+    public FeeMoneyRequirement(DungeonsAPI api) {
+        econ = ((DungeonsXL) api).getEconomyProvider();
     }
 
     /* Getters and setters */

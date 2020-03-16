@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,8 @@ public class KeyItemsRequirement implements Requirement {
 
     private List<ExItem> keyItems;
 
-    public KeyItemsRequirement(CaliburnAPI caliburn) {
-        this.caliburn = caliburn;
+    public KeyItemsRequirement(DungeonsAPI api) {
+        caliburn = api.getCaliburn();
     }
 
     /* Getters and setters */

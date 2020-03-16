@@ -38,7 +38,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class WorldConfig extends GameRuleContainer {
 
     private DungeonsXL plugin;
-    private CaliburnAPI caliburn;
 
     private File file;
 
@@ -47,7 +46,6 @@ public class WorldConfig extends GameRuleContainer {
 
     public WorldConfig(DungeonsXL plugin) {
         this.plugin = plugin;
-        caliburn = plugin.getCaliburn();
     }
 
     public WorldConfig(DungeonsXL plugin, File file) {
@@ -67,7 +65,7 @@ public class WorldConfig extends GameRuleContainer {
     // Load & Save
     public void load(ConfigurationSection config) {
         for (GameRule rule : GameRule.VALUES) {
-            rule.fromConfig(plugin, caliburn, this, config);
+            rule.fromConfig(plugin, this, config);
         }
     }
 

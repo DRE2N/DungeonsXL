@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
@@ -33,8 +34,8 @@ public class ForbiddenItemsRequirement implements Requirement {
 
     private List<ExItem> forbiddenItems;
 
-    public ForbiddenItemsRequirement(CaliburnAPI caliburn) {
-        this.caliburn = caliburn;
+    public ForbiddenItemsRequirement(DungeonsAPI api) {
+        caliburn = api.getCaliburn();
     }
 
     /* Getters and setters */

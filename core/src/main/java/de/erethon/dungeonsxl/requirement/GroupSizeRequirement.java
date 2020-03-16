@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,13 +27,13 @@ import org.bukkit.entity.Player;
  */
 public class GroupSizeRequirement implements Requirement {
 
-    private DungeonsXL plugin;
+    private DungeonsAPI api;
 
     private int minimum;
     private int maximum;
 
-    public GroupSizeRequirement(DungeonsXL plugin) {
-        this.plugin = plugin;
+    public GroupSizeRequirement(DungeonsAPI api) {
+        this.api = api;
     }
 
     /**
@@ -73,7 +73,7 @@ public class GroupSizeRequirement implements Requirement {
 
     @Override
     public boolean check(Player player) {
-        PlayerGroup group = plugin.getPlayerGroup(player);
+        PlayerGroup group = api.getPlayerGroup(player);
         int size = group.getMembers().size();
         return size >= minimum && size <= maximum;
     }

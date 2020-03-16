@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
@@ -33,13 +33,13 @@ import org.bukkit.entity.Player;
  */
 public class FeeLevelRequirement implements Requirement {
 
-    private DungeonsXL plugin;
+    private DungeonsAPI api;
 
     private int fee;
     private Boolean keepInventory;
 
-    public FeeLevelRequirement(DungeonsXL plugin) {
-        this.plugin = plugin;
+    public FeeLevelRequirement(DungeonsAPI api) {
+        this.api = api;
     }
 
     /* Getters and setters */
@@ -69,7 +69,7 @@ public class FeeLevelRequirement implements Requirement {
             return player.getLevel() >= fee;
         }
 
-        DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
+        DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
         return dPlayer != null ? dPlayer.getData().getOldLevel() >= fee : true;
     }
 
@@ -79,7 +79,7 @@ public class FeeLevelRequirement implements Requirement {
             player.setLevel(player.getLevel() - fee);
 
         } else {
-            DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
+            DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
             if (dPlayer == null) {
                 return;
             }
@@ -95,7 +95,7 @@ public class FeeLevelRequirement implements Requirement {
             return keepInventory;
         }
 
-        Game game = plugin.getGame(player);
+        Game game = api.getGame(player);
         GameRuleContainer rules = null;
         if (game != null) {
             rules = game.getRules();
