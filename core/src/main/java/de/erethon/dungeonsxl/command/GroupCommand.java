@@ -22,7 +22,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.event.dgroup.DGroupDisbandEvent;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
-import de.erethon.dungeonsxl.player.DGamePlayer;
+import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
@@ -54,7 +54,7 @@ public class GroupCommand extends DCommand {
         this.player = (Player) sender;
         this.args = args;
 
-        DGroup dGroup = DGroup.getByPlayer(player);
+        DGroup dGroup = (DGroup) plugin.getPlayerGroup(player);
 
         if (args.length == 2) {
 
@@ -90,18 +90,18 @@ public class GroupCommand extends DCommand {
                 return;
 
             } else if (args[1].equalsIgnoreCase("disband") && DPermission.hasPermission(sender, DPermission.GROUP_ADMIN)) {
-                disbandGroup(DGroup.getByName(args[2]), args[2]);
+                disbandGroup((DGroup) plugin.getPlayerGroupCache().get(args[2]), args[2]);
                 return;
 
             } else if (args[1].equalsIgnoreCase("join")) {
-                joinGroup(DGroup.getByName(args[2]));
+                joinGroup((DGroup) plugin.getPlayerGroupCache().get(args[2]));
                 return;
 
             } else if (args[1].equalsIgnoreCase("show") && DPermission.hasPermission(sender, DPermission.GROUP_ADMIN)) {
-                DGroup group = DGroup.getByName(args[2]);
+                DGroup group = (DGroup) plugin.getPlayerGroupCache().get(args[2]);
                 Player player = Bukkit.getPlayer(args[2]);
                 if (group == null && player != null) {
-                    group = DGroup.getByPlayer(player);
+                    group = (DGroup) plugin.getPlayerGroup(player);
                 }
                 showGroup(group);
                 return;
@@ -112,12 +112,12 @@ public class GroupCommand extends DCommand {
     }
 
     public void createGroup() {
-        if (DGroup.getByPlayer(player) != null) {
+        if (plugin.getPlayerGroup(player) != null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
         }
 
-        if (DGroup.getByName(args[2]) != null) {
+        if (plugin.getPlayerGroupCache().get(args[2]) != null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NAME_IN_USE.getMessage(args[2]));
             return;
         }
@@ -203,7 +203,7 @@ public class GroupCommand extends DCommand {
             return;
         }
 
-        if (DGroup.getByPlayer(player) != null) {
+        if (plugin.getPlayerGroup(player) != null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
         }
@@ -224,11 +224,11 @@ public class GroupCommand extends DCommand {
 
         Player toKick = Bukkit.getPlayer(args[2]);
         if (toKick != null) {
-            DPlayerKickEvent event = new DPlayerKickEvent(DGamePlayer.getByPlayer(toKick.getPlayer()), DPlayerKickEvent.Cause.COMMAND);
+            DPlayerKickEvent event = new DPlayerKickEvent((DGlobalPlayer) dPlayers.get(toKick.getPlayer()), DPlayerKickEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-                if (dGroup.getPlayers().contains(toKick)) {
+                if (dGroup.getMembers().contains(toKick)) {
                     dGroup.removePlayer(toKick);
                     MessageUtil.sendMessage(sender, DMessage.GROUP_KICKED_PLAYER.getMessage(sender.getName(), args[2], dGroup.getName()));
 
@@ -255,9 +255,9 @@ public class GroupCommand extends DCommand {
         }
 
         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dGroup.getName() + " &4&l]");
-        MessageUtil.sendMessage(sender, "&bCaptain: &e" + dGroup.getCaptain().getName());
+        MessageUtil.sendMessage(sender, "&bCaptain: &e" + dGroup.getLeader().getName());
         String players = "";
-        for (String player : dGroup.getPlayers().getNames()) {
+        for (String player : dGroup.getMembers().getNames()) {
             players += (players.isEmpty() ? "" : "&b, &e") + player;
         }
         MessageUtil.sendMessage(sender, "&bPlayers: &e" + players);

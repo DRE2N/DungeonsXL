@@ -45,8 +45,18 @@ public class BlockAdapterBlockData implements BlockAdapter {
         if (!(block.getBlockData() instanceof Openable)) {
             throw new IllegalArgumentException("Block is not Openable");
         }
-        Openable data = ((Openable) block.getBlockData());
+        Openable data = (Openable) block.getBlockData();
         data.setOpen(true);
+        block.setBlockData(data);
+    }
+
+    @Override
+    public void closeDoor(Block block) {
+        if (!(block.getBlockData() instanceof Openable)) {
+            throw new IllegalArgumentException("Block is not Openable");
+        }
+        Openable data = (Openable) block.getBlockData();
+        data.setOpen(false);
         block.setBlockData(data);
     }
 

@@ -19,10 +19,10 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.config.CommonMessage;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DGamePlayer;
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -61,19 +61,19 @@ public class LivesCommand extends DCommand {
             return;
         }
 
-        DGlobalPlayer globalPlayer = dPlayers.getByPlayer(player);
-        if (!(globalPlayer instanceof DGamePlayer)) {
+        GlobalPlayer globalPlayer = dPlayers.get(player);
+        if (!(globalPlayer instanceof GamePlayer)) {
             MessageUtil.sendMessage(sender, args.length == 1 ? DMessage.ERROR_NO_GAME.getMessage() : DMessage.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));
             return;
         }
 
-        DGamePlayer gamePlayer = (DGamePlayer) globalPlayer;
-        DGroup dGroup = gamePlayer != null ? gamePlayer.getDGroup() : DGroup.getByName(args[1]);
+        GamePlayer gamePlayer = (GamePlayer) globalPlayer;
+        PlayerGroup group = gamePlayer != null ? gamePlayer.getGroup() : plugin.getPlayerGroupCache().get(args[1]);
         if (gamePlayer != null) {
             MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_PLAYER.getMessage(gamePlayer.getName(), gamePlayer.getLives() == -1 ? DMessage.MISC_UNLIMITED.getMessage() : String.valueOf(gamePlayer.getLives())));
 
-        } else if (dGroup != null) {
-            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_GROUP.getMessage(dGroup.getName(), String.valueOf(dGroup.getLives() == -1 ? "UNLIMITED" : dGroup.getLives())));
+        } else if (group != null) {
+            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_GROUP.getMessage(group.getName(), String.valueOf(group.getLives() == -1 ? "UNLIMITED" : group.getLives())));
 
         } else {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));

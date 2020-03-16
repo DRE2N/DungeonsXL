@@ -15,7 +15,7 @@
 package de.erethon.dungeonsxl.api.sign;
 
 import de.erethon.dungeonsxl.api.DungeonsAPI;
-import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -29,8 +29,8 @@ import org.bukkit.entity.Player;
  */
 public abstract class Rocker extends Deactivatable {
 
-    protected Rocker(DungeonsAPI api, Sign sign, String[] lines, GameWorld gameWorld) {
-        super(api, sign, lines, gameWorld);
+    protected Rocker(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
+        super(api, sign, lines, instance);
     }
 
     /**

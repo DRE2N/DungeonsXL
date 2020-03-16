@@ -18,9 +18,8 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.config.MainConfig;
-import de.erethon.dungeonsxl.player.DPlayerCache;
-import de.erethon.dungeonsxl.world.DWorldCache;
 
 /**
  * @author Daniel Saukel
@@ -29,14 +28,12 @@ public abstract class DCommand extends DRECommand {
 
     protected DungeonsXL plugin;
     protected MainConfig config;
-    protected DPlayerCache dPlayers;
-    protected DWorldCache instances;
+    protected PlayerCache dPlayers;
 
     protected DCommand(DungeonsXL plugin) {
         this.plugin = plugin;
         config = plugin.getMainConfig();
-        dPlayers = plugin.getDPlayerCache();
-        instances = plugin.getDWorldCache();
+        dPlayers = plugin.getPlayerCache();
     }
 
 }

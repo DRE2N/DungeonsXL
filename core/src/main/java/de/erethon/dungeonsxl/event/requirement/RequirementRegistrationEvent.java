@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.event.requirement;
 
-import de.erethon.dungeonsxl.requirement.Requirement;
+import de.erethon.dungeonsxl.api.Requirement;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 

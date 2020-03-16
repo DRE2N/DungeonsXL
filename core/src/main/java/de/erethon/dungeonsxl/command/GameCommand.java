@@ -18,11 +18,11 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,19 +44,19 @@ public class GameCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGroup dGroup = DGroup.getByPlayer(player);
+        PlayerGroup dGroup = plugin.getPlayerGroup(player);
         if (dGroup == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
-        DGameWorld gameWorld = dGroup.getGameWorld();
+        GameWorld gameWorld = dGroup.getGameWorld();
         if (gameWorld == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_GAME.getMessage());
             return;
         }
 
-        Game game = gameWorld.getGame();
+        DGame game = (DGame) gameWorld.getGame();
         if (game == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_GAME.getMessage());
             return;
@@ -64,13 +64,12 @@ public class GameCommand extends DCommand {
 
         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6Game &4&l]");
         String groups = "";
-        for (DGroup group : game.getDGroups()) {
-            groups += (group == game.getDGroups().get(0) ? "" : "&b, &e") + group.getName();
+        for (PlayerGroup group : game.getGroups()) {
+            groups += (group == game.getGroups().get(0) ? "" : "&b, &e") + group.getName();
         }
         MessageUtil.sendMessage(sender, "&bGroups: &e" + groups);
-        MessageUtil.sendMessage(sender, "&bGame type: &e" + (game.getType() == null ? "Not started yet" : game.getType()));
-        MessageUtil.sendMessage(sender, "&bDungeon: &e" + (dGroup.getDungeonName() == null ? "N/A" : dGroup.getDungeonName()));
-        MessageUtil.sendMessage(sender, "&bMap: &e" + (dGroup.getMapName() == null ? "N/A" : dGroup.getMapName()));
+        MessageUtil.sendMessage(sender, "&bDungeon: &e" + (dGroup.getDungeon().getName() == null ? "N/A" : dGroup.getDungeon().getName()));
+        MessageUtil.sendMessage(sender, "&bMap: &e" + (dGroup.getGameWorld() == null ? "N/A" : dGroup.getGameWorld().getName()));
         MessageUtil.sendMessage(sender, "&bWaves finished: &e" + game.getWaveCount());
         MessageUtil.sendMessage(sender, "&bKills: &e" + game.getGameKills() + " / Game; " + game.getWaveKills() + " / Wave");
     }

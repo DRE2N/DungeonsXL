@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.util;
 
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 
 /**
@@ -52,13 +52,13 @@ public enum ParsingUtil {
      * Replace the placeholders that are relevant for the chat in a String automatically.
      *
      * @param string the String that contains the placeholders
-     * @param sender the DGlobalPlayer who sent the message
+     * @param sender the GlobalPlayer who sent the message
      * @return the string with the placeholders replaced
      */
-    public static String replaceChatPlaceholders(String string, DGlobalPlayer sender) {
+    public static String replaceChatPlaceholders(String string, GlobalPlayer sender) {
         string = string.replaceAll(PLAYER_NAME.getPlaceholder(), sender.getName());
 
-        DGroup group = DGroup.getByPlayer(sender.getPlayer());
+        DGroup group = (DGroup) sender.getGroup();
         if (group != null) {
             string = string.replaceAll(GROUP_COLOR.getPlaceholder(), group.getDColor().getChatColor().toString());
             string = string.replaceAll(GROUP_NAME.getPlaceholder(), group.getName());

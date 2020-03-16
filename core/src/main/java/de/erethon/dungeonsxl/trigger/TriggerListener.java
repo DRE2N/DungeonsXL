@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.trigger;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,10 +47,9 @@ public class TriggerListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (DGameWorld gameWorld : plugin.getDWorldCache().getGameWorlds()) {
-                    if (event.getBlock().getWorld() == gameWorld.getWorld()) {
-                        RedstoneTrigger.updateAll(gameWorld);
-                    }
+                GameWorld gameWorld = plugin.getGameWorld(event.getBlock().getWorld());
+                if (gameWorld != null) {
+                    RedstoneTrigger.updateAll((DGameWorld) gameWorld);
                 }
             }
         }.runTaskLater(plugin, 1L);
@@ -58,7 +58,7 @@ public class TriggerListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
+        DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(player.getWorld());
         if (gameWorld == null) {
             return;
         }

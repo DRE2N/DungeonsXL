@@ -17,45 +17,47 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.util.ParsingUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import de.erethon.dungeonsxl.world.DInstanceWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
 /**
- * Represents a player in an instance.
- *
  * @author Daniel Saukel
  */
-public abstract class DInstancePlayer extends DGlobalPlayer {
+public abstract class DInstancePlayer extends DGlobalPlayer implements InstancePlayer {
 
-    MainConfig config;
+    protected MainConfig config;
 
+    private InstanceWorld instanceWorld;
     private World world;
 
-    DInstancePlayer(DungeonsXL plugin, Player player, World world) {
+    DInstancePlayer(DungeonsXL plugin, Player player, InstanceWorld world) {
         super(plugin, player, false);
 
         config = plugin.getMainConfig();
 
-        this.world = world;
+        instanceWorld = world;
+        this.world = world.getWorld();
         getData().savePlayerState(player);
     }
 
     /* Getters and setters */
-    /**
-     * @return the instance
-     */
+    @Override
+    public InstanceWorld getInstanceWorld() {
+        return instanceWorld;
+    }
+
+    @Override
     public World getWorld() {
         return world;
     }
 
-    /**
-     * @param instance the instance to set
-     */
     public void setWorld(World instance) {
         world = instance;
     }
@@ -98,7 +100,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
             new DGlobalPlayer(this);
 
         } else {
-            plugin.getDPlayerCache().removePlayer(this);
+            plugin.getPlayerCache().remove(this);
         }
     }
 
@@ -108,16 +110,12 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
      * @param message the message to send
      */
     public void chat(String message) {
-        DInstanceWorld instance = plugin.getDWorldCache().getInstanceByWorld(world);
-        if (instance == null) {
-            return;
-        }
-        String chatFormat = instance instanceof DGameWorld ? config.getChatFormatGame() : config.getChatFormatEdit();
-        instance.sendMessage(ParsingUtil.replaceChatPlaceholders(chatFormat, this) + message);
+        String chatFormat = instanceWorld instanceof GameWorld ? config.getChatFormatGame() : config.getChatFormatEdit();
+        instanceWorld.sendMessage(ParsingUtil.replaceChatPlaceholders(chatFormat, this) + message);
 
-        for (DGlobalPlayer player : plugin.getDPlayerCache().getDGlobalPlayers()) {
+        for (GlobalPlayer player : plugin.getPlayerCache()) {
             if (player.isInChatSpyMode()) {
-                if (!instance.getWorld().getPlayers().contains(player.getPlayer())) {
+                if (!world.getPlayers().contains(player.getPlayer())) {
                     player.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatSpy(), this) + message);
                 }
             }
@@ -125,11 +123,6 @@ public abstract class DInstancePlayer extends DGlobalPlayer {
     }
 
     /* Abstracts */
-    /**
-     * The player leaves the dungeon and / or his group.
-     */
-    public abstract void leave();
-
     /**
      * Repeating checks for the player.
      *

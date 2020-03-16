@@ -16,8 +16,9 @@
  */
 package de.erethon.dungeonsxl.mob;
 
-import de.erethon.dungeonsxl.world.DEditWorld;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -32,12 +33,18 @@ import org.bukkit.event.entity.EntityDeathEvent;
  */
 public class DMobListener implements Listener {
 
+    private DungeonsXL plugin;
+
+    public DMobListener(DungeonsXL plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         World world = event.getLocation().getWorld();
 
-        DEditWorld editWorld = DEditWorld.getByWorld(world);
-        DGameWorld gameWorld = DGameWorld.getByWorld(world);
+        EditWorld editWorld = plugin.getEditWorld(world);
+        GameWorld gameWorld = plugin.getGameWorld(world);
 
         if (editWorld != null || gameWorld != null) {
             switch (event.getSpawnReason()) {
@@ -56,12 +63,12 @@ public class DMobListener implements Listener {
 
         if (event.getEntity() instanceof LivingEntity) {
             LivingEntity entity = event.getEntity();
-            DGameWorld gameWorld = DGameWorld.getByWorld(world);
+            GameWorld gameWorld = plugin.getGameWorld(world);
             if (gameWorld != null) {
                 if (gameWorld.isPlaying()) {
-                    DMob dMob = DMob.getByEntity(entity);
+                    DMob dMob = (DMob) plugin.getDungeonMob(entity);
                     if (dMob != null) {
-                        dMob.onDeath(event);
+                        dMob.onDeath(plugin, event);
                     }
                 }
             }
@@ -71,8 +78,7 @@ public class DMobListener implements Listener {
     // Zombie / Skeleton combustion from the sun.
     @EventHandler
     public void onEntityCombust(EntityCombustEvent event) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
-        if (gameWorld != null) {
+        if (plugin.getGameWorld(event.getEntity().getWorld()) != null) {
             event.setCancelled(true);
         }
     }
@@ -80,8 +86,7 @@ public class DMobListener implements Listener {
     // Allow other combustion
     @EventHandler
     public void onEntityCombustByEntity(EntityCombustByEntityEvent event) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
-        if (gameWorld != null) {
+        if (plugin.getGameWorld(event.getEntity().getWorld()) != null) {
             if (event.isCancelled()) {
                 event.setCancelled(false);
             }

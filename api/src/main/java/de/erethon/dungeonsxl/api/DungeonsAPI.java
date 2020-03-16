@@ -14,6 +14,7 @@
  */
 package de.erethon.dungeonsxl.api;
 
+import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.misc.Registry;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
@@ -21,8 +22,8 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
-import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.GroupAdapter;
+import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
@@ -32,7 +33,6 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import java.io.File;
 import java.util.Collection;
-import java.util.UUID;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -55,11 +55,25 @@ public interface DungeonsAPI extends Plugin {
     static final File DUNGEONS = new File(SCRIPTS, "dungeons");
 
     /**
+     * Returns the loaded instance of the Caliburn API.
+     *
+     * @return the loaded instance of the Caliburn API
+     */
+    CaliburnAPI getCaliburn();
+
+    /**
      * Returns a cache of player wrapper objects.
      *
      * @return a cache of player wrapper objects
      */
-    Registry<UUID, GlobalPlayer> getPlayerCache();
+    PlayerCache getPlayerCache();
+
+    /**
+     * Returns a cache of Game objects.
+     *
+     * @return a cache of Game objects
+     */
+    Collection<Game> getGameCache();
 
     /**
      * Returns a registry of the loaded classes.
@@ -74,15 +88,6 @@ public interface DungeonsAPI extends Plugin {
      * @return a registry of the sign types
      */
     Registry<String, Class<? extends DungeonSign>> getSignRegistry();
-
-    /**
-     * Returns a registry of the trigger types.
-     *
-     * @return a registry of the trigger types
-     * @deprecated stub
-     */
-    @Deprecated
-    Registry<String, Class<? extends Trigger>> getTriggerRegistry();
 
     /**
      * Returns a registry of the requirement types.
@@ -113,11 +118,11 @@ public interface DungeonsAPI extends Plugin {
     Registry<String, ResourceWorld> getMapRegistry();
 
     /**
-     * Returns a registry of the instance worlds.
+     * Returns a cache of the instance worlds.
      *
-     * @return a registry of the instance worlds
+     * @return a cache of the instance worlds
      */
-    Registry<Integer, InstanceWorld> getInstanceRegistry();
+    Registry<Integer, InstanceWorld> getInstanceCache();
 
     /**
      * Returns a registry of the game rules.
@@ -132,6 +137,13 @@ public interface DungeonsAPI extends Plugin {
      * @return a registry of the external mob providers
      */
     Registry<String, ExternalMobProvider> getExternalMobProviderRegistry();
+
+    /**
+     * Returns a cache of the player groups.
+     *
+     * @return a cache of the player groups
+     */
+    Registry<String, PlayerGroup> getPlayerGroupCache();
 
     /**
      * Makes DungeonsXL track external group and synchronize them with its own groups.
@@ -192,15 +204,6 @@ public interface DungeonsAPI extends Plugin {
      *
      * @param entity    the entity
      * @param gameWorld the game world where the entity is
-     * @return the wrapped DungeonMob
-     */
-    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld);
-
-    /**
-     * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
-     *
-     * @param entity    the entity
-     * @param gameWorld the game world where the entity is
      * @param triggerId the identifier used in mob triggers
      * @return the wrapped DungeonMob
      */
@@ -237,12 +240,12 @@ public interface DungeonsAPI extends Plugin {
     DungeonMob getDungeonMob(LivingEntity entity);
 
     /**
-     * Returns the game the given group plays.
+     * Returns the group the player is a member of or null if he is in none.
      *
-     * @param group the group
-     * @return the game the given group plays
+     * @param member the player
+     * @return the group the player is a member of or null if he is in none
      */
-    Game getGame(PlayerGroup group);
+    PlayerGroup getPlayerGroup(Player member);
 
     /**
      * Returns the game the given player plays.

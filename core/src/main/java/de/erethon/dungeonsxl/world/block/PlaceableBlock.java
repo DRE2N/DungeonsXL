@@ -19,7 +19,7 @@ package de.erethon.dungeonsxl.world.block;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.NumberUtil;
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
@@ -39,13 +39,13 @@ public class PlaceableBlock extends GameBlock {
     private Set<BlockFace> faces = new HashSet<>();
     private int triggerId = -1;
 
-    public PlaceableBlock(DungeonsXL plugin, DGameWorld gameWorld, Block block, String ids, String args) {
-        super(plugin, block);
+    public PlaceableBlock(DungeonsAPI api, DGameWorld gameWorld, Block block, String ids, String args) {
+        super(api, block);
 
         this.gameWorld = gameWorld;
 
         for (String id : ids.split(",")) {
-            ExItem item = plugin.getCaliburn().getExItem(id);
+            ExItem item = api.getCaliburn().getExItem(id);
             if (item != null) {
                 materials.add(item);
             }

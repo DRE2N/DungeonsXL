@@ -114,7 +114,7 @@ public class ProgressTrigger extends Trigger {
     }
 
     public static ProgressTrigger getOrCreate(DungeonsXL plugin, String floor, DGameWorld gameWorld) {
-        DResourceWorld resource = plugin.getDWorldCache().getResourceByName(floor);
+        DResourceWorld resource = (DResourceWorld) plugin.getMapRegistry().get(floor);
 
         if (resource != null) {
             return new ProgressTrigger(resource);

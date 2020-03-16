@@ -19,9 +19,9 @@ package de.erethon.dungeonsxl.config;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import static de.erethon.dungeonsxl.api.player.PlayerGroup.Color.*;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.io.IOException;
@@ -107,7 +107,7 @@ public class MainConfig extends DREConfig {
     /* Permissions bridge */
     private List<String> editPermissions;
 
-    /* Default Dungeon Settings */
+    /* Default DDungeon Settings */
     private WorldConfig defaultWorldConfig;
 
     public MainConfig(DungeonsXL plugin, File file) {
@@ -238,7 +238,7 @@ public class MainConfig extends DREConfig {
      */
     public Dungeon getTutorialDungeon() {
         if (tutorialDungeon == null) {
-            tutorialDungeon = plugin.getDungeonCache().getByName(tutorialDungeonName, true);
+            tutorialDungeon = plugin.getDungeonRegistry().get(tutorialDungeonName);
         }
         return tutorialDungeon;
     }
@@ -568,7 +568,7 @@ public class MainConfig extends DREConfig {
             config.set("editPermissions", editPermissions);
         }
 
-        /* Default Dungeon Config */
+        /* Default DDungeon Config */
         if (!config.contains("default")) {
             config.createSection("default");
         }

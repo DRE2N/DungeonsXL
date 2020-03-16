@@ -16,6 +16,8 @@
  */
 package de.erethon.dungeonsxl.mob;
 
+import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
+
 /**
  * Officially supported external mob plugins.
  *

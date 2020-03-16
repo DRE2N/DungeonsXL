@@ -17,13 +17,13 @@
 package de.erethon.dungeonsxl.announcer;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.ProgressBar;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,7 +47,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             if (dGroup == null) {
                 continue;
             }
-            for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
+            for (Player player : dGroup.getMembers().getOnlinePlayers()) {
                 players.add(player);
             }
         }
@@ -69,7 +69,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             return;
         }
 
-        Game game = null;
+        DGame game = null;
 
         for (DGroup dGroup : announcer.getDGroups()) {
             if (dGroup == null) {
@@ -77,21 +77,21 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             }
 
             if (game == null) {
-                DResourceWorld resource = plugin.getDWorldCache().getResourceByName(announcer.getMapName());
+                ResourceWorld resource = plugin.getMapRegistry().get(announcer.getMapName());
                 if (resource == null) {
                     dGroup.sendMessage(DMessage.ERROR_NO_SUCH_MAP.getMessage(announcer.getMapName()));
                     cancel();
                     return;
                 }
-                DGameWorld gameWorld = resource.instantiateAsGameWorld(false);
+                GameWorld gameWorld = resource.instantiateGameWorld(false);
                 if (gameWorld == null) {
                     dGroup.sendMessage(DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
                     cancel();
                     return;
                 }
-                game = new Game(plugin, dGroup, gameWorld);
+                game = new DGame(plugin, dGroup, gameWorld);
             } else {
-                game.getDGroups().add(dGroup);
+                game.addGroup(dGroup);
             }
 
             dGroup.setDungeon(announcer.getDungeonName() == null ? announcer.getMapName() : announcer.getDungeonName());

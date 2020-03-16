@@ -17,6 +17,7 @@ package de.erethon.dungeonsxl.api.world;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import java.util.Collection;
 import org.bukkit.Location;
 
@@ -98,8 +99,23 @@ public interface GameWorld extends InstanceWorld {
      * Returns the start location of the world. This may be set by a start {@link de.erethon.dungeonsxl.api.sign.DungeonSign sign} or, if none exists, the
      * Vanilla spawn location of the {@link #getWorld() world}.
      *
+     * @param group each group might have its own start location
      * @return the start location of the world
      */
-    Location getStartLocation();
+    Location getStartLocation(PlayerGroup group);
+
+    /**
+     * Returns if it is required to choose a class in order to start the game.
+     *
+     * @return if it is required to choose a class in order to start the game
+     */
+    boolean areClassesEnabled();
+
+    /**
+     * Sets if it is required to choose a class in order to start the game.
+     *
+     * @param enabled if it is required to choose a class in order to start the game
+     */
+    void setClassesEnabled(boolean enabled);
 
 }

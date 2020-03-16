@@ -14,11 +14,12 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
-import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import java.util.Collection;
 import java.util.List;
+import org.bukkit.entity.Player;
 
 /**
  * Handles the rules of playing in a dungeon.
@@ -94,6 +95,20 @@ public interface Game {
     void setWorld(GameWorld gameWorld);
 
     /**
+     * Returns if the game has rewards.
+     *
+     * @return if the game has rewards
+     */
+    boolean hasRewards();
+
+    /**
+     * Sets if the game has rewards.
+     *
+     * @param enabled if the game has rewards
+     */
+    void setRewards(boolean enabled);
+
+    /**
      * Returns the rules of the dungeon of this game.
      * <p>
      * This is not necessarily represented 1:1 by a config file because it is usually merged together through {@link Dungeon#setupRules()}.
@@ -130,7 +145,7 @@ public interface Game {
      *
      * @return the players playing the game
      */
-    PlayerCollection getPlayers();
+    Collection<Player> getPlayers();
 
     /**
      * Returns true if there are no groups in this game; false if not.

@@ -14,14 +14,18 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
-import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.caliburn.mob.VanillaMob;
+import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
+import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,8 +42,6 @@ import org.bukkit.configuration.ConfigurationSection;
  * @param <V> the type of the game rule value
  * @author Daniel Saukel
  */
-// TODO: These values aren't properly fetched from config yet: values that involve Caliburn, requirements & rewards; maybe messages.
-// Check special merging rules for damageProtectedEntities and interactionProtectedEntities.
 public class GameRule<V> {
 
     /**
@@ -63,6 +65,10 @@ public class GameRule<V> {
      */
     public static final GameRule<Boolean> IS_LOBBY_DISABLED = new GameRule<>(Boolean.class, "isLobbyDisabled", false);
     /**
+     * The goal of the game that defines what makes it end.
+     */
+    public static final GameRule<GameGoal> GAME_GOAL = new GameRule<>(GameGoal.class, "gameGoal", GameGoal.END);
+    /**
      * The game mode.
      */
     public static final GameRule<GameMode> GAME_MODE = new GameRule<>(GameMode.class, "gameMode", GameMode.SURVIVAL);
@@ -81,24 +87,40 @@ public class GameRule<V> {
     /**
      * A whitelist of breakable blocks. breakBlocks is supposed to be set to "true" if this should be used.
      */
-    public static final GameRule<Map<ExItem, HashSet<ExItem>>> BREAK_WHITELIST = new MapGameRule<>(Map.class, "breakWhitelist", null);
+    public static final GameRule<Map<ExItem, HashSet<ExItem>>> BREAK_WHITELIST = new MapGameRule<>("breakWhitelist", null, (api, value) -> {
+        if (!(value instanceof ConfigurationSection)) {
+            return null;
+        }
+        ConfigurationSection section = (ConfigurationSection) value;
+        Map<ExItem, HashSet<ExItem>> map = new HashMap<>();
+        for (Map.Entry<String, Object> entry : section.getValues(false).entrySet()) {
+            ExItem tool = api.getCaliburn().getExItem(entry.getKey());
+            if (tool == null) {
+                continue;
+            }
+            HashSet<ExItem> blocks = new HashSet<>();
+            blocks.addAll(api.getCaliburn().deserializeExItemList(section, entry.getKey()));
+            map.put(tool, blocks);
+        }
+        return map;
+    });
     /**
      * A list of all entity types that shall be protected from damage. If this is left out AND if breakBlocks is false, armor stands, paintings and item frames
      * will be protected by default. If this is left out and if breakBlocks is true, nothing will be protected by default.
      */
-    public static final GameRule<Set<ExMob>> DAMAGE_PROTECTED_ENTITIES = new CollectionGameRule<>(Set.class, "damageProtectedEntities", new HashSet<>(Arrays.asList(
+    public static final GameRule<Set<ExMob>> DAMAGE_PROTECTED_ENTITIES = new CollectionGameRule<>("damageProtectedEntities", new HashSet<>(Arrays.asList(
             VanillaMob.ARMOR_STAND,
             VanillaMob.ITEM_FRAME,
             VanillaMob.PAINTING
-    )));
+    )), ConfigReader.EX_MOB_SET_READER);
     /**
      * If this is left out AND if breakBlocks is false, armor stands and item frames will be protected by default. If this is left out and if breakBlocks is
      * true, nothing will be protected by default.
      */
-    public static final GameRule<Set<ExMob>> INTERACTION_PROTECTED_ENTITIES = new CollectionGameRule<>(Set.class, "interactionProtectedEntities", new HashSet<>(Arrays.asList(
+    public static final GameRule<Set<ExMob>> INTERACTION_PROTECTED_ENTITIES = new CollectionGameRule<>("interactionProtectedEntities", new HashSet<>(Arrays.asList(
             VanillaMob.ARMOR_STAND,
             VanillaMob.ITEM_FRAME
-    )));
+    )), ConfigReader.EX_MOB_SET_READER);
     /**
      * If blocks may be placed.
      */
@@ -106,7 +128,7 @@ public class GameRule<V> {
     /**
      * A whitelist of placeable blocks. placeBlocks is supposed to be set to "true" if this should be used.
      */
-    public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>(Set.class, "placeWhitelist", null);
+    public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", null, ConfigReader.EX_ITEM_SET_READER);
     /**
      * If it should rain permanently in the dungeon.
      * <p>
@@ -148,6 +170,10 @@ public class GameRule<V> {
      */
     public static final GameRule<Integer> SCORE_GOAL = new GameRule<>(Integer.class, "scoreGoal", -1);
     /**
+     * Maximum time in hours since the dungeons specified by other rules were finished. 0 = ignore.
+     */
+    public static final GameRule<Integer> TIME_LAST_PLAYED_REQUIRED_DUNGEONS = new GameRule<>(Integer.class, "timeLastPlayedRequiredDungeons", 0);
+    /**
      * Time in hours when the game may be played again after it has been started.
      */
     public static final GameRule<Integer> TIME_TO_NEXT_PLAY_AFTER_START = new GameRule<>(Integer.class, "timeToNextPlayAfterStart", 0);
@@ -174,77 +200,189 @@ public class GameRule<V> {
     /**
      * A list of requirements. Note that requirements will be ignored if the player has the dxl.ignorerequirements permission node.
      */
-    public static final GameRule<List<Requirement>> REQUIREMENTS = new CollectionGameRule<>(List.class, "requirements", new ArrayList<>());
+    public static final GameRule<List<Requirement>> REQUIREMENTS = new CollectionGameRule<>("requirements", new ArrayList<>(), (api, value) -> {
+        if (!(value instanceof ConfigurationSection)) {
+            return null;
+        }
+        ConfigurationSection section = (ConfigurationSection) value;
+        List<Requirement> requirements = new ArrayList<>();
+        for (String key : section.getValues(false).keySet()) {
+            Class<? extends Requirement> clss = api.getRequirementRegistry().get(key);
+            if (clss == null) {
+                MessageUtil.log(api, "&4Could not find requirement named \"" + key + "\".");
+                continue;
+            }
+            try {
+                Constructor constructor = clss.getConstructor(DungeonsAPI.class);
+                if (constructor == null) {
+                    constructor = clss.getConstructor();
+                    if (constructor == null) {
+                        MessageUtil.log(api, "&4Requirement \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
+                        continue;
+                    }
+                }
+                requirements.add((Requirement) constructor.newInstance(api));
+            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+                    | IllegalArgumentException | InvocationTargetException exception) {
+                MessageUtil.log(api, "&4Requirement \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
+            }
+        }
+        return requirements;
+    });
     /**
      * One of these Dungeons must be finished ("any" for any dungeon).
      */
-    public static final GameRule<List<String>> MUST_FINISH_ONE = new CollectionGameRule<>(List.class, "mustFinishOne", null);
+    public static final GameRule<List<String>> MUST_FINISH_ONE = new CollectionGameRule<>("mustFinishOne", null);
     /**
      * All of these Dungeons must be finished. If you do not want any, leave this empty.
      */
-    public static final GameRule<List<String>> MUST_FINISH_ALL = new CollectionGameRule<>(List.class, "mustFinishAll", null);
+    public static final GameRule<List<String>> MUST_FINISH_ALL = new CollectionGameRule<>("mustFinishAll", null);
     /**
      * This can be used to give rewards. The default implementation does not do this at the moment.
      */
-    public static final GameRule<List<Reward>> REWARDS = new CollectionGameRule<>(List.class, "rewards", new ArrayList<>());
+    public static final GameRule<List<Reward>> REWARDS = new CollectionGameRule<Reward, List<Reward>>("rewards", new ArrayList<>(), (api, value) -> {
+        if (!(value instanceof ConfigurationSection)) {
+            return null;
+        }
+        ConfigurationSection section = (ConfigurationSection) value;
+        List<Reward> rewards = new ArrayList<>();
+        for (String key : section.getValues(false).keySet()) {
+            Class<? extends Reward> clss = api.getRewardRegistry().get(key);
+            if (clss == null) {
+                MessageUtil.log(api, "&4Could not find reward named \"" + key + "\".");
+                continue;
+            }
+            try {
+                Constructor constructor = clss.getConstructor(DungeonsAPI.class);
+                if (constructor == null) {
+                    constructor = clss.getConstructor();
+                    if (constructor == null) {
+                        MessageUtil.log(api, "&4Reward \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
+                        continue;
+                    }
+                }
+                rewards.add((Reward) constructor.newInstance(api));
+            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+                    | IllegalArgumentException | InvocationTargetException exception) {
+                MessageUtil.log(api, "&4Reward \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
+            }
+        }
+        return rewards;
+    });
     /**
      * These commands can be used by all players if they are in the dungeon. DXL commands like /dxl leavecan be used by default.
      */
-    public static final GameRule<List<String>> GAME_COMMAND_WHITELIST = new CollectionGameRule<>(List.class, "gameCommandWhitelist", new ArrayList<>());
+    public static final GameRule<List<String>> GAME_COMMAND_WHITELIST = new CollectionGameRule<>("gameCommandWhitelist", new ArrayList<>());
     /**
      * A list of permissions players get while they play the game. The permissions get removed as soon as the player leaves the game. Requires Vault and a
      * permissions plugin like PermissionsEx.
      */
-    public static final GameRule<List<String>> GAME_PERMISSIONS = new CollectionGameRule<>(List.class, "gamePermissions", new ArrayList<>());
+    public static final GameRule<List<String>> GAME_PERMISSIONS = new CollectionGameRule<>("gamePermissions", new ArrayList<>());
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
-    public static final GameRule<String> TITLE = new GameRule<>(String.class, "title", null);
+    public static final GameRule<String> TITLE = new GameRule<>(String.class, "title.title", null);
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
-    public static final GameRule<String> SUBTITLE = new GameRule<>(String.class, "subtitle", null);
+    public static final GameRule<String> SUBTITLE = new GameRule<>(String.class, "title.subtitle", null);
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
-    public static final GameRule<String> ACTION_BAR = new GameRule<>(String.class, "actionBar", null);
+    public static final GameRule<String> ACTION_BAR = new GameRule<>(String.class, "title.actionBar", null);
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
-    public static final GameRule<String> CHAT = new GameRule<>(String.class, "chat", null);
+    public static final GameRule<String> CHAT = new GameRule<>(String.class, "title.chat", null);
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
-    public static final GameRule<Integer> TITLE_FADE_IN = new GameRule<>(Integer.class, "titleFadeIn", 20);
+    public static final GameRule<Integer> TITLE_FADE_IN = new GameRule<>(Integer.class, "title.fadeIn", 20);
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
-    public static final GameRule<Integer> TITLE_FADE_OUT = new GameRule<>(Integer.class, "titleFadeOut", 20);
+    public static final GameRule<Integer> TITLE_FADE_OUT = new GameRule<>(Integer.class, "title.fadeOut", 20);
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
-    public static final GameRule<Integer> TITLE_SHOW = new GameRule<>(Integer.class, "titleShow", 60);
+    public static final GameRule<Integer> TITLE_SHOW = new GameRule<>(Integer.class, "title.show", 60);
     /**
      * Messages; also to be created with /dxl msg
      */
-    public static final GameRule<Map<Integer, String>> MESSAGES = new MapGameRule<>(Map.class, "msgs", new HashMap<>());
+    public static final GameRule<Map<Integer, String>> MESSAGES = new MapGameRule<>("msgs", new HashMap<>(), (api, value) -> {
+        if (!(value instanceof ConfigurationSection)) {
+            return null;
+        }
+        ConfigurationSection section = (ConfigurationSection) value;
+        Map<Integer, String> map = new HashMap<>();
+        for (Map.Entry<String, Object> entry : section.getValues(false).entrySet()) {
+            int id = NumberUtil.parseInt(entry.getKey(), -1);
+            if (id == -1) {
+                continue;
+            }
+            if (!(entry.getValue() instanceof String)) {
+                continue;
+            }
+            map.put(id, (String) entry.getValue());
+        }
+        return map;
+    });
     /**
      * Items you cannot drop or destroy.
      */
-    public static final GameRule<List<ExItem>> SECURE_OBJECTS = new CollectionGameRule<>(List.class, "secureObjects", new ArrayList<>());
+    public static final GameRule<Set<ExItem>> SECURE_OBJECTS = new CollectionGameRule<>("secureObjects", new HashSet<>(), ConfigReader.EX_ITEM_SET_READER);
     /**
      * If group tags are used.
      */
     public static final GameRule<Boolean> GROUP_TAG_ENABLED = new GameRule<>(Boolean.class, "groupTagEnabled", false);
 
+    /**
+     * An array of all game rules that exist natively in DungeonsXL.
+     */
+    public static final GameRule[] VALUES = values();
+
+    private static GameRule[] values() {
+        Field[] fields = GameRule.class.getFields();
+        GameRule[] values = new GameRule[fields.length - 1];
+        int i = 0;
+        for (Field field : fields) {
+            try {
+                Object object = field.get(null);
+                if (object instanceof GameRule) {
+                    values[i++] = (GameRule) object;
+                }
+            } catch (IllegalArgumentException | IllegalAccessException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return values;
+    }
+
     protected Class<V> type;
+    protected ConfigReader<V> reader;
     private String key;
     private V defaultValue;
 
+    /**
+     * @param type         the class of V
+     * @param key          the configuration key of the game rule
+     * @param defaultValue the default value that is used when nothing is set
+     */
     public GameRule(Class<V> type, String key, V defaultValue) {
         this.type = type;
         this.key = key;
         this.defaultValue = defaultValue;
+    }
+
+    /**
+     * @param type         the class of V
+     * @param key          the configuration key of the game rule
+     * @param defaultValue the default value that is used when nothing is set
+     * @param reader       a functional interface that loads the value from config
+     */
+    public GameRule(Class<V> type, String key, V defaultValue, ConfigReader<V> reader) {
+        this(type, key, defaultValue);
+        this.reader = reader;
     }
 
     /**
@@ -278,17 +416,20 @@ public class GameRule<V> {
     /**
      * Returns the state of the game rule fetched from the config.
      * <p>
-     * If the type of this game rule is an enum, Strings as config values that are the {@link Enum#name()} of an enum value are converted
-     * automatically.
+     * If the type of this game rule is an enum, Strings as config values that are the {@link Enum#name()} of an enum value are converted automatically.
      *
      * @param api       the API instance
-     * @param caliburn  the CaliburnAPI instance
      * @param container the game rule container whose state is to be set
      * @param config    the config to fetch the value from
      * @return the value
      */
-    public V fromConfig(DungeonsAPI api, CaliburnAPI caliburn, GameRuleContainer container, ConfigurationSection config) {
+    public V fromConfig(DungeonsAPI api, GameRuleContainer container, ConfigurationSection config) {
         Object value = config.get(getKey());
+        if (reader != null) {
+            V v = reader.read(api, value);
+            container.setState(this, v);
+            return v;
+        }
 
         if (Enum.class.isAssignableFrom(type)) {
             if (!(value instanceof String)) {
@@ -297,7 +438,12 @@ public class GameRule<V> {
             value = EnumUtil.getEnumIgnoreCase((Class<? extends Enum>) type, (String) value);
         }
 
-        return isValidValue(value) ? (V) value : null;
+        if (isValidValue(value)) {
+            container.setState(this, (V) value);
+            return (V) value;
+        } else {
+            return null;
+        }
     }
 
     /**

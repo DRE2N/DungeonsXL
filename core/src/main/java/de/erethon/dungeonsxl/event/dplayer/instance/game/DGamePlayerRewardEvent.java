@@ -16,8 +16,8 @@
  */
 package de.erethon.dungeonsxl.event.dplayer.instance.game;
 
+import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.player.DGamePlayer;
-import de.erethon.dungeonsxl.reward.Reward;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.entity.Player;
@@ -37,7 +37,7 @@ public class DGamePlayerRewardEvent extends DGamePlayerEvent implements Cancella
 
     public DGamePlayerRewardEvent(DGamePlayer dPlayer) {
         super(dPlayer);
-        this.rewards = dPlayer.getDGroup().getRewards();
+        this.rewards = dPlayer.getGroup().getRewards();
     }
 
     /**

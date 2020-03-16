@@ -19,8 +19,9 @@ package de.erethon.dungeonsxl.world.block;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -31,8 +32,8 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public class TeamFlag extends TeamBlock {
 
-    public TeamFlag(DungeonsXL plugin, Block block, DGroup owner) {
-        super(plugin, block, owner);
+    public TeamFlag(DungeonsAPI api, Block block, DGroup owner) {
+        super(api, block, owner);
         reset();
     }
 
@@ -47,12 +48,12 @@ public class TeamFlag extends TeamBlock {
     @Override
     public boolean onBreak(BlockBreakEvent event) {
         Player breaker = event.getPlayer();
-        DGamePlayer gamePlayer = DGamePlayer.getByPlayer(breaker);
+        GamePlayer gamePlayer = api.getPlayerCache().getGamePlayer(breaker);
         if (gamePlayer == null) {
             return true;
         }
 
-        if (owner.getPlayers().contains(breaker)) {
+        if (owner.getMembers().contains(breaker)) {
             MessageUtil.sendMessage(breaker, DMessage.ERROR_BLOCK_OWN_TEAM.getMessage());
             return true;
         }

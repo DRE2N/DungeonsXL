@@ -23,7 +23,7 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
  *
  * @author Daniel Saukel
  */
-// Implementation-specific methods: g/s lines copy, poke
+// Implementation-specific methods: poke
 public interface EditPlayer extends InstancePlayer {
 
     /**

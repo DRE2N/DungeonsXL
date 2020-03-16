@@ -14,7 +14,9 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import java.util.Collection;
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * A {@link GameRule} where the value is a {@link java.util.Collection}.
@@ -25,8 +27,57 @@ import java.util.Collection;
  */
 public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> {
 
-    public CollectionGameRule(Class type, String key, V defaultValue) {
-        super(type, key, defaultValue);
+    /**
+     * @param key          the configuration key of the game rule
+     * @param defaultValue the default value that is used when nothing is set
+     */
+    public CollectionGameRule(String key, V defaultValue) {
+        super(null, key, defaultValue);
+    }
+
+    /**
+     * @param key          the configuration key of the game rule
+     * @param defaultValue the default value that is used when nothing is set
+     * @param reader       a functional interface that loads the value from config
+     */
+    public CollectionGameRule(String key, V defaultValue, ConfigReader<V> reader) {
+        super(null, key, defaultValue, reader);
+    }
+
+    /**
+     * This implementation uses more expensive casting + catching the ClassCastException.
+     * Developers should consider doing that themselves instead of wasting this cast.
+     *
+     * @param value the value
+     * @return if the given value is an instance of {@link V}
+     */
+    @Override
+    public boolean isValidValue(Object value) {
+        try {
+            V v = (V) value;
+            return true;
+        } catch (ClassCastException exception) {
+            return false;
+        }
+    }
+
+    @Override
+    public V fromConfig(DungeonsAPI api, GameRuleContainer container, ConfigurationSection config) {
+        Object value = config.get(getKey());
+        if (reader != null) {
+            V v = reader.read(api, value);
+            container.setState(this, v);
+            return v;
+        }
+
+        V v;
+        try {
+            v = (V) value;
+        } catch (ClassCastException exception) {
+            return null;
+        }
+        container.setState(this, v);
+        return v;
     }
 
     @Override

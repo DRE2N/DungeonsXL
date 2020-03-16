@@ -19,14 +19,15 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
-import de.erethon.dungeonsxl.world.DWorldCache;
 import java.io.File;
 import java.util.ArrayList;
 import org.bukkit.command.CommandSender;
@@ -51,20 +52,20 @@ public class ListCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         ArrayList<String> dungeonList = new ArrayList<>();
-        for (Dungeon dungeon : plugin.getDungeonCache().getDungeons()) {
+        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
             dungeonList.add(dungeon.getName());
         }
         ArrayList<String> mapList = new ArrayList<>();
         for (File file : DungeonsXL.MAPS.listFiles()) {
-            if (!file.equals(DWorldCache.RAW)) {
+            if (!file.equals(DResourceWorld.RAW)) {
                 mapList.add(file.getName());
             }
         }
         ArrayList<String> loadedList = new ArrayList<>();
-        for (DEditWorld editWorld : instances.getEditWorlds()) {
+        for (InstanceWorld editWorld : plugin.getInstanceCache().getAllIf(i -> i instanceof EditWorld)) {
             loadedList.add(editWorld.getWorld().getWorldFolder().getName() + " / " + editWorld.getName());
         }
-        for (DGameWorld gameWorld : instances.getGameWorlds()) {
+        for (InstanceWorld gameWorld : plugin.getInstanceCache().getAllIf(i -> i instanceof GameWorld)) {
             loadedList.add(gameWorld.getWorld().getWorldFolder().getName() + " / " + gameWorld.getName());
         }
         ArrayList<String> toSend = new ArrayList<>();
@@ -75,15 +76,22 @@ public class ListCommand extends DCommand {
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("dungeons") || args[1].equalsIgnoreCase("d")) {
                 if (args.length >= 3) {
-                    Dungeon dungeon = plugin.getDungeonCache().getByName(args[2]);
+                    Dungeon dungeon = plugin.getDungeonRegistry().get(args[2]);
                     if (dungeon != null) {
                         MessageUtil.sendPluginTag(sender, plugin);
                         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + dungeon.getName() + " &4&l]");
-                        MessageUtil.sendMessage(sender, "&eFloors: &o" + dungeon.getConfig().getFloors());
-                        MessageUtil.sendMessage(sender, "&estartFloor: &o[" + dungeon.getConfig().getStartFloor() + "]");
-                        MessageUtil.sendMessage(sender, "&eendFloor: &o[" + dungeon.getConfig().getEndFloor() + "]");
-                        MessageUtil.sendMessage(sender, "&efloorCount: &o[" + dungeon.getConfig().getFloorCount() + "]");
-                        MessageUtil.sendMessage(sender, "&eremoveWhenPlayed: &o[" + dungeon.getConfig().getRemoveWhenPlayed() + "]");
+                        StringBuilder floorList = new StringBuilder();
+                        for (int i = 0; i < dungeon.getFloors().size(); i++) {
+                            if (i != 0) {
+                                floorList.append(", ");
+                            }
+                            floorList.append(dungeon.getFloors().get(i).getName());
+                        }
+                        MessageUtil.sendMessage(sender, "&eFloors: &o" + floorList.toString());
+                        MessageUtil.sendMessage(sender, "&estartFloor: &o[" + dungeon.getStartFloor().getName() + "]");
+                        MessageUtil.sendMessage(sender, "&eendFloor: &o[" + dungeon.getEndFloor().getName() + "]");
+                        MessageUtil.sendMessage(sender, "&efloorCount: &o[" + dungeon.getFloorCount() + "]");
+                        MessageUtil.sendMessage(sender, "&eremoveWhenPlayed: &o[" + dungeon.getRemoveWhenPlayed() + "]");
                         return;
                     }
                 }
@@ -130,7 +138,7 @@ public class ListCommand extends DCommand {
                 for (String map : toSend) {
                     boolean invited = false;
                     if (sender instanceof Player) {
-                        DResourceWorld resource = instances.getResourceByName(map);
+                        ResourceWorld resource = plugin.getMapRegistry().get(map);
                         if (resource != null) {
                             invited = resource.isInvitedPlayer((Player) sender);
                         }

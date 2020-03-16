@@ -21,11 +21,11 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.CompatibilityHandler;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.event.DataReloadEvent;
-import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import java.util.List;
+import java.util.Collection;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -51,7 +51,7 @@ public class ReloadCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        List<DInstancePlayer> dPlayers = this.dPlayers.getDInstancePlayers();
+        Collection<InstancePlayer> dPlayers = this.dPlayers.getAllInstancePlayers();
         if (!dPlayers.isEmpty() && args.length == 1 && sender instanceof Player) {
             MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_PLAYERS.getMessage());
             ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -force");
@@ -70,14 +70,12 @@ public class ReloadCommand extends DCommand {
             return;
         }
 
-        for (DInstancePlayer dPlayer : dPlayers) {
-            dPlayer.leave();
-        }
+        dPlayers.forEach(InstancePlayer::leave);
 
         int maps = DungeonsXL.MAPS.listFiles().length - 1;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = instances.getEditWorlds().size() + instances.getGameWorlds().size();
-        int players = this.dPlayers.getDGamePlayers().size();
+        int loaded = plugin.getInstanceCache().size();
+        int players = this.dPlayers.getAllGamePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {

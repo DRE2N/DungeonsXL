@@ -21,13 +21,14 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Location;
@@ -209,14 +210,14 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
-        DGroup dGroup = DGroup.getByPlayer(player);
-        if (dGroup == null) {
+        PlayerGroup group = plugin.getPlayerGroup(player);
+        if (group == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
-        DGameWorld target = dGroup.getGameWorld();
-        Game game = Game.getByDGroup(dGroup);
+        GameWorld target = group.getGameWorld();
+        Game game = group.getGame();
 
         if (target == null && game != null) {
             target = game.getWorld();
@@ -224,7 +225,7 @@ public class DPortal extends GlobalProtection {
 
         if (target == null) {
             if (game != null) {
-                for (DGroup otherTeam : game.getDGroups()) {
+                for (PlayerGroup otherTeam : game.getGroups()) {
                     if (otherTeam.getGameWorld() != null) {
                         target = otherTeam.getGameWorld();
                         break;
@@ -233,15 +234,15 @@ public class DPortal extends GlobalProtection {
             }
         }
 
-        if (target == null && dGroup.getDungeon() != null) {
-            DResourceWorld resource = dGroup.getDungeon().getMap();
+        if (target == null && group.getDungeon() != null) {
+            ResourceWorld resource = group.getDungeon().getMap();
             if (resource != null) {
-                target = resource.instantiateAsGameWorld(false);
+                target = resource.instantiateGameWorld(false);
                 if (target == null) {
                     MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
                     return;
                 }
-                dGroup.setGameWorld(target);
+                group.setGameWorld(target);
             }
         }
 
@@ -251,11 +252,11 @@ public class DPortal extends GlobalProtection {
         }
 
         if (game == null) {
-            game = new Game(plugin, dGroup, target);
+            game = new DGame(plugin, group, target);
 
         } else {
             game.setWorld(target);
-            dGroup.setGameWorld(target);
+            group.setGameWorld(target);
         }
 
         new DGamePlayer(plugin, player, target);

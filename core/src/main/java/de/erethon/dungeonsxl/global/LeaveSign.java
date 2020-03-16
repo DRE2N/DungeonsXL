@@ -19,9 +19,9 @@ package de.erethon.dungeonsxl.global;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DGamePlayer;
-import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import java.util.HashSet;
 import java.util.Set;
@@ -91,13 +91,13 @@ public class LeaveSign extends GlobalProtection {
     }
 
     public void onPlayerInteract(Player player) {
-        DGamePlayer dplayer = DGamePlayer.getByPlayer(player);
+        GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer(player);
 
-        if (dplayer != null) {
-            dplayer.leave();
+        if (gamePlayer != null) {
+            gamePlayer.leave();
 
         } else {
-            DGroup group = DGroup.getByPlayer(player);
+            PlayerGroup group = gamePlayer.getGroup();
             if (group != null) {
                 group.removePlayer(player);
                 MessageUtil.sendMessage(player, DMessage.PLAYER_LEAVE_GROUP.getMessage());

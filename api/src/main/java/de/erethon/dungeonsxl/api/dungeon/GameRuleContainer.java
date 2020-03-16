@@ -15,6 +15,7 @@
 package de.erethon.dungeonsxl.api.dungeon;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -23,6 +24,32 @@ import java.util.Map;
  * @author Daniel Saukel
  */
 public class GameRuleContainer {
+
+    /**
+     * A container of all rules with their default value. This is used internally as the most subsidiary container that fills missing rules if they are not set.
+     */
+    public static final GameRuleContainer DEFAULT_VALUES = new GameRuleContainer();
+
+    static {
+        for (GameRule rule : GameRule.VALUES) {
+            DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
+        }
+    }
+
+    /**
+     * Initializes an emtpy GameRuleContainer.
+     */
+    public GameRuleContainer() {
+    }
+
+    /**
+     * Copies a GameRuleContainer.
+     *
+     * @param container the container to copy
+     */
+    public GameRuleContainer(GameRuleContainer container) {
+        rules = new HashMap<>(container.rules);
+    }
 
     private Map<GameRule<?>, Object> rules = new HashMap<>();
 
@@ -74,6 +101,18 @@ public class GameRuleContainer {
      */
     public void merge(GameRuleContainer subsidiary) {
         rules.entrySet().forEach(e -> e.getKey().merge(this, subsidiary, this));
+
+        // If we are using the last subsidiary rules (the default rules) and if blocks may be broken...
+        if (subsidiary != DEFAULT_VALUES || !getState(GameRule.BREAK_BLOCKS)) {
+            return;
+        }
+        // ...then it makes no sense to set *ProtectedEntities to default where several block-like entities (like paintings) are protected.
+        if (getState(GameRule.DAMAGE_PROTECTED_ENTITIES) == DEFAULT_VALUES.getState(GameRule.DAMAGE_PROTECTED_ENTITIES)) {
+            setState(GameRule.DAMAGE_PROTECTED_ENTITIES, new HashSet<>());
+        }
+        if (getState(GameRule.INTERACTION_PROTECTED_ENTITIES) == DEFAULT_VALUES.getState(GameRule.INTERACTION_PROTECTED_ENTITIES)) {
+            setState(GameRule.INTERACTION_PROTECTED_ENTITIES, new HashSet<>());
+        }
     }
 
 }

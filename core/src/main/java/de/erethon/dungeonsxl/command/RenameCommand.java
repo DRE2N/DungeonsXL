@@ -18,13 +18,14 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.global.GlobalProtection;
 import de.erethon.dungeonsxl.global.JoinSign;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class RenameCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = instances.getResourceByName(args[1]);
+        DResourceWorld resource = (DResourceWorld) plugin.getMapRegistry().get(args[1]);
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
@@ -60,14 +61,12 @@ public class RenameCommand extends DCommand {
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
         resource.getSignData().updateFile(resource);
 
-        for (DEditWorld editWorld : instances.getEditWorlds()) {
-            if (editWorld.getResource() == resource) {
-                editWorld.delete(true);
-            }
+        if (resource.getEditWorld() != null) {
+            resource.getEditWorld().delete(true);
         }
 
-        for (Dungeon dungeon : plugin.getDungeonCache().getDungeons()) {
-            DungeonConfig dConfig = dungeon.getConfig();
+        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
+            DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
             FileConfiguration config = dConfig.getConfig();
             File file = dConfig.getFile();
 
@@ -81,7 +80,7 @@ public class RenameCommand extends DCommand {
 
             List<String> list = config.getStringList("floors");
             int i = 0;
-            for (DResourceWorld floor : dConfig.getFloors()) {
+            for (ResourceWorld floor : dConfig.getFloors()) {
                 if (floor == resource) {
                     list.set(i, args[2]);
                 }

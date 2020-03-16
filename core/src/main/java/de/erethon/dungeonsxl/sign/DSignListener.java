@@ -18,12 +18,15 @@ package de.erethon.dungeonsxl.sign;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -40,10 +43,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class DSignListener implements Listener {
 
-    private DungeonsXL plugin;
+    private DungeonsAPI api;
 
-    public DSignListener(DungeonsXL plugin) {
-        this.plugin = plugin;
+    public DSignListener(DungeonsAPI api) {
+        this.api = api;
     }
 
     @EventHandler
@@ -53,12 +56,12 @@ public class DSignListener implements Listener {
         if (clickedBlock == null) {
             return;
         }
-        DGamePlayer dPlayer = DGamePlayer.getByPlayer(player);
+        GamePlayer dPlayer = api.getPlayerCache().getGamePlayer(player);
         if (dPlayer == null) {
             return;
         }
 
-        DGameWorld gameWorld = DGameWorld.getByWorld(player.getWorld());
+        DGameWorld gameWorld = (DGameWorld) dPlayer.getGameWorld();
         if (gameWorld == null) {
             return;
         }
@@ -67,17 +70,6 @@ public class DSignListener implements Listener {
         if (trigger != null) {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 trigger.onTrigger(player);
-            }
-        }
-
-        for (Sign classSign : gameWorld.getClassesSigns()) {
-            if (classSign != null) {
-                if (classSign.getLocation().distance(clickedBlock.getLocation()) < 1) {
-                    if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                        dPlayer.setDClass(ChatColor.stripColor(classSign.getLine(1)));
-                    }
-                    break;
-                }
             }
         }
     }
@@ -93,7 +85,7 @@ public class DSignListener implements Listener {
         }
 
         Sign sign = (Sign) state;
-        DEditWorld editWorld = DEditWorld.getByWorld(sign.getWorld());
+        EditWorld editWorld = api.getEditWorld(sign.getWorld());
         if (editWorld == null) {
             return;
         }
@@ -104,34 +96,33 @@ public class DSignListener implements Listener {
             sign.setLine(2, lines[2]);
             sign.setLine(3, lines[3]);
 
-            for (DSignTypeDefault type : DSignTypeDefault.values()) {
-                if (!lines[0].equalsIgnoreCase("[" + type.getName() + "]")) {
+            for (Entry<String, Class<? extends DungeonSign>> registryEntry : api.getSignRegistry().entrySet()) {
+                if (!lines[0].equalsIgnoreCase("[" + registryEntry.getKey() + "]")) {
                     continue;
                 }
-                if (type.isLegacy()) {
+                if (DungeonsXL.LEGACY_SIGNS.contains(registryEntry.getKey().toUpperCase())) {
                     MessageUtil.sendMessage(player, ChatColor.RED + "https://erethon.de/resources/dxl-signs/deprecated.gif");
                     MessageUtil.sendMessage(player, ChatColor.LIGHT_PURPLE + "https://github.com/DRE2N/DungeonsXL/wiki/Legacy-support#updating");
                     return;
                 }
             }
 
-            DSign dsign = DSign.create(plugin, sign, null);
-
+            DungeonSign dsign = editWorld.createDungeonSign(sign, sign.getLines());
             if (dsign == null) {
                 return;
             }
 
-            if (!DPermission.hasPermission(player, dsign.getType().getBuildPermission())) {
+            if (!DPermission.hasPermission(player, dsign.getBuildPermission())) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_NO_PERMISSIONS.getMessage());
                 return;
             }
 
-            if (dsign.check()) {
+            if (dsign.validate()) {
                 editWorld.registerSign(block);
-                editWorld.getSigns().add(block);
                 MessageUtil.sendMessage(player, DMessage.PLAYER_SIGN_CREATED.getMessage());
 
             } else {
+                editWorld.removeDungeonSign(block);
                 MessageUtil.sendMessage(player, DMessage.ERROR_SIGN_WRONG_FORMAT.getMessage());
             }
         }

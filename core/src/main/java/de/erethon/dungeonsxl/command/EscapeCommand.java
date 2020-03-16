@@ -18,12 +18,11 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.EditPlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DEditPlayer;
-import de.erethon.dungeonsxl.player.DGamePlayer;
-import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -45,15 +44,15 @@ public class EscapeCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DEditPlayer dPlayer = DEditPlayer.getByPlayer(player);
+        EditPlayer editPlayer = dPlayers.getEditPlayer(player);
 
-        if (DGamePlayer.getByPlayer(player) != null) {
+        if (dPlayers.getGamePlayer(player) != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
 
-        } else if (dPlayer != null) {
-            dPlayer.escape();
+        } else if (editPlayer != null) {
+            editPlayer.escape();
 
-            DEditWorld editWorld = DEditWorld.getByWorld(dPlayer.getWorld());
+            EditWorld editWorld = editPlayer.getEditWorld();
             if (editWorld == null) {
                 return;
             }
@@ -63,7 +62,7 @@ public class EscapeCommand extends DCommand {
             }
 
         } else {
-            DGroup dGroup = DGroup.getByPlayer(player);
+            PlayerGroup dGroup = plugin.getPlayerGroup(player);
             if (dGroup != null) {
                 dGroup.removePlayer(player);
                 MessageUtil.sendMessage(player, DMessage.CMD_LEAVE_SUCCESS.getMessage());

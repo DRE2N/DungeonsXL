@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.event.dgroup;
 
-import de.erethon.dungeonsxl.dungeon.Dungeon;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.player.DGroup;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -29,9 +29,9 @@ public class DGroupFinishDungeonEvent extends DGroupEvent implements Cancellable
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Dungeon dungeon;
+    private DDungeon dungeon;
 
-    public DGroupFinishDungeonEvent(Dungeon dungeon, DGroup dGroup) {
+    public DGroupFinishDungeonEvent(DDungeon dungeon, DGroup dGroup) {
         super(dGroup);
         this.dungeon = dungeon;
     }
@@ -39,14 +39,14 @@ public class DGroupFinishDungeonEvent extends DGroupEvent implements Cancellable
     /**
      * @return the dungeon
      */
-    public Dungeon getDungeon() {
+    public DDungeon getDungeon() {
         return dungeon;
     }
 
     /**
      * @param dungeon the dungeon to set
      */
-    public void setDisbander(Dungeon dungeon) {
+    public void setDisbander(DDungeon dungeon) {
         this.dungeon = dungeon;
     }
 

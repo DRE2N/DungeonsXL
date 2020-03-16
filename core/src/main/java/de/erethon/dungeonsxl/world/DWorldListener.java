@@ -21,7 +21,11 @@ import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.game.Game;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import java.util.Set;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -49,18 +53,18 @@ import org.bukkit.event.world.WorldInitEvent;
  */
 public class DWorldListener implements Listener {
 
+    private DungeonsXL plugin;
     private CaliburnAPI caliburn;
-    private DWorldCache dWorlds;
 
     public DWorldListener(DungeonsXL plugin) {
+        this.plugin = plugin;
         caliburn = plugin.getCaliburn();
-        dWorlds = plugin.getDWorldCache();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInit(WorldInitEvent event) {
         World world = event.getWorld();
-        if (dWorlds.isInstance(world)) {
+        if (plugin.isInstance(world)) {
             world.setKeepSpawnInMemory(false);
         }
     }
@@ -68,15 +72,15 @@ public class DWorldListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        // DEditWorld Signs
-        DEditWorld editWorld = DEditWorld.getByWorld(block.getWorld());
+        // EditWorld Signs
+        EditWorld editWorld = plugin.getEditWorld(block.getWorld());
         if (editWorld != null) {
-            editWorld.getSigns().remove(event.getBlock());
+            editWorld.removeDungeonSign(event.getBlock());
             return;
         }
 
-        // Deny DGameWorld block breaking
-        DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
+        // Deny GameWorld block breaking
+        DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(block.getWorld());
         if (gameWorld != null) {
             if (gameWorld.onBreak(event)) {
                 event.setCancelled(true);
@@ -88,7 +92,7 @@ public class DWorldListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlock();
 
-        DGameWorld gameWorld = DGameWorld.getByWorld(block.getWorld());
+        DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(block.getWorld());
         if (gameWorld == null) {
             return;
         }
@@ -100,7 +104,7 @@ public class DWorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockIgnite(BlockIgniteEvent event) {
-        if (dWorlds.getInstanceByWorld(event.getBlock().getWorld()) == null) {
+        if (!plugin.isInstance(event.getBlock().getWorld())) {
             return;
         }
 
@@ -113,24 +117,22 @@ public class DWorldListener implements Listener {
     public void onBlockSpread(BlockSpreadEvent event) {
         Block block = event.getSource();
 
-        DInstanceWorld instance = dWorlds.getInstanceByWorld(block.getWorld());
-        if (instance != null && VanillaItem.VINE.is(block)) {
+        if (plugin.isInstance(block.getWorld()) && VanillaItem.VINE.is(block)) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getEntity().getWorld());
-
-        if (gameWorld != null) {
-            if (event.getEntity() instanceof LivingEntity) {
-                // Disable Creeper explosions in gameWorlds
-                event.setCancelled(true);
-            } else {
-                // Disable drops from TNT
-                event.setYield(0);
-            }
+        if (plugin.getGameWorld(event.getEntity().getWorld()) == null) {
+            return;
+        }
+        if (event.getEntity() instanceof LivingEntity) {
+            // Disable Creeper explosions in gameWorlds
+            event.setCancelled(true);
+        } else {// TODO respect block breaking game rules
+            // Disable drops from TNT
+            event.setYield(0);
         }
     }
 
@@ -160,15 +162,12 @@ public class DWorldListener implements Listener {
      * @param interact true = interact; false = break
      */
     public void onTouch(Cancellable event, Entity entity, boolean interact) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(entity.getWorld());
+        GameWorld gameWorld = plugin.getGameWorld(entity.getWorld());
         if (gameWorld == null) {
             return;
         }
-        Game game = Game.getByGameWorld(gameWorld);
-        if (game == null) {
-            return;
-        }
-        Set<ExMob> prot = interact ? game.getRules().getInteractionProtectedEntities() : game.getRules().getDamageProtectedEntities();
+        GameRuleContainer rules = gameWorld.getDungeon().getRules();
+        Set<ExMob> prot = interact ? rules.getState(GameRule.INTERACTION_PROTECTED_ENTITIES) : rules.getState(GameRule.DAMAGE_PROTECTED_ENTITIES);
         if (prot.contains(caliburn.getExMob(entity))) {
             event.setCancelled(true);
         }
@@ -177,7 +176,7 @@ public class DWorldListener implements Listener {
     // TODO: Is this necessary?
     @EventHandler
     public void onItemSpawn(ItemSpawnEvent event) {
-        if (DGameWorld.getByWorld(event.getLocation().getWorld()) != null) {
+        if (plugin.getGameWorld(event.getLocation().getWorld()) != null) {
             if (Category.SIGNS.containsItem(event.getEntity().getItemStack())) {
                 event.setCancelled(true);
             }
@@ -186,15 +185,11 @@ public class DWorldListener implements Listener {
 
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
-        DInstanceWorld dWorld = dWorlds.getInstanceByWorld(event.getWorld());
-        if (dWorld instanceof DEditWorld && event.toWeatherState()) {
+        InstanceWorld instance = plugin.getInstanceWorld(event.getWorld());
+        if (instance instanceof EditWorld && event.toWeatherState()) {
             event.setCancelled(true);
-        } else if (dWorld instanceof DGameWorld) {
-            Game game = Game.getByGameWorld((DGameWorld) dWorld);
-            if (game == null) {
-                return;
-            }
-            Boolean raining = game.getRules().isRaining();
+        } else if (instance instanceof GameWorld) {
+            Boolean raining = ((GameWorld) instance).getDungeon().getRules().getState(GameRule.RAIN);
             if (raining == null) {
                 return;
             }

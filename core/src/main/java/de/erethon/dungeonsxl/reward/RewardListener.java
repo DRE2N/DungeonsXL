@@ -18,10 +18,9 @@ package de.erethon.dungeonsxl.reward;
 
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import de.erethon.vignette.api.PaginatedInventoryGUI;
@@ -84,7 +83,7 @@ public class RewardListener implements Listener {
 
         InventoryView inventory = event.getView();
 
-        DGameWorld gameWorld = DGameWorld.getByWorld(event.getPlayer().getWorld());
+        DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(event.getPlayer().getWorld());
 
         if (gameWorld == null) {
             return;
@@ -108,7 +107,7 @@ public class RewardListener implements Listener {
 
         if (!plugin.getMainConfig().getOpenInventories() && !DPermission.hasPermission(event.getPlayer(), DPermission.INSECURE)) {
             World world = event.getPlayer().getWorld();
-            if (event.getInventory().getType() != InventoryType.CREATIVE && DEditWorld.getByWorld(world) != null) {
+            if (event.getInventory().getType() != InventoryType.CREATIVE && plugin.getEditWorld(world) != null) {
                 event.setCancelled(true);
             }
         }
@@ -117,8 +116,8 @@ public class RewardListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        DGlobalPlayer dPlayer = plugin.getDPlayerCache().getByPlayer(player);
-        if (plugin.getDWorldCache().getInstanceByWorld(player.getWorld()) != null) {
+        GlobalPlayer dPlayer = plugin.getPlayerCache().get(player);
+        if (plugin.getInstanceWorld(player.getWorld()) != null) {
             return;
         }
         Block block = player.getLocation().getBlock();

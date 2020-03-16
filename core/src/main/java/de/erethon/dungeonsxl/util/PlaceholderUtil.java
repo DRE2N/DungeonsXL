@@ -17,10 +17,9 @@
 package de.erethon.dungeonsxl.util;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.game.Game;
-import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.player.DPlayerCache;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -30,13 +29,11 @@ import org.bukkit.entity.Player;
 public class PlaceholderUtil extends PlaceholderExpansion {
 
     private DungeonsXL plugin;
-    private DPlayerCache dPlayers;
 
     private String identifier;
 
     public PlaceholderUtil(DungeonsXL plugin, String identifier) {
         this.plugin = plugin;
-        dPlayers = plugin.getDPlayerCache();
         this.identifier = identifier;
     }
 
@@ -65,31 +62,31 @@ public class PlaceholderUtil extends PlaceholderExpansion {
         if (player == null) {
             return "";
         }
-        DGroup group = dPlayers.getByPlayer(player).getDGroup();
+        PlayerGroup group = plugin.getPlayerGroup(player);
 
         switch (identifier) {
             case "group_members":
-                return group != null ? group.getPlayers().getNames().toString().substring(1, group.getPlayers().getNames().toString().length() - 2) : "";
+                return group != null ? group.getMembers().getNames().toString().substring(1, group.getMembers().getNames().toString().length() - 2) : "";
             case "group_name":
                 return group != null ? group.getName() : "";
             case "group_name_raw":
                 return group != null ? group.getRawName() : "";
             case "group_player_count":
-                return group != null ? String.valueOf(group.getPlayers().size()) : "";
+                return group != null ? String.valueOf(group.getMembers().size()) : "";
             case "game_player_count":
-                Game game = Game.getByPlayer(player);
+                Game game = group.getGame();
                 return game != null ? String.valueOf(game.getPlayers().size()) : "";
             case "floor_player_count":
-                DGameWorld gameWorld = group.getGameWorld();
+                GameWorld gameWorld = group.getGameWorld();
                 return gameWorld != null ? String.valueOf(gameWorld.getPlayers().size()) : "";
             case "dungeon_name":
-                return group != null ? group.getDungeonName() : "";
+                return group != null ? group.getDungeon().getName() : "";
             case "global_dungeon_count":
-                return String.valueOf(plugin.getDungeonCache().getDungeons().size());
+                return String.valueOf(plugin.getDungeonRegistry().size());
             case "global_floor_count":
-                return String.valueOf(plugin.getDWorldCache().getResources().size());
+                return String.valueOf(plugin.getMapRegistry().size());
             case "global_instance_count":
-                return String.valueOf(plugin.getDWorldCache().getInstances().size());
+                return String.valueOf(plugin.getInstanceCache().size());
             default:
                 return null;
         }

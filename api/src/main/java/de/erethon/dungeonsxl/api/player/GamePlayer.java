@@ -14,7 +14,10 @@
  */
 package de.erethon.dungeonsxl.api.player;
 
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import org.bukkit.Location;
+import org.bukkit.entity.Wolf;
 
 /**
  * Represents a player in a game dungeon instance.
@@ -25,6 +28,24 @@ import org.bukkit.Location;
  */
 // Implementation-specific methods: isInTestMode, setReady, [wolf, group tag, requirement, loot check methods], finishFloor
 public interface GamePlayer extends InstancePlayer {
+
+    /**
+     * Returns the game the player's group plays.
+     *
+     * @return the game the player's group plays
+     */
+    default Game getGame() {
+        return getGroup().getGame();
+    }
+
+    /**
+     * Returns the game world of the player's group.
+     *
+     * @return the game world of the player's group
+     */
+    default GameWorld getGameWorld() {
+        return getGroup().getGameWorld();
+    }
 
     /**
      * Returns if the player is ready to start the game.
@@ -126,6 +147,24 @@ public interface GamePlayer extends InstancePlayer {
      * @param lives the lives
      */
     void setLives(int lives);
+
+    /**
+     * Returns the player's wolf or null if he does not have one.
+     *
+     * @return the player's wolf or null if he does not have one
+     * @deprecated More dynamic pet features might make this obsolete in the future.
+     */
+    @Deprecated
+    Wolf getWolf();
+
+    /**
+     * Gives the player a wolf.
+     *
+     * @param wolf the wolf
+     * @deprecated More dynamic pet features might make this obsolete in the future.
+     */
+    @Deprecated
+    void setWolf(Wolf wolf);
 
     /**
      * Returns if the player is stealing another group's flag.

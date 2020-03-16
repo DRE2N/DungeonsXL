@@ -14,6 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.player;
 
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import org.bukkit.World;
 
 /**
@@ -32,6 +33,13 @@ public interface InstancePlayer extends GlobalPlayer {
      * @return the world of the instance
      */
     World getWorld();
+
+    /**
+     * The world of the instance, where the player is supposed to be.
+     *
+     * @return the instance world
+     */
+    InstanceWorld getInstanceWorld();
 
     /**
      * Makes the player leave his group and dungeon.

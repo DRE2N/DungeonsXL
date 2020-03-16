@@ -18,10 +18,13 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
+import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.WorldConfig;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -44,7 +47,7 @@ public class MsgCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DEditWorld editWorld = DEditWorld.getByWorld(player.getWorld());
+        EditWorld editWorld = plugin.getEditWorld(player.getWorld());
 
         if (editWorld == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NOT_IN_DUNGEON.getMessage());
@@ -59,10 +62,11 @@ public class MsgCommand extends DCommand {
         try {
             int id = Integer.parseInt(args[1]);
 
-            WorldConfig config = editWorld.getResource().getConfig(true);
+            WorldConfig config = ((DResourceWorld) editWorld.getResource()).getConfig(true);
+            Map<Integer, String> msgs = config.getState(GameRule.MESSAGES);
 
             if (args.length == 2) {
-                String msg = config.getMessage(id);
+                String msg = msgs.get(id);
 
                 if (msg != null) {
                     MessageUtil.sendMessage(player, ChatColor.WHITE + msg);
@@ -85,7 +89,7 @@ public class MsgCommand extends DCommand {
 
                 if (splitMsg.length > 1) {
                     msg = splitMsg[1];
-                    String old = config.getMessage(id);
+                    String old = msgs.get(id);
                     if (old == null) {
                         MessageUtil.sendMessage(player, DMessage.CMD_MSG_ADDED.getMessage(String.valueOf(id)));
 
@@ -93,7 +97,7 @@ public class MsgCommand extends DCommand {
                         MessageUtil.sendMessage(player, DMessage.CMD_MSG_UPDATED.getMessage(String.valueOf(id)));
                     }
 
-                    config.setMessage(id, msg);
+                    msgs.put(id, msg);
                     config.save();
 
                 } else {

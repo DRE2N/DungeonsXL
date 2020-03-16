@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.player.DPermission;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +26,9 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class PermissionRequirement extends Requirement {
-
-    private RequirementType type = RequirementTypeDefault.PERMISSION;
+public class PermissionRequirement implements Requirement {
 
     private List<String> permissions = new ArrayList<>();
-
-    public PermissionRequirement(DungeonsXL plugin) {
-        super(plugin);
-    }
 
     /* Getters and setters */
     /**
@@ -49,11 +43,6 @@ public class PermissionRequirement extends Requirement {
      */
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
-    }
-
-    @Override
-    public RequirementType getType() {
-        return type;
     }
 
     /* Actions */

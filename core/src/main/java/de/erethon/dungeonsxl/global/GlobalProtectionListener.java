@@ -22,7 +22,6 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -87,7 +86,7 @@ public class GlobalProtectionListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        DGlobalPlayer dGlobalPlayer = plugin.getDPlayerCache().getByPlayer(player);
+        DGlobalPlayer dGlobalPlayer = (DGlobalPlayer) plugin.getPlayerCache().get(player);
 
         GlobalProtection protection = plugin.getGlobalProtectionCache().getByBlock(block);
         if (protection != null) {
@@ -182,7 +181,7 @@ public class GlobalProtectionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPortalCreation(PlayerInteractEvent event) {
-        DGlobalPlayer dPlayer = plugin.getDPlayerCache().getByPlayer(event.getPlayer());
+        DGlobalPlayer dPlayer = (DGlobalPlayer) plugin.getPlayerCache().get(event.getPlayer());
         if (!dPlayer.isCreatingPortal()) {
             return;
         }
@@ -217,7 +216,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getDPlayerCache().getByPlayer(player).isInBreakMode()) {
+        if (plugin.getPlayerCache().get(player).isInBreakMode()) {
             return;
         }
         Block clickedBlock = event.getClickedBlock();
@@ -258,7 +257,7 @@ public class GlobalProtectionListener implements Listener {
         String[] lines = event.getLines();
 
         // Group Signs
-        if (DEditWorld.getByWorld(player.getWorld()) == null) {
+        if (plugin.getEditWorld(player.getWorld()) == null) {
             if (!DPermission.hasPermission(player, DPermission.SIGN)) {
                 return;
             }

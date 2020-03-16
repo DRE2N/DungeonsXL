@@ -19,9 +19,9 @@ package de.erethon.dungeonsxl.announcer;
 import de.erethon.commons.chat.DefaultFontInfo;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.Dungeon;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.GUIUtil;
@@ -96,9 +96,9 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeonCache().getByName(identifier);
+            Dungeon dungeon = plugin.getDungeonRegistry().get(identifier);
             if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor().getName();
+                mapName = dungeon.getStartFloor().getName();
             }
 
         } else {
@@ -130,9 +130,9 @@ public class Announcer {
         if (multiFloor) {
             dungeonName = identifier;
 
-            Dungeon dungeon = plugin.getDungeonCache().getByName(identifier);
+            Dungeon dungeon = plugin.getDungeonRegistry().get(identifier);
             if (dungeon != null) {
-                mapName = dungeon.getConfig().getStartFloor().getName();
+                mapName = dungeon.getStartFloor().getName();
             }
 
         } else {
@@ -291,7 +291,7 @@ public class Announcer {
     public boolean areRequirementsFulfilled() {
         int i = 0;
         for (DGroup group : dGroups) {
-            if (group != null && group.getPlayers().size() >= minPlayersPerGroup) {
+            if (group != null && group.getMembers().size() >= minPlayersPerGroup) {
                 i++;
             }
         }
@@ -349,21 +349,21 @@ public class Announcer {
      */
     public void clickGroupButton(Player player, ItemStack button) {
         DGroup dGroup = getDGroupByButton(button);
-        DGroup pGroup = DGroup.getByPlayer(player);
+        DGroup pGroup = (DGroup) plugin.getPlayerGroup(player);
         Color color = Color.getByWoolType(plugin.getCaliburn().getExItem(button));
 
         for (DGroup group : dGroups) {
-            if (dGroups.contains(pGroup) && pGroup != null && pGroup.isCustom() && pGroup.getCaptain() == player) {
+            if (dGroups.contains(pGroup) && pGroup != null && pGroup.isCustom() && pGroup.getLeader() == player) {
                 dGroups.set(dGroups.indexOf(pGroup), null);
             }
 
-            if (group != null && group.getPlayers().contains(player)) {
+            if (group != null && group.getMembers().contains(player)) {
                 group.removePlayer(player);
             }
         }
 
         if (dGroup != null && pGroup == null) {
-            if (dGroup.getPlayers().size() < maxPlayersPerGroup) {
+            if (dGroup.getMembers().size() < maxPlayersPerGroup) {
                 dGroup.addPlayer(player);
             }
 
@@ -409,14 +409,14 @@ public class Announcer {
             List<String> lore = new ArrayList<>();
 
             DGroup dGroup = dGroups.get(groupCount);
-            if (!plugin.getDGroupCache().contains(dGroup)) {
+            if (!plugin.getPlayerGroupCache().contains(dGroup)) {
                 dGroups.set(groupCount, null);
 
             } else if (dGroup != null) {
                 name = ChatColor.AQUA + dGroup.getName();
-                playerCount = dGroup.getPlayers().size();
-                for (Player player : dGroup.getPlayers().getOnlinePlayers()) {
-                    lore.add((dGroup.getCaptain().equals(player) ? ChatColor.GOLD : ChatColor.GRAY) + player.getName());
+                playerCount = dGroup.getMembers().size();
+                for (Player player : dGroup.getMembers().getOnlinePlayers()) {
+                    lore.add((dGroup.getLeader().equals(player) ? ChatColor.GOLD : ChatColor.GRAY) + player.getName());
                 }
             }
 

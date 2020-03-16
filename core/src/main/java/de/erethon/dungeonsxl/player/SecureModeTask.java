@@ -17,6 +17,8 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,12 +37,12 @@ public class SecureModeTask extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            DGlobalPlayer dGlobalPlayer = plugin.getDPlayerCache().getByPlayer(player);
-            if (dGlobalPlayer == null) {
-                dGlobalPlayer = new DGlobalPlayer(plugin, player);
+            GlobalPlayer globalPlayer = plugin.getPlayerCache().get(player);
+            if (globalPlayer == null) {
+                globalPlayer = new DGlobalPlayer(plugin, player);
             }
 
-            if (!(dGlobalPlayer instanceof DInstancePlayer)) {
+            if (!(globalPlayer instanceof InstancePlayer)) {
                 if (player.getWorld().getName().startsWith("DXL_Game_") | player.getWorld().getName().startsWith("DXL_Edit_") && !DPermission.hasPermission(player, DPermission.INSECURE)) {
                     player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
                 }

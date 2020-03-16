@@ -15,6 +15,8 @@
 package de.erethon.dungeonsxl.api.sign;
 
 import de.erethon.dungeonsxl.api.Trigger;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.util.Set;
 import org.bukkit.block.Sign;
@@ -64,24 +66,56 @@ public interface DungeonSign {
 
     /**
      * Returns the sign that represents event point.
+     * <p>
+     * Use {@link #getLines()} instead to read the raw data of this dungeon sign.
      *
      * @return the sign that represents event point
      */
     Sign getSign();
 
     /**
+     * Returns the raw line of this sign at the given index.
+     * <p>
+     * These lines might not be the physical lines of {@link #getSign()}.
+     *
+     * @param index the line index (0-3)
+     * @return the raw lines of this sign in an array with 4 elements
+     */
+    default String getLine(int index) {
+        return getLines()[index];
+    }
+
+    /**
      * Returns the raw lines of this sign in an array with 4 elements.
+     * <p>
+     * These lines might not be the physical lines of {@link #getSign()}.
      *
      * @return the raw lines of this sign in an array with 4 elements
      */
     String[] getLines();
 
     /**
-     * Returns the game world this sign is in; null if this is an edit world.
+     * Returns the edit world this sign is in; null if this is in a game world.
      *
-     * @return the game world this sign is in; null if this is an edit world
+     * @return the edit world this sign is in; null if this is in a game world
+     */
+    EditWorld getEditWorld();
+
+    /**
+     * Returns the game world this sign is in; null if this is in an edit world.
+     *
+     * @return the game world this sign is in; null if this is in an edit world
      */
     GameWorld getGameWorld();
+
+    /**
+     * Returns the game played in the world of this sign.
+     *
+     * @return the game played in the world of this sign
+     */
+    default Game getGame() {
+        return getGameWorld().getGame();
+    }
 
     /**
      * Returns a Set of the triggers registered for this sign.
@@ -157,9 +191,7 @@ public interface DungeonSign {
      *
      * @return if the sign is valid
      */
-    default boolean validate() {
-        return true;
-    }
+    boolean validate();
 
     /**
      * Returns if the sign is erroneous.

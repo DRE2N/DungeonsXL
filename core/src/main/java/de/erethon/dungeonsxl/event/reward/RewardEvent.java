@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.event.reward;
 
-import de.erethon.dungeonsxl.reward.Reward;
+import de.erethon.dungeonsxl.api.Reward;
 import org.bukkit.event.Event;
 
 /**

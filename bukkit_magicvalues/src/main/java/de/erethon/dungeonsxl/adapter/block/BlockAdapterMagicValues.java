@@ -45,6 +45,11 @@ public class BlockAdapterMagicValues implements BlockAdapter {
     }
 
     @Override
+    public void closeDoor(Block block) {
+        block.setData((byte) (block.getData() - 4));
+    }
+
+    @Override
     public void setBlockWoolColor(Block block, Color color) {
         block.setTypeIdAndData(Material.WOOL.getId(), color.getDyeColor().getWoolData(), false);
     }

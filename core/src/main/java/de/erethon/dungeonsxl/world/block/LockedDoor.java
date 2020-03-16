@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,8 +31,8 @@ public class LockedDoor extends GameBlock implements MultiBlock {
 
     private Block attachedBlock;
 
-    public LockedDoor(DungeonsXL plugin, Block block) {
-        super(plugin, block);
+    public LockedDoor(DungeonsAPI api, Block block) {
+        super(api, block);
         attachedBlock = getAttachedBlock();
     }
 
@@ -57,6 +58,13 @@ public class LockedDoor extends GameBlock implements MultiBlock {
      */
     public void open() {
         DungeonsXL.BLOCK_ADAPTER.openDoor(block);
+    }
+
+    /**
+     * Closes the door.
+     */
+    public void close() {
+        DungeonsXL.BLOCK_ADAPTER.closeDoor(block);
     }
 
     @Override

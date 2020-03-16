@@ -19,14 +19,14 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.config.CommonMessage;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DEditWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class EditCommand extends DCommand {
-
+    
     public EditCommand(DungeonsXL plugin) {
         super(plugin);
         setCommand("edit");
@@ -43,48 +43,42 @@ public class EditCommand extends DCommand {
         setHelp(DMessage.CMD_EDIT_HELP.getMessage());
         setPlayerCommand(true);
     }
-
+    
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        String mapName = args[1];
-
-        if (!instances.exists(mapName)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(mapName));
-            return;
-        }
-
-        DResourceWorld resource = instances.getResourceByName(mapName);
+        
+        ResourceWorld resource = plugin.getMapRegistry().getFirstIf(d -> d.getName().equalsIgnoreCase(args[1]));
         if (resource == null) {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(mapName));
+            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
         }
-
+        
         if (!resource.isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.EDIT)) {
             MessageUtil.sendMessage(player, CommonMessage.CMD_NO_PERMISSION.getMessage());
             return;
         }
-
-        DEditWorld editWorld = resource.instantiateAsEditWorld(false);
+        
+        EditWorld editWorld = resource.getOrInstantiateEditWorld(false);
         if (editWorld == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
             return;
         }
-
-        DGroup dGroup = DGroup.getByPlayer(player);
-        DGlobalPlayer dPlayer = dPlayers.getByPlayer(player);
-
-        if (dPlayer instanceof DInstancePlayer) {
+        
+        PlayerGroup dGroup = plugin.getPlayerGroup(player);
+        GlobalPlayer dPlayer = dPlayers.get(player);
+        
+        if (dPlayer instanceof InstancePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
-
+        
         if (dGroup != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
         }
-
+        
         new DEditPlayer(plugin, player, editWorld);
     }
-
+    
 }

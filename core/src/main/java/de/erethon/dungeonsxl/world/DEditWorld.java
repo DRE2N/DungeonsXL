@@ -18,27 +18,24 @@ package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.event.editworld.EditWorldSaveEvent;
 import de.erethon.dungeonsxl.event.editworld.EditWorldUnloadEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 /**
- * A raw resource world instance to edit the dungeon map. There is never more than one DEditWorld per DResourceWorld.
- *
  * @author Frank Baumann, Daniel Saukel
  */
-public class DEditWorld extends DInstanceWorld {
+public class DEditWorld extends DInstanceWorld implements EditWorld {
 
     public static String ID_FILE_PREFIX = ".id_";
 
     private File idFile;
-    private CopyOnWriteArrayList<Block> signs = new CopyOnWriteArrayList<>();
 
     DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
         super(plugin, resourceWorld, folder, world, id);
@@ -50,6 +47,8 @@ public class DEditWorld extends DInstanceWorld {
 
     /* Getters and setters */
     /**
+     * Returns the file that stores the ID
+     *
      * @return the file that stores the ID
      */
     public File getIdFile() {
@@ -69,26 +68,8 @@ public class DEditWorld extends DInstanceWorld {
         }
     }
 
-    /**
-     * @return the signs
-     */
-    public CopyOnWriteArrayList<Block> getSigns() {
-        return signs;
-    }
-
-    /**
-     * @param signs the sign to set
-     */
-    public void setSigns(CopyOnWriteArrayList<Block> signs) {
-        this.signs = signs;
-    }
-
     /* Actions */
-    /**
-     * Registers the block as a DSign sothat it can later be saved persistently.
-     *
-     * @param block a DSign block
-     */
+    @Override
     public void registerSign(Block block) {
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
@@ -100,9 +81,7 @@ public class DEditWorld extends DInstanceWorld {
         }
     }
 
-    /**
-     * Saves the sign data and overrides the resource with the changes.
-     */
+    @Override
     public void save() {
         EditWorldSaveEvent event = new EditWorldSaveEvent(this);
         Bukkit.getPluginManager().callEvent(event);
@@ -114,9 +93,9 @@ public class DEditWorld extends DInstanceWorld {
         getWorld().save();
 
         FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-        DWorldCache.deleteUnusedFiles(getResource().getFolder());
+        DResourceWorld.deleteUnusedFiles(getResource().getFolder());
 
-        getResource().getSignData().serializeSigns(signs);
+        getResource().getSignData().serializeSigns(signs.values());
     }
 
     @Override
@@ -124,11 +103,7 @@ public class DEditWorld extends DInstanceWorld {
         delete(true);
     }
 
-    /**
-     * Deletes this edit instance.
-     *
-     * @param save whether this world should be saved
-     */
+    @Override
     public void delete(boolean save) {
         EditWorldUnloadEvent event = new EditWorldUnloadEvent(this, true);
         Bukkit.getPluginManager().callEvent(event);
@@ -142,37 +117,13 @@ public class DEditWorld extends DInstanceWorld {
             Bukkit.unloadWorld(getWorld(), true);
         }
         FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-        DWorldCache.deleteUnusedFiles(getResource().getFolder());
+        DResourceWorld.deleteUnusedFiles(getResource().getFolder());
         if (!save) {
             Bukkit.unloadWorld(getWorld(), true);
         }
 
         FileUtil.removeDir(getFolder());
-        worlds.removeInstance(this);
-    }
-
-    /* Statics */
-    /**
-     * @param world the instance
-     * @return the DEditWorld that represents the world
-     */
-    public static DEditWorld getByWorld(World world) {
-        return getByName(world.getName());
-    }
-
-    /**
-     * @param name the instance name
-     * @return the DEditWorld that represents the world
-     */
-    public static DEditWorld getByName(String name) {
-        DInstanceWorld instance = DungeonsXL.getInstance().getDWorldCache().getInstanceByName(name);
-
-        if (instance instanceof DEditWorld) {
-            return (DEditWorld) instance;
-
-        } else {
-            return null;
-        }
+        plugin.getInstanceCache().remove(this);
     }
 
 }

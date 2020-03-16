@@ -85,7 +85,7 @@ public class GroupSign extends JoinSign {
             return;
         }
 
-        if (group.getPlayers().size() >= startIfElementsAtLeast && startIfElementsAtLeast != -1 && !loadedWorld) {
+        if (group.getMembers().size() >= startIfElementsAtLeast && startIfElementsAtLeast != -1 && !loadedWorld) {
             loadedWorld = true;
             group.teleport();
         }
@@ -93,7 +93,7 @@ public class GroupSign extends JoinSign {
         if (group.isPlaying()) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_IS_PLAYING.getMessage());
 
-        } else if (group.getPlayers().size() >= maxElements) {
+        } else if (group.getMembers().size() >= maxElements) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_FULL.getMessage());
 
         } else {
@@ -103,7 +103,7 @@ public class GroupSign extends JoinSign {
         int j = 1;
         Sign rowSign = sign;
 
-        for (Player player : group.getPlayers().getOnlinePlayers()) {
+        for (Player player : group.getMembers().getOnlinePlayers()) {
             if (j > 3) {
                 j = 0;
                 rowSign = (Sign) sign.getBlock().getRelative(0, -1, 0).getState();
@@ -133,7 +133,7 @@ public class GroupSign extends JoinSign {
     }
 
     public void onPlayerInteract(Block block, Player player) {
-        if (DGroup.getByPlayer(player) != null) {
+        if (plugin.getPlayerGroup(player) != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
         }

@@ -47,8 +47,8 @@ public class MainCommand extends DCommand {
 
         int maps = DungeonsXL.MAPS.listFiles().length - 1;
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
-        int loaded = instances.getEditWorlds().size() + instances.getGameWorlds().size();
-        int players = dPlayers.getDGamePlayers().size();
+        int loaded = plugin.getInstanceCache().size();
+        int players = dPlayers.getAllInstancePlayers().size();
         Internals internals = CompatibilityHandler.getInstance().getInternals();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {

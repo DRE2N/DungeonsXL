@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -27,12 +27,12 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public abstract class GameBlock {
 
-    protected DungeonsXL plugin;
+    protected DungeonsAPI api;
 
     protected Block block;
 
-    public GameBlock(DungeonsXL plugin, Block block) {
-        this.plugin = plugin;
+    public GameBlock(DungeonsAPI api, Block block) {
+        this.api = api;
         this.block = block;
     }
 

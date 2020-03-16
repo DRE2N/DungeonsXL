@@ -19,16 +19,18 @@ package de.erethon.dungeonsxl.mob;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.caliburn.util.compatibility.Version;
+import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dmob.DMobDeathEvent;
 import de.erethon.dungeonsxl.event.dmob.DMobSpawnEvent;
-import de.erethon.dungeonsxl.game.Game;
 import de.erethon.dungeonsxl.trigger.MobTrigger;
 import de.erethon.dungeonsxl.trigger.WaveTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.Random;
 import java.util.Set;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -36,89 +38,74 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class DMob {
+public class DMob implements DungeonMob {
 
-    // Variables
     private LivingEntity entity;
     private ExMob type;
 
     private String trigger;
 
-    private DMob(LivingEntity entity, DGameWorld gameWorld) {
-        gameWorld.addDMob(this);
-
+    private DMob(LivingEntity entity, GameWorld gameWorld) {
         this.entity = entity;
 
-        /* Remove DropChance of equipment */
         if (!isExternalMob()) {
-            this.entity.getEquipment().setHelmetDropChance(0);
-            this.entity.getEquipment().setChestplateDropChance(0);
-            this.entity.getEquipment().setLeggingsDropChance(0);
-            this.entity.getEquipment().setBootsDropChance(0);
-            this.entity.getEquipment().setItemInHandDropChance(0);
+            entity.getEquipment().setHelmetDropChance(0);
+            entity.getEquipment().setChestplateDropChance(0);
+            entity.getEquipment().setLeggingsDropChance(0);
+            entity.getEquipment().setBootsDropChance(0);
             if (Version.isAtLeast(Version.MC1_9)) {
-                this.entity.getEquipment().setItemInOffHandDropChance(0);
+                entity.getEquipment().setItemInMainHandDropChance(0);
+                entity.getEquipment().setItemInOffHandDropChance(0);
+            } else {
+                entity.getEquipment().setItemInHandDropChance(0);
             }
         }
 
         DMobSpawnEvent event = new DMobSpawnEvent(this, entity);
         Bukkit.getPluginManager().callEvent(event);
 
-        if (event.isCancelled()) {
-            gameWorld.removeDMob(this);
+        if (!event.isCancelled()) {
+            gameWorld.addMob(this);
         }
     }
 
-    public DMob(LivingEntity entity, DGameWorld gameWorld, String trigger) {
+    public DMob(LivingEntity entity, GameWorld gameWorld, String trigger) {
         this(entity, gameWorld);
         this.trigger = trigger;
     }
 
-    public DMob(LivingEntity entity, DGameWorld gameWorld, ExMob type) {
+    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type) {
         this(entity, gameWorld);
         this.type = type;
         this.trigger = type.getId();
     }
 
-    public DMob(LivingEntity entity, DGameWorld gameWorld, ExMob type, String trigger) {
+    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type, String trigger) {
         this(entity, gameWorld);
         this.type = type;
         this.trigger = trigger;
     }
 
     /* Getters */
-    /**
-     * @return the represented LivingEntity
-     */
+    @Override
     public LivingEntity getEntity() {
         return entity;
     }
 
-    /**
-     * @return the DMobType or null if the mob is an external mob
-     */
+    @Override
     public ExMob getType() {
         return type;
     }
 
-    /**
-     * @return if the mob is spawned by an external plugin
-     */
-    public boolean isExternalMob() {
-        return type == null;
-    }
-
-    /**
-     * @return the trigger String
-     */
-    public String getTrigger() {
+    @Override
+    public String getTriggerId() {
         return trigger;
     }
 
     /* Actions */
-    public void onDeath(EntityDeathEvent event) {
+    public void onDeath(DungeonsXL plugin, EntityDeathEvent event) {
         LivingEntity victim = event.getEntity();
-        DGameWorld gameWorld = DGameWorld.getByWorld(victim.getWorld());
+        DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(victim.getWorld());
         String name = null;
 
         if (gameWorld == null) {
@@ -160,25 +147,12 @@ public class DMob {
 
         Set<WaveTrigger> waveTriggers = WaveTrigger.getByGameWorld(gameWorld);
         for (WaveTrigger waveTrigger : waveTriggers) {
-            if (Game.getByGameWorld(gameWorld).getWaveKills() >= Math.ceil(gameWorld.getMobCount() * waveTrigger.getMustKillRate())) {
+            if (((DGame) gameWorld.getGame()).getWaveKills() >= Math.ceil(gameWorld.getMobCount() * waveTrigger.getMustKillRate())) {
                 waveTrigger.onTrigger();
             }
         }
 
-        gameWorld.removeDMob(this);
-    }
-
-    /* Statics */
-    public static DMob getByEntity(Entity entity) {
-        DGameWorld gameWorld = DGameWorld.getByWorld(entity.getWorld());
-
-        for (DMob dMob : gameWorld.getDMobs()) {
-            if (dMob.entity == entity) {
-                return dMob;
-            }
-        }
-
-        return null;
+        gameWorld.removeMob(this);
     }
 
     @Override

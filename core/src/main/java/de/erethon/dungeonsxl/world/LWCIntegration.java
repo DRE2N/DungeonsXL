@@ -20,6 +20,7 @@ import com.griefcraft.lwc.LWC;
 import com.griefcraft.scripting.JavaModule;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 
 /**
  * @author Daniel Saukel
@@ -35,7 +36,7 @@ public class LWCIntegration extends JavaModule {
 
     @Override
     public void onRegisterProtection(LWCProtectionRegisterEvent event) {
-        DInstanceWorld instance = plugin.getDWorldCache().getInstanceByWorld(event.getBlock().getWorld());
+        InstanceWorld instance = plugin.getInstanceWorld(event.getBlock().getWorld());
         if (instance != null) {
             event.setCancelled(true);
         }

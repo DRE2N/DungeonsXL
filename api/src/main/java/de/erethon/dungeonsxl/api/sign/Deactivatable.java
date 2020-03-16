@@ -17,7 +17,7 @@ package de.erethon.dungeonsxl.api.sign;
 import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Trigger;
-import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -29,48 +29,70 @@ import org.bukkit.entity.Player;
 public abstract class Deactivatable extends AbstractDSign {
 
     protected boolean active;
-    private PlayerCollection playersActivated = new PlayerCollection();
+    protected PlayerCollection playersActivated = new PlayerCollection();
 
-    protected Deactivatable(DungeonsAPI api, Sign sign, String[] lines, GameWorld gameWorld) {
-        super(api, sign, lines, gameWorld);
+    protected Deactivatable(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
+        super(api, sign, lines, instance);
     }
 
     /**
      * Sets the state to active.
      * <p>
-     * This might not be meaningful if the sign uses {@link #activate(org.bukkit.entity.Player)}.
+     * <b>Note that the default implementation of {@link #activate(org.bukkit.entity.Player)} assumes that the sign does not need player specific behavior and
+     * simply calls this method, while the default implementation of this method assumes that the sign should perform
+     * {@link #activate(org.bukkit.entity.Player)} for each player in the game world. This leaves a button sign with a stackoverflow if not one of both methods
+     * at least is overriden. Consider using a {@link Passive} sign instead if you need a sign that simply marks places and ignores being triggered. An
+     * implementation that does not need player specific behavior should set {@link #active} to true.</b>
      */
     public void activate() {
-        active = true;
+        getGameWorld().getPlayers().forEach(p -> activate(p.getPlayer()));
     }
 
     /**
      * Sets the state to active for the given player.
+     * <p>
+     * <b>Note that the default implementation of this method assumes that the sign does not need player specific behavior and simply calls {@link #activate()},
+     * while the default implementation of {@link #activate()} assumes that the sign should perform {@link #activate(org.bukkit.entity.Player)} for each player
+     * in the game world. This leaves a deactivatable sign with a stackoverflow if not one of both methods at least is overriden. Consider using a
+     * {@link Passive} sign instead if you need a sign that simply marks places and ignores being triggered. An implementation that needs player specific
+     * behavior should add the player to the {@link #playersActivated} collection.</b>
      *
      * @param player the player
      * @return if the action was successful
      */
     public boolean activate(Player player) {
-        return playersActivated.add(player);
+        activate();
+        return true;
     }
 
     /**
      * Sets the state to inactive.
      * <p>
-     * This might not be meaningful if the sign uses {@link #deactivate(org.bukkit.entity.Player)}.
+     * <b>Note that the default implementation of {@link #deactivate(org.bukkit.entity.Player)} assumes that the sign does not need player specific behavior and
+     * simply calls this method, while the default implementation of this method assumes that the sign should perform
+     * {@link #deactivate(org.bukkit.entity.Player)} for each player in the game world. This leaves a button sign with a stackoverflow if not one of both
+     * methods at least is overriden. Consider using a {@link Passive} sign instead if you need a sign that simply marks places and ignores being triggered. An
+     * implementation that does not need player specific behavior should set {@link #active} to false.</b>
      */
     public void deactivate() {
-        active = false;
+        getGameWorld().getPlayers().forEach(p -> deactivate(p.getPlayer()));
     }
 
     /**
      * Sets the state to inactive for the given player.
+     * <p>
+     * <b>Note that the default implementation of this method assumes that the sign does not need player specific behavior and simply calls
+     * {@link #deactivate()}, while the default implementation of {@link #deactivate()} assumes that the sign should perform
+     * {@link #deactivate(org.bukkit.entity.Player)} for each player in the game world. This leaves a deactivatable sign with a stackoverflow if not one of both
+     * methods at least is overriden. Consider using a {@link Passive} sign instead if you need a sign that simply marks places and ignores being triggered. An
+     * implementation that needs player specific behavior should remove the player from the {@link #playersActivated} collection.</b>
      *
      * @param player the player
      * @return if the action was successful
      */
     public boolean deactivate(Player player) {
-        return playersActivated.remove(player);
+        deactivate();
+        return true;
     }
 
     /**
@@ -86,12 +108,15 @@ public abstract class Deactivatable extends AbstractDSign {
 
     /**
      * Returns if the sign is activated for the given player.
+     * <p>
+     * <b>Note that the default implementation of this method assumes that the sign does not need player specific behavior and simply calls {@link #isActive()}.
+     * An implementation that needs player specific behavior should check if the {@link #playersActivated} collection contains the player.</b>
      *
      * @param player the player
      * @return if the sign is activated for the given player
      */
     public boolean isActive(Player player) {
-        return playersActivated.contains(player);
+        return isActive();
     }
 
     @Override

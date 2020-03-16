@@ -18,6 +18,8 @@ package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,17 +28,14 @@ import org.bukkit.entity.Player;
 /**
  * @author Daniel Saukel
  */
-public class FeeMoneyRequirement extends Requirement {
+public class FeeMoneyRequirement implements Requirement {
 
     private Economy econ;
 
-    private RequirementType type = RequirementTypeDefault.FEE_MONEY;
-
     private double fee;
 
-    public FeeMoneyRequirement(DungeonsXL plugin) {
-        super(plugin);
-        econ = plugin.getEconomyProvider();
+    public FeeMoneyRequirement(DungeonsAPI api) {
+        econ = ((DungeonsXL) api).getEconomyProvider();
     }
 
     /* Getters and setters */
@@ -52,11 +51,6 @@ public class FeeMoneyRequirement extends Requirement {
      */
     public void setFee(double fee) {
         this.fee = fee;
-    }
-
-    @Override
-    public RequirementType getType() {
-        return type;
     }
 
     /* Actions */
