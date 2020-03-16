@@ -90,41 +90,37 @@ public class DSignListener implements Listener {
             return;
         }
 
-        if (sign != null) {
-            sign.setLine(0, lines[0]);
-            sign.setLine(1, lines[1]);
-            sign.setLine(2, lines[2]);
-            sign.setLine(3, lines[3]);
+        if (sign == null) {
+            return;
+        }
+        sign.setLine(0, lines[0]);
+        sign.setLine(1, lines[1]);
+        sign.setLine(2, lines[2]);
+        sign.setLine(3, lines[3]);
 
-            for (Entry<String, Class<? extends DungeonSign>> registryEntry : api.getSignRegistry().entrySet()) {
-                if (!lines[0].equalsIgnoreCase("[" + registryEntry.getKey() + "]")) {
-                    continue;
-                }
-                if (DungeonsXL.LEGACY_SIGNS.contains(registryEntry.getKey().toUpperCase())) {
-                    MessageUtil.sendMessage(player, ChatColor.RED + "https://erethon.de/resources/dxl-signs/deprecated.gif");
-                    MessageUtil.sendMessage(player, ChatColor.LIGHT_PURPLE + "https://github.com/DRE2N/DungeonsXL/wiki/Legacy-support#updating");
-                    return;
-                }
-            }
+        if (DungeonsXL.LEGACY_SIGNS.containsKey(lines[0].substring(1, lines[0].length() - 2).toUpperCase())) {
+            MessageUtil.sendMessage(player, ChatColor.RED + "https://erethon.de/resources/dxl-signs/deprecated.gif");
+            MessageUtil.sendMessage(player, ChatColor.LIGHT_PURPLE + "https://github.com/DRE2N/DungeonsXL/wiki/Legacy-support#updating");
+            return;
+        }
 
-            DungeonSign dsign = editWorld.createDungeonSign(sign, sign.getLines());
-            if (dsign == null) {
-                return;
-            }
+        DungeonSign dsign = editWorld.createDungeonSign(sign, sign.getLines());
+        if (dsign == null) {
+            return;
+        }
 
-            if (!DPermission.hasPermission(player, dsign.getBuildPermission())) {
-                MessageUtil.sendMessage(player, DMessage.ERROR_NO_PERMISSIONS.getMessage());
-                return;
-            }
+        if (!DPermission.hasPermission(player, dsign.getBuildPermission())) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_NO_PERMISSIONS.getMessage());
+            return;
+        }
 
-            if (dsign.validate()) {
-                editWorld.registerSign(block);
-                MessageUtil.sendMessage(player, DMessage.PLAYER_SIGN_CREATED.getMessage());
+        if (dsign.validate()) {
+            editWorld.registerSign(block);
+            MessageUtil.sendMessage(player, DMessage.PLAYER_SIGN_CREATED.getMessage());
 
-            } else {
-                editWorld.removeDungeonSign(block);
-                MessageUtil.sendMessage(player, DMessage.ERROR_SIGN_WRONG_FORMAT.getMessage());
-            }
+        } else {
+            editWorld.removeDungeonSign(block);
+            MessageUtil.sendMessage(player, DMessage.ERROR_SIGN_WRONG_FORMAT.getMessage());
         }
     }
 

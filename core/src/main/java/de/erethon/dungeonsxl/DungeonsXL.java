@@ -86,7 +86,9 @@ import de.erethon.vignette.api.VignetteAPI;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -112,18 +114,18 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final File LOOT_TABLES = new File(SCRIPTS, "loottables");
     public static final File MOBS = new File(SCRIPTS, "mobs");
     public static final File SIGNS = new File(SCRIPTS, "signs");
-    public static final Set<String> LEGACY_SIGNS = new HashSet<>();
+    public static final Map<String, Class<? extends DungeonSign>> LEGACY_SIGNS = new HashMap<>();
 
     static {
-        LEGACY_SIGNS.add("CHEST");
-        LEGACY_SIGNS.add("EXTERNALMOB");
-        LEGACY_SIGNS.add("FLOOR");
+        LEGACY_SIGNS.put("CHEST", RewardChestSign.class);
+        LEGACY_SIGNS.put("EXTERNALMOB", MobSign.class);
+        LEGACY_SIGNS.put("FLOOR", EndSign.class);
     }
 
     private PlayerCache playerCache = new PlayerCache();
     private Collection<Game> gameCache = new ArrayList<>();
     private Registry<String, PlayerClass> classRegistry = new Registry<>();
-    private Registry<String, Class<? extends DungeonSign>> signRegistry = new Registry<>();
+    private Registry<String, Class<? extends DungeonSign>> signRegistry = new SignRegistry();
     private Registry<String, Class<? extends Requirement>> requirementRegistry = new Registry<>();
     private Registry<String, Class<? extends Reward>> rewardRegistry = new Registry<>();
     private Registry<String, Dungeon> dungeonRegistry = new Registry<>();
@@ -132,6 +134,20 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private Registry<String, GameRule> gameRuleRegistry = new Registry<>();
     private Registry<String, ExternalMobProvider> externalMobProviderRegistry = new Registry<>();
     private Registry<String, PlayerGroup> playerGroupCache = new Registry<>();
+
+    @Deprecated
+    private class SignRegistry extends Registry<String, Class<? extends DungeonSign>> {
+
+        @Override
+        public Class<? extends DungeonSign> get(String key) {
+            Class<? extends DungeonSign> clss = super.get(key);
+            if (clss == null) {
+                return LEGACY_SIGNS.get(key.toUpperCase());
+            }
+            return clss;
+        }
+
+    }
 
     private boolean loadingWorld;
 
@@ -230,18 +246,12 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         signRegistry.add("Block", BlockSign.class);
         signRegistry.add("BossShop", BossShopSign.class);
         signRegistry.add("Checkpoint", CheckpointSign.class);
-        // Deprecated
-        signRegistry.add("Chest", RewardChestSign.class);
         signRegistry.add("Classes", ClassesSign.class);
         //signRegistry.add("CMD", CommandSign.class); TODO: REIMPLEMENT
         signRegistry.add("Drop", DropSign.class);
         signRegistry.add("DungeonChest", DungeonChestSign.class);
         signRegistry.add("End", EndSign.class);
-        // Deprecated
-        signRegistry.add("ExternalMob", MobSign.class);
         signRegistry.add("Flag", FlagSign.class);
-        // Deprecated
-        signRegistry.add("Floor", EndSign.class);
         signRegistry.add("Hologram", HologramSign.class);
         signRegistry.add("Interact", InteractSign.class);
         signRegistry.add("Leave", LeaveSign.class);
