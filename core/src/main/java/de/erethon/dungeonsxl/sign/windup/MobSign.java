@@ -22,8 +22,8 @@ import de.erethon.commons.misc.Registry;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.sign.Windup;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.bukkit.Location;
@@ -44,8 +44,8 @@ public class MobSign extends Windup {
     private Collection<LivingEntity> spawnedMobs = new ArrayList<>();
     private int initialAmount;
 
-    public MobSign(DungeonsAPI api, Sign sign, String[] lines, DGameWorld gameWorld) {
-        super(api, sign, lines, gameWorld);
+    public MobSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
+        super(api, sign, lines, instance);
         providers = api.getExternalMobProviderRegistry();
     }
 
