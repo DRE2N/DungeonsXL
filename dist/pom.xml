@@ -25,26 +25,10 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>de.erethon:caliburn</include>
-                                    <include>de.erethon.commons:commons-dist</include>
                                     <include>de.erethon.vignette:vignette-dist</include>
                                     <include>de.erethon.dungeonsxl:*</include>
                                 </includes>
                             </artifactSet>
-                            <relocations>
-                                <relocation>
-                                    <pattern>de.erethon.commons</pattern>
-                                    <shadedPattern>de.erethon.dungeonsxl.util.commons</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>de.erethon.caliburn.util.compatibility</pattern>
-                                    <shadedPattern>de.erethon.dungeonsxl.util.commons.compatibility</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>de.erethon.vignette</pattern>
-                                    <shadedPattern>de.erethon.dungeonsxl.util.vignette</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

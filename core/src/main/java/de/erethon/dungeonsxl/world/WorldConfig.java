@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.world;
 
-import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;

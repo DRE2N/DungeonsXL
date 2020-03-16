@@ -16,9 +16,6 @@
  */
 package de.erethon.dungeonsxl;
 
-import de.erethon.dungeonsxl.sign.rocker.TriggerSign;
-import de.erethon.dungeonsxl.sign.button.CheckpointSign;
-import de.erethon.dungeonsxl.sign.button.SoundMessageSign;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.caliburn.mob.ExMob;
