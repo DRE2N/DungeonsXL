@@ -87,7 +87,7 @@ public class DDungeon implements Dungeon {
 
     @Override
     public ResourceWorld getStartFloor() {
-        return config.getStartFloor();
+        return map;
     }
 
     @Override
