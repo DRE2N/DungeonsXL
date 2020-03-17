@@ -142,7 +142,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         public Class<? extends DungeonSign> get(String key) {
             Class<? extends DungeonSign> clss = super.get(key);
             if (clss == null) {
-                return LEGACY_SIGNS.get(key.toUpperCase());
+                return LEGACY_SIGNS.get(key);
             }
             return clss;
         }
@@ -241,39 +241,39 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         Bukkit.getPluginManager().registerEvents(new TriggerListener(this), this);
 
         // Signs
-        signRegistry.add("ActionBar", ActionBarSign.class);
-        signRegistry.add("Bed", BedSign.class);
-        signRegistry.add("Block", BlockSign.class);
-        signRegistry.add("BossShop", BossShopSign.class);
-        signRegistry.add("Checkpoint", CheckpointSign.class);
-        signRegistry.add("Classes", ClassesSign.class);
+        signRegistry.add("ACTIONBAR", ActionBarSign.class);
+        signRegistry.add("BED", BedSign.class);
+        signRegistry.add("BLOCK", BlockSign.class);
+        signRegistry.add("BOSSSHOP", BossShopSign.class);
+        signRegistry.add("CHECKPOINT", CheckpointSign.class);
+        signRegistry.add("CLASSES", ClassesSign.class);
         //signRegistry.add("CMD", CommandSign.class); TODO: REIMPLEMENT
-        signRegistry.add("Drop", DropSign.class);
-        signRegistry.add("DungeonChest", DungeonChestSign.class);
-        signRegistry.add("End", EndSign.class);
-        signRegistry.add("Flag", FlagSign.class);
-        signRegistry.add("Hologram", HologramSign.class);
-        signRegistry.add("Interact", InteractSign.class);
-        signRegistry.add("Leave", LeaveSign.class);
-        signRegistry.add("Lives", LivesModifierSign.class);
-        signRegistry.add("Lobby", LobbySign.class);
-        signRegistry.add("Mob", MobSign.class);
+        signRegistry.add("DROP", DropSign.class);
+        signRegistry.add("DUNGEONCHEST", DungeonChestSign.class);
+        signRegistry.add("END", EndSign.class);
+        signRegistry.add("FLAG", FlagSign.class);
+        signRegistry.add("HOLOGRAM", HologramSign.class);
+        signRegistry.add("INTERACT", InteractSign.class);
+        signRegistry.add("LEAVE", LeaveSign.class);
+        signRegistry.add("LIVES", LivesModifierSign.class);
+        signRegistry.add("LOBBY", LobbySign.class);
+        signRegistry.add("MOB", MobSign.class);
         signRegistry.add("MSG", ChatMessageSign.class);
-        signRegistry.add("Note", NoteSign.class);
-        signRegistry.add("Door", OpenDoorSign.class);
-        signRegistry.add("Place", PlaceSign.class);
-        signRegistry.add("Protection", ProtectionSign.class);
-        signRegistry.add("Ready", ReadySign.class);
-        signRegistry.add("Redstone", RedstoneSign.class);
-        signRegistry.add("ResourcePack", ResourcePackSign.class);
-        signRegistry.add("RewardChest", RewardChestSign.class);
-        signRegistry.add("Script", ScriptSign.class);
-        signRegistry.add("SoundMSG", SoundMessageSign.class);
-        signRegistry.add("Start", StartSign.class);
-        signRegistry.add("Teleport", TeleportSign.class);
-        signRegistry.add("Title", TitleSign.class);
-        signRegistry.add("Trigger", TriggerSign.class);
-        signRegistry.add("Wave", WaveSign.class);
+        signRegistry.add("NOTE", NoteSign.class);
+        signRegistry.add("DOOR", OpenDoorSign.class);
+        signRegistry.add("PLACE", PlaceSign.class);
+        signRegistry.add("PROTECTION", ProtectionSign.class);
+        signRegistry.add("READY", ReadySign.class);
+        signRegistry.add("REDSTONE", RedstoneSign.class);
+        signRegistry.add("RESOURCEPACK", ResourcePackSign.class);
+        signRegistry.add("REWARDCHEST", RewardChestSign.class);
+        signRegistry.add("SCRIPT", ScriptSign.class);
+        signRegistry.add("SOUNDMSG", SoundMessageSign.class);
+        signRegistry.add("START", StartSign.class);
+        signRegistry.add("TELEPORT", TeleportSign.class);
+        signRegistry.add("TITLE", TitleSign.class);
+        signRegistry.add("TRIGGER", TriggerSign.class);
+        signRegistry.add("WAVE", WaveSign.class);
         Bukkit.getPluginManager().registerEvents(new DSignListener(this), this);
 
         // Maps

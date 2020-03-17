@@ -108,9 +108,12 @@ public abstract class DInstanceWorld implements InstanceWorld {
 
     @Override
     public DungeonSign createDungeonSign(Sign sign, String[] lines) {
-        String type = lines[0].substring(1, lines[0].length() - 2);
+        String type = lines[0].substring(1, lines[0].length() - 1);
         try {
-            Class<? extends DungeonSign> clss = plugin.getSignRegistry().get(type);
+            Class<? extends DungeonSign> clss = plugin.getSignRegistry().get(type.toUpperCase());
+            if (clss == null) {
+                return null;
+            }
             Constructor constructor = clss.getConstructor(DungeonsAPI.class, Sign.class, String[].class, InstanceWorld.class);
             DungeonSign dSign = (DungeonSign) constructor.newInstance(plugin, sign, lines, this);
             signs.put(sign.getBlock(), dSign);
