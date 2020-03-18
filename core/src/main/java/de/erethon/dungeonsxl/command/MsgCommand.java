@@ -24,6 +24,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.WorldConfig;
+import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -64,6 +65,10 @@ public class MsgCommand extends DCommand {
 
             WorldConfig config = ((DResourceWorld) editWorld.getResource()).getConfig(true);
             Map<Integer, String> msgs = config.getState(GameRule.MESSAGES);
+            if (msgs == null) {
+                config.setState(GameRule.MESSAGES, new HashMap<>());
+                msgs = config.getState(GameRule.MESSAGES);
+            }
 
             if (args.length == 2) {
                 String msg = msgs.get(id);
