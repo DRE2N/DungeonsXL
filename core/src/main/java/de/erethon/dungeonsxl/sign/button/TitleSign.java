@@ -50,16 +50,18 @@ public class TitleSign extends MessageSign {
 
     @Override
     public void initialize() {
-        super.initialize();
-
-        String[] line1 = text.split(",");
+        String[] line1 = getLine(1).split(",");
         Map<Integer, String> messages = getGameWorld().getDungeon().getRules().getState(GameRule.MESSAGES);
         int id0 = NumberUtil.parseInt(line1[0], -1);
-        title = id0 != -1 ? messages.get(id0) : "";
+        title = messages.get(id0);
+        if (title == null) {
+            title = "";
+        }
         if (line1.length > 1) {
             int id1 = NumberUtil.parseInt(line1[1], -1);
-            subtitle = id1 != -1 ? messages.get(id1) : "";
-        } else {
+            subtitle = messages.get(id1);
+        }
+        if (subtitle == null) {
             subtitle = "";
         }
 
