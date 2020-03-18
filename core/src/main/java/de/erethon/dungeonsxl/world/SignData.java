@@ -26,6 +26,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 
 /**
@@ -73,8 +74,9 @@ public class SignData {
                 int z = os.readInt();
 
                 Block block = instance.getWorld().getBlockAt(x, y, z);
-                if (block.getState() instanceof Sign) {
-                    Sign sign = (Sign) block.getState();
+                BlockState state = block.getState();
+                if (state instanceof Sign) {
+                    Sign sign = (Sign) state;
                     String[] lines = sign.getLines();
                     instance.createDungeonSign(sign, lines);
 

@@ -118,6 +118,7 @@ public abstract class DInstanceWorld implements InstanceWorld {
             DungeonSign dSign = (DungeonSign) constructor.newInstance(plugin, sign, lines, this);
             signs.put(sign.getBlock(), dSign);
             return dSign;
+
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException exception) {
             MessageUtil.log(plugin, "&4Could not create a dungeon sign of the type \"" + type

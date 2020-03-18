@@ -61,6 +61,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
@@ -162,6 +163,20 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     @Override
     public void setClassesEnabled(boolean enabled) {
         classes = enabled;
+    }
+
+    @Override
+    public DungeonSign createDungeonSign(Sign sign, String[] lines) {
+        DungeonSign dSign = super.createDungeonSign(sign, lines);
+
+        if (dSign.isOnDungeonInit()) {
+            dSign.initialize();
+        }
+        if (!dSign.isErroneous() && dSign.isSetToAir()) {
+            dSign.setToAir();
+        }
+
+        return dSign;
     }
 
     /**
@@ -369,10 +384,18 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         isPlaying = true;
 
         for (DungeonSign sign : getDungeonSigns()) {
-            if (sign != null) {
-                if (!sign.isOnDungeonInit()) {
-                    sign.initialize();
-                }
+            if (sign == null || sign.isOnDungeonInit()) {
+                continue;
+            }
+            sign.initialize();
+            if (sign.isErroneous()) {
+                continue;
+            }
+            if (sign.isSetToAir()) {
+                sign.setToAir();
+            }
+            if (!sign.hasTriggers()) {
+                sign.trigger(null);
             }
         }
 
@@ -382,12 +405,6 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         for (Trigger trigger : getTriggers(TriggerTypeDefault.FORTUNE)) {
             ((FortuneTrigger) trigger).onTrigger();
-        }
-
-        for (DungeonSign sign : getDungeonSigns()) {
-            if (sign != null && !sign.isErroneous() && !sign.hasTriggers()) {
-                sign.trigger(null);
-            }
         }
     }
 
