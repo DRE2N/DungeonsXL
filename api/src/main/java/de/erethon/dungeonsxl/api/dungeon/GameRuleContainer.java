@@ -36,10 +36,13 @@ public class GameRuleContainer {
         }
     }
 
+    private Map<GameRule<?>, Object> rules;
+
     /**
      * Initializes an emtpy GameRuleContainer.
      */
     public GameRuleContainer() {
+        rules = new HashMap<>();
     }
 
     /**
@@ -50,8 +53,6 @@ public class GameRuleContainer {
     public GameRuleContainer(GameRuleContainer container) {
         rules = new HashMap<>(container.rules);
     }
-
-    private Map<GameRule<?>, Object> rules = new HashMap<>();
 
     /**
      * Returns the state of the GameRule or UNDEFINED_STATE if it is not defined
@@ -86,7 +87,7 @@ public class GameRuleContainer {
     }
 
     /**
-     * Removes the rule from the map sothat a subsidiary provider can set it.
+     * Removes the rule from the map sothat a subsidiary container can set it.
      *
      * @param rule the GameRule to unset
      */
@@ -100,7 +101,7 @@ public class GameRuleContainer {
      * @param subsidiary the GameRules that override the values that are null.
      */
     public void merge(GameRuleContainer subsidiary) {
-        rules.entrySet().forEach(e -> e.getKey().merge(this, subsidiary, this));
+        subsidiary.rules.entrySet().forEach(e -> e.getKey().merge(this, subsidiary, this));
 
         // If we are using the last subsidiary rules (the default rules) and if blocks may be broken...
         if (subsidiary != DEFAULT_VALUES || !getState(GameRule.BREAK_BLOCKS)) {

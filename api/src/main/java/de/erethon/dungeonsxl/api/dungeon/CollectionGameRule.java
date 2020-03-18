@@ -83,8 +83,24 @@ public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> 
     @Override
     public void merge(GameRuleContainer overriding, GameRuleContainer subsidiary, GameRuleContainer writeTo) {
         V write = writeTo.getState(this);
-        write.addAll(subsidiary.getState(this));
-        write.addAll(overriding.getState(this));
+
+        V subsidiaryState = subsidiary.getState(this);
+        if (subsidiaryState != null) {
+            if (write == null) {
+                write = subsidiaryState;
+            } else {
+                write.addAll(subsidiaryState);
+            }
+        }
+
+        V overridingState = overriding.getState(this);
+        if (overridingState != null) {
+            if (write == null) {
+                write = overridingState;
+            } else {
+                write.addAll(overridingState);
+            }
+        }
         writeTo.setState(this, write);
     }
 

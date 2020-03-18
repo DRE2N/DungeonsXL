@@ -71,8 +71,24 @@ public class MapGameRule<TK, TV, V extends Map<TK, TV>> extends GameRule<V> {
     @Override
     public void merge(GameRuleContainer overriding, GameRuleContainer subsidiary, GameRuleContainer writeTo) {
         V write = writeTo.getState(this);
-        write.putAll(subsidiary.getState(this));
-        write.putAll(overriding.getState(this));
+
+        V subsidiaryState = subsidiary.getState(this);
+        if (subsidiaryState != null) {
+            if (write == null) {
+                write = subsidiaryState;
+            } else {
+                write.putAll(subsidiaryState);
+            }
+        }
+
+        V overridingState = overriding.getState(this);
+        if (overridingState != null) {
+            if (write == null) {
+                write = overridingState;
+            } else {
+                write.putAll(overridingState);
+            }
+        }
         writeTo.setState(this, write);
     }
 
