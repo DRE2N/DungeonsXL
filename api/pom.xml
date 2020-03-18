@@ -42,6 +42,13 @@
                                     <include>de.erethon.commons:commons-dist</include>
                                 </includes>
                             </artifactSet>
+                            <relocations>
+                                <!-- We don't need this twice -->
+                                <relocation>
+                                    <pattern>de.erethon.caliburn.util.commons</pattern>
+                                    <shadedPattern>de.erethon.commons</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
