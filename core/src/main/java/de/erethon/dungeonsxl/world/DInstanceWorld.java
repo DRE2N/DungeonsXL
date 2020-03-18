@@ -27,6 +27,7 @@ import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.dungeonsxl.trigger.Trigger;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -117,6 +118,26 @@ public abstract class DInstanceWorld implements InstanceWorld {
             Constructor constructor = clss.getConstructor(DungeonsAPI.class, Sign.class, String[].class, InstanceWorld.class);
             DungeonSign dSign = (DungeonSign) constructor.newInstance(plugin, sign, lines, this);
             signs.put(sign.getBlock(), dSign);
+
+            String[] triggerTypes = lines[3].replaceAll("\\s", "").split(",");
+            for (String triggerString : triggerTypes) {
+                if (triggerString.isEmpty()) {
+                    continue;
+                }
+
+                String id = triggerString.substring(0, 1);
+                String value = null;
+                if (triggerString.length() > 1) {
+                    value = triggerString.substring(1);
+                }
+
+                Trigger trigger = Trigger.getOrCreate(plugin, id, value, dSign);
+                if (trigger != null) {
+                    trigger.addListener(dSign);
+                    dSign.addTrigger(trigger);
+                }
+            }
+
             return dSign;
 
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
