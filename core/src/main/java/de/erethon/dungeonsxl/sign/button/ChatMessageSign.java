@@ -20,8 +20,6 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -29,8 +27,6 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class ChatMessageSign extends MessageSign {
-
-    private List<Player> done = new ArrayList<>();
 
     public ChatMessageSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
@@ -47,25 +43,8 @@ public class ChatMessageSign extends MessageSign {
     }
 
     @Override
-    public boolean push(Player player) {
-        if (!done.contains(player)) {
-            MessageUtil.sendMessage(player, text);
-            done.add(player);
-        }
-
-        if (done.size() >= getGameWorld().getWorld().getPlayers().size()) {
-            getGameWorld().removeDungeonSign(this);
-        }
-
-        return true;
-    }
-
-    @Override
-    public void push() {
-        for (Player player : getGameWorld().getWorld().getPlayers()) {
-            MessageUtil.sendMessage(player, text);
-        }
-        getGameWorld().removeDungeonSign(this);
+    public void sendMessage(Player player) {
+        MessageUtil.sendMessage(player, text);
     }
 
 }

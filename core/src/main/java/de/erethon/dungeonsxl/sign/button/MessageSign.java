@@ -21,14 +21,18 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 /**
  * @author Daniel Saukel
  */
 public abstract class MessageSign extends Button {
 
-    protected String text;
+    protected String text = "UNKNOWN MESSAGE";
+    private List<Player> done = new ArrayList<>();
 
     public MessageSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
@@ -67,7 +71,33 @@ public abstract class MessageSign extends Button {
         String text = getGameWorld().getDungeon().getRules().getState(GameRule.MESSAGES).get(NumberUtil.parseInt(getLine(1)));
         if (text != null) {
             this.text = text;
+        } else {
+            markAsErroneous("Unknown message, ID: " + getLine(1));
         }
     }
+
+    @Override
+    public boolean push(Player player) {
+        if (!done.contains(player)) {
+            sendMessage(player);
+            done.add(player);
+        }
+
+        if (done.size() >= getGameWorld().getWorld().getPlayers().size()) {
+            getGameWorld().removeDungeonSign(this);
+        }
+
+        return true;
+    }
+
+    @Override
+    public void push() {
+        for (Player player : getGameWorld().getWorld().getPlayers()) {
+            sendMessage(player);
+        }
+        getGameWorld().removeDungeonSign(this);
+    }
+
+    public abstract void sendMessage(Player player);
 
 }

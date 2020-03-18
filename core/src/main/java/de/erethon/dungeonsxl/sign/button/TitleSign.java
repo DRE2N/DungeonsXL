@@ -55,11 +55,16 @@ public class TitleSign extends MessageSign {
         int id0 = NumberUtil.parseInt(line1[0], -1);
         title = messages.get(id0);
         if (title == null) {
-            title = "";
+            markAsErroneous("Unknown message, ID: " + getLine(1));
+            return;
         }
         if (line1.length > 1) {
             int id1 = NumberUtil.parseInt(line1[1], -1);
             subtitle = messages.get(id1);
+            if (subtitle == null) {
+                markAsErroneous("Unknown message, ID: " + getLine(1));
+                return;
+            }
         }
         if (subtitle == null) {
             subtitle = "";
@@ -78,9 +83,8 @@ public class TitleSign extends MessageSign {
     }
 
     @Override
-    public boolean push(Player player) {
+    public void sendMessage(Player player) {
         MessageUtil.sendTitleMessage(player, title, subtitle, fadeIn, stay, fadeOut);
-        return true;
     }
 
 }

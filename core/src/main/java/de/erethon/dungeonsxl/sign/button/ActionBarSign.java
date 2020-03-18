@@ -43,9 +43,8 @@ public class ActionBarSign extends MessageSign {
     }
 
     @Override
-    public boolean push(Player player) {
+    public void sendMessage(Player player) {
         MessageUtil.sendActionBarMessage(player, text);
-        return true;
     }
 
 }
