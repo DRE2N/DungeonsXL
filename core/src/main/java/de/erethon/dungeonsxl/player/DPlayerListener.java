@@ -21,7 +21,6 @@ import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.player.EditPlayer;
@@ -414,7 +413,6 @@ public class DPlayerListener implements Listener {
         Player player = event.getPlayer();
         GlobalPlayer dPlayer = dPlayers.get(player);
         PlayerGroup dGroup = dPlayer.getGroup();
-        Dungeon dungeon = dGroup.getDungeon();
 
         if (!(dPlayer instanceof InstancePlayer)) {
             if (dGroup != null) {
@@ -422,7 +420,7 @@ public class DPlayerListener implements Listener {
             }
 
         } else if (dPlayer instanceof GamePlayer) {
-            int timeUntilKickOfflinePlayer = dungeon.getRules().getState(GameRule.TIME_UNTIL_KICK_OFFLINE_PLAYER);
+            int timeUntilKickOfflinePlayer = dGroup.getDungeon().getRules().getState(GameRule.TIME_UNTIL_KICK_OFFLINE_PLAYER);
 
             if (timeUntilKickOfflinePlayer == 0) {
                 ((InstancePlayer) dPlayer).leave();
