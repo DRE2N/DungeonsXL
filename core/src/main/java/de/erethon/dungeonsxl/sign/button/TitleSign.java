@@ -19,8 +19,10 @@ package de.erethon.dungeonsxl.sign.button;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import java.util.Map;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -50,10 +52,13 @@ public class TitleSign extends MessageSign {
     public void initialize() {
         super.initialize();
 
-        String[] line1 = text.split("/");
-        title = line1[0];
+        String[] line1 = text.split(",");
+        Map<Integer, String> messages = getGameWorld().getDungeon().getRules().getState(GameRule.MESSAGES);
+        int id0 = NumberUtil.parseInt(line1[0], -1);
+        title = id0 != -1 ? messages.get(id0) : "";
         if (line1.length > 1) {
-            subtitle = line1[1];
+            int id1 = NumberUtil.parseInt(line1[1], -1);
+            subtitle = id1 != -1 ? messages.get(id1) : "";
         } else {
             subtitle = "";
         }
