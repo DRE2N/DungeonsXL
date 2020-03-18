@@ -175,8 +175,6 @@ public abstract class Windup extends Deactivatable {
     public void trigger(Player player) {
         if (!isActive()) {
             activate(player);
-        } else {
-            deactivate();
         }
     }
 
