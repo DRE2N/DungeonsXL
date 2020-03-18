@@ -187,6 +187,8 @@ public class DDungeon implements Dungeon {
             rules.merge(getDefaultValues());
         } else if (map.getRules() != null) {
             rules = new GameRuleContainer(map.getRules());
+        } else {
+            rules = new GameRuleContainer();
         }
         rules.merge(plugin.getMainConfig().getDefaultWorldConfig());
         rules.merge(GameRuleContainer.DEFAULT_VALUES);
