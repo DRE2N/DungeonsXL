@@ -32,7 +32,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
-import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -45,7 +44,6 @@ public class RewardChest extends GameBlock {
     private Economy econ;
 
     private boolean used = false;
-    private Container container;
     private double moneyReward;
     private int levelReward;
     private ItemStack[] itemReward;
@@ -54,11 +52,6 @@ public class RewardChest extends GameBlock {
         super(plugin, container);
         econ = plugin.getEconomyProvider();
 
-        if (!(container.getState() instanceof Container)) {
-            return;
-        }
-
-        this.container = (Container) container.getState();
         this.moneyReward = moneyReward;
         this.levelReward = levelReward;
         this.itemReward = itemReward;
@@ -76,20 +69,6 @@ public class RewardChest extends GameBlock {
      */
     public void setUsed(boolean used) {
         this.used = used;
-    }
-
-    /**
-     * @return the chest
-     */
-    public Container getContainer() {
-        return container;
-    }
-
-    /**
-     * @param container the container to set
-     */
-    public void setContainer(Container container) {
-        this.container = container;
     }
 
     /**
@@ -135,7 +114,7 @@ public class RewardChest extends GameBlock {
             return;
         }
 
-        if (container.getLocation().distance(container.getLocation()) < 1) {
+        if (block.getLocation().distance(block.getLocation()) < 1) {
             addTreasure(api.getPlayerGroup(opener));
             used = true;
         }

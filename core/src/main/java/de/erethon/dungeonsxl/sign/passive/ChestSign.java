@@ -20,8 +20,8 @@ import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.dungeonsxl.util.ContainerAdapter;
 import org.bukkit.block.Block;
-import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
@@ -88,21 +88,21 @@ public abstract class ChestSign extends Passive {
             Block yRelative = sign.getRelative(0, i, 0);
             Block zRelative = sign.getRelative(0, 0, i);
 
-            if (xRelative.getState() instanceof Container) {
+            if (ContainerAdapter.isValidContainer(xRelative)) {
                 if (chestContent == null) {
-                    chestContent = ((Container) xRelative.getState()).getInventory().getContents();
+                    chestContent = ContainerAdapter.getBlockInventory(xRelative).getContents();
                 }
                 chest = xRelative;
 
-            } else if (yRelative.getState() instanceof Container) {
+            } else if (ContainerAdapter.isValidContainer(yRelative)) {
                 if (chestContent == null) {
-                    chestContent = ((Container) yRelative.getState()).getInventory().getContents();
+                    chestContent = ContainerAdapter.getBlockInventory(yRelative).getContents();
                 }
                 chest = yRelative;
 
-            } else if (zRelative.getState() instanceof Container) {
+            } else if (ContainerAdapter.isValidContainer(zRelative)) {
                 if (chestContent == null) {
-                    chestContent = ((Container) zRelative.getState()).getInventory().getContents();
+                    chestContent = ContainerAdapter.getBlockInventory(zRelative).getContents();
                 }
                 chest = zRelative;
             }

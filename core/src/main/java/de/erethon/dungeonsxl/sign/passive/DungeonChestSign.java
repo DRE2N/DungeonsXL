@@ -20,9 +20,9 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.ContainerAdapter;
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
@@ -79,7 +79,7 @@ public class DungeonChestSign extends ChestSign {
         }
 
         chestContent = Arrays.copyOfRange(list.toArray(new ItemStack[list.size()]), 0, 26);
-        ((Container) chest.getState()).getInventory().setContents(chestContent);
+        ContainerAdapter.getBlockInventory(chest).setContents(chestContent);
     }
 
 }

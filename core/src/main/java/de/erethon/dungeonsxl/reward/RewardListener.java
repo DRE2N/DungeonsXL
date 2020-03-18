@@ -17,11 +17,11 @@
 package de.erethon.dungeonsxl.reward;
 
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.compatibility.Version;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.ContainerAdapter;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import de.erethon.vignette.api.PaginatedInventoryGUI;
@@ -30,16 +30,12 @@ import de.erethon.vignette.api.layout.PaginatedFlowInventoryLayout;
 import de.erethon.vignette.api.layout.PaginatedInventoryLayout.PaginationButtonPosition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -93,12 +89,12 @@ public class RewardListener implements Listener {
             return;
         }
 
-        if (!(isValidContainer(inventory.getTopInventory()))) {
+        if (!(ContainerAdapter.isValidContainer(inventory.getTopInventory()))) {
             return;
         }
 
         for (RewardChest rewardChest : gameWorld.getRewardChests()) {
-            if (!rewardChest.getBlock().equals(getHolderBlock(inventory.getTopInventory().getHolder()))) {
+            if (!rewardChest.getBlock().equals(ContainerAdapter.getHolderBlock(inventory.getTopInventory().getHolder()))) {
                 continue;
             }
 
@@ -140,22 +136,6 @@ public class RewardListener implements Listener {
             }
             lootInventory.open(player);
             dPlayer.setRewardItems(null);
-        }
-    }
-
-    private static boolean isValidContainer(Inventory inventory) {
-        if (Version.isAtLeast(Version.MC1_12_1)) {
-            return inventory.getHolder() instanceof Container;
-        } else {
-            return inventory.getHolder() instanceof Chest;
-        }
-    }
-
-    private static Block getHolderBlock(InventoryHolder holder) {
-        if (Version.isAtLeast(Version.MC1_12_1)) {
-            return ((Container) holder).getBlock();
-        } else {
-            return ((Chest) holder).getBlock();
         }
     }
 
