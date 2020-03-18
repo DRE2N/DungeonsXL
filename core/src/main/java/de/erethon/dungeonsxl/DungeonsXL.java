@@ -37,6 +37,7 @@ import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.player.GroupAdapter;
@@ -131,7 +132,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private Registry<String, Dungeon> dungeonRegistry = new Registry<>();
     private Registry<String, ResourceWorld> mapRegistry = new Registry<>();
     private Registry<Integer, InstanceWorld> instanceCache = new Registry<>();
-    private Registry<String, GameRule> gameRuleRegistry = new Registry<>();
+    private Registry<String, GameRule> gameRuleRegistry = new GameRuleRegistry();
     private Registry<String, ExternalMobProvider> externalMobProviderRegistry = new Registry<>();
     private Registry<String, PlayerGroup> playerGroupCache = new Registry<>();
 
@@ -145,6 +146,16 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
                 return LEGACY_SIGNS.get(key);
             }
             return clss;
+        }
+
+    }
+
+    private class GameRuleRegistry extends Registry<String, GameRule> {
+
+        @Override
+        public void add(String key, GameRule rule) {
+            super.add(key, rule);
+            GameRuleContainer.DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
         }
 
     }
@@ -311,6 +322,10 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(this), this);
         globalData = new GlobalData(this, new File(getDataFolder(), "data.yml"));
         globalData.load();
+
+        for (GameRule rule : GameRule.VALUES) {
+            gameRuleRegistry.add(rule.getKey(), rule);
+        }
 
         // Mobs - Supported providers
         for (ExternalMobPlugin externalMobPlugin : ExternalMobPlugin.values()) {

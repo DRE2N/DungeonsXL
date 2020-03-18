@@ -63,7 +63,7 @@ public class WorldConfig extends GameRuleContainer {
 
     // Load & Save
     public void load(ConfigurationSection config) {
-        for (GameRule rule : GameRule.VALUES) {
+        for (GameRule rule : plugin.getGameRuleRegistry()) {
             rule.fromConfig(plugin, this, config);
         }
     }
