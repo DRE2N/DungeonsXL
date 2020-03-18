@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
@@ -26,7 +27,6 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -98,9 +98,11 @@ public class DSignListener implements Listener {
         sign.setLine(2, lines[2]);
         sign.setLine(3, lines[3]);
 
-        if (DungeonsXL.LEGACY_SIGNS.containsKey(lines[0].substring(1, lines[0].length() - 2).toUpperCase())) {
+        if (DungeonsXL.LEGACY_SIGNS.containsKey(lines[0].substring(1, lines[0].length() - 1).toUpperCase())) {
             MessageUtil.sendMessage(player, ChatColor.RED + "https://erethon.de/resources/dxl-signs/deprecated.gif");
             MessageUtil.sendMessage(player, ChatColor.LIGHT_PURPLE + "https://github.com/DRE2N/DungeonsXL/wiki/Legacy-support#updating");
+            event.setCancelled(true);
+            event.getBlock().setType(VanillaItem.AIR.getMaterial());
             return;
         }
 
