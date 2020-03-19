@@ -102,14 +102,4 @@ public class DropSign extends Windup {
         });
     }
 
-    @Override
-    public void activate() {
-        if (interval < 0) {
-            active = true;
-            getRunnable().run();
-        } else {
-            super.activate();
-        }
-    }
-
 }

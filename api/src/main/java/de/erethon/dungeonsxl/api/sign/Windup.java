@@ -153,8 +153,12 @@ public abstract class Windup extends Deactivatable {
 
     @Override
     public void activate() {
-        active = true;
-        startTask();
+        if (interval <= 0) {
+            runnable.run();
+        } else {
+            active = true;
+            startTask();
+        }
     }
 
     /**
@@ -163,7 +167,9 @@ public abstract class Windup extends Deactivatable {
     @Override
     public void deactivate() {
         active = false;
-        getTask().cancel();
+        if (getTask() != null) {
+            getTask().cancel();
+        }
     }
 
     /**
