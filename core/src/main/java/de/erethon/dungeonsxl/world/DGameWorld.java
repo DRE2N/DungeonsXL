@@ -169,6 +169,25 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     public DungeonSign createDungeonSign(Sign sign, String[] lines) {
         DungeonSign dSign = super.createDungeonSign(sign, lines);
 
+        String[] triggerTypes = lines[3].replaceAll("\\s", "").split(",");
+        for (String triggerString : triggerTypes) {
+            if (triggerString.isEmpty()) {
+                continue;
+            }
+
+            String id = triggerString.substring(0, 1);
+            String value = null;
+            if (triggerString.length() > 1) {
+                value = triggerString.substring(1);
+            }
+
+            Trigger trigger = Trigger.getOrCreate(plugin, id, value, dSign);
+            if (trigger != null) {
+                trigger.addListener(dSign);
+                dSign.addTrigger(trigger);
+            }
+        }
+
         if (dSign.isOnDungeonInit()) {
             dSign.initialize();
         }
