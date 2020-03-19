@@ -145,27 +145,12 @@ public interface Dungeon {
     GameRuleContainer getOverrideValues();
 
     /**
-     * Sets the game rule container whose values override all values of the game rule containers of the dungeon's maps.
-     *
-     * @param rules the override values
-     */
-    void setOverrideValues(GameRuleContainer rules);
-
-    /**
      * The values from this game rule container will be overriden by values of the game rule containers of the dungeon's maps. They will however still override
      * the values from the main config.
      *
      * @return the default values
      */
     GameRuleContainer getDefaultValues();
-
-    /**
-     * Sets the game rule container whose values will be overriden by values of the game rule containers of the dungeon's maps. They will however still override
-     * the values from the main config.
-     *
-     * @param rules the default values
-     */
-    void setDefaultValues(GameRuleContainer rules);
 
     /**
      * Returns true if the floor is either in the floors list or the start / end floor.

@@ -309,7 +309,7 @@ public class GameRule<V> {
     /**
      * Messages; also to be created with /dxl msg
      */
-    public static final GameRule<Map<Integer, String>> MESSAGES = new MapGameRule<>("msgs", new HashMap<>(), (api, value) -> {
+    public static final GameRule<Map<Integer, String>> MESSAGES = new MapGameRule<>("messages", new HashMap<>(), (api, value) -> {
         if (!(value instanceof ConfigurationSection)) {
             return null;
         }
@@ -461,6 +461,11 @@ public class GameRule<V> {
         V overridingValue = overriding.getState(this);
         V subsidiaryValue = subsidiary.getState(this);
         writeTo.setState(this, overridingValue != null ? overridingValue : subsidiaryValue);
+    }
+
+    @Override
+    public String toString() {
+        return "GameRule{key=" + key + "}";
     }
 
 }

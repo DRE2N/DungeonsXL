@@ -39,6 +39,7 @@ public class WorldConfig extends GameRuleContainer {
     private DungeonsXL plugin;
 
     private File file;
+    private ConfigurationSection config;
 
     private List<String> invitedPlayers = new ArrayList<>();
     private Environment worldEnvironment;
@@ -51,21 +52,23 @@ public class WorldConfig extends GameRuleContainer {
         this(plugin);
 
         this.file = file;
-        FileConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-        load(configFile);
+        config = YamlConfiguration.loadConfiguration(file);
+        load();
     }
 
     public WorldConfig(DungeonsXL plugin, ConfigurationSection config) {
         this(plugin);
 
-        load(config);
+        this.config = config;
+        load();
     }
 
-    // Load & Save
-    public void load(ConfigurationSection config) {
-        for (GameRule rule : plugin.getGameRuleRegistry()) {
-            rule.fromConfig(plugin, this, config);
-        }
+    public void load() {
+        plugin.getGameRuleRegistry().forEach(this::updateGameRule);
+    }
+
+    public void updateGameRule(GameRule rule) {
+        rule.fromConfig(plugin, this, config);
     }
 
     public void save() {
@@ -76,7 +79,7 @@ public class WorldConfig extends GameRuleContainer {
 
         if (getState(GameRule.MESSAGES) != null) {
             for (int msgs : getState(GameRule.MESSAGES).keySet()) {
-                configFile.set("message." + msgs, getState(GameRule.MESSAGES).get(msgs));
+                configFile.set("messages." + msgs, getState(GameRule.MESSAGES).get(msgs));
             }
         }
 

@@ -116,4 +116,9 @@ public class GameRuleContainer {
         }
     }
 
+    @Override
+    public String toString() {
+        return "GameRuleContainer{" + rules + "}";
+    }
+
 }

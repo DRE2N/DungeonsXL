@@ -82,6 +82,7 @@ import de.erethon.dungeonsxl.util.PlaceholderUtil;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.DWorldListener;
 import de.erethon.dungeonsxl.world.LWCIntegration;
+import de.erethon.dungeonsxl.world.WorldConfig;
 import de.erethon.dungeonsxl.world.WorldUnloadTask;
 import de.erethon.vignette.api.VignetteAPI;
 import java.io.File;
@@ -155,12 +156,26 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         @Override
         public void add(String key, GameRule rule) {
             super.add(key, rule);
-            GameRuleContainer.DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
+            if (loaded) {
+                GameRuleContainer.DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
+                mainConfig.getDefaultWorldConfig().updateGameRule(rule);
+                for (Dungeon apiDungeon : dungeonRegistry) {
+                    DDungeon dungeon = ((DDungeon) apiDungeon);
+                    if (dungeon.isMultiFloor()) {
+                        dungeon.getConfig().getDefaultValues().updateGameRule(rule);
+                        dungeon.getConfig().getOverrideValues().updateGameRule(rule);
+                    } else {
+                        WorldConfig cfg = ((DResourceWorld) dungeon.getMap()).getConfig(false);
+                        cfg.updateGameRule(rule);
+                    }
+                }
+                dungeonRegistry.forEach(Dungeon::setupRules);
+            }
         }
 
     }
 
-    private boolean loadingWorld;
+    private boolean loaded, loadingWorld;
 
     private GlobalData globalData;
     private MainConfig mainConfig;
@@ -287,6 +302,10 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         signRegistry.add("WAVE", WaveSign.class);
         Bukkit.getPluginManager().registerEvents(new DSignListener(this), this);
 
+        for (GameRule rule : GameRule.VALUES) {
+            gameRuleRegistry.add(rule.getKey(), rule);
+        }
+
         // Maps
         for (File file : MAPS.listFiles()) {
             if (file.isDirectory() && !file.getName().equals(".raw")) {
@@ -322,10 +341,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(this), this);
         globalData = new GlobalData(this, new File(getDataFolder(), "data.yml"));
         globalData.load();
-
-        for (GameRule rule : GameRule.VALUES) {
-            gameRuleRegistry.add(rule.getKey(), rule);
-        }
 
         // Mobs - Supported providers
         for (ExternalMobPlugin externalMobPlugin : ExternalMobPlugin.values()) {
@@ -375,6 +390,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         }
 
         dCommands.register(this);
+        loaded = true;
     }
 
     public void saveData() {

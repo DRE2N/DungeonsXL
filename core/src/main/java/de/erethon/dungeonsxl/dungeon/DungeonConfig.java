@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.dungeon;
 
 import de.erethon.commons.config.DREConfig;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
@@ -42,8 +41,8 @@ public class DungeonConfig extends DREConfig {
     private List<ResourceWorld> floors = new ArrayList<>();
     private int floorCount;
     private boolean removeWhenPlayed;
-    private GameRuleContainer overrideValues;
-    private GameRuleContainer defaultValues;
+    private WorldConfig overrideValues;
+    private WorldConfig defaultValues;
 
     public DungeonConfig(DungeonsXL plugin, File file) {
         super(file, CONFIG_VERSION);
@@ -100,20 +99,12 @@ public class DungeonConfig extends DREConfig {
         this.removeWhenPlayed = removeWhenPlayed;
     }
 
-    public GameRuleContainer getOverrideValues() {
+    public WorldConfig getOverrideValues() {
         return overrideValues;
     }
 
-    public void setOverrideValues(GameRuleContainer worldConfig) {
-        overrideValues = worldConfig;
-    }
-
-    public GameRuleContainer getDefaultValues() {
+    public WorldConfig getDefaultValues() {
         return defaultValues;
-    }
-
-    public void setDefaultValues(GameRuleContainer worldConfig) {
-        defaultValues = worldConfig;
     }
 
     public boolean containsFloor(ResourceWorld resource) {

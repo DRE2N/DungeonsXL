@@ -150,18 +150,8 @@ public class DDungeon implements Dungeon {
     }
 
     @Override
-    public void setOverrideValues(GameRuleContainer rules) {
-        config.setOverrideValues(rules);
-    }
-
-    @Override
     public GameRuleContainer getDefaultValues() {
         return config.getDefaultValues();
-    }
-
-    @Override
-    public void setDefaultValues(GameRuleContainer rules) {
-        config.setDefaultValues(rules);
     }
 
     @Override
