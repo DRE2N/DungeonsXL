@@ -22,7 +22,6 @@ import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.sign.SignUpdateTask;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
@@ -91,9 +90,6 @@ public class TriggerSign extends Rocker {
         }
 
         getSign().setLine(1, String.valueOf(id));
-
-        new SignUpdateTask(getSign()).runTaskLater(api, 2L);
-
         return true;
     }
 

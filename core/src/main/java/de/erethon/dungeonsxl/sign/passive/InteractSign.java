@@ -22,7 +22,6 @@ import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.sign.SignUpdateTask;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
@@ -92,9 +91,6 @@ public class InteractSign extends Passive {
         }
 
         getSign().setLine(1, String.valueOf(id));
-
-        new SignUpdateTask(getSign()).runTaskLater(api, 2L);
-
         return true;
     }
 
