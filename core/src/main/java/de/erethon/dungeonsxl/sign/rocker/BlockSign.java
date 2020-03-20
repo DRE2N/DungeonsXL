@@ -125,7 +125,12 @@ public class BlockSign extends Rocker {
     @Override
     public void deactivate() {
         getSign().getBlock().setType(offBlock.getMaterial());
-        MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
+        try {
+            MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
+        } catch (IllegalArgumentException exception) {
+            markAsErroneous("onBlock data value " + offBlockData + " cannot be applied to given type " + onBlock.getId());
+            return;
+        }
         active = false;
     }
 
