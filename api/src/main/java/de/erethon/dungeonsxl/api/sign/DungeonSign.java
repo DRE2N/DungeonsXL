@@ -170,9 +170,23 @@ public interface DungeonSign {
     void trigger(Player player);
 
     /**
-     * Updates the sign.
+     * Checks if the triggers of the sign have been triggered. If they all are, the sign itself is triggered.
+     *
+     * @param lastFired the last trigger that has been triggered
      */
-    void update();
+    default void updateTriggers(Trigger lastFired) {
+        if (isErroneous()) {
+            return;
+        }
+
+        for (Trigger trigger : getTriggers()) {
+            if (!trigger.isTriggered()) {
+                return;
+            }
+        }
+
+        trigger(lastFired != null ? lastFired.getPlayer() : null);
+    }
 
     /**
      * Sets the sign to air if it is not erroneous and if its type requires this.

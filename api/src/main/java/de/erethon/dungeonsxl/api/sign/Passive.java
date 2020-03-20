@@ -15,6 +15,7 @@
 package de.erethon.dungeonsxl.api.sign;
 
 import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -32,9 +33,11 @@ public abstract class Passive extends AbstractDSign {
 
     /**
      * Does nothing.
+     *
+     * @param lastFired unused
      */
     @Override
-    public final void update() {
+    public final void updateTriggers(Trigger lastFired) {
     }
 
     /**

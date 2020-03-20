@@ -106,7 +106,7 @@ public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
 
     public void updateDSigns() {
         for (DungeonSign dSign : dSigns.toArray(new DungeonSign[dSigns.size()])) {
-            dSign.update();
+            dSign.updateTriggers(this);
         }
     }
 

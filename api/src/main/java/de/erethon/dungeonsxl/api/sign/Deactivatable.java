@@ -119,28 +119,4 @@ public abstract class Deactivatable extends AbstractDSign {
         return isActive();
     }
 
-    @Override
-    public void update() {
-        if (isErroneous()) {
-            return;
-        }
-
-        for (Trigger trigger : getTriggers()) {
-            if (!trigger.isTriggered()) {
-                deactivate();
-                return;
-            }
-
-            if (trigger.getPlayer() == null) {
-                continue;
-            }
-
-            if (activate(trigger.getPlayer())) {
-                return;
-            }
-        }
-
-        activate();
-    }
-
 }

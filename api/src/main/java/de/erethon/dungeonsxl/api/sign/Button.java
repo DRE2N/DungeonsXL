@@ -64,29 +64,6 @@ public abstract class Button extends AbstractDSign {
         return true;
     }
 
-    @Override
-    public void update() {
-        if (isErroneous()) {
-            return;
-        }
-
-        for (Trigger trigger : getTriggers()) {
-            if (!trigger.isTriggered()) {
-                return;
-            }
-
-            if (trigger.getPlayer() == null) {
-                continue;
-            }
-
-            if (push(trigger.getPlayer())) {
-                return;
-            }
-        }
-
-        push();
-    }
-
     /**
      * This is the same as {@link #push(org.bukkit.entity.Player)}.
      *
