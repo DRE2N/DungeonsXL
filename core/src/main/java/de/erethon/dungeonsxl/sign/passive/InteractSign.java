@@ -83,7 +83,7 @@ public class InteractSign extends Passive {
             }
 
         } else {
-            id = NumberUtil.parseInt(getSign().getLine(1));
+            id = NumberUtil.parseInt(getLine(1));
             if (id == 0 || used.contains(id)) {
                 return false;
             } else {
@@ -107,8 +107,8 @@ public class InteractSign extends Passive {
         }
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.GREEN + getSign().getLine(2));
-        getSign().setLine(2, ChatColor.GREEN + getSign().getLine(3));
+        getSign().setLine(1, ChatColor.GREEN + getLine(2));
+        getSign().setLine(2, ChatColor.GREEN + getLine(3));
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
     }

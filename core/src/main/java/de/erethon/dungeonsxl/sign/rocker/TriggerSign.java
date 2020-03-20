@@ -82,7 +82,7 @@ public class TriggerSign extends Rocker {
             }
 
         } else {
-            id = NumberUtil.parseInt(getSign().getLine(1));
+            id = NumberUtil.parseInt(getLine(1));
             if (id == 0 || used.contains(id)) {
                 return false;
             } else {
