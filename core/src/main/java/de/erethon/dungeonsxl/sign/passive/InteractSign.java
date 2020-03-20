@@ -35,7 +35,7 @@ import org.bukkit.block.Sign;
  */
 public class InteractSign extends Passive {
 
-    private int id = 1;
+    private int id = 0;
 
     public InteractSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
