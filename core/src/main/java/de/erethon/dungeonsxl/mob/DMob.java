@@ -18,7 +18,7 @@ package de.erethon.dungeonsxl.mob;
 
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.caliburn.mob.VanillaMob;
-import de.erethon.caliburn.util.compatibility.Version;
+import de.erethon.commons.compatibility.Version;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.world.GameWorld;
