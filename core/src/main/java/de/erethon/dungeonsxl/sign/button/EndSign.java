@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.sign.Button;
@@ -88,7 +87,7 @@ public class EndSign extends Button {
         }
 
         if (!getTriggers().isEmpty()) {
-            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
+            setToAir();
             return;
         }
 

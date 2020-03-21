@@ -19,7 +19,6 @@ package de.erethon.dungeonsxl.sign.passive;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Passive;
@@ -78,8 +77,6 @@ public class HologramSign extends Passive {
 
     @Override
     public void initialize() {
-        getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
-
         String[] holoLines = getLine(1).split("/");
         Location location = getSign().getLocation();
         location = location.add(0.5, NumberUtil.parseDouble(getLine(2)), 0.5);

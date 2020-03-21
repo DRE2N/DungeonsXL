@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
@@ -89,7 +88,7 @@ public class ReadySign extends Button {
         }
 
         if (!getTriggers().isEmpty()) {
-            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
+            setToAir();
             return;
         }
 

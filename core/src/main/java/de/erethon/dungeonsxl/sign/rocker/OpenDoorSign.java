@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.sign.rocker;
 
 import de.erethon.caliburn.category.Category;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
@@ -88,8 +87,6 @@ public class OpenDoorSign extends Rocker {
                 door = new LockedDoor(api, block);
             }
             ((DGameWorld) getGameWorld()).addGameBlock(door);
-
-            getSign().getBlock().setType(VanillaItem.AIR.getMaterial());
 
         } else {
             markAsErroneous("No door attached");
