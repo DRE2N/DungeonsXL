@@ -40,7 +40,7 @@ public class MobSpawnTask extends BukkitRunnable {
     @Override
     public void run() {
         if (gameWorld == null) {
-            cancel();
+            sign.deactivate();
             return;
         }
 
@@ -52,7 +52,7 @@ public class MobSpawnTask extends BukkitRunnable {
         if (k < n) {
             k++;
         } else {
-            cancel();
+            sign.deactivate();
         }
     }
 
