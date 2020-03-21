@@ -21,6 +21,7 @@ import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -63,7 +64,7 @@ public class HologramSign extends Passive {
 
     @Override
     public boolean isSetToAir() {
-        return false;
+        return true;
     }
 
     @Override
@@ -77,7 +78,12 @@ public class HologramSign extends Passive {
 
     @Override
     public void initialize() {
-        String[] holoLines = getLine(1).split("/");
+        String text = getGameWorld().getDungeon().getRules().getState(GameRule.MESSAGES).get(NumberUtil.parseInt(getLine(1)));
+        if (text == null) {
+            markAsErroneous("Unknown message, ID: " + getLine(1));
+            return;
+        }
+        String[] holoLines = text.split("/");
         Location location = getSign().getLocation();
         location = location.add(0.5, NumberUtil.parseDouble(getLine(2)), 0.5);
 
