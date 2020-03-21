@@ -190,9 +190,9 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         if (dSign.isOnDungeonInit()) {
             dSign.initialize();
-        }
-        if (!dSign.isErroneous() && dSign.isSetToAir()) {
-            dSign.setToAir();
+            if (!dSign.isErroneous() && dSign.isSetToAir()) {
+                dSign.setToAir();
+            }
         }
 
         return dSign;
