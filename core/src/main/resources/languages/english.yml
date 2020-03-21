@@ -213,20 +213,20 @@ requirement:
 reward: 
   general: "&6You received &4&v1 &6for finishing the dungeon."
 sign: 
-  end: "&2END"
+  end: "&aEND"
   floor: 
-    1: "&2ENTER"
-    2: "&2NEXT FLOOR"
+    1: "&aENTER"
+    2: "&aNEXT FLOOR"
   global: 
     full: "&4FULL"
     isPlaying: "&4IS PLAYING"
-    joinGame: "&2JOIN GAME"
-    joinGroup: "&2JOIN GROUP"
-    newGame: "&2NEW GAME"
-    newGroup: "&2NEW GROUP"
-  leave: "&2LEAVE"
-  ready: "&2READY"
-  resourcePack: "&2DOWNLOAD"
+    joinGame: "&aJOIN GAME"
+    joinGroup: "&aJOIN GROUP"
+    newGame: "&aNEW GAME"
+    newGroup: "&aNEW GROUP"
+  leave: "&aLEAVE"
+  ready: "&aREADY"
+  resourcePack: "&aDOWNLOAD"
   wave: 
-    1: "&2START"
-    2: "&2NEXT WAVE"
+    1: "&aSTART"
+    2: "&aNEXT WAVE"

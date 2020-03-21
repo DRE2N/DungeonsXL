@@ -213,20 +213,20 @@ requirement:
 reward: 
   general: "&6Vous avez reçu &4&v1 &6pour avoir fini le donjon."
 sign: 
-  end: "&2FINIR"
+  end: "&aFINIR"
   floor: 
-    1: "&2ENTRER AU PRO-"
-    2: "&2CHAIN ÉTAGE"
+    1: "&aENTRER AU PRO-"
+    2: "&aCHAIN ÉTAGE"
   global: 
     full: "&4PLEIN"
     isPlaying: "&4EN JEU"
-    joinGame: "&2INSCRIRE AU JEU"
-    joinGroup: "&2INSCRIRE AU GROUPE"
-    newGame: "&2NOUVEAU JEU"
-    newGroup: "&2NOUVEAU GROUPE"
-  leave: "&2QUITTER"
-  ready: "&2PRÊT"
-  resourcePack: "&2TÉLÉCHARGER"
+    joinGame: "&aINSCRIRE AU JEU"
+    joinGroup: "&aINSCRIRE AU GROUPE"
+    newGame: "&aNOUVEAU JEU"
+    newGroup: "&aNOUVEAU GROUPE"
+  leave: "&aQUITTER"
+  ready: "&aPRÊT"
+  resourcePack: "&aTÉLÉCHARGER"
   wave: 
-    1: "&2COMMENCER"
-    2: "&2VAGUE SUIVANTE"
+    1: "&aCOMMENCER"
+    2: "&aVAGUE SUIVANTE"
