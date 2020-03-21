@@ -108,7 +108,7 @@ public class ResourcePackSign extends Button {
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
         getSign().setLine(1, DMessage.SIGN_RESOURCE_PACK.getMessage());
-        getSign().setLine(2, ChatColor.DARK_GREEN + getLine(1));
+        getSign().setLine(2, ChatColor.GREEN + getLine(1));
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
     }

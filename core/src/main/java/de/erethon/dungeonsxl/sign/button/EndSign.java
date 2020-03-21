@@ -104,7 +104,7 @@ public class EndSign extends Button {
             if (floor == null) {
                 getSign().setLine(2, DMessage.SIGN_FLOOR_2.getMessage());
             } else {
-                getSign().setLine(2, ChatColor.DARK_GREEN + floor.getName().replace("_", " "));
+                getSign().setLine(2, ChatColor.GREEN + floor.getName().replace("_", " "));
             }
         } else {
             getSign().setLine(1, DMessage.SIGN_END.getMessage());

@@ -88,7 +88,7 @@ public class ClassesSign extends Button {
             }
 
             getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-            getSign().setLine(1, ChatColor.DARK_GREEN + playerClass.getName());
+            getSign().setLine(1, ChatColor.GREEN + playerClass.getName());
             getSign().setLine(2, "");
             getSign().setLine(3, ChatColor.DARK_BLUE + "############");
             getSign().update();
