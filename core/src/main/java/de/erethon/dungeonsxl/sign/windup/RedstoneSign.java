@@ -19,19 +19,75 @@ package de.erethon.dungeonsxl.sign.windup;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
-import de.erethon.dungeonsxl.api.sign.Windup;
+import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class RedstoneSign extends Windup {
+public class RedstoneSign extends Rocker {
+
+    private BukkitTask enableTask;
+    private BukkitTask disableTask;
+    private long delay = 0;
+    private long offDelay = 0;
+    private int repeat = 1;
+    private int repeatsToDo = 1;
 
     public RedstoneSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
+    }
+
+    public BukkitTask getEnableTask() {
+        return enableTask;
+    }
+
+    public void setEnableTask(BukkitTask enableTask) {
+        this.enableTask = enableTask;
+    }
+
+    public BukkitTask getDisableTask() {
+        return disableTask;
+    }
+
+    public void setDisableTask(BukkitTask disableTask) {
+        this.disableTask = disableTask;
+    }
+
+    public long getDelay() {
+        return delay;
+    }
+
+    public void setDelay(long delay) {
+        this.delay = delay;
+    }
+
+    public long getOffDelay() {
+        return offDelay;
+    }
+
+    public void setOffDelay(long offDelay) {
+        this.offDelay = offDelay;
+    }
+
+    public int getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(int repeat) {
+        this.repeat = repeat;
+    }
+
+    public int getRepeatsToDo() {
+        return repeatsToDo;
+    }
+
+    public void setRepeatsToDo(int repeatsToDo) {
+        this.repeatsToDo = repeatsToDo;
     }
 
     @Override
@@ -66,23 +122,32 @@ public class RedstoneSign extends Windup {
 
     @Override
     public void initialize() {
-        interval = NumberUtil.parseDouble(getLine(1), 0);
-        n = NumberUtil.parseInt(getLine(2), -1);
-        setRunnable(new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (getGameWorld() == null) {
-                    cancel();
-                    return;
-                }
-                power(!isPowered());
-                if (k < n) {
-                    k++;
-                } else {
-                    cancel();
-                }
+        int line1 = 0;
+        int line11 = 0;
+        if (!getLine(1).isEmpty()) {
+            String line[] = getLine(1).split(",");
+            line1 = NumberUtil.parseInt(line[0]);
+            if (line.length > 1) {
+                line11 = NumberUtil.parseInt(line[1]);
             }
-        });
+        }
+
+        int line2 = 1;
+        if (!getLine(2).isEmpty()) {
+            line2 = NumberUtil.parseInt(getLine(2));
+        }
+
+        if (line1 > 0) {
+            delay = (long) line1 * 2;
+            if (line11 > 0) {
+                offDelay = (long) line11 * 2;
+            } else {
+                offDelay = delay;
+            }
+            if (line2 >= 0) {
+                repeat = line2;
+            }
+        }
     }
 
     @Override
@@ -92,20 +157,44 @@ public class RedstoneSign extends Windup {
         }
 
         if (delay > 0) {
-            startTask();
+            enableTask = new DelayedPowerTask(this, true).runTaskTimer(api, delay, delay + offDelay);
+
+            if (repeat != 1) {
+                repeatsToDo = repeat;
+                disableTask = new DelayedPowerTask(this, false).runTaskTimer(api, delay + offDelay, delay + offDelay);
+            }
+
         } else {
-            power(true);
+            power();
         }
 
         active = true;
     }
 
-    public boolean isPowered() {
-        return getSign().getBlock().getType() == VanillaItem.REDSTONE_BLOCK.getMaterial();
+    @Override
+    public void deactivate() {
+        if (!active) {
+            return;
+        }
+
+        unpower();
+
+        if (enableTask != null) {
+            enableTask.cancel();
+        }
+        if (disableTask != null) {
+            disableTask.cancel();
+        }
+
+        active = false;
     }
 
-    public void power(boolean power) {
-        getSign().getBlock().setType((power ? VanillaItem.REDSTONE_BLOCK : VanillaItem.AIR).getMaterial());
+    public void power() {
+        getSign().getBlock().setType(VanillaItem.REDSTONE_BLOCK.getMaterial());
+    }
+
+    public void unpower() {
+        setToAir();
     }
 
 }

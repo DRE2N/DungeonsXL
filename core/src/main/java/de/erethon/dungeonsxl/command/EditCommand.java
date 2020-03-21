@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
 public class EditCommand extends DCommand {
-    
+
     public EditCommand(DungeonsXL plugin) {
         super(plugin);
         setCommand("edit");
@@ -43,42 +43,42 @@ public class EditCommand extends DCommand {
         setHelp(DMessage.CMD_EDIT_HELP.getMessage());
         setPlayerCommand(true);
     }
-    
+
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        
+
         ResourceWorld resource = plugin.getMapRegistry().getFirstIf(d -> d.getName().equalsIgnoreCase(args[1]));
         if (resource == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
         }
-        
+
         if (!resource.isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.EDIT)) {
             MessageUtil.sendMessage(player, CommonMessage.CMD_NO_PERMISSION.getMessage());
             return;
         }
-        
+
         EditWorld editWorld = resource.getOrInstantiateEditWorld(false);
         if (editWorld == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
             return;
         }
-        
+
         PlayerGroup dGroup = plugin.getPlayerGroup(player);
         GlobalPlayer dPlayer = dPlayers.get(player);
-        
+
         if (dPlayer instanceof InstancePlayer) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
             return;
         }
-        
+
         if (dGroup != null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
         }
-        
+
         new DEditPlayer(plugin, player, editWorld);
     }
-    
+
 }
