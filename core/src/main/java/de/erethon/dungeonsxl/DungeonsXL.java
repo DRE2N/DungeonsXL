@@ -116,6 +116,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final File LOOT_TABLES = new File(SCRIPTS, "loottables");
     public static final File MOBS = new File(SCRIPTS, "mobs");
     public static final File SIGNS = new File(SCRIPTS, "signs");
+    public static final File COMMANDS = new File(SCRIPTS, "commands");
     public static final Map<String, Class<? extends DungeonSign>> LEGACY_SIGNS = new HashMap<>();
 
     static {
@@ -185,6 +186,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private GlobalProtectionCache protections;
     private AnnouncerCache announcers;
     private Registry<String, SignScript> signScriptRegistry;
+    private Registry<String, CommandScript> commandScriptRegistry;
 
     public DungeonsXL() {
         settings = DREPluginSettings.builder()
@@ -236,6 +238,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         LOOT_TABLES.mkdir();
         MOBS.mkdir();
         SIGNS.mkdir();
+        COMMANDS.mkdir();
     }
 
     public void loadConfig() {
@@ -258,6 +261,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         protections = new GlobalProtectionCache(this);
         announcers = new AnnouncerCache(this);
         signScriptRegistry = new Registry<>();
+        commandScriptRegistry = new Registry<>();
         dCommands = new DCommandCache(this);
     }
 
@@ -387,6 +391,11 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         for (File script : FileUtil.getFilesForFolder(SIGNS)) {
             SignScript sign = new SignScript(script);
             signScriptRegistry.add(sign.getName(), sign);
+        }
+
+        for (File script : FileUtil.getFilesForFolder(COMMANDS)) {
+            CommandScript cmd = new CommandScript(script);
+            commandScriptRegistry.add(cmd.getName(), cmd);
         }
 
         dCommands.register(this);
@@ -593,6 +602,15 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
      */
     public Registry<String, SignScript> getSignScriptRegistry() {
         return signScriptRegistry;
+    }
+
+    /**
+     * Returns a registry of the loaded command scripts.
+     *
+     * @return a registry of the loaded command scripts
+     */
+    public Registry<String, CommandScript> getCommandScriptRegistry() {
+        return commandScriptRegistry;
     }
 
     @Deprecated
