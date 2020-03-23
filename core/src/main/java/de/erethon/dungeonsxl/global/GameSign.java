@@ -152,8 +152,8 @@ public class GameSign extends JoinSign {
                 return;
             }
 
-            game = new DGame(plugin, dGroup);
             dGroup.setDungeon(dungeon);
+            game = new DGame(plugin, dGroup);
             update();
 
         } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GAME.getMessage())) {

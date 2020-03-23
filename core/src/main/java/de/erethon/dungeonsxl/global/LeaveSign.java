@@ -97,7 +97,7 @@ public class LeaveSign extends GlobalProtection {
             gamePlayer.leave();
 
         } else {
-            PlayerGroup group = gamePlayer.getGroup();
+            PlayerGroup group = plugin.getPlayerGroup(player);
             if (group != null) {
                 group.removePlayer(player);
                 MessageUtil.sendMessage(player, DMessage.PLAYER_LEAVE_GROUP.getMessage());
