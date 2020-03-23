@@ -20,10 +20,8 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 /**
@@ -34,19 +32,12 @@ public class CommandScript {
     private String name;
     private File file;
     private List<String> commands = new ArrayList<>();
-    private Permission permission;
 
     public CommandScript(String name, List<String> commands, Permission permission) {
         this.name = name;
         file = new File(DungeonsXL.COMMANDS, name + ".yml");
 
         setCommands(commands);
-
-        if (permission != null) {
-            setPermission(permission);
-        } else {
-            setPermission(new Permission("dxl.cmd." + name));
-        }
     }
 
     public CommandScript(File file) {
@@ -57,11 +48,6 @@ public class CommandScript {
 
         if (config.getStringList("commands") != null) {
             setCommands(config.getStringList("commands"));
-        }
-        if (config.getString("permission") != null) {
-            setPermission(new Permission(config.getString("permission")));
-        } else {
-            setPermission(new Permission("dxl.cmd." + name));
         }
     }
 
@@ -79,26 +65,6 @@ public class CommandScript {
 
     public void setCommands(List<String> commands) {
         this.commands = commands;
-    }
-
-    public Permission getPermission() {
-        return permission;
-    }
-
-    public Permission getPermission(CommandSender sender) {
-        if (!(sender instanceof Player)) {
-            return new Permission(getPermission() + ".asconsole");
-
-        } else if (sender.isOp()) {
-            return new Permission(getPermission() + ".asop");
-
-        } else {
-            return permission;
-        }
-    }
-
-    public void setPermission(Permission permission) {
-        this.permission = permission;
     }
 
 }
