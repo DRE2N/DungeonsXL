@@ -60,6 +60,7 @@ public class PlayCommand extends DCommand {
         Dungeon dungeon = plugin.getDungeonRegistry().get(args[1]);
         if (dungeon == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(args[1]));
+            return;
         }
 
         DGroup group = (DGroup) dPlayer.getGroup();
