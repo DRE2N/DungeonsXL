@@ -75,13 +75,11 @@ public class TeleportSign extends Button implements LocationSign {
 
     @Override
     public boolean validate() {
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <= 2; i++) {            
             if (!getLine(i).isEmpty()) {
-                if (BlockUtil.lettersToYaw(getLine(i)) == -1) {
-                    String[] loc = getLine(i).split(",");
-                    if (loc.length != 3) {
-                        return false;
-                    }
+                String[] loc = getLine(i).split(",");
+                if (loc.length != 3) {
+                    return false;    
                 }
             }
         }
