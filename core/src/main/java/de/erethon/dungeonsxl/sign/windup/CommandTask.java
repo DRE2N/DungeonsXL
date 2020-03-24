@@ -50,11 +50,6 @@ public class CommandTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (!player.hasPermission(script.getPermission(player))) {
-            player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
-            return;
-        }
-
         String command = script.getCommands().get(k++).replace("%player%", sender.getName()).replace("%player_name%", sender.getName());
         if (papi) {
             Bukkit.getServer().dispatchCommand(sender, PlaceholderAPI.setPlaceholders(player, command));
