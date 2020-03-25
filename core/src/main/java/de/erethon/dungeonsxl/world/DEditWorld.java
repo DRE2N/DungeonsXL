@@ -123,6 +123,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         }
 
         FileUtil.removeDir(getFolder());
+        getResource().editWorld = null;
         plugin.getInstanceCache().remove(this);
     }
 

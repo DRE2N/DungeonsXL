@@ -47,7 +47,7 @@ public class DResourceWorld implements ResourceWorld {
     private File folder;
     private WorldConfig config;
     private SignData signData;
-    private EditWorld editWorld;
+    EditWorld editWorld;
 
     public DResourceWorld(DungeonsXL plugin, String name) {
         this.plugin = plugin;
