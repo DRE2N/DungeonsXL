@@ -68,6 +68,7 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.player.SecureModeTask;
+import de.erethon.dungeonsxl.player.groupadapter.*;
 import de.erethon.dungeonsxl.requirement.*;
 import de.erethon.dungeonsxl.reward.*;
 import de.erethon.dungeonsxl.sign.DSignListener;
@@ -137,6 +138,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private Registry<String, GameRule> gameRuleRegistry = new GameRuleRegistry();
     private Registry<String, ExternalMobProvider> externalMobProviderRegistry = new Registry<>();
     private Registry<String, PlayerGroup> playerGroupCache = new Registry<>();
+    private Collection<GroupAdapter> groupAdapters = new ArrayList<>();
 
     @Deprecated
     private class SignRegistry extends Registry<String, Class<? extends DungeonSign>> {
@@ -212,6 +214,9 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         loadData();
         if (manager.isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderUtil(this, "dxl").register();
+        }
+        if (manager.isPluginEnabled("Parties")) {
+            registerGroupAdapter(new PartiesAdapter(this));
         }
         VignetteAPI.init(this);
     }
@@ -530,7 +535,16 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     @Override
     public void registerGroupAdapter(GroupAdapter groupAdapter) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        groupAdapters.add(groupAdapter);
+    }
+
+    /**
+     * Returns a collection of the loadedGroupAdapters
+     *
+     * @return a collection of GroupAdapters
+     */
+    public Collection<GroupAdapter> getGroupAdapters() {
+        return groupAdapters;
     }
 
     /**
