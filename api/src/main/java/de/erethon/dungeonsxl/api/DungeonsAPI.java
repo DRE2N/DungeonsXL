@@ -143,7 +143,7 @@ public interface DungeonsAPI extends Plugin {
      *
      * @return a cache of the player groups
      */
-    Registry<String, PlayerGroup> getPlayerGroupCache();
+    Registry<String, PlayerGroup> getGroupCache();
 
     /**
      * Makes DungeonsXL track external group and synchronize them with its own groups.

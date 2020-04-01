@@ -90,15 +90,15 @@ public class GroupCommand extends DCommand {
                 return;
 
             } else if (args[1].equalsIgnoreCase("disband") && DPermission.hasPermission(sender, DPermission.GROUP_ADMIN)) {
-                disbandGroup((DGroup) plugin.getPlayerGroupCache().get(args[2]), args[2]);
+                disbandGroup((DGroup) plugin.getGroupCache().get(args[2]), args[2]);
                 return;
 
             } else if (args[1].equalsIgnoreCase("join")) {
-                joinGroup((DGroup) plugin.getPlayerGroupCache().get(args[2]));
+                joinGroup((DGroup) plugin.getGroupCache().get(args[2]));
                 return;
 
             } else if (args[1].equalsIgnoreCase("show") && DPermission.hasPermission(sender, DPermission.GROUP_ADMIN)) {
-                DGroup group = (DGroup) plugin.getPlayerGroupCache().get(args[2]);
+                DGroup group = (DGroup) plugin.getGroupCache().get(args[2]);
                 Player player = Bukkit.getPlayer(args[2]);
                 if (group == null && player != null) {
                     group = (DGroup) plugin.getPlayerGroup(player);
@@ -117,7 +117,7 @@ public class GroupCommand extends DCommand {
             return;
         }
 
-        if (plugin.getPlayerGroupCache().get(args[2]) != null) {
+        if (plugin.getGroupCache().get(args[2]) != null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NAME_IN_USE.getMessage(args[2]));
             return;
         }
@@ -213,7 +213,7 @@ public class GroupCommand extends DCommand {
             return;
         }
 
-        dGroup.addPlayer(player);
+        dGroup.addMember(player);
         dGroup.removeInvitedPlayer(player, true);
     }
 
@@ -229,7 +229,7 @@ public class GroupCommand extends DCommand {
 
             if (!event.isCancelled()) {
                 if (dGroup.getMembers().contains(toKick)) {
-                    dGroup.removePlayer(toKick);
+                    dGroup.removeMember(toKick);
                     MessageUtil.sendMessage(sender, DMessage.GROUP_KICKED_PLAYER.getMessage(sender.getName(), args[2], dGroup.getName()));
 
                 } else {

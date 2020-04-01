@@ -67,7 +67,7 @@ public class PartiesAdapter extends GroupAdapter<Party> implements Listener {
     @Override
     public PlayerGroup createDungeonGroup(Party eGroup) {
         PlayerGroup dGroup = dxl.createGroup(Bukkit.getPlayer(eGroup.getLeader()), eGroup.getName());
-        eGroup.getMembers().forEach(uuid -> dGroup.addPlayer(Bukkit.getPlayer(uuid), false));
+        eGroup.getMembers().forEach(uuid -> dGroup.addMember(Bukkit.getPlayer(uuid), false));
         groups.put(dGroup, new ExternalGroupData<>(eGroup, false));
         return dGroup;
     }
@@ -163,7 +163,7 @@ public class PartiesAdapter extends GroupAdapter<Party> implements Listener {
         if (dGroup != null) {
             dGroup.delete();
         }
-        if (dxl.getPlayerGroupCache().get(event.getNewPartyName()) != null) {
+        if (dxl.getGroupCache().get(event.getNewPartyName()) != null) {
             MessageUtil.sendMessage(getPlayer(event.getPartyPlayer()), DMessage.ERROR_NAME_IN_USE.getMessage(event.getNewPartyName()));
             event.setCancelled(true);
             return;
@@ -189,7 +189,7 @@ public class PartiesAdapter extends GroupAdapter<Party> implements Listener {
                 Player player = getPlayer(event.getPartyPlayer());
                 PlayerGroup group = dxl.getPlayerGroup(player);
                 if (group != null) {
-                    group.removePlayer(player);
+                    group.removeMember(player);
                 }
             }
         }.runTask(dxl);

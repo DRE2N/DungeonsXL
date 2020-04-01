@@ -64,7 +64,7 @@ public class EscapeCommand extends DCommand {
         } else {
             PlayerGroup dGroup = plugin.getPlayerGroup(player);
             if (dGroup != null) {
-                dGroup.removePlayer(player);
+                dGroup.removeMember(player);
                 MessageUtil.sendMessage(player, DMessage.CMD_LEAVE_SUCCESS.getMessage());
                 return;
             }

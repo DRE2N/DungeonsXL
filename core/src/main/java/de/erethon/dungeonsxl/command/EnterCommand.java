@@ -48,8 +48,8 @@ public class EnterCommand extends DCommand {
         Player captain = (Player) sender;
         String targetName = args.length == 3 ? args[2] : args[1];
 
-        PlayerGroup joining = args.length == 3 ? plugin.getPlayerGroupCache().get(args[1]) : plugin.getPlayerGroup(captain);
-        PlayerGroup target = plugin.getPlayerGroupCache().get(targetName);
+        PlayerGroup joining = args.length == 3 ? plugin.getGroupCache().get(args[1]) : plugin.getPlayerGroup(captain);
+        PlayerGroup target = plugin.getGroupCache().get(targetName);
 
         if (target == null) {
             Player targetPlayer = Bukkit.getPlayer(targetName);

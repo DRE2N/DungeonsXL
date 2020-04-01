@@ -416,7 +416,7 @@ public class DPlayerListener implements Listener {
 
         if (!(dPlayer instanceof InstancePlayer)) {
             if (dGroup != null) {
-                dGroup.removePlayer(player);
+                dGroup.removeMember(player);
             }
 
         } else if (dPlayer instanceof GamePlayer) {

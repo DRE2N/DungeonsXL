@@ -387,7 +387,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         if (getGroup() != null) {
-            dGroup.removePlayer(getPlayer(), message);
+            dGroup.removeMember(getPlayer(), message);
         }
 
         if (game != null && finished && game.hasRewards()) {

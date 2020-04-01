@@ -97,11 +97,11 @@ public class DGroup implements PlayerGroup {
         this.plugin = plugin;
         dPlayers = plugin.getPlayerCache();
 
-        plugin.getPlayerGroupCache().add(name, this);
+        plugin.getGroupCache().add(name, this);
         this.name = name;
 
         setLeader(player);
-        addPlayer(player);
+        addMember(player);
 
         playing = false;
         floorCount = 0;
@@ -121,7 +121,7 @@ public class DGroup implements PlayerGroup {
         this.plugin = plugin;
         dPlayers = plugin.getPlayerCache();
 
-        plugin.getPlayerGroupCache().add(name, this);
+        plugin.getGroupCache().add(name, this);
         this.name = name;
 
         DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent((DGlobalPlayer) dPlayers.get(captain), true, this);
@@ -134,7 +134,7 @@ public class DGroup implements PlayerGroup {
 
         for (Player player : players) {
             if (!this.players.contains(player)) {
-                addPlayer(player);
+                addMember(player);
             }
         }
 
@@ -204,7 +204,7 @@ public class DGroup implements PlayerGroup {
     }
 
     @Override
-    public void addPlayer(Player player, boolean message) {
+    public void addMember(Player player, boolean message) {
         DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent((DGlobalPlayer) dPlayers.getGamePlayer(player), false, this);
         Bukkit.getPluginManager().callEvent(event);
 
@@ -221,12 +221,12 @@ public class DGroup implements PlayerGroup {
     }
 
     @Override
-    public void removePlayer(Player player) {
-        removePlayer(player, true);
+    public void removeMember(Player player) {
+        removeMember(player, true);
     }
 
     @Override
-    public void removePlayer(Player player, boolean message) {
+    public void removeMember(Player player, boolean message) {
         players.remove(player.getUniqueId());
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
 
@@ -649,7 +649,7 @@ public class DGroup implements PlayerGroup {
     public void delete() {
         Game game = getGame();
 
-        plugin.getPlayerGroupCache().remove(this);
+        plugin.getGroupCache().remove(this);
 
         if (game != null) {
             game.removeGroup(this);

@@ -529,7 +529,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     }
 
     @Override
-    public Registry<String, PlayerGroup> getPlayerGroupCache() {
+    public Registry<String, PlayerGroup> getGroupCache() {
         return playerGroupCache;
     }
 

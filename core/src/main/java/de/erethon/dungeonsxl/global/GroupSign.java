@@ -159,7 +159,7 @@ public class GroupSign extends JoinSign {
             update();
 
         } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage())) {
-            group.addPlayer(player);
+            group.addMember(player);
             update();
         }
     }

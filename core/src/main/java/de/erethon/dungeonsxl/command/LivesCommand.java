@@ -68,7 +68,7 @@ public class LivesCommand extends DCommand {
         }
 
         GamePlayer gamePlayer = (GamePlayer) globalPlayer;
-        PlayerGroup group = gamePlayer != null ? gamePlayer.getGroup() : plugin.getPlayerGroupCache().get(args[1]);
+        PlayerGroup group = gamePlayer != null ? gamePlayer.getGroup() : plugin.getGroupCache().get(args[1]);
         if (gamePlayer != null) {
             MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_PLAYER.getMessage(gamePlayer.getName(), gamePlayer.getLives() == -1 ? DMessage.MISC_UNLIMITED.getMessage() : String.valueOf(gamePlayer.getLives())));
 

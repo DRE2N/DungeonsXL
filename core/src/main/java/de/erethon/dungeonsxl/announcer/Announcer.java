@@ -358,13 +358,13 @@ public class Announcer {
             }
 
             if (group != null && group.getMembers().contains(player)) {
-                group.removePlayer(player);
+                group.removeMember(player);
             }
         }
 
         if (dGroup != null && pGroup == null) {
             if (dGroup.getMembers().size() < maxPlayersPerGroup) {
-                dGroup.addPlayer(player);
+                dGroup.addMember(player);
             }
 
         } else if (dGroup == null && pGroup == null) {
@@ -409,7 +409,7 @@ public class Announcer {
             List<String> lore = new ArrayList<>();
 
             DGroup dGroup = dGroups.get(groupCount);
-            if (!plugin.getPlayerGroupCache().contains(dGroup)) {
+            if (!plugin.getGroupCache().contains(dGroup)) {
                 dGroups.set(groupCount, null);
 
             } else if (dGroup != null) {

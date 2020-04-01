@@ -83,7 +83,7 @@ public class LeaveCommand extends DCommand {
         if (dPlayer instanceof DInstancePlayer) {
             ((DInstancePlayer) dPlayer).leave();
         } else {
-            dGroup.removePlayer(player);
+            dGroup.removeMember(player);
         }
 
         MessageUtil.sendMessage(player, DMessage.CMD_LEAVE_SUCCESS.getMessage());

@@ -245,12 +245,12 @@ public abstract class GroupAdapter<T> {
                 return;
             }
             if (dGroup != null) {
-                dGroup.removePlayer(player, false);
+                dGroup.removeMember(player, false);
                 return;
             }
             dGroup = getDungeonGroup(eGroup);
             if (dGroup != null && !dGroup.getMembers().contains(player)) {
-                dGroup.addPlayer(player);
+                dGroup.addMember(player);
             } else {
                 dGroup = createDungeonGroup(eGroup);
             }

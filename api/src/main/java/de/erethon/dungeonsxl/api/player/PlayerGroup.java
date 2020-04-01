@@ -219,12 +219,12 @@ public interface PlayerGroup {
     /**
      * Adds a player to the group.
      * <p>
-     * The default implemenation calls {@link #addPlayer(Player, boolean)} with messages set to true.
+     * The default implemenation calls {@link #addMember(Player, boolean)} with messages set to true.
      *
      * @param player the player to add
      */
-    default void addPlayer(Player player) {
-        addPlayer(player, true);
+    default void addMember(Player player) {
+        addMember(player, true);
     }
 
     /**
@@ -233,17 +233,17 @@ public interface PlayerGroup {
      * @param player  the player to add
      * @param message if messages shall be sent
      */
-    void addPlayer(Player player, boolean message);
+    void addMember(Player player, boolean message);
 
     /**
      * Removes a player from the group.
      * <p>
-     * The default implemenation calls {@link #removePlayer(Player, boolean)} with messages set to true.
+     * The default implemenation calls {@link #removeMember(Player, boolean)} with messages set to true.
      *
      * @param player the player to add
      */
-    default void removePlayer(Player player) {
-        addPlayer(player, true);
+    default void removeMember(Player player) {
+        addMember(player, true);
     }
 
     /**
@@ -252,7 +252,7 @@ public interface PlayerGroup {
      * @param player  the player to add
      * @param message if messages shall be sent
      */
-    void removePlayer(Player player, boolean message);
+    void removeMember(Player player, boolean message);
 
     /**
      * Returns a PlayerCollection of the players who are invited to join the group but did not yet do so.

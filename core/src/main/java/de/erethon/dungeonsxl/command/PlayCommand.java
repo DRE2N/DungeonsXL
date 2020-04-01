@@ -72,7 +72,7 @@ public class PlayCommand extends DCommand {
             DGroupCreateEvent event = new DGroupCreateEvent(group, player, DGroupCreateEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
-                plugin.getPlayerGroupCache().remove(group);
+                plugin.getGroupCache().remove(group);
                 group = null;
             }
         }

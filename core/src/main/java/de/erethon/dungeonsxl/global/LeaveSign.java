@@ -99,7 +99,7 @@ public class LeaveSign extends GlobalProtection {
         } else {
             PlayerGroup group = plugin.getPlayerGroup(player);
             if (group != null) {
-                group.removePlayer(player);
+                group.removeMember(player);
                 MessageUtil.sendMessage(player, DMessage.PLAYER_LEAVE_GROUP.getMessage());
             }
         }
