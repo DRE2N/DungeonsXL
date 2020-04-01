@@ -235,7 +235,7 @@ public abstract class GroupAdapter<T> {
      *
      * @param player the player
      */
-    public void syncPlayer(Player player) {
+    public void syncJoin(Player player) {
         T eGroup = getExternalGroup(player);
         PlayerGroup dGroup = dxl.getPlayerGroup(player);
 
@@ -248,11 +248,49 @@ public abstract class GroupAdapter<T> {
                 dGroup.removePlayer(player, false);
                 return;
             }
-            dGroup = createDungeonGroup(eGroup);
+            dGroup = getDungeonGroup(eGroup);
+            if (dGroup != null && !dGroup.getMembers().contains(player)) {
+                dGroup.addPlayer(player);
+            } else {
+                dGroup = createDungeonGroup(eGroup);
+            }
 
         } else if (eGroup == null && dGroup != null) {
-            createExternalGroup(dGroup);
+            eGroup = getExternalGroup(dGroup);
+            if (eGroup == null) {
+                eGroup = createExternalGroup(dGroup);
+            }
+            if (!isExternalGroupMember(eGroup, player)) {
+                addExternalGroupMember(eGroup, player);
+            }
         }
     }
+
+    /**
+     * Returns if the player is a member of the external group.
+     *
+     * @param eGroup the external group
+     * @param player player
+     * @return if the player is a member of the external group
+     */
+    public abstract boolean isExternalGroupMember(T eGroup, Player player);
+
+    /**
+     * Adds the member to the external group.
+     *
+     * @param eGroup the external group
+     * @param member the member
+     * @return if adding the member was successful
+     */
+    public abstract boolean addExternalGroupMember(T eGroup, Player member);
+
+    /**
+     * Removes the member from the external group.
+     *
+     * @param eGroup the external group
+     * @param member the member
+     * @return if removing the player was successful
+     */
+    public abstract boolean removeExternalGroupMember(T eGroup, Player member);
 
 }

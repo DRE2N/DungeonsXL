@@ -81,16 +81,25 @@ public class PartiesAdapter extends GroupAdapter<Party> implements Listener {
         return partiesAPI.getParty(pPlayer.getPartyName());
     }
 
+    @Override
+    public boolean isExternalGroupMember(Party eGroup, Player player) {
+        if (eGroup == null) {
+            return false;
+        }
+        return eGroup.getMembers().contains(player.getUniqueId());
+    }
+
+    @Override
     public boolean addExternalGroupMember(Party eGroup, Player member) {
         return eGroup.addMember(getPartyPlayer(member));
     }
 
-    public boolean removeExternalGroupMember(Player member) {
+    @Override
+    public boolean removeExternalGroupMember(Party eGroup, Player member) {
         PartyPlayer pPlayer = getPartyPlayer(member);
         if (pPlayer == null) {
             return false;
         }
-        Party eGroup = partiesAPI.getParty(pPlayer.getPartyName());
         if (eGroup == null) {
             return false;
         }
@@ -167,7 +176,7 @@ public class PartiesAdapter extends GroupAdapter<Party> implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                syncPlayer(getPlayer(event.getPartyPlayer()));
+                syncJoin(getPlayer(event.getPartyPlayer()));
             }
         }.runTask(dxl);
     }
@@ -177,7 +186,11 @@ public class PartiesAdapter extends GroupAdapter<Party> implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                syncPlayer(getPlayer(event.getPartyPlayer()));
+                Player player = getPlayer(event.getPartyPlayer());
+                PlayerGroup group = dxl.getPlayerGroup(player);
+                if (group != null) {
+                    group.removePlayer(player);
+                }
             }
         }.runTask(dxl);
     }

@@ -107,8 +107,6 @@ public class DGroup implements PlayerGroup {
         floorCount = 0;
 
         id = counter++;
-
-        plugin.getGroupAdapters().forEach(a -> a.syncPlayer(player));
     }
 
     public DGroup(DungeonsXL plugin, Player player, Dungeon dungeon) {
@@ -145,8 +143,6 @@ public class DGroup implements PlayerGroup {
         floorCount = 0;
 
         id = counter++;
-
-        plugin.getGroupAdapters().forEach(a -> a.syncPlayer(captain));
     }
 
     // Getters and setters
@@ -221,7 +217,7 @@ public class DGroup implements PlayerGroup {
             players.add(player.getUniqueId());
         }
 
-        plugin.getGroupAdapters().forEach(a -> a.syncPlayer(player));
+        plugin.getGroupAdapters().forEach(a -> a.syncJoin(player));
     }
 
     @Override
@@ -248,7 +244,7 @@ public class DGroup implements PlayerGroup {
             }
         }
 
-        plugin.getGroupAdapters().forEach(a -> a.syncPlayer(player));
+        plugin.getGroupAdapters().forEach(a -> a.removeExternalGroupMember(a.getExternalGroup(player), player));
     }
 
     @Override
