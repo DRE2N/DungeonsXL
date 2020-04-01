@@ -103,6 +103,8 @@ public class ReadySign extends Button {
         getSign().setLine(2, "");
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
+
+        ((DGameWorld) getGameWorld()).setReadySign(this);
     }
 
     @Override

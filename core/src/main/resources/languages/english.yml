@@ -127,6 +127,7 @@ error:
   noLeaveInTutorial: "&4You cannot use this command in the tutorial."
   noPermissions: "&4You do not have permission to do this."
   noProtectedBlock: "&4This is not a block protected by DungeonsXL."
+  noReadySign: "&4The world &6&v1 &4does not seem to have a ready sign. No game can be started and only lobby dungeon signs will be initialized."
   noRewardsTime: "&4You cannot receive rewards before &6&v1&4."
   noSuchDungeon: "&4This dungeon does not exist."
   noSuchGroup: "&4The group &6&v1&4 does not exist."

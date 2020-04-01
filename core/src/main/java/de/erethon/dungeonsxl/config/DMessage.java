@@ -117,6 +117,7 @@ public enum DMessage implements Message {
     ERROR_NO_LEAVE_IN_TUTORIAL("error.noLeaveInTutorial"),
     ERROR_NO_PERMISSIONS("error.noPermissions"),
     ERROR_NO_PROTECTED_BLOCK("error.noProtectedBlock"),
+    ERROR_NO_READY_SIGN("error.noReadySign"),
     ERROR_NO_REWARDS_TIME("error.noRewardsTime"),
     ERROR_NO_SUCH_DUNGEON("error.noSuchDungeon"),
     ERROR_NO_SUCH_GROUP("error.noSuchGroup"),

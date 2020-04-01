@@ -112,6 +112,10 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         } else {
             PlayerUtil.secureTeleport(player, teleport);
         }
+
+        if (!((DGameWorld) world).hasReadySign()) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_NO_READY_SIGN.getMessage(world.getName()));
+        }
     }
 
     /* Getters and setters */

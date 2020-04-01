@@ -127,6 +127,7 @@ error:
   noLeaveInTutorial: "&4Du kannst diesen Befehl im Tutorial nicht benutzen."
   noPermissions: "&4Du hast nicht die nötigen Berechtigungen, um das zu tun."
   noProtectedBlock: "&4Das ist kein von DungeonsXL geschützter Block."
+  noReadySign: "&4Die Welt &6&v1 &4hat kein Ready-Schild. Spiele können nicht begonnen werden und nur Lobby-Schilder werden geladen."
   noRewardsTime: "&4Du kannst vor &6&v1&4 keine Belohnungen bekommen."
   noSuchDungeon: "&4Dieser Dungeon existiert nicht."
   noSuchGroup: "&4Die Gruppe &6&v1&4 gibt es nicht."

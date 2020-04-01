@@ -33,7 +33,7 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
 import de.erethon.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
-import de.erethon.dungeonsxl.sign.LocationSign;
+import de.erethon.dungeonsxl.sign.button.ReadySign;
 import de.erethon.dungeonsxl.sign.passive.StartSign;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.FortuneTrigger;
@@ -94,6 +94,8 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     private List<DungeonMob> mobs = new ArrayList<>();
     private List<Trigger> triggers = new ArrayList<>();
 
+    private boolean readySign;
+
     DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
         super(plugin, resourceWorld, folder, world, id);
         caliburn = plugin.getCaliburn();
@@ -132,19 +134,19 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         int index = getGame().getGroups().indexOf(dGroup);
 
         // Try the matching location
+        StartSign anyStartSign = null;
         for (DungeonSign sign : getDungeonSigns()) {
             if (sign instanceof StartSign) {
-                if (((StartSign) sign).getId() == index) {
-                    return ((LocationSign) sign).getLocation();
+                anyStartSign = (StartSign) sign;
+                if (anyStartSign.getId() == index) {
+                    return anyStartSign.getLocation();
                 }
             }
         }
 
-        // Try any location
-        for (DungeonSign sign : getDungeonSigns()) {
-            if (sign instanceof StartSign) {
-                return ((LocationSign) sign).getLocation();
-            }
+        // Try any start sign
+        if (anyStartSign != null) {
+            return anyStartSign.getLocation();
         }
 
         // Lobby location as fallback
@@ -387,6 +389,14 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         return null;
+    }
+
+    public boolean hasReadySign() {
+        return readySign;
+    }
+
+    public void setReadySign(ReadySign readySign) {
+        this.readySign = readySign != null;
     }
 
     /**

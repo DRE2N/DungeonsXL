@@ -127,6 +127,7 @@ error:
   noLeaveInTutorial: "&4Vous ne pouvez utiliser cette commande dans le tutoriel."
   noPermissions: "&4Vous n'avez pas la permission de faire ça."
   noProtectedBlock: "&4Ce n'est pas un bloc protégé par DungeonsXL."
+  noReadySign: "&4La carte &6&v1 &4n'a pas de panneau \"ready\". On ne peut pas commencer des jeus et les panneaux de lobby ne sont que initialisés."
   noRewardsTime: "&4Vous ne pouvez pas recevoir de récompense avant &6&v1&4."
   noSuchDungeon: "&4Le donjon &6&v1&4 n'existe pas."
   noSuchGroup: "&4Le groupe &6&v1&4 n'existe pas."
