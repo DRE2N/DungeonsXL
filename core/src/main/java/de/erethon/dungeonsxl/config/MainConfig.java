@@ -48,10 +48,11 @@ public class MainConfig extends DREConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 16;
+    public static final int CONFIG_VERSION = 17;
 
     private String language = "english";
     private boolean enableEconomy = false;
+    private boolean groupAdaptersEnabled = false;
 
     /* Chat */
     private boolean chatEnabled = true;
@@ -147,6 +148,20 @@ public class MainConfig extends DREConfig {
      */
     public void setEconomyEnabled(boolean enabled) {
         enableEconomy = enabled;
+    }
+
+    /**
+     * @return if DungeonsXL should use group adapters
+     */
+    public boolean areGroupAdaptersEnabled() {
+        return groupAdaptersEnabled;
+    }
+
+    /**
+     * @param enabled if DungeonsXL should use group adapters
+     */
+    public void setGroupAdaptersEnabled(boolean enabled) {
+        groupAdaptersEnabled = enabled;
     }
 
     /**
@@ -472,6 +487,10 @@ public class MainConfig extends DREConfig {
             config.set("enableEconomy", enableEconomy);
         }
 
+        if (!config.contains("groupAdaptersEnabled")) {
+            config.set("groupAdaptersEnabled", groupAdaptersEnabled);
+        }
+
         if (!config.contains("chatEnabled")) {
             config.set("chatEnabled", chatEnabled);
         }
@@ -581,6 +600,7 @@ public class MainConfig extends DREConfig {
         language = config.getString("language", language);
         plugin.getMessageHandler().setDefaultLanguage(language);
         enableEconomy = config.getBoolean("enableEconomy", enableEconomy);
+        groupAdaptersEnabled = config.getBoolean("groupAdaptersEnabled", groupAdaptersEnabled);
         chatEnabled = config.getBoolean("chatEnabled", chatEnabled);
         chatFormatEdit = config.getString("chatFormat.edit", chatFormatEdit);
         chatFormatGame = config.getString("chatFormat.game", chatFormatGame);

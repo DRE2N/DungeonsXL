@@ -535,7 +535,11 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     @Override
     public void registerGroupAdapter(GroupAdapter groupAdapter) {
-        groupAdapters.add(groupAdapter);
+        if (mainConfig.areGroupAdaptersEnabled()) {
+            groupAdapters.add(groupAdapter);
+        } else {
+            MessageUtil.log(this, "&4The group adapter &6" + groupAdapter.getClass().getName() + " &4was not registered because the feature is disabled.");
+        }
     }
 
     /**
