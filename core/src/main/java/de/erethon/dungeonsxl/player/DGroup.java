@@ -216,6 +216,8 @@ public class DGroup implements PlayerGroup {
 
             players.add(player.getUniqueId());
         }
+
+        plugin.getGroupAdapters().forEach(a -> a.syncJoin(player));
     }
 
     @Override
@@ -238,8 +240,11 @@ public class DGroup implements PlayerGroup {
 
             if (!event.isCancelled()) {
                 delete();
+                return;
             }
         }
+
+        plugin.getGroupAdapters().forEach(a -> a.removeExternalGroupMember(a.getExternalGroup(player), player));
     }
 
     @Override
@@ -662,6 +667,8 @@ public class DGroup implements PlayerGroup {
         }
 
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
+
+        plugin.getGroupAdapters().forEach(a -> a.deleteCorrespondingGroup(this));
     }
 
     public boolean startGame(Game game) {

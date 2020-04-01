@@ -89,6 +89,11 @@
             <version>2.10.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.alessiodp.parties</groupId>
+            <artifactId>parties-api</artifactId>
+            <version>2.6.14</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -106,6 +111,10 @@
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
     </repositories>
 </project>
