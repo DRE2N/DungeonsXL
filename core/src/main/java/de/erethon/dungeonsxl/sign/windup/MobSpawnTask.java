@@ -35,7 +35,7 @@ public class MobSpawnTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (isWorldFinished()) {
+        if (sign.isWorldFinished()) {
             sign.deactivate();
             return;
         }

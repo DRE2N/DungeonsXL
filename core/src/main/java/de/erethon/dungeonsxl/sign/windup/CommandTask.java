@@ -49,7 +49,7 @@ public class CommandTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (isWorldFinished()) {
+        if (sign.isWorldFinished()) {
             sign.deactivate();
             return;
         }

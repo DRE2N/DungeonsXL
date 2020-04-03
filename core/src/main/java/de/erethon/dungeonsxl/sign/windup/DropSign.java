@@ -93,10 +93,14 @@ public class DropSign extends Windup {
         setRunnable(new BukkitRunnable() {
             @Override
             public void run() {
+                if (isWorldFinished()) {
+                    deactivate();
+                    return;
+                }
                 try {
                     spawnLocation.getWorld().dropItem(spawnLocation, getItem());
                 } catch (NullPointerException exception) {
-                    cancel();
+                    deactivate();
                 }
             }
         });

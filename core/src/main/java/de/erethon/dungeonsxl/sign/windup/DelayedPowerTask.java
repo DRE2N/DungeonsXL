@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign.windup;
 
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -23,17 +24,19 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DelayedPowerTask extends BukkitRunnable {
 
+    private DungeonsAPI api;
+
     private RedstoneSign sign;
     private boolean enable;
 
-    public DelayedPowerTask(RedstoneSign sign, boolean enable) {
+    public DelayedPowerTask(DungeonsAPI api, RedstoneSign sign, boolean enable) {
         this.sign = sign;
         this.enable = enable;
     }
 
     @Override
     public void run() {
-        if (isWorldFinished()) {
+        if (api.getGameWorld(sign.getSign().getWorld()) != null) {
             sign.getEnableTask().cancel();
             sign.getDisableTask().cancel();
             return;

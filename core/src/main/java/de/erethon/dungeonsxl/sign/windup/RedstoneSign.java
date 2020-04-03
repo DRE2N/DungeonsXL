@@ -22,7 +22,6 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -157,11 +156,11 @@ public class RedstoneSign extends Rocker {
         }
 
         if (delay > 0) {
-            enableTask = new DelayedPowerTask(this, true).runTaskTimer(api, delay, delay + offDelay);
+            enableTask = new DelayedPowerTask(api, this, true).runTaskTimer(api, delay, delay + offDelay);
 
             if (repeat != 1) {
                 repeatsToDo = repeat;
-                disableTask = new DelayedPowerTask(this, false).runTaskTimer(api, delay + offDelay, delay + offDelay);
+                disableTask = new DelayedPowerTask(api, this, false).runTaskTimer(api, delay + offDelay, delay + offDelay);
             }
 
         } else {
