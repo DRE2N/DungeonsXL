@@ -33,7 +33,7 @@ public class DelayedPowerTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (sign.getGameWorld() == null) {
+        if (isWorldFinished()) {
             sign.getEnableTask().cancel();
             sign.getDisableTask().cancel();
             return;

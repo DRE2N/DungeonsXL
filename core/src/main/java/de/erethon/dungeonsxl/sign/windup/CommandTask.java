@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.sign.windup;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -50,6 +49,11 @@ public class CommandTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (isWorldFinished()) {
+            sign.deactivate();
+            return;
+        }
+
         String command = script.getCommands().get(k++).replace("%player%", sender.getName()).replace("%player_name%", sender.getName());
         if (papi) {
             Bukkit.getServer().dispatchCommand(sender, PlaceholderAPI.setPlaceholders(player, command));

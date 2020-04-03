@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.sign.windup;
 
-import de.erethon.dungeonsxl.api.DungeonsAPI;
-import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.mob.DMob;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -29,17 +27,15 @@ public class MobSpawnTask extends BukkitRunnable {
 
     private MobSign sign;
     private int k, n;
-    private GameWorld gameWorld;
 
-    public MobSpawnTask(DungeonsAPI api, MobSign sign, int n) {
+    public MobSpawnTask(MobSign sign, int n) {
         this.sign = sign;
-        gameWorld = sign.getGameWorld();
         this.n = n;
     }
 
     @Override
     public void run() {
-        if (gameWorld == null) {
+        if (isWorldFinished()) {
             sign.deactivate();
             return;
         }

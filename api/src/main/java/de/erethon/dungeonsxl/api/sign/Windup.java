@@ -184,4 +184,13 @@ public abstract class Windup extends Deactivatable {
         }
     }
 
+    /**
+     * Use this method to ensure that its world still exists.
+     *
+     * @return if the world is already finished
+     */
+    public boolean isWorldFinished() {
+        return api.getGameWorld(getSign().getWorld()) != null;
+    }
+
 }
