@@ -405,10 +405,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     public void startGame() {
         GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, (DGame) getGame());
         Bukkit.getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
             return;
         }
+
+        world.setDifficulty(getRules().getState(GameRule.DIFFICULTY));
 
         isPlaying = true;
 

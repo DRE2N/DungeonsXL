@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -69,9 +70,13 @@ public class GameRule<V> {
      */
     public static final GameRule<GameGoal> GAME_GOAL = new GameRule<>(GameGoal.class, "gameGoal", GameGoal.END);
     /**
-     * The game mode.
+     * The Vanilla game mode.
      */
     public static final GameRule<GameMode> GAME_MODE = new GameRule<>(GameMode.class, "gameMode", GameMode.SURVIVAL);
+    /**
+     * The Vanilla difficulty.
+     */
+    public static final GameRule<Difficulty> DIFFICULTY = new GameRule<>(Difficulty.class, "difficulty", Difficulty.NORMAL);
     /**
      * If players may fly.
      */
