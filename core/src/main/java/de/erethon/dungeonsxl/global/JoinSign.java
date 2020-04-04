@@ -72,12 +72,9 @@ public abstract class JoinSign extends GlobalProtection {
         } else if (config.contains("maxPlayersPerGroup")) {
             maxElements = config.getInt("maxPlayersPerGroup");
         }
+        startIfElementsAtLeast = config.getInt("startIfElementsAtLeast", -1);
 
         verticalSigns = (int) Math.ceil((float) (1 + maxElements) / 4);
-
-        if (startIfElementsAtLeast > 0 && startIfElementsAtLeast <= maxElements) {
-            startIfElementsAtLeast = config.getInt("startIfElementsAtLeast");
-        }
 
         update();
     }
