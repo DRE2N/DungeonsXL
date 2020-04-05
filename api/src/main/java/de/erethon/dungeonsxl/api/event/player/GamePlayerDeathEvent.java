@@ -19,6 +19,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
+ * Fired when a player dies in a dungeon. This is also fired when a player does not technically die because the deathScreen rule prevented the death.
+ *
  * @author Daniel Saukel
  */
 public class GamePlayerDeathEvent extends GamePlayerEvent implements Cancellable {
