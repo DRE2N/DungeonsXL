@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -27,6 +28,7 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.player.GamePlayerDeathEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
@@ -36,7 +38,6 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
-import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerDeathEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerRewardEvent;
 import de.erethon.dungeonsxl.event.requirement.RequirementCheckEvent;
@@ -52,6 +53,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -744,24 +746,51 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         if (game == null) {
             return;
         }
+        GameRuleContainer rules = game.getRules();
+        boolean keepInventory = rules.getState(GameRule.KEEP_INVENTORY_ON_DEATH);
 
-        DGamePlayerDeathEvent dPlayerDeathEvent = new DGamePlayerDeathEvent(this, event, 1);
+        GamePlayerDeathEvent dPlayerDeathEvent = new GamePlayerDeathEvent(this, keepInventory, 1);
         Bukkit.getPluginManager().callEvent(dPlayerDeathEvent);
-
         if (dPlayerDeathEvent.isCancelled()) {
             return;
         }
 
-        if (config.areGlobalDeathMessagesDisabled()) {
-            event.setDeathMessage(null);
-        }
-
-        GameRuleContainer rules = game.getRules();
-        if (rules.getState(GameRule.KEEP_INVENTORY_ON_DEATH)) {
+        Location deathLocation = player.getLocation();
+        if (keepInventory && event != null) {
             event.setKeepInventory(true);
             event.getDrops().clear();
             event.setKeepLevel(true);
             event.setDroppedExp(0);
+        } else if (!keepInventory && event == null) {
+            for (ItemStack itemStack : player.getInventory().getContents()) {
+                if (itemStack == null) {
+                    continue;
+                }
+                getWorld().dropItemNaturally(deathLocation, itemStack);
+            }
+            player.getInventory().clear();
+
+            ExperienceOrb orb = (ExperienceOrb) VanillaMob.EXPERIENCE_ORB.toEntity(deathLocation);
+            int expDrop = 7 * player.getLevel();
+            expDrop = expDrop > 100 ? 100 : expDrop;
+            orb.setExperience(expDrop);
+            player.setLevel(player.getLevel() - 7);
+            player.setExp(0);
+        }
+
+        if (event == null) {
+            Location respawn = getLastCheckpoint();
+            if (respawn == null) {
+                respawn = gameWorld.getStartLocation(getGroup());
+            }
+            player.teleport(respawn);
+            heal();
+            if (getWolf() != null) {
+                getWolf().teleport(respawn);
+            }
+
+        } else if (config.areGlobalDeathMessagesDisabled()) {
+            event.setDeathMessage(null);
         }
 
         if (getGroup() != null && dGroup.getLives() != -1) {

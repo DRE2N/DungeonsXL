@@ -82,6 +82,11 @@ public class GameRule<V> {
      */
     public static final GameRule<Boolean> FOOD_LEVEL = new GameRule<>(Boolean.class, "foodLevel", true);
     /**
+     * Sets if death screens are enabled. If false, players that would have died are healed and teleported to the respawn location;
+     * their inventory and experience are dropped if {@link #KEEP_INVENTORY_ON_DEATH} is set to false.
+     */
+    public static final GameRule<Boolean> DEATH_SCREEN = new GameRule<>(Boolean.class, "deathScreen", false);
+    /**
      * If players may fly.
      */
     public static final GameRule<Boolean> FLY = new GameRule<>(Boolean.class, "fly", false);

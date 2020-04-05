@@ -259,6 +259,19 @@ public class DGlobalPlayer implements GlobalPlayer {
         MessageUtil.sendMessage(player, message);
     }
 
+    public void heal() {
+        if (is1_9) {
+            player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+        } else {
+            player.setHealth(player.getMaxHealth());
+        }
+        player.setFoodLevel(20);
+        player.setFireTicks(0);
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
+    }
+
     @Override
     public void reset(boolean keepInventory) {
         final Location tpLoc = data.getOldLocation().getWorld() != null ? data.getOldLocation() : Bukkit.getWorlds().get(0).getSpawnLocation();

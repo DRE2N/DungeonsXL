@@ -101,7 +101,18 @@ public class DPlayerListener implements Listener {
         }
 
         boolean dead = ((LivingEntity) event.getEntity()).getHealth() - event.getFinalDamage() <= 0;
-        if (dead && plugin.getDungeonMob((LivingEntity) event.getEntity()) != null) {
+        if (!dead) {
+            return;
+        }
+        if (event.getEntity() instanceof Player && !gameWorld.getDungeon().getRules().getState(GameRule.DEATH_SCREEN)) {
+            GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer((Player) event.getEntity());
+            if (gamePlayer == null) {
+                return;
+            }
+            ((DGamePlayer) gamePlayer).onDeath(null);
+        }
+
+        if (plugin.getDungeonMob((LivingEntity) event.getEntity()) != null) {
             String killer = null;
 
             if (event instanceof EntityDamageByEntityEvent) {
