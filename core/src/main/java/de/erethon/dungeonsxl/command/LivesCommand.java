@@ -70,10 +70,12 @@ public class LivesCommand extends DCommand {
         GamePlayer gamePlayer = (GamePlayer) globalPlayer;
         PlayerGroup group = gamePlayer != null ? gamePlayer.getGroup() : plugin.getGroupCache().get(args[1]);
         if (gamePlayer != null) {
-            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_PLAYER.getMessage(gamePlayer.getName(), gamePlayer.getLives() == -1 ? DMessage.MISC_UNLIMITED.getMessage() : String.valueOf(gamePlayer.getLives())));
+            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_PLAYER.getMessage(gamePlayer.getName(),
+                    gamePlayer.getLives() == -1 ? DMessage.PLAYER_UNLIMITED_LIVES.getMessage() : String.valueOf(gamePlayer.getLives())));
 
         } else if (group != null) {
-            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_GROUP.getMessage(group.getName(), String.valueOf(group.getLives() == -1 ? "UNLIMITED" : group.getLives())));
+            MessageUtil.sendMessage(sender, DMessage.CMD_LIVES_GROUP.getMessage(group.getName(),
+                    String.valueOf(group.getLives() == -1 ? "UNLIMITED" : group.getLives())));
 
         } else {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_PLAYER.getMessage(args[1]));

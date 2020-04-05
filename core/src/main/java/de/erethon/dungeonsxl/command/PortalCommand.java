@@ -40,7 +40,7 @@ public class PortalCommand extends DCommand {
         super(plugin);
         setCommand("portal");
         setMinArgs(0);
-        setMaxArgs(1);
+        setMaxArgs(2);
         setHelp(DMessage.CMD_PORTAL_HELP.getMessage());
         setPermission(DPermission.PORTAL.getNode());
         setPlayerCommand(true);
@@ -72,14 +72,23 @@ public class PortalCommand extends DCommand {
             dPortal = new DPortal(plugin, plugin.getGlobalProtectionCache().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
             dPortal.setWorld(player.getWorld());
-            dGlobalPlayer.setCachedItem(player.getItemInHand());
+            dGlobalPlayer.setCachedItem(player.getInventory().getItemInHand());
             player.getInventory().setItemInHand(VanillaItem.WOODEN_SWORD.toItemStack());
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_INTRODUCTION.getMessage());
 
         } else {
+            if (args.length == 3 && VanillaItem.NETHER_PORTAL.getName().equalsIgnoreCase(args[1])) {
+                if (args[2].equalsIgnoreCase("-rotate")) {
+                    dPortal.rotate();
+                }
+                dGlobalPlayer.setCreatingPortal(null);
+                MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_CREATED.getMessage());
+                return;
+            }
+
             dPortal.delete();
             dGlobalPlayer.setCreatingPortal(null);
-            player.setItemInHand(dGlobalPlayer.getCachedItem());
+            player.getInventory().setItemInHand(dGlobalPlayer.getCachedItem());
             dGlobalPlayer.setCachedItem(null);
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_ABORT.getMessage());
         }

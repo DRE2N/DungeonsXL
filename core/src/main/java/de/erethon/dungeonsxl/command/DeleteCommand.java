@@ -54,11 +54,11 @@ public class DeleteCommand extends DCommand {
 
         if (args.length == 2 && sender instanceof Player) {
             ClickEvent onClickConfirm = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl delete " + args[1] + " true");
-            TextComponent confirm = new TextComponent(DMessage.MISC_YES.getMessage());
+            TextComponent confirm = new TextComponent(DMessage.BUTTON_ACCEPT.getMessage());
             confirm.setClickEvent(onClickConfirm);
 
             ClickEvent onClickDeny = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl delete " + args[1] + " false");
-            TextComponent deny = new TextComponent(DMessage.MISC_NO.getMessage());
+            TextComponent deny = new TextComponent(DMessage.BUTTON_DENY.getMessage());
             deny.setClickEvent(onClickDeny);
 
             MessageUtil.sendMessage(sender, DMessage.CMD_DELETE_BACKUPS.getMessage());

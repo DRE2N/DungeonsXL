@@ -171,11 +171,10 @@ group:
   rewardChest: "&6Votre groupe a trouvé un coffre de récompenses."
   uninvitedPlayer: "&4&v1&6 a repris l'invitation de &4&v2&6 pour le groupe &4&v3&6."
   waveFinished: "&6Votre groupe a fini la vague numéro &4&v1&6. La suivante va commencer dans &4&v2&6 secondes."
-misc: 
-  false: "&4[ NON ]"
+button: 
+  accept: "&a[ OUI ]"
+  deny: "&4[ NON ]"
   okay: "&a[ OK ]"
-  true: "&a[ OUI ]"
-  unlimited: Illimité
 player: 
   blockInfo: "&6Block ID: &2&v1"
   checkpointReached: "&6Point de sauvegarde atteint."
@@ -196,10 +195,12 @@ player:
   newLeader: "&6Vous êtes maintenant le nouveau capitaine du groupe."
   offline: "&Le joueur &4&v1&6 est passé hors ligne. Dans &4&v2&6 secondes il va être automatiquement éjecté du donjon."
   offlineNever: "&6Le joueur &4&v1&6 est passé hors ligne. Il ne va &4pas&6 être éjecté du donjon automatiquement."
-  portalAbort: "&6Création de portails annulée."
-  portalCreated: "&6Portail créé."
-  portalIntroduction: "&6Cliquez sur les deux bords du portail avec l'épée en bois."
-  portalProgress: "&6Le premier bord a été marqué avec succès. Vous devez maintenant cliquer sur le deuxième bord."
+  portal:
+    abort: "&6Création de portails annulée."
+    created: "&6Portail créé."
+    introduction: "&6Cliquez sur les deux bords du portail avec l'épée en bois."
+    progress: "&6Le premier bord a été marqué avec succès. Vous devez maintenant cliquer sur le deuxième bord."
+    rotate: "&6Voulez-vous tourner le portail ?"
   protectedBlockDeleted: "&6Protection retirée avec succès."
   ready: "&6Vous êtes maintenant prêt à démarrer le donjon."
   signCopied: "&6Données du panneau copiées."
@@ -208,6 +209,7 @@ player:
   timeLeft: "&v1Il vous reste &6&v2 &v1secondes pour finir le donjon."
   treasures: "&1trésors"
   uninvited: "&4&v1&6 a annulé votre invitation au groupe &4&v2&6."
+  unlimitedLives: "illimité"
   waitForOtherPlayers: "&6En attente des membres de l'équipe..."
 requirement: 
   fee: "&6Vous avez été débité de &4&v1 &6pour entrer dans le donjon."

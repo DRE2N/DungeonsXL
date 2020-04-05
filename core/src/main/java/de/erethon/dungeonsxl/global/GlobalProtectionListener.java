@@ -205,9 +205,6 @@ public class GlobalProtectionListener implements Listener {
                 dPortal.setBlock2(event.getClickedBlock());
                 dPortal.setActive(true);
                 dPortal.create(dPlayer);
-                dPlayer.sendMessage(DMessage.PLAYER_PORTAL_CREATED.getMessage());
-                dPlayer.getPlayer().getInventory().setItemInHand(dPlayer.getCachedItem());
-                dPlayer.setCachedItem(null);
             }
             event.setCancelled(true);
         }

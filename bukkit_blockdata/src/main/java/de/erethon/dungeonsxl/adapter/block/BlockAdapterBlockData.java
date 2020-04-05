@@ -96,6 +96,7 @@ public class BlockAdapterBlockData implements BlockAdapter {
         }
         Orientable data = (Orientable) block.getBlockData();
         data.setAxis(z ? Axis.Z : Axis.X);
+        block.setBlockData(data, false);
     }
 
 }

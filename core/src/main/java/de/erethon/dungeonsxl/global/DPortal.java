@@ -31,6 +31,8 @@ import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import java.util.HashSet;
 import java.util.Set;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -197,8 +199,36 @@ public class DPortal extends GlobalProtection {
             xx = xx + xcount;
         } while (xx != x2 + xcount);
 
-        if (player != null) {
+        if (player == null) {
+            return;
+        }
+        player.getPlayer().getInventory().setItemInHand(player.getCachedItem());
+        player.setCachedItem(null);
+
+        if (material != VanillaItem.NETHER_PORTAL) {
+            player.sendMessage(DMessage.PLAYER_PORTAL_CREATED.getMessage());
             player.setCreatingPortal(null);
+
+        } else {
+            ClickEvent onClickYes = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl portal NETHER_PORTAL -rotate");
+            TextComponent yes = new TextComponent(DMessage.BUTTON_ACCEPT.getMessage());
+            yes.setClickEvent(onClickYes);
+
+            ClickEvent onClickNo = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl portal NETHER_PORTAL -norotate");
+            TextComponent no = new TextComponent(DMessage.BUTTON_DENY.getMessage());
+            no.setClickEvent(onClickNo);
+
+            player.sendMessage(DMessage.PLAYER_PORTAL_ROTATE.getMessage());
+            MessageUtil.sendMessage(player.getPlayer(), yes, new TextComponent(" "), no);
+        }
+    }
+
+    public void rotate() {
+        zAxis = !zAxis;
+        for (Block block : getBlocks()) {
+            if (block.getType() == VanillaItem.NETHER_PORTAL.getMaterial()) {
+                DungeonsXL.BLOCK_ADAPTER.setAxis(block, zAxis);
+            }
         }
     }
 

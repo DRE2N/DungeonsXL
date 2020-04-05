@@ -1,5 +1,9 @@
 announcer: 
   click: "&4&l=> &6KLICKE HIER ZUM BEITRETEN &4&l<="
+button: 
+  accept: "&a[ JA ]"
+  deny: "&4[ NEIN ]"
+  okay: "&a[ OK ]"
 cmd: 
   break: 
     breakMode: "&6Du darfst jetzt von DungeonsXL geschützte Blöcke zerstören."
@@ -171,11 +175,6 @@ group:
   rewardChest: "&6Deine Gruppe hat eine Schatztruhe gefunden."
   uninvitedPlayer: "&4&v1&6 hat die Einladung für &4&v2&6 in die Gruppe &4&v3&6 zurückgezogen."
   waveFinished: "&6Deine Gruppe hat die &4&v1&6te Welle beendet. Die nächste fängt in &4&v2&6 Sekunden an."
-misc: 
-  false: "&4[ NEIN ]"
-  okay: "&a[ OK ]"
-  true: "&a[ JA ]"
-  unlimited: "unendlich viele"
 player: 
   blockInfo: "&6Block-ID: &2&v1"
   checkpointReached: "&6Checkpoint erreicht."
@@ -196,10 +195,12 @@ player:
   newLeader: "&6Du bist jetzt der neue Kapitän Deiner Gruppe."
   offline: "&Der Spieler &4&v1&6 hat den Server verlassen. In &4&v2&6 Sekunden wird er automatisch aus dem Spiel geworfen."
   offlineNever: "&6Der Spieler &4&v1&6 hat den Server verlassen. Er wird aber &4nicht&6 automatisch aus dem Spiel geworfen."
-  portalAbort: "&6Das Erstellen des Portals wurde abgebrochen."
-  portalCreated: "&6Das Portal wurde erstellt."
-  portalIntroduction: "&6Klicke die zwei Ecken des Portals mit dem Holzschwert an."
-  portalProgress: "&6Das erste Eck wurde erfolgreich markiert. Klicke nun das zweite Eck an."
+  portal:
+    abort: "&6Das Erstellen des Portals wurde abgebrochen."
+    created: "&6Das Portal wurde erstellt."
+    introduction: "&6Klicke die zwei Ecken des Portals mit dem Holzschwert an."
+    progress: "&6Das erste Eck wurde erfolgreich markiert. Klicke nun das zweite Eck an."
+    rotate: "&6Möchtest Du das Portal drehen?"
   protectedBlockDeleted: "&6Die Sicherung wurde erfolgreich entfernt."
   ready: "&6Du bist jetzt bereit, das Spiel zu starten."
   signCopied: "&6Schilddaten kopiert."
@@ -208,6 +209,7 @@ player:
   timeLeft: "&v1Du hast &6&v2 &v1Sekunden übrig, um den Dungeon zu beenden."
   treasures: "&1Schätze"
   uninvited: "&4&v1&6 hat Deine Einladung zur Gruppe &4&v2&6 zurückgezogen."
+  unlimitedLives: "unendlich viele"
   waitForOtherPlayers: "&6Warte auf andere Gruppenmitglieder..."
 requirement: 
   fee: "&6Du hast &4&v1 &6bezahlt, um den Dungeon zu betreten."

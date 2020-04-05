@@ -1,5 +1,9 @@
 announcer: 
   click: "&4&l=> &6CLICK HERE TO JOIN &4&l<="
+button: 
+  accept: "&a[ YES ]"
+  deny: "&4[ NO ]"
+  okay: "&a[ OK ]"
 cmd: 
   break: 
     breakMode: "&6You may break a block protected by DungeonsXL."
@@ -171,11 +175,6 @@ group:
   rewardChest: "&6Your group has found a reward chest."
   uninvitedPlayer: "&4&v1&6 took back the invitation for &4&v2&6 to the group &4&v3&6."
   waveFinished: "&6Your group finished wave no. &4&v1&6. The next one is going to start in &4&v2&6 seconds."
-misc: 
-  false: "&4[ NO ]"
-  okay: "&a[ OK ]"
-  true: "&a[ YES ]"
-  unlimited: unlimited
 player: 
   blockInfo: "&6Block ID: &2&v1"
   checkpointReached: "&6Checkpoint reached."
@@ -196,10 +195,12 @@ player:
   newLeader: "&6You are now the new captain of your group."
   offline: "&Player &4&v1&6 went offline. In &4&v2&6 seconds he will autmatically be kicked from the dungeon."
   offlineNever: "&6The player &4&v1&6 went offline. He will &4not&6 be kicked from the dungeon automatically."
-  portalAbort: "&6Portal creation cancelled."
-  portalCreated: "&6Portal created."
-  portalIntroduction: "&6Click on the two edges of the portal with the wooden sword."
-  portalProgress: "&6First edge successfully marked. You may now click on the other edge."
+  portal:
+    abort: "&6Portal creation cancelled."
+    created: "&6Portal created."
+    introduction: "&6Click on the two edges of the portal with the wooden sword."
+    progress: "&6First edge successfully marked. You may now click on the other edge."
+    rotate: "&6Do you wish to rotate the portal?"
   protectedBlockDeleted: "&6Successfully removed the protection."
   ready: "&6You are now ready to start the dungeon."
   signCopied: "&6Sign data copied."
@@ -208,6 +209,7 @@ player:
   timeLeft: "&v1You have &6&v2 &v1seconds left to finish the dungeon."
   treasures: "&1Treasures"
   uninvited: "&4&v1&6 took back your invitation to the group &4&v2&6."
+  unlimitedLives: "unlimited"
   waitForOtherPlayers: "&6Waiting for team members..."
 requirement: 
   fee: "&6You have been charged &4&v1 &6for entering the dungeon."

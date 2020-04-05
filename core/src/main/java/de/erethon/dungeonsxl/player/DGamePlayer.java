@@ -775,7 +775,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             }
 
             GamePlayer killer = plugin.getPlayerCache().getGamePlayer(player.getKiller());
-            String newLives = lives == -1 ? DMessage.MISC_UNLIMITED.getMessage() : String.valueOf(this.lives);
+            String newLives = lives == -1 ? DMessage.PLAYER_UNLIMITED_LIVES.getMessage() : String.valueOf(this.lives);
             if (killer != null) {
                 gameWorld.sendMessage(DMessage.PLAYER_KILLED.getMessage(getName(), killer.getName(), newLives));
             } else {
