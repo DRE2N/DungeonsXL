@@ -217,7 +217,7 @@ public class DPlayerListener implements Listener {
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
         GameWorld gameWorld = plugin.getGameWorld(event.getEntity().getWorld());
         if (gameWorld != null) {
-            if (!gameWorld.isPlaying()) {
+            if (!gameWorld.isPlaying() || !gameWorld.getDungeon().getRules().getState(GameRule.FOOD_LEVEL)) {
                 event.setCancelled(true);
             }
         }

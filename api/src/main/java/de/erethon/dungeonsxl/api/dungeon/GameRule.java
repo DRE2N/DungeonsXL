@@ -78,6 +78,10 @@ public class GameRule<V> {
      */
     public static final GameRule<Difficulty> DIFFICULTY = new GameRule<>(Difficulty.class, "difficulty", Difficulty.NORMAL);
     /**
+     * If the food levels of the players change.
+     */
+    public static final GameRule<Boolean> FOOD_LEVEL = new GameRule<>(Boolean.class, "foodLevel", true);
+    /**
      * If players may fly.
      */
     public static final GameRule<Boolean> FLY = new GameRule<>(Boolean.class, "fly", false);
