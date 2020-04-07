@@ -83,6 +83,7 @@ public class ReadySign extends Button {
 
     @Override
     public void initialize() {
+        ((DGameWorld) getGameWorld()).setReadySign(this);
         if (!getLine(2).isEmpty()) {
             autoStart = NumberUtil.parseDouble(getLine(2), -1);
         }
@@ -103,8 +104,6 @@ public class ReadySign extends Button {
         getSign().setLine(2, "");
         getSign().setLine(3, ChatColor.DARK_BLUE + "############");
         getSign().update();
-
-        ((DGameWorld) getGameWorld()).setReadySign(this);
     }
 
     @Override
