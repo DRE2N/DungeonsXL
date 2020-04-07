@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class MobSpawnTask extends BukkitRunnable {
 
     private MobSign sign;
-    private int k, n;
+    private int k = 1, n;
 
     public MobSpawnTask(MobSign sign, int n) {
         this.sign = sign;

@@ -35,10 +35,6 @@ public abstract class Windup extends Deactivatable {
      * How many times the task is supposed to be executed (unless it is cancelled).
      */
     protected int n;
-    /**
-     * How many times the task has been executed.
-     */
-    protected int k;
 
     private Runnable runnable;
     private BukkitTask task;
@@ -135,26 +131,12 @@ public abstract class Windup extends Deactivatable {
         this.n = n;
     }
 
-    /**
-     * Returns how many times the task has already been executed (like in SIGMA notation).
-     *
-     * @return how many times the task has already been executed (like in SIGMA notation)
-     */
-    public int getK() {
-        return k;
-    }
-
-    /**
-     * Resets k (like in SIGMA notation) to 0.
-     */
-    public void resetK() {
-        k = 0;
-    }
-
     @Override
     public void activate() {
         if (interval <= 0) {
-            runnable.run();
+            for (int k = 0; k < n; k++) {
+                runnable.run();
+            }
         } else {
             active = true;
             startTask();

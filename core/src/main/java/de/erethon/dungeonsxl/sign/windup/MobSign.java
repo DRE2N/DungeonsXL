@@ -138,7 +138,6 @@ public class MobSign extends Windup {
                 return null;
             }
             spawned = (LivingEntity) type.toEntity(spawnLoc);
-            spawned.setRemoveWhenFarAway(false);
 
         } else {
             provider.summon(mob, spawnLoc);
@@ -152,6 +151,7 @@ public class MobSign extends Windup {
             }
         }
 
+        spawned.setRemoveWhenFarAway(false);
         spawnedMobs.add(spawned);
         return spawned;
     }
