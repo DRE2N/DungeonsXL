@@ -207,7 +207,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     @Override
     public void onEnable() {
         super.onEnable();
-        if (compat.isPaper() && Internals.andHigher(Internals.v1_14_R1).contains(compat.getInternals())) {
+        if (compat.isPaper() && Internals.andHigher(Internals.v1_14_R1).contains(compat.getInternals()) && System.getProperty("XLDevMode") == null) {
             File paperFile = new File("paper.yml");
             FileConfiguration paperConfig = YamlConfiguration.loadConfiguration(paperFile);
             if (paperConfig.getBoolean("settings.async-chunks.enable")) {
