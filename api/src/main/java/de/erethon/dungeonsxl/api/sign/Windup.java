@@ -190,7 +190,7 @@ public abstract class Windup extends Deactivatable {
      * @return if the world is already finished
      */
     public boolean isWorldFinished() {
-        return api.getGameWorld(getSign().getWorld()) != null;
+        return Bukkit.getWorld(worldName) == null;
     }
 
 }

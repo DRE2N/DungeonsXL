@@ -42,6 +42,7 @@ public abstract class AbstractDSign implements DungeonSign {
     private Sign sign;
     private String[] lines;
     private InstanceWorld instance;
+    String worldName;
     private Set<Trigger> triggers = new HashSet<>();
     private boolean initialized;
     private boolean erroneous;
@@ -51,6 +52,7 @@ public abstract class AbstractDSign implements DungeonSign {
         this.sign = sign;
         this.lines = lines;
         this.instance = instance;
+        worldName = instance.getWorld().getName();
     }
 
     @Override
