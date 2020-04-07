@@ -46,11 +46,13 @@ public class DistanceTrigger extends Trigger {
     public void onTrigger(Player player) {
         TriggerActionEvent event = new TriggerActionEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
             return;
         }
 
+        if (isTriggered()) {
+            return;
+        }
         setTriggered(true);
         this.setPlayer(player);
         updateDSigns();
