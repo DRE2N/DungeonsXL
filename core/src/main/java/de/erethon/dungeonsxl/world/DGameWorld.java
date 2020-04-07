@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.world;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -452,7 +453,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         kickAllPlayers();
 
-        Bukkit.unloadWorld(getWorld(), true);
+        Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
         FileUtil.removeDir(getFolder());
         plugin.getInstanceCache().remove(this);
     }

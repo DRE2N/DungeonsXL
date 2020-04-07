@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
@@ -182,7 +183,7 @@ public class DResourceWorld implements ResourceWorld {
             World world = Bukkit.getWorld(name);
             boolean removed = false;
             if (world != null && world.getPlayers().isEmpty()) {
-                Bukkit.unloadWorld(name, false);
+                Bukkit.unloadWorld(name, /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
             }
             if (world == null || world.getPlayers().isEmpty()) {
                 removed = instanceFolder.delete();
@@ -316,7 +317,7 @@ public class DResourceWorld implements ResourceWorld {
         World world = rawCreator.createWorld();
         File worldFolder = new File(Bukkit.getWorldContainer(), ".raw");
         FileUtil.copyDir(worldFolder, RAW, DungeonsXL.EXCLUDED_FILES);
-        Bukkit.unloadWorld(world, false);
+        Bukkit.unloadWorld(world, /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
         FileUtil.removeDir(worldFolder);
     }
 

@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.EditWorld;
@@ -119,7 +120,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
         DResourceWorld.deleteUnusedFiles(getResource().getFolder());
         if (!save) {
-            Bukkit.unloadWorld(getWorld(), true);
+            Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
         }
 
         FileUtil.removeDir(getFolder());
