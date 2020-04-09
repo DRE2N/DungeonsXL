@@ -159,7 +159,11 @@ public interface Dungeon {
      * @return true if the floor is either in the floors list or the start / end floor.
      */
     default boolean containsFloor(ResourceWorld resource) {
-        return getFloors().contains(resource) || getStartFloor().equals(resource) || getEndFloor().equals(resource);
+        if (isMultiFloor()) {
+            return getFloors().contains(resource) || getStartFloor().equals(resource) || getEndFloor().equals(resource);
+        } else {
+            return getMap().equals(resource);
+        }
     }
 
     /**

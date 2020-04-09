@@ -16,7 +16,6 @@ package de.erethon.dungeonsxl.api.sign;
 
 import de.erethon.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
-import de.erethon.dungeonsxl.api.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;

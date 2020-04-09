@@ -67,6 +67,9 @@ public class DDungeon implements Dungeon {
     }
 
     public DungeonConfig getConfig() {
+        if (!isMultiFloor()) {
+            throw new IllegalStateException("Tried to access the dungeon config of a single floor dungeon");
+        }
         return config;
     }
 
@@ -92,23 +95,23 @@ public class DDungeon implements Dungeon {
 
     @Override
     public void setStartFloor(ResourceWorld startFloor) {
-        config.setStartFloor(startFloor);
+        getConfig().setStartFloor(startFloor);
     }
 
     @Override
     public ResourceWorld getEndFloor() {
-        return config.getEndFloor();
+        return getConfig().getEndFloor();
     }
 
     @Override
     public void setEndFloor(ResourceWorld endFloor) {
-        config.setEndFloor(endFloor);
+        getConfig().setEndFloor(endFloor);
     }
 
     @Override
     public List<ResourceWorld> getFloors() {
         if (isMultiFloor()) {
-            return config.getFloors();
+            return getConfig().getFloors();
         } else {
             return new ArrayList<>(Arrays.asList(map));
         }
@@ -116,42 +119,42 @@ public class DDungeon implements Dungeon {
 
     @Override
     public void addFloor(ResourceWorld resource) {
-        config.addFloor(resource);
+        getConfig().addFloor(resource);
     }
 
     @Override
     public void removeFloor(ResourceWorld resource) {
-        config.removeFloor(resource);
+        getConfig().removeFloor(resource);
     }
 
     @Override
     public int getFloorCount() {
-        return config.getFloorCount();
+        return getConfig().getFloorCount();
     }
 
     @Override
     public void setFloorCount(int floorCount) {
-        config.setFloorCount(floorCount);
+        getConfig().setFloorCount(floorCount);
     }
 
     @Override
     public boolean getRemoveWhenPlayed() {
-        return config.getRemoveWhenPlayed();
+        return getConfig().getRemoveWhenPlayed();
     }
 
     @Override
     public void setRemoveWhenPlayed(boolean removeWhenPlayed) {
-        config.setRemoveWhenPlayed(removeWhenPlayed);
+        getConfig().setRemoveWhenPlayed(removeWhenPlayed);
     }
 
     @Override
     public GameRuleContainer getOverrideValues() {
-        return config.getOverrideValues();
+        return getConfig().getOverrideValues();
     }
 
     @Override
     public GameRuleContainer getDefaultValues() {
-        return config.getDefaultValues();
+        return getConfig().getDefaultValues();
     }
 
     @Override
@@ -191,7 +194,7 @@ public class DDungeon implements Dungeon {
                 return false;
             }
         }
-        return config.getStartFloor() != null && config.getEndFloor() != null;
+        return getConfig().getStartFloor() != null && getConfig().getEndFloor() != null;
     }
 
     /* Statics */
