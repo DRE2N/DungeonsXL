@@ -131,10 +131,14 @@ public class DungeonConfig extends DREConfig {
         ConfigurationSection overrideSection = config.getConfigurationSection("overrideValues");
         if (overrideSection != null) {
             overrideValues = new WorldConfig(plugin, overrideSection);
+        } else {
+            overrideValues = new WorldConfig(plugin);
         }
         ConfigurationSection defaultSection = config.getConfigurationSection("defaultValues");
         if (defaultValues != null) {
             defaultValues = new WorldConfig(plugin, defaultSection);
+        } else {
+            defaultValues = new WorldConfig(plugin);
         }
     }
 
