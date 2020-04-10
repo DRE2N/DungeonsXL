@@ -235,7 +235,9 @@ public class GameRule<V> {
                         continue;
                     }
                 }
-                requirements.add((Requirement) constructor.newInstance(api));
+                Requirement requirement = (Requirement) constructor.newInstance(api);
+                requirement.setup(section);
+                requirements.add(requirement);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                     | IllegalArgumentException | InvocationTargetException exception) {
                 MessageUtil.log(api, "&4Requirement \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
