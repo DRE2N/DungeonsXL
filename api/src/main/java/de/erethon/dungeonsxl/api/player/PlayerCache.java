@@ -148,6 +148,9 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     public Collection<GamePlayer> getAllGamePlayersIf(Predicate<GamePlayer> predicate) {
         Collection<GamePlayer> checked = new ArrayList<>();
         for (GlobalPlayer element : elements.values()) {
+            if (!(element instanceof GamePlayer)) {
+                continue;
+            }
             GamePlayer gamePlayer = (GamePlayer) element;
             if (predicate.test(gamePlayer)) {
                 checked.add(gamePlayer);
