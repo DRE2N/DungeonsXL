@@ -361,7 +361,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         int mobCount = 0;
 
         signs:
-        for (DungeonSign sign : getDungeonSigns()) {
+        for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
             if (!(sign instanceof MobSign)) {
                 continue;
             }
@@ -414,7 +414,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         isPlaying = true;
 
-        for (DungeonSign sign : getDungeonSigns()) {
+        for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
             if (sign == null || sign.isOnDungeonInit()) {
                 continue;
             }
