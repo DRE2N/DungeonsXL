@@ -64,6 +64,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 /**
  * @author Daniel Saukel, Frank Baumann, Milan Albrecht
@@ -159,7 +160,10 @@ public class DPlayerListener implements Listener {
         Entity attackedEntity = event.getEntity();
 
         if (attackerEntity instanceof Projectile) {
-            attackerEntity = (Entity) ((Projectile) attackerEntity).getShooter();
+            ProjectileSource source = ((Projectile) attackerEntity).getShooter();
+            if (source instanceof Entity) {
+                attackerEntity = (Entity) source;
+            }
         }
 
         Player attackerPlayer = null;
