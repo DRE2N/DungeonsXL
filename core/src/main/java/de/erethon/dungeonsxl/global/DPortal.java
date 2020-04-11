@@ -253,7 +253,7 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
-        if (!plugin.getPlayerCache().get(player).checkRequirements()) {
+        if (!plugin.getPlayerCache().get(player).checkRequirements(dungeon)) {
             return;
         }
 
