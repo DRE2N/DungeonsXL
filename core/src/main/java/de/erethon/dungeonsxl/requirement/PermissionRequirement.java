@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -33,6 +34,9 @@ import org.bukkit.entity.Player;
 public class PermissionRequirement implements Requirement {
 
     private List<String> permissions = new ArrayList<>();
+
+    public PermissionRequirement(DungeonsAPI api) {
+    }
 
     /* Getters and setters */
     /**
@@ -52,7 +56,7 @@ public class PermissionRequirement implements Requirement {
     /* Actions */
     @Override
     public void setup(ConfigurationSection config) {
-        permissions = config.getStringList("permissions");
+        permissions = config.getStringList("permission");
     }
 
     @Override

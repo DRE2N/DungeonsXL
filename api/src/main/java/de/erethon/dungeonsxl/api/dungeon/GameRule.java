@@ -229,11 +229,8 @@ public class GameRule<V> {
             try {
                 Constructor constructor = clss.getConstructor(DungeonsAPI.class);
                 if (constructor == null) {
-                    constructor = clss.getConstructor();
-                    if (constructor == null) {
-                        MessageUtil.log(api, "&4Requirement \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
-                        continue;
-                    }
+                    MessageUtil.log(api, "&4Requirement \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
+                    continue;
                 }
                 Requirement requirement = (Requirement) constructor.newInstance(api);
                 requirement.setup(section);
@@ -271,11 +268,8 @@ public class GameRule<V> {
             try {
                 Constructor constructor = clss.getConstructor(DungeonsAPI.class);
                 if (constructor == null) {
-                    constructor = clss.getConstructor();
-                    if (constructor == null) {
-                        MessageUtil.log(api, "&4Reward \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
-                        continue;
-                    }
+                    MessageUtil.log(api, "&4Reward \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
+                    continue;
                 }
                 Reward reward = (Reward) constructor.newInstance(api);
                 // reward.setup();
