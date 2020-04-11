@@ -28,13 +28,17 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MapGameRule<TK, TV, V extends Map<TK, TV>> extends GameRule<V> {
 
+    protected Copier<V> copier;
+
     /**
      * @param key          the configuration key of the game rule
      * @param defaultValue the default value that is used when nothing is set
      * @param reader       a functional interface that loads the value from config
+     * @param copier       a method to copy the map
      */
-    public MapGameRule(String key, V defaultValue, ConfigReader<V> reader) {
+    public MapGameRule(String key, V defaultValue, ConfigReader<V> reader, Copier<V> copier) {
         super(null, key, defaultValue, reader);
+        this.copier = copier;
     }
 
     /**
@@ -70,12 +74,13 @@ public class MapGameRule<TK, TV, V extends Map<TK, TV>> extends GameRule<V> {
 
     @Override
     public void merge(GameRuleContainer overriding, GameRuleContainer subsidiary, GameRuleContainer writeTo) {
-        V write = writeTo.getState(this);
+        V writeToState = writeTo.getState(this);
+        V write = writeToState != null ? copier.copy(writeTo.getState(this)) : null;
 
         V subsidiaryState = subsidiary.getState(this);
         if (subsidiaryState != null) {
             if (write == null) {
-                write = subsidiaryState;
+                write = copier.copy(subsidiaryState);
             } else {
                 write.putAll(subsidiaryState);
             }
@@ -84,7 +89,7 @@ public class MapGameRule<TK, TV, V extends Map<TK, TV>> extends GameRule<V> {
         V overridingState = overriding.getState(this);
         if (overridingState != null) {
             if (write == null) {
-                write = overridingState;
+                write = copier.copy(overridingState);
             } else {
                 write.putAll(overridingState);
             }

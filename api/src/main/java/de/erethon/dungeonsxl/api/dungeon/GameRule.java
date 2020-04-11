@@ -117,7 +117,7 @@ public class GameRule<V> {
             map.put(tool, blocks);
         }
         return map;
-    });
+    }, HashMap::new);
     /**
      * A list of all entity types that shall be protected from damage. If this is left out AND if breakBlocks is false, armor stands, paintings and item frames
      * will be protected by default. If this is left out and if breakBlocks is true, nothing will be protected by default.
@@ -126,7 +126,7 @@ public class GameRule<V> {
             VanillaMob.ARMOR_STAND,
             VanillaMob.ITEM_FRAME,
             VanillaMob.PAINTING
-    )), ConfigReader.EX_MOB_SET_READER);
+    )), ConfigReader.EX_MOB_SET_READER, HashSet::new);
     /**
      * If this is left out AND if breakBlocks is false, armor stands and item frames will be protected by default. If this is left out and if breakBlocks is
      * true, nothing will be protected by default.
@@ -134,7 +134,7 @@ public class GameRule<V> {
     public static final GameRule<Set<ExMob>> INTERACTION_PROTECTED_ENTITIES = new CollectionGameRule<>("interactionProtectedEntities", new HashSet<>(Arrays.asList(
             VanillaMob.ARMOR_STAND,
             VanillaMob.ITEM_FRAME
-    )), ConfigReader.EX_MOB_SET_READER);
+    )), ConfigReader.EX_MOB_SET_READER, HashSet::new);
     /**
      * If blocks may be placed.
      */
@@ -142,7 +142,7 @@ public class GameRule<V> {
     /**
      * A whitelist of placeable blocks. placeBlocks is supposed to be set to "true" if this should be used.
      */
-    public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", null, ConfigReader.EX_ITEM_SET_READER);
+    public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", null, ConfigReader.EX_ITEM_SET_READER, HashSet::new);
     /**
      * If it should rain permanently in the dungeon.
      * <p>
@@ -244,15 +244,15 @@ public class GameRule<V> {
             }
         }
         return requirements;
-    });
+    }, ArrayList::new);
     /**
      * One of these Dungeons must be finished ("any" for any dungeon).
      */
-    public static final GameRule<List<String>> MUST_FINISH_ONE = new CollectionGameRule<>("mustFinishOne", null);
+    public static final GameRule<List<String>> MUST_FINISH_ONE = new CollectionGameRule<>("mustFinishOne", null, ArrayList::new);
     /**
      * All of these Dungeons must be finished. If you do not want any, leave this empty.
      */
-    public static final GameRule<List<String>> MUST_FINISH_ALL = new CollectionGameRule<>("mustFinishAll", null);
+    public static final GameRule<List<String>> MUST_FINISH_ALL = new CollectionGameRule<>("mustFinishAll", null, ArrayList::new);
     /**
      * This can be used to give rewards. The default implementation does not do this at the moment.
      */
@@ -277,23 +277,25 @@ public class GameRule<V> {
                         continue;
                     }
                 }
-                rewards.add((Reward) constructor.newInstance(api));
+                Reward reward = (Reward) constructor.newInstance(api);
+                // reward.setup();
+                rewards.add(reward);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                     | IllegalArgumentException | InvocationTargetException exception) {
                 MessageUtil.log(api, "&4Reward \"" + key + "\" is not implemented properly with a (DungeonsAPI) constructor.");
             }
         }
         return rewards;
-    });
+    }, ArrayList::new);
     /**
      * These commands can be used by all players if they are in the dungeon. DXL commands like /dxl leavecan be used by default.
      */
-    public static final GameRule<List<String>> GAME_COMMAND_WHITELIST = new CollectionGameRule<>("gameCommandWhitelist", new ArrayList<>());
+    public static final GameRule<List<String>> GAME_COMMAND_WHITELIST = new CollectionGameRule<>("gameCommandWhitelist", new ArrayList<>(), ArrayList::new);
     /**
      * A list of permissions players get while they play the game. The permissions get removed as soon as the player leaves the game. Requires Vault and a
      * permissions plugin like PermissionsEx.
      */
-    public static final GameRule<List<String>> GAME_PERMISSIONS = new CollectionGameRule<>("gamePermissions", new ArrayList<>());
+    public static final GameRule<List<String>> GAME_PERMISSIONS = new CollectionGameRule<>("gamePermissions", new ArrayList<>(), ArrayList::new);
     /**
      * Use this to replace the default ready / new floor message. If titles are deactivated in the main config, this is not going to work.
      */
@@ -342,11 +344,11 @@ public class GameRule<V> {
             map.put(id, (String) entry.getValue());
         }
         return map;
-    });
+    }, HashMap::new);
     /**
      * Items you cannot drop or destroy.
      */
-    public static final GameRule<Set<ExItem>> SECURE_OBJECTS = new CollectionGameRule<>("secureObjects", new HashSet<>(), ConfigReader.EX_ITEM_SET_READER);
+    public static final GameRule<Set<ExItem>> SECURE_OBJECTS = new CollectionGameRule<>("secureObjects", new HashSet<>(), ConfigReader.EX_ITEM_SET_READER, HashSet::new);
     /**
      * If group tags are used.
      */
@@ -481,7 +483,7 @@ public class GameRule<V> {
 
     @Override
     public String toString() {
-        return "GameRule{key=" + key + "}";
+        return getClass().getSimpleName() + "{key=" + key + "}";
     }
 
 }

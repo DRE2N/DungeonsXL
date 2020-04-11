@@ -27,21 +27,27 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> {
 
+    protected Copier<V> copier;
+
     /**
      * @param key          the configuration key of the game rule
      * @param defaultValue the default value that is used when nothing is set
+     * @param copier       a method to copy the collection
      */
-    public CollectionGameRule(String key, V defaultValue) {
+    public CollectionGameRule(String key, V defaultValue, Copier<V> copier) {
         super(null, key, defaultValue);
+        this.copier = copier;
     }
 
     /**
      * @param key          the configuration key of the game rule
      * @param defaultValue the default value that is used when nothing is set
      * @param reader       a functional interface that loads the value from config
+     * @param copier       a method to copy the collection
      */
-    public CollectionGameRule(String key, V defaultValue, ConfigReader<V> reader) {
+    public CollectionGameRule(String key, V defaultValue, ConfigReader<V> reader, Copier<V> copier) {
         super(null, key, defaultValue, reader);
+        this.copier = copier;
     }
 
     /**
@@ -82,23 +88,28 @@ public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> 
 
     @Override
     public void merge(GameRuleContainer overriding, GameRuleContainer subsidiary, GameRuleContainer writeTo) {
-        V write = writeTo.getState(this);
+        V writeToState = writeTo.getState(this);
+        V write = writeToState != null ? copier.copy(writeTo.getState(this)) : null;
 
-        V subsidiaryState = subsidiary.getState(this);
-        if (subsidiaryState != null) {
-            if (write == null) {
-                write = subsidiaryState;
-            } else {
-                write.addAll(subsidiaryState);
+        if (subsidiary != writeTo) {
+            V subsidiaryState = subsidiary.getState(this);
+            if (subsidiaryState != null) {
+                if (write == null) {
+                    write = copier.copy(subsidiaryState);
+                } else {
+                    write.addAll(subsidiaryState);
+                }
             }
         }
 
-        V overridingState = overriding.getState(this);
-        if (overridingState != null) {
-            if (write == null) {
-                write = overridingState;
-            } else {
-                write.addAll(overridingState);
+        if (overriding != writeTo) {
+            V overridingState = overriding.getState(this);
+            if (overridingState != null) {
+                if (write == null) {
+                    write = copier.copy(overridingState);
+                } else {
+                    write.addAll(overridingState);
+                }
             }
         }
         writeTo.setState(this, write);
