@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
@@ -50,12 +51,16 @@ public class DistanceTrigger extends Trigger {
             return;
         }
 
-        if (isTriggered()) {
-            return;
-        }
         setTriggered(true);
-        this.setPlayer(player);
+        setPlayer(player);
         updateDSigns();
+        DGameWorld gameWorld = null;
+        for (DungeonSign sign : getDSigns()) {
+            gameWorld = (DGameWorld) sign.getGameWorld();
+            removeDSign(sign);
+            sign.removeTrigger(this);
+        }
+        unregister(gameWorld);
     }
 
     @Override
