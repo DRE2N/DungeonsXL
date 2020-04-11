@@ -14,6 +14,7 @@
  */
 package de.erethon.dungeonsxl.api;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -38,6 +39,14 @@ public interface Requirement {
      * @return if the given player fulfills the requirements
      */
     boolean check(Player player);
+
+    /**
+     * Returns the message that informs the player if they fulfill the requirement.
+     *
+     * @param player the player who will receive the message
+     * @return the error message that is sent to the player when they do not fulfill the requirement
+     */
+    BaseComponent[] getCheckMessage(Player player);
 
     /**
      * This is fired after the {@link #check(Player)} has been accepted. It demands the requirement from the given player. This may be empty for a "key" or may

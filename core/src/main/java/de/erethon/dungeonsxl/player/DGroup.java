@@ -761,7 +761,6 @@ public class DGroup implements PlayerGroup {
             for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
                 RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
                 Bukkit.getPluginManager().callEvent(event);
-
                 if (requirementDemandEvent.isCancelled()) {
                     continue;
                 }
@@ -800,6 +799,7 @@ public class DGroup implements PlayerGroup {
         }
     }
 
+    // This is not used.
     public boolean checkTime() {
         if (DPermission.hasPermission(getLeader(), DPermission.IGNORE_TIME_LIMIT)) {
             return true;
@@ -814,6 +814,7 @@ public class DGroup implements PlayerGroup {
         return true;
     }
 
+    // This is not used.
     public boolean checkRequirements() {
         if (DPermission.hasPermission(getLeader(), DPermission.IGNORE_REQUIREMENTS)) {
             return true;

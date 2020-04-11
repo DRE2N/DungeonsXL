@@ -21,6 +21,7 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
@@ -246,15 +247,22 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
+        Dungeon dungeon = group.getDungeon();
+        if (dungeon == null) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
+            return;
+        }
+
+        if (!plugin.getPlayerCache().get(player).checkRequirements()) {
+            return;
+        }
+
         GameWorld target = group.getGameWorld();
         Game game = group.getGame();
 
         if (target == null && game != null) {
             target = game.getWorld();
-        }
-
-        if (target == null) {
-            if (game != null) {
+            if (target == null) {
                 for (PlayerGroup otherTeam : game.getGroups()) {
                     if (otherTeam.getGameWorld() != null) {
                         target = otherTeam.getGameWorld();
@@ -264,8 +272,8 @@ public class DPortal extends GlobalProtection {
             }
         }
 
-        if (target == null && group.getDungeon() != null) {
-            ResourceWorld resource = group.getDungeon().getMap();
+        if (target == null) {
+            ResourceWorld resource = dungeon.getMap();
             if (resource != null) {
                 target = resource.instantiateGameWorld(false);
                 if (target == null) {

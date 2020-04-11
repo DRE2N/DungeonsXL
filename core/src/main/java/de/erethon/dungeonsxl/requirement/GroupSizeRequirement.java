@@ -19,6 +19,10 @@ package de.erethon.dungeonsxl.requirement;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import de.erethon.dungeonsxl.config.DMessage;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -79,7 +83,22 @@ public class GroupSizeRequirement implements Requirement {
     }
 
     @Override
+    public BaseComponent[] getCheckMessage(Player player) {
+        int size = api.getPlayerGroup(player).getMembers().size();
+        ChatColor color = size >= minimum && size <= maximum ? ChatColor.GREEN : ChatColor.DARK_RED;
+        return new ComponentBuilder(DMessage.REQUIREMENT_GROUP_SIZE.getMessage() + ": ").color(ChatColor.GOLD)
+                .append(String.valueOf(size)).color(color)
+                .append("/" + minimum + "-" + maximum).color(ChatColor.WHITE)
+                .create();
+    }
+
+    @Override
     public void demand(Player player) {
+    }
+
+    @Override
+    public String toString() {
+        return "GroupSizeRequirement{minimum=" + minimum + "; maximum=" + maximum + "}";
     }
 
 }

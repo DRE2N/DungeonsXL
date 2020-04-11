@@ -21,6 +21,9 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -69,6 +72,16 @@ public class FeeMoneyRequirement implements Requirement {
     }
 
     @Override
+    public BaseComponent[] getCheckMessage(Player player) {
+        double money = econ.getBalance(player);
+        ChatColor color = money >= fee ? ChatColor.GREEN : ChatColor.DARK_RED;
+        return new ComponentBuilder(DMessage.REQUIREMENT_FEE_MONEY.getMessage() + ": ").color(ChatColor.GOLD)
+                .append(String.valueOf(money)).color(color)
+                .append("/" + fee).color(ChatColor.WHITE)
+                .create();
+    }
+
+    @Override
     public void demand(Player player) {
         if (econ == null) {
             return;
@@ -76,6 +89,11 @@ public class FeeMoneyRequirement implements Requirement {
 
         econ.withdrawPlayer(player, fee);
         MessageUtil.sendMessage(player, DMessage.REQUIREMENT_FEE.getMessage(econ.format(fee)));
+    }
+
+    @Override
+    public String toString() {
+        return "FeeMoneyRequirement{fee=" + fee + "}";
     }
 
 }

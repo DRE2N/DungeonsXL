@@ -213,6 +213,12 @@ player:
   waitForOtherPlayers: "&6Warte auf andere Gruppenmitglieder..."
 requirement: 
   fee: "&6Du hast &4&v1 &6bezahlt, um den Dungeon zu betreten."
+  feeLevel: "Level"
+  feeMoney: "Geld"
+  forbiddenItems: "Verbotene Items"
+  groupSize: "Gruppengröße"
+  keyItems: "Schlüssel"
+  permission: "Permissions"
 reward: 
   general: "&6Du hast &4&v1 &6für das Beenden des Dungeons erhalten."
 sign: 

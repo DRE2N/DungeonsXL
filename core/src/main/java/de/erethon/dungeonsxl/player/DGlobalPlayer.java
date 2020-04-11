@@ -20,16 +20,22 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Requirement;
+import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
+import de.erethon.dungeonsxl.event.requirement.RequirementCheckEvent;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.util.NBTUtil;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -251,6 +257,138 @@ public class DGlobalPlayer implements GlobalPlayer {
 
     public boolean hasPermission(DPermission permission) {
         return DPermission.hasPermission(player, permission);
+    }
+
+    public boolean checkRequirements(Dungeon dungeon) {
+        boolean fulfilled = true;
+        GameRuleContainer rules = dungeon.getRules();
+
+        if (!checkTimeAfterStart(dungeon) && !checkTimeAfterFinish(dungeon)) {
+            int longestTime = rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START) >= rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH)
+                    ? rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START) : rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH);
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(longestTime)));
+            fulfilled = false;
+
+        } else if (!checkTimeAfterStart(dungeon)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START))));
+            fulfilled = false;
+
+        } else if (!checkTimeAfterFinish(dungeon)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH))));
+            fulfilled = false;
+        }
+
+        boolean genericReqs = true;
+        for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
+            RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                continue;
+            }
+
+            if (!requirement.check(player)) {
+                fulfilled = false;
+                genericReqs = false;
+            }
+        }
+        if (!genericReqs) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_REQUIREMENTS.getMessage());
+            rules.getState(GameRule.REQUIREMENTS).forEach(r -> MessageUtil.sendMessage(player, r.getCheckMessage(player)));
+        }
+
+        if (rules.getState(GameRule.MUST_FINISH_ALL) != null) {
+            List<String> finished = new ArrayList<>(rules.getState(GameRule.MUST_FINISH_ALL));
+            if (rules.getState(GameRule.MUST_FINISH_ONE) != null) {
+                finished.addAll(rules.getState(GameRule.MUST_FINISH_ONE));
+            }
+
+            if (!finished.isEmpty()) {
+
+                long bestTime = 0;
+                int numOfNeeded = 0;
+                boolean doneTheOne = false;
+
+                if (finished.size() == rules.getState(GameRule.MUST_FINISH_ALL).size()) {
+                    doneTheOne = true;
+                }
+
+                for (String played : finished) {
+                    for (String dungeonName : DungeonsXL.MAPS.list()) {
+                        if (new File(DungeonsXL.MAPS, dungeonName).isDirectory()) {
+                            if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
+
+                                Long time = getData().getTimeLastFinished(dungeonName);
+                                if (time != -1) {
+                                    if (rules.getState(GameRule.MUST_FINISH_ALL).contains(played)) {
+                                        numOfNeeded++;
+                                    } else {
+                                        doneTheOne = true;
+                                    }
+                                    if (bestTime < time) {
+                                        bestTime = time;
+                                    }
+                                }
+                                break;
+
+                            }
+                        }
+                    }
+                }
+
+                if (bestTime == 0) {
+                    fulfilled = false;
+
+                } else if (rules.getState(GameRule.TIME_LAST_PLAYED_REQUIRED_DUNGEONS) != 0) {
+                    if (System.currentTimeMillis() - bestTime > rules.getState(GameRule.TIME_LAST_PLAYED_REQUIRED_DUNGEONS) * (long) 3600000) {
+                        fulfilled = false;
+                    }
+                }
+
+                if (numOfNeeded < rules.getState(GameRule.MUST_FINISH_ALL).size() || !doneTheOne) {
+                    fulfilled = false;
+                }
+
+            }
+        }
+
+        return fulfilled || DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS);
+    }
+
+    public boolean checkTimeAfterStart(Dungeon dungeon) {
+        return checkTime(dungeon, dungeon.getRules().getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START),
+                getData().getTimeLastStarted(dungeon.getName()));
+    }
+
+    public boolean checkTimeAfterFinish(Dungeon dungeon) {
+        return checkTime(dungeon, dungeon.getRules().getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH),
+                getData().getTimeLastFinished(dungeon.getName()));
+    }
+
+    public boolean checkTime(Dungeon dungeon, int requirement, long dataTime) {
+        if (DPermission.hasPermission(player, DPermission.IGNORE_TIME_LIMIT)) {
+            return true;
+        }
+
+        return dataTime == -1 || dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
+    }
+
+    public void giveLoot(Dungeon dungeon, List<Reward> ruleRewards, List<Reward> groupRewards) {
+        if (!canLoot(dungeon)) {
+            return;
+        }
+        ruleRewards.forEach(r -> r.giveTo(player.getPlayer()));
+        groupRewards.forEach(r -> r.giveTo(player.getPlayer()));
+        if (getGroup() != null && getGroup().getDungeon() != null) {
+            getData().logTimeLastLoot(getGroup().getDungeon().getName());
+        }
+    }
+
+    public boolean canLoot(Dungeon dungeon) {
+        return getTimeNextLoot(dungeon) <= getData().getTimeLastStarted(dungeon.getName());
+    }
+
+    public long getTimeNextLoot(Dungeon dungeon) {
+        return dungeon.getRules().getState(GameRule.TIME_TO_NEXT_LOOT) * 60 * 60 * 1000 + getData().getTimeLastLoot(dungeon.getName());
     }
 
     /* Actions */

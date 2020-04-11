@@ -82,6 +82,10 @@ public class PlayCommand extends DCommand {
         }
         group.setDungeon(dungeon);
 
+        if (!dPlayer.checkRequirements(dungeon)) {
+            return;
+        }
+
         GameWorld gameWorld = dungeon.getMap().instantiateGameWorld(false);
         if (gameWorld == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());

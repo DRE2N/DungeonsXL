@@ -24,7 +24,11 @@ import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
+import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPlayerData;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -65,12 +69,26 @@ public class FeeLevelRequirement implements Requirement {
 
     @Override
     public boolean check(Player player) {
+        return getRelevantLevel(player) >= fee;
+    }
+
+    @Override
+    public BaseComponent[] getCheckMessage(Player player) {
+        int level = getRelevantLevel(player);
+        ChatColor color = level >= fee ? ChatColor.GREEN : ChatColor.DARK_RED;
+        return new ComponentBuilder(DMessage.REQUIREMENT_FEE_LEVEL.getMessage() + ": ").color(ChatColor.GOLD)
+                .append(String.valueOf(level)).color(color)
+                .append("/" + fee).color(ChatColor.WHITE)
+                .create();
+    }
+
+    private int getRelevantLevel(Player player) {
         if (isKeepInventory(player)) {
-            return player.getLevel() >= fee;
+            return player.getLevel();
         }
 
-        DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
-        return dPlayer != null ? dPlayer.getData().getOldLevel() >= fee : true;
+        DGlobalPlayer dPlayer = (DGlobalPlayer) api.getPlayerCache().get(player);
+        return dPlayer.getData().getOldLevel();
     }
 
     @Override
@@ -107,6 +125,11 @@ public class FeeLevelRequirement implements Requirement {
 
         keepInventory = GameRuleContainer.DEFAULT_VALUES.getState(GameRule.KEEP_INVENTORY_ON_ENTER);
         return keepInventory;
+    }
+
+    @Override
+    public String toString() {
+        return "FeeLevelRequirement{fee=" + fee + "}";
     }
 
 }

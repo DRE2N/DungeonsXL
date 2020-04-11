@@ -20,8 +20,14 @@ import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
+import de.erethon.dungeonsxl.config.DMessage;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -66,7 +72,37 @@ public class KeyItemsRequirement implements Requirement {
     }
 
     @Override
+    public BaseComponent[] getCheckMessage(Player player) {
+        ComponentBuilder builder = new ComponentBuilder(DMessage.REQUIREMENT_KEY_ITEMS.getMessage() + ": ").color(ChatColor.GOLD);
+
+        Set<ExItem> exInventory = new HashSet<>();
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (item != null) {
+                exInventory.add(caliburn.getExItem(item));
+            }
+        }
+
+        boolean first = true;
+        for (ExItem key : keyItems) {
+            ChatColor color = exInventory.contains(key) ? ChatColor.GREEN : ChatColor.DARK_RED;
+            if (!first) {
+                builder.append(", ").color(ChatColor.WHITE);
+            } else {
+                first = false;
+            }
+            builder.append(key.getName()).color(color);
+        }
+
+        return builder.create();
+    }
+
+    @Override
     public void demand(Player player) {
+    }
+
+    @Override
+    public String toString() {
+        return "KeyItemsRequirement{items=" + keyItems + "}";
     }
 
 }

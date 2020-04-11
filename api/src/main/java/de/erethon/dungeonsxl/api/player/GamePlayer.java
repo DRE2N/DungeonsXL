@@ -26,7 +26,7 @@ import org.bukkit.entity.Wolf;
  *
  * @author Daniel Saukel
  */
-// Implementation-specific methods: isInTestMode, setReady, [wolf, group tag, requirement, loot check methods], finishFloor
+// Implementation-specific methods: isInTestMode, setReady, [wolf, group tag methods], finishFloor
 public interface GamePlayer extends InstancePlayer {
 
     /**

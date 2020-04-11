@@ -213,6 +213,12 @@ player:
   waitForOtherPlayers: "&6En attente des membres de l'équipe..."
 requirement: 
   fee: "&6Vous avez été débité de &4&v1 &6pour entrer dans le donjon."
+  feeLevel: "Niveaux"
+  feeMoney: "Argent"
+  forbiddenItems: "Objets défendus"
+  groupSize: "Quantité des joueurs"
+  keyItems: "Clés"
+  permission: "Permissions"
 reward: 
   general: "&6Vous avez reçu &4&v1 &6pour avoir fini le donjon."
 sign: 

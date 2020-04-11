@@ -17,9 +17,13 @@
 package de.erethon.dungeonsxl.requirement;
 
 import de.erethon.dungeonsxl.api.Requirement;
+import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import java.util.ArrayList;
 import java.util.List;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -48,7 +52,7 @@ public class PermissionRequirement implements Requirement {
     /* Actions */
     @Override
     public void setup(ConfigurationSection config) {
-        permissions = config.getStringList("permission");
+        permissions = config.getStringList("permissions");
     }
 
     @Override
@@ -63,7 +67,27 @@ public class PermissionRequirement implements Requirement {
     }
 
     @Override
+    public BaseComponent[] getCheckMessage(Player player) {
+        ComponentBuilder builder = new ComponentBuilder(DMessage.REQUIREMENT_PERMISSION.getMessage() + ": ").color(ChatColor.GOLD);
+        boolean first = true;
+        for (String node : permissions) {
+            if (!first) {
+                builder.append(", ").color(ChatColor.WHITE);
+            } else {
+                first = false;
+            }
+            builder.append(node).color(player.hasPermission(node) ? ChatColor.GREEN : ChatColor.DARK_RED);
+        }
+        return builder.create();
+    }
+
+    @Override
     public void demand(Player player) {
+    }
+
+    @Override
+    public String toString() {
+        return "PermissionRequirement{permissions=" + permissions + "}";
     }
 
 }

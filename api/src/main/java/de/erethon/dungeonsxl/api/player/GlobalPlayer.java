@@ -16,6 +16,7 @@ package de.erethon.dungeonsxl.api.player;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerWrapper;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -136,5 +137,15 @@ public interface GlobalPlayer extends PlayerWrapper {
      * @param keepInventory if the saved status shall be reset
      */
     void reset(Location tpLoc, boolean keepInventory);
+
+    /**
+     * Performs a requirement check for the given dungeon.
+     * <p>
+     * This method might send messages to the player to inform him that he does not fulfill them.
+     *
+     * @param dungeon the dungeon to check
+     * @return if the player fulfills the requirements or may bypass them
+     */
+    boolean checkRequirements(Dungeon dungeon);
 
 }
