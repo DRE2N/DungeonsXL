@@ -83,9 +83,9 @@ public class HologramSign extends Passive {
             markAsErroneous("Unknown message, ID: " + getLine(1));
             return;
         }
-        String[] holoLines = text.split("/");
+        String[] holoLines = text.split("(?i)<br>");
         Location location = getSign().getLocation();
-        location = location.add(0.5, NumberUtil.parseDouble(getLine(2)), 0.5);
+        location = location.add(0.5, NumberUtil.parseDouble(getLine(2), 2.0), 0.5);
 
         hologram = HologramsAPI.createHologram(api, location);
         for (String line : holoLines) {
