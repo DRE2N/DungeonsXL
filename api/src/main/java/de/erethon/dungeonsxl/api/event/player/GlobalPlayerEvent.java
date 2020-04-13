@@ -27,7 +27,7 @@ public abstract class GlobalPlayerEvent extends Event {
 
     protected GlobalPlayer globalPlayer;
 
-    public GlobalPlayerEvent(GlobalPlayer globalPlayer) {
+    protected GlobalPlayerEvent(GlobalPlayer globalPlayer) {
         this.globalPlayer = globalPlayer;
     }
 

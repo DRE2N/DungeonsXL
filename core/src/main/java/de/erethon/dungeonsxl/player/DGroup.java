@@ -25,6 +25,7 @@ import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.requirement.RequirementDemandEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
@@ -41,7 +42,6 @@ import de.erethon.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
 import de.erethon.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
 import de.erethon.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
 import de.erethon.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
-import de.erethon.dungeonsxl.event.requirement.RequirementDemandEvent;
 import de.erethon.dungeonsxl.event.reward.RewardAdditionEvent;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
@@ -759,7 +759,8 @@ public class DGroup implements PlayerGroup {
             }
 
             for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
-                RequirementDemandEvent requirementDemandEvent = new RequirementDemandEvent(requirement, player);
+                RequirementDemandEvent requirementDemandEvent
+                        = new RequirementDemandEvent(requirement, dungeon, player, rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER));
                 Bukkit.getPluginManager().callEvent(event);
                 if (requirementDemandEvent.isCancelled()) {
                     continue;

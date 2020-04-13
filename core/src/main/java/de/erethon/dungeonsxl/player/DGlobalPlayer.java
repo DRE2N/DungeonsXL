@@ -25,19 +25,20 @@ import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.requirement.RequirementCheckEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import de.erethon.dungeonsxl.event.requirement.RequirementCheckEvent;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.util.NBTUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -259,6 +260,7 @@ public class DGlobalPlayer implements GlobalPlayer {
         return DPermission.hasPermission(player, permission);
     }
 
+    @Override
     public boolean checkRequirements(Dungeon dungeon) {
         boolean fulfilled = true;
         GameRuleContainer rules = dungeon.getRules();
@@ -279,13 +281,15 @@ public class DGlobalPlayer implements GlobalPlayer {
         }
 
         boolean genericReqs = true;
+        List<BaseComponent[]> msgs = new ArrayList<>(rules.getState(GameRule.REQUIREMENTS).size());
         for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
-            RequirementCheckEvent event = new RequirementCheckEvent(requirement, player);
+            RequirementCheckEvent event = new RequirementCheckEvent(requirement, dungeon, player, rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER));
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 continue;
             }
 
+            msgs.add(event.getCheckMessage());
             if (!requirement.check(player)) {
                 fulfilled = false;
                 genericReqs = false;
@@ -293,7 +297,7 @@ public class DGlobalPlayer implements GlobalPlayer {
         }
         if (!genericReqs) {
             MessageUtil.sendMessage(player, DMessage.ERROR_REQUIREMENTS.getMessage());
-            rules.getState(GameRule.REQUIREMENTS).forEach(r -> MessageUtil.sendMessage(player, r.getCheckMessage(player)));
+            msgs.forEach(msg -> MessageUtil.sendMessage(player, msg));
         }
 
         if (rules.getState(GameRule.MUST_FINISH_ALL) != null) {
