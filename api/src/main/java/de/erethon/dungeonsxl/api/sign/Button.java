@@ -70,7 +70,11 @@ public abstract class Button extends AbstractDSign {
      */
     @Override
     public void trigger(Player player) {
-        push(player);
+        if (player != null) {
+            push(player);
+        } else {
+            push();
+        }
     }
 
 }
