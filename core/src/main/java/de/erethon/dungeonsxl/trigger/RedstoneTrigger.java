@@ -16,7 +16,8 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.commons.misc.BlockUtil;
+import de.erethon.dungeonsxl.api.sign.Deactivatable;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
@@ -52,7 +53,21 @@ public class RedstoneTrigger extends Trigger {
 
         } else if (isTriggered()) {
             setTriggered(false);
-            updateDSigns();
+
+            for (DungeonSign dSign : getDSigns().toArray(new DungeonSign[getDSigns().size()])) {
+                if (!(dSign instanceof Deactivatable)) {
+                    return;
+                }
+                if (dSign.isErroneous()) {
+                    return;
+                }
+                for (de.erethon.dungeonsxl.api.Trigger trigger : dSign.getTriggers()) {
+                    if (trigger.isTriggered()) {
+                        return;
+                    }
+                }
+                ((Deactivatable) dSign).deactivate();
+            }
         }
     }
 
@@ -63,7 +78,7 @@ public class RedstoneTrigger extends Trigger {
 
     /* Statics */
     public static RedstoneTrigger getOrCreate(Sign sign, DGameWorld gameWorld) {
-        Block rtBlock = BlockUtil.getAttachedBlock(sign.getBlock());
+        Block rtBlock = sign.getBlock();
         if (rtBlock != null) {
             for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
                 RedstoneTrigger trigger = (RedstoneTrigger) uncasted;
