@@ -418,7 +418,13 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             if (sign == null || sign.isOnDungeonInit()) {
                 continue;
             }
-            sign.initialize();
+            try {
+                sign.initialize();
+            } catch (Exception exception) {
+                sign.markAsErroneous("An error occurred while initializing a sign of the type " + sign.getName()
+                        + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
+                exception.printStackTrace();
+            }
             if (sign.isErroneous()) {
                 continue;
             }
