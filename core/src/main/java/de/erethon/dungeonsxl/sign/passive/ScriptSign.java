@@ -77,6 +77,11 @@ public class ScriptSign extends Passive {
     @Override
     public void initialize() {
         SignScript script = ((DungeonsXL) api).getSignScriptRegistry().get(scriptName);
+        if (script == null) {
+            markAsErroneous("The script \"" + scriptName + "\" could not be found.");
+            return;
+        }
+
         for (String[] lines : script.getSigns()) {
             DungeonSign dSign = getGameWorld().createDungeonSign(getSign(), lines);
             if (dSign.isErroneous()) {
