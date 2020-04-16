@@ -21,12 +21,15 @@ import de.erethon.caliburn.category.Category;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
+import de.erethon.commons.compatibility.Version;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -47,8 +50,12 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  * @author Daniel Saukel, Frank Baumann, Milan Albrecht
@@ -87,6 +94,38 @@ public class DWorldListener implements Listener {
             if (gameWorld.onBreak(event)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockInteract(PlayerInteractEvent event) {
+        Block block = event.getClickedBlock();
+        GameWorld gameWorld = plugin.getGameWorld(block.getWorld());
+        if (gameWorld == null || gameWorld.isPlaying()) {
+            return;
+        }
+
+        Map<ExItem, HashSet<ExItem>> blacklist = gameWorld.getDungeon().getRules().getState(GameRule.INTERACTION_BLACKLIST);
+        if (blacklist == null) {
+            return;
+        }
+
+        ExItem material = VanillaItem.get(block.getType());
+        ExItem tool = caliburn.getExItem(getItemInHand(event));
+        if (blacklist.containsKey(material)
+                && (blacklist.get(material) == null
+                || blacklist.get(material).isEmpty()
+                || blacklist.get(material).contains(tool))) {
+            event.setCancelled(true);
+        }
+    }
+
+    private ItemStack getItemInHand(PlayerInteractEvent event) {
+        PlayerInventory inventory = event.getPlayer().getInventory();
+        if (Version.isAtLeast(Version.MC1_9)) {
+            return event.getHand() == EquipmentSlot.HAND ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        } else {
+            return inventory.getItemInHand();
         }
     }
 

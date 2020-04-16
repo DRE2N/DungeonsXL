@@ -18,8 +18,11 @@ import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * A functional interface to deserialize a raw value read from a configuration.
@@ -55,6 +58,26 @@ public interface ConfigReader<V> {
             set.add(api.getCaliburn().getExMob(entry));
         }
         return set;
+    };
+    /**
+     * Reads a map of Caliburn items as tool keys and a set of Caliburn items as block values.
+     */
+    static final ConfigReader<Map<ExItem, HashSet<ExItem>>> TOOL_BLOCK_MAP_READER = (api, value) -> {
+        if (!(value instanceof ConfigurationSection)) {
+            return null;
+        }
+        ConfigurationSection section = (ConfigurationSection) value;
+        Map<ExItem, HashSet<ExItem>> map = new HashMap<>();
+        for (Map.Entry<String, Object> entry : section.getValues(false).entrySet()) {
+            ExItem tool = api.getCaliburn().getExItem(entry.getKey());
+            if (tool == null) {
+                continue;
+            }
+            HashSet<ExItem> blocks = new HashSet<>();
+            blocks.addAll(api.getCaliburn().deserializeExItemList(section, entry.getKey()));
+            map.put(tool, blocks);
+        }
+        return map;
     };
 
     /**

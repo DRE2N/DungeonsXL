@@ -109,23 +109,13 @@ public class GameRule<V> {
     /**
      * A whitelist of breakable blocks. breakBlocks is supposed to be set to "true" if this should be used.
      */
-    public static final GameRule<Map<ExItem, HashSet<ExItem>>> BREAK_WHITELIST = new MapGameRule<>("breakWhitelist", null, (api, value) -> {
-        if (!(value instanceof ConfigurationSection)) {
-            return null;
-        }
-        ConfigurationSection section = (ConfigurationSection) value;
-        Map<ExItem, HashSet<ExItem>> map = new HashMap<>();
-        for (Map.Entry<String, Object> entry : section.getValues(false).entrySet()) {
-            ExItem tool = api.getCaliburn().getExItem(entry.getKey());
-            if (tool == null) {
-                continue;
-            }
-            HashSet<ExItem> blocks = new HashSet<>();
-            blocks.addAll(api.getCaliburn().deserializeExItemList(section, entry.getKey()));
-            map.put(tool, blocks);
-        }
-        return map;
-    }, HashMap::new);
+    public static final GameRule<Map<ExItem, HashSet<ExItem>>> BREAK_WHITELIST
+            = new MapGameRule<>("breakWhitelist", null, ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
+    /**
+     * A blacklist of block types players cannot interact with.
+     */
+    public static final GameRule<Map<ExItem, HashSet<ExItem>>> INTERACTION_BLACKLIST
+            = new MapGameRule<>("interactionBlacklist", null, ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
     /**
      * A list of all entity types that shall be protected from damage. If this is left out AND if breakBlocks is false, armor stands, paintings and item frames
      * will be protected by default. If this is left out and if breakBlocks is true, nothing will be protected by default.
@@ -151,6 +141,7 @@ public class GameRule<V> {
      * A whitelist of placeable blocks. placeBlocks is supposed to be set to "true" if this should be used.
      */
     public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", null, ConfigReader.EX_ITEM_SET_READER, HashSet::new);
+    /**
      * A set of blocks that do not fade.
      *
      * @see <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/block/BlockFadeEvent.html">org.bukkit.event.block.BlockFadeEvent</a>
