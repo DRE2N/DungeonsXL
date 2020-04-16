@@ -151,6 +151,11 @@ public class GameRule<V> {
      * A whitelist of placeable blocks. placeBlocks is supposed to be set to "true" if this should be used.
      */
     public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", null, ConfigReader.EX_ITEM_SET_READER, HashSet::new);
+     * A set of blocks that do not fade.
+     *
+     * @see <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/block/BlockFadeEvent.html">org.bukkit.event.block.BlockFadeEvent</a>
+     */
+    public static final GameRule<Set<ExItem>> BLOCK_FADE_DISABLED = new CollectionGameRule<>("blockFadeDisabled", null, ConfigReader.EX_ITEM_SET_READER, HashSet::new);
     /**
      * This does what the doFireTick Vanilla game rule does.
      */

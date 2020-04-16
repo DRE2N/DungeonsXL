@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.world;
 
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.category.Category;
+import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -36,6 +37,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
@@ -180,6 +182,27 @@ public class DWorldListener implements Listener {
             if (Category.SIGNS.containsItem(event.getEntity().getItemStack())) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onBlockFade(BlockFadeEvent event) {
+        GameWorld gameWorld = plugin.getGameWorld(event.getBlock().getWorld());
+        if (gameWorld == null) {
+            return;
+        }
+
+        if (!gameWorld.isPlaying()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        Set<ExItem> blockFadeDisabled = gameWorld.getGame().getRules().getState(GameRule.BLOCK_FADE_DISABLED);
+        if (blockFadeDisabled == null) {
+            return;
+        }
+        if (gameWorld.getGame() != null && blockFadeDisabled.contains(VanillaItem.get(event.getBlock().getType()))) {
+            event.setCancelled(true);
         }
     }
 
