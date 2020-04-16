@@ -62,6 +62,14 @@ public class GameRule<V> {
      */
     public static final GameRule<Boolean> KEEP_INVENTORY_ON_DEATH = new GameRule<>(Boolean.class, "keepInventoryOnDeath", true);
     /**
+     * The location where the players spawn when they leave the dungeon without succeeding.
+     */
+    public static final GameRule<String> ESCAPE_LOCATION = new GameRule<>(String.class, "escapeLocation", null);
+    /**
+     * The location where the players spawn when they finish the dungeon.
+     */
+    public static final GameRule<String> FINISH_LOCATION = new GameRule<>(String.class, "finishLocation", null);
+    /**
      * If the Lobby is disabled. This applies only to Dungeons that have to be solved alone and where there are no classes to choose from.
      */
     public static final GameRule<Boolean> IS_LOBBY_DISABLED = new GameRule<>(Boolean.class, "isLobbyDisabled", false);

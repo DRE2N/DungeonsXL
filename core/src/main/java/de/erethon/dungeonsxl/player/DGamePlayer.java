@@ -371,11 +371,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         delete();
 
         if (player.isOnline()) {
-            if (finished) {
-                reset(rules.getState(GameRule.KEEP_INVENTORY_ON_FINISH));
-            } else {
-                reset(rules.getState(GameRule.KEEP_INVENTORY_ON_ESCAPE));
-            }
+            reset(finished);
         }
 
         // Permission bridge

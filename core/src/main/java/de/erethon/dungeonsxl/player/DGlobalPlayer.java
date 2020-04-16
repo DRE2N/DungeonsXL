@@ -33,6 +33,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.global.DPortal;
+import de.erethon.dungeonsxl.util.LocationString;
 import de.erethon.dungeonsxl.util.NBTUtil;
 import java.io.File;
 import java.util.ArrayList;
@@ -415,8 +416,33 @@ public class DGlobalPlayer implements GlobalPlayer {
     }
 
     @Override
-    public void reset(boolean keepInventory) {
-        final Location tpLoc = data.getOldLocation().getWorld() != null ? data.getOldLocation() : Bukkit.getWorlds().get(0).getSpawnLocation();
+    public void reset(boolean gameFinished) {
+        Location tpLoc;
+        boolean keepInventory;
+        if (getGroup() != null) {
+            Dungeon dungeon = getGroup().getDungeon();
+            GameRuleContainer rules = dungeon.getRules();
+            keepInventory = rules.getState(gameFinished ? GameRule.KEEP_INVENTORY_ON_FINISH : GameRule.KEEP_INVENTORY_ON_ESCAPE);
+            LocationString tpLocString = LocationString.fromString(rules.getState(gameFinished ? GameRule.FINISH_LOCATION : GameRule.ESCAPE_LOCATION));
+            if (tpLocString != null && tpLocString.getLocation() != null) {
+                tpLoc = tpLocString.getLocation();
+            } else {
+                if (data.getOldLocation().getWorld() != null) {
+                    tpLoc = data.getOldLocation();
+                } else {
+                    tpLoc = Bukkit.getWorlds().get(0).getSpawnLocation();
+                }
+            }
+
+        } else {
+            if (data.getOldLocation().getWorld() != null) {
+                tpLoc = data.getOldLocation();
+            } else {
+                tpLoc = Bukkit.getWorlds().get(0).getSpawnLocation();
+            }
+            keepInventory = false;
+        }
+
         if (player.isDead()) {
             new BukkitRunnable() {
                 @Override

@@ -38,6 +38,7 @@ import de.erethon.dungeonsxl.util.ParsingUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import java.util.ArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -388,7 +389,8 @@ public class DPlayerListener implements Listener {
 
         DGlobalPlayer dPlayer = new DGlobalPlayer(plugin, player);
         if (dPlayer.getData().wasInGame()) {
-            dPlayer.reset(dPlayer.getData().getKeepInventoryAfterLogout());
+            dPlayer.reset(dPlayer.getData().getOldLocation() != null ? dPlayer.getData().getOldLocation() : Bukkit.getWorlds().get(0).getSpawnLocation(),
+                    dPlayer.getData().getKeepInventoryAfterLogout());
         }
 
         if (!dPlayer.getData().hasFinishedTutorial() && config.isTutorialActivated()) {

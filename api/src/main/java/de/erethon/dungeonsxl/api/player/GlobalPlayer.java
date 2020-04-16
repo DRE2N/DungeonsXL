@@ -124,14 +124,14 @@ public interface GlobalPlayer extends PlayerWrapper {
     }
 
     /**
-     * Respawns the player at his old position before he was in a dungeon.
+     * Respawns the player at the location defined by the game rules or his old position before he was in a dungeon.
      *
-     * @param keepInventory if the saved status shall be reset
+     * @param gameFinished if the game was finished
      */
-    void reset(boolean keepInventory);
+    void reset(boolean gameFinished);
 
     /**
-     * Respawns the player at his old position before he was in a dungeon.
+     * Respawns the player at the given location.
      *
      * @param tpLoc         the location where the player shall respawn
      * @param keepInventory if the saved status shall be reset
