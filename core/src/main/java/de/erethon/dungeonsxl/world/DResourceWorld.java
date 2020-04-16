@@ -30,6 +30,7 @@ import de.erethon.dungeonsxl.event.editworld.EditWorldGenerateEvent;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -200,6 +201,7 @@ public class DResourceWorld implements ResourceWorld {
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment()));
+        instance.world.setGameRule(GameRule.DO_FIRE_TICK, false);
         if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause all");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dmap worldset " + name + " enabled:false");

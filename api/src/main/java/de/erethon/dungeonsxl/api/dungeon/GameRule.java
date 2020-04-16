@@ -152,6 +152,10 @@ public class GameRule<V> {
      */
     public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", null, ConfigReader.EX_ITEM_SET_READER, HashSet::new);
     /**
+     * This does what the doFireTick Vanilla game rule does.
+     */
+    public static final GameRule<Boolean> FIRE_TICK = new GameRule<>(Boolean.class, "fireTick", false);
+    /**
      * If it should rain permanently in the dungeon.
      * <p>
      * true = permanent rain; false = permanent sun; leaving this out = random weather like in vanilla Minecraft

@@ -411,6 +411,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         world.setDifficulty(getRules().getState(GameRule.DIFFICULTY));
+        world.setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, getRules().getState(GameRule.FIRE_TICK));
 
         isPlaying = true;
 
