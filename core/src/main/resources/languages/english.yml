@@ -107,6 +107,14 @@ cmd:
   uninvite: 
     help: "/dxl uninvite [player] [map] - Uninvite a player from editing a map"
     success: "&4&v1&6's permission to edit the map &4&v2&6 has been removed successfully."
+dayOfWeek:
+  0: "Sunday"
+  1: "Monday"
+  2: "Tuesday"
+  3: "Wednesday"
+  4: "Thursday"
+  5: "Friday"
+  6: "Saturday"
 error: 
   bed: "&4You cannot use a bed while in a dungeon."
   blockOwnTeam: "&4This block belongs to your own group."

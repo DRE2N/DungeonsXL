@@ -107,6 +107,14 @@ cmd:
   uninvite: 
     help: "/dxl uninvite [player] [map] - Lädt einen Spieler davon aus, eine Welt zu bearbeiten"
     success: "&4&v1&6's Berechtigung zum Bearbeiten der Welt &4&v2&6 wurde erfolgreich entfernt."
+dayOfWeek:
+  0: "Sonntag"
+  1: "Montag"
+  2: "Dienstag"
+  3: "Mittwoch"
+  4: "Donnerstag"
+  5: "Freitag"
+  6: "Samstag"
 error: 
   bed: "&4Du kannst im Dungeon kein Bett benutzen."
   blockOwnTeam: "&4Dieser Block gehört zu Deiner eigenen Gruppe."

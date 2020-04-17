@@ -103,6 +103,14 @@ cmd:
   uninvite: 
     help: "/dxl uninvite [player] [dungeon] - Désinvite un joueur à éditer un donjon"
     success: "&4&v1&6 a été désinviter avec succès à éditer la carte &4&v1&6."
+dayOfWeek:
+  0: "Dimanche"
+  1: "Lundi"
+  2: "Mardi"
+  3: "Mercredi"
+  4: "Jeudi"
+  5: "Vendredi"
+  6: "Samedi"
 error: 
   bed: "&4Vous ne pouvez utiliser un lit en étant dans un donjon."
   blockOwnTeam: "&4Ce bloque appartient à votre groupe."
@@ -178,7 +186,7 @@ button:
 player: 
   blockInfo: "&6Block ID: &2&v1"
   checkpointReached: "&6Point de sauvegarde atteint."
-  death: "&6Vous êtes mort, vies restantes: &2&v1"
+  death: "&4&v1 &6est mort, vies restantes: &4&v2"
   deathKick: "&2&v1&6 est mort et a perdu sa dernière vie."
   finishedDungeon: "&6Vous avez terminé le donjon avec succès."
   finished_Floor: "&6Vous avez terminé l'étage avec succès."

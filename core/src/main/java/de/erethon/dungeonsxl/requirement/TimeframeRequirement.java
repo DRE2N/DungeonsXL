@@ -42,7 +42,12 @@ public class TimeframeRequirement implements Requirement {
         WEDNESDAY,
         THURSDAY,
         FRIDAY,
-        SATURDAY
+        SATURDAY;
+
+        @Override
+        public String toString() {
+            return DMessage.valueOf("DAY_OF_WEEK_" + ordinal()).getMessage();
+        }
     }
 
     public static class Timeframe<T> {
@@ -138,22 +143,26 @@ public class TimeframeRequirement implements Requirement {
         for (Timeframe<Weekday> timeframe : weekdays) {
             ChatColor color = isInDayTimeframe(timeframe) ? ChatColor.GREEN : ChatColor.DARK_RED;
             if (!first) {
-                builder.append(" | ").color(ChatColor.WHITE);
+                builder.append(" & ").color(ChatColor.WHITE);
             } else {
                 first = false;
             }
-            builder.append(timeframe.getStart() + "-" + timeframe.getEnd()).color(color);
+            if (timeframe.getStart() != timeframe.getEnd()) {
+                builder.append(timeframe.getStart() + "-" + timeframe.getEnd()).color(color);
+            } else {
+                builder.append(timeframe.getStart().toString()).color(color);
+            }
         }
 
         first = true;
         for (Timeframe<Integer> timeframe : daytimes) {
             ChatColor color = isInHourTimeframe(timeframe) ? ChatColor.GREEN : ChatColor.DARK_RED;
             if (!first) {
-                builder.append(" | ").color(ChatColor.WHITE);
+                builder.append(" & ").color(ChatColor.WHITE);
             } else {
                 first = false;
                 if (!weekdays.isEmpty()) {
-                    builder.append(" & ").color(ChatColor.WHITE);
+                    builder.append(" | ").color(ChatColor.WHITE);
                 }
             }
             builder.append(timeframe.getStart() + "-" + timeframe.getEnd()).color(color);
