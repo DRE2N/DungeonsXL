@@ -28,6 +28,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Daniel Saukel
@@ -116,11 +117,17 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
         if (save) {
             Bukkit.unloadWorld(getWorld(), true);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                    DResourceWorld.deleteUnusedFiles(getResource().getFolder());
+                }
+            }.runTaskLater(plugin, 200L);
         }
-        FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-        DResourceWorld.deleteUnusedFiles(getResource().getFolder());
         if (!save) {
             Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
+            DResourceWorld.deleteUnusedFiles(getResource().getFolder());
         }
 
         FileUtil.removeDir(getFolder());

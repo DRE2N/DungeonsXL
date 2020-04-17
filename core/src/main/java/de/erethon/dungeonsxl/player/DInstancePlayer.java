@@ -35,7 +35,6 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
     protected MainConfig config;
 
     private InstanceWorld instanceWorld;
-    private World world;
 
     DInstancePlayer(DungeonsXL plugin, Player player, InstanceWorld world) {
         super(plugin, player, false);
@@ -43,7 +42,6 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
         config = plugin.getMainConfig();
 
         instanceWorld = world;
-        this.world = world.getWorld();
         getData().savePlayerState(player);
     }
 
@@ -55,11 +53,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
 
     @Override
     public World getWorld() {
-        return world;
-    }
-
-    public void setWorld(World instance) {
-        world = instance;
+        return instanceWorld.getWorld();
     }
 
     // Players in dungeons never get announcer messages
@@ -115,7 +109,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
 
         for (GlobalPlayer player : plugin.getPlayerCache()) {
             if (player.isInChatSpyMode()) {
-                if (!world.getPlayers().contains(player.getPlayer())) {
+                if (!getWorld().getPlayers().contains(player.getPlayer())) {
                     player.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatSpy(), this) + message);
                 }
             }

@@ -410,8 +410,8 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             return;
         }
 
-        world.setDifficulty(getRules().getState(GameRule.DIFFICULTY));
-        world.setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, getRules().getState(GameRule.FIRE_TICK));
+        getWorld().setDifficulty(getRules().getState(GameRule.DIFFICULTY));
+        getWorld().setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, getRules().getState(GameRule.FIRE_TICK));
 
         isPlaying = true;
 
@@ -512,7 +512,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         // Cancel if a protected entity is attached
-        for (Entity entity : world.getNearbyEntities(block.getLocation(), 2, 2, 2)) {
+        for (Entity entity : getWorld().getNearbyEntities(block.getLocation(), 2, 2, 2)) {
             if (!(entity instanceof Hanging)) {
                 continue;
             }

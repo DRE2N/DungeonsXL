@@ -28,6 +28,7 @@ import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -50,7 +51,7 @@ public abstract class DInstanceWorld implements InstanceWorld {
     protected Map<Block, DungeonSign> signs = new HashMap<>();
     private DResourceWorld resourceWorld;
     private File folder;
-    World world;
+    WeakReference<World> world;
     private int id;
     private Location lobby;
 
@@ -60,7 +61,7 @@ public abstract class DInstanceWorld implements InstanceWorld {
 
         this.resourceWorld = resourceWorld;
         this.folder = folder;
-        this.world = world;
+        this.world = new WeakReference<>(world);
         this.id = id;
 
         plugin.getInstanceCache().add(id, this);
@@ -84,7 +85,7 @@ public abstract class DInstanceWorld implements InstanceWorld {
 
     @Override
     public World getWorld() {
-        return world;
+        return world.get();
     }
 
     /**
@@ -167,30 +168,30 @@ public abstract class DInstanceWorld implements InstanceWorld {
     public void kickAllPlayers() {
         getPlayers().forEach(p -> p.leave());
         // Players who shouldn't be in the dungeon but still are for some reason
-        world.getPlayers().forEach(p -> PlayerUtil.secureTeleport(p, Bukkit.getWorlds().get(0).getSpawnLocation()));
+        getWorld().getPlayers().forEach(p -> PlayerUtil.secureTeleport(p, Bukkit.getWorlds().get(0).getSpawnLocation()));
     }
 
     /**
      * @param rules sets up the time and weather to match the rules
      */
     public void setWeather(GameRuleContainer rules) {
-        if (world == null) {
+        if (world == null || getWorld() == null) {
             return;
         }
 
         if (rules.getState(GameRule.THUNDER) != null) {
             if (rules.getState(GameRule.THUNDER)) {
-                world.setThundering(true);
-                world.setStorm(true);
-                world.setThunderDuration(Integer.MAX_VALUE);
+                getWorld().setThundering(true);
+                getWorld().setStorm(true);
+                getWorld().setThunderDuration(Integer.MAX_VALUE);
             } else {
-                world.setThundering(false);
-                world.setStorm(false);
+                getWorld().setThundering(false);
+                getWorld().setStorm(false);
             }
         }
 
         if (rules.getState(GameRule.TIME) != null) {
-            world.setTime(rules.getState(GameRule.TIME));
+            getWorld().setTime(rules.getState(GameRule.TIME));
         }
     }
 
