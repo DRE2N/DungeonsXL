@@ -71,7 +71,6 @@ public class PortalCommand extends DCommand {
         if (dPortal == null) {
             dPortal = new DPortal(plugin, plugin.getGlobalProtectionCache().generateId(DPortal.class, player.getWorld()), player.getWorld(), material, false);
             dGlobalPlayer.setCreatingPortal(dPortal);
-            dPortal.setWorld(player.getWorld());
             dGlobalPlayer.setCachedItem(player.getInventory().getItemInHand());
             player.getInventory().setItemInHand(VanillaItem.WOODEN_SWORD.toItemStack());
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_INTRODUCTION.getMessage());
