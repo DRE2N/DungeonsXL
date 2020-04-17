@@ -205,6 +205,7 @@ public enum DMessage implements Message {
     REQUIREMENT_GROUP_SIZE("requirement.groupSize"),
     REQUIREMENT_KEY_ITEMS("requirement.keyItems"),
     REQUIREMENT_PERMISSION("requirement.permission"),
+    REQUIREMENT_TIMEFRAME("requirement.timeframe"),
     REWARD_GENERAL("reward.general"),
     SIGN_END("sign.end"),
     SIGN_FLOOR_1("sign.floor.1"),

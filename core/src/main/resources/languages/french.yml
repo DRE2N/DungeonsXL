@@ -219,6 +219,7 @@ requirement:
   groupSize: "Quantité des joueurs"
   keyItems: "Clés"
   permission: "Permissions"
+  timeframe: "Créneau horaire"
 reward: 
   general: "&6Vous avez reçu &4&v1 &6pour avoir fini le donjon."
 sign: 

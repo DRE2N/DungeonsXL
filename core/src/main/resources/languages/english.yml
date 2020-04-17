@@ -219,6 +219,7 @@ requirement:
   groupSize: "Group size"
   keyItems: "Keys"
   permission: "Permissions"
+  timeframe: "Timeframe"
 reward: 
   general: "&6You received &4&v1 &6for finishing the dungeon."
 sign: 

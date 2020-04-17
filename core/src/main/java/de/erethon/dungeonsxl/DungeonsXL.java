@@ -283,6 +283,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         requirementRegistry.add("groupSize", GroupSizeRequirement.class);
         requirementRegistry.add("keyItems", KeyItemsRequirement.class);
         requirementRegistry.add("permission", PermissionRequirement.class);
+        requirementRegistry.add("timeframe", TimeframeRequirement.class);
 
         rewardRegistry.add("item", ItemReward.class);
         rewardRegistry.add("money", MoneyReward.class);
