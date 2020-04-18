@@ -85,7 +85,6 @@ import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.DWorldListener;
 import de.erethon.dungeonsxl.world.LWCIntegration;
 import de.erethon.dungeonsxl.world.WorldConfig;
-import de.erethon.dungeonsxl.world.WorldUnloadTask;
 import de.erethon.vignette.api.VignetteAPI;
 import java.io.File;
 import java.io.IOException;
@@ -352,7 +351,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         if (!DResourceWorld.RAW.exists()) {
             DResourceWorld.createRaw();
         }
-        new WorldUnloadTask(this).runTaskTimer(this, 20L, 20L);//1200L
         Bukkit.getPluginManager().registerEvents(new DWorldListener(this), this);
         if (LWCUtil.isLWCLoaded()) {
             new LWCIntegration(this);
