@@ -6,6 +6,8 @@
 [![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://erethon.de/javadocs/dungeonsxl/)
 [![MCStats](http://feuerstern.bplaced.net/ressourcen/buttons/MCStats.png)](http://bstats.org/plugin/bukkit/DungeonsXL/)
 
+[![Build Status](https://travis-ci.com/DRE2N/DungeonsXL.svg?branch=master)](https://travis-ci.com/DRE2N/DungeonsXL)
+
 DungeonsXL is a server mod that allows you to instantiate worlds.
 
 Its main goal is to offer a way to use a world in a set state multiple times by a player (like for a jump'n'run), a group of players (e.g. for a quest dungeon, an adventure map or a PvE arena) or even by groups of groups of players (e.g. for PvP arenas).
