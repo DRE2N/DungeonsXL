@@ -86,10 +86,7 @@ public class TriggerListener implements Listener {
             }
         }
         if (name == null) {
-            ExItem exItem = plugin.getCaliburn().getExItem(item);
-            if (item != null) {
-                name = exItem.getName();
-            }
+            name = plugin.getCaliburn().getExItem(item).getName();
         }
 
         UseItemTrigger trigger = UseItemTrigger.getByName(name, gameWorld);
