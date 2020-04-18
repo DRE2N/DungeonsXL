@@ -156,11 +156,11 @@ public class RedstoneSign extends Rocker {
         }
 
         if (delay > 0) {
-            enableTask = new DelayedPowerTask(api, this, true).runTaskTimer(api, delay, delay + offDelay);
+            enableTask = new DelayedPowerTask(this, true).runTaskTimer(api, delay, delay + offDelay);
 
             if (repeat != 1) {
                 repeatsToDo = repeat;
-                disableTask = new DelayedPowerTask(api, this, false).runTaskTimer(api, delay + offDelay, delay + offDelay);
+                disableTask = new DelayedPowerTask(this, false).runTaskTimer(api, delay + offDelay, delay + offDelay);
             }
 
         } else {
