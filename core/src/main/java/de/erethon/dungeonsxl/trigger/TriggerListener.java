@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.GameWorld;
