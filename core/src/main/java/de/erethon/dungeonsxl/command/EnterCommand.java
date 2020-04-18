@@ -69,7 +69,7 @@ public class EnterCommand extends DCommand {
             return;
         }
 
-        if (joining.getGame() != null) {
+        if (joining != null && joining.getGame() != null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_GAME.getMessage());
             return;
         }
