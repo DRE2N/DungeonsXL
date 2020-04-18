@@ -18,16 +18,20 @@ package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.FileUtil;
+import de.erethon.commons.misc.ProgressBar;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.event.world.EditWorldSaveEvent;
 import de.erethon.dungeonsxl.api.event.world.EditWorldUnloadEvent;
 import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.player.DEditPlayer;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -87,7 +91,40 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
     public void save() {
         EditWorldSaveEvent event = new EditWorldSaveEvent(this);
         Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
 
+        plugin.setLoadingWorld(true);
+        List<Player> players = getWorld().getPlayers();
+        kickAllPlayers();
+
+        getResource().editWorld = null;
+        plugin.getInstanceCache().remove(this);
+        getResource().getSignData().serializeSigns(signs.values());
+        Bukkit.unloadWorld(getWorld(), true);
+        new ProgressBar(players, plugin.getMainConfig().getEditInstanceRemovalDelay()) {
+            @Override
+            public void onFinish() {
+                getResource().clearFolder();
+                FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                DResourceWorld.deleteUnusedFiles(getResource().getFolder());
+                FileUtil.removeDir(getFolder());
+
+                EditWorld newEditWorld = getResource().getOrInstantiateEditWorld(true);
+                players.forEach(p -> {
+                    if (p.isOnline()) {
+                        new DEditPlayer(plugin, p, newEditWorld);
+                    }
+                });
+                plugin.setLoadingWorld(false);
+            }
+        }.send(plugin);
+    }
+
+    public void forceSave() {
+        EditWorldSaveEvent event = new EditWorldSaveEvent(this);
+        Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
@@ -116,10 +153,12 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         kickAllPlayers();
 
         if (save) {
+            getResource().getSignData().serializeSigns(signs.values());
             Bukkit.unloadWorld(getWorld(), true);
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    getResource().clearFolder();
                     FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
                     DResourceWorld.deleteUnusedFiles(getResource().getFolder());
                     FileUtil.removeDir(getFolder());
@@ -128,8 +167,12 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         }
         if (!save) {
             Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
-            DResourceWorld.deleteUnusedFiles(getResource().getFolder());
-            FileUtil.removeDir(getFolder());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileUtil.removeDir(getFolder());
+                }
+            }.runTaskLaterAsynchronously(plugin, 200L);
         }
 
         getResource().editWorld = null;

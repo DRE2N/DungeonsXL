@@ -80,6 +80,7 @@ import de.erethon.dungeonsxl.trigger.TriggerListener;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
+import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.DWorldListener;
 import de.erethon.dungeonsxl.world.LWCIntegration;
@@ -436,7 +437,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     public void saveData() {
         protections.saveAll();
-        instanceCache.getAllIf(i -> i instanceof EditWorld).forEach(i -> ((EditWorld) i).save());
+        instanceCache.getAllIf(i -> i instanceof EditWorld).forEach(i -> ((DEditWorld) i).forceSave());
     }
 
     public void loadData() {

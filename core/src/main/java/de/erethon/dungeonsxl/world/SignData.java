@@ -36,6 +36,8 @@ import org.bukkit.block.Sign;
  */
 public class SignData {
 
+    public static final String FILE_NAME = "DXLData.data";
+
     private File file;
 
     public SignData(File file) {
@@ -55,7 +57,7 @@ public class SignData {
     }
 
     public void updateFile(DResourceWorld resource) {
-        file = new File(resource.getFolder(), "DXLData.data");
+        file = new File(resource.getFolder(), FILE_NAME);
     }
 
     /**

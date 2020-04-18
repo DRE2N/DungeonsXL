@@ -48,7 +48,7 @@ public class MainConfig extends DREConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 17;
+    public static final int CONFIG_VERSION = 18;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -96,6 +96,7 @@ public class MainConfig extends DREConfig {
 
     /* Performance */
     private int maxInstances = 10;
+    private int editInstanceRemovalDelay = 5;
 
     /* Secure Mode */
     private boolean secureModeEnabled = false;
@@ -386,6 +387,20 @@ public class MainConfig extends DREConfig {
     }
 
     /**
+     * @return the delay in seconds until an edit world without players is saved and removed
+     */
+    public int getEditInstanceRemovalDelay() {
+        return editInstanceRemovalDelay;
+    }
+
+    /**
+     * @param delay the delay in seconds until an edit world without players is saved and removed
+     */
+    public void setEditInstanceRemovalDelay(int delay) {
+        editInstanceRemovalDelay = delay;
+    }
+
+    /**
      * @return if the secure mode is enabled
      */
     public boolean isSecureModeEnabled() {
@@ -559,6 +574,10 @@ public class MainConfig extends DREConfig {
             config.set("maxInstances", maxInstances);
         }
 
+        if (!config.contains("editInstanceRemovalDelay")) {
+            config.set("editInstanceRemovalDelay", editInstanceRemovalDelay);
+        }
+
         if (!config.contains("secureMode.enabled")) {
             config.set("secureMode.enabled", secureModeEnabled);
         }
@@ -647,6 +666,7 @@ public class MainConfig extends DREConfig {
         }
 
         maxInstances = config.getInt("maxInstances", maxInstances);
+        editInstanceRemovalDelay = config.getInt("editInstanceRemovalDelay", editInstanceRemovalDelay);
         secureModeEnabled = config.getBoolean("secureMode.enabled", secureModeEnabled);
         openInventories = config.getBoolean("secureMode.openInventories", openInventories);
         dropItems = config.getBoolean("secureMode.dropItems", dropItems);

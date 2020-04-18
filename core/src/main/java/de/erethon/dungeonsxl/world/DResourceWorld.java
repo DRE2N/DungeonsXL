@@ -65,7 +65,7 @@ public class DResourceWorld implements ResourceWorld {
             config = new WorldConfig(plugin, configFile);
         }
 
-        signData = new SignData(new File(folder, "DXLData.data"));
+        signData = new SignData(new File(folder, SignData.FILE_NAME));
     }
 
     public DResourceWorld(DungeonsXL plugin, File folder) {
@@ -78,7 +78,7 @@ public class DResourceWorld implements ResourceWorld {
             config = new WorldConfig(plugin, configFile);
         }
 
-        signData = new SignData(new File(folder, "DXLData.data"));
+        signData = new SignData(new File(folder, SignData.FILE_NAME));
     }
 
     /* Getters and setters */
@@ -211,6 +211,7 @@ public class DResourceWorld implements ResourceWorld {
 
         if (game) {
             signData.deserializeSigns((DGameWorld) instance);
+            instance.getWorld().setAutoSave(false);
         } else {
             signData.deserializeSigns((DEditWorld) instance);
         }
@@ -295,6 +296,19 @@ public class DResourceWorld implements ResourceWorld {
         editWorld.generateIdFile();
 
         return editWorld;
+    }
+
+    void clearFolder() {
+        for (File file : FileUtil.getFilesForFolder(getFolder())) {
+            if (file.getName().equals(SignData.FILE_NAME)) {
+                continue;
+            }
+            if (file.isDirectory()) {
+                FileUtil.removeDir(file);
+            } else {
+                file.delete();
+            }
+        }
     }
 
     /**
