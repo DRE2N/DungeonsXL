@@ -122,15 +122,16 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                 public void run() {
                     FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
                     DResourceWorld.deleteUnusedFiles(getResource().getFolder());
+                    FileUtil.removeDir(getFolder());
                 }
-            }.runTaskLater(plugin, 200L);
+            }.runTaskLaterAsynchronously(plugin, 200L);
         }
         if (!save) {
             Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
             DResourceWorld.deleteUnusedFiles(getResource().getFolder());
+            FileUtil.removeDir(getFolder());
         }
 
-        FileUtil.removeDir(getFolder());
         getResource().editWorld = null;
         plugin.getInstanceCache().remove(this);
     }
