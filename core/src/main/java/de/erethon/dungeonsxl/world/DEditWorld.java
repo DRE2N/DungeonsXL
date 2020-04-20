@@ -163,7 +163,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                     DResourceWorld.deleteUnusedFiles(getResource().getFolder());
                     FileUtil.removeDir(getFolder());
                 }
-            }.runTaskLaterAsynchronously(plugin, 200L);
+            }.runTaskLaterAsynchronously(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
         }
         if (!save) {
             Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
@@ -172,7 +172,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                 public void run() {
                     FileUtil.removeDir(getFolder());
                 }
-            }.runTaskLaterAsynchronously(plugin, 200L);
+            }.runTaskLaterAsynchronously(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
         }
 
         getResource().editWorld = null;
