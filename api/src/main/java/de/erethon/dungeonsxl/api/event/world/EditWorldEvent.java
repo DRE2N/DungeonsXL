@@ -12,28 +12,28 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.event.player;
+package de.erethon.dungeonsxl.api.event.world;
 
-import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.world.EditWorld;
 
 /**
- * Superclass for events involving {@link GamePlayer}s.
+ * Superclass for events involving DungeonsXL edit instances.
  *
  * @author Daniel Saukel
  */
-public abstract class GamePlayerEvent extends GlobalPlayerEvent {
+public abstract class EditWorldEvent extends InstanceWorldEvent {
 
-    protected GamePlayerEvent(GamePlayer gamePlayer) {
-        super(gamePlayer);
+    protected EditWorldEvent(EditWorld editWorld) {
+        super(editWorld);
     }
 
     /**
-     * Returns the GamePlayer involved in this event.
+     * Returns the EditWorld involved in this event.
      *
-     * @return the GamePlayer involved in this event
+     * @return the EditWorld involved in this event
      */
-    public GamePlayer getGamePlayer() {
-        return (GamePlayer) globalPlayer;
+    public EditWorld getEditWorld() {
+        return (EditWorld) instance;
     }
 
 }

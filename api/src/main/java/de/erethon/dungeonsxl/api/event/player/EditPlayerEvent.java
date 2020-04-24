@@ -28,7 +28,7 @@ public abstract class EditPlayerEvent extends GlobalPlayerEvent {
     }
 
     /**
-     * Returns the EditPlayer involved in this event
+     * Returns the EditPlayer involved in this event.
      *
      * @return the EditPlayer involved in this event
      */
