@@ -14,13 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.event;
+package de.erethon.dungeonsxl.api.event;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
+ * Fired when the plugin is reloaded with /dxl reload.
+ *
  * @author Daniel Saukel
  */
 public class DataReloadEvent extends Event implements Cancellable {
