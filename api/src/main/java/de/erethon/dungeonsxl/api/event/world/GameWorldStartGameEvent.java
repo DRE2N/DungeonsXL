@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.event.gameworld;
+package de.erethon.dungeonsxl.api.event.world;
 
-import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -29,25 +30,43 @@ public class GameWorldStartGameEvent extends GameWorldEvent implements Cancellab
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private DGame game;
+    private Game game;
+    private Location startLocation;
 
-    public GameWorldStartGameEvent(DGameWorld gameWorld, DGame game) {
-        super(gameWorld);
+    public GameWorldStartGameEvent(GameWorld gameWorld, Game game, Location location) {
+        super(gameWorld, gameWorld.getDungeon());
         this.game = game;
     }
 
     /**
+     * Returns the game.
+     *
      * @return the game
      */
-    public DGame getGame() {
+    public Game getGame() {
         return game;
     }
 
     /**
-     * @param game the game to set
+     * Returns the location where the players are teleported.
+     *
+     * @return the location where the players are teleported
      */
-    public void setGame(DGame game) {
-        this.game = game;
+    public Location getStartLocation() {
+        return startLocation;
+    }
+
+    /**
+     * Sets the location where the players are teleported.
+     *
+     * @param startLocation a location in the game world
+     * @throws IllegalArgumentException if the given location is not in the game world.
+     */
+    public void setStartLocation(Location startLocation) {
+        if (startLocation.getWorld() != getGameWorld().getWorld()) {
+            throw new IllegalArgumentException("Location " + startLocation + " is not in world " + getGameWorld().getWorld());
+        }
+        this.startLocation = startLocation;
     }
 
     @Override
