@@ -19,11 +19,11 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
@@ -69,7 +69,7 @@ public class PlayCommand extends DCommand {
             return;
         } else if (group == null) {
             group = new DGroup(plugin, player, dungeon);
-            DGroupCreateEvent event = new DGroupCreateEvent(group, player, DGroupCreateEvent.Cause.COMMAND);
+            GroupCreateEvent event = new GroupCreateEvent(group, dPlayer, GroupCreateEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 plugin.getGroupCache().remove(group);

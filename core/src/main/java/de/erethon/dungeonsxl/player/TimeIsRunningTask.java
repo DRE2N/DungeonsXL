@@ -18,9 +18,10 @@ package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.event.group.GroupPlayerKickEvent;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -60,15 +61,15 @@ public class TimeIsRunningTask extends BukkitRunnable {
             for (Player player : group.getMembers().getOnlinePlayers()) {
                 MessageUtil.sendActionBarMessage(player, DMessage.PLAYER_TIME_LEFT.getMessage(color, String.valueOf(timeLeft)));
 
-                DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
+                GamePlayer dPlayer = plugin.getPlayerCache().getGamePlayer(player);
                 if (timeLeft > 0) {
                     continue;
                 }
 
-                DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(dPlayer, DPlayerKickEvent.Cause.TIME_EXPIRED);
-                Bukkit.getServer().getPluginManager().callEvent(dPlayerKickEvent);
+                GroupPlayerKickEvent groupPlayerKickEvent = new GroupPlayerKickEvent(group, dPlayer, GroupPlayerKickEvent.Cause.TIME_EXPIRED);
+                Bukkit.getServer().getPluginManager().callEvent(groupPlayerKickEvent);
 
-                if (!dPlayerKickEvent.isCancelled()) {
+                if (!groupPlayerKickEvent.isCancelled()) {
                     MessageUtil.broadcastMessage(DMessage.PLAYER_TIME_KICK.getMessage(player.getName()));
                     dPlayer.leave();
                 }

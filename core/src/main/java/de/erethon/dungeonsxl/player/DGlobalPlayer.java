@@ -25,13 +25,13 @@ import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.event.requirement.RequirementCheckEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.util.LocationString;
 import de.erethon.dungeonsxl.util.NBTUtil;
@@ -377,12 +377,11 @@ public class DGlobalPlayer implements GlobalPlayer {
         return dataTime == -1 || dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
     }
 
-    public void giveLoot(Dungeon dungeon, List<Reward> ruleRewards, List<Reward> groupRewards) {
+    public void giveLoot(Dungeon dungeon, List<Reward> rewards) {
         if (!canLoot(dungeon)) {
             return;
         }
-        ruleRewards.forEach(r -> r.giveTo(player.getPlayer()));
-        groupRewards.forEach(r -> r.giveTo(player.getPlayer()));
+        rewards.forEach(r -> r.giveTo(player.getPlayer()));
         if (getGroup() != null && getGroup().getDungeon() != null) {
             getData().logTimeLastLoot(getGroup().getDungeon().getName());
         }
@@ -534,7 +533,7 @@ public class DGlobalPlayer implements GlobalPlayer {
 
         DGroup dGroup = new DGroup(plugin, "Tutorial", player, dungeon);
 
-        DGroupCreateEvent createEvent = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.GROUP_SIGN);
+        GroupCreateEvent createEvent = new GroupCreateEvent(dGroup, this, GroupCreateEvent.Cause.GROUP_SIGN);
         Bukkit.getPluginManager().callEvent(createEvent);
         if (createEvent.isCancelled()) {
             dGroup = null;

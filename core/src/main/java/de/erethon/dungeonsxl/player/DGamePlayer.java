@@ -21,11 +21,15 @@ import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.group.GroupPlayerKickEvent;
 import de.erethon.dungeonsxl.api.event.player.GamePlayerDeathEvent;
+import de.erethon.dungeonsxl.api.event.player.GamePlayerFinishEvent;
+import de.erethon.dungeonsxl.api.event.player.GlobalPlayerRewardPayOutEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
@@ -33,14 +37,13 @@ import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
 import de.erethon.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
-import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerFinishEvent;
-import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerRewardEvent;
 import de.erethon.dungeonsxl.trigger.DistanceTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -386,10 +389,12 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         if (game != null && finished && game.hasRewards()) {
-            DGamePlayerRewardEvent dGroupRewardEvent = new DGamePlayerRewardEvent(this);
-            Bukkit.getPluginManager().callEvent(dGroupRewardEvent);
-            if (!dGroupRewardEvent.isCancelled()) {
-                giveLoot(getGroup().getDungeon(), rules.getState(GameRule.REWARDS), dGroup.getRewards());
+            List<Reward> rewards = new ArrayList<>(dGroup.getRewards());
+            rewards.addAll(rules.getState(GameRule.REWARDS));
+            GlobalPlayerRewardPayOutEvent globalPlayerPayOutRewardEvent = new GlobalPlayerRewardPayOutEvent(this, rewards);
+            Bukkit.getPluginManager().callEvent(globalPlayerPayOutRewardEvent);
+            if (!globalPlayerPayOutRewardEvent.isCancelled()) {
+                giveLoot(getGroup().getDungeon(), globalPlayerPayOutRewardEvent.getRewards());
             }
 
             getData().logTimeLastFinished(getGroup().getDungeonName());
@@ -456,7 +461,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
     @Override
     public void kill() {
-        DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.DEATH);
+        GroupPlayerKickEvent dPlayerKickEvent = new GroupPlayerKickEvent(getGroup(), this, GroupPlayerKickEvent.Cause.DEATH);
         Bukkit.getPluginManager().callEvent(dPlayerKickEvent);
 
         if (!dPlayerKickEvent.isCancelled()) {
@@ -557,9 +562,9 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             hasToWait = true;
         }
 
-        DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, hasToWait);
-        Bukkit.getPluginManager().callEvent(dPlayerFinishEvent);
-        if (dPlayerFinishEvent.isCancelled()) {
+        GamePlayerFinishEvent gamePlayerFinishEvent = new GamePlayerFinishEvent(this, hasToWait);
+        Bukkit.getPluginManager().callEvent(gamePlayerFinishEvent);
+        if (gamePlayerFinishEvent.isCancelled()) {
             finished = false;
         }
     }
@@ -589,9 +594,9 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             hasToWait = true;
         }
 
-        DGamePlayerFinishEvent dPlayerFinishEvent = new DGamePlayerFinishEvent(this, hasToWait);
-        Bukkit.getPluginManager().callEvent(dPlayerFinishEvent);
-        if (dPlayerFinishEvent.isCancelled()) {
+        GamePlayerFinishEvent gamePlayerFinishEvent = new GamePlayerFinishEvent(this, hasToWait);
+        Bukkit.getPluginManager().callEvent(gamePlayerFinishEvent);
+        if (gamePlayerFinishEvent.isCancelled()) {
             finished = false;
         }
     }
@@ -768,10 +773,10 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         if (kick) {
-            DPlayerKickEvent dPlayerKickEvent = new DPlayerKickEvent(this, DPlayerKickEvent.Cause.OFFLINE);
-            Bukkit.getPluginManager().callEvent(dPlayerKickEvent);
+            GroupPlayerKickEvent groupPlayerKickEvent = new GroupPlayerKickEvent(getGroup(), this, GroupPlayerKickEvent.Cause.OFFLINE);
+            Bukkit.getPluginManager().callEvent(groupPlayerKickEvent);
 
-            if (!dPlayerKickEvent.isCancelled()) {
+            if (!groupPlayerKickEvent.isCancelled()) {
                 leave();
             }
         }

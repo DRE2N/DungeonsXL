@@ -20,9 +20,9 @@ import de.erethon.commons.chat.DefaultFontInfo;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.GUIUtil;
 import java.io.File;
@@ -368,7 +368,7 @@ public class Announcer {
             }
 
         } else if (dGroup == null && pGroup == null) {
-            DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.ANNOUNCER);
+            GroupCreateEvent event = new GroupCreateEvent(dGroup, plugin.getPlayerCache().get(player), GroupCreateEvent.Cause.ANNOUNCER);
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 dGroups.set(buttons.indexOf(button), new DGroup(plugin, player, color));

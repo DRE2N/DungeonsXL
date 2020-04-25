@@ -25,6 +25,12 @@ import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.group.GroupCollectRewardEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupDisbandEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupFinishDungeonEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupFinishFloorEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupPlayerJoinEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupStartFloorEvent;
 import de.erethon.dungeonsxl.api.event.requirement.RequirementDemandEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
@@ -37,12 +43,6 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
-import de.erethon.dungeonsxl.event.dgroup.DGroupDisbandEvent;
-import de.erethon.dungeonsxl.event.dgroup.DGroupFinishDungeonEvent;
-import de.erethon.dungeonsxl.event.dgroup.DGroupFinishFloorEvent;
-import de.erethon.dungeonsxl.event.dgroup.DGroupStartFloorEvent;
-import de.erethon.dungeonsxl.event.dplayer.DPlayerJoinDGroupEvent;
-import de.erethon.dungeonsxl.event.reward.RewardAdditionEvent;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
@@ -100,8 +100,15 @@ public class DGroup implements PlayerGroup {
         plugin.getGroupCache().add(name, this);
         this.name = name;
 
-        setLeader(player);
-        addMember(player);
+        GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(player), true);
+        Bukkit.getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            setLeader(player);
+            addMember(player);
+        } else {
+            plugin.getGroupCache().remove(this);
+            return;
+        }
 
         playing = false;
         floorCount = 0;
@@ -124,9 +131,8 @@ public class DGroup implements PlayerGroup {
         plugin.getGroupCache().add(name, this);
         this.name = name;
 
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent((DGlobalPlayer) dPlayers.get(captain), true, this);
+        GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(captain), true);
         Bukkit.getPluginManager().callEvent(event);
-
         if (!event.isCancelled()) {
             this.captain = captain;
             this.players.add(captain);
@@ -136,6 +142,10 @@ public class DGroup implements PlayerGroup {
             if (!this.players.contains(player)) {
                 addMember(player);
             }
+        }
+        if (getMembers().size() == 0) {
+            plugin.getGroupCache().remove(this);
+            return;
         }
 
         setDungeon(dungeon);
@@ -205,18 +215,17 @@ public class DGroup implements PlayerGroup {
 
     @Override
     public void addMember(Player player, boolean message) {
-        DPlayerJoinDGroupEvent event = new DPlayerJoinDGroupEvent((DGlobalPlayer) dPlayers.getGamePlayer(player), false, this);
+        GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.getGamePlayer(player), false);
         Bukkit.getPluginManager().callEvent(event);
-
-        if (!event.isCancelled()) {
-            if (message) {
-                sendMessage(DMessage.GROUP_PLAYER_JOINED.getMessage(player.getName()));
-                MessageUtil.sendMessage(player, DMessage.PLAYER_JOIN_GROUP.getMessage());
-            }
-
-            players.add(player.getUniqueId());
+        if (event.isCancelled()) {
+            return;
         }
 
+        if (message) {
+            sendMessage(DMessage.GROUP_PLAYER_JOINED.getMessage(player.getName()));
+            MessageUtil.sendMessage(player, DMessage.PLAYER_JOIN_GROUP.getMessage());
+        }
+        players.add(player.getUniqueId());
         plugin.getGroupAdapters().forEach(a -> a.syncJoin(player));
     }
 
@@ -235,9 +244,8 @@ public class DGroup implements PlayerGroup {
         }
 
         if (isEmpty()) {
-            DGroupDisbandEvent event = new DGroupDisbandEvent(this, player, DGroupDisbandEvent.Cause.GROUP_IS_EMPTY);
+            GroupDisbandEvent event = new GroupDisbandEvent(this, dPlayers.get(player), GroupDisbandEvent.Cause.GROUP_IS_EMPTY);
             Bukkit.getPluginManager().callEvent(event);
-
             if (!event.isCancelled()) {
                 delete();
                 return;
@@ -421,9 +429,8 @@ public class DGroup implements PlayerGroup {
 
     @Override
     public void addReward(Reward reward) {
-        RewardAdditionEvent event = new RewardAdditionEvent(reward, this);
+        GroupCollectRewardEvent event = new GroupCollectRewardEvent(this, null, reward);
         Bukkit.getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
             return;
         }
@@ -586,9 +593,9 @@ public class DGroup implements PlayerGroup {
      * The group finishs the dungeon.
      */
     public void finish() {
-        DGroupFinishDungeonEvent dGroupFinishDungeonEvent = new DGroupFinishDungeonEvent((DDungeon) dungeon, this);
-        Bukkit.getPluginManager().callEvent(dGroupFinishDungeonEvent);
-        if (dGroupFinishDungeonEvent.isCancelled()) {
+        GroupFinishDungeonEvent groupFinishDungeonEvent = new GroupFinishDungeonEvent(this, dungeon);
+        Bukkit.getPluginManager().callEvent(groupFinishDungeonEvent);
+        if (groupFinishDungeonEvent.isCancelled()) {
             return;
         }
 
@@ -621,7 +628,7 @@ public class DGroup implements PlayerGroup {
             type = GameWorld.Type.END_FLOOR;
         }
 
-        DGroupFinishFloorEvent event = new DGroupFinishFloorEvent(this, (DGameWorld) gameWorld, (DResourceWorld) newFloor);
+        GroupFinishFloorEvent event = new GroupFinishFloorEvent(this, gameWorld, newFloor);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -706,9 +713,8 @@ public class DGroup implements PlayerGroup {
             }
         }
 
-        DGroupStartFloorEvent event = new DGroupStartFloorEvent(this, (DGameWorld) gameWorld);
+        GroupStartFloorEvent event = new GroupStartFloorEvent(this, gameWorld);
         Bukkit.getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
             return false;
         }

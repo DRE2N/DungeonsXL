@@ -20,11 +20,11 @@ import de.erethon.caliburn.mob.ExMob;
 import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
+import de.erethon.dungeonsxl.api.event.mob.DungeonMobSpawnEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.event.dmob.DMobDeathEvent;
-import de.erethon.dungeonsxl.event.dmob.DMobSpawnEvent;
 import de.erethon.dungeonsxl.trigger.MobTrigger;
 import de.erethon.dungeonsxl.trigger.WaveTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -60,13 +60,10 @@ public class DMob implements DungeonMob {
                 entity.getEquipment().setItemInHandDropChance(0);
             }
         }
+        gameWorld.addMob(this);
 
-        DMobSpawnEvent event = new DMobSpawnEvent(this, entity);
+        DungeonMobSpawnEvent event = new DungeonMobSpawnEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-
-        if (!event.isCancelled()) {
-            gameWorld.addMob(this);
-        }
     }
 
     public DMob(LivingEntity entity, GameWorld gameWorld, String trigger) {
@@ -112,9 +109,8 @@ public class DMob implements DungeonMob {
             return;
         }
 
-        DMobDeathEvent dMobDeathEvent = new DMobDeathEvent(this, event);
+        DungeonMobDeathEvent dMobDeathEvent = new DungeonMobDeathEvent(this);
         Bukkit.getServer().getPluginManager().callEvent(dMobDeathEvent);
-
         if (dMobDeathEvent.isCancelled()) {
             return;
         }

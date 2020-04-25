@@ -17,11 +17,11 @@
 package de.erethon.dungeonsxl.sign.button;
 
 import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.event.group.GroupPlayerLeaveEvent;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
-import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -90,16 +90,15 @@ public class LeaveSign extends Button {
 
     @Override
     public boolean push(Player player) {
-        DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
-        if (dPlayer != null) {
-            DGamePlayerEscapeEvent event = new DGamePlayerEscapeEvent(dPlayer);
+        GamePlayer gamePlayer = api.getPlayerCache().getGamePlayer(player);
+        if (gamePlayer != null) {
+            GroupPlayerLeaveEvent event = new GroupPlayerLeaveEvent(gamePlayer.getGroup(), gamePlayer);
             Bukkit.getPluginManager().callEvent(event);
-
             if (event.isCancelled()) {
                 return false;
             }
 
-            dPlayer.leave();
+            gamePlayer.leave();
         }
 
         return true;
