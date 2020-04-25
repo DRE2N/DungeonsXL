@@ -19,14 +19,11 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.event.group.GroupPlayerLeaveEvent;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.event.dplayer.DPlayerLeaveDGroupEvent;
-import de.erethon.dungeonsxl.event.dplayer.instance.game.DGamePlayerEscapeEvent;
 import de.erethon.dungeonsxl.player.DEditPlayer;
-import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
@@ -66,17 +63,9 @@ public class LeaveCommand extends DCommand {
             return;
         }
 
-        if (dPlayer instanceof DGamePlayer) {
-            DGamePlayerEscapeEvent dPlayerEscapeEvent = new DGamePlayerEscapeEvent((DGamePlayer) dPlayer);
-            Bukkit.getPluginManager().callEvent(dPlayerEscapeEvent);
-            if (dPlayerEscapeEvent.isCancelled()) {
-                return;
-            }
-        }
-
-        DPlayerLeaveDGroupEvent dPlayerLeaveDGroupEvent = new DPlayerLeaveDGroupEvent(dPlayer, (DGroup) dGroup);
-        Bukkit.getPluginManager().callEvent(dPlayerLeaveDGroupEvent);
-        if (dPlayerLeaveDGroupEvent.isCancelled()) {
+        GroupPlayerLeaveEvent groupPlayerLeaveEvent = new GroupPlayerLeaveEvent(dGroup, dPlayer);
+        Bukkit.getPluginManager().callEvent(groupPlayerLeaveEvent);
+        if (groupPlayerLeaveEvent.isCancelled()) {
             return;
         }
 

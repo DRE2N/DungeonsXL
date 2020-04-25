@@ -14,26 +14,26 @@
  */
 package de.erethon.dungeonsxl.api.event.player;
 
-import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.player.EditPlayer;
 
 /**
- * Superclass for events involving {@link GamePlayer}s.
+ * Superclass for events involving {@link EditPlayer}s.
  *
  * @author Daniel Saukel
  */
-public abstract class GamePlayerEvent extends GlobalPlayerEvent {
+public abstract class EditPlayerEvent extends GlobalPlayerEvent {
 
-    protected GamePlayerEvent(GamePlayer gamePlayer) {
-        super(gamePlayer);
+    protected EditPlayerEvent(EditPlayer editPlayer) {
+        super(editPlayer);
     }
 
     /**
-     * Returns the GamePlayer involved in this event.
+     * Returns the EditPlayer involved in this event.
      *
-     * @return the GamePlayer involved in this event
+     * @return the EditPlayer involved in this event
      */
-    public GamePlayer getGamePlayer() {
-        return (GamePlayer) globalPlayer;
+    public EditPlayer getEditPlayer() {
+        return (EditPlayer) globalPlayer;
     }
 
 }

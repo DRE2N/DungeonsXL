@@ -18,11 +18,10 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupDisbandEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupPlayerKickEvent;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.event.dgroup.DGroupCreateEvent;
-import de.erethon.dungeonsxl.event.dgroup.DGroupDisbandEvent;
-import de.erethon.dungeonsxl.event.dplayer.DPlayerKickEvent;
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
@@ -123,7 +122,7 @@ public class GroupCommand extends DCommand {
         }
 
         DGroup dGroup = new DGroup(plugin, args[2], player);
-        DGroupCreateEvent event = new DGroupCreateEvent(dGroup, player, DGroupCreateEvent.Cause.COMMAND);
+        GroupCreateEvent event = new GroupCreateEvent(dGroup, plugin.getPlayerCache().get(player), GroupCreateEvent.Cause.COMMAND);
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
@@ -148,7 +147,7 @@ public class GroupCommand extends DCommand {
             return;
         }
 
-        DGroupDisbandEvent event = new DGroupDisbandEvent(dGroup, player, DGroupDisbandEvent.Cause.COMMAND);
+        GroupDisbandEvent event = new GroupDisbandEvent(dGroup, plugin.getPlayerCache().get(player), GroupDisbandEvent.Cause.COMMAND);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled()) {
@@ -224,7 +223,7 @@ public class GroupCommand extends DCommand {
 
         Player toKick = Bukkit.getPlayer(args[2]);
         if (toKick != null) {
-            DPlayerKickEvent event = new DPlayerKickEvent((DGlobalPlayer) dPlayers.get(toKick.getPlayer()), DPlayerKickEvent.Cause.COMMAND);
+            GroupPlayerKickEvent event = new GroupPlayerKickEvent(dGroup, dPlayers.get(toKick.getPlayer()), GroupPlayerKickEvent.Cause.COMMAND);
             Bukkit.getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {

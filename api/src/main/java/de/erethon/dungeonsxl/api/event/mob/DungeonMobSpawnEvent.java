@@ -12,28 +12,33 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.event.player;
+package de.erethon.dungeonsxl.api.event.mob;
 
-import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import org.bukkit.event.HandlerList;
 
 /**
- * Superclass for events involving {@link GamePlayer}s.
+ * Fired when a spawned entity is registered as a {@link DungeonMob}.
+ * <p>
+ * Use {@link org.bukkit.event.entity.CreatureSpawnEvent} if you need to prevent a mob from spawning.
  *
  * @author Daniel Saukel
  */
-public abstract class GamePlayerEvent extends GlobalPlayerEvent {
+public class DungeonMobSpawnEvent extends DungeonMobEvent {
 
-    protected GamePlayerEvent(GamePlayer gamePlayer) {
-        super(gamePlayer);
+    private static final HandlerList handlers = new HandlerList();
+
+    public DungeonMobSpawnEvent(DungeonMob mob) {
+        super(mob);
     }
 
-    /**
-     * Returns the GamePlayer involved in this event.
-     *
-     * @return the GamePlayer involved in this event
-     */
-    public GamePlayer getGamePlayer() {
-        return (GamePlayer) globalPlayer;
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
 }

@@ -27,13 +27,12 @@ import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.world.GameWorldStartGameEvent;
+import de.erethon.dungeonsxl.api.event.world.InstanceWorldUnloadEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.event.gameworld.GameWorldStartGameEvent;
-import de.erethon.dungeonsxl.event.gameworld.GameWorldUnloadEvent;
 import de.erethon.dungeonsxl.sign.button.ReadySign;
 import de.erethon.dungeonsxl.sign.passive.StartSign;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
@@ -404,7 +403,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
      * Set up the instance for the game
      */
     public void startGame() {
-        GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, (DGame) getGame());
+        GameWorldStartGameEvent event = new GameWorldStartGameEvent(this, getGame());
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -451,9 +450,8 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
      */
     @Override
     public void delete() {
-        GameWorldUnloadEvent event = new GameWorldUnloadEvent(this);
+        InstanceWorldUnloadEvent event = new InstanceWorldUnloadEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
             return;
         }

@@ -22,6 +22,8 @@ import de.erethon.commons.misc.SimpleDateUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.event.group.GroupCollectRewardEvent;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -115,12 +117,12 @@ public class RewardChest extends GameBlock {
         }
 
         if (block.getLocation().distance(block.getLocation()) < 1) {
-            addTreasure(api.getPlayerGroup(opener));
+            addTreasure(api.getPlayerGroup(opener), api.getPlayerCache().getGamePlayer(opener));
             used = true;
         }
     }
 
-    public void addTreasure(PlayerGroup group) {
+    public void addTreasure(PlayerGroup group, GamePlayer collector) {
         if (group == null) {
             return;
         }
@@ -133,15 +135,27 @@ public class RewardChest extends GameBlock {
         for (Reward reward : group.getRewards()) {
             if (reward instanceof MoneyReward) {
                 hasMoneyReward = true;
-                ((MoneyReward) reward).addMoney(moneyReward);
+                GroupCollectRewardEvent event = new GroupCollectRewardEvent(group, collector, reward);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    ((MoneyReward) reward).addMoney(moneyReward);
+                }
 
             } else if (reward instanceof LevelReward) {
                 hasLevelReward = true;
-                ((LevelReward) reward).addLevels(levelReward);
+                GroupCollectRewardEvent event = new GroupCollectRewardEvent(group, collector, reward);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    ((LevelReward) reward).addLevels(levelReward);
+                }
 
             } else if (reward instanceof ItemReward) {
                 hasItemReward = true;
-                ((ItemReward) reward).addItems(itemReward);
+                GroupCollectRewardEvent event = new GroupCollectRewardEvent(group, collector, reward);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    ((ItemReward) reward).addItems(itemReward);
+                }
             }
         }
 
@@ -150,19 +164,31 @@ public class RewardChest extends GameBlock {
             if (!hasMoneyReward) {
                 MoneyReward reward = new MoneyReward(econ);
                 reward.addMoney(moneyReward);
-                group.addReward(reward);
+                GroupCollectRewardEvent event = new GroupCollectRewardEvent(group, collector, reward);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    group.getRewards().add(reward);
+                }
             }
 
             if (!hasLevelReward) {
                 LevelReward reward = new LevelReward();
                 reward.addLevels(levelReward);
-                group.addReward(reward);
+                GroupCollectRewardEvent event = new GroupCollectRewardEvent(group, collector, reward);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    group.getRewards().add(reward);
+                }
             }
 
             if (!hasItemReward) {
                 ItemReward reward = new ItemReward(api);
                 reward.addItems(itemReward);
-                group.addReward(reward);
+                GroupCollectRewardEvent event = new GroupCollectRewardEvent(group, collector, reward);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    group.getRewards().add(reward);
+                }
             }
         }
 

@@ -12,28 +12,31 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.event.player;
+package de.erethon.dungeonsxl.api.event.group;
 
-import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
+import org.bukkit.event.Event;
 
 /**
- * Superclass for events involving {@link GamePlayer}s.
+ * Superclass for events involving DungeonsXL groups.
  *
  * @author Daniel Saukel
  */
-public abstract class GamePlayerEvent extends GlobalPlayerEvent {
+public abstract class GroupEvent extends Event {
 
-    protected GamePlayerEvent(GamePlayer gamePlayer) {
-        super(gamePlayer);
+    protected PlayerGroup group;
+
+    protected GroupEvent(PlayerGroup group) {
+        this.group = group;
     }
 
     /**
-     * Returns the GamePlayer involved in this event.
+     * Returns the group involved in this event.
      *
-     * @return the GamePlayer involved in this event
+     * @return the group involved in this event
      */
-    public GamePlayer getGamePlayer() {
-        return (GamePlayer) globalPlayer;
+    public PlayerGroup getGroup() {
+        return group;
     }
 
 }

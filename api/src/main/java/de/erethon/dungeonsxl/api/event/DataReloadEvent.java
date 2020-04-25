@@ -12,28 +12,39 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.event.player;
+package de.erethon.dungeonsxl.api.event;
 
-import de.erethon.dungeonsxl.api.player.GamePlayer;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 /**
- * Superclass for events involving {@link GamePlayer}s.
+ * Fired when the plugin is reloaded with /dxl reload.
  *
  * @author Daniel Saukel
  */
-public abstract class GamePlayerEvent extends GlobalPlayerEvent {
+public class DataReloadEvent extends Event implements Cancellable {
 
-    protected GamePlayerEvent(GamePlayer gamePlayer) {
-        super(gamePlayer);
+    private static final HandlerList handlers = new HandlerList();
+    private boolean cancelled;
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
 
-    /**
-     * Returns the GamePlayer involved in this event.
-     *
-     * @return the GamePlayer involved in this event
-     */
-    public GamePlayer getGamePlayer() {
-        return (GamePlayer) globalPlayer;
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
 }
