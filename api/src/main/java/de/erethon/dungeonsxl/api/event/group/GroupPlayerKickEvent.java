@@ -14,22 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.event.dplayer;
+package de.erethon.dungeonsxl.api.event.group;
 
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
  * @author Daniel Saukel
  */
-public class DPlayerKickEvent extends DPlayerEvent implements Cancellable {
+public class GroupPlayerKickEvent extends GroupEvent implements Cancellable {
 
     public enum Cause {
 
         COMMAND,
+        /**
+         * When the player is kicked because he does not have any lives left.
+         */
         DEATH,
+        /**
+         * When a player is kicked from a group to mirror the state of a party plugin.
+         *
+         * @see de.erethon.dungeonsxl.api.player.GroupAdapter
+         */
+        GROUP_ADAPTER,
         OFFLINE,
+        /**
+         * When the time for the group to reach a certain state expired.
+         */
         TIME_EXPIRED,
         CUSTOM
 
@@ -38,25 +51,31 @@ public class DPlayerKickEvent extends DPlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
+    private GlobalPlayer player;
     private Cause cause;
 
-    public DPlayerKickEvent(DGlobalPlayer dPlayer, Cause cause) {
-        super(dPlayer);
+    public GroupPlayerKickEvent(PlayerGroup group, GlobalPlayer player, Cause cause) {
+        super(group);
+        this.player = player;
         this.cause = cause;
     }
 
     /**
-     * @return the cause
+     * Returns the player who is joining the group.
+     *
+     * @return the player who is joining the group
+     */
+    public GlobalPlayer getPlayer() {
+        return player;
+    }
+
+    /**
+     * Returns the cause of the kick.
+     *
+     * @return the cause of the kick
      */
     public Cause getCause() {
         return cause;
-    }
-
-    /**
-     * @param cause the cause to set
-     */
-    public void setCause(Cause cause) {
-        this.cause = cause;
     }
 
     @Override
