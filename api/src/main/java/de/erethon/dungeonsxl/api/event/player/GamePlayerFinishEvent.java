@@ -14,39 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.event.dplayer.instance.game;
+package de.erethon.dungeonsxl.api.event.player;
 
-import de.erethon.dungeonsxl.player.DGamePlayer;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
+ * Fired when a player finishs a game.
+ * <p>
+ * Do not confuse this with {@link de.erethon.dungeonsxl.api.event.group.GroupFinishDungeonEvent}. GamePlayerFinishEvent is fired when a player triggers an end
+ * sign, while GroupFinishDungeonEvent is triggered when all group members have triggered the ready sign and the game actually ends.
+ *
  * @author Daniel Saukel
  */
-public class DGamePlayerFinishEvent extends DGamePlayerEvent implements Cancellable {
+public class GamePlayerFinishEvent extends GamePlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
     private boolean hasToWait;
 
-    public DGamePlayerFinishEvent(DGamePlayer dPlayer, boolean hasToWait) {
-        super(dPlayer);
+    public GamePlayerFinishEvent(GamePlayer gamePlayer, boolean hasToWait) {
+        super(gamePlayer);
         this.hasToWait = hasToWait;
     }
 
     /**
-     * @return the hasToWait
+     * Returns false if the other group members have all already triggered the end sign, true if not.
+     *
+     * @return false if the other group members have all already triggered the end sign, true if not
      */
     public boolean getHasToWait() {
         return hasToWait;
-    }
-
-    /**
-     * @param hasToWait the hasToWait to set
-     */
-    public void setHasToWait(boolean hasToWait) {
-        this.hasToWait = hasToWait;
     }
 
     @Override
