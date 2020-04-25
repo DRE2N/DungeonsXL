@@ -15,6 +15,7 @@
 package de.erethon.dungeonsxl.api.event.group;
 
 import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -32,10 +33,10 @@ public class GroupCollectRewardEvent extends GroupEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Player collector;
+    private GamePlayer collector;
     private Reward reward;
 
-    public GroupCollectRewardEvent(PlayerGroup group, Player collector, Reward reward) {
+    public GroupCollectRewardEvent(PlayerGroup group, GamePlayer collector, Reward reward) {
         super(group);
         this.collector = collector;
         this.reward = reward;
@@ -48,7 +49,7 @@ public class GroupCollectRewardEvent extends GroupEvent implements Cancellable {
      *
      * @return the player who collected the reward
      */
-    public Player getCollector() {
+    public GamePlayer getCollector() {
         return collector;
     }
 

@@ -14,8 +14,8 @@
  */
 package de.erethon.dungeonsxl.api.event.group;
 
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -29,10 +29,10 @@ public class GroupScoreEvent extends GroupEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Player scorer;
+    private GamePlayer scorer;
     private PlayerGroup loserGroup;
 
-    public GroupScoreEvent(PlayerGroup group, Player scorer, PlayerGroup loserGroup) {
+    public GroupScoreEvent(PlayerGroup group, GamePlayer scorer, PlayerGroup loserGroup) {
         super(group);
         this.scorer = scorer;
         this.loserGroup = loserGroup;
@@ -43,7 +43,7 @@ public class GroupScoreEvent extends GroupEvent implements Cancellable {
      *
      * @return the player who scored
      */
-    public Player getScorer() {
+    public GamePlayer getScorer() {
         return scorer;
     }
 

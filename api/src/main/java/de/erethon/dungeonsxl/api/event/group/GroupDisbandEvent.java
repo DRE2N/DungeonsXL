@@ -14,8 +14,8 @@
  */
 package de.erethon.dungeonsxl.api.event.group;
 
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -40,7 +40,7 @@ public class GroupDisbandEvent extends GroupEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Player disbander;
+    private GlobalPlayer disbander;
     private Cause cause;
 
     public GroupDisbandEvent(PlayerGroup group, Cause cause) {
@@ -48,7 +48,7 @@ public class GroupDisbandEvent extends GroupEvent implements Cancellable {
         this.cause = cause;
     }
 
-    public GroupDisbandEvent(PlayerGroup group, Player disbander, Cause cause) {
+    public GroupDisbandEvent(PlayerGroup group, GlobalPlayer disbander, Cause cause) {
         super(group);
         this.disbander = disbander;
         this.cause = cause;
@@ -61,7 +61,7 @@ public class GroupDisbandEvent extends GroupEvent implements Cancellable {
      *
      * @return the player who disbanded the group
      */
-    public Player getDisbander() {
+    public GlobalPlayer getDisbander() {
         return disbander;
     }
 
