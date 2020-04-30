@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -43,12 +42,8 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
     private File idFile;
 
-    DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
-        super(plugin, resourceWorld, folder, world, id);
-    }
-
     DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
-        this(plugin, resourceWorld, folder, null, id);
+        super(plugin, resourceWorld, folder, id);
     }
 
     /* Getters and setters */
