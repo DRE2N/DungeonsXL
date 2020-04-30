@@ -29,7 +29,6 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.OfflinePlayer;
@@ -201,7 +200,7 @@ public class DResourceWorld implements ResourceWorld {
         DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder, id) : new DEditWorld(plugin, this, instanceFolder, id);
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
-        instance.world = new WeakReference<>(Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())));
+        instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())).getName();
         instance.getWorld().setGameRule(GameRule.DO_FIRE_TICK, false);
         if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause all");
@@ -292,7 +291,7 @@ public class DResourceWorld implements ResourceWorld {
         }
         FileUtil.copyDir(RAW, folder, DungeonsXL.EXCLUDED_FILES);
         editWorld.generateIdFile();
-        editWorld.world = new WeakReference<>(creator.createWorld());
+        editWorld.world = creator.createWorld().getName();
         editWorld.generateIdFile();
 
         return editWorld;
