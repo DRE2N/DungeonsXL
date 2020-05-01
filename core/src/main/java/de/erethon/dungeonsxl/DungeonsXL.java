@@ -87,7 +87,6 @@ import de.erethon.dungeonsxl.world.LWCIntegration;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import de.erethon.vignette.api.VignetteAPI;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -97,8 +96,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -207,23 +204,8 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     @Override
     public void onEnable() {
         super.onEnable();
-        if (compat.isPaper() && Internals.andHigher(Internals.v1_14_R1).contains(compat.getInternals()) && System.getProperty("XLDevMode") == null) {
-            File paperFile = new File("paper.yml");
-            FileConfiguration paperConfig = YamlConfiguration.loadConfiguration(paperFile);
-            if (paperConfig.getBoolean("settings.async-chunks.enable")) {
-                MessageUtil.log(this, "&4It seems that the server runs Paper 1.14 or higher and that asynchronous world / chunk (un-) loading is enabled.");
-                MessageUtil.log(this, "&4This feature seems to be too error-prone for massive usage at runtime, which DungeonsXL requires.");
-                MessageUtil.log(this, "&4See &6https://github.com/PaperMC/Paper/issues/3063 &4for further information.");
-                MessageUtil.log(this, "&4The server will be restarted with asynchronous chunk loading turned off.");
-                paperConfig.set("settings.async-chunks.enable", false);
-                try {
-                    paperConfig.save(paperFile);
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-                getServer().spigot().restart();
-                return;
-            }
+        if (Internals.andHigher(Internals.v1_14_R1).contains(compat.getInternals())) {
+            getLogger().warning("Support for Minecraft 1.14 and higher is experimental. Do not use this in a production environment.");
         }
 
         instance = this;
