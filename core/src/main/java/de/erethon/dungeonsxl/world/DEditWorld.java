@@ -106,13 +106,13 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                 DResourceWorld.deleteUnusedFiles(getResource().getFolder());
                 FileUtil.removeDir(getFolder());
 
+                plugin.setLoadingWorld(false);
                 EditWorld newEditWorld = getResource().getOrInstantiateEditWorld(true);
                 players.forEach(p -> {
                     if (p.isOnline()) {
                         new DEditPlayer(plugin, p, newEditWorld);
                     }
                 });
-                plugin.setLoadingWorld(false);
             }
         }.send(plugin);
     }
