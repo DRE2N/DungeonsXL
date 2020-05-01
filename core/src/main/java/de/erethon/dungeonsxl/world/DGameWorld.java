@@ -164,6 +164,9 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     @Override
     public DungeonSign createDungeonSign(Sign sign, String[] lines) {
         DungeonSign dSign = super.createDungeonSign(sign, lines);
+        if (dSign == null) {
+            return null;
+        }
 
         String[] triggerTypes = lines[3].replaceAll("\\s", "").split(",");
         for (String triggerString : triggerTypes) {
