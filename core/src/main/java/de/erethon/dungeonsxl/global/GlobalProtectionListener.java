@@ -22,6 +22,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.player.DPlayerListener;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -105,6 +106,10 @@ public class GlobalProtectionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
+        Player player = event.getPlayer();
+        if (DPlayerListener.isCitizensNPC(player)) {
+            return;
+        }
         Block block = event.getBlockClicked();
         if (DPortal.getByBlock(plugin, block) != null) {
             event.setCancelled(true);
@@ -140,6 +145,9 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        if (DPlayerListener.isCitizensNPC(player)) {
+            return;
+        }
         DPortal dPortal = DPortal.getByLocation(plugin, player.getEyeLocation());
         if (dPortal == null) {
             return;
@@ -181,7 +189,11 @@ public class GlobalProtectionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPortalCreation(PlayerInteractEvent event) {
-        DGlobalPlayer dPlayer = (DGlobalPlayer) plugin.getPlayerCache().get(event.getPlayer());
+        Player player = event.getPlayer();
+        if (DPlayerListener.isCitizensNPC(player)) {
+            return;
+        }
+        DGlobalPlayer dPlayer = (DGlobalPlayer) plugin.getPlayerCache().get(player);
         if (!dPlayer.isCreatingPortal()) {
             return;
         }
@@ -213,7 +225,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getPlayerCache().get(player).isInBreakMode()) {
+        if (DPlayerListener.isCitizensNPC(player) || plugin.getPlayerCache().get(player).isInBreakMode()) {
             return;
         }
         Block clickedBlock = event.getClickedBlock();

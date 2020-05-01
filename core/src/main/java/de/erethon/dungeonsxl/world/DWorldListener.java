@@ -28,6 +28,7 @@ import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.dungeonsxl.player.DPlayerListener;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +36,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -99,6 +101,10 @@ public class DWorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (DPlayerListener.isCitizensNPC(player)) {
+            return;
+        }
         Block block = event.getClickedBlock();
         GameWorld gameWorld = plugin.getGameWorld(block.getWorld());
         if (gameWorld == null || gameWorld.isPlaying()) {

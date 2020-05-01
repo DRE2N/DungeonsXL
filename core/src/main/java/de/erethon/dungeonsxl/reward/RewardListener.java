@@ -21,6 +21,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.util.ContainerAdapter;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
@@ -114,6 +115,9 @@ public class RewardListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        if (DPlayerListener.isCitizensNPC(player)) {
+            return;
+        }
         GlobalPlayer dPlayer = plugin.getPlayerCache().get(player);
         if (plugin.getInstanceWorld(player.getWorld()) != null) {
             return;

@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.trigger;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,6 +58,9 @@ public class TriggerListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (DPlayerListener.isCitizensNPC(player)) {
+            return;
+        }
         DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(player.getWorld());
         if (gameWorld == null) {
             return;

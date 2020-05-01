@@ -25,6 +25,7 @@ import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
@@ -52,6 +53,9 @@ public class DSignListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (DPlayerListener.isCitizensNPC(player)) {
+            return;
+        }
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock == null) {
             return;
