@@ -27,6 +27,7 @@ import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.block.Sign;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -89,12 +90,19 @@ public class TriggerSign extends Rocker {
             }
         }
 
-        getSign().setLine(1, String.valueOf(id));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                getSign().setLine(1, String.valueOf(id));
+                getSign().update(true);
+            }
+        }.runTaskLater(api, 1L);
         return true;
     }
 
     @Override
     public void initialize() {
+        id = NumberUtil.parseInt(getLine(1), 1);
     }
 
     @Override
