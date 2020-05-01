@@ -26,8 +26,10 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -91,14 +93,23 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         }
 
         plugin.setLoadingWorld(true);
-        List<Player> players = getWorld().getPlayers();
+        Map<Player, Double[]> players = new HashMap<>();
+        getWorld().getPlayers().forEach(p -> players.put(p,
+                new Double[]{
+                    p.getLocation().getX(),
+                    p.getLocation().getY(),
+                    p.getLocation().getZ(),
+                    new Double(p.getLocation().getYaw()),
+                    new Double(p.getLocation().getPitch())
+                }
+        ));
         kickAllPlayers();
 
         getResource().editWorld = null;
         plugin.getInstanceCache().remove(this);
         getResource().getSignData().serializeSigns(signs.values());
         Bukkit.unloadWorld(getWorld(), true);
-        new ProgressBar(players, plugin.getMainConfig().getEditInstanceRemovalDelay()) {
+        new ProgressBar(players.keySet(), plugin.getMainConfig().getEditInstanceRemovalDelay()) {
             @Override
             public void onFinish() {
                 getResource().clearFolder();
@@ -108,9 +119,11 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
                 plugin.setLoadingWorld(false);
                 EditWorld newEditWorld = getResource().getOrInstantiateEditWorld(true);
-                players.forEach(p -> {
+                players.keySet().forEach(p -> {
                     if (p.isOnline()) {
                         new DEditPlayer(plugin, p, newEditWorld);
+                        Double[] coords = players.get(p);
+                        p.teleport(new Location(newEditWorld.getWorld(), coords[0], coords[1], coords[2], coords[3].floatValue(), coords[4].floatValue()));
                     }
                 });
             }
