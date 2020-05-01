@@ -55,6 +55,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Tobias Schmitz, Milan Albrecht, Daniel Saukel
@@ -692,7 +693,12 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         if ((dGroup.getLives() == 0 || lives == 0) && ready) {
-            kill();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    kill();
+                }
+            }.runTaskLater(plugin, 1L);
         }
 
         if (rules.getState(GameRule.GAME_GOAL) == GameGoal.LAST_MAN_STANDING) {
