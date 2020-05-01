@@ -28,7 +28,6 @@ import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -51,17 +50,16 @@ public abstract class DInstanceWorld implements InstanceWorld {
     protected Map<Block, DungeonSign> signs = new HashMap<>();
     private DResourceWorld resourceWorld;
     private File folder;
-    WeakReference<World> world;
+    String world;
     private int id;
     private Location lobby;
 
-    DInstanceWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
+    DInstanceWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
         this.plugin = plugin;
         dPlayers = plugin.getPlayerCache();
 
         this.resourceWorld = resourceWorld;
         this.folder = folder;
-        this.world = new WeakReference<>(world);
         this.id = id;
 
         plugin.getInstanceCache().add(id, this);
@@ -85,7 +83,10 @@ public abstract class DInstanceWorld implements InstanceWorld {
 
     @Override
     public World getWorld() {
-        return world.get();
+        if (world == null) {
+            return null;
+        }
+        return Bukkit.getWorld(world);
     }
 
     /**

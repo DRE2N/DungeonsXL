@@ -457,6 +457,10 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
                 // ...*flies away*
             }
         }
+
+        if (gameWorld.getPlayers().isEmpty()) {
+            gameWorld.delete();
+        }
     }
 
     @Override

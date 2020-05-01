@@ -96,13 +96,8 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     private boolean readySign;
 
-    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, World world, int id) {
-        super(plugin, resourceWorld, folder, world, id);
-        caliburn = plugin.getCaliburn();
-    }
-
     DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
-        this(plugin, resourceWorld, folder, null, id);
+        super(plugin, resourceWorld, folder, id);
         caliburn = plugin.getCaliburn();
     }
 

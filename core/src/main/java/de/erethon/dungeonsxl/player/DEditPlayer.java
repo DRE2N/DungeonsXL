@@ -143,8 +143,8 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
 
         reset(false);
 
-        if (editWorld != null) {
-            editWorld.save();
+        if (!plugin.isLoadingWorld() && editWorld != null && editWorld.getPlayers().isEmpty()) {
+            editWorld.delete();
         }
     }
 

@@ -21,8 +21,8 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,7 +39,7 @@ public abstract class GlobalProtection {
 
     public static final String SIGN_TAG = "[DXL]";
 
-    private WeakReference<World> world;
+    private String world;
     private int id;
 
     protected GlobalProtection(DungeonsXL plugin, World world, int id) {
@@ -47,7 +47,7 @@ public abstract class GlobalProtection {
         protections = plugin.getGlobalProtectionCache();
         config = plugin.getGlobalData().getConfig();
 
-        this.world = new WeakReference<>(world);
+        this.world = world.getName();
         this.id = id;
 
         protections.addProtection(this);
@@ -57,7 +57,7 @@ public abstract class GlobalProtection {
      * @return the world
      */
     public World getWorld() {
-        return world.get();
+        return Bukkit.getWorld(world);
     }
 
     /**
