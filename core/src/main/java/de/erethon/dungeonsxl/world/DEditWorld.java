@@ -44,8 +44,8 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
     private File idFile;
 
-    DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
-        super(plugin, resourceWorld, folder, id);
+    DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder) {
+        super(plugin, resourceWorld, folder);
     }
 
     /* Getters and setters */

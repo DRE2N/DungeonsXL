@@ -59,7 +59,6 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
@@ -96,8 +95,8 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     private boolean readySign;
 
-    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
-        super(plugin, resourceWorld, folder, id);
+    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder) {
+        super(plugin, resourceWorld, folder);
         caliburn = plugin.getCaliburn();
     }
 

@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.misc.Registry;
 import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
@@ -47,6 +46,8 @@ public abstract class DInstanceWorld implements InstanceWorld {
     protected DungeonsXL plugin;
     protected PlayerCache dPlayers;
 
+    static int counter;
+
     protected Map<Block, DungeonSign> signs = new HashMap<>();
     private DResourceWorld resourceWorld;
     private File folder;
@@ -54,13 +55,13 @@ public abstract class DInstanceWorld implements InstanceWorld {
     private int id;
     private Location lobby;
 
-    DInstanceWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, int id) {
+    DInstanceWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder) {
         this.plugin = plugin;
         dPlayers = plugin.getPlayerCache();
 
         this.resourceWorld = resourceWorld;
         this.folder = folder;
-        this.id = id;
+        id = counter++;
 
         plugin.getInstanceCache().add(id, this);
     }
@@ -194,20 +195,6 @@ public abstract class DInstanceWorld implements InstanceWorld {
         if (rules.getState(GameRule.TIME) != null) {
             getWorld().setTime(rules.getState(GameRule.TIME));
         }
-    }
-
-    /**
-     * @param instanceCache the used instance cache
-     * @return an ID for the instance
-     */
-    public static int generateId(Registry<Integer, InstanceWorld> instanceCache) {
-        int id = 0;
-        for (InstanceWorld instance : instanceCache) {
-            if (instance.getId() >= id) {
-                id = instance.getId() + 1;
-            }
-        }
-        return id;
     }
 
     /**

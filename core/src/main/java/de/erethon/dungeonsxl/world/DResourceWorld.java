@@ -176,7 +176,7 @@ public class DResourceWorld implements ResourceWorld {
 
     public DInstanceWorld instantiate(boolean game) {
         plugin.setLoadingWorld(true);
-        int id = DInstanceWorld.generateId(plugin.getInstanceCache());
+        int id = DInstanceWorld.counter;
         String name = DInstanceWorld.generateName(game, id);
 
         File instanceFolder = new File(Bukkit.getWorldContainer(), name);
@@ -197,7 +197,7 @@ public class DResourceWorld implements ResourceWorld {
             }
         }
 
-        DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder, id) : new DEditWorld(plugin, this, instanceFolder, id);
+        DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder) : new DEditWorld(plugin, this, instanceFolder);
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())).getName();
@@ -271,14 +271,14 @@ public class DResourceWorld implements ResourceWorld {
      * @return the automatically created DEditWorld instance
      */
     public DEditWorld generate() {
-        int id = DInstanceWorld.generateId(plugin.getInstanceCache());
+        int id = DInstanceWorld.counter;
         String name = DInstanceWorld.generateName(false, id);
         File folder = new File(Bukkit.getWorldContainer(), name);
         WorldCreator creator = new WorldCreator(name);
         creator.type(WorldType.FLAT);
         creator.generateStructures(false);
 
-        DEditWorld editWorld = new DEditWorld(plugin, this, folder, id);
+        DEditWorld editWorld = new DEditWorld(plugin, this, folder);
 
         EditWorldGenerateEvent event = new EditWorldGenerateEvent(editWorld);
         Bukkit.getPluginManager().callEvent(event);
