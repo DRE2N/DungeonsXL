@@ -707,6 +707,9 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     @Override
     public DungeonMob getDungeonMob(LivingEntity entity) {
         GameWorld gameWorld = getGameWorld(entity.getWorld());
+        if (gameWorld == null) {
+            return null;
+        }
         for (DungeonMob mob : gameWorld.getMobs()) {
             if (mob.getEntity() == entity) {
                 return mob;
