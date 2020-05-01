@@ -59,7 +59,7 @@ public class DResourceWorld implements ResourceWorld {
             folder.mkdir();
         }
 
-        File configFile = new File(folder, "config.yml");
+        File configFile = new File(folder, WorldConfig.FILE_NAME);
         if (configFile.exists()) {
             config = new WorldConfig(plugin, configFile);
         }
@@ -72,7 +72,7 @@ public class DResourceWorld implements ResourceWorld {
 
         this.folder = folder;
 
-        File configFile = new File(folder, "config.yml");
+        File configFile = new File(folder, WorldConfig.FILE_NAME);
         if (configFile.exists()) {
             config = new WorldConfig(plugin, configFile);
         }
@@ -110,7 +110,7 @@ public class DResourceWorld implements ResourceWorld {
      */
     public WorldConfig getConfig(boolean generate) {
         if (config == null) {
-            File file = new File(folder, "config.yml");
+            File file = new File(folder, WorldConfig.FILE_NAME);
             if (file.exists()) {
                 try {
                     file.createNewFile();
@@ -299,7 +299,7 @@ public class DResourceWorld implements ResourceWorld {
 
     void clearFolder() {
         for (File file : FileUtil.getFilesForFolder(getFolder())) {
-            if (file.getName().equals(SignData.FILE_NAME)) {
+            if (file.getName().equals(SignData.FILE_NAME) || file.getName().equals(WorldConfig.FILE_NAME)) {
                 continue;
             }
             if (file.isDirectory()) {

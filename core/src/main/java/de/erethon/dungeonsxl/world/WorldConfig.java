@@ -38,6 +38,8 @@ public class WorldConfig extends GameRuleContainer {
 
     private DungeonsXL plugin;
 
+    public static final String FILE_NAME = "config.yml";
+
     private File file;
     private ConfigurationSection config;
 
