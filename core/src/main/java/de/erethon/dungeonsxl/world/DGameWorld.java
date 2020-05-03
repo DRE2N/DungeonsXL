@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.world;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.BlockUtil;
 import de.erethon.commons.misc.FileUtil;
@@ -407,7 +408,9 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         getWorld().setDifficulty(getRules().getState(GameRule.DIFFICULTY));
-        getWorld().setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, getRules().getState(GameRule.FIRE_TICK));
+        if (Internals.isAtLeast(Internals.v1_13_R1)) {
+            getWorld().setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, getRules().getState(GameRule.FIRE_TICK));
+        }
 
         isPlaying = true;
 

@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.compatibility.Internals;
 import de.erethon.commons.compatibility.Version;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -201,7 +202,9 @@ public class DResourceWorld implements ResourceWorld {
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())).getName();
-        instance.getWorld().setGameRule(GameRule.DO_FIRE_TICK, false);
+        if (Internals.isAtLeast(Internals.v1_13_R1)) {
+            instance.getWorld().setGameRule(GameRule.DO_FIRE_TICK, false);
+        }
         if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause all");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dmap worldset " + name + " enabled:false");
