@@ -49,6 +49,7 @@ public class MobSpawnTask extends BukkitRunnable {
             k++;
         } else {
             sign.deactivate();
+            k = 1;
         }
     }
 
