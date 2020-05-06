@@ -77,10 +77,22 @@ public class OpenDoorSign extends Rocker {
         return true;
     }
 
+    @Deprecated
+    public static final java.util.Set<org.bukkit.Material> FENCE_GATES = new java.util.HashSet<>(6);
+
+    static {
+        FENCE_GATES.add(de.erethon.caliburn.item.VanillaItem.OAK_FENCE_GATE.getMaterial());
+        FENCE_GATES.add(de.erethon.caliburn.item.VanillaItem.ACACIA_FENCE_GATE.getMaterial());
+        FENCE_GATES.add(de.erethon.caliburn.item.VanillaItem.DARK_OAK_FENCE_GATE.getMaterial());
+        FENCE_GATES.add(de.erethon.caliburn.item.VanillaItem.SPRUCE_FENCE_GATE.getMaterial());
+        FENCE_GATES.add(de.erethon.caliburn.item.VanillaItem.BIRCH_FENCE_GATE.getMaterial());
+        FENCE_GATES.add(de.erethon.caliburn.item.VanillaItem.JUNGLE_FENCE_GATE.getMaterial());
+    }
+
     @Override
     public void initialize() {
         Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
-        if (Category.DOORS.containsBlock(block)) {
+        if (Category.DOORS.containsBlock(block) || FENCE_GATES.contains(block.getType()) || Category.TRAPDOORS.containsBlock(block)) {
             if (block.getRelative(BlockFace.DOWN).getType() == block.getType()) {
                 door = new LockedDoor(api, block.getRelative(BlockFace.DOWN));
             } else {
