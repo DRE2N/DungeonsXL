@@ -758,7 +758,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     public InstanceWorld getInstanceWorld(World world) {
         for (InstanceWorld instance : instanceCache) {
-            if (instance.getWorld().equals(world)) {
+            if (world.equals(instance.getWorld())) {
                 return instance;
             }
         }
