@@ -106,6 +106,9 @@ public class DWorldListener implements Listener {
             return;
         }
         Block block = event.getClickedBlock();
+        if (block == null) {
+            return;
+        }
         GameWorld gameWorld = plugin.getGameWorld(block.getWorld());
         if (gameWorld == null || gameWorld.isPlaying()) {
             return;
