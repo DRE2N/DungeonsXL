@@ -16,6 +16,8 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
+import de.erethon.caliburn.category.Category;
+import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.api.sign.Deactivatable;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
@@ -78,17 +80,22 @@ public class RedstoneTrigger extends Trigger {
 
     /* Statics */
     public static RedstoneTrigger getOrCreate(Sign sign, DGameWorld gameWorld) {
-        Block rtBlock = sign.getBlock();
-        if (rtBlock != null) {
-            for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
-                RedstoneTrigger trigger = (RedstoneTrigger) uncasted;
-                if (trigger.rtBlock.equals(rtBlock)) {
-                    return trigger;
-                }
-            }
-            return new RedstoneTrigger(rtBlock);
+        Block rtBlock;
+        if (Category.WALL_SIGNS.containsBlock(sign.getBlock())) {
+            rtBlock = BlockUtil.getAttachedBlock(sign.getBlock());
+        } else {
+            rtBlock = sign.getBlock();
         }
-        return null;
+        if (rtBlock == null) {
+            return null;
+        }
+        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
+            RedstoneTrigger trigger = (RedstoneTrigger) uncasted;
+            if (trigger.rtBlock.equals(rtBlock)) {
+                return trigger;
+            }
+        }
+        return new RedstoneTrigger(rtBlock);
     }
 
     public static void updateAll(DGameWorld gameWorld) {
