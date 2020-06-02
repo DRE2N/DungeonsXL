@@ -291,7 +291,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         signRegistry.add("BOSSSHOP", BossShopSign.class);
         signRegistry.add("CHECKPOINT", CheckpointSign.class);
         signRegistry.add("CLASSES", ClassesSign.class);
-        //signRegistry.add("CMD", CommandSign.class); TODO: REIMPLEMENT
+        signRegistry.add("CMD", CommandSign.class);
         signRegistry.add("DROP", DropSign.class);
         signRegistry.add("DUNGEONCHEST", DungeonChestSign.class);
         signRegistry.add("END", EndSign.class);
