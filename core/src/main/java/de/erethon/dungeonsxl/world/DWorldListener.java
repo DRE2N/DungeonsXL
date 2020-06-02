@@ -29,6 +29,7 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPlayerListener;
+import de.erethon.dungeonsxl.util.ContainerAdapter;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -110,7 +111,14 @@ public class DWorldListener implements Listener {
             return;
         }
         GameWorld gameWorld = plugin.getGameWorld(block.getWorld());
-        if (gameWorld == null || gameWorld.isPlaying()) {
+        if (gameWorld == null) {
+            return;
+        }
+
+        if (!gameWorld.isPlaying()) {
+            if (!plugin.getMainConfig().areLobbyContainersEnabled() || !ContainerAdapter.isValidContainer(block)) {
+                event.setCancelled(true);
+            }
             return;
         }
 

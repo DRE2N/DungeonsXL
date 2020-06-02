@@ -48,7 +48,7 @@ public class MainConfig extends DREConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 18;
+    public static final int CONFIG_VERSION = 19;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -105,11 +105,11 @@ public class MainConfig extends DREConfig {
     private boolean dropItems = false;
     private List<String> editCommandWhitelist;
     private BackupMode backupMode = BackupMode.ON_DISABLE_AND_SAVE;
+    private boolean lobbyContainersEnabled = false;
 
     /* Permissions bridge */
     private List<String> editPermissions;
 
-    /* Default DDungeon Settings */
     private WorldConfig defaultWorldConfig;
 
     public MainConfig(DungeonsXL plugin, File file) {
@@ -123,135 +123,78 @@ public class MainConfig extends DREConfig {
         load();
     }
 
-    /**
-     * @return the language
-     */
     public String getLanguage() {
         return language;
     }
 
-    /**
-     * @param language the language to set
-     */
     public void setLanguage(String language) {
         this.language = language;
     }
 
-    /**
-     * @return if DungeonsXL should use economy features provided by Vault
-     */
     public boolean isEconomyEnabled() {
         return enableEconomy;
     }
 
-    /**
-     * @param enabled if DungeonsXL should use economy features provided by Vault
-     */
     public void setEconomyEnabled(boolean enabled) {
         enableEconomy = enabled;
     }
 
-    /**
-     * @return if DungeonsXL should use group adapters
-     */
     public boolean areGroupAdaptersEnabled() {
         return groupAdaptersEnabled;
     }
 
-    /**
-     * @param enabled if DungeonsXL should use group adapters
-     */
     public void setGroupAdaptersEnabled(boolean enabled) {
         groupAdaptersEnabled = enabled;
     }
 
-    /**
-     * @return if the dungeon chat is enabled
-     */
     public boolean isChatEnabled() {
         return chatEnabled;
     }
 
-    /**
-     * @param enabled if the dungeon chat is enabled
-     */
     public void setChatEnabled(boolean enabled) {
         chatEnabled = enabled;
     }
 
-    /**
-     * @return the edit chat format
-     */
     public String getChatFormatEdit() {
         return chatFormatEdit;
     }
 
-    /**
-     * @param string the edit chat format to set
-     */
     public void setEditFormatEdit(String string) {
         chatFormatEdit = string;
     }
 
-    /**
-     * @return the game chat format
-     */
     public String getChatFormatGame() {
         return chatFormatGame;
     }
 
-    /**
-     * @param string the game chat format to set
-     */
     public void setChatFormatGame(String string) {
         chatFormatGame = string;
     }
 
-    /**
-     * @return the group chat format
-     */
     public String getChatFormatGroup() {
         return chatFormatGroup;
     }
 
-    /**
-     * @param string the group chat format to set
-     */
     public void setChatFormatGroup(String string) {
         chatFormatGroup = string;
     }
 
-    /**
-     * @return the chat spy format
-     */
     public String getChatFormatSpy() {
         return chatFormatSpy;
     }
 
-    /**
-     * @param string the chat spy format to set
-     */
     public void setChatFormatSpy(String string) {
         chatFormatSpy = string;
     }
 
-    /**
-     * @return if the tutorial is activated
-     */
     public boolean isTutorialActivated() {
         return tutorialActivated;
     }
 
-    /**
-     * @param activated if new players start in a tutorial
-     */
     public void setTutorialActivated(boolean activated) {
         tutorialActivated = activated;
     }
 
-    /**
-     * @return the tutorial dungeon
-     */
     public Dungeon getTutorialDungeon() {
         if (tutorialDungeon == null) {
             tutorialDungeon = plugin.getDungeonRegistry().get(tutorialDungeonName);
@@ -259,171 +202,98 @@ public class MainConfig extends DREConfig {
         return tutorialDungeon;
     }
 
-    /**
-     * @param dungeon the tutorial dungeon to set
-     */
     public void setTutorialDungeon(Dungeon dungeon) {
         tutorialDungeon = dungeon;
     }
 
-    /**
-     * @return the tutorialStartGroup
-     */
     public String getTutorialStartGroup() {
         return tutorialStartGroup;
     }
 
-    /**
-     * @param group the group the player gets when he plays the tutorial
-     */
     public void setTutorialStartGroup(String group) {
         tutorialStartGroup = group;
     }
 
-    /**
-     * @return the tutorialEndGroup
-     */
     public String getTutorialEndGroup() {
         return tutorialEndGroup;
     }
 
-    /**
-     * @param group the group the player gets when he finshs the tutorial
-     */
     public void setTutorialEndGroup(String group) {
         tutorialEndGroup = group;
     }
 
-    /**
-     * @return the group colors
-     */
     public List<Color> getGroupColorPriority() {
         return groupColorPriority;
     }
 
-    /**
-     * @param count the group count
-     * @return the group color for the count
-     */
     public Color getGroupColorPriority(int count) {
         return (count < groupColorPriority.size() && count >= 0) ? groupColorPriority.get(count) : Color.WHITE;
     }
 
-    /**
-     * @param colors the colors to set
-     */
     public void setGroupColorPriority(List<Color> colors) {
         groupColorPriority = colors;
     }
 
-    /**
-     * @return the announcement interval
-     */
     public long getAnnouncmentInterval() {
         return (long) (announcementInterval * 20);
     }
 
-    /**
-     * @param interval the interval to set
-     */
     public void setAnnouncementInterval(double interval) {
         announcementInterval = interval;
     }
 
-    /**
-     * @return false if death messages shall be sent to players who are not in the dungeon, true if not
-     */
     public boolean areGlobalDeathMessagesDisabled() {
         return globalDeathMessagesDisabled;
     }
 
-    /**
-     * @param disabled set if death messages shall be sent to players who are not in the dungeon
-     */
     public void setGlobalDeathMessagesDisabled(boolean disabled) {
         globalDeathMessagesDisabled = false;
     }
 
-    /**
-     * @return if the floor title shall be sent
-     */
     public boolean isSendFloorTitleEnabled() {
         return sendFloorTitle;
     }
 
-    /**
-     * @param enabled if the floor title shall be sent
-     */
     public void setSendFloorTitleEnabled(boolean enabled) {
         sendFloorTitle = enabled;
     }
 
-    /**
-     * @return the custom external mob providers
-     */
     public Map<String, Object> getExternalMobProviders() {
         return externalMobProviders;
     }
 
-    /**
-     * @return the resource pack index
-     */
     public Map<String, Object> getResourcePacks() {
         return resourcePacks;
     }
 
-    /**
-     * @return the maximum amount of worlds to instantiate at once
-     */
     public int getMaxInstances() {
         return maxInstances;
     }
 
-    /**
-     * @param maxInstances the maximum amount of worlds to instantiate at once
-     */
     public void setMaxInstances(int maxInstances) {
         this.maxInstances = maxInstances;
     }
 
-    /**
-     * @return the delay in seconds until an edit world without players is saved and removed
-     */
     public int getEditInstanceRemovalDelay() {
         return editInstanceRemovalDelay;
     }
 
-    /**
-     * @param delay the delay in seconds until an edit world without players is saved and removed
-     */
     public void setEditInstanceRemovalDelay(int delay) {
         editInstanceRemovalDelay = delay;
     }
 
-    /**
-     * @return if the secure mode is enabled
-     */
     public boolean isSecureModeEnabled() {
         return secureModeEnabled;
     }
 
-    /**
-     * @param enabled if the secure mode is enabled
-     */
     public void setSecureModeEnabled(boolean enabled) {
         secureModeEnabled = enabled;
     }
 
-    /**
-     * @return if players may open inventories while editing; false if secure mode disabled
-     */
     public boolean getOpenInventories() {
         return openInventories && secureModeEnabled;
     }
 
-    /**
-     * @param openInventories if inventories can be opened in edit mode
-     */
     public void setOpenInventories(boolean openInventories) {
         this.openInventories = openInventories;
     }
@@ -442,51 +312,38 @@ public class MainConfig extends DREConfig {
         this.dropItems = dropItems;
     }
 
-    /**
-     * @return the interval for the check task
-     */
     public long getSecureModeCheckInterval() {
         return (long) (secureModeCheckInterval * 20);
     }
 
-    /**
-     * @param interval the interval for the check task
-     */
     public void setSecureModeCheckInterval(double interval) {
         secureModeCheckInterval = interval;
     }
 
-    /**
-     * @return the editCommandWhitelist
-     */
     public List<String> getEditCommandWhitelist() {
         return editCommandWhitelist;
     }
 
-    /**
-     * @return the backup mode
-     */
     public BackupMode getBackupMode() {
         return backupMode;
     }
 
-    /**
-     * @param mode the BackupMode to set
-     */
     public void setBackupMode(BackupMode mode) {
         backupMode = mode;
     }
 
-    /**
-     * @return the edit mode permissions
-     */
+    public boolean areLobbyContainersEnabled() {
+        return lobbyContainersEnabled;
+    }
+
+    public void setLobbyContainersEnabled(boolean enabled) {
+        lobbyContainersEnabled = enabled;
+    }
+
     public List<String> getEditPermissions() {
         return editPermissions;
     }
 
-    /**
-     * @return the defaultWorldConfig
-     */
     public WorldConfig getDefaultWorldConfig() {
         return defaultWorldConfig;
     }
@@ -602,6 +459,10 @@ public class MainConfig extends DREConfig {
             config.set("backupMode", backupMode.toString());
         }
 
+        if (!config.contains("lobbyContainersEnabled")) {
+            config.set("lobbyContainersEnabled", lobbyContainersEnabled);
+        }
+
         if (!config.contains("editPermissions")) {
             config.set("editPermissions", editPermissions);
         }
@@ -677,6 +538,7 @@ public class MainConfig extends DREConfig {
         if (EnumUtil.isValidEnum(BackupMode.class, mode)) {
             backupMode = BackupMode.valueOf(mode);
         }
+        lobbyContainersEnabled = config.getBoolean("lobbyContainersEnabled", lobbyContainersEnabled);
 
         editPermissions = config.getStringList("editPermissions");
 
