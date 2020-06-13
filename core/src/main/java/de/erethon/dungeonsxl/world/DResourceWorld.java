@@ -177,7 +177,7 @@ public class DResourceWorld implements ResourceWorld {
 
     public DInstanceWorld instantiate(boolean game) {
         plugin.setLoadingWorld(true);
-        int id = DInstanceWorld.counter;
+        int id = DInstanceWorld.nextId(plugin);
         String name = DInstanceWorld.generateName(game, id);
 
         File instanceFolder = new File(Bukkit.getWorldContainer(), name);
@@ -274,7 +274,7 @@ public class DResourceWorld implements ResourceWorld {
      * @return the automatically created DEditWorld instance
      */
     public DEditWorld generate() {
-        int id = DInstanceWorld.counter;
+        int id = DInstanceWorld.nextId(plugin);
         String name = DInstanceWorld.generateName(false, id);
         File folder = new File(Bukkit.getWorldContainer(), name);
         WorldCreator creator = new WorldCreator(name);
