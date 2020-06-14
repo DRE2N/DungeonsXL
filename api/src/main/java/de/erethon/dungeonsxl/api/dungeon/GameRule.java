@@ -62,6 +62,10 @@ public class GameRule<V> {
      */
     public static final GameRule<Boolean> KEEP_INVENTORY_ON_DEATH = new GameRule<>(Boolean.class, "keepInventoryOnDeath", true);
     /**
+     * Shall players reset their inventory to their chosen class when respawning?
+     */
+    public static final GameRule<Boolean> RESET_CLASS_INVENTORY_ON_RESPAWN = new GameRule<>(Boolean.class, "resetClassInventoryOnRespawn", true);
+    /**
      * The location where the players spawn when they leave the dungeon without succeeding.
      */
     public static final GameRule<String> ESCAPE_LOCATION = new GameRule<>(String.class, "escapeLocation", null);

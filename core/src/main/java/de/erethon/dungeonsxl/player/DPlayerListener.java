@@ -499,8 +499,11 @@ public class DPlayerListener implements Listener {
                 respawn = group.getGameWorld().getStartLocation(group);
             }
 
+            boolean shouldResetInventory = gamePlayer.getGameWorld().getDungeon().getRules().getState(GameRule.RESET_CLASS_INVENTORY_ON_RESPAWN);
+
             // Because some plugins set another respawn point, DXL teleports a few ticks later.
-            new RespawnTask(player, respawn).runTaskLater(plugin, 10L);
+            event.setRespawnLocation(respawn);
+            new RespawnTask(player, gamePlayer, respawn, shouldResetInventory).runTaskLater(plugin, 10L);
 
             // Don't forget Doge!
             if (gamePlayer.getWolf() != null) {
