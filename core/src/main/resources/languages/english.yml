@@ -1,4 +1,6 @@
-announcer: 
+announce:
+  help: "/dxl announce [name] - Runs an announcement script"
+announcer:
   click: "&4&l=> &6CLICK HERE TO JOIN &4&l<="
 button: 
   accept: "&a[ YES ]"
@@ -141,6 +143,7 @@ error:
   noProtectedBlock: "&4This is not a block protected by DungeonsXL."
   noReadySign: "&4The world &6&v1 &4does not seem to have a ready sign. No game can be started and only lobby dungeon signs will be initialized."
   noRewardsTime: "&4You cannot receive rewards before &6&v1&4."
+  noSuchAnnouncement: "&4This announcement does not exist."
   noSuchDungeon: "&4This dungeon does not exist."
   noSuchGroup: "&4The group &6&v1&4 does not exist."
   noSuchMap: "&4The world &6&v1&4 does not exist."
