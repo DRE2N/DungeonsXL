@@ -17,11 +17,10 @@
 package de.erethon.dungeonsxl.announcer;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.player.DInstancePlayer;
 import java.util.List;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -45,11 +44,10 @@ public class AnnouncerTask extends BukkitRunnable {
     public void run() {
         Announcer announcer = announcers.get(index);
         List<String> worlds = announcer.getWorlds();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            DGlobalPlayer dPlayer = (DGlobalPlayer) plugin.getPlayerCache().get(player);
-            if (!(dPlayer instanceof DInstancePlayer) && dPlayer.isAnnouncerEnabled()) {
-                if (worlds.isEmpty() || worlds.contains(player.getWorld().getName())) {
-                    announcer.send(player);
+        for (GlobalPlayer dPlayer : plugin.getPlayerCache()) {
+            if (!(dPlayer instanceof InstancePlayer) && ((DGlobalPlayer) dPlayer).isAnnouncerEnabled()) {
+                if (worlds.isEmpty() || worlds.contains(dPlayer.getPlayer().getWorld().getName())) {
+                    announcer.send(dPlayer.getPlayer());
                 }
             }
         }

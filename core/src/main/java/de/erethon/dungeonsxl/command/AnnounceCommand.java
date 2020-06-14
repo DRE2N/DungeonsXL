@@ -19,18 +19,17 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.announcer.Announcer;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
+import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
 /**
- * @author Daniel Saukel
+ * @author Goh Wei Wen
  */
 public class AnnounceCommand extends DCommand {
 
@@ -55,11 +54,10 @@ public class AnnounceCommand extends DCommand {
         }
 
         List<String> worlds = announcer.getWorlds();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            DGlobalPlayer dPlayer = (DGlobalPlayer) plugin.getPlayerCache().get(player);
-            if (!(dPlayer instanceof DInstancePlayer) && dPlayer.isAnnouncerEnabled()) {
-                if (worlds.isEmpty() || worlds.contains(player.getWorld().getName())) {
-                    announcer.send(player);
+        for (GlobalPlayer dPlayer : plugin.getPlayerCache()) {
+            if (!(dPlayer instanceof InstancePlayer) && ((DGlobalPlayer) dPlayer).isAnnouncerEnabled()) {
+                if (worlds.isEmpty() || worlds.contains(dPlayer.getPlayer().getWorld().getName())) {
+                    announcer.send(dPlayer.getPlayer());
                 }
             }
         }
