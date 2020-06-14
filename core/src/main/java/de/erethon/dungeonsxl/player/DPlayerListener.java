@@ -107,6 +107,7 @@ public class DPlayerListener implements Listener {
             return;
         }
         if (event.getEntity() instanceof Player && !gameWorld.getDungeon().getRules().getState(GameRule.DEATH_SCREEN)) {
+            event.setDamage(0);
             GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer((Player) event.getEntity());
             if (gamePlayer == null) {
                 return;
