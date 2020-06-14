@@ -213,4 +213,13 @@ public enum DPermission {
         }
     }
 
+    /**
+     * Unregisters the permissions.
+     */
+    public static void unregister() {
+        for (DPermission permission : values()) {
+            Bukkit.getPluginManager().removePermission(permission.getNode());
+        }
+    }
+
 }

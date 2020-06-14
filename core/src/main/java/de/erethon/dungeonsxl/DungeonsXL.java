@@ -234,6 +234,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         deleteAllInstances();
         HandlerList.unregisterAll(this);
         getServer().getScheduler().cancelTasks(this);
+        DPermission.unregister();
         loaded = false;
     }
 
