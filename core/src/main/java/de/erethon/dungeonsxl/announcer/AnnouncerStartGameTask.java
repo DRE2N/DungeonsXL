@@ -76,6 +76,8 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
                 continue;
             }
 
+            dGroup.setDungeon(announcer.getDungeonName() == null ? announcer.getMapName() : announcer.getDungeonName());
+
             if (game == null) {
                 ResourceWorld resource = plugin.getMapRegistry().get(announcer.getMapName());
                 if (resource == null) {
@@ -94,7 +96,6 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
                 game.addGroup(dGroup);
             }
 
-            dGroup.setDungeon(announcer.getDungeonName() == null ? announcer.getMapName() : announcer.getDungeonName());
             dGroup.setGameWorld(game.getWorld());
         }
 
