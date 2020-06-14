@@ -14,35 +14,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.announcer;
+package de.erethon.dungeonsxl.command;
 
+import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.announcer.Announcer;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
+import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
+import de.erethon.dungeonsxl.player.DPermission;
+import org.bukkit.command.CommandSender;
+
 import java.util.List;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * @author Daniel Saukel
+ * @author Goh Wei Wen
  */
-public class AnnouncerTask extends BukkitRunnable {
+public class AnnounceCommand extends DCommand {
 
-    private DungeonsXL plugin;
-
-    private List<Announcer> announcers;
-    private int index;
-
-    public AnnouncerTask(DungeonsXL plugin) {
-        this.plugin = plugin;
-
-        this.announcers = plugin.getAnnouncerCache().getAnnouncers();
-        index = 0;
+    public AnnounceCommand(DungeonsXL plugin) {
+        super(plugin);
+        setCommand("announce");
+        setMinArgs(1);
+        setMaxArgs(1);
+        setHelp(DMessage.CMD_ANNOUNCE_HELP.getMessage());
+        setPermission(DPermission.ANNOUNCE.getNode());
+        setPlayerCommand(true);
     }
 
     @Override
-    public void run() {
-        Announcer announcer = announcers.get(index);
+    public void onExecute(String[] args, CommandSender sender) {
+        String name = args[1];
+        Announcer announcer = plugin.getAnnouncerCache().getByName(name);
+
+        if (announcer == null) {
+            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_ANNOUNCER.getMessage(name));
+            return;
+        }
+
         List<String> worlds = announcer.getWorlds();
         for (GlobalPlayer dPlayer : plugin.getPlayerCache()) {
             if (!(dPlayer instanceof InstancePlayer) && ((DGlobalPlayer) dPlayer).isAnnouncerEnabled()) {
@@ -50,11 +60,6 @@ public class AnnouncerTask extends BukkitRunnable {
                     announcer.send(dPlayer.getPlayer());
                 }
             }
-        }
-
-        index++;
-        if (index == announcers.size()) {
-            index = 0;
         }
     }
 

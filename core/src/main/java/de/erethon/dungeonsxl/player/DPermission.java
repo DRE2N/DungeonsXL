@@ -32,6 +32,7 @@ import static org.bukkit.permissions.PermissionDefault.*;
 public enum DPermission {
 
     // Main nodes
+    ANNOUNCE("announce", OP),
     BED("bed", OP),
     BREAK("break", OP),
     BYPASS("bypass", OP),

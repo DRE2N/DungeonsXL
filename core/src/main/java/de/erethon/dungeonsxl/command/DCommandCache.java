@@ -29,6 +29,7 @@ public class DCommandCache extends DRECommandCache {
 
     public static final String LABEL = "dungeonsxl";
 
+    public AnnounceCommand announce;
     public BreakCommand breakCmd;
     public ChatCommand chat;
     public ChatSpyCommand chatSpy;
@@ -63,6 +64,7 @@ public class DCommandCache extends DRECommandCache {
     public DCommandCache(DungeonsXL plugin) {
         super(LABEL, plugin);
 
+        announce = new AnnounceCommand(plugin);
         breakCmd = new BreakCommand(plugin);
         chat = new ChatCommand(plugin);
         chatSpy = new ChatSpyCommand(plugin);
@@ -94,6 +96,7 @@ public class DCommandCache extends DRECommandCache {
         test = new TestCommand(plugin);
         uninvite = new UninviteCommand(plugin);
 
+        addCommand(announce);
         addCommand(breakCmd);
         addCommand(create);
         addCommand(delete);

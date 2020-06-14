@@ -46,7 +46,7 @@ public class AnnouncerCache {
         for (File file : folder.listFiles()) {
             addAnnouncer(new Announcer(plugin, file));
         }
-        if (!announcers.isEmpty()) {
+        if (!announcers.isEmpty() && plugin.getMainConfig().getAnnouncmentInterval() > 0) {
             new AnnouncerTask(plugin).runTaskTimer(plugin, plugin.getMainConfig().getAnnouncmentInterval(), plugin.getMainConfig().getAnnouncmentInterval());
         }
         Bukkit.getPluginManager().registerEvents(new AnnouncerListener(plugin), plugin);

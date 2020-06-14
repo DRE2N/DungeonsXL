@@ -26,6 +26,7 @@ import de.erethon.commons.config.Message;
 public enum DMessage implements Message {
 
     ANNOUNCER_CLICK("announcer.click"),
+    CMD_ANNOUNCE_HELP("cmd.announce.help"),
     CMD_BREAK_BREAK_MODE("cmd.break.breakMode"),
     CMD_BREAK_HELP("cmd.break.help"),
     CMD_BREAK_PROTECTED_MODE("cmd.break.protectedMode"),
@@ -126,6 +127,7 @@ public enum DMessage implements Message {
     ERROR_NO_PROTECTED_BLOCK("error.noProtectedBlock"),
     ERROR_NO_READY_SIGN("error.noReadySign"),
     ERROR_NO_REWARDS_TIME("error.noRewardsTime"),
+    ERROR_NO_SUCH_ANNOUNCER("error.noSuchAnnouncer"),
     ERROR_NO_SUCH_DUNGEON("error.noSuchDungeon"),
     ERROR_NO_SUCH_GROUP("error.noSuchGroup"),
     ERROR_NO_SUCH_MAP("error.noSuchMap"),
