@@ -72,6 +72,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
     private Wolf wolf;
     private int wolfRespawnTime = 30;
     private long offlineTime;
+    private boolean resetClassInventoryOnRespawn;
 
     private int initialLives = -1;
     private int lives;
@@ -104,6 +105,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         initialLives = rules.getState(GameRule.INITIAL_LIVES);
         lives = initialLives;
+
+        resetClassInventoryOnRespawn = rules.getState(GameRule.RESET_CLASS_INVENTORY_ON_RESPAWN);
 
         Location teleport = world.getLobbyLocation();
         if (teleport == null) {
@@ -532,9 +535,13 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         PlayerUtil.secureTeleport(getPlayer(), respawn);
 
-        // Don't forget Doge!
-        if (wolf != null) {
-            wolf.teleport(getPlayer());
+        if (resetClassInventoryOnRespawn) {
+            setPlayerClass(dClass);
+        } else {
+            // Don't forget Doge!
+            if (wolf != null) {
+                wolf.teleport(getPlayer());
+            }
         }
     }
 
@@ -657,6 +664,10 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             heal();
             if (getWolf() != null) {
                 getWolf().teleport(respawn);
+            }
+
+            if (rules.getState(GameRule.RESET_CLASS_INVENTORY_ON_RESPAWN)) {
+                setPlayerClass(dClass);
             }
 
         } else if (config.areGlobalDeathMessagesDisabled()) {
