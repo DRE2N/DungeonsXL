@@ -181,6 +181,9 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
     @Override
     public void setPlayerClass(PlayerClass playerClass) {
         dClass = playerClass;
+        if (dClass == null) {
+            return;
+        }
 
         /* Set Dog */
         if (wolf != null) {
