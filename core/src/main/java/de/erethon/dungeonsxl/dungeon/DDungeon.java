@@ -38,21 +38,6 @@ public class DDungeon implements Dungeon {
     private GameRuleContainer rules;
 
     /**
-     * Real dungeon
-     *
-     * @param plugin the plugin instance
-     * @param file   the file to load from
-     */
-    public DDungeon(DungeonsXL plugin, File file) {
-        this.plugin = plugin;
-
-        name = file.getName().replaceAll(".yml", "");
-        config = new DungeonConfig(plugin, file);
-        map = config.getStartFloor();
-        setupRules();
-    }
-
-    /**
      * Artificial dungeon
      *
      * @param plugin   the plugin instance
@@ -64,6 +49,35 @@ public class DDungeon implements Dungeon {
         name = resource.getName();
         map = resource;
         setupRules();
+    }
+
+    private DDungeon() {
+    }
+
+    /**
+     * Real dungeon
+     *
+     * @param plugin the plugin instance
+     * @param file   the file to load from
+     * @return the dungeon or null if the config is erroneous
+     */
+    public static Dungeon create(DungeonsXL plugin, File file) {
+        DungeonConfig config = new DungeonConfig(plugin, file);
+        if (config.getStartFloor() == null || config.getEndFloor() == null) {
+            return null;
+        }
+
+        DDungeon dungeon = new DDungeon();
+        dungeon.plugin = plugin;
+        dungeon.name = file.getName().replaceAll(".yml", "");
+        dungeon.config = config;
+        dungeon.map = config.getStartFloor();
+        if (dungeon.isSetupCorrect()) {
+            dungeon.setupRules();
+            return dungeon;
+        } else {
+            return null;
+        }
     }
 
     public DungeonConfig getConfig() {
@@ -194,7 +208,7 @@ public class DDungeon implements Dungeon {
                 return false;
             }
         }
-        return getConfig().getStartFloor() != null && getConfig().getEndFloor() != null;
+        return getConfig() == null || (getConfig().getStartFloor() != null && getConfig().getEndFloor() != null);
     }
 
     /* Statics */

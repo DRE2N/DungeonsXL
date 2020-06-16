@@ -341,9 +341,9 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
         // Dungeons - Linked dungeons
         for (File file : DUNGEONS.listFiles()) {
-            Dungeon dungeon = new DDungeon(this, file);
+            Dungeon dungeon = DDungeon.create(this, file);
 
-            if (dungeon.isSetupCorrect()) {
+            if (dungeon != null) {
                 dungeonRegistry.add(dungeon.getName(), dungeon);
             } else {
                 MessageUtil.log(this, "&4The setup of dungeon &6" + file.getName()
