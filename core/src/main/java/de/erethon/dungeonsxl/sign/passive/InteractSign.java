@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Milan Albrecht, Daniel Saukel
@@ -90,7 +91,13 @@ public class InteractSign extends Passive {
             }
         }
 
-        getSign().setLine(1, String.valueOf(id));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                getSign().setLine(1, String.valueOf(id));
+                getSign().update(true);
+            }
+        }.runTaskLater(api, 1L);
         return true;
     }
 

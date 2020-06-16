@@ -34,7 +34,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class TriggerSign extends Rocker {
 
-    private int id = 1;
+    private int id = 0;
 
     public TriggerSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
