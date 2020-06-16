@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.sign.windup;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,7 +30,7 @@ public class CommandScript {
 
     private String name;
     private File file;
-    private List<String> commands = new ArrayList<>();
+    private List<String> commands;
 
     public CommandScript(String name, List<String> commands, Permission permission) {
         this.name = name;
@@ -45,10 +44,7 @@ public class CommandScript {
 
         name = file.getName().replace(".yml", "");
         this.file = file;
-
-        if (config.getStringList("commands") != null) {
-            setCommands(config.getStringList("commands"));
-        }
+        setCommands(config.getStringList("commands"));
     }
 
     public String getName() {

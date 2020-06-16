@@ -86,6 +86,7 @@ public class CommandSign extends Windup {
 
     @Override
     public void initialize() {
+        script = ((DungeonsXL) api).getCommandScriptRegistry().get(getLine(1));
         String[] attributes = getLine(2).split(",");
 
         if (attributes.length == 3) {
