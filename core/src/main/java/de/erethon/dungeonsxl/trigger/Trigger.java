@@ -124,74 +124,63 @@ public abstract class Trigger implements de.erethon.dungeonsxl.api.Trigger {
         Trigger trigger = null;
 
         if (type == TriggerTypeDefault.REDSTONE) {
-
             trigger = RedstoneTrigger.getOrCreate(dSign.getSign(), gameWorld);
 
         } else if (type == TriggerTypeDefault.DISTANCE) {
-
             if (value != null) {
                 trigger = new DistanceTrigger(NumberUtil.parseInt(value), dSign.getSign().getLocation());
-
             } else {
                 trigger = new DistanceTrigger(dSign.getSign().getLocation());
             }
 
         } else if (type == TriggerTypeDefault.FORTUNE) {
-
             if (value != null) {
                 trigger = new FortuneTrigger(NumberUtil.parseDouble(value));
             }
 
         } else if (type == TriggerTypeDefault.SIGN) {
-
             if (value != null) {
                 trigger = SignTrigger.getOrCreate(NumberUtil.parseInt(value), gameWorld);
             }
 
         } else if (type == TriggerTypeDefault.INTERACT) {
-
             if (value != null) {
                 trigger = InteractTrigger.getOrCreate(NumberUtil.parseInt(value), gameWorld);
             }
 
         } else if (type == TriggerTypeDefault.MOB) {
-
             if (value != null) {
                 trigger = MobTrigger.getOrCreate(value, gameWorld);
             }
 
-        } else if (type == TriggerTypeDefault.PROGRESS) {
-
+        } else if (type == TriggerTypeDefault.PRESENCE) {
             if (value != null) {
                 if (value.matches("[0-99]/[0-999]")) {
                     int floorCount = NumberUtil.parseInt(value.split("/")[0]);
                     int waveCount = NumberUtil.parseInt(value.split("/")[1]);
                     trigger = ProgressTrigger.getOrCreate(floorCount, waveCount, gameWorld);
-
                 } else {
-                    trigger = ProgressTrigger.getOrCreate(plugin, value, gameWorld);
+                    trigger = new PresenceTrigger(NumberUtil.parseInt(value), dSign.getSign().getLocation());
                 }
+            } else {
+                trigger = new PresenceTrigger(dSign.getSign().getLocation());
             }
 
         } else if (type == TriggerTypeDefault.USE_ITEM) {
-
             if (value != null) {
                 trigger = UseItemTrigger.getOrCreate(plugin, value, gameWorld);
             }
 
         } else if (type == TriggerTypeDefault.WAVE) {
-
             if (value != null) {
                 trigger = WaveTrigger.getOrCreate(NumberUtil.parseDouble(value, 1), gameWorld);
             }
 
         } else if (type != null) {
-
             Method method;
             try {
                 method = type.getHandler().getDeclaredMethod("getOrCreate", String.class, DGameWorld.class);
                 trigger = (Trigger) method.invoke(value, dSign.getGameWorld());
-
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
                 MessageUtil.log("An error occurred while accessing the handler class of the sign " + type.getIdentifier() + ": " + exception.getClass().getSimpleName());
                 if (!(type instanceof TriggerTypeDefault)) {

@@ -16,39 +16,40 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
+import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 /**
- * Default implementation of TriggerType.
- *
  * @author Daniel Saukel
  */
-public enum TriggerTypeDefault implements TriggerType {
+public class PresenceTrigger extends DistanceTrigger {
 
-    DISTANCE("D", DistanceTrigger.class),
-    FORTUNE("F", FortuneTrigger.class),
-    INTERACT("I", InteractTrigger.class),
-    MOB("M", MobTrigger.class),
-    PRESENCE("P", PresenceTrigger.class),
-    REDSTONE("R", RedstoneTrigger.class),
-    SIGN("T", SignTrigger.class),
-    USE_ITEM("U", UseItemTrigger.class),
-    WAVE("W", WaveTrigger.class);
+    public PresenceTrigger(int distance, Location loc) {
+        super(distance, loc);
+    }
 
-    private String identifier;
-    private Class<? extends Trigger> handler;
-
-    TriggerTypeDefault(String identifier, Class<? extends Trigger> handler) {
-        this.identifier = identifier;
-        this.handler = handler;
+    public PresenceTrigger(Location loc) {
+        super(loc);
     }
 
     @Override
-    public String getIdentifier() {
-        return identifier;
+    public void onTrigger(Player player) {
+        TriggerActionEvent event = new TriggerActionEvent(this);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        setTriggered(true);
+        setPlayer(player);
+        updateDSigns();
     }
 
     @Override
-    public Class<? extends Trigger> getHandler() {
-        return handler;
+    public TriggerType getType() {
+        return TriggerTypeDefault.PRESENCE;
     }
 
 }

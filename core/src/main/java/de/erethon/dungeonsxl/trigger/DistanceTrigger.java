@@ -74,10 +74,12 @@ public class DistanceTrigger extends Trigger {
             return;
         }
 
-        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.DISTANCE)) {
-            DistanceTrigger trigger = (DistanceTrigger) uncasted;
-            if (player.getLocation().distance(trigger.loc) < trigger.distance) {
-                trigger.onTrigger(player);
+        for (Trigger trigger : gameWorld.getTriggers()) {
+            if (trigger instanceof DistanceTrigger) {
+                DistanceTrigger distanceTrigger = (DistanceTrigger) trigger;
+                if (player.getLocation().distance(distanceTrigger.loc) < distanceTrigger.distance) {
+                    distanceTrigger.onTrigger(player);
+                }
             }
         }
     }
