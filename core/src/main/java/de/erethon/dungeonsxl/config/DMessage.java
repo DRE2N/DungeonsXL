@@ -208,6 +208,7 @@ public enum DMessage implements Message {
     PLAYER_UNLIMITED_LIVES("player.unlimitedLives"),
     PLAYER_WAIT_FOR_OTHER_PLAYERS("player.waitForOtherPlayers"),
     REQUIREMENT_FEE("requirement.fee"),
+    REQUIREMENT_FEE_ITEMS("requirement.feeItems"),
     REQUIREMENT_FEE_LEVEL("requirement.feeLevel"),
     REQUIREMENT_FEE_MONEY("requirement.feeMoney"),
     REQUIREMENT_FORBIDDEN_ITEMS("requirement.forbiddenItems"),

@@ -221,6 +221,7 @@ player:
   waitForOtherPlayers: "&6Warte auf andere Gruppenmitglieder..."
 requirement: 
   fee: "&6Du hast &4&v1 &6bezahlt, um den Dungeon zu betreten."
+  feeItems: "Items"
   feeLevel: "Level"
   feeMoney: "Geld"
   forbiddenItems: "Verbotene Items"
