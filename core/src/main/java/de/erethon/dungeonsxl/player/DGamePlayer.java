@@ -99,10 +99,6 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
         player.setAllowFlight(rules.getState(GameRule.FLY));
 
-        if (rules.getState(GameRule.IS_LOBBY_DISABLED)) {
-            ready();
-        }
-
         initialLives = rules.getState(GameRule.INITIAL_LIVES);
         lives = initialLives;
 
