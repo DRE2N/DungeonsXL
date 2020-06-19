@@ -363,9 +363,8 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
                 continue;
             }
 
-            for (de.erethon.dungeonsxl.api.Trigger apiTrigger : sign.getTriggers()) {
-                Trigger trigger = (Trigger) apiTrigger;
-                if (trigger.getType() == TriggerTypeDefault.PROGRESS) {
+            for (de.erethon.dungeonsxl.api.Trigger trigger : sign.getTriggers()) {
+                if (trigger instanceof ProgressTrigger) {
                     if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
                         break signs;
                     }

@@ -29,8 +29,6 @@ import org.bukkit.Bukkit;
  */
 public class ProgressTrigger extends Trigger {
 
-    private TriggerType type = TriggerTypeDefault.PROGRESS;
-
     private DResourceWorld floor;
     private int floorCount;
     private int waveCount;
@@ -102,7 +100,7 @@ public class ProgressTrigger extends Trigger {
 
     @Override
     public TriggerType getType() {
-        return type;
+        return TriggerTypeDefault.PRESENCE;
     }
 
     /* Statics */
@@ -126,8 +124,10 @@ public class ProgressTrigger extends Trigger {
 
     public static Set<ProgressTrigger> getByGameWorld(DGameWorld gameWorld) {
         Set<ProgressTrigger> toReturn = new HashSet<>();
-        for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.PROGRESS)) {
-            toReturn.add((ProgressTrigger) trigger);
+        for (Trigger trigger : gameWorld.getTriggers()) {
+            if (trigger instanceof ProgressTrigger) {
+                toReturn.add((ProgressTrigger) trigger);
+            }
         }
         return toReturn;
     }
