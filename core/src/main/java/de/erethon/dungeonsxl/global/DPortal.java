@@ -243,13 +243,13 @@ public class DPortal extends GlobalProtection {
 
         PlayerGroup group = plugin.getPlayerGroup(player);
         if (group == null) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
+            MessageUtil.sendActionBarMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
         Dungeon dungeon = group.getDungeon();
         if (dungeon == null) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
+            MessageUtil.sendActionBarMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
             return;
         }
 
@@ -277,7 +277,7 @@ public class DPortal extends GlobalProtection {
             if (resource != null) {
                 target = resource.instantiateGameWorld(false);
                 if (target == null) {
-                    MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+                    MessageUtil.sendActionBarMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
                     return;
                 }
                 group.setGameWorld(target);
@@ -285,7 +285,7 @@ public class DPortal extends GlobalProtection {
         }
 
         if (target == null) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
+            MessageUtil.sendActionBarMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
             return;
         }
 

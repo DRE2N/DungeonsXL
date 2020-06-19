@@ -148,14 +148,17 @@ public class GlobalProtectionListener implements Listener {
         if (DPlayerListener.isCitizensNPC(player)) {
             return;
         }
-        DPortal dPortal = DPortal.getByLocation(plugin, player.getEyeLocation());
-        if (dPortal == null) {
-            return;
+
+        if (!plugin.getMainConfig().isStrictMovementCheckEnabled()) {
+            Block blockFrom = event.getFrom().getBlock();
+            Block blockTo = event.getTo().getBlock();
+            if (blockFrom.equals(blockTo)) {
+                return;
+            }
         }
 
-        Block blockFrom = event.getFrom().getBlock();
-        Block blockTo = event.getTo().getBlock();
-        if (blockFrom.equals(blockTo)) {
+        DPortal dPortal = DPortal.getByLocation(plugin, player.getEyeLocation());
+        if (dPortal == null) {
             return;
         }
 

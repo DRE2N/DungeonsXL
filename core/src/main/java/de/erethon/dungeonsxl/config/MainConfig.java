@@ -48,7 +48,7 @@ public class MainConfig extends DREConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 19;
+    public static final int CONFIG_VERSION = 20;
 
     private String language = "english";
     private boolean enableEconomy = false;
@@ -97,6 +97,7 @@ public class MainConfig extends DREConfig {
     /* Performance */
     private int maxInstances = 10;
     private int editInstanceRemovalDelay = 5;
+    private boolean strictMovementCheckEnabled = true;
 
     /* Secure Mode */
     private boolean secureModeEnabled = false;
@@ -282,6 +283,14 @@ public class MainConfig extends DREConfig {
         editInstanceRemovalDelay = delay;
     }
 
+    public boolean isStrictMovementCheckEnabled() {
+        return strictMovementCheckEnabled;
+    }
+
+    public void setStrictMovementCheckEnabled(boolean enabled) {
+        strictMovementCheckEnabled = enabled;
+    }
+
     public boolean isSecureModeEnabled() {
         return secureModeEnabled;
     }
@@ -435,6 +444,10 @@ public class MainConfig extends DREConfig {
             config.set("editInstanceRemovalDelay", editInstanceRemovalDelay);
         }
 
+        if (!config.contains("strictMovementCheckEnabled")) {
+            config.set("strictMovementCheckEnabled", strictMovementCheckEnabled);
+        }
+
         if (!config.contains("secureMode.enabled")) {
             config.set("secureMode.enabled", secureModeEnabled);
         }
@@ -528,6 +541,7 @@ public class MainConfig extends DREConfig {
 
         maxInstances = config.getInt("maxInstances", maxInstances);
         editInstanceRemovalDelay = config.getInt("editInstanceRemovalDelay", editInstanceRemovalDelay);
+        strictMovementCheckEnabled = config.getBoolean("strictMovementCheckEnabled", strictMovementCheckEnabled);
         secureModeEnabled = config.getBoolean("secureMode.enabled", secureModeEnabled);
         openInventories = config.getBoolean("secureMode.openInventories", openInventories);
         dropItems = config.getBoolean("secureMode.dropItems", dropItems);
