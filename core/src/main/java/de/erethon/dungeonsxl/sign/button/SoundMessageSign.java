@@ -23,8 +23,6 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -38,7 +36,6 @@ public class SoundMessageSign extends Button {
     private SoundCategory category;
     private float volume;
     private float pitch;
-    private List<Player> done = new ArrayList<>();
 
     public SoundMessageSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
@@ -112,14 +109,7 @@ public class SoundMessageSign extends Button {
 
     @Override
     public boolean push(Player player) {
-        if (!done.contains(player)) {
-            done.add(player);
-            playSound(player);
-        }
-
-        if (done.size() >= getGameWorld().getWorld().getPlayers().size()) {
-            getGameWorld().removeDungeonSign(this);
-        }
+        playSound(player);
         return true;
     }
 

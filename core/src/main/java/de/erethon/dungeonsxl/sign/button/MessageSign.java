@@ -21,8 +21,6 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -32,7 +30,6 @@ import org.bukkit.entity.Player;
 public abstract class MessageSign extends Button {
 
     protected String text = "UNKNOWN MESSAGE";
-    private List<Player> done = new ArrayList<>();
 
     public MessageSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
@@ -78,15 +75,7 @@ public abstract class MessageSign extends Button {
 
     @Override
     public boolean push(Player player) {
-        if (!done.contains(player)) {
-            sendMessage(player);
-            done.add(player);
-        }
-
-        if (done.size() >= getGameWorld().getWorld().getPlayers().size()) {
-            getGameWorld().removeDungeonSign(this);
-        }
-
+        sendMessage(player);
         return true;
     }
 
