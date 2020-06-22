@@ -57,6 +57,10 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
         return instanceWorld.getWorld();
     }
 
+    public void setInstanceWorld(InstanceWorld instanceWorld) {
+        this.instanceWorld = instanceWorld;
+    }
+
     // Players in dungeons never get announcer messages
     @Override
     public boolean isAnnouncerEnabled() {

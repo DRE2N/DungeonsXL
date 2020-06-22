@@ -642,6 +642,7 @@ public class DGroup implements PlayerGroup {
         game.setWorld(gameWorld);
 
         for (DGamePlayer player : getDGamePlayers()) {
+            player.setInstanceWorld(gameWorld);
             player.setLastCheckpoint(gameWorld.getStartLocation(this));
             if (player.getWolf() != null) {
                 player.getWolf().teleport(player.getLastCheckpoint());
