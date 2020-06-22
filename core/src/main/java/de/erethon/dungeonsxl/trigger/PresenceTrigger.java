@@ -45,6 +45,7 @@ public class PresenceTrigger extends DistanceTrigger {
         setTriggered(true);
         setPlayer(player);
         updateDSigns();
+        setTriggered(false);
     }
 
     @Override
