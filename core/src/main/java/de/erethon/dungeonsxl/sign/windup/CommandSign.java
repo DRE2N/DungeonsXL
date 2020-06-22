@@ -81,7 +81,7 @@ public class CommandSign extends Windup {
     @Override
     public boolean validate() {
         script = ((DungeonsXL) api).getCommandScriptRegistry().get(getLine(1));
-        return script != null;
+        return script != null && !script.getCommands().isEmpty();
     }
 
     @Override
@@ -99,27 +99,30 @@ public class CommandSign extends Windup {
 
         } else if (attributes.length == 2) {
             delay = NumberUtil.parseDouble(attributes[0]);
-            double interval = NumberUtil.parseDouble(attributes[1], -1);
+            interval = NumberUtil.parseDouble(attributes[1], -1);
             if (interval == -1) {
+                interval = delay;
                 executor = EnumUtil.getEnumIgnoreCase(Executor.class, attributes[1]);
-            } else {
-                this.interval = interval;
             }
             if (executor == null) {
                 executor = Executor.DEFAULT;
             }
 
         } else if (attributes.length == 1) {
-            double delay = NumberUtil.parseDouble(attributes[0], -1);
+            delay = NumberUtil.parseDouble(attributes[0], -1);
             if (delay == -1) {
+                delay = 0;
+                interval = 0;
                 executor = EnumUtil.getEnumIgnoreCase(Executor.class, attributes[0]);
-            } else {
-                this.delay = delay;
+            }
+            if (executor == null) {
+                executor = Executor.DEFAULT;
             }
 
         } else if (attributes.length == 0) {
             executor = Executor.DEFAULT;
         }
+        n = script.getCommands().size();
 
         setRunnable(new CommandTask(this, Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")));
 

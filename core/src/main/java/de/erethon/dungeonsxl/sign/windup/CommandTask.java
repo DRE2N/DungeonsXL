@@ -53,16 +53,18 @@ public class CommandTask extends BukkitRunnable {
             sign.deactivate();
             return;
         }
+        if (k >= script.getCommands().size()) {
+            sign.deactivate();
+            k = 0;
+        }
 
-        String command = script.getCommands().get(k++).replace("%player%", sender.getName()).replace("%player_name%", sender.getName());
+        String command = script.getCommands().get(k++)
+                .replace("%player%", sender.getName()).replace("%player_name%", sender.getName())
+                .replace("%world%", sign.getGameWorld().getWorld().getName()).replace("%world_name%", sign.getGameWorld().getWorld().getName());
         if (papi) {
             Bukkit.getServer().dispatchCommand(sender, PlaceholderAPI.setPlaceholders(player, command));
         } else {
             Bukkit.getServer().dispatchCommand(sender, command);
-        }
-
-        if (k >= script.getCommands().size()) {
-            sign.deactivate();
         }
     }
 
