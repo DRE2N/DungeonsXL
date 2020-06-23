@@ -239,7 +239,7 @@ public class DResourceWorld implements ResourceWorld {
             return null;
         }
 
-        this.editWorld = (EditWorld) instantiate(false);
+        editWorld = (EditWorld) instantiate(false);
         return editWorld;
     }
 
@@ -282,6 +282,7 @@ public class DResourceWorld implements ResourceWorld {
         creator.generateStructures(false);
 
         DEditWorld editWorld = new DEditWorld(plugin, this, folder);
+        this.editWorld = editWorld;
 
         EditWorldGenerateEvent event = new EditWorldGenerateEvent(editWorld);
         Bukkit.getPluginManager().callEvent(event);
