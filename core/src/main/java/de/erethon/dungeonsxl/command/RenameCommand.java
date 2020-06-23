@@ -66,6 +66,9 @@ public class RenameCommand extends DCommand {
         }
 
         for (Dungeon dungeon : plugin.getDungeonRegistry()) {
+            if (!dungeon.isMultiFloor()) {
+                continue;
+            }
             DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
             FileConfiguration config = dConfig.getConfig();
             File file = dConfig.getFile();
