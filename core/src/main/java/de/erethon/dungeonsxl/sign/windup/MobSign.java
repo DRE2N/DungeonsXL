@@ -151,6 +151,10 @@ public class MobSign extends Windup {
             }
         }
 
+        if (spawned == null) {
+            return null;
+        }
+
         spawned.setRemoveWhenFarAway(false);
         spawnedMobs.add(spawned);
         return spawned;
