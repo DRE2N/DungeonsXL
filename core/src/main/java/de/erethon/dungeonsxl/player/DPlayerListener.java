@@ -512,7 +512,7 @@ public class DPlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         if (isCitizensNPC(player)) {
@@ -522,7 +522,7 @@ public class DPlayerListener implements Listener {
 
         World toWorld = event.getTo().getWorld();
 
-        if (dPlayer instanceof DInstancePlayer && ((DInstancePlayer) dPlayer).getWorld() == toWorld) {
+        if (dPlayer instanceof InstancePlayer && ((InstancePlayer) dPlayer).getWorld() == toWorld) {
             return;
         }
 
