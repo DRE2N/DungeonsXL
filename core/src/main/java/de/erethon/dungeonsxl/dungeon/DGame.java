@@ -291,8 +291,7 @@ public class DGame implements Game {
             @Override
             public void run() {
                 if (teleport) {
-                    groups.forEach(g -> g.getMembers().getOnlinePlayers()
-                            .forEach(p -> PlayerUtil.secureTeleport(p, world.getStartLocation(plugin.getPlayerGroup(p)))));
+                    groups.forEach(g -> g.getMembers().getOnlinePlayers().forEach(p -> p.teleport(world.getStartLocation(plugin.getPlayerGroup(p)))));
                 }
 
                 for (DungeonSign dSign : world.getDungeonSigns()) {

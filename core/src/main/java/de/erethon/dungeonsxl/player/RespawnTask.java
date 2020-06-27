@@ -45,7 +45,7 @@ public class RespawnTask extends BukkitRunnable {
             return;
         }
         if (player.getWorld() != location.getWorld() || player.getLocation().distance(location) > 2) {
-            PlayerUtil.secureTeleport(player, location);
+            player.teleport(location);
         }
         if (resetClassInventory) {
             dPlayer.setPlayerClass(dPlayer.getPlayerClass());

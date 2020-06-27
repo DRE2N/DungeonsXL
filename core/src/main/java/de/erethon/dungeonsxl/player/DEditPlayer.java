@@ -56,9 +56,9 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
 
         Location teleport = world.getLobbyLocation();
         if (teleport == null) {
-            PlayerUtil.secureTeleport(player, world.getWorld().getSpawnLocation());
+            player.teleport(world.getWorld().getSpawnLocation());
         } else {
-            PlayerUtil.secureTeleport(player, teleport);
+            player.teleport(teleport);
         }
 
         // Permission bridge
@@ -173,7 +173,7 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
         }
 
         if (!locationValid) {
-            PlayerUtil.secureTeleport(getPlayer(), teleportLocation);
+            getPlayer().teleport(teleportLocation);
         }
     }
 

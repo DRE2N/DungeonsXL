@@ -106,9 +106,9 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         Location teleport = world.getLobbyLocation();
         if (teleport == null) {
-            PlayerUtil.secureTeleport(player, world.getWorld().getSpawnLocation());
+            player.teleport(world.getWorld().getSpawnLocation());
         } else {
-            PlayerUtil.secureTeleport(player, teleport);
+            player.teleport(teleport);
         }
 
         if (!((DGameWorld) world).hasReadySign()) {
@@ -532,7 +532,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             respawn = getWorld().getSpawnLocation();
         }
 
-        PlayerUtil.secureTeleport(getPlayer(), respawn);
+        getPlayer().teleport(respawn);
 
         if (resetClassInventoryOnRespawn) {
             setPlayerClass(dClass);
@@ -785,7 +785,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         if (!locationValid) {
-            PlayerUtil.secureTeleport(getPlayer(), teleportLocation);
+            getPlayer().teleport(teleportLocation);
         }
 
         if (teleportWolf) {

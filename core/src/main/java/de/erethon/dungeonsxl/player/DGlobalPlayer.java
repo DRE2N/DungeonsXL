@@ -446,7 +446,7 @@ public class DGlobalPlayer implements GlobalPlayer {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerUtil.respawn(player);
+                    player.spigot().respawn();
                     reset(tpLoc, keepInventory);
                 }
             }.runTaskLater(plugin, 1L);
@@ -458,7 +458,7 @@ public class DGlobalPlayer implements GlobalPlayer {
     @Override
     public void reset(Location tpLoc, boolean keepInventory) {
         try {
-            PlayerUtil.secureTeleport(player, tpLoc);
+            player.teleport(tpLoc);
             player.setGameMode(data.getOldGameMode());
             if (!keepInventory) {
                 while (data.getOldInventory().size() > 36) {
