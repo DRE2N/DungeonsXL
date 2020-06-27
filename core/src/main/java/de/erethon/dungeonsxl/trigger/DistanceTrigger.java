@@ -34,8 +34,10 @@ public class DistanceTrigger extends Trigger {
     private Location loc;
 
     public DistanceTrigger(int distance, Location loc) {
-        if (distance >= 0) {
+        if (distance >= 2) {
             this.distance = distance;
+        } else {
+            this.distance = 2;
         }
         this.loc = loc;
     }
