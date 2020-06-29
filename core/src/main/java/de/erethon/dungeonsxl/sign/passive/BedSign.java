@@ -52,7 +52,7 @@ public class BedSign extends Passive {
 
     @Override
     public boolean isOnDungeonInit() {
-        return true;
+        return false;
     }
 
     @Override
