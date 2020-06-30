@@ -97,7 +97,13 @@ public class ScriptSign extends Passive {
                 exception.printStackTrace();
             }
             if (!dSign.hasTriggers()) {
-                dSign.trigger(null);
+                try {
+                    dSign.trigger(null);
+                } catch (Exception exception) {
+                    markAsErroneous("An error occurred while triggering a sign of the type " + getName()
+                            + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
+                    exception.printStackTrace();
+                }
             }
         }
     }

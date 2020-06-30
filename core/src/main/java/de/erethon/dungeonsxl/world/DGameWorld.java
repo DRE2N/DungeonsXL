@@ -437,7 +437,13 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
                 sign.setToAir();
             }
             if (!sign.hasTriggers()) {
-                sign.trigger(null);
+                try {
+                    sign.trigger(null);
+                } catch (Exception exception) {
+                    sign.markAsErroneous("An error occurred while triggering a sign of the type " + getName()
+                            + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
+                    exception.printStackTrace();
+                }
             }
         }
 

@@ -185,7 +185,13 @@ public interface DungeonSign {
             }
         }
 
-        trigger(lastFired != null ? lastFired.getPlayer() : null);
+        try {
+            trigger(lastFired != null ? lastFired.getPlayer() : null);
+        } catch (Exception exception) {
+            markAsErroneous("An error occurred while triggering a sign of the type " + getName()
+                    + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
+            exception.printStackTrace();
+        }
     }
 
     /**
