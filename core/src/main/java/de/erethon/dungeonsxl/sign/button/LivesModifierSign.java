@@ -90,6 +90,8 @@ public class LivesModifierSign extends Button {
         lives = NumberUtil.parseInt(getLine(1));
         if (EnumUtil.isValidEnum(Target.class, getLine(2).toUpperCase())) {
             target = Target.valueOf(getLine(2).toUpperCase());
+        } else {
+            target = Target.PLAYER;
         }
     }
 
