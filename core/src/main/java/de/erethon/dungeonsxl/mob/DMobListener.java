@@ -20,7 +20,10 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -75,21 +78,15 @@ public class DMobListener implements Listener {
         }
     }
 
-    // Zombie / Skeleton combustion from the sun.
+    // Prevent undead combustion from the sun.
     @EventHandler
     public void onEntityCombust(EntityCombustEvent event) {
-        if (plugin.getGameWorld(event.getEntity().getWorld()) != null) {
-            event.setCancelled(true);
+        if (event instanceof EntityCombustByEntityEvent) {
+            return;
         }
-    }
-
-    // Allow other combustion
-    @EventHandler
-    public void onEntityCombustByEntity(EntityCombustByEntityEvent event) {
-        if (plugin.getGameWorld(event.getEntity().getWorld()) != null) {
-            if (event.isCancelled()) {
-                event.setCancelled(false);
-            }
+        Entity entity = event.getEntity();
+        if ((entity instanceof Skeleton || entity instanceof Zombie) && plugin.getGameWorld(entity.getWorld()) != null) {
+            event.setCancelled(true);
         }
     }
 
