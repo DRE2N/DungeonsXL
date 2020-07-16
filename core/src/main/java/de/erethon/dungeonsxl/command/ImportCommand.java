@@ -73,7 +73,7 @@ public class ImportCommand extends DCommand {
 
         DResourceWorld resource = new DResourceWorld(plugin, args[1]);
         plugin.getDungeonRegistry().add(args[1], new DDungeon(plugin, resource));
-        if (world.getEnvironment() != Environment.NORMAL) {
+        if (world != null && world.getEnvironment() != Environment.NORMAL) {
             WorldConfig config = resource.getConfig(true);
             config.setWorldEnvironment(world.getEnvironment());
             config.save();
