@@ -86,9 +86,16 @@ public class DPlayerListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+        LivingEntity entity = ((LivingEntity) event.getEntity());
+        if (isCitizensNPC(entity)) {
+            return;
+        }
+
         World world = event.getEntity().getWorld();
         GameWorld gameWorld = plugin.getGameWorld(world);
-
         if (gameWorld == null) {
             return;
         }
@@ -98,24 +105,20 @@ public class DPlayerListener implements Listener {
             event.setCancelled(true);
         }
 
-        if (!(event.getEntity() instanceof LivingEntity)) {
-            return;
-        }
-
-        boolean dead = ((LivingEntity) event.getEntity()).getHealth() - event.getFinalDamage() <= 0;
+        boolean dead = entity.getHealth() - event.getFinalDamage() <= 0;
         if (!dead) {
             return;
         }
-        if (event.getEntity() instanceof Player && !gameWorld.getDungeon().getRules().getState(GameRule.DEATH_SCREEN)) {
+        if (entity instanceof Player && !gameWorld.getDungeon().getRules().getState(GameRule.DEATH_SCREEN)) {
             event.setDamage(0);
-            GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer((Player) event.getEntity());
+            GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer((Player) entity);
             if (gamePlayer == null) {
                 return;
             }
             ((DGamePlayer) gamePlayer).onDeath(null);
         }
 
-        if (plugin.getDungeonMob((LivingEntity) event.getEntity()) != null) {
+        if (plugin.getDungeonMob(entity) != null) {
             String killer = null;
 
             if (event instanceof EntityDamageByEntityEvent) {
