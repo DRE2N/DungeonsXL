@@ -72,10 +72,12 @@ public class PlaceableBlock extends GameBlock {
         if (triggerId != -1) {
             SignTrigger.getById(triggerId, gameWorld).onTrigger(true);
         }
+        gameWorld.removeGameBlock(this);
     }
 
     public boolean canPlace(Block toPlace, ExItem material) {
-        return faces.contains(toPlace.getFace(block)) && (materials.isEmpty() || materials.contains(material));
+        return block.getX() == toPlace.getX() && block.getY() == toPlace.getY() && block.getZ() == toPlace.getZ()
+                && faces.contains(toPlace.getFace(block)) && (materials.isEmpty() || materials.contains(material));
     }
 
     public static boolean canBuildHere(Block block, ExItem material, DGameWorld gameWorld) {
