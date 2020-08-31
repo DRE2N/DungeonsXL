@@ -29,8 +29,8 @@ import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
-import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.dungeon.DGame;
@@ -468,51 +468,41 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        GlobalPlayer dPlayer = dPlayers.get(player);
-        if (dPlayer == null) {
+        InstancePlayer instancePlayer = dPlayers.getInstancePlayer(player);
+        if (instancePlayer == null) {
+            return;
+        }
+        InstanceWorld instance = instancePlayer.getInstanceWorld();
+        if (instance == null) {
             return;
         }
 
-        if (dPlayer instanceof EditPlayer) {
-            EditWorld editWorld = ((EditPlayer) dPlayer).getEditWorld();
-            if (editWorld == null) {
-                return;
-            }
-
-            if (editWorld.getLobbyLocation() == null) {
-                event.setRespawnLocation(editWorld.getWorld().getSpawnLocation());
-
-            } else {
-                event.setRespawnLocation(editWorld.getLobbyLocation());
-            }
-
-        } else if (dPlayer instanceof GamePlayer) {
-            GamePlayer gamePlayer = (GamePlayer) dPlayer;
-
-            GameWorld gameWorld = gamePlayer.getGameWorld();
-            if (gameWorld == null) {
-                return;
-            }
-
-            PlayerGroup group = dPlayer.getGroup();
-
-            Location respawn = gamePlayer.getLastCheckpoint();
-
+        GamePlayer gamePlayer = null;
+        PlayerGroup group = instancePlayer.getGroup();
+        Location respawn = null;
+        boolean shouldResetInventory = false;
+        if (instancePlayer instanceof GamePlayer) {
+            gamePlayer = ((GamePlayer) instancePlayer);
+            respawn = gamePlayer.getLastCheckpoint();
             if (respawn == null) {
                 respawn = group.getGameWorld().getStartLocation(group);
             }
-
-            boolean shouldResetInventory = gamePlayer.getGameWorld().getDungeon().getRules().getState(GameRule.RESET_CLASS_INVENTORY_ON_RESPAWN);
-
-            // Because some plugins set another respawn point, DXL teleports a few ticks later.
-            event.setRespawnLocation(respawn);
-            new RespawnTask(player, gamePlayer, respawn, shouldResetInventory).runTaskLater(plugin, 10L);
-
+            shouldResetInventory = gamePlayer.getGameWorld().getDungeon().getRules().getState(GameRule.RESET_CLASS_INVENTORY_ON_RESPAWN);
             // Don't forget Doge!
             if (gamePlayer.getWolf() != null) {
                 gamePlayer.getWolf().teleport(respawn);
             }
         }
+        if (respawn == null) {
+            respawn = instancePlayer.getInstanceWorld().getLobbyLocation();
+        }
+        if (respawn == null) {
+            respawn = instancePlayer.getInstanceWorld().getWorld().getSpawnLocation();
+        }
+
+        // Because some plugins set another respawn point, DXL teleports a few ticks later.
+        event.setRespawnLocation(respawn);
+        new RespawnTask(player, gamePlayer, respawn, shouldResetInventory).runTaskLater(plugin, 10L);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
