@@ -34,6 +34,7 @@ import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.sign.button.ReadySign;
 import de.erethon.dungeonsxl.sign.passive.StartSign;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
@@ -465,6 +466,10 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+            ((CitizensMobProvider) plugin.getExternalMobProviderRegistry().get("CI")).removeSpawnedNPCs(getWorld());
         }
 
         kickAllPlayers();

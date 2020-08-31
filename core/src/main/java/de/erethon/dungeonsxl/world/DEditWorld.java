@@ -23,6 +23,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.event.world.EditWorldSaveEvent;
 import de.erethon.dungeonsxl.api.event.world.EditWorldUnloadEvent;
 import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import java.io.File;
 import java.io.IOException;
@@ -156,6 +157,10 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+            ((CitizensMobProvider) plugin.getExternalMobProviderRegistry().get("CI")).removeSpawnedNPCs(getWorld());
         }
 
         kickAllPlayers();

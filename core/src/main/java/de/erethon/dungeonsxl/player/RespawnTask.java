@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.player;
 
-import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

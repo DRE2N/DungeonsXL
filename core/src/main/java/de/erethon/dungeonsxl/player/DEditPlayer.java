@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.world.EditWorld;

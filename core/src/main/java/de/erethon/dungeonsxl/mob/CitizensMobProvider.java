@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.mob;
 
 import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.npc.AbstractNPC;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -69,6 +71,17 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
      */
     public void removeSpawnedNPC(NPC npc) {
         spawnedNPCs.remove(npc);
+        npc.destroy();
+    }
+
+    public void removeSpawnedNPCs(World world) {
+        Set<NPC> worldNPCs = new HashSet<>();
+        for (NPC npc : spawnedNPCs) {
+            if (npc.getStoredLocation().getWorld().equals(world)) {
+                worldNPCs.add(npc);
+            }
+        }
+        worldNPCs.forEach(this::removeSpawnedNPC);
     }
 
     @Override
@@ -93,19 +106,19 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
             return;
         }
 
-        NPC npc = registry.createTransientClone((AbstractNPC) source);
+        GameWorld gameWorld = DungeonsXL.getInstance().getGameWorld(location.getWorld());
+        if (gameWorld == null) {
+            return;
+        }
+
+        boolean nativeRegistry = gameWorld.getDungeon().getRules().getState(GameRule.USE_NATIVE_CITIZENS_REGISTRY);
+        NPC npc = nativeRegistry ? source.clone() : registry.createTransientClone((AbstractNPC) source);
         if (npc.isSpawned()) {
             npc.despawn();
         }
 
         npc.spawn(location);
         spawnedNPCs.add(npc);
-
-        GameWorld gameWorld = DungeonsXL.getInstance().getGameWorld(location.getWorld());
-        if (gameWorld == null) {
-            return;
-        }
-
         new DMob((LivingEntity) npc.getEntity(), gameWorld, mob);
     }
 

@@ -355,6 +355,10 @@ public class GameRule<V> {
      * If group tags are used.
      */
     public static final GameRule<Boolean> GROUP_TAG_ENABLED = new GameRule<>(Boolean.class, "groupTagEnabled", false);
+    /**
+     * If Citizens NPCs should be copied to the native registry.
+     */
+    public static final GameRule<Boolean> USE_NATIVE_CITIZENS_REGISTRY = new GameRule<>(Boolean.class, "useNativeCitizensRegistry", false);
 
     /**
      * An array of all game rules that exist natively in DungeonsXL.

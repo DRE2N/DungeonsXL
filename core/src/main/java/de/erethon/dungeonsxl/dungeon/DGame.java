@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.dungeon;
 
-import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
