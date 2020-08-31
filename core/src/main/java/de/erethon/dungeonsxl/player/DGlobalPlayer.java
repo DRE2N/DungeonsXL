@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Internals;
-import de.erethon.commons.player.PlayerUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
@@ -284,6 +283,10 @@ public class DGlobalPlayer implements GlobalPlayer {
         boolean genericReqs = true;
         List<BaseComponent[]> msgs = new ArrayList<>(rules.getState(GameRule.REQUIREMENTS).size());
         for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
+            if (requirement == null) {
+                MessageUtil.log(plugin, "The dungeon " + dungeon.getName() + " has an invalid requirement.");
+                continue;
+            }
             RequirementCheckEvent event = new RequirementCheckEvent(requirement, dungeon, player, rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER));
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
