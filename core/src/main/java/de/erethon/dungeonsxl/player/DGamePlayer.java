@@ -649,7 +649,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             int expDrop = 7 * player.getLevel();
             expDrop = expDrop > 100 ? 100 : expDrop;
             orb.setExperience(expDrop);
-            player.setLevel(player.getLevel() - 7);
+            int newLevel = player.getLevel() - 7;
+            player.setLevel(newLevel > 0 ? newLevel : 0);
             player.setExp(0);
         }
 
