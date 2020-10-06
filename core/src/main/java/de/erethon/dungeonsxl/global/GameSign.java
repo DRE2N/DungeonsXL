@@ -157,6 +157,7 @@ public class GameSign extends JoinSign {
             update();
 
         } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GAME.getMessage())) {
+            dGroup.setDungeon(dungeon);
             game.addGroup(dGroup);
             update();
         }
