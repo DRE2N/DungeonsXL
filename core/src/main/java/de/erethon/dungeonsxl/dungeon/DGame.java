@@ -63,11 +63,7 @@ public class DGame implements Game {
         tutorial = false;
         started = false;
 
-        groups.add(group);
-        group.setGameWorld(world);
-        group.setInitialLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));
-        group.setLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));
-        group.setScore(getRules().getState(GameRule.INITIAL_SCORE));
+        addGroup(group);
     }
 
     public DGame(DungeonsXL plugin, PlayerGroup group, GameWorld world) {
@@ -112,6 +108,7 @@ public class DGame implements Game {
     public void addGroup(PlayerGroup group) {
         groups.add(group);
 
+        ((DGroup) group).setGame(this);
         group.setGameWorld(world);
         group.setInitialLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));
         group.setLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));

@@ -287,9 +287,7 @@ public interface PlayerGroup {
      *
      * @return the game of the game world the group is in.
      */
-    default Game getGame() {
-        return getGameWorld() != null ? getGameWorld().getGame() : null;
-    }
+    Game getGame();
 
     /**
      * Returns the game world the group is in.

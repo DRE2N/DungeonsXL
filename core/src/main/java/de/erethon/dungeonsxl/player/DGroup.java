@@ -74,6 +74,7 @@ public class DGroup implements PlayerGroup {
     private PlayerCollection invitedPlayers = new PlayerCollection();
     private Dungeon dungeon;
     private List<ResourceWorld> unplayedFloors = new ArrayList<>();
+    private Game game;
     private GameWorld gameWorld;
     private boolean playing;
     private int floorCount;
@@ -332,6 +333,18 @@ public class DGroup implements PlayerGroup {
     @Override
     public void setGameWorld(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
+    }
+
+    @Override
+    public Game getGame() {
+        if (game == null && gameWorld != null) {
+            game = gameWorld.getGame();
+        }
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     @Override
