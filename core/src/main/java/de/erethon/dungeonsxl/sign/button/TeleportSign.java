@@ -105,9 +105,13 @@ public class TeleportSign extends Button implements LocationSign {
                     double y = NumberUtil.parseDouble(loc[1]);
                     double z = NumberUtil.parseDouble(loc[2]);
 
-                    // If round number, add 0.5 to tp to middle of block
-                    x = NumberUtil.parseInt(loc[0]) + 0.5;
-                    z = NumberUtil.parseInt(loc[2]) + 0.5;
+                    // If number is even, add +0.5 to teleport to the middle of the block
+                    if (!loc[0].contains(".")) {
+                        x += 0.5;
+                    }
+                    if (!loc[2].contains(".")) {
+                        z += 0.5;
+                    }
 
                     location.setX(x);
                     location.setY(y);
