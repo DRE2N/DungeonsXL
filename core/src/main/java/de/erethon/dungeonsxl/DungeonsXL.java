@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl;
 
 import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Internals;
@@ -60,7 +59,6 @@ import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.mob.CustomExternalMobProvider;
 import de.erethon.dungeonsxl.mob.DMob;
 import de.erethon.dungeonsxl.mob.DMobListener;
-import de.erethon.dungeonsxl.mob.DMobType;
 import de.erethon.dungeonsxl.mob.ExternalMobPlugin;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
@@ -114,8 +112,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
     public static final File ANNOUNCERS = new File(SCRIPTS, "announcers");
-    public static final File LOOT_TABLES = new File(SCRIPTS, "loottables");
-    public static final File MOBS = new File(SCRIPTS, "mobs");
     public static final File SIGNS = new File(SCRIPTS, "signs");
     public static final File COMMANDS = new File(SCRIPTS, "commands");
     public static final Map<String, Class<? extends DungeonSign>> LEGACY_SIGNS = new HashMap<>();
@@ -210,7 +206,9 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
         instance = this;
         initFolders();
-        loadCaliburnAPI();
+        caliburn = CaliburnAPI.getInstance() == null ? new CaliburnAPI(this) : CaliburnAPI.getInstance();
+        caliburn.loadDataFiles();
+        caliburn.finishInitialization();
         DPermission.register();
         loadConfig();
         createCaches();
@@ -249,8 +247,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         ANNOUNCERS.mkdir();
         CLASSES.mkdir();
         DUNGEONS.mkdir();
-        LOOT_TABLES.mkdir();
-        MOBS.mkdir();
         SIGNS.mkdir();
         COMMANDS.mkdir();
     }
@@ -470,16 +466,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     @Override
     public CaliburnAPI getCaliburn() {
         return caliburn;
-    }
-
-    private void loadCaliburnAPI() {
-        caliburn = CaliburnAPI.getInstance() == null ? new CaliburnAPI(this) : CaliburnAPI.getInstance();
-        if (LOOT_TABLES.isDirectory()) {
-            FileUtil.getFilesForFolder(LOOT_TABLES).forEach(s -> new LootTable(caliburn, s));
-        }
-        if (MOBS.isDirectory()) {
-            FileUtil.getFilesForFolder(MOBS).forEach(s -> caliburn.getExMobs().add(new DMobType(this, s)));
-        }
     }
 
     @Override
