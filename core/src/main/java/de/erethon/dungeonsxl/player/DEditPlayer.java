@@ -63,7 +63,7 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
             for (String permission : plugin.getMainConfig().getEditPermissions()) {
-                plugin.getPermissionProvider().playerAddTransient(world.getName(), player, permission);
+                plugin.getPermissionProvider().playerAddTransient(getWorld().getName(), player, permission);
             }
         }
     }
