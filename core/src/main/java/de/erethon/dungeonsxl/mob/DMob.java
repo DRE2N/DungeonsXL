@@ -28,12 +28,10 @@ import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.trigger.MobTrigger;
 import de.erethon.dungeonsxl.trigger.WaveTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import java.util.Random;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -115,18 +113,7 @@ public class DMob implements DungeonMob {
             return;
         }
 
-        if (type instanceof DMobType) {
-            event.getDrops().clear();
-
-            for (ItemStack itemStack : ((DMobType) type).getDrops().keySet()) {
-                Random randomGenerator = new Random();
-                int random = randomGenerator.nextInt(100);
-
-                if (((DMobType) type).getDrops().get(itemStack) > random) {
-                    event.getDrops().add(itemStack);
-                }
-            }
-
+        if (!isExternalMob()) {
             name = type.getId();
 
         } else if (isExternalMob() && trigger != null) {
