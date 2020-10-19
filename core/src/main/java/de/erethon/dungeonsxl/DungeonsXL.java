@@ -206,9 +206,13 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
         instance = this;
         initFolders();
-        caliburn = CaliburnAPI.getInstance() == null ? new CaliburnAPI(this) : CaliburnAPI.getInstance();
-        caliburn.loadDataFiles();
-        caliburn.finishInitialization();
+        if (CaliburnAPI.getInstance() == null) {
+            caliburn = new CaliburnAPI(this);
+            caliburn.loadDataFiles();
+            caliburn.finishInitialization();
+        } else {
+            caliburn = CaliburnAPI.getInstance();
+        }
         DPermission.register();
         loadConfig();
         createCaches();
