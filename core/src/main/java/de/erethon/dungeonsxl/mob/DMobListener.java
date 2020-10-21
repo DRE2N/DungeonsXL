@@ -16,12 +16,14 @@
  */
 package de.erethon.dungeonsxl.mob;
 
+import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.PiglinAbstract;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -46,17 +48,23 @@ public class DMobListener implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         World world = event.getLocation().getWorld();
 
-        EditWorld editWorld = plugin.getEditWorld(world);
-        GameWorld gameWorld = plugin.getGameWorld(world);
+        InstanceWorld instance = plugin.getInstanceWorld(world);
+        if (instance == null) {
+            return;
+        }
 
-        if (editWorld != null || gameWorld != null) {
-            switch (event.getSpawnReason()) {
-                case CHUNK_GEN:
-                case JOCKEY:
-                case MOUNT:
-                case NATURAL:
-                    event.setCancelled(true);
-            }
+        switch (event.getSpawnReason()) {
+            case CHUNK_GEN:
+            case JOCKEY:
+            case MOUNT:
+            case NATURAL:
+                event.setCancelled(true);
+                return;
+        }
+
+        VanillaMob vm = VanillaMob.get(event.getEntityType());
+        if (vm == VanillaMob.PIGLIN || vm == VanillaMob.PIGLIN_BRUTE) {
+            ((PiglinAbstract) event.getEntity()).setImmuneToZombification(true);
         }
     }
 
