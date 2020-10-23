@@ -216,7 +216,7 @@ public class DGroup implements PlayerGroup {
 
     @Override
     public void addMember(Player player, boolean message) {
-        GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.getGamePlayer(player), false);
+        GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(player), false);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
