@@ -25,10 +25,13 @@ import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.util.ContainerAdapter;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
+import de.erethon.vignette.api.InventoryGUI;
 import de.erethon.vignette.api.PaginatedInventoryGUI;
+import de.erethon.vignette.api.component.Component;
 import de.erethon.vignette.api.component.InventoryButton;
 import de.erethon.vignette.api.layout.PaginatedFlowInventoryLayout;
 import de.erethon.vignette.api.layout.PaginatedInventoryLayout.PaginationButtonPosition;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -37,6 +40,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -119,16 +123,28 @@ public class RewardListener implements Listener {
             return;
         }
         GlobalPlayer dPlayer = plugin.getPlayerCache().get(player);
-        if (plugin.getInstanceWorld(player.getWorld()) != null) {
+        World world = player.getWorld();
+        Location location = player.getLocation();
+        if (plugin.getInstanceWorld(world) != null) {
             return;
         }
-        Block block = player.getLocation().getBlock();
+        Block block = location.getBlock();
         if (dPlayer.hasRewardItemsLeft() && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 1, 0)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, -1, 0))
                 && !VanillaItem.NETHER_PORTAL.is(block.getRelative(1, 0, 0)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(-1, 0, 0))
                 && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, 1)) && !VanillaItem.NETHER_PORTAL.is(block.getRelative(0, 0, -1))) {
             PaginatedInventoryGUI lootInventory = new PaginatedInventoryGUI(DMessage.PLAYER_TREASURES.getMessage());
             PaginatedFlowInventoryLayout layout = new PaginatedFlowInventoryLayout(lootInventory, 54, PaginationButtonPosition.BOTTOM);
             layout.setSwitchButtonLinePlaceholdersEnabled(true);
+            lootInventory.setCloseListener(e -> {
+                for (Inventory inventory : lootInventory.getOpenedInventories()) {
+                    for (int i = 0; i < 45; i++) {
+                        ItemStack item = inventory.getItem(i);
+                        if (item != null) {
+                            world.dropItem(location, item);
+                        }
+                    }
+                }
+            });
             lootInventory.setLayout(layout);
             lootInventory.register();
             for (ItemStack item : dPlayer.getRewardItems()) {
