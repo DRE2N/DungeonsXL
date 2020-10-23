@@ -41,7 +41,11 @@ public abstract class Rocker extends Deactivatable {
     @Override
     public void trigger(Player player) {
         if (!isActive()) {
-            activate(player);
+            if (player != null) {
+                activate(player);
+            } else {
+                activate();
+            }
         } else {
             deactivate();
         }
