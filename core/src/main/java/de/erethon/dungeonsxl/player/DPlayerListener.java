@@ -449,9 +449,11 @@ public class DPlayerListener implements Listener {
             } else if (timeUntilKickOfflinePlayer > 0) {
                 dGroup.sendMessage(DMessage.PLAYER_OFFLINE.getMessage(dPlayer.getName(), String.valueOf(timeUntilKickOfflinePlayer)), player);
                 ((GamePlayer) dPlayer).setOfflineTimeMillis(System.currentTimeMillis() + timeUntilKickOfflinePlayer * 1000);
+                return;
 
             } else {
                 dGroup.sendMessage(DMessage.PLAYER_OFFLINE_NEVER.getMessage(dPlayer.getName()), player);
+                return;
             }
 
         } else if (dPlayer instanceof InstancePlayer) {

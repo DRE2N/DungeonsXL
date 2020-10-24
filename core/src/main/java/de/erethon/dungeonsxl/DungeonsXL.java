@@ -788,6 +788,8 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         }
 
         dPlayer.setPlayer(player);
+        playerCache.remove(dPlayer);
+        playerCache.add(player, dPlayer);
         dPlayer.setOfflineTimeMillis(0);
         return true;
     }
