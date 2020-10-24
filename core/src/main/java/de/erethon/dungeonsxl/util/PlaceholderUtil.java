@@ -66,7 +66,7 @@ public class PlaceholderUtil extends PlaceholderExpansion {
 
         switch (identifier) {
             case "group_members":
-                return group != null ? group.getMembers().getNames().toString().substring(1, group.getMembers().getNames().toString().length() - 2) : "";
+                return group != null ? group.getMembers().getNames().toString().substring(1, group.getMembers().getNames().toString().length() - 1) : "";
             case "group_name":
                 return group != null ? group.getName() : "";
             case "group_name_raw":
