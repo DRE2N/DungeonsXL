@@ -19,7 +19,6 @@ package de.erethon.dungeonsxl.requirement;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DPermission;
 import java.util.ArrayList;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
@@ -62,7 +61,7 @@ public class PermissionRequirement implements Requirement {
     @Override
     public boolean check(Player player) {
         for (String permission : permissions) {
-            if (!DPermission.hasPermission(player, permission)) {
+            if (!player.hasPermission(permission)) {
                 return false;
             }
         }

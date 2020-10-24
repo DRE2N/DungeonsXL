@@ -253,7 +253,7 @@ public class DGlobalPlayer implements GlobalPlayer {
 
     @Override
     public boolean hasPermission(String permission) {
-        return DPermission.hasPermission(player, permission);
+        return player.hasPermission(permission);
     }
 
     public boolean hasPermission(DPermission permission) {

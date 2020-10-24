@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.player;
 
-import de.erethon.commons.misc.EnumUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,32 +98,33 @@ public enum DPermission {
 
     public static final String PREFIX = "dxl.";
 
-    private String node;
-    private PermissionDefault isDefault;
+    private Permission node;
     private List<DPermission> children = new ArrayList<>();
 
     DPermission(String node, PermissionDefault isDefault) {
-        this.node = node;
-        this.isDefault = isDefault;
+        this.node = new Permission(PREFIX + node, isDefault);
     }
 
     DPermission(String node, PermissionDefault isDefault, DPermission... children) {
         this(node, isDefault);
         this.children = Arrays.asList(children);
+        for (DPermission child : children) {
+            child.node.addParent(node, true);
+        }
     }
 
     /**
      * @return the permission node String
      */
     public String getNode() {
-        return PREFIX + node;
+        return node.getName();
     }
 
     /**
      * @return if a player has the node by default
      */
     public PermissionDefault isDefault() {
-        return isDefault;
+        return node.getDefault();
     }
 
     /**
@@ -161,48 +161,7 @@ public enum DPermission {
      * @return if the player has the permission
      */
     public static boolean hasPermission(CommandSender sender, DPermission permission) {
-        if (sender.hasPermission(permission.getNode())) {
-            return true;
-        }
-
-        for (DPermission parent : DPermission.values()) {
-            if (parent.getChildren().contains(permission) && sender.hasPermission(parent.getNode())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param sender     the CommandSender
-     * @param permission the permission to check
-     * @return if the player has the permission
-     */
-    public static boolean hasPermission(CommandSender sender, String permission) {
-        if (sender.hasPermission(permission)) {
-            return true;
-        }
-
-        DPermission dPermission = null;
-        if (EnumUtil.isValidEnum(DPermission.class, permission)) {
-            dPermission = DPermission.valueOf(permission);
-
-        } else if (DPermission.getByNode(permission) != null) {
-            dPermission = DPermission.getByNode(permission);
-        }
-
-        if (dPermission == null) {
-            return false;
-        }
-
-        for (DPermission parent : DPermission.values()) {
-            if (parent.getChildren().contains(dPermission) && sender.hasPermission(parent.getNode())) {
-                return true;
-            }
-        }
-
-        return false;
+        return sender.hasPermission(permission.getNode());
     }
 
     /**
@@ -210,7 +169,7 @@ public enum DPermission {
      */
     public static void register() {
         for (DPermission permission : values()) {
-            Bukkit.getPluginManager().addPermission(new Permission(permission.getNode(), permission.isDefault()));
+            Bukkit.getPluginManager().addPermission(permission.node);
         }
     }
 
@@ -219,7 +178,7 @@ public enum DPermission {
      */
     public static void unregister() {
         for (DPermission permission : values()) {
-            Bukkit.getPluginManager().removePermission(permission.getNode());
+            Bukkit.getPluginManager().removePermission(permission.node);
         }
     }
 

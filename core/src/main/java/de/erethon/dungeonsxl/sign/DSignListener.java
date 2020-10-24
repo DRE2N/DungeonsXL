@@ -24,7 +24,6 @@ import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -119,7 +118,7 @@ public class DSignListener implements Listener {
             return;
         }
 
-        if (!DPermission.hasPermission(player, dsign.getBuildPermission())) {
+        if (!player.hasPermission(dsign.getBuildPermission())) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NO_PERMISSIONS.getMessage());
             return;
         }
