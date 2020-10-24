@@ -82,8 +82,9 @@ public class ScriptSign extends Passive {
             return;
         }
 
+        DungeonSign dSign = null;
         for (String[] lines : script.getSigns()) {
-            DungeonSign dSign = getGameWorld().createDungeonSign(getSign(), lines);
+            dSign = getGameWorld().createDungeonSign(getSign(), lines);
             if (dSign.isErroneous()) {
                 getGameWorld().removeDungeonSign(dSign);
                 continue;
@@ -91,9 +92,6 @@ public class ScriptSign extends Passive {
 
             try {
                 dSign.initialize();
-                if (dSign.isSetToAir()) {
-                    dSign.setToAir();
-                }
             } catch (Exception exception) {
                 dSign.markAsErroneous("An error occurred while initializing a sign of the type " + dSign.getName()
                         + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
@@ -108,6 +106,14 @@ public class ScriptSign extends Passive {
                     exception.printStackTrace();
                 }
             }
+        }
+
+        if (dSign == null) {
+            markAsErroneous("The script \"" + scriptName + "\" could not be found.");
+            return;
+        }
+        if (dSign.isSetToAir()) {
+            dSign.setToAir();
         }
     }
 
