@@ -1,12 +1,13 @@
-![DungeonsXL](http://feuerstern.bplaced.net/ressourcen/logos/DungeonsXL.png)
+![DungeonsXL](https://erethon.de/resources/logos/DungeonsXL.png)
 
-[![Builds](http://feuerstern.bplaced.net/ressourcen/buttons/Builds.png)](http://erethon.de/repo/de/erethon/dungeonsxl/dungeonsxl-dist)
-[![Wiki](http://feuerstern.bplaced.net/ressourcen/buttons/Wiki.png)](../../wiki/)
-[![Issues](http://feuerstern.bplaced.net/ressourcen/buttons/Issues.png)](../../issues/)
-[![JavaDocs](http://feuerstern.bplaced.net/ressourcen/buttons/JavaDocs.png)](http://erethon.de/javadocs/dungeonsxl/)
-[![MCStats](http://feuerstern.bplaced.net/ressourcen/buttons/MCStats.png)](http://bstats.org/plugin/bukkit/DungeonsXL/)
+[![Builds](https://erethon.de/resources/buttons/Builds.png)](http://erethon.de/repo/de/erethon/dungeonsxl/dungeonsxl-dist)
+[![Wiki](https://erethon.de/resources/buttons/Wiki.png)](../../wiki/)
+[![Issues](https://erethon.de/resources/buttons/Issues.png)](../../issues/)
+[![JavaDocs](https://erethon.de/resources/buttons/JavaDocs.png)](http://erethon.de/javadocs/dungeonsxl/)
+[![MCStats](https://erethon.de/resources/buttons/MCStats.png)](http://bstats.org/plugin/bukkit/DungeonsXL/)
 
-[![Build Status](https://travis-ci.com/DRE2N/DungeonsXL.svg?branch=master)](https://travis-ci.com/DRE2N/DungeonsXL)
+[![Build Status](https://travis-ci.com/DRE2N/DungeonsXL.svg?branch=master)](https://travis-ci.com/DRE2N/DungeonsXL) [![codebeat badge](https://codebeat.co/badges/5c57507f-084b-4945-8159-06bf5cf17794)](https://codebeat.co/projects/github-com-dre2n-dungeonsxl-master)
+
 
 DungeonsXL is a server mod that allows you to instantiate worlds.
 
@@ -47,7 +48,7 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with Spigot 1.8 and higher. However, support for 1.15 / 1.14 / 1.13 has a higher priority than support for 1.8-1.12. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. DungeonsXL only works with Spigot and does not support CraftBukkit builds.
+DungeonsXL works with Spigot 1.8 and higher. However, support for 1.13-1.16 has a higher priority than support for 1.8-1.12. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. DungeonsXL only works with Spigot and does not support CraftBukkit builds.
 
 ### Building information and dependencies
 Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org/).
