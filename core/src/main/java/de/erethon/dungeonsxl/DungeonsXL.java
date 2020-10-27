@@ -49,6 +49,7 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.command.DCommandCache;
+import de.erethon.dungeonsxl.command.StatusCommand;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
@@ -92,6 +93,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
@@ -200,6 +202,14 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     @Override
     public void onEnable() {
         super.onEnable();
+        String ixlVersion = manager.isPluginEnabled("ItemsXL") ? manager.getPlugin("ItemsXL").getDescription().getVersion() : "";
+        if (ixlVersion.startsWith("0.[0-5]") || ixlVersion.equals("0.6") || ixlVersion.equals("0.6.1")) {
+            getLogger().log(Level.SEVERE, "DungeonsXL includes v1.0-RC-03 of the Caliburn custom item library. ItemsXL must implement the same or a newer, "
+                    + "but still compatible version of this library. This build of DungeonsXL is compatible with ItemsXL v" + StatusCommand.LATEST_IXL
+                    + " and, possibly, higher. The latest DXL and IXL versions available on SpigotMC.org should always be compatible with each other.");
+            manager.disablePlugin(this);
+            return;
+        }
         if (Internals.andHigher(Internals.v1_14_R1).contains(compat.getInternals())) {
             getLogger().warning("Support for Minecraft 1.14 and higher is experimental. Do not use this in a production environment.");
         }
@@ -225,6 +235,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             registerGroupAdapter(new PartiesAdapter(this));
         }
         VignetteAPI.init(this);
+        loaded = true;
     }
 
     @Override
@@ -413,7 +424,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         }
 
         dCommands.register(this);
-        loaded = true;
     }
 
     public void saveData() {

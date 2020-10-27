@@ -51,6 +51,16 @@ public class ReloadCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
+        if (args.length >= 2 && (args[1].equalsIgnoreCase("-caliburn") || args[1].equalsIgnoreCase("-c"))) {
+            plugin.getCaliburn().reload();
+            MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
+            String ci = String.valueOf(plugin.getCaliburn().getCustomItems().size());
+            String cm = String.valueOf(plugin.getCaliburn().getCustomMobs().size());
+            String lt = String.valueOf(plugin.getCaliburn().getLootTables().size());
+            MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_CALIBURN.getMessage(ci, cm, lt));
+            return;
+        }
+
         Collection<InstancePlayer> dPlayers = this.dPlayers.getAllInstancePlayers();
         if (!dPlayers.isEmpty() && args.length == 1 && sender instanceof Player) {
             MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_PLAYERS.getMessage());
@@ -97,6 +107,11 @@ public class ReloadCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, ixl));
+        ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -caliburn");
+        String message = DefaultFontInfo.center(DMessage.CMD_RELOAD_BUTTON_CALIBURN.getMessage());
+        TextComponent text = new TextComponent(message);
+        text.setClickEvent(onClick);
+        MessageUtil.sendMessage(sender, text);
     }
 
 }

@@ -84,6 +84,8 @@ public enum DMessage implements Message {
     CMD_MSG_UPDATED("cmd.msg.updated"),
     CMD_PORTAL_HELP("cmd.portal.help"),
     CMD_PLAY_HELP("cmd.play.help"),
+    CMD_RELOAD_BUTTON_CALIBURN("cmd.reload.buttonCaliburn"),
+    CMD_RELOAD_CALIBURN("cmd.reload.caliburn"),
     CMD_RELOAD_HELP("cmd.reload.help"),
     CMD_RELOAD_SUCCESS("cmd.reload.success"),
     CMD_RELOAD_PLAYERS("cmd.reload.players"),

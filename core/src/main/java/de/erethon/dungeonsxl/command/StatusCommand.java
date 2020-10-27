@@ -38,6 +38,8 @@ public class StatusCommand extends DCommand {
     public static final String TRUE = ChatColor.GREEN + "\u2714";
     public static final String FALSE = ChatColor.DARK_RED + "\u2718";
 
+    public static final String LATEST_IXL = "0.6.2";
+
     public StatusCommand(DungeonsXL plugin) {
         super(plugin);
         setCommand("status");
@@ -67,7 +69,6 @@ public class StatusCommand extends DCommand {
         MessageUtil.sendMessage(sender, "= DungeonsXL: " + dungeonsxlVersion + " " + dungeonsxlVersionCorrect);
 
         Plugin vault = manager.getPlugin("Vault");
-        Plugin commandsxl = manager.getPlugin("CommandsXL");
         Plugin itemsxl = manager.getPlugin("ItemsXL");
         Plugin citizens = manager.getPlugin("Citizens");
         Plugin custommobs = manager.getPlugin("CustomMobs");
@@ -77,7 +78,6 @@ public class StatusCommand extends DCommand {
         String vaultVersion = "Not enabled";
         String permissionPlugin = "No plugin found";
         String economyPlugin = "No plugin found";
-        String commandsxlVersion = "Not enabled";
         String itemsxlVersion = "Not enabled";
         String citizensVersion = "Not enabled";
         String custommobsVersion = "Not enabled";
@@ -93,9 +93,6 @@ public class StatusCommand extends DCommand {
             if (plugin.getEconomyProvider() != null) {
                 economyPlugin = plugin.getEconomyProvider().getName();
             }
-        }
-        if (commandsxl != null) {
-            commandsxlVersion = commandsxl.getDescription().getVersion();
         }
         if (itemsxl != null) {
             itemsxlVersion = itemsxl.getDescription().getVersion();
@@ -116,8 +113,7 @@ public class StatusCommand extends DCommand {
         String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.7"));
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
         String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
-        String commandsxlVersionCorrect = getSymbol(commandsxlVersion.startsWith("2.1"));
-        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals("0.6.1"));
+        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals(LATEST_IXL));
         String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));
         String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
         String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("3."));
@@ -128,7 +124,6 @@ public class StatusCommand extends DCommand {
         MessageUtil.sendMessage(sender, "= Vault: " + vaultVersion + " " + vaultVersionCorrect);
         MessageUtil.sendMessage(sender, "  = Permissions: " + permissionPlugin + " " + permissionPluginCorrect);
         MessageUtil.sendMessage(sender, "  = Economy: " + economyPlugin + " " + economyPluginCorrect);
-        MessageUtil.sendMessage(sender, "= CommandsXL: " + commandsxlVersion + " " + commandsxlVersionCorrect);
         MessageUtil.sendMessage(sender, "= ItemsXL: " + itemsxlVersion + " " + itemsxlVersionCorrect);
         MessageUtil.sendMessage(sender, "= Citizens: " + citizensVersion + " " + citizensVersionCorrect);
         MessageUtil.sendMessage(sender, "= CustomMobs: " + custommobsVersion + " " + custommobsVersionCorrect);

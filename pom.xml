@@ -39,7 +39,7 @@
         <dependency>
             <groupId>de.erethon</groupId>
             <artifactId>caliburn</artifactId>
-            <version>1.0-RC-02</version>
+            <version>1.0-RC-03</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

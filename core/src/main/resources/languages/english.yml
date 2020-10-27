@@ -91,6 +91,8 @@ cmd:
   portal: 
     help: "/dxl portal ([material=portal]) - Creates a portal that leads into a dungeon"
   reload: 
+    buttonCaliburn: "&9[ RELOAD CALIBURN CONTENT ]"
+    caliburn: "&eCustom Items: &o[&v1] &eMobs: &o[&v2] &eLoot Tables: &o[&v3]"
     help: "/dxl reload - Reloads the plugin"
     players: "&4Warning: If you reload the plugin, all players will be kicked out of their game."
     success: "&7Successfully reloaded DungeonsXL."

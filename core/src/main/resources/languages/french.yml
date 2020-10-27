@@ -85,6 +85,8 @@ cmd:
   portal: 
     help: "/dxl portal ([material=portal]) - Créer un portail qui mène à un donjon"
   reload: 
+    buttonCaliburn: "&9[ RECHARGE LES CONTENUES DE CALIBURN ]"
+    caliburn: "&eItems personnalisés: &o[&v1] &eMobs: &o[&v2] &eTableaux Loot: &o[&v3]"
     help: "/dxl reload - Recharge le plugin"
     players: "&4Attention: Si vous rechargez le plugin, tous les joueurs seront éjectés de leur jeu."
     success: "&7DungeonsXL a été rechargé avec succès."
