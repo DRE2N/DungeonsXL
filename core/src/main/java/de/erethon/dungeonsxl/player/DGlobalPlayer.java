@@ -42,6 +42,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -474,23 +476,30 @@ public class DGlobalPlayer implements GlobalPlayer {
                 }
                 player.setLevel(data.getOldLevel());
                 player.setExp(data.getOldExp());
-                if (is1_9) {
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(data.getOldMaxHealth());
-                    player.setHealth(data.getOldHealth() <= data.getOldMaxHealth() ? data.getOldHealth() : data.getOldMaxHealth());
-                } else {
-                    player.setHealth(player.getMaxHealth());
-                }
                 player.setFoodLevel(data.getOldFoodLevel());
                 player.setFireTicks(data.getOldFireTicks());
+
                 for (PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
                 }
-
                 player.addPotionEffects(data.getOldPotionEffects());
 
                 if (is1_9) {
                     player.setCollidable(data.getOldCollidabilityState());
                     player.setInvulnerable(data.getOldInvulnerabilityState());
+                    for (Attribute attribute : Attribute.values()) {
+                        AttributeInstance instance = player.getAttribute(attribute);
+                        if (instance == null) {
+                            continue;
+                        }
+                        instance.setBaseValue((double) data.getOldAttributeBases().get(attribute));
+                        for (AttributeModifier mod : instance.getModifiers()) {
+                            instance.removeModifier(mod);
+                        }
+                        for (/*AttributeModifier*/Object mod : data.getOldAttributeMods().get(attribute)) { // TODO Remove casts when 1.8 is dropped
+                            instance.addModifier((AttributeModifier) mod);
+                        }
+                    }
                 }
                 player.setAllowFlight(data.getOldFlyingState());
 

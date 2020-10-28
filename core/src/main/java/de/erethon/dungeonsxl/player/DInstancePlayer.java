@@ -22,6 +22,7 @@ import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.MainConfig;
+import de.erethon.dungeonsxl.util.AttributeUtil;
 import de.erethon.dungeonsxl.util.ParsingUtil;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -80,6 +81,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
         player.setLevel(0);
         double maxHealth;
         if (is1_9) {
+            AttributeUtil.resetPlayerAttributes(player);
             maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         } else {
             maxHealth = player.getMaxHealth();

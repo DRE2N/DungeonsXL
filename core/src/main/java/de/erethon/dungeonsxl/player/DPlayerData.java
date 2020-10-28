@@ -16,8 +16,11 @@
  */
 package de.erethon.dungeonsxl.player;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.compatibility.Internals;
+import de.erethon.commons.config.ConfigUtil;
 import de.erethon.commons.config.DREConfig;
 import de.erethon.commons.javaplugin.DREPlugin;
 import de.erethon.commons.misc.EnumUtil;
@@ -29,10 +32,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -59,12 +65,13 @@ public class DPlayerData extends DREConfig {
     private ItemStack oldOffHand;
     private int oldLvl;
     private float oldExp;
-    private double oldMaxHealth;
     private double oldHealth;
     private int oldFoodLevel;
     private int oldFireTicks;
     private GameMode oldGameMode;
     private Collection<PotionEffect> oldPotionEffects;
+    private Map/*<Attribute, Double>*/ oldAttributeBases;
+    private Multimap/*<Attribute, AttributeModifier>*/ oldAttributeMods;
     private boolean oldCollidabilityState;
     private boolean oldFlyingState;
     private boolean oldInvulnerabilityState;
@@ -196,20 +203,6 @@ public class DPlayerData extends DREConfig {
     }
 
     /**
-     * @return the old max health
-     */
-    public double getOldMaxHealth() {
-        return oldMaxHealth;
-    }
-
-    /**
-     * @param maxHealth the maximum health to set
-     */
-    public void setOldMaxHealth(double maxHealth) {
-        oldMaxHealth = maxHealth;
-    }
-
-    /**
      * @return the old health
      */
     public double getOldHealth() {
@@ -277,6 +270,34 @@ public class DPlayerData extends DREConfig {
      */
     public void setOldPotionEffects(Collection<PotionEffect> potionEffects) {
         oldPotionEffects = potionEffects;
+    }
+
+    /**
+     * @return the old attribute bases
+     */
+    public Map/*<Attribute, Double>*/ getOldAttributeBases() {
+        return oldAttributeBases;
+    }
+
+    /**
+     * @param attributeBases the old attribute bases to set
+     */
+    public void setOldAttributeBases(Map/*<Attribute, Double>*/ attributeBases) {
+        oldAttributeBases = attributeBases;
+    }
+
+    /**
+     * @return the old attribute modifiers
+     */
+    public Multimap/*<Attribute, AttributeModifier>*/ getOldAttributeMods() {
+        return oldAttributeMods;
+    }
+
+    /**
+     * @param attributeMods the old attribute modifiers to set
+     */
+    public void setOldAttributeMods(Multimap/*<Attribute, AttributeModifier>*/ attributeMods) {
+        oldAttributeMods = attributeMods;
     }
 
     /**
@@ -503,7 +524,6 @@ public class DPlayerData extends DREConfig {
 
         oldLvl = config.getInt(PREFIX_STATE_PERSISTENCE + "oldLvl");
         oldExp = config.getInt(PREFIX_STATE_PERSISTENCE + "oldExp");
-        oldMaxHealth = config.getDouble(PREFIX_STATE_PERSISTENCE + "oldMaxHealth");
         oldHealth = config.getDouble(PREFIX_STATE_PERSISTENCE + "oldHealth");
         oldFoodLevel = config.getInt(PREFIX_STATE_PERSISTENCE + "oldFoodLevel");
         oldFireTicks = config.getInt(PREFIX_STATE_PERSISTENCE + "oldFireTicks");
@@ -514,6 +534,34 @@ public class DPlayerData extends DREConfig {
             oldGameMode = GameMode.SURVIVAL;
         }
         oldPotionEffects = (Collection<PotionEffect>) config.get(PREFIX_STATE_PERSISTENCE + "oldPotionEffects");
+
+        if (is1_9) {
+            Map<String, Object> basesMap = ConfigUtil.getMap(config, PREFIX_STATE_PERSISTENCE + "oldAttributeBases", false);
+            if (basesMap != null) {
+                oldAttributeBases = new HashMap<>();
+                for (Entry<String, Object> entry : basesMap.entrySet()) {
+                    if (!(entry.getValue() instanceof Double)) {
+                        continue;
+                    }
+                    Attribute attribute = EnumUtil.getEnum(Attribute.class, entry.getKey());
+                    Double base = (Double) entry.getValue();
+                    oldAttributeBases.put(attribute, base);
+                }
+            }
+
+            Map<String, Object> modsMap = ConfigUtil.getMap(config, PREFIX_STATE_PERSISTENCE + "oldAttributeModifiers", false);
+            if (modsMap != null) {
+                oldAttributeMods = HashMultimap.create();
+                for (Entry<String, Object> entry : modsMap.entrySet()) {
+                    if (!(entry.getValue() instanceof Collection)) {
+                        continue;
+                    }
+                    Attribute attribute = EnumUtil.getEnum(Attribute.class, entry.getKey());
+                    Collection<AttributeModifier> mods = (Collection<AttributeModifier>) entry.getValue();
+                    oldAttributeMods.putAll(attribute, mods);
+                }
+            }
+        }
 
         try {
             oldLocation = (Location) config.get(PREFIX_STATE_PERSISTENCE + "oldLocation");
@@ -544,9 +592,6 @@ public class DPlayerData extends DREConfig {
         oldGameMode = player.getGameMode();
         oldFireTicks = player.getFireTicks();
         oldFoodLevel = player.getFoodLevel();
-        if (is1_9) {
-            oldMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-        }
         oldHealth = player.getHealth();
         oldExp = player.getExp();
         oldLvl = player.getLevel();
@@ -558,6 +603,18 @@ public class DPlayerData extends DREConfig {
         oldLocation = player.getLocation();
         oldPotionEffects = player.getActivePotionEffects();
         if (is1_9) {
+            oldAttributeBases = new HashMap<>();
+            oldAttributeMods = HashMultimap.create();
+            for (Attribute attribute : Attribute.values()) {
+                AttributeInstance instance = player.getAttribute(attribute);
+                if (instance == null) {
+                    continue;
+                }
+                oldAttributeBases.put(attribute, instance.getBaseValue());
+                for (AttributeModifier mod : instance.getModifiers()) {
+                    oldAttributeMods.put(attribute, mod);
+                }
+            }
             oldCollidabilityState = player.isCollidable();
             oldInvulnerabilityState = player.isInvulnerable();
         }
@@ -566,7 +623,6 @@ public class DPlayerData extends DREConfig {
         config.set(PREFIX_STATE_PERSISTENCE + "oldGameMode", oldGameMode.toString());
         config.set(PREFIX_STATE_PERSISTENCE + "oldFireTicks", oldFireTicks);
         config.set(PREFIX_STATE_PERSISTENCE + "oldFoodLevel", oldFoodLevel);
-        config.set(PREFIX_STATE_PERSISTENCE + "oldMaxHealth", oldMaxHealth);
         config.set(PREFIX_STATE_PERSISTENCE + "oldHealth", oldHealth);
         config.set(PREFIX_STATE_PERSISTENCE + "oldExp", oldExp);
         config.set(PREFIX_STATE_PERSISTENCE + "oldLvl", oldLvl);
@@ -575,6 +631,10 @@ public class DPlayerData extends DREConfig {
         config.set(PREFIX_STATE_PERSISTENCE + "oldOffHand", oldOffHand);
         config.set(PREFIX_STATE_PERSISTENCE + "oldLocation", oldLocation);
         config.set(PREFIX_STATE_PERSISTENCE + "oldPotionEffects", oldPotionEffects);
+        if (is1_9) {
+            config.set(PREFIX_STATE_PERSISTENCE + "oldAttributeBases", oldAttributeBases);
+            config.set(PREFIX_STATE_PERSISTENCE + "oldAttributeMods", oldAttributeMods.asMap());
+        }
         config.set(PREFIX_STATE_PERSISTENCE + "oldCollidabilityState", oldCollidabilityState);
         config.set(PREFIX_STATE_PERSISTENCE + "oldFlyingState", oldFlyingState);
         config.set(PREFIX_STATE_PERSISTENCE + "oldInvulnerabilityState", oldInvulnerabilityState);
@@ -589,7 +649,6 @@ public class DPlayerData extends DREConfig {
         oldGameMode = null;
         oldFireTicks = 0;
         oldFoodLevel = 0;
-        oldMaxHealth = 20;
         oldHealth = 0;
         oldExp = 0;
         oldLvl = 0;
@@ -598,6 +657,8 @@ public class DPlayerData extends DREConfig {
         oldOffHand = null;
         oldLocation = null;
         oldPotionEffects = null;
+        oldAttributeBases = null;
+        oldAttributeMods = null;
         oldCollidabilityState = true;
         oldFlyingState = false;
         oldInvulnerabilityState = false;
