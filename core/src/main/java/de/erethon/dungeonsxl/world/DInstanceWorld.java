@@ -169,7 +169,7 @@ public abstract class DInstanceWorld implements InstanceWorld {
     public void kickAllPlayers() {
         getPlayers().forEach(p -> p.leave());
         // Players who shouldn't be in the dungeon but still are for some reason
-        if (world != null) {
+        if (plugin.isLoaded() && world != null) {
             getWorld().getPlayers().forEach(p -> p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
         }
     }

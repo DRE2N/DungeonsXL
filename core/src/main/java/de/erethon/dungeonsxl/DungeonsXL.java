@@ -243,12 +243,12 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         if (!loaded) {
             return;
         }
+        loaded = false;
         saveData();
         deleteAllInstances();
         HandlerList.unregisterAll(this);
         getServer().getScheduler().cancelTasks(this);
         DPermission.unregister();
-        loaded = false;
     }
 
     public void initFolders() {
@@ -558,6 +558,15 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
      */
     public Collection<GroupAdapter> getGroupAdapters() {
         return groupAdapters;
+    }
+
+    /**
+     * Returns true if the plugin is not currently in the process of enabling or disabling or entirely disabled, otherwise false.
+     *
+     * @return true if the plugin is not currently in the process of enabling or disabling or entirely disabled, otherwise false
+     */
+    public boolean isLoaded() {
+        return loaded;
     }
 
     /**
