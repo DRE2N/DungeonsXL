@@ -623,7 +623,8 @@ public class DGroup implements PlayerGroup {
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
         DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
-        int floorsLeft = getDungeon().getFloors().size() + 1 - floorCount;//floorCount contains start floor, but dungeon floor list doesn't
+        int floorsLeft = getDungeon().getFloors().size() - floorCount; //floorCount contains start floor, but dungeon floor list doesn't
+        removeUnplayedFloor((DResourceWorld) gameWorld.getResource(), false);
         ResourceWorld newFloor = null;
         GameWorld.Type type = null;
         if (gameWorld.getType() == GameWorld.Type.END_FLOOR) {
@@ -648,7 +649,6 @@ public class DGroup implements PlayerGroup {
         }
 
         Game game = getGame();
-        removeUnplayedFloor((DResourceWorld) gameWorld.getResource(), false);
         GameWorld gameWorld = newFloor.instantiateGameWorld(true);
         gameWorld.setType(type);
         this.gameWorld = gameWorld;
