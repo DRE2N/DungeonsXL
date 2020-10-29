@@ -133,9 +133,21 @@ public class GroupSign extends JoinSign {
     }
 
     public void onPlayerInteract(Block block, Player player) {
-        if (plugin.getPlayerGroup(player) != null) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
-            return;
+        DGroup playerGroup = (DGroup) plugin.getPlayerGroup(player);
+        if (playerGroup != null) {
+            if (playerGroup.getLeader().equals(player)) {
+                if (group != null || maxElements < playerGroup.getMembers().size()) {
+                    MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
+                    return;
+                } else {
+                    group = playerGroup;
+                    group.setDungeon(dungeon);
+                    update();
+                    return;
+                }
+            } else {
+                playerGroup.removeMember(player, true);
+            }
         }
 
         Block topBlock = block.getRelative(0, startSign.getY() - block.getY(), 0);
