@@ -710,7 +710,7 @@ public class DGroup implements PlayerGroup {
 
             boolean ready = true;
             for (Player player : dGroup.getMembers().getOnlinePlayers()) {
-                DGamePlayer dPlayer = (DGamePlayer) dPlayers.get(player);
+                DGamePlayer dPlayer = (DGamePlayer) dPlayers.getGamePlayer(player);
                 if (dPlayer == null) {
                     dPlayer = new DGamePlayer(plugin, player, gameWorld);
                 }
