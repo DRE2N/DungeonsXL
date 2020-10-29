@@ -19,10 +19,15 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.FileUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
+import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.player.DPermission;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -80,6 +85,27 @@ public class DeleteCommand extends DCommand {
                 }
             }
         }
+
+        List<Dungeon> toRemove = new ArrayList<>();
+        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
+            if (dungeon.getStartFloor().equals(resource)) {
+                toRemove.add(dungeon);
+                if (dungeon.isMultiFloor()) {
+                    ((DDungeon) dungeon).getConfig().getFile().delete();
+                }
+            } else if (dungeon.isMultiFloor() && dungeon.getEndFloor().equals(resource)) {
+                toRemove.add(dungeon);
+                ((DDungeon) dungeon).getConfig().getFile().delete();
+            } else if (dungeon.isMultiFloor() && dungeon.getFloors().contains(resource)) {
+                dungeon.getFloors().remove(resource);
+                DungeonConfig config = ((DDungeon) dungeon).getConfig();
+                List<String> floors = config.getConfig().getStringList("floors");
+                floors.remove(resource.getName());
+                config.getConfig().set("floors", floors);
+                config.save();
+            }
+        }
+        toRemove.forEach(plugin.getDungeonRegistry()::remove);
 
         MessageUtil.sendMessage(sender, DMessage.CMD_DELETE_SUCCESS.getMessage(args[1]));
     }
