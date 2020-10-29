@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -39,7 +40,8 @@ public class MsgCommand extends DCommand {
         super(plugin);
         setMinArgs(-1);
         setMaxArgs(-1);
-        setCommand("msg");
+        setCommand("message");
+        setAliases("msg");
         setHelp(DMessage.CMD_MSG_HELP.getMessage());
         setPermission(DPermission.MESSAGE.getNode());
         setPlayerCommand(true);
@@ -104,6 +106,20 @@ public class MsgCommand extends DCommand {
 
                     msgs.put(id, msg);
                     config.save();
+
+                    for (Dungeon dungeon : plugin.getDungeonRegistry()) {
+                        if (!dungeon.getStartFloor().equals(editWorld.getResource())) {
+                            continue;
+                        }
+                        // Only MFD overrideValues can override floor configs
+                        if (dungeon.isMultiFloor()) {
+                            Map<Integer, String> overrideValuesMSG = dungeon.getOverrideValues().getState(GameRule.MESSAGES);
+                            if (overrideValuesMSG != null && overrideValuesMSG.containsKey(id)) {
+                                continue;
+                            }
+                        }
+                        dungeon.getRules().getState(GameRule.MESSAGES).put(id, msg);
+                    }
 
                 } else {
                     MessageUtil.sendMessage(player, DMessage.ERROR_MSG_FORMAT.getMessage());
