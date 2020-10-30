@@ -543,7 +543,7 @@ public class DGlobalPlayer implements GlobalPlayer {
             }
         }
 
-        DGroup dGroup = new DGroup(plugin, "Tutorial", player, dungeon);
+        DGroup dGroup = new DGroup(plugin, player, dungeon);
 
         GroupCreateEvent createEvent = new GroupCreateEvent(dGroup, this, GroupCreateEvent.Cause.GROUP_SIGN);
         Bukkit.getPluginManager().callEvent(createEvent);
