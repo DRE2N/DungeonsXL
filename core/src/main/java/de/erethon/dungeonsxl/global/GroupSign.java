@@ -136,11 +136,12 @@ public class GroupSign extends JoinSign {
         DGroup playerGroup = (DGroup) plugin.getPlayerGroup(player);
         if (playerGroup != null) {
             if (playerGroup.getLeader().equals(player)) {
-                if (group != null || maxElements < playerGroup.getMembers().size()) {
+                if (playerGroup.getGroupSign() != null || group != null || maxElements < playerGroup.getMembers().size()) {
                     MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
                     return;
                 } else {
                     group = playerGroup;
+                    group.setGroupSign(this);
                     group.setDungeon(dungeon);
                     update();
                     return;
@@ -165,8 +166,10 @@ public class GroupSign extends JoinSign {
 
             if (groupName != null) {
                 group = new DGroup(plugin, groupName, player, dungeon);
+                group.setGroupSign(this);
             } else {
                 group = new DGroup(plugin, player, dungeon);
+                group.setGroupSign(this);
             }
             update();
 

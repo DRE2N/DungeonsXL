@@ -43,6 +43,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
+import de.erethon.dungeonsxl.global.GroupSign;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class DGroup implements PlayerGroup {
 
     private int id;
     private String name;
+    private GroupSign groupSign;
     private Player captain;
     private PlayerCollection players = new PlayerCollection();
     private PlayerCollection invitedPlayers = new PlayerCollection();
@@ -175,6 +177,14 @@ public class DGroup implements PlayerGroup {
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    public GroupSign getGroupSign() {
+        return groupSign;
+    }
+
+    public void setGroupSign(GroupSign groupSign) {
+        this.groupSign = groupSign;
     }
 
     @Override
