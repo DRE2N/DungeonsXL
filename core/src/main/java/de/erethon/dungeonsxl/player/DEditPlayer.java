@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.commons.chat.MessageUtil;
+import de.erethon.commons.misc.ProgressBar;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
@@ -144,6 +145,12 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
 
         if (!plugin.isLoadingWorld() && editWorld != null && editWorld.getPlayers().isEmpty()) {
             editWorld.delete();
+            new ProgressBar(player, config.getEditInstanceRemovalDelay()) {
+                @Override
+                public void onFinish() {
+                    MessageUtil.sendActionBarMessage(player, DMessage.CMD_SAVE_SUCCESS.getMessage());
+                }
+            }.send(plugin);
         }
     }
 
