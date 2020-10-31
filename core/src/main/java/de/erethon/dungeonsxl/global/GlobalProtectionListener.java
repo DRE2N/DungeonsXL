@@ -145,7 +145,7 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (DPlayerListener.isCitizensNPC(player)) {
+        if (DPlayerListener.isCitizensNPC(player) || plugin.isInstance(event.getTo().getWorld())) {
             return;
         }
 

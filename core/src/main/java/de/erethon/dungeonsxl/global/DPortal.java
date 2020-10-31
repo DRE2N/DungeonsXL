@@ -403,9 +403,12 @@ public class DPortal extends GlobalProtection {
      * @return the portal that the block belongs to, null if it belongs to none
      */
     public static DPortal getByBlock(DungeonsXL plugin, Block block) {
+        if (plugin.isInstance(block.getWorld())) {
+            return null;
+        }
         for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections(DPortal.class)) {
             DPortal portal = (DPortal) protection;
-            if (portal.getBlock1() == null || portal.getBlock2() == null) {
+            if (!portal.getWorld().equals(block.getWorld()) || portal.getBlock1() == null || portal.getBlock2() == null) {
                 continue;
             }
 
