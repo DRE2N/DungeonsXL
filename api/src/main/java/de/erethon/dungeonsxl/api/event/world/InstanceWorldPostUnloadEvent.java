@@ -14,44 +14,40 @@
  */
 package de.erethon.dungeonsxl.api.event.world;
 
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- * Fired when a {@link ResourceWorld} is instantiated.
+ * Fired after an instance world is unloaded.
  *
  * @author Daniel Saukel
  */
-public class ResourceWorldInstantiateEvent extends ResourceWorldEvent implements Cancellable {
+public class InstanceWorldPostUnloadEvent extends ResourceWorldEvent {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled;
+    private String instanceWorldName;
 
-    private Dungeon dungeon;
-
-    public ResourceWorldInstantiateEvent(ResourceWorld resource, Dungeon dungeon) {
+    public InstanceWorldPostUnloadEvent(ResourceWorld resource, String instanceWorldName) {
         super(resource);
-        this.dungeon = dungeon;
+        this.instanceWorldName = instanceWorldName;
     }
 
     /**
-     * Returns the dungeon as a part of which the instance is loaded.
+     * Returns the name the instance world had.
      *
-     * @return the dungeon as a part of which the instance is loaded
+     * @return the name the instance world had
      */
-    public Dungeon getDungeon() {
-        return dungeon;
+    public String getInstanceWorldName() {
+        return instanceWorldName;
     }
 
     /**
-     * Returns if the loaded instance will be an edit world.
+     * Returns if the unloaded instance was an edit world.
      *
-     * @return if the loaded instance will be an edit world
+     * @return if the unloaded instance was an edit world
      */
-    public boolean isEditInstance() {
-        return dungeon == null;
+    public boolean wasEditInstance() {
+        return instanceWorldName.startsWith("DXL_Edit_");
     }
 
     @Override
@@ -61,16 +57,6 @@ public class ResourceWorldInstantiateEvent extends ResourceWorldEvent implements
 
     public static HandlerList getHandlerList() {
         return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
     }
 
 }

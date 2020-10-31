@@ -23,7 +23,7 @@ import org.bukkit.event.HandlerList;
  * Fired when a group finishs a {@link Dungeon}, which means the end floor of a dungeon.
  * <p>
  * Do not confuse this with {@link de.erethon.dungeonsxl.api.event.player.GamePlayerFinishEvent}. GamePlayerFinishEvent is fired when a player triggers an end
- * sign, while GroupFinishDungeonEvent is triggered when all group members have triggered the ready sign and the game actually ends.
+ * sign, while GroupFinishDungeonEvent is triggered when all group members have triggered the end sign and the game actually ends.
  *
  * @author Daniel Saukel
  */

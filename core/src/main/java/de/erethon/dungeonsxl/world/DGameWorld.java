@@ -29,6 +29,7 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.world.GameWorldStartGameEvent;
+import de.erethon.dungeonsxl.api.event.world.InstanceWorldPostUnloadEvent;
 import de.erethon.dungeonsxl.api.event.world.InstanceWorldUnloadEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
@@ -474,9 +475,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         kickAllPlayers();
 
+        String name = getWorld().getName();
         Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
         FileUtil.removeDir(getFolder());
         plugin.getInstanceCache().remove(this);
+        Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
     }
 
     private GameRuleContainer getRules() {

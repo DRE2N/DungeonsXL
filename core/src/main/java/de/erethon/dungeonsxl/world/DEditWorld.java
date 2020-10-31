@@ -22,6 +22,7 @@ import de.erethon.commons.misc.ProgressBar;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.event.world.EditWorldSaveEvent;
 import de.erethon.dungeonsxl.api.event.world.EditWorldUnloadEvent;
+import de.erethon.dungeonsxl.api.event.world.InstanceWorldPostUnloadEvent;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.player.DEditPlayer;
@@ -165,6 +166,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
         kickAllPlayers();
 
+        String name = getWorld().getName();
         if (save) {
             getResource().getSignData().serializeSigns(signs.values());
             Bukkit.unloadWorld(getWorld(), true);
@@ -175,8 +177,9 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                     FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
                     DResourceWorld.deleteUnusedFiles(getResource().getFolder());
                     FileUtil.removeDir(getFolder());
+                    Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
                 }
-            }.runTaskLaterAsynchronously(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
+            }.runTaskLater(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
         }
         if (!save) {
             Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
@@ -184,8 +187,9 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                 @Override
                 public void run() {
                     FileUtil.removeDir(getFolder());
+                    Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
                 }
-            }.runTaskLaterAsynchronously(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
+            }.runTaskLater(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
         }
 
         getResource().editWorld = null;
