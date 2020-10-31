@@ -96,6 +96,11 @@ public class RenameCommand extends DCommand {
             } catch (IOException ex) {
             }
         }
+        resource.getSingleFloorDungeon().setName(args[2]);
+        plugin.getDungeonRegistry().removeKey(args[1]);
+        plugin.getDungeonRegistry().add(args[2], resource.getSingleFloorDungeon());
+        plugin.getMapRegistry().removeKey(args[1]);
+        plugin.getMapRegistry().add(args[2], resource);
 
         boolean changed = false;
         for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections().toArray(new GlobalProtection[]{})) {
