@@ -42,7 +42,17 @@
                                     <include>de.erethon:caliburn</include>
                                     <include>de.erethon.commons:commons-dist</include>
                                 </includes>
-                            </artifactSet>
+                            </artifactSet>                            
+                            <relocations>	
+                                <relocation>
+                                    <pattern>de.erethon.commons</pattern>	
+                                    <shadedPattern>de.erethon.dungeonsxl.util.commons</shadedPattern>	
+                                </relocation>
+                                <relocation>
+                                    <pattern>de.erethon.caliburn.util.compatibility</pattern>	
+                                    <shadedPattern>de.erethon.dungeonsxl.util.commons.compatibility</shadedPattern>	
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

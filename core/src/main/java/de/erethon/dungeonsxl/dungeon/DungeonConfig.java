@@ -16,9 +16,9 @@
  */
 package de.erethon.dungeonsxl.dungeon;
 
-import de.erethon.commons.config.DREConfig;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.dungeonsxl.util.commons.config.DREConfig;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.util.ArrayList;

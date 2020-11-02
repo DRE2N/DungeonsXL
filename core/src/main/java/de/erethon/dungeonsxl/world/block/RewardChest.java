@@ -17,8 +17,6 @@
 package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.misc.SimpleDateUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Game;
@@ -30,6 +28,8 @@ import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.reward.ItemReward;
 import de.erethon.dungeonsxl.reward.LevelReward;
 import de.erethon.dungeonsxl.reward.MoneyReward;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.misc.SimpleDateUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

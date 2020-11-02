@@ -18,7 +18,6 @@ package de.erethon.dungeonsxl.mob;
 
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.caliburn.mob.VanillaMob;
-import de.erethon.commons.compatibility.Version;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobSpawnEvent;
@@ -27,6 +26,7 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.trigger.MobTrigger;
 import de.erethon.dungeonsxl.trigger.WaveTrigger;
+import de.erethon.dungeonsxl.util.commons.compatibility.Version;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.Set;
 import org.bukkit.Bukkit;

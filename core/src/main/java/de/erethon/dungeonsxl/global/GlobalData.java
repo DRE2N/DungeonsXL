@@ -16,9 +16,9 @@
  */
 package de.erethon.dungeonsxl.global;
 
-import de.erethon.commons.config.DREConfig;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.util.commons.config.DREConfig;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import java.io.File;
 import java.util.Map.Entry;
 import org.bukkit.Bukkit;

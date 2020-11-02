@@ -18,8 +18,6 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
@@ -30,6 +28,8 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
 import java.util.HashSet;
 import java.util.Set;
 import net.md_5.bungee.api.chat.ClickEvent;

@@ -17,11 +17,11 @@
 package de.erethon.dungeonsxl.sign.rocker;
 
 import de.erethon.caliburn.category.Category;
-import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import org.bukkit.block.Block;

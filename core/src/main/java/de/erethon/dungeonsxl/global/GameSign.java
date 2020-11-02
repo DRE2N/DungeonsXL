@@ -17,13 +17,13 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.category.Category;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;

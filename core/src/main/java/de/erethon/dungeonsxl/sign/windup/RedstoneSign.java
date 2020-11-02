@@ -17,11 +17,11 @@
 package de.erethon.dungeonsxl.sign.windup;
 
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitTask;
 

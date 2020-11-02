@@ -5,10 +5,10 @@
  */
 package de.erethon.dungeonsxxl;
 
-import de.erethon.commons.compatibility.Internals;
-import de.erethon.commons.javaplugin.DREPlugin;
-import de.erethon.commons.javaplugin.DREPluginSettings;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
+import de.erethon.dungeonsxl.util.commons.javaplugin.DREPlugin;
+import de.erethon.dungeonsxl.util.commons.javaplugin.DREPluginSettings;
 import de.erethon.dungeonsxxl.requirement.*;
 import de.erethon.dungeonsxxl.sign.*;
 import de.erethon.dungeonsxxl.util.GlowUtil;

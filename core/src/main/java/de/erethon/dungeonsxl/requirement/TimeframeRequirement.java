@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
-import de.erethon.commons.misc.EnumUtil;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

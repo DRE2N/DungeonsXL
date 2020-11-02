@@ -29,6 +29,12 @@
                                     <include>de.erethon.dungeonsxl:*</include>
                                 </includes>
                             </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>de.erethon.vignette</pattern>	
+                                    <shadedPattern>de.erethon.dungeonsxl.util.vignette</shadedPattern>	
+                                </relocation>	
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

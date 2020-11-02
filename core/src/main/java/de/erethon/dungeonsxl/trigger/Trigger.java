@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.event.trigger.TriggerRegistrationEvent;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

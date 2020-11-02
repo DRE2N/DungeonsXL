@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.announcer;
 
-import de.erethon.commons.chat.DefaultFontInfo;
-import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
@@ -25,6 +23,8 @@ import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.GUIUtil;
+import de.erethon.dungeonsxl.util.commons.chat.DefaultFontInfo;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.event.player.EditPlayerLeaveEvent;
 import de.erethon.dungeonsxl.api.player.EditPlayer;
@@ -24,6 +23,7 @@ import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

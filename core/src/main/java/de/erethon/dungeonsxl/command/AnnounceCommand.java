@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.announcer.Announcer;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
@@ -24,6 +23,7 @@ import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 

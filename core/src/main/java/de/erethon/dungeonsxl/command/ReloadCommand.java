@@ -16,15 +16,15 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.chat.DefaultFontInfo;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
-import de.erethon.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.event.DataReloadEvent;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.commons.chat.DefaultFontInfo;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.compatibility.CompatibilityHandler;
+import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
 import java.util.Collection;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;

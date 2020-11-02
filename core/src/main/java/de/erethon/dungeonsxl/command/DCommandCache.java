@@ -16,9 +16,9 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.command.DRECommand;
-import de.erethon.commons.command.DRECommandCache;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.util.commons.command.DRECommand;
+import de.erethon.dungeonsxl.util.commons.command.DRECommandCache;
 
 /**
  * An enumeration of all command instances.

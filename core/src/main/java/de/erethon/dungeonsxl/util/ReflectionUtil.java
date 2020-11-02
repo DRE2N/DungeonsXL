@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.util;
 
-import de.erethon.commons.compatibility.CompatibilityHandler;
+import de.erethon.dungeonsxl.util.commons.compatibility.CompatibilityHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.bukkit.inventory.ItemStack;

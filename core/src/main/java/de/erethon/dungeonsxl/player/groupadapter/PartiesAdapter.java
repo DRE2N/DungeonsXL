@@ -25,11 +25,11 @@ import com.alessiodp.parties.api.events.bukkit.player.BukkitPartiesPlayerPostLea
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.alessiodp.parties.api.interfaces.Party;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
-import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;

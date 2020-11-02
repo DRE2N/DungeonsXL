@@ -18,12 +18,12 @@ package de.erethon.dungeonsxl.player;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.Internals;
-import de.erethon.commons.config.ConfigUtil;
-import de.erethon.commons.config.DREConfig;
-import de.erethon.commons.javaplugin.DREPlugin;
-import de.erethon.commons.misc.EnumUtil;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
+import de.erethon.dungeonsxl.util.commons.config.ConfigUtil;
+import de.erethon.dungeonsxl.util.commons.config.DREConfig;
+import de.erethon.dungeonsxl.util.commons.javaplugin.DREPlugin;
+import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

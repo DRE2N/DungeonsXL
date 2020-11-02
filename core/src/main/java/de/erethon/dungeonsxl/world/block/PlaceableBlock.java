@@ -17,10 +17,10 @@
 package de.erethon.dungeonsxl.world.block;
 
 import de.erethon.caliburn.item.ExItem;
-import de.erethon.commons.misc.BlockUtil;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
+import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;

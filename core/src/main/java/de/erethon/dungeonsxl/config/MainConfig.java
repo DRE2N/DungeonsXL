@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.config;
 
-import de.erethon.commons.config.DREConfig;
-import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import static de.erethon.dungeonsxl.api.player.PlayerGroup.Color.*;
+import de.erethon.dungeonsxl.util.commons.config.DREConfig;
+import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.io.IOException;

@@ -16,13 +16,13 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import static de.erethon.commons.chat.FatLetter.*;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.CompatibilityHandler;
-import de.erethon.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import static de.erethon.dungeonsxl.util.commons.chat.FatLetter.*;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.compatibility.CompatibilityHandler;
+import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;

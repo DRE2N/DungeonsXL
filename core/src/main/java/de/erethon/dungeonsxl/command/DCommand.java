@@ -16,10 +16,10 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.command.DRECommand;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.config.MainConfig;
+import de.erethon.dungeonsxl.util.commons.command.DRECommand;
 
 /**
  * @author Daniel Saukel

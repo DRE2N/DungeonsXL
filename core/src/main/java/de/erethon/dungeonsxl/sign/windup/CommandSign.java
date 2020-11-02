@@ -16,14 +16,14 @@
  */
 package de.erethon.dungeonsxl.sign.windup;
 
-import de.erethon.commons.misc.EnumUtil;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Windup;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
+import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

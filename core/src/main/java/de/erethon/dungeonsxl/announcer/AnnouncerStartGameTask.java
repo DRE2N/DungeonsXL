@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.announcer;
 
-import de.erethon.commons.misc.ProgressBar;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
@@ -24,6 +23,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.util.commons.misc.ProgressBar;
 import java.util.HashSet;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -5,13 +5,13 @@
  */
 package de.erethon.dungeonsxxl.sign;
 
-import de.erethon.commons.misc.BlockUtil;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.sign.passive.InteractSign;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
+import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Sign;
 

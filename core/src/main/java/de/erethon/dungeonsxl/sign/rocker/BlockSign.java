@@ -18,12 +18,12 @@ package de.erethon.dungeonsxl.sign.rocker;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.MagicValueUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import org.bukkit.block.Sign;
 
 /**

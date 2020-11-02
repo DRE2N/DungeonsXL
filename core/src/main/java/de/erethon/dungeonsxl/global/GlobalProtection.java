@@ -16,10 +16,10 @@
  */
 package de.erethon.dungeonsxl.global;
 
-import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import java.io.File;
 import java.util.Collection;
 import org.bukkit.Bukkit;

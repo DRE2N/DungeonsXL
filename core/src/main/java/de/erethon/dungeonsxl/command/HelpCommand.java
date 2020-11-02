@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.command.DRECommand;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.command.DRECommand;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import java.util.ArrayList;
 import java.util.Set;
 import org.bukkit.command.CommandSender;

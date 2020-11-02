@@ -16,9 +16,9 @@
  */
 package de.erethon.dungeonsxl.sign;
 
-import de.erethon.commons.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
 import org.bukkit.Location;
 
 /**

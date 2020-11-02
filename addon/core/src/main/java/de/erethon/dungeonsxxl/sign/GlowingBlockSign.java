@@ -5,12 +5,12 @@
  */
 package de.erethon.dungeonsxxl.sign;
 
-import de.erethon.commons.misc.BlockUtil;
-import de.erethon.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
+import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxxl.DungeonsXXL;
 import de.erethon.dungeonsxxl.world.block.GlowingBlock;

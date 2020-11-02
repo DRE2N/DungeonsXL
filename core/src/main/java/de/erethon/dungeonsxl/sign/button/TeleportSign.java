@@ -16,13 +16,13 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
-import de.erethon.commons.misc.BlockUtil;
-import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.sign.LocationSign;
+import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
