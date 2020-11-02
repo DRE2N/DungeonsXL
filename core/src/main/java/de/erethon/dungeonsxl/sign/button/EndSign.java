@@ -16,8 +16,11 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
+import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.GameGoal;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
@@ -82,6 +85,13 @@ public class EndSign extends Button {
 
     @Override
     public void initialize() {
+        GameGoal goal = getGame().getRules().getState(GameRule.GAME_GOAL);
+        if (goal != GameGoal.END) {
+            setToAir();
+            MessageUtil.log(api, "&4An end sign in the dungeon " + getGame().getDungeon().getName() + " is ignored because the game goal is " + goal.toString());
+            return;
+        }
+
         if (!getLine(1).isEmpty()) {
             floor = api.getMapRegistry().get(getLine(1));
         }

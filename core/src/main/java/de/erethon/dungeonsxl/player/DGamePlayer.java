@@ -337,7 +337,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         GameRuleContainer rules = game.getRules();
 
         getGroup().setScore(getGroup().getScore() + 1);
-        if (rules.getState(GameRule.SCORE_GOAL) == getGroup().getScore()) {
+        GameGoal goal = rules.getState(GameRule.GAME_GOAL);
+        if ((goal == GameGoal.REACH_SCORE || goal == GameGoal.TIME_SCORE) && rules.getState(GameRule.SCORE_GOAL) == getGroup().getScore()) {
             getGroup().winGame();
         }
 
