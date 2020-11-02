@@ -18,11 +18,13 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.event.player.EditPlayerLeaveEvent;
 import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,6 +52,12 @@ public class EscapeCommand extends DCommand {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
 
         } else if (editPlayer != null) {
+            EditPlayerLeaveEvent event = new EditPlayerLeaveEvent(editPlayer, true, true);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+
             editPlayer.escape();
 
             EditWorld editWorld = editPlayer.getEditWorld();
@@ -57,7 +65,7 @@ public class EscapeCommand extends DCommand {
                 return;
             }
 
-            if (editWorld.getWorld().getPlayers().isEmpty()) {
+            if (editWorld.getWorld().getPlayers().isEmpty() && event.getUnloadIfEmpty()) {
                 editWorld.delete(false);
             }
 

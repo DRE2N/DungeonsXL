@@ -15,7 +15,6 @@
 package de.erethon.dungeonsxl.api.event.player;
 
 import de.erethon.dungeonsxl.api.player.EditPlayer;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
@@ -23,10 +22,9 @@ import org.bukkit.event.HandlerList;
  *
  * @author Daniel Saukel
  */
-public class EditPlayerEditEvent extends EditPlayerEvent implements Cancellable {
+public class EditPlayerEditEvent extends EditPlayerEvent {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled;
 
     private boolean newlyLoaded;
 
@@ -51,16 +49,6 @@ public class EditPlayerEditEvent extends EditPlayerEvent implements Cancellable 
 
     public static HandlerList getHandlerList() {
         return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
     }
 
 }

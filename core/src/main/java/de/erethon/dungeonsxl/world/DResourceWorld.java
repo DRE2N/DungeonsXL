@@ -24,6 +24,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.world.EditWorldGenerateEvent;
+import de.erethon.dungeonsxl.api.event.world.ResourceWorldInstantiateEvent;
 import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
@@ -199,6 +200,10 @@ public class DResourceWorld implements ResourceWorld {
         }
 
         DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder) : new DEditWorld(plugin, this, instanceFolder);
+        ResourceWorldInstantiateEvent event = new ResourceWorldInstantiateEvent(this, name);
+        if (event.isCancelled()) {
+            return null;
+        }
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())).getName();
@@ -284,7 +289,7 @@ public class DResourceWorld implements ResourceWorld {
         DEditWorld editWorld = new DEditWorld(plugin, this, folder);
         this.editWorld = editWorld;
 
-        EditWorldGenerateEvent event = new EditWorldGenerateEvent(editWorld);
+        ResourceWorldInstantiateEvent event = new ResourceWorldInstantiateEvent(this, name);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return null;
@@ -298,6 +303,7 @@ public class DResourceWorld implements ResourceWorld {
         editWorld.world = creator.createWorld().getName();
         editWorld.generateIdFile();
 
+        Bukkit.getPluginManager().callEvent(new EditWorldGenerateEvent(editWorld));
         return editWorld;
     }
 

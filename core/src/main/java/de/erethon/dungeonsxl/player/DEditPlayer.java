@@ -138,12 +138,12 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
     }
 
     @Override
-    public void leave() {
+    public void leave(boolean unloadIfEmpty) {
         delete();
 
         reset(false);
 
-        if (!plugin.isLoadingWorld() && editWorld != null && editWorld.getPlayers().isEmpty()) {
+        if (unloadIfEmpty && !plugin.isLoadingWorld() && editWorld != null && editWorld.getPlayers().isEmpty()) {
             editWorld.delete();
             new ProgressBar(player, config.getEditInstanceRemovalDelay()) {
                 @Override

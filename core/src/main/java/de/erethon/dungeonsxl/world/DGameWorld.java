@@ -387,6 +387,10 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     @Override
     public Dungeon getDungeon() {
+        if (getGame() != null) {
+            return getGame().getDungeon();
+        }
+
         for (Dungeon dungeon : plugin.getDungeonRegistry()) {
             if (dungeon.containsFloor(getResource())) {
                 return dungeon;

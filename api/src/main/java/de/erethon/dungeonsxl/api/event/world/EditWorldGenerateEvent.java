@@ -15,18 +15,16 @@
 package de.erethon.dungeonsxl.api.event.world;
 
 import de.erethon.dungeonsxl.api.world.EditWorld;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- * Fired when a dungeon world is generated.
+ * Fired after a dungeon world is generated.
  *
  * @author Daniel Saukel
  */
-public class EditWorldGenerateEvent extends EditWorldEvent implements Cancellable {
+public class EditWorldGenerateEvent extends EditWorldEvent {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled;
 
     public EditWorldGenerateEvent(EditWorld editWorld) {
         super(editWorld);
@@ -39,16 +37,6 @@ public class EditWorldGenerateEvent extends EditWorldEvent implements Cancellabl
 
     public static HandlerList getHandlerList() {
         return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
     }
 
 }

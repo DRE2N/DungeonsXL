@@ -20,11 +20,12 @@ import de.erethon.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.event.group.GroupPlayerLeaveEvent;
+import de.erethon.dungeonsxl.api.event.player.EditPlayerLeaveEvent;
+import de.erethon.dungeonsxl.api.player.EditPlayer;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DEditPlayer;
-import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -48,7 +49,7 @@ public class LeaveCommand extends DCommand {
     @Override
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
-        DGlobalPlayer dPlayer = (DGlobalPlayer) dPlayers.get(player);
+        GlobalPlayer globalPlayer = dPlayers.get(player);
         Game game = plugin.getGame(player);
 
         if (game != null && game.isTutorial()) {
@@ -56,23 +57,29 @@ public class LeaveCommand extends DCommand {
             return;
         }
 
-        PlayerGroup dGroup = dPlayer.getGroup();
+        PlayerGroup group = globalPlayer.getGroup();
 
-        if (dGroup == null && !(dPlayer instanceof DEditPlayer)) {
+        if (group == null && !(globalPlayer instanceof EditPlayer)) {
             MessageUtil.sendMessage(player, DMessage.ERROR_JOIN_GROUP.getMessage());
             return;
         }
 
-        GroupPlayerLeaveEvent groupPlayerLeaveEvent = new GroupPlayerLeaveEvent(dGroup, dPlayer);
-        Bukkit.getPluginManager().callEvent(groupPlayerLeaveEvent);
-        if (groupPlayerLeaveEvent.isCancelled()) {
-            return;
-        }
-
-        if (dPlayer instanceof DInstancePlayer) {
-            ((DInstancePlayer) dPlayer).leave();
+        if (globalPlayer instanceof GamePlayer) {
+            GroupPlayerLeaveEvent event = new GroupPlayerLeaveEvent(group, globalPlayer);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+            ((GamePlayer) globalPlayer).leave();
+        } else if (globalPlayer instanceof EditPlayer) {
+            EditPlayerLeaveEvent event = new EditPlayerLeaveEvent((EditPlayer) globalPlayer, false, true);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+            ((EditPlayer) globalPlayer).leave(event.getUnloadIfEmpty());
         } else {
-            dGroup.removeMember(player);
+            group.removeMember(player);
         }
 
         MessageUtil.sendMessage(player, DMessage.CMD_LEAVE_SUCCESS.getMessage());

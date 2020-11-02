@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.config.CommonMessage;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.event.player.EditPlayerEditEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
@@ -27,6 +28,7 @@ import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -59,6 +61,7 @@ public class EditCommand extends DCommand {
             return;
         }
 
+        boolean newlyLoaded = resource.getEditWorld() == null;
         EditWorld editWorld = resource.getOrInstantiateEditWorld(false);
         if (editWorld == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
@@ -78,7 +81,7 @@ public class EditCommand extends DCommand {
             return;
         }
 
-        new DEditPlayer(plugin, player, editWorld);
+        Bukkit.getPluginManager().callEvent(new EditPlayerEditEvent(new DEditPlayer(plugin, player, editWorld), newlyLoaded));
     }
 
 }

@@ -48,6 +48,23 @@ public interface EditPlayer extends InstancePlayer {
     void setCopiedLines(String[] copiedLines);
 
     /**
+     * Makes the player leave his group and dungeon.
+     * <p>
+     * This unloads the world if there are no editors left after this player leaves.
+     */
+    @Override
+    default void leave() {
+        leave(true);
+    }
+
+    /**
+     * Makes the player leave his group and dungeon.
+     *
+     * @param unloadIfEmpty whether the world is to be unloaded if, after this player leaves, no editors are left
+     */
+    void leave(boolean unloadIfEmpty);
+
+    /**
      * Makes the player leave the edit world without saving the progress.
      */
     void escape();

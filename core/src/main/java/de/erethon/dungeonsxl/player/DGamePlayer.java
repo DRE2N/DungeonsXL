@@ -26,6 +26,7 @@ import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.group.GroupPlayerKickEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupScoreEvent;
 import de.erethon.dungeonsxl.api.event.player.GamePlayerDeathEvent;
 import de.erethon.dungeonsxl.api.event.player.GamePlayerFinishEvent;
 import de.erethon.dungeonsxl.api.event.player.GlobalPlayerRewardPayOutEvent;
@@ -329,6 +330,11 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         Game game = plugin.getGame(getWorld());
         if (game == null) {
+            return;
+        }
+
+        GroupScoreEvent event = new GroupScoreEvent(getGroup(), this, stealing);
+        if (event.isCancelled()) {
             return;
         }
 

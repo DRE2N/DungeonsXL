@@ -14,7 +14,6 @@
  */
 package de.erethon.dungeonsxl.api.event.world;
 
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -29,20 +28,11 @@ public class ResourceWorldInstantiateEvent extends ResourceWorldEvent implements
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private Dungeon dungeon;
+    private String instanceWorldName;
 
-    public ResourceWorldInstantiateEvent(ResourceWorld resource, Dungeon dungeon) {
+    public ResourceWorldInstantiateEvent(ResourceWorld resource, String instanceWorldName) {
         super(resource);
-        this.dungeon = dungeon;
-    }
-
-    /**
-     * Returns the dungeon as a part of which the instance is loaded.
-     *
-     * @return the dungeon as a part of which the instance is loaded
-     */
-    public Dungeon getDungeon() {
-        return dungeon;
+        this.instanceWorldName = instanceWorldName;
     }
 
     /**
@@ -51,7 +41,18 @@ public class ResourceWorldInstantiateEvent extends ResourceWorldEvent implements
      * @return if the loaded instance will be an edit world
      */
     public boolean isEditInstance() {
-        return dungeon == null;
+        return instanceWorldName.startsWith("DXL_Edit_");
+    }
+
+    /**
+     * Returns the name the newly loaded Bukkit world is going to have.
+     * <p>
+     * Note that at this point no Bukkit World object for this world exists.
+     *
+     * @return the name the newly loaded Bukkit world is going to have
+     */
+    public String getInstanceWorldName() {
+        return instanceWorldName;
     }
 
     @Override
