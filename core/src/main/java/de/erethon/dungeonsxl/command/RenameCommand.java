@@ -57,6 +57,7 @@ public class RenameCommand extends DCommand {
             return;
         }
 
+        Dungeon sfd = resource.getSingleFloorDungeon();
         resource.setName(args[2]);
         resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
         resource.getSignData().updateFile(resource);
@@ -96,9 +97,9 @@ public class RenameCommand extends DCommand {
             } catch (IOException ex) {
             }
         }
-        resource.getSingleFloorDungeon().setName(args[2]);
+        sfd.setName(args[2]);
         plugin.getDungeonRegistry().removeKey(args[1]);
-        plugin.getDungeonRegistry().add(args[2], resource.getSingleFloorDungeon());
+        plugin.getDungeonRegistry().add(args[2], sfd);
         plugin.getMapRegistry().removeKey(args[1]);
         plugin.getMapRegistry().add(args[2], resource);
 
