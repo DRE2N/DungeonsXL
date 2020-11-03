@@ -113,7 +113,7 @@ public class DResourceWorld implements ResourceWorld {
     public WorldConfig getConfig(boolean generate) {
         if (config == null) {
             File file = new File(folder, WorldConfig.FILE_NAME);
-            if (file.exists()) {
+            if (!file.exists() && generate) {
                 try {
                     file.createNewFile();
                 } catch (IOException exception) {
@@ -128,7 +128,7 @@ public class DResourceWorld implements ResourceWorld {
 
     @Override
     public Environment getWorldEnvironment() {
-        return (config != null && config.getWorldEnvironment() != null) ? config.getWorldEnvironment() : Environment.NORMAL;
+        return (getConfig(false) != null && getConfig(false).getWorldEnvironment() != null) ? getConfig(false).getWorldEnvironment() : Environment.NORMAL;
     }
 
     @Override
@@ -178,26 +178,8 @@ public class DResourceWorld implements ResourceWorld {
 
     public DInstanceWorld instantiate(boolean game) {
         plugin.setLoadingWorld(true);
-        int id = DInstanceWorld.counter;
-        String name = DInstanceWorld.generateName(game, id);
-
+        String name = DInstanceWorld.generateName(game);
         File instanceFolder = new File(Bukkit.getWorldContainer(), name);
-        while (instanceFolder.exists()) {
-            World world = Bukkit.getWorld(name);
-            boolean removed = false;
-            if (world != null && world.getPlayers().isEmpty()) {
-                Bukkit.unloadWorld(name, /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
-            }
-            if (world == null || world.getPlayers().isEmpty()) {
-                removed = instanceFolder.delete();
-            }
-            if (!removed) {
-                MessageUtil.log(plugin, "&6Warning: An unrecognized junk instance (&4" + name + "&6) has been found, but could not be deleted.");
-                id++;
-                name = DInstanceWorld.generateName(game, id);
-                instanceFolder = new File(Bukkit.getWorldContainer(), name);
-            }
-        }
 
         DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder) : new DEditWorld(plugin, this, instanceFolder);
         ResourceWorldInstantiateEvent event = new ResourceWorldInstantiateEvent(this, name);
@@ -279,8 +261,7 @@ public class DResourceWorld implements ResourceWorld {
      * @return the automatically created DEditWorld instance
      */
     public DEditWorld generate() {
-        int id = DInstanceWorld.counter;
-        String name = DInstanceWorld.generateName(false, id);
+        String name = DInstanceWorld.generateName(false);
         File folder = new File(Bukkit.getWorldContainer(), name);
         WorldCreator creator = new WorldCreator(name);
         creator.type(WorldType.FLAT);

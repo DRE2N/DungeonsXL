@@ -25,6 +25,7 @@ import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.util.commons.compatibility.Version;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -45,7 +46,7 @@ public abstract class DInstanceWorld implements InstanceWorld {
     protected DungeonsXL plugin;
     protected PlayerCache dPlayers;
 
-    static int counter;
+    private static int counter;
 
     protected Map<Block, DungeonSign> signs = new HashMap<>();
     private DResourceWorld resourceWorld;
@@ -201,10 +202,27 @@ public abstract class DInstanceWorld implements InstanceWorld {
     /**
      * @return a name for the instance
      * @param game whether the instance is a GameWorld
-     * @param id   the id to use
      */
-    public static String generateName(boolean game, int id) {
-        return "DXL_" + (game ? "Game" : "Edit") + "_" + id;
+    public static String generateName(boolean game) {
+        String name = "DXL_" + (game ? "Game" : "Edit") + "_" + counter;
+        File instanceFolder = new File(Bukkit.getWorldContainer(), name);
+        while (instanceFolder.exists()) {
+            World world = Bukkit.getWorld(name);
+            boolean removed = false;
+            if (world != null && world.getPlayers().isEmpty()) {
+                Bukkit.unloadWorld(name, /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
+            }
+            if (world == null || world.getPlayers().isEmpty()) {
+                removed = instanceFolder.delete();
+            }
+            if (!removed) {
+                MessageUtil.log(DungeonsXL.getInstance(), "&6Warning: An unrecognized junk instance (&4" + name + "&6) has been found, but could not be deleted.");
+                counter++;
+                name = "DXL_" + (game ? "Game" : "Edit") + "_" + counter;
+                instanceFolder = new File(Bukkit.getWorldContainer(), name);
+            }
+        }
+        return name;
     }
 
     @Override

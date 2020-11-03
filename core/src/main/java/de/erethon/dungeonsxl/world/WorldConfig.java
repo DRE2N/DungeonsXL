@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.world;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +68,8 @@ public class WorldConfig extends GameRuleContainer {
 
     public void load() {
         plugin.getGameRuleRegistry().forEach(this::updateGameRule);
+        invitedPlayers = config.getStringList("invitedPlayers");
+        worldEnvironment = EnumUtil.getEnumIgnoreCase(Environment.class, config.getString("worldEnvironment", Environment.NORMAL.name()));
     }
 
     public void updateGameRule(GameRule rule) {
