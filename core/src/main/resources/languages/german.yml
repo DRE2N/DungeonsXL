@@ -1,49 +1,51 @@
-announcer: 
+announcer:
   click: "&4&l=> &6KLICKE HIER ZUM BEITRETEN &4&l<="
-button: 
+button:
   accept: "&a[ JA ]"
   deny: "&4[ NEIN ]"
   okay: "&a[ OK ]"
-cmd: 
-  break: 
+cmd:
+  announce:
+    help: "/dxl announce [name] - Startet ein Announcer-Script"
+  break:
     breakMode: "&6Du darfst jetzt von DungeonsXL geschützte Blöcke zerstören."
     help: "/dxl break - Zerstöre einen von DungeonsXL geschützten Block"
     protectedMode: "&6Du darfst keine von DungeonsXL geschützten Blöcke mehr zerstören."
-  chat: 
+  chat:
     dungeonChat: "&6Du hast den Dungeon-Chat betreten."
     help: "/dxl chat - Chat-Modus wechseln"
     normalChat: "&6Du bist jetzt im öffentlichen Chat."
-  chatspy: 
+  chatspy:
     help: "/dxl chatspy - (De-)Aktiviert den Chat-Spy"
     started: "&6Du liest jetzt den Dungeon-Chat mit."
     stopped: "&6Du hast aufgehört, den Dungeon-Chat mitzulesen."
-  create: 
+  create:
     help: "/dxl create [name] - Erstellt eine neue Dungeon-Map"
-  delete: 
+  delete:
     backups: "&6Möchtest Du auch alle gespeicherten Backups löschen?"
     help: "/dxl delete [name] - Löscht eine Dungeon-Map"
     success: "&6Die Welt &4&v1&6 wurde erfolgreich gelöscht."
-  dungeonItem: 
+  dungeonItem:
     dungeonItemHelp: "&6Nachdem ein Spiel beendet wurde, werden &4Dungeon-Items &6selbst dann aus dem Inventar entfernt, wenn die Spielregeln das eigentlich erlauben."
     globalItemHelp: "&6Nachdem ein Spiel beendet wurde, können &4globale Items &6aus den Dungeons mit herausgenommen werden, wenn die Spielregeln das erlauben."
     help: "/dxl dungeonItem [true|false|info] - Stellt den Item-Stack in der Hand des Spielers so ein, dass er nicht aus dem Dungeon mit herausgenommen werden kann"
-    info: 
+    info:
       dungeon: "&6Dieses Item ist ein &4Dungeon-Item&6."
       global: "&6Dieses Item ist ein &4globales Item&6."
-    set: 
+    set:
       dungeon: "&6Das Item wurde erfolgreich als &4Dungeon-Item&6 eingestellt."
       global: "&6Das Item wurde erfolgreich als &4globales Item&6 eingestellt."
-  edit: 
+  edit:
     help: "/dxl edit [map] - Eine vorhandene Welt bearbeiten"
-  enter: 
+  enter:
     help: "/dxl enter ([joining group]) [target group] - Lässt eine Gruppe das Spiel einer anderen betreten."
     success: "&6Die Gruppe &4&v1 &6ist erfolgreich dem Spiel der Gruppe &4&v2&6 beigetreten."
-  escape: 
+  escape:
     help: "/dxl escape - Die Welt ohne zu speichern verlassen"
-  game: 
+  game:
     help: "/dxl game - Zeigt Informationen über das laufende Spiel an"
-  group: 
-    help: 
+  group:
+    help:
       create: "/dxl group create [group] - Erstellt eine neue Gruppe"
       disband: "/dxl group disband ([group]) - Löst eine Gruppe auf"
       invite: "/dxl group invite [player] - Lädt jemanden in die Gruppe ein"
@@ -52,61 +54,61 @@ cmd:
       main: "/dxl group - Zeigt die Hilfeseiten des group-Befehls"
       show: "/dxl group show [group] - Zeigt eine Gruppe an"
       uninvite: "/dxl group uninvite [player] - Nimmt eine Einladung für die Gruppe zurück"
-  help: 
+  help:
     help: "/dxl help [page] - Zeigt die Hilfeseite"
-  import: 
+  import:
     help: "/dxl import [world] - Importiert eine Welt aus dem World-Container als Dungeon-Map"
     success: "&6Die Welt &4&v1&6 wurde erfolgreich importiert."
-  invite: 
+  invite:
     help: "/dxl invite [player] [dungeon] - Lädt einen Spieler ein, eine Dungeon-Welt zu bearbeiten"
     success: "&6Der Spieler &4&v1&6 wurde erfolgreich dazu eingeladen, die Welt &4&v2&6 zu bearbeiten."
-  join: 
+  join:
     help: "/dxl join [announcement] - Öffnet ein GUI, um einer Gruppe in einem zukünftigen Spiel beizutreten"
-  kick: 
+  kick:
     help: "/dxl kick [player] - Wirft den Spieler aus seiner Gruppe und damit aus dem Dungeon heraus"
     success: "&4&v1&6 wurde erfolgreich aus der Gruppe geworfen."
-  leave: 
+  leave:
     help: "/dxl leave - Die Gruppe und Instanz verlassen"
     success: "&6Du hast Deine Gruppe erfolgreich verlassen."
-  list: 
+  list:
     help: "/dxl list ([dungeon|map|loaded]) ([dungeon]) - Listet alle Dungeons auf"
-  lives: 
+  lives:
     group: "&4&v1 &6haben &4&v2 &6Leben übrig."
     help: "/dxl lives [player] - Zeigt die Leben, die ein Spieler übrig hat"
     player: "&4&v1 &6hat &4&v2 &6Leben übrig."
-  main: 
-    compatibility: "&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]"
+  main:
+    compatibility: "&eInternals:&o[&v1] &eVault:&o[&v2] &eItemsXL:&o[&v3]"
     help: "/dxl - Grundlegende Statusinformationen"
     helpInfo: "&7Gib &o/dxl help&r&7 für weitere Informationen ein."
-    loaded: "&eWelten: &o[&v1] &eDungeons: &o[&v2] &eGeladen: &o[&v3] &eSpieler: &o[&v4]"
+    loaded: "&eWelten:&o[&v1] &eDungeons:&o[&v2] &eGeladen:&o[&v3] &eSpieler:&o[&v4]"
     welcome: "&7Willkommen bei &4Dungeons&fXL"
-  msg: 
+  msg:
     added: "&6Neue Nachrichten (&4&v1&6) hinzugefügt."
     help: "/dxl msg [id] '[msg]' - Zeigt oder bearbeitet eine Nachricht"
     updated: "&6Nachrichten (&4&v1&6) aktualisiert."
-  play: 
+  play:
     help: "/dxl play [name] - Erlaubt dem Spieler, einen Dungeon ohne Portal zu spielen"
-  portal: 
+  portal:
     help: "/dxl portal ([material=portal]) - Erstellt ein Portal, das in einen Dungeon führt"
-  reload: 
+  reload:
     buttonCaliburn: "&9[ CALIBURN-INHALTE NEU LADEN ]"
-    caliburn: "&eBenutzerdefinierte Items: &o[&v1] &eMobs: &o[&v2] &eLoottabellen: &o[&v3]"
+    caliburn: "&eBenutzerdefinierte Items:&o[&v1] &eMobs:&o[&v2] &eLoottabellen:&o[&v3]"
     help: "/dxl reload - Lädt das Plugin neu"
-    players: "&4Warnung: Wenn Du das Plugin neu lädst, werden alle Spieler aus ihrem Spiel geworfen."
+    players: "&4Warnung:Wenn Du das Plugin neu lädst, werden alle Spieler aus ihrem Spiel geworfen."
     success: "&7DungeonsXL wurde erfolgreich neugeladen."
-  rename: 
+  rename:
     help: "/dxl rename [old name] [new name] - Ändert den Namen des Dungeons in einen neuen. Dieser Befehl updatet auch Namensreferenzen zu dem Dungeon"
     success: "&4&v1&6 wurde erfolgreich zu &4&v2&6 umbenannt."
-  resourcePack: 
+  resourcePack:
     help: "/dxl resourcepack [ID] - Downloadet ein in der Haupt-Config registriertes Ressourcenpaket; nutze 'reset' um es zurückzusetzen"
-  save: 
+  save:
     help: "/dxl save - Speichert den Dungeon"
     success: "&6Welt gespeichert."
-  status: 
+  status:
     help: "/dxl status - Zeigt den technischen Status von DungeonsXL"
-  test: 
+  test:
     help: "/dxl test - Startet das Spiel im Testmodus"
-  uninvite: 
+  uninvite:
     help: "/dxl uninvite [player] [map] - Lädt einen Spieler davon aus, eine Welt zu bearbeiten"
     success: "&4&v1&6's Berechtigung zum Bearbeiten der Welt &4&v2&6 wurde erfolgreich entfernt."
 dayOfWeek:
@@ -117,7 +119,7 @@ dayOfWeek:
   4: "Donnerstag"
   5: "Freitag"
   6: "Samstag"
-error: 
+error:
   bed: "&4Du kannst im Dungeon kein Bett benutzen."
   blockOwnTeam: "&4Dieser Block gehört zu Deiner eigenen Gruppe."
   chestIsOpened: "&4Diese Truhe wurde schon geöffnet."
@@ -143,6 +145,7 @@ error:
   noProtectedBlock: "&4Das ist kein von DungeonsXL geschützter Block."
   noReadySign: "&4Die Welt &6&v1 &4hat kein Ready-Schild. Spiele können nicht begonnen werden und nur Lobby-Schilder werden geladen."
   noRewardsTime: "&4Du kannst vor &6&v1&4 keine Belohnungen bekommen."
+  noSuchAnnouncement: "&4Dieser Announcer existiert nicht."
   noSuchDungeon: "&4Dieser Dungeon existiert nicht."
   noSuchGroup: "&4Die Gruppe &6&v1&4 gibt es nicht."
   noSuchMap: "&4Die Welt &6&v1&4 gibt es nicht."
@@ -162,7 +165,7 @@ error:
   tooManyInstances: "&4Im Moment sind zu viele Welten instanziert. Versuche es in ein paar Minuten nochmal."
   tooManyTutorials: "&4Im Moment laufen zu viele Tutorials. Versuche es in ein paar Minuten nochmal."
   tutorialDoesNotExist: "&4Der Tutorial-Dungeon existiert nicht."
-group: 
+group:
   bedDestroyed: "&6Das Bett der Gruppe &4&v1 &6wurde von &4&v2&6 zerstört."
   congrats: "&6Herzlichen Glückwunsch!"
   congratsSub: "&l&4Deine Gruppe &v1 &4hat das Spiel gewonnen."
@@ -185,8 +188,8 @@ group:
   rewardChest: "&6Deine Gruppe hat eine Schatztruhe gefunden."
   uninvitedPlayer: "&4&v1&6 hat die Einladung für &4&v2&6 in die Gruppe &4&v3&6 zurückgezogen."
   waveFinished: "&6Deine Gruppe hat die &4&v1&6te Welle beendet. Die nächste fängt in &4&v2&6 Sekunden an."
-player: 
-  blockInfo: "&6Block-ID: &2&v1"
+player:
+  blockInfo: "&6Block-ID:&2&v1"
   checkpointReached: "&6Checkpoint erreicht."
   death: "&4&v1 &6ist gestorben und hat &4&v2 &6Leben übrig."
   deathKick: "&2&v1 &6hat sein letztes Leben verloren und wurde aus dem Spiel geworfen."
@@ -221,7 +224,7 @@ player:
   uninvited: "&4&v1&6 hat Deine Einladung zur Gruppe &4&v2&6 zurückgezogen."
   unlimitedLives: "unendlich viele"
   waitForOtherPlayers: "&6Warte auf andere Gruppenmitglieder..."
-requirement: 
+requirement:
   fee: "&6Du hast &4&v1 &6bezahlt, um den Dungeon zu betreten."
   feeItems: "Items"
   feeLevel: "Level"
@@ -231,14 +234,14 @@ requirement:
   keyItems: "Schlüssel"
   permission: "Permissions"
   timeframe: "Zeitfenster"
-reward: 
+reward:
   general: "&6Du hast &4&v1 &6für das Beenden des Dungeons erhalten."
-sign: 
+sign:
   end: "&aENDE"
-  floor: 
+  floor:
     1: "&aNÄCHSTES LEVEL"
     2: "&aBETRETEN"
-  global: 
+  global:
     full: "&4VOLL"
     isPlaying: "&4AM SPIELEN"
     joinGame: "&aSPIEL BEITRETEN"
@@ -248,6 +251,6 @@ sign:
   leave: "&aVERLASSEN"
   ready: "&aBEREIT"
   resourcePack: "&aDOWNLOAD"
-  wave: 
+  wave:
     1: "&aBEGINNE"
     2: "&aNÄCHSTE WELLE"

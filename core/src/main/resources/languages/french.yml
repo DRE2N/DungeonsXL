@@ -1,45 +1,51 @@
-announcer: 
+announcer:
   click: "&4&l=> &6CLIQUEZ ICI POUR REJOINDRE &4&l<="
-cmd: 
-  break: 
+button: 
+  accept: "&a[ OUI ]"
+  deny: "&4[ NON ]"
+  okay: "&a[ OK ]"
+cmd:
+  announce:
+    help: "/dxl announce [name] - Exécuter un script d'annonce"
+  break:
     breakMode: "&6Vous pouvez casser un bloc protégé par DungeonsXL."
     help: "/dxl break - Casser un bloc protégé par DungeonsXL"
     protectedMode: "&6Vous ne pouvez plus casser des blocs protégés par DungeonsXL."
-  chat: 
+  chat:
     dungeonChat: "&6Vous êtes entrés dans l'espace de discussion du donjon."
     help: "/dxl chat - Changer le mode de discussion"
     normalChat: "&6Vous êtes maintenant dans l'espace de discussion public."
-  chatspy: 
+  chatspy:
     help: "/dxl chatspy - Activer/désactiver le mode espionnage"
     started: "&6Vous avez commencé à espionner l'espace de discussion du donjon."
     stopped: "&6Vous avez arrêté d'espionner l'espace de discussion du donjon."
-  create: 
+  create:
     help: "/dxl create [name] - Créer une nouvelle carte de donjon"
-  delete: 
+  delete:
     backups: "&6Voulez-vous vraiment supprimer toutes les sauvegardes ?"
     help: "/dxl create [name] - créé une nouvelle carte donjon"
     success: "&6 &4&v1&6 a été supprimé avec succès."
-  dungeonItem: 
+  dungeonItem:
     dungeonItemHelp: "&6Après avoir fini une partie, &4les objets du donjons &6sont supprimés de l'inventaire du joueur sauf si les paramètres du donjons autorisent à les conserver."
     globalItemHelp: "&6Après avoir fini une partie, &4les objets globaux &6peuvent être sortis du donjon si les paramètres du donjon l'autorise."
     help: "/dxl dungeonItem [true|false|info] - Défini la pile d'objet dans les mains du joueur comme ne pouvant être sortie du donjon."
-    info: 
+    info:
       dungeon: "&6C'est un &4objet de donjon&6."
       global: "&6C'est un &4objet global&6."
-    set: 
+    set:
       dungeon: "&6Vous avez réussi à en faire un &4objet de donjon&6."
       global: "&6Vous avez réussi à en faire un &4objet global&6."
-  edit: 
+  edit:
     help: "/dxl edit [name] - Editer une carte existante de donjon"
-  enter: 
+  enter:
     help: "/dxl enter ([joining group]) [target group] - Laisser le groupe en train de rejoindre, entrer dans la partie du groupe cible"
     success: "&6Le groupe &4&v1 &6est rentré avec succès dans la partie du groupe &4&v2&6."
-  escape: 
+  escape:
     help: "/dxl escape - Quitter le monde actuel en cours d'édition sans sauvegarder"
-  game: 
+  game:
     help: "/dxl game - Montrer les informations à propos de la partie de jeu actuel"
-  group: 
-    help: 
+  group:
+    help:
       create: "/dxl group create [group] - Créer un nouveau groupe"
       disband: "/dxl group disband ([group]) - Dissoudre un groupe"
       invite: "/dxl group invite [player] - Inviter quelqu'un a votre groupe"
@@ -48,61 +54,61 @@ cmd:
       main: "/dxl group - Montrer l'aide des commandes de groupe"
       show: "/dxl group show [group] - Montrer un groupe"
       uninvite: "/dxl group uninvite [player] - Retirer une invitation à votre groupe"
-  help: 
+  help:
     help: "/dxl help [page] - Montrer la page d''aide"
-  import: 
+  import:
     help: "/dxl import [world] - Importe un monde du conteneur de monde en tant que carte de donjon"
     success: "&6Importation du monde &4&v1&6 avec succès."
-  invite: 
+  invite:
     help: "/dxl invite [player] [dungeon] - Inviter un joueur à éditer un donjon"
     success: "&6Le joueur &4&v1&6 a été invité avec succès à éditer la carte &4&v2&6."
-  join: 
+  join:
     help: "/dxl join [announcement] - Ouvrir l'interface pour rejoindre un groupe dans une prochaine partie"
-  kick: 
+  kick:
     help: "/dxl kick [player] - Éjecte le joueur hors de son groupe et du donjon en cours"
     success: "&6Éjection de &4&v1&6 du groupe réussite."
-  leave: 
+  leave:
     help: "/dxl leave - Quitter le groupe et le donjon ou le monde en cours d''édition"
     success: "&6Vous avez quitté le groupe avec succès."
-  list: 
+  list:
     help: "/dxl list ([dungeon|map|loaded]) ([dungeon]) - Lister tous les donjons"
-  lives: 
+  lives:
     group: "&4&v1&6 ont &4&v2 &6vies restantes."
     help: "/dxl lives [player] - Montrer les vies d''un joueur venant de partir"
     player: "&4&v1&6 a &4&v2 &6vies restantes."
-  main: 
-    compatibility: "&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]"
+  main:
+    compatibility: "&eInternals:&o[&v1] &eVault:&o[&v2] &eItemsXL:&o[&v3]"
     help: "/dxl - Informations générales"
     helpInfo: "&7Tapez dans &o/dxl help&r&7 pour plus d'information."
-    loaded: "&eCartes: &o[&v1] &eDonjons: &o[&v2] &eChargés: &o[&v3] &eJoueurs:&o[&v4]"
+    loaded: "&eCartes:&o[&v1] &eDonjons:&o[&v2] &eChargés:&o[&v3] &eJoueurs:&o[&v4]"
     welcome: "&7Bienvenue sur &4Dungeons&fXL"
-  msg: 
+  msg:
     added: "&6Nouveaux messages (&4&v1&6) ajoutés."
     help: "/dxl msg [id] '[msg]' - Montrer ou éditer un message"
     updated: "&6Messages (&4&v1&6) mis à jour."
-  play: 
+  play:
     help: "/dxl play [name] - Permettre au joueur de jouer à un donjon sans un portail"
-  portal: 
+  portal:
     help: "/dxl portal ([material=portal]) - Créer un portail qui mène à un donjon"
-  reload: 
+  reload:
     buttonCaliburn: "&9[ RECHARGE LES CONTENUES DE CALIBURN ]"
-    caliburn: "&eItems personnalisés: &o[&v1] &eMobs: &o[&v2] &eTableaux Loot: &o[&v3]"
+    caliburn: "&eItems personnalisés:&o[&v1] &eMobs:&o[&v2] &eTableaux Loot:&o[&v3]"
     help: "/dxl reload - Recharge le plugin"
-    players: "&4Attention: Si vous rechargez le plugin, tous les joueurs seront éjectés de leur jeu."
+    players: "&4Attention:Si vous rechargez le plugin, tous les joueurs seront éjectés de leur jeu."
     success: "&7DungeonsXL a été rechargé avec succès."
-  rename: 
+  rename:
     help: "/dxl rename [old name] [new name] - Change le nom de la carte en un nouveau. Cette commande NE casse PAS les donjons comportant cette carte."
     success: "&6Carte &4&v1&6 renommée en &4&v2&6 avec succès."
-  resourcePack: 
+  resourcePack:
     help: "/dxl resourcepack [ID] - Télécharge un pack de ressources enregistré dans le fichier configuration principale; utilisez 'reset' pour réinitialisé"
-  save: 
+  save:
     help: "/dxl save - Sauvegarder le donjon actuel"
     success: "&6Carte sauvegardée."
-  status: 
+  status:
     help: "/dxl status - Affiche le status technique de DungeonsXL"
-  test: 
+  test:
     help: "/dxl test - Lance une partie en mode test"
-  uninvite: 
+  uninvite:
     help: "/dxl uninvite [player] [dungeon] - Désinvite un joueur à éditer un donjon"
     success: "&4&v1&6 a été désinviter avec succès à éditer la carte &4&v1&6."
 dayOfWeek:
@@ -113,7 +119,7 @@ dayOfWeek:
   4: "Jeudi"
   5: "Vendredi"
   6: "Samedi"
-error: 
+error:
   bed: "&4Vous ne pouvez utiliser un lit en étant dans un donjon."
   blockOwnTeam: "&4Ce bloque appartient à votre groupe."
   chestIsOpened: "&4Ce coffre a déjà été ouvert."
@@ -139,6 +145,7 @@ error:
   noProtectedBlock: "&4Ce n'est pas un bloc protégé par DungeonsXL."
   noReadySign: "&4La carte &6&v1 &4n'a pas de panneau \"ready\". On ne peut pas commencer des jeus et les panneaux de lobby ne sont que initialisés."
   noRewardsTime: "&4Vous ne pouvez pas recevoir de récompense avant &6&v1&4."
+  noSuchAnnouncement: "&4Cette annonce n'existe pas."
   noSuchDungeon: "&4Le donjon &6&v1&4 n'existe pas."
   noSuchGroup: "&4Le groupe &6&v1&4 n'existe pas."
   noSuchMap: "&4La carte &6&v1&4 n'existe pas."
@@ -158,7 +165,7 @@ error:
   tooManyInstances: "&4Il y a actuellement trop de carte instanciées. Réessayez dans quelques minutes."
   tooManyTutorials: "&4Il y a actuellement trop de tutoriel en cours. Réessayez dans quelques minutes."
   tutorialDoesNotExist: "&4Le tutoriel du donjon n'existe pas."
-group: 
+group:
   bedDestroyed: "&6Le lit du groupe &4&v1 &6a été détruit par &4&v2&6."
   congrats: "&6Félicitations !"
   congratsSub: "&l&4Votre groupe &v1 &4gagne le match."
@@ -181,14 +188,10 @@ group:
   rewardChest: "&6Votre groupe a trouvé un coffre de récompenses."
   uninvitedPlayer: "&4&v1&6 a repris l'invitation de &4&v2&6 pour le groupe &4&v3&6."
   waveFinished: "&6Votre groupe a fini la vague numéro &4&v1&6. La suivante va commencer dans &4&v2&6 secondes."
-button: 
-  accept: "&a[ OUI ]"
-  deny: "&4[ NON ]"
-  okay: "&a[ OK ]"
-player: 
-  blockInfo: "&6Block ID: &2&v1"
+player:
+  blockInfo: "&6Block ID:&2&v1"
   checkpointReached: "&6Point de sauvegarde atteint."
-  death: "&4&v1 &6est mort, vies restantes: &4&v2"
+  death: "&4&v1 &6est mort, vies restantes:&4&v2"
   deathKick: "&2&v1&6 est mort et a perdu sa dernière vie."
   finishedDungeon: "&6Vous avez terminé le donjon avec succès."
   finished_Floor: "&6Vous avez terminé l'étage avec succès."
@@ -221,7 +224,7 @@ player:
   uninvited: "&4&v1&6 a annulé votre invitation au groupe &4&v2&6."
   unlimitedLives: "illimité"
   waitForOtherPlayers: "&6En attente des membres de l'équipe..."
-requirement: 
+requirement:
   fee: "&6Vous avez été débité de &4&v1 &6pour entrer dans le donjon."
   feeItems: "Items"
   feeLevel: "Niveaux"
@@ -231,14 +234,14 @@ requirement:
   keyItems: "Clés"
   permission: "Permissions"
   timeframe: "Créneau horaire"
-reward: 
+reward:
   general: "&6Vous avez reçu &4&v1 &6pour avoir fini le donjon."
-sign: 
+sign:
   end: "&aFINIR"
-  floor: 
+  floor:
     1: "&aENTRER AU PRO-"
     2: "&aCHAIN ÉTAGE"
-  global: 
+  global:
     full: "&4PLEIN"
     isPlaying: "&4EN JEU"
     joinGame: "&aINSCRIRE AU JEU"
@@ -248,6 +251,6 @@ sign:
   leave: "&aQUITTER"
   ready: "&aPRÊT"
   resourcePack: "&aTÉLÉCHARGER"
-  wave: 
+  wave:
     1: "&aCOMMENCER"
     2: "&aVAGUE SUIVANTE"

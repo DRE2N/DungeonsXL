@@ -1,51 +1,51 @@
-announce:
-  help: "/dxl announce [name] - Runs an announcement script"
 announcer:
   click: "&4&l=> &6CLICK HERE TO JOIN &4&l<="
 button: 
   accept: "&a[ YES ]"
   deny: "&4[ NO ]"
   okay: "&a[ OK ]"
-cmd: 
-  break: 
+cmd:
+  announce:
+    help: "/dxl announce [name] - Runs an announcement script"
+  break:
     breakMode: "&6You may break a block protected by DungeonsXL."
     help: "/dxl break - Break a block protected by DungeonsXL"
     protectedMode: "&6You may not break blocks protected by DungeonsXL anymore."
-  chat: 
+  chat:
     dungeonChat: "&6You have entered the dungeon chat"
     help: "/dxl chat - Change the chat mode"
     normalChat: "&6You are now in the public chat"
-  chatspy: 
+  chatspy:
     help: "/dxl chatspy - Dis/enables the spymode"
     started: "&6You started to spy the dungeon chat."
     stopped: "&6You stopped to spy the dungeon chat."
-  create: 
+  create:
     help: "/dxl create [name] - Creates a new dungeon map"
-  delete: 
+  delete:
     backups: "&6Do you wish to delete all saved backups as well?"
     help: "/dxl delete [name] - Deletes a dungeon map"
     success: "&6Successfully deleted the map &4&v1&6."
-  dungeonItem: 
+  dungeonItem:
     dungeonItemHelp: "&6After finishing a game, &4dungeon items &6are removed from the player's inventory even if the respective dungeon setup in general allows to keep it."
     globalItemHelp: "&6After finishing a game, &4global items &6can be taken out of dungeons if the respective dungeon setup in general allows to keep the inventory."
     help: "/dxl dungeonItem [true|false|info] - Sets the item stack in the player's hand to be one that cannot be taken out of a dungeon"
-    info: 
+    info:
       dungeon: "&6This item is a &4dungeon item&6."
       global: "&6This item is a &4global item&6."
-    set: 
+    set:
       dungeon: "&6Successfully made this item a &4dungeon item&6."
       global: "&6Successfully made this item a &4global item&6."
-  edit: 
+  edit:
     help: "/dxl edit [map] - Edit an existing dungeon map"
-  enter: 
+  enter:
     help: "/dxl enter ([joining group]) [target group] - Let the joining group enter the game of the target group"
     success: "&6The group &4&v1 &6successfully entered the game of the group &4&v2&6."
-  escape: 
+  escape:
     help: "/dxl escape - Leaves the current edit world without saving"
-  game: 
+  game:
     help: "/dxl game - Shows information about the current game session"
-  group: 
-    help: 
+  group:
+    help:
       create: "/dxl group create [group] - Creates a new group"
       disband: "/dxl group disband ([group]) - Disbands a group"
       invite: "/dxl group invite [player] - Invites someone to your group"
@@ -54,61 +54,61 @@ cmd:
       main: "/dxl group - Shows group command help"
       show: "/dxl group show [group] - Shows a group"
       uninvite: "/dxl group uninvite [player] - Takes back an invitation to your group"
-  help: 
+  help:
     help: "/dxl help [page] - Shows the help page"
-  import: 
+  import:
     help: "/dxl import [world] - Imports a world from the world container as a dungeon map"
     success: "&6Successfully imported the world &4&v1&6."
-  invite: 
+  invite:
     help: "/dxl invite [player] [dungeon] - Invite a player to edit a dungeon"
     success: "&6Player &4&v1&6 was successfully invited to edit the map &4&v2&6."
-  join: 
+  join:
     help: "/dxl join [announcement] - Opens the GUI to join a group in an upcoming game"
-  kick: 
+  kick:
     help: "/dxl kick [player] - Kicks the player out of his group and dungeon"
     success: "&6Successfully kicked &4&v1&6 out of the group."
-  leave: 
+  leave:
     help: "/dxl leave - Leaves the current group and dungeon or edit world"
     success: "&6You have successfully left your group."
-  list: 
+  list:
     help: "/dxl list ([dungeon|map|loaded]) ([dungeon]) - Lists all dungeons"
-  lives: 
+  lives:
     group: "&4&v1 &6have &4&v2 &6lives left."
     help: "/dxl lives [player] - Shows the lives a player has left"
     player: "&4&v1 &6has &4&v2 &6lives left."
-  main: 
+  main:
     compatibility: "&eInternals: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]"
     help: "/dxl - General status information"
     helpInfo: "&7Type in &o/dxl help&r&7 for further information."
     loaded: "&eMaps: &o[&v1] &eDungeons: &o[&v2] &eLoaded: &o[&v3] &ePlayers: &o[&v4]"
     welcome: "&7Welcome to &4Dungeons&fXL"
-  msg: 
+  msg:
     added: "&6New Messages (&4&v1&6) added."
     help: "/dxl msg [id] '[msg]' - Show or edit a message"
     updated: "&6Messages (&4&v1&6) updated."
-  play: 
+  play:
     help: "/dxl play [name] - Allows the player to play a dungeon without a portal"
-  portal: 
+  portal:
     help: "/dxl portal ([material=portal]) - Creates a portal that leads into a dungeon"
-  reload: 
+  reload:
     buttonCaliburn: "&9[ RELOAD CALIBURN CONTENT ]"
     caliburn: "&eCustom Items: &o[&v1] &eMobs: &o[&v2] &eLoot Tables: &o[&v3]"
     help: "/dxl reload - Reloads the plugin"
     players: "&4Warning: If you reload the plugin, all players will be kicked out of their game."
     success: "&7Successfully reloaded DungeonsXL."
-  rename: 
+  rename:
     help: "/dxl rename [old name] [new name] - Changes the name of a map to the new one. This command does NOT break dungeons that include this map."
     success: "&6Successfully renamed the map &4&v1&6 to &4&v2&6."
-  resourcePack: 
+  resourcePack:
     help: "/dxl resourcepack [ID] - Downloads a resourcepack registered in the main configuration file; use 'reset' to reset"
-  save: 
+  save:
     help: "/dxl save - Saves the current dungeon"
     success: "&6Map saved."
-  status: 
+  status:
     help: "/dxl status - Shows the technical status of DungeonsXL"
-  test: 
+  test:
     help: "/dxl test - Starts the game in test mode"
-  uninvite: 
+  uninvite:
     help: "/dxl uninvite [player] [map] - Uninvite a player from editing a map"
     success: "&4&v1&6's permission to edit the map &4&v2&6 has been removed successfully."
 dayOfWeek:
@@ -119,7 +119,7 @@ dayOfWeek:
   4: "Thursday"
   5: "Friday"
   6: "Saturday"
-error: 
+error:
   bed: "&4You cannot use a bed while in a dungeon."
   blockOwnTeam: "&4This block belongs to your own group."
   chestIsOpened: "&4This chest has already been opened."
@@ -165,7 +165,7 @@ error:
   tooManyInstances: "&4There are currently too many maps instantiated. Try it again in a few minutes."
   tooManyTutorials: "&4There are currently too many tutorials running. Try it again in a few minutes."
   tutorialDoesNotExist: "&4Tutorial dungeon does not exist."
-group: 
+group:
   bedDestroyed: "&6The bed of the group &4&v1 &6has been destroyed by &4&v2&6."
   congrats: "&6Congratulations!"
   congratsSub: "&l&4Your group &v1 &4won the match."
@@ -188,7 +188,7 @@ group:
   rewardChest: "&6Your group has found a reward chest."
   uninvitedPlayer: "&4&v1&6 took back the invitation for &4&v2&6 to the group &4&v3&6."
   waveFinished: "&6Your group finished wave no. &4&v1&6. The next one is going to start in &4&v2&6 seconds."
-player: 
+player:
   blockInfo: "&6Block ID: &2&v1"
   checkpointReached: "&6Checkpoint reached."
   death: "&4&v1 &6died and has &4&v2 &6lives left."
@@ -224,7 +224,7 @@ player:
   uninvited: "&4&v1&6 took back your invitation to the group &4&v2&6."
   unlimitedLives: "unlimited"
   waitForOtherPlayers: "&6Waiting for team members..."
-requirement: 
+requirement:
   fee: "&6You have been charged &4&v1 &6for entering the dungeon."
   feeItems: "Items"
   feeLevel: "Levels"
@@ -234,14 +234,14 @@ requirement:
   keyItems: "Keys"
   permission: "Permissions"
   timeframe: "Timeframe"
-reward: 
+reward:
   general: "&6You received &4&v1 &6for finishing the dungeon."
-sign: 
+sign:
   end: "&aEND"
-  floor: 
+  floor:
     1: "&aENTER"
     2: "&aNEXT FLOOR"
-  global: 
+  global:
     full: "&4FULL"
     isPlaying: "&4IS PLAYING"
     joinGame: "&aJOIN GAME"
@@ -251,6 +251,6 @@ sign:
   leave: "&aLEAVE"
   ready: "&aREADY"
   resourcePack: "&aDOWNLOAD"
-  wave: 
+  wave:
     1: "&aSTART"
     2: "&aNEXT WAVE"
