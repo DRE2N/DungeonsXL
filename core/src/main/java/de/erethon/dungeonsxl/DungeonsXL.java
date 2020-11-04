@@ -204,7 +204,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public void onEnable() {
         super.onEnable();
         String ixlVersion = manager.isPluginEnabled("ItemsXL") ? manager.getPlugin("ItemsXL").getDescription().getVersion() : "";
-        if (ixlVersion.startsWith("0.[0-5]") || ixlVersion.equals("0.6") || ixlVersion.equals("0.6.1")) {
+        if (ixlVersion.startsWith("0.[0-5]") || ixlVersion.equals("0.6") || ixlVersion.matches("0.6.[1-3]")) {
             getLogger().log(Level.SEVERE, "DungeonsXL includes v1.0-RC-03 of the Caliburn custom item library. ItemsXL must implement the same or a newer, "
                     + "but still compatible version of this library. This build of DungeonsXL is compatible with ItemsXL v" + StatusCommand.LATEST_IXL
                     + " and, possibly, higher. The latest DXL and IXL versions available on SpigotMC.org should always be compatible with each other.");

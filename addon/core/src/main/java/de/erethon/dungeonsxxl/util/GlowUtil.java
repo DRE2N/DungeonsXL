@@ -9,17 +9,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import net.minecraft.server.v1_16_R2.EntityShulker;
-import net.minecraft.server.v1_16_R2.EntityTypes;
-import net.minecraft.server.v1_16_R2.Packet;
-import net.minecraft.server.v1_16_R2.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_16_R2.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_16_R3.EntityShulker;
+import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.server.v1_16_R3.Packet;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
@@ -41,7 +41,7 @@ public class GlowUtil implements Listener {
 
     private Map<ChatColor, Team> teams = new HashMap<>();
     private GlowData<org.bukkit.entity.Entity> glowingBlocks = new GlowData<>();
-    private Map<Player, GlowData<net.minecraft.server.v1_16_R2.Entity>> playerGlows = new HashMap<>();
+    private Map<Player, GlowData<net.minecraft.server.v1_16_R3.Entity>> playerGlows = new HashMap<>();
     private GlowRunnable runnable = new GlowRunnable();
 
     public GlowUtil(Plugin plugin) {
@@ -177,8 +177,8 @@ public class GlowUtil implements Listener {
             runnable.removeEntity(bukkitEntity);
         }
 
-        for (Entry<Player, GlowData<net.minecraft.server.v1_16_R2.Entity>> entry : playerGlows.entrySet()) {
-            net.minecraft.server.v1_16_R2.Entity nmsEntity = entry.getValue().get(block);
+        for (Entry<Player, GlowData<net.minecraft.server.v1_16_R3.Entity>> entry : playerGlows.entrySet()) {
+            net.minecraft.server.v1_16_R3.Entity nmsEntity = entry.getValue().get(block);
             if (nmsEntity != null) {
                 sendPacket(entry.getKey(), new PacketPlayOutEntityDestroy(nmsEntity.getId()));
                 runnable.removeEntity(nmsEntity);
@@ -203,7 +203,7 @@ public class GlowUtil implements Listener {
      * @param entity an NMS Entity
      * @param color  the glow color
      */
-    public void addGlow(net.minecraft.server.v1_16_R2.Entity entity, ChatColor color) {
+    public void addGlow(net.minecraft.server.v1_16_R3.Entity entity, ChatColor color) {
         getTeam(color).addEntry(asEntry(entity));
         entity.setFlag(6, true);
     }
@@ -233,7 +233,7 @@ public class GlowUtil implements Listener {
      *
      * @param entity an NMS Entity
      */
-    public void addRainbowGlow(net.minecraft.server.v1_16_R2.Entity entity) {
+    public void addRainbowGlow(net.minecraft.server.v1_16_R3.Entity entity) {
         addRainbowGlow(entity, null);
     }
 
@@ -243,7 +243,7 @@ public class GlowUtil implements Listener {
      * @param entity     an NMS Entity
      * @param cancelTime the time in milliseconds until the glow effect shall end; null = forever
      */
-    public void addRainbowGlow(net.minecraft.server.v1_16_R2.Entity entity, Long cancelTime) {
+    public void addRainbowGlow(net.minecraft.server.v1_16_R3.Entity entity, Long cancelTime) {
         entity.setFlag(6, true);
         runnable.addEntity(entity, cancelTime != null ? System.currentTimeMillis() + cancelTime : null);
     }
@@ -264,7 +264,7 @@ public class GlowUtil implements Listener {
      *
      * @param entity an NMS Entity
      */
-    public void removeGlow(net.minecraft.server.v1_16_R2.Entity entity) {
+    public void removeGlow(net.minecraft.server.v1_16_R3.Entity entity) {
         entity.setFlag(6, false);
         teams.values().forEach(t -> t.removeEntry(asEntry(entity)));
         runnable.removeEntity(entity);
@@ -274,7 +274,7 @@ public class GlowUtil implements Listener {
         return entity instanceof Player ? entity.getName() : entity.getUniqueId().toString();
     }
 
-    private static String asEntry(net.minecraft.server.v1_16_R2.Entity entity) {
+    private static String asEntry(net.minecraft.server.v1_16_R3.Entity entity) {
         return entity instanceof Player ? entity.getName() : entity.getUniqueID().toString();
     }
 
@@ -311,8 +311,8 @@ public class GlowUtil implements Listener {
             for (Entry<Object, Long> entry : entities.entrySet().toArray(new Entry[entities.size()])) {
                 if (entry.getKey() instanceof org.bukkit.entity.Entity) {
                     run((org.bukkit.entity.Entity) entry.getKey(), entry.getValue());
-                } else if (entry.getKey() instanceof net.minecraft.server.v1_16_R2.Entity) {
-                    run((net.minecraft.server.v1_16_R2.Entity) entry.getKey(), entry.getValue());
+                } else if (entry.getKey() instanceof net.minecraft.server.v1_16_R3.Entity) {
+                    run((net.minecraft.server.v1_16_R3.Entity) entry.getKey(), entry.getValue());
                 }
             }
         }
@@ -332,11 +332,11 @@ public class GlowUtil implements Listener {
             getTeam(color).addEntry(asEntry(entity));
         }
 
-        private void run(net.minecraft.server.v1_16_R2.Entity entity, Long cancelTime) {
+        private void run(net.minecraft.server.v1_16_R3.Entity entity, Long cancelTime) {
             getTeam(color).removeEntry(asEntry(entity));
             if (cancelTime != null && System.currentTimeMillis() >= cancelTime) {
                 entities.remove(entity);
-                for (Entry<Player, GlowData<net.minecraft.server.v1_16_R2.Entity>> entry : playerGlows.entrySet()) {
+                for (Entry<Player, GlowData<net.minecraft.server.v1_16_R3.Entity>> entry : playerGlows.entrySet()) {
                     if (!entry.getValue().glowingBlocks.containsValue(entity)) {
                         continue;
                     }

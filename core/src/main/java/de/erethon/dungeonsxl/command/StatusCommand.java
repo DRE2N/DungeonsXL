@@ -38,7 +38,7 @@ public class StatusCommand extends DCommand {
     public static final String TRUE = ChatColor.GREEN + "\u2714";
     public static final String FALSE = ChatColor.DARK_RED + "\u2718";
 
-    public static final String LATEST_IXL = "0.6.3";
+    public static final String LATEST_IXL = "0.6.4";
 
     public StatusCommand(DungeonsXL plugin) {
         super(plugin);
