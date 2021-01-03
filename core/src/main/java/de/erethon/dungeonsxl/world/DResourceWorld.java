@@ -183,6 +183,7 @@ public class DResourceWorld implements ResourceWorld {
 
         DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder) : new DEditWorld(plugin, this, instanceFolder);
         ResourceWorldInstantiateEvent event = new ResourceWorldInstantiateEvent(this, name);
+        Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return null;
         }
