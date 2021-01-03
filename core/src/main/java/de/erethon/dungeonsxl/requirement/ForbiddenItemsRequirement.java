@@ -21,8 +21,10 @@ import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -38,7 +40,7 @@ public class ForbiddenItemsRequirement implements Requirement {
 
     private CaliburnAPI caliburn;
 
-    private List<ExItem> forbiddenItems;
+    private Map<ExItem, Boolean> forbiddenItems = new HashMap<>();
 
     public ForbiddenItemsRequirement(DungeonsAPI api) {
         caliburn = api.getCaliburn();
@@ -46,16 +48,26 @@ public class ForbiddenItemsRequirement implements Requirement {
 
     /* Getters and setters */
     /**
-     * @return the forbidden items
+     * @return the forbidden items (key) and if the check is deep (value)
      */
-    public List<ExItem> getForbiddenItems() {
+    public Map<ExItem, Boolean> getForbiddenItems() {
         return forbiddenItems;
     }
 
     /* Actions */
     @Override
     public void setup(ConfigurationSection config) {
-        forbiddenItems = caliburn.deserializeExItemList(config, "forbiddenItems");
+        for (String entry : config.getStringList("forbiddenItems")) {
+            if (entry == null) {
+                continue;
+            }
+            boolean star = !entry.contains("*");
+            entry = entry.replace("*", "");
+            ExItem item = caliburn.getExItem(entry);
+            if (item != null) {
+                forbiddenItems.put(item, star);
+            }
+        }
     }
 
     @Override
@@ -65,8 +77,16 @@ public class ForbiddenItemsRequirement implements Requirement {
                 continue;
             }
             ExItem exItem = caliburn.getExItem(item);
-            if (forbiddenItems.contains(exItem)) {
-                return false;
+            for (Entry<ExItem, Boolean> entry : forbiddenItems.entrySet()) {
+                if (entry.getValue()) {
+                    if (exItem.isSubsumableUnder(entry.getKey())) {
+                        return false;
+                    }
+                } else {
+                    if (exItem.equals(entry.getKey())) {
+                        return false;
+                    }
+                }
             }
         }
         return true;
@@ -84,17 +104,27 @@ public class ForbiddenItemsRequirement implements Requirement {
         }
 
         boolean first = true;
-        for (ExItem forbiddenItem : forbiddenItems) {
-            ChatColor color = exInventory.contains(forbiddenItem) ? ChatColor.DARK_RED : ChatColor.GREEN;
+        for (Entry<ExItem, Boolean> entry : forbiddenItems.entrySet()) {
+            boolean contains = containsItem(exInventory, entry.getKey(), entry.getValue());
+            ChatColor color = contains ? ChatColor.DARK_RED : ChatColor.GREEN;
             if (!first) {
                 builder.append(", ").color(ChatColor.WHITE);
             } else {
                 first = false;
             }
-            builder.append(forbiddenItem.getName()).color(color);
+            builder.append(entry.getKey().getName()).color(color);
         }
 
         return builder.create();
+    }
+
+    private boolean containsItem(Set<ExItem> exInventory, ExItem forbiddenItem, boolean deepCheck) {
+        for (ExItem item : exInventory) {
+            if ((deepCheck && item.isSubsumableUnder(forbiddenItem)) || (!deepCheck && item.equals(forbiddenItem))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

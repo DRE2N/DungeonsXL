@@ -38,7 +38,7 @@ public class StatusCommand extends DCommand {
     public static final String TRUE = ChatColor.GREEN + "\u2714";
     public static final String FALSE = ChatColor.DARK_RED + "\u2718";
 
-    public static final String LATEST_IXL = "0.6.4";
+    public static final String LATEST_IXL = "0.6.5";
 
     public StatusCommand(DungeonsXL plugin) {
         super(plugin);
@@ -118,7 +118,7 @@ public class StatusCommand extends DCommand {
         String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
         String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("3."));
         String mythicmobsVersionCorrect = getSymbol(mythicmobsVersion.startsWith("4."));
-        String holographicdisplaysVersionCorrect = getSymbol(holographicdisplaysVersion.startsWith("2.3"));
+        String holographicdisplaysVersionCorrect = getSymbol(holographicdisplaysVersion.startsWith("2.4"));
 
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Dependency info:");
         MessageUtil.sendMessage(sender, "= Vault: " + vaultVersion + " " + vaultVersionCorrect);
