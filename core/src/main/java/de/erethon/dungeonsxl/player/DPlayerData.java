@@ -549,7 +549,7 @@ public class DPlayerData extends DREConfig {
                 }
             }
 
-            Map<String, Object> modsMap = ConfigUtil.getMap(config, PREFIX_STATE_PERSISTENCE + "oldAttributeModifiers", false);
+            Map<String, Object> modsMap = ConfigUtil.getMap(config, PREFIX_STATE_PERSISTENCE + "oldAttributeMods", false);
             if (modsMap != null) {
                 oldAttributeMods = HashMultimap.create();
                 for (Entry<String, Object> entry : modsMap.entrySet()) {
@@ -632,8 +632,14 @@ public class DPlayerData extends DREConfig {
         config.set(PREFIX_STATE_PERSISTENCE + "oldLocation", oldLocation);
         config.set(PREFIX_STATE_PERSISTENCE + "oldPotionEffects", oldPotionEffects);
         if (is1_9) {
-            config.set(PREFIX_STATE_PERSISTENCE + "oldAttributeBases", oldAttributeBases);
-            config.set(PREFIX_STATE_PERSISTENCE + "oldAttributeMods", oldAttributeMods.asMap());
+            for (Object object : oldAttributeBases.entrySet()) {
+                Entry<Attribute, Double> entry = (Entry<Attribute, Double>) object;
+                config.set(PREFIX_STATE_PERSISTENCE + "oldAttributeBases." + entry.getKey().name(), entry.getValue());
+            }
+            for (Object object : oldAttributeMods.asMap().entrySet()) {
+                Entry<Attribute, Collection<AttributeModifier>> entry = (Entry<Attribute, Collection<AttributeModifier>>) object;
+                config.set(PREFIX_STATE_PERSISTENCE + "oldAttributeMods." + entry.getKey().name(), entry.getValue());
+            }
         }
         config.set(PREFIX_STATE_PERSISTENCE + "oldCollidabilityState", oldCollidabilityState);
         config.set(PREFIX_STATE_PERSISTENCE + "oldFlyingState", oldFlyingState);
