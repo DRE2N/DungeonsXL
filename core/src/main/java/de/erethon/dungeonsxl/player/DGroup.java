@@ -89,11 +89,11 @@ public class DGroup implements PlayerGroup {
     private int lives = -1;
 
     public DGroup(DungeonsXL plugin, Player player) {
-        this(plugin, "Group#" + counter, player);
+        this(plugin, "Group", player);
     }
 
     public DGroup(DungeonsXL plugin, Player player, Color color) {
-        this(plugin, color.toString() + "#" + counter, player);
+        this(plugin, color.toString(), player);
     }
 
     public DGroup(DungeonsXL plugin, String name, Player player) {
@@ -101,7 +101,8 @@ public class DGroup implements PlayerGroup {
         dPlayers = plugin.getPlayerCache();
 
         plugin.getGroupCache().add(name, this);
-        this.name = name;
+        id = counter++;
+        this.name = name + "#" + id;
 
         GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(player), true);
         Bukkit.getPluginManager().callEvent(event);
@@ -115,12 +116,10 @@ public class DGroup implements PlayerGroup {
 
         playing = false;
         floorCount = 0;
-
-        id = counter++;
     }
 
     public DGroup(DungeonsXL plugin, Player player, Dungeon dungeon) {
-        this(plugin, "Group#" + counter, player, dungeon);
+        this(plugin, "Group", player, dungeon);
     }
 
     public DGroup(DungeonsXL plugin, String name, Player player, Dungeon dungeon) {
@@ -132,7 +131,8 @@ public class DGroup implements PlayerGroup {
         dPlayers = plugin.getPlayerCache();
 
         plugin.getGroupCache().add(name, this);
-        this.name = name;
+        id = counter++;
+        this.name = name + "#" + id;
 
         GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(captain), true);
         Bukkit.getPluginManager().callEvent(event);
@@ -154,8 +154,6 @@ public class DGroup implements PlayerGroup {
         setDungeon(dungeon);
         playing = false;
         floorCount = 0;
-
-        id = counter++;
     }
 
     // Getters and setters
