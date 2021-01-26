@@ -93,4 +93,9 @@ public class GroupDisbandEvent extends GroupEvent implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{group=" + group + "; disbander=" + disbander + "; cause=" + cause + "}";
+    }
+
 }

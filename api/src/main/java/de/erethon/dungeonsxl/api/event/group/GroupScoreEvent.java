@@ -75,4 +75,9 @@ public class GroupScoreEvent extends GroupEvent implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{group=" + group + "; scorer=" + scorer + "; loserGroup=" + loserGroup + "}";
+    }
+
 }

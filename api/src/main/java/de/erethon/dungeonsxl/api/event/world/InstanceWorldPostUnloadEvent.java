@@ -59,4 +59,9 @@ public class InstanceWorldPostUnloadEvent extends ResourceWorldEvent {
         return handlers;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{resource=" + resource + "; instanceWorldName=" + instanceWorldName + "}";
+    }
+
 }

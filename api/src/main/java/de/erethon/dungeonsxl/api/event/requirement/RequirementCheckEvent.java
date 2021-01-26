@@ -111,4 +111,9 @@ public class RequirementCheckEvent extends RequirementEvent implements Cancellab
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{requirement=" + requirement + "; player=" + player + "; keepInventory=" + keepInventory + "}";
+    }
+
 }

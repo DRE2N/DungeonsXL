@@ -41,4 +41,9 @@ public class DungeonMobSpawnEvent extends DungeonMobEvent {
         return handlers;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{mob=" + mob + "}";
+    }
+
 }

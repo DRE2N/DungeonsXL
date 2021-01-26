@@ -89,4 +89,9 @@ public class GroupCollectRewardEvent extends GroupEvent implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{group=" + group + "; collector=" + collector + "; reward=" + reward + "}";
+    }
+
 }

@@ -74,4 +74,9 @@ public class ResourceWorldInstantiateEvent extends ResourceWorldEvent implements
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{resource=" + resource + "; instanceWorldName=" + instanceWorldName + "}";
+    }
+
 }

@@ -66,4 +66,9 @@ public class GamePlayerFinishEvent extends GamePlayerEvent implements Cancellabl
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{player=" + globalPlayer + "; hasToWait=" + hasToWait + "}";
+    }
+
 }

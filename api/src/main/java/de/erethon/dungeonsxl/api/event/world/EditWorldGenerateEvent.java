@@ -39,4 +39,9 @@ public class EditWorldGenerateEvent extends EditWorldEvent {
         return handlers;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{instance=" + instance + "}";
+    }
+
 }

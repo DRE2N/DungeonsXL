@@ -71,4 +71,9 @@ public class EditWorldUnloadEvent extends InstanceWorldUnloadEvent {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{instance=" + instance + "; save=" + save + "}";
+    }
+
 }

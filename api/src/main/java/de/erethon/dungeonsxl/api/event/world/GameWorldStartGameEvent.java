@@ -64,4 +64,9 @@ public class GameWorldStartGameEvent extends GameWorldEvent implements Cancellab
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{instance=" + instance + "; dungeon=" + getDungeon() + "; game=" + game + "}";
+    }
+
 }

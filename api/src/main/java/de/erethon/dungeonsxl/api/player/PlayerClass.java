@@ -127,4 +127,9 @@ public class PlayerClass {
         this.dog = dog;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{name=" + name + "}";
+    }
+
 }

@@ -66,4 +66,9 @@ public class GlobalPlayerRewardPayOutEvent extends GlobalPlayerEvent implements 
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{player=" + globalPlayer + "; rewards=" + rewards + "}";
+    }
+
 }

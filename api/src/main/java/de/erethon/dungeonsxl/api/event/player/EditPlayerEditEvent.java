@@ -51,4 +51,9 @@ public class EditPlayerEditEvent extends EditPlayerEvent {
         return handlers;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{player=" + globalPlayer + "; newlyLoaded=" + newlyLoaded + "}";
+    }
+
 }

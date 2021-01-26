@@ -87,4 +87,9 @@ public class RequirementDemandEvent extends RequirementEvent implements Cancella
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{requirement=" + requirement + "; player=" + player + "; keepInventory=" + keepInventory + "}";
+    }
+
 }

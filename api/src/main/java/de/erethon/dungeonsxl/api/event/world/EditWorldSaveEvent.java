@@ -51,4 +51,9 @@ public class EditWorldSaveEvent extends EditWorldEvent implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{instance=" + instance + "}";
+    }
+
 }

@@ -67,4 +67,9 @@ public class GroupFinishDungeonEvent extends GroupEvent implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{group=" + group + "; dungeon=" + dungeon + "}";
+    }
+
 }

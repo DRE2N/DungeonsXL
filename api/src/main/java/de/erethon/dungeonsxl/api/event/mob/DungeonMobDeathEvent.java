@@ -64,4 +64,9 @@ public class DungeonMobDeathEvent extends DungeonMobEvent implements Cancellable
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{mob=" + mob + "}";
+    }
+
 }

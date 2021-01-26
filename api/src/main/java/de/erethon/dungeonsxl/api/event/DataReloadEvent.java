@@ -47,4 +47,9 @@ public class DataReloadEvent extends Event implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+
 }

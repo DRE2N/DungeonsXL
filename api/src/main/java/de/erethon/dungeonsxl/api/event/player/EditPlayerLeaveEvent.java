@@ -83,4 +83,9 @@ public class EditPlayerLeaveEvent extends EditPlayerEvent implements Cancellable
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{player=" + globalPlayer + "; escape=" + escape + "; unloadIfEmpty=" + unloadIfEmpty + "}";
+    }
+
 }
