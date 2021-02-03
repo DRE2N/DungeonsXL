@@ -51,6 +51,7 @@ public class ReloadCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
+        sender.sendMessage("The reload command is disabled in this development build."); if (true) return;
         if (args.length >= 2 && (args[1].equalsIgnoreCase("-caliburn") || args[1].equalsIgnoreCase("-c"))) {
             plugin.getCaliburn().reload();
             MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
