@@ -788,7 +788,7 @@ public class DGroup implements PlayerGroup {
             for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
                 RequirementDemandEvent requirementDemandEvent
                         = new RequirementDemandEvent(requirement, dungeon, player, rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER));
-                Bukkit.getPluginManager().callEvent(event);
+                Bukkit.getPluginManager().callEvent(requirementDemandEvent);
                 if (requirementDemandEvent.isCancelled()) {
                     continue;
                 }
