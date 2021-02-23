@@ -19,7 +19,9 @@ package de.erethon.dungeonsxl.player;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
@@ -29,6 +31,7 @@ import de.erethon.dungeonsxl.api.event.group.GroupScoreEvent;
 import de.erethon.dungeonsxl.api.event.player.GamePlayerDeathEvent;
 import de.erethon.dungeonsxl.api.event.player.GamePlayerFinishEvent;
 import de.erethon.dungeonsxl.api.event.player.GlobalPlayerRewardPayOutEvent;
+import de.erethon.dungeonsxl.api.event.requirement.RequirementDemandEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
@@ -103,6 +106,10 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         lives = initialLives;
 
         resetClassInventoryOnRespawn = rules.getState(GameRule.RESET_CLASS_INVENTORY_ON_RESPAWN);
+
+        if (rules.getState(GameRule.GROUP_TAG_ENABLED)) {
+            initDGroupTag();
+        }
 
         Location teleport = world.getLobbyLocation();
         if (teleport == null) {
@@ -512,17 +519,11 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         ready = true;
 
         boolean start = true;
-        for (PlayerGroup gameGroup : game.getGroups()) {
-            if (!gameGroup.isPlaying()) {
-                if (!((DGroup) gameGroup).startGame(game)) {
-                    start = false;
-                }
-            } else {
-                respawn();
-            }
+        if (!game.start()) {// TODO: Start for every player???
+            start = false;
+        } else {
+            respawn();
         }
-
-        game.setStarted(true);
         return start;
     }
 
@@ -550,6 +551,62 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
     }
 
+    public void startGame() {
+        Dungeon dungeon = getGame().getDungeon();
+        GameRuleContainer rules = dungeon.getRules();
+        getData().logTimeLastStarted(dungeon.getName());
+        getData().setKeepInventoryAfterLogout(rules.getState(GameRule.KEEP_INVENTORY_ON_ESCAPE));
+
+        respawn();
+
+        if (plugin.getMainConfig().isSendFloorTitleEnabled()) {
+            String mapName = getGameWorld().getName();
+            if (rules.getState(GameRule.TITLE) != null || rules.getState(GameRule.SUBTITLE) != null) {
+                String title = rules.getState(GameRule.TITLE) == null ? "" : rules.getState(GameRule.TITLE);
+                String subtitle = rules.getState(GameRule.SUBTITLE) == null ? "" : rules.getState(GameRule.SUBTITLE);
+
+                MessageUtil.sendTitleMessage(player, title, subtitle,
+                        rules.getState(GameRule.TITLE_FADE_IN), rules.getState(GameRule.TITLE_SHOW), rules.getState(GameRule.TITLE_FADE_OUT));
+
+            } else if (!dungeon.getName().equals(mapName)) {
+                MessageUtil.sendTitleMessage(player, "&b&l" + dungeon.getName().replaceAll("_", " "), "&4&l" + mapName.replaceAll("_", " "));
+
+            } else {
+                MessageUtil.sendTitleMessage(player, "&4&l" + mapName.replaceAll("_", " "));
+            }
+
+            if (rules.getState(GameRule.ACTION_BAR) != null) {
+                MessageUtil.sendActionBarMessage(player, rules.getState(GameRule.ACTION_BAR));
+            }
+
+            if (rules.getState(GameRule.CHAT) != null) {
+                MessageUtil.sendCenteredMessage(player, rules.getState(GameRule.CHAT));
+            }
+        }
+
+        for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
+            RequirementDemandEvent requirementDemandEvent
+                    = new RequirementDemandEvent(requirement, dungeon, player, rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER));
+            Bukkit.getPluginManager().callEvent(requirementDemandEvent);
+            if (requirementDemandEvent.isCancelled()) {
+                continue;
+            }
+
+            if (!DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS)) {
+                requirement.demand(player);
+            }
+        }
+
+        player.setGameMode(rules.getState(GameRule.GAME_MODE));
+
+        // Permission bridge
+        if (plugin.getPermissionProvider() != null) {
+            for (String permission : rules.getState(GameRule.GAME_PERMISSIONS)) {
+                plugin.getPermissionProvider().playerAddTransient(getGame().getWorld().getWorld().getName(), player, permission);
+            }
+        }
+    }
+
     /**
      * The DGamePlayer finishs the current floor.
      *
@@ -571,7 +628,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         if (!dGroup.isPlaying()) {
             return;
         }
-        dGroup.setNextFloor(specifiedFloor);
+        getGame().setNextFloor(specifiedFloor);
         if (dGroup.isFinished()) {
             dGroup.finishFloor(specifiedFloor);
         } else {

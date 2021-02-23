@@ -93,6 +93,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -812,6 +813,20 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         playerCache.add(player, dPlayer);
         dPlayer.setOfflineTimeMillis(0);
         return true;
+    }
+
+    private boolean xlDevMode = System.getProperty("XLDevMode") != null;
+
+    public void log(String message) {
+        if (xlDevMode) {
+            MessageUtil.log(this, message);
+        }
+    }
+
+    public <T> void log(String message, T t, Predicate<T> predicate) {
+        if (xlDevMode && !predicate.test(t)) {
+            throw new AssertionError(message);
+        }
     }
 
 }

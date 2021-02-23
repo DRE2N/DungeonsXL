@@ -30,6 +30,7 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -47,11 +48,15 @@ public class DGame implements Game {
 
     private DungeonsXL plugin;
 
+    private Dungeon dungeon;
+    private GameWorld world;
+    private List<ResourceWorld> unplayedFloors = new ArrayList<>();
+    private ResourceWorld nextFloor;
+    private int floorCount;
+    private List<PlayerGroup> groups = new ArrayList<>();
     private boolean tutorial;
     private boolean test;
-    private List<PlayerGroup> groups = new ArrayList<>();
     private boolean started;
-    private GameWorld world;
     private int waveCount;
     private Map<String, Integer> gameKills = new HashMap<>();
     private Map<String, Integer> waveKills = new HashMap<>();
@@ -60,6 +65,10 @@ public class DGame implements Game {
         this.plugin = plugin;
         plugin.getGameCache().add(this);
 
+        dungeon = group.getDungeon();
+        if (dungeon == null) {
+            throw new IllegalStateException("Game initialized without dungeon");
+        }
         tutorial = false;
         started = false;
 
@@ -70,9 +79,13 @@ public class DGame implements Game {
         this.plugin = plugin;
         plugin.getGameCache().add(this);
 
+        this.world = world;
+        dungeon = world.getDungeon();
+        if (dungeon == null) {
+            throw new IllegalStateException("Game initialized without dungeon");
+        }
         tutorial = false;
         started = false;
-        this.world = world;
 
         addGroup(group);
     }
@@ -83,6 +96,10 @@ public class DGame implements Game {
 
         this.groups = groups;
         this.world = world;
+        dungeon = world.getDungeon();
+        if (dungeon == null) {
+            throw new IllegalStateException("Game initialized without dungeon");
+        }
         tutorial = false;
         started = true;
 
@@ -135,13 +152,85 @@ public class DGame implements Game {
     }
 
     @Override
-    public GameWorld getWorld() {
-        return world;
+    public Dungeon getDungeon() {
+        return dungeon;
+    }
+
+    /**
+     * Sets up all dungeon-related fields.
+     *
+     * @param dungeon the dungeon to set
+     */
+    public void setDungeon(Dungeon dungeon) {
+        this.dungeon = dungeon;
+        if (dungeon.isMultiFloor()) {
+            unplayedFloors = new ArrayList<>(dungeon.getFloors());
+        }
+    }
+
+    /**
+     * Sets up all dungeon-related fields.
+     *
+     * @param name the name of the dungeon
+     * @return if the action was successful
+     */
+    public boolean setDungeon(String name) {
+        dungeon = plugin.getDungeonRegistry().get(name);
+        if (dungeon != null) {
+            unplayedFloors = dungeon.getFloors();
+            return true;
+
+        } else {
+            ResourceWorld resource = plugin.getMapRegistry().get(name);
+            if (resource != null) {
+                dungeon = resource.getSingleFloorDungeon();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public DGameWorld getWorld() {
+        return (DGameWorld) world;
     }
 
     @Override
     public void setWorld(GameWorld gameWorld) {
         world = gameWorld;
+    }
+
+    @Override
+    public List<ResourceWorld> getUnplayedFloors() {
+        return unplayedFloors;
+    }
+
+    @Override
+    public boolean addUnplayedFloor(ResourceWorld unplayedFloor) {
+        return unplayedFloors.add(unplayedFloor);
+    }
+
+    @Override
+    public boolean removeUnplayedFloor(ResourceWorld unplayedFloor, boolean force) {
+        if (getDungeon().getRemoveWhenPlayed() || force) {
+            return unplayedFloors.remove(unplayedFloor);
+        }
+        return false;
+    }
+
+    @Override
+    public ResourceWorld getNextFloor() {
+        return nextFloor;
+    }
+
+    @Override
+    public void setNextFloor(ResourceWorld floor) {
+        nextFloor = floor;
+    }
+
+    @Override
+    public int getFloorCount() {
+        return floorCount;
     }
 
     @Override
@@ -152,38 +241,6 @@ public class DGame implements Game {
     @Override
     public void setRewards(boolean enabled) {
         test = enabled;
-    }
-
-    @Override
-    public List<ResourceWorld> getUnplayedFloors() {
-        List<ResourceWorld> unplayedFloors = null;
-        for (PlayerGroup group : groups) {
-            DGroup dGroup = (DGroup) group;
-            if (unplayedFloors == null || dGroup.getUnplayedFloors().size() < unplayedFloors.size()) {
-                unplayedFloors = dGroup.getUnplayedFloors();
-            }
-        }
-        if (unplayedFloors == null) {
-            unplayedFloors = new ArrayList<>();
-        }
-        return unplayedFloors;
-    }
-
-    @Override
-    public int getFloorCount() {
-        int floorCount = 0;
-        for (PlayerGroup group : groups) {
-            DGroup dGroup = (DGroup) group;
-            if (dGroup.getFloorCount() > floorCount) {
-                floorCount = dGroup.getFloorCount();
-            }
-        }
-        return floorCount;
-    }
-
-    @Override
-    public Dungeon getDungeon() {
-        return groups.get(0).getDungeon();
     }
 
     /**
@@ -252,6 +309,32 @@ public class DGame implements Game {
     @Override
     public boolean isEmpty() {
         return groups.isEmpty();
+    }
+
+    @Override
+    public boolean start() {
+        getWorld().setWeather(getRules());
+
+        int i = 0;
+        for (PlayerGroup group : groups) {
+            if (group == null) {
+                continue;
+            }
+            if (!((DGroup) group).startGame(this, i++)) {
+                return false; // TODO: State of groups that are OK has already been changed
+            }
+        }
+
+        if (getWorld() != null) {
+            if (!getWorld().isPlaying()) {
+                getWorld().startGame();
+            }
+        }
+
+        floorCount++;
+        nextFloor = null;
+        started = true;
+        return true;
     }
 
     @Override

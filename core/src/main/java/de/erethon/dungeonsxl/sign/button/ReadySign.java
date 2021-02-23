@@ -16,16 +16,21 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
+import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.util.commons.misc.ProgressBar;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -116,9 +121,7 @@ public class ReadySign extends Button {
             bar.cancel();
         }
 
-        for (Player player : getGame().getPlayers()) {
-            ready(api.getPlayerCache().getGamePlayer(player));
-        }
+        readyAll();
     }
 
     @Override
@@ -141,6 +144,23 @@ public class ReadySign extends Button {
         }
 
         return true;
+    }
+
+    private void readyAll() {
+        for (PlayerGroup group : getGame().getGroups()) {
+            for (UUID memberId : group.getMembers()) {
+                Player player = Bukkit.getPlayer(memberId);
+                if (player != null) {
+                    GamePlayer gamePlayer = api.getPlayerCache().getGamePlayer(player);
+                    if (gamePlayer == null) {
+                        gamePlayer = new DGamePlayer((DungeonsXL) api, player, getGameWorld());
+                    }
+                    ready(gamePlayer);
+                } else {
+                    group.getMembers().remove(memberId);
+                }
+            }
+        }
     }
 
     private void ready(GamePlayer player) {

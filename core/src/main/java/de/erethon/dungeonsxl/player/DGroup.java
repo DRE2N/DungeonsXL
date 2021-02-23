@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
@@ -29,7 +28,7 @@ import de.erethon.dungeonsxl.api.event.group.GroupFinishDungeonEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupFinishFloorEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupPlayerJoinEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupStartFloorEvent;
-import de.erethon.dungeonsxl.api.event.requirement.RequirementDemandEvent;
+import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
@@ -44,7 +43,6 @@ import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.global.GroupSign;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.util.commons.player.PlayerCollection;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,14 +73,11 @@ public class DGroup implements PlayerGroup {
     private PlayerCollection players = new PlayerCollection();
     private PlayerCollection invitedPlayers = new PlayerCollection();
     private Dungeon dungeon;
-    private List<ResourceWorld> unplayedFloors = new ArrayList<>();
     private Game game;
     private GameWorld gameWorld;
     private boolean playing;
-    private int floorCount;
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
-    private ResourceWorld nextFloor;
     private Color color;
     private int score = 0;
     private int initialLives = -1;
@@ -115,7 +110,6 @@ public class DGroup implements PlayerGroup {
         }
 
         playing = false;
-        floorCount = 0;
     }
 
     public DGroup(DungeonsXL plugin, Player player, Dungeon dungeon) {
@@ -151,9 +145,8 @@ public class DGroup implements PlayerGroup {
             return;
         }
 
-        setDungeon(dungeon);
+        this.dungeon = dungeon;
         playing = false;
-        floorCount = 0;
     }
 
     // Getters and setters
@@ -357,73 +350,37 @@ public class DGroup implements PlayerGroup {
 
     @Override
     public Dungeon getDungeon() {
-        return dungeon;
+        return game != null ? game.getDungeon() : dungeon;
     }
 
     /**
-     * Sets up all dungeon-related fields.
+     * {@link #getDungeon()} ignores this if the group is in a game.
      *
-     * @param dungeon the dungeon to set
+     * @param dungeon dungeon to set
      */
     public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
-        if (dungeon.isMultiFloor()) {
-            unplayedFloors = new ArrayList<>(dungeon.getFloors());
-        }
     }
 
     /**
-     * Sets up all dungeon-related fields.
+     * Sets the dungeon.
      *
      * @param name the name of the dungeon
      * @return if the action was successful
      */
     public boolean setDungeon(String name) {
-        dungeon = plugin.getDungeonRegistry().get(name);
-        if (dungeon != null) {
-            unplayedFloors = dungeon.getFloors();
-            return true;
-
-        } else {
-            ResourceWorld resource = plugin.getMapRegistry().get(name);
-            if (resource != null) {
-                dungeon = resource.getSingleFloorDungeon();
-                return true;
-            }
-            return false;
-        }
+        return (dungeon = plugin.getDungeonRegistry().get(name)) != null;
     }
 
     public String getDungeonName() {
-        if (dungeon == null) {
+        if (getDungeon() == null) {
             return null;
         }
-        return dungeon.getName();
+        return getDungeon().getName();
     }
 
     public String getMapName() {
         return gameWorld == null ? null : gameWorld.getName();
-    }
-
-    public List<ResourceWorld> getUnplayedFloors() {
-        return unplayedFloors;
-    }
-
-    /**
-     * @param unplayedFloor the unplayed floor to add
-     */
-    public void addUnplayedFloor(DResourceWorld unplayedFloor) {
-        unplayedFloors.add(unplayedFloor);
-    }
-
-    /**
-     * @param unplayedFloor the unplayed floor to remove
-     * @param force         remove the floor even if removeWhenPlayed is disabled
-     */
-    public void removeUnplayedFloor(DResourceWorld unplayedFloor, boolean force) {
-        if (getDungeon().getRemoveWhenPlayed() || force) {
-            unplayedFloors.remove(unplayedFloor);
-        }
     }
 
     @Override
@@ -433,14 +390,6 @@ public class DGroup implements PlayerGroup {
 
     public void setPlaying(boolean playing) {
         this.playing = playing;
-    }
-
-    public int getFloorCount() {
-        return floorCount;
-    }
-
-    public void setFloorCount(int floorCount) {
-        this.floorCount = floorCount;
     }
 
     @Override
@@ -478,14 +427,6 @@ public class DGroup implements PlayerGroup {
 
     public boolean isCustom() {
         return !name.matches("Group#[0-9]{1,}");
-    }
-
-    public ResourceWorld getNextFloor() {
-        return nextFloor;
-    }
-
-    public void setNextFloor(DResourceWorld floor) {
-        nextFloor = floor;
     }
 
     /**
@@ -624,15 +565,17 @@ public class DGroup implements PlayerGroup {
         getDGamePlayers().forEach(p -> p.leave(false));
     }
 
+    // TODO: Move code to more appropriate classes
     /**
      * The group finishs the current floor.
      *
      * @param specifiedFloor the name of the next floor
      */
     public void finishFloor(DResourceWorld specifiedFloor) {
+        Game game = getGame();
         DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
-        int floorsLeft = getDungeon().getFloors().size() - floorCount; //floorCount contains start floor, but dungeon floor list doesn't
-        removeUnplayedFloor((DResourceWorld) gameWorld.getResource(), false);
+        int floorsLeft = getDungeon().getFloors().size() - game.getFloorCount(); //floorCount contains start floor, but dungeon floor list doesn't
+        game.removeUnplayedFloor((DResourceWorld) gameWorld.getResource(), false);
         ResourceWorld newFloor = null;
         GameWorld.Type type = null;
         if (gameWorld.getType() == GameWorld.Type.END_FLOOR) {
@@ -643,7 +586,7 @@ public class DGroup implements PlayerGroup {
             type = GameWorld.Type.DEFAULT;
         } else if (floorsLeft > 0) {
             int random = new Random().nextInt(floorsLeft);
-            newFloor = getUnplayedFloors().get(random);
+            newFloor = game.getUnplayedFloors().get(random);
             type = GameWorld.Type.DEFAULT;
         } else {
             newFloor = dConfig.getEndFloor();
@@ -656,7 +599,6 @@ public class DGroup implements PlayerGroup {
             return;
         }
 
-        Game game = getGame();
         GameWorld gameWorld = newFloor.instantiateGameWorld(true);
         gameWorld.setType(type);
         this.gameWorld = gameWorld;
@@ -670,7 +612,7 @@ public class DGroup implements PlayerGroup {
             }
             player.setFinished(false);
         }
-        startGame(game);
+        game.start();
     }
 
     @Override
@@ -699,122 +641,52 @@ public class DGroup implements PlayerGroup {
         plugin.getGroupAdapters().forEach(a -> a.deleteCorrespondingGroup(this));
     }
 
-    public boolean startGame(Game game) {
-        if (game == null) {
+    public boolean startGame(Game game, int index) {
+        if (color == null) {
+            color = plugin.getMainConfig().getGroupColorPriority(index);
+        }
+
+        boolean ready = true;
+        for (Player player : getMembers().getOnlinePlayers()) {
+            GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer(player);
+            if (gamePlayer == null) {
+                gamePlayer = new DGamePlayer(plugin, player, getGameWorld());
+            }
+
+            if (!gamePlayer.isReady()) {
+                ready = false;
+            }
+        }
+
+        if (!ready) {
             return false;
         }
-        GameRuleContainer rules = game.getRules();
-        ((DGameWorld) gameWorld).setWeather(rules);
 
-        if (color == null) {
-            color = plugin.getMainConfig().getGroupColorPriority((game.getGroups().indexOf(this)));
-        }
-
-        for (PlayerGroup group : game.getGroups()) {
-            DGroup dGroup = (DGroup) group;
-            if (dGroup == null) {
-                continue;
-            }
-
-            boolean ready = true;
-            for (Player player : dGroup.getMembers().getOnlinePlayers()) {
-                DGamePlayer dPlayer = (DGamePlayer) dPlayers.getGamePlayer(player);
-                if (dPlayer == null) {
-                    dPlayer = new DGamePlayer(plugin, player, gameWorld);
-                }
-                if (rules.getState(GameRule.GROUP_TAG_ENABLED)) {
-                    dPlayer.initDGroupTag();
-                }
-                if (!dPlayer.isReady()) {
-                    ready = false;
-                }
-            }
-
-            if (!ready) {
-                return false;
-            }
-        }
-
-        GroupStartFloorEvent event = new GroupStartFloorEvent(this, gameWorld);
+        GroupStartFloorEvent event = new GroupStartFloorEvent(this, getGameWorld());
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return false;
         }
 
         playing = true;
-
-        if (gameWorld != null) {
-            if (!gameWorld.isPlaying()) {
-                ((DGameWorld) gameWorld).startGame();
-            }
-        }
-
-        floorCount++;
-
-        for (Player player : players.getOnlinePlayers()) {
-            DGamePlayer dPlayer = (DGamePlayer) dPlayers.getGamePlayer(player);
-            if (dPlayer == null) {
-                continue;
-            }
-            dPlayer.getData().logTimeLastStarted(getDungeonName());
-            dPlayer.getData().setKeepInventoryAfterLogout(rules.getState(GameRule.KEEP_INVENTORY_ON_ESCAPE));
-
-            dPlayer.respawn();
-
-            if (plugin.getMainConfig().isSendFloorTitleEnabled()) {
-                if (rules.getState(GameRule.TITLE) != null || rules.getState(GameRule.SUBTITLE) != null) {
-                    String title = rules.getState(GameRule.TITLE) == null ? "" : rules.getState(GameRule.TITLE);
-                    String subtitle = rules.getState(GameRule.SUBTITLE) == null ? "" : rules.getState(GameRule.SUBTITLE);
-
-                    MessageUtil.sendTitleMessage(player, title, subtitle,
-                            rules.getState(GameRule.TITLE_FADE_IN), rules.getState(GameRule.TITLE_SHOW), rules.getState(GameRule.TITLE_FADE_OUT));
-
-                } else if (!getDungeonName().equals(getMapName())) {
-                    MessageUtil.sendTitleMessage(player, "&b&l" + getDungeonName().replaceAll("_", " "), "&4&l" + getMapName().replaceAll("_", " "));
-
-                } else {
-                    MessageUtil.sendTitleMessage(player, "&4&l" + getMapName().replaceAll("_", " "));
-                }
-
-                if (rules.getState(GameRule.ACTION_BAR) != null) {
-                    MessageUtil.sendActionBarMessage(player, rules.getState(GameRule.ACTION_BAR));
-                }
-
-                if (rules.getState(GameRule.CHAT) != null) {
-                    MessageUtil.sendCenteredMessage(player, rules.getState(GameRule.CHAT));
-                }
-            }
-
-            for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
-                RequirementDemandEvent requirementDemandEvent
-                        = new RequirementDemandEvent(requirement, dungeon, player, rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER));
-                Bukkit.getPluginManager().callEvent(event);
-                if (requirementDemandEvent.isCancelled()) {
-                    continue;
-                }
-
-                if (!DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS)) {
-                    requirement.demand(player);
-                }
-            }
-
-            player.setGameMode(rules.getState(GameRule.GAME_MODE));
-            if (rules.getState(GameRule.TIME_TO_FINISH) != -1) {
-                timeIsRunningTask = new TimeIsRunningTask(plugin, this, rules.getState(GameRule.TIME_TO_FINISH)).runTaskTimer(plugin, 20, 20);
-            }
-
-            // Permission bridge
-            if (plugin.getPermissionProvider() != null) {
-                for (String permission : rules.getState(GameRule.GAME_PERMISSIONS)) {
-                    plugin.getPermissionProvider().playerRemoveTransient(gameWorld.getWorld().getName(), player, permission);
-                }
-            }
-        }
-
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
-        nextFloor = null;
+
+        GameRuleContainer rules = getDungeon().getRules();
         initialLives = rules.getState(GameRule.INITIAL_GROUP_LIVES);
         lives = initialLives;
+        if (rules.getState(GameRule.TIME_TO_FINISH) != -1) {
+            timeIsRunningTask = new TimeIsRunningTask(plugin, this, rules.getState(GameRule.TIME_TO_FINISH)).runTaskTimer(plugin, 20, 20);
+        }
+
+        for (UUID playerId : getMembers()) {
+            GlobalPlayer player = plugin.getPlayerCache().get(playerId);
+            if (!(player instanceof DGamePlayer)) {
+                plugin.log("Player isn't a DGamePlayer");
+                continue;
+            }
+            ((DGamePlayer) player).startGame();
+        }
+
         return true;
     }
 

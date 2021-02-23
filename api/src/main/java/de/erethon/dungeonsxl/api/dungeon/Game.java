@@ -127,6 +127,38 @@ public interface Game {
     List<ResourceWorld> getUnplayedFloors();
 
     /**
+     * Adds a floor to the list of floors to play.
+     *
+     * @param unplayedFloor the resource world of the floor
+     * @return if the addition was successful
+     */
+    boolean addUnplayedFloor(ResourceWorld unplayedFloor);
+
+    /**
+     * Removes a floor from the list of floors to play.
+     *
+     * @param unplayedFloor the resource world of the floor
+     * @param force         if the floor shall be removed even if the {@link #getDungeon() dungeon}'s floors are not to be
+     *                      {@link Dungeon#getRemoveWhenPlayed() removed when played.}
+     * @return if the removal was successful
+     */
+    boolean removeUnplayedFloor(ResourceWorld unplayedFloor, boolean force);
+
+    /**
+     * Returns the resource of the next floor to play.
+     *
+     * @return the resource of the next floor to play
+     */
+    ResourceWorld getNextFloor();
+
+    /**
+     * Sets the next floor to play.
+     *
+     * @param floor the resource world of the floor
+     */
+    void setNextFloor(ResourceWorld floor);
+
+    /**
      * Returns the amount of played floors in this game.
      *
      * @return the amount of played floors in this game
@@ -153,6 +185,13 @@ public interface Game {
      * @return true if there are no groups in this game; false if not
      */
     boolean isEmpty();
+
+    /**
+     * Starts the game. This is what happens when the ready sign is triggered by everyone.
+     *
+     * @return if the game has started correctly
+     */
+    boolean start();
 
     /**
      * Deletes this game.
