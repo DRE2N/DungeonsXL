@@ -20,6 +20,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
@@ -552,10 +553,9 @@ public class DGlobalPlayer implements GlobalPlayer {
             return;
         }
 
-        // The maxInstances check is already done in the listener
-        GameWorld gameWorld = dungeon.getMap().instantiateGameWorld(true);
-        dGroup.setGameWorld(gameWorld);
-        new DGame(plugin, dGroup, gameWorld).setTutorial(true);
+        Game game = new DGame(plugin, dungeon, dGroup);
+        game.setTutorial(true);
+        GameWorld gameWorld = game.ensureWorldIsLoaded(true);
         new DGamePlayer(plugin, player, gameWorld);
     }
 

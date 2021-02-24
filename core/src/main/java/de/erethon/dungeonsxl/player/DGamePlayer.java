@@ -90,10 +90,6 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         Game game = world.getGame();
         dGroup = (DGroup) plugin.getPlayerGroup(player);
-        if (game == null) {
-            game = new DGame(plugin, dGroup);
-        }
-
         GameRuleContainer rules = game.getRules();
         player.setGameMode(GameMode.SURVIVAL);
 
@@ -508,7 +504,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         Game game = dGroup.getGame();
         if (game == null) {
-            game = new DGame(plugin, dGroup, dGroup.getGameWorld());
+            game = new DGame(plugin, dGroup.getDungeon(), dGroup);
         }
         game.setRewards(rewards);
 

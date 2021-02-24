@@ -107,7 +107,7 @@ cmd:
   status:
     help: "/dxl status - Zeigt den technischen Status von DungeonsXL"
   test:
-    help: "/dxl test - Startet das Spiel im Testmodus"
+    help: "/dxl test [name] - Startet das Spiel im Testmodus"
   uninvite:
     help: "/dxl uninvite [player] [map] - Lädt einen Spieler davon aus, eine Welt zu bearbeiten"
     success: "&4&v1&6's Berechtigung zum Bearbeiten der Welt &4&v2&6 wurde erfolgreich entfernt."

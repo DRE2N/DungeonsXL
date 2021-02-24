@@ -17,6 +17,7 @@
 package de.erethon.dungeonsxl.announcer;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -69,7 +70,7 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
             return;
         }
 
-        DGame game = null;
+        Game game = null;
 
         for (DGroup dGroup : announcer.getDGroups()) {
             if (dGroup == null) {
@@ -85,18 +86,16 @@ public class AnnouncerStartGameTask extends BukkitRunnable {
                     cancel();
                     return;
                 }
-                GameWorld gameWorld = resource.instantiateGameWorld(false);
+                game = new DGame(plugin, dGroup.getDungeon(), dGroup);
+                GameWorld gameWorld = game.ensureWorldIsLoaded(false);
                 if (gameWorld == null) {
                     dGroup.sendMessage(DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
                     cancel();
                     return;
                 }
-                game = new DGame(plugin, dGroup, gameWorld);
             } else {
                 game.addGroup(dGroup);
             }
-
-            dGroup.setGameWorld(game.getWorld());
         }
 
         if (game == null) {

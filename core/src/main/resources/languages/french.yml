@@ -107,7 +107,7 @@ cmd:
   status:
     help: "/dxl status - Affiche le status technique de DungeonsXL"
   test:
-    help: "/dxl test - Lance une partie en mode test"
+    help: "/dxl test [name] - Lance une partie en mode test"
   uninvite:
     help: "/dxl uninvite [player] [dungeon] - Désinvite un joueur à éditer un donjon"
     success: "&4&v1&6 a été désinviter avec succès à éditer la carte &4&v1&6."

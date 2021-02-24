@@ -294,14 +294,9 @@ public interface PlayerGroup {
      *
      * @return the game world the group is in
      */
-    GameWorld getGameWorld();
-
-    /**
-     * Sets the game world the group is in.
-     *
-     * @param gameWorld the game world to set
-     */
-    void setGameWorld(GameWorld gameWorld);
+    default GameWorld getGameWorld() {
+        return getGame() != null ? getGame().getWorld() : null;
+    }
 
     /**
      * Returns the dungeon the group is playing or has remembered to play next.

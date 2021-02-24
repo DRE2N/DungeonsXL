@@ -30,7 +30,6 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,48 +60,26 @@ public class DGame implements Game {
     private Map<String, Integer> gameKills = new HashMap<>();
     private Map<String, Integer> waveKills = new HashMap<>();
 
-    public DGame(DungeonsXL plugin, PlayerGroup group) {
+    public DGame(DungeonsXL plugin, Dungeon dungeon) {
         this.plugin = plugin;
         plugin.getGameCache().add(this);
 
-        dungeon = group.getDungeon();
-        if (dungeon == null) {
+        this.dungeon = dungeon;
+        if (this.dungeon == null) {
             throw new IllegalStateException("Game initialized without dungeon");
         }
         tutorial = false;
         started = false;
 
+    }
+
+    public DGame(DungeonsXL plugin, Dungeon dungeon, PlayerGroup group) {
+        this(plugin, dungeon);
         addGroup(group);
     }
 
-    public DGame(DungeonsXL plugin, PlayerGroup group, GameWorld world) {
-        this.plugin = plugin;
-        plugin.getGameCache().add(this);
-
-        this.world = world;
-        dungeon = world.getDungeon();
-        if (dungeon == null) {
-            throw new IllegalStateException("Game initialized without dungeon");
-        }
-        tutorial = false;
-        started = false;
-
-        addGroup(group);
-    }
-
-    public DGame(DungeonsXL plugin, List<PlayerGroup> groups, GameWorld world) {
-        this.plugin = plugin;
-        plugin.getGameCache().add(this);
-
-        this.groups = groups;
-        this.world = world;
-        dungeon = world.getDungeon();
-        if (dungeon == null) {
-            throw new IllegalStateException("Game initialized without dungeon");
-        }
-        tutorial = false;
-        started = true;
-
+    public DGame(DungeonsXL plugin, Dungeon dungeon, List<PlayerGroup> groups) {
+        this(plugin, dungeon);
         groups.forEach(this::addGroup);
     }
 
@@ -126,7 +103,6 @@ public class DGame implements Game {
         groups.add(group);
 
         ((DGroup) group).setGame(this);
-        group.setGameWorld(world);
         group.setInitialLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));
         group.setLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));
         group.setScore(getRules().getState(GameRule.INITIAL_SCORE));
@@ -312,6 +288,15 @@ public class DGame implements Game {
     }
 
     @Override
+    public GameWorld ensureWorldIsLoaded(boolean ignoreLimit) {
+        if (world != null) {
+            return world;
+        }
+        world = dungeon.getMap().instantiateGameWorld(dungeon, ignoreLimit);
+        return world;
+    }
+
+    @Override
     public boolean start() {
         getWorld().setWeather(getRules());
 
@@ -356,7 +341,7 @@ public class DGame implements Game {
         waveCount++;
         resetWaveKills();
 
-        Set<ProgressTrigger> triggers = ProgressTrigger.getByGameWorld((DGameWorld) world);
+        Set<ProgressTrigger> triggers = ProgressTrigger.getByGameWorld(getWorld());
         for (ProgressTrigger trigger : triggers) {
             if (getWaveCount() >= trigger.getWaveCount() & getFloorCount() >= trigger.getFloorCount() - 1 || !getUnplayedFloors().contains(trigger.getFloor()) & trigger.getFloor() != null) {
                 trigger.onTrigger();

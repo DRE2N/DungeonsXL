@@ -19,17 +19,17 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
-import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,8 +41,8 @@ public class TestCommand extends DCommand {
     public TestCommand(DungeonsXL plugin) {
         super(plugin);
         setCommand("test");
-        setMinArgs(0);
-        setMaxArgs(0);
+        setMinArgs(1);
+        setMaxArgs(1);
         setHelp(DMessage.CMD_TEST_HELP.getMessage());
         setPermission(DPermission.TEST.getNode());
         setPlayerCommand(true);
@@ -53,47 +53,49 @@ public class TestCommand extends DCommand {
     public void onExecute(String[] args, CommandSender sender) {
         Player player = (Player) sender;
         GlobalPlayer dPlayer = dPlayers.get(player);
+        if (dPlayer instanceof DInstancePlayer) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
+            return;
+        }
 
-        if (!(dPlayer instanceof DEditPlayer)) {
-            PlayerGroup dGroup = dPlayer.getGroup();
-            if (dGroup == null) {
-                MessageUtil.sendMessage(sender, DMessage.ERROR_JOIN_GROUP.getMessage());
-                return;
-            }
+        Dungeon dungeon = plugin.getDungeonRegistry().get(args[1]);
+        if (dungeon == null) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(args[1]));
+            return;
+        }
 
-            if (!dGroup.getLeader().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
-                MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_LEADER.getMessage());
-                return;
+        DGroup group = (DGroup) dPlayer.getGroup();
+        if (group != null && group.isPlaying()) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
+            return;
+        } else if (group == null) {
+            group = new DGroup(plugin, player, dungeon);
+            GroupCreateEvent event = new GroupCreateEvent(group, dPlayer, GroupCreateEvent.Cause.COMMAND);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                plugin.getGroupCache().remove(group);
+                group = null;
             }
+        }
+        if (!group.getLeader().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_NOT_LEADER.getMessage());
+            return;
+        }
+        group.setDungeon(dungeon);
 
-            GameWorld gameWorld = dGroup.getGameWorld();
-            if (gameWorld == null) {
-                MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_IN_DUNGEON.getMessage());
-                return;
-            }
+        if (!dPlayer.checkRequirements(dungeon)) {
+            return;
+        }
 
-            Game game = gameWorld.getGame();
-            if (game != null && game.hasStarted()) {
-                MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_DUNGEON.getMessage());
-                return;
-            }
-
-            for (Player groupPlayer : dGroup.getMembers().getOnlinePlayers()) {
-                ((DGamePlayer) dPlayers.getGamePlayer(groupPlayer)).ready();
-            }
-
-        } else {
-            DEditPlayer editPlayer = (DEditPlayer) dPlayer;
-            editPlayer.leave();
-            ResourceWorld resource = editPlayer.getEditWorld().getResource();
-            Dungeon dungeon = resource.getSingleFloorDungeon();
-            GameWorld instance = resource.instantiateGameWorld(false);
-            if (instance == null) {
-                MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
-                return;
-            }
-            DGame game = new DGame(plugin, new DGroup(plugin, player, dungeon), instance);
-            new DGamePlayer(plugin, player, game.getWorld());
+        Game game = new DGame(plugin, dungeon, group);
+        game.setRewards(false);
+        GameWorld gameWorld = game.ensureWorldIsLoaded(false);
+        if (gameWorld == null) {
+            MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+            return;
+        }
+        for (Player groupPlayer : group.getMembers().getOnlinePlayers()) {
+            new DGamePlayer(plugin, groupPlayer, group.getGameWorld());
         }
     }
 

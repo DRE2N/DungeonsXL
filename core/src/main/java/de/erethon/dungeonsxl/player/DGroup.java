@@ -74,7 +74,6 @@ public class DGroup implements PlayerGroup {
     private PlayerCollection invitedPlayers = new PlayerCollection();
     private Dungeon dungeon;
     private Game game;
-    private GameWorld gameWorld;
     private boolean playing;
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
@@ -327,20 +326,7 @@ public class DGroup implements PlayerGroup {
     }
 
     @Override
-    public GameWorld getGameWorld() {
-        return gameWorld;
-    }
-
-    @Override
-    public void setGameWorld(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
-    }
-
-    @Override
     public Game getGame() {
-        if (game == null && gameWorld != null) {
-            game = gameWorld.getGame();
-        }
         return game;
     }
 
@@ -380,7 +366,7 @@ public class DGroup implements PlayerGroup {
     }
 
     public String getMapName() {
-        return gameWorld == null ? null : gameWorld.getName();
+        return getGameWorld() == null ? null : getGameWorld().getName();
     }
 
     @Override
@@ -498,47 +484,14 @@ public class DGroup implements PlayerGroup {
             return false;
         }
 
-        GameWorld target = dungeon.getMap().instantiateGameWorld(false);
-        Game game = getGame();
-
-        if (target == null && game != null) {
-            target = game.getWorld();
-        }
-
-        if (target == null) {
-            if (game != null) {
-                for (PlayerGroup otherTeam : game.getGroups()) {
-                    if (otherTeam.getGameWorld() != null) {
-                        target = otherTeam.getGameWorld();
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (target == null && dungeon != null) {
-            ResourceWorld resource = dungeon.getMap();
-            if (resource != null) {
-                target = resource.instantiateGameWorld(false);
-                if (target == null) {
-                    sendMessage(DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
-                    return false;
-                }
-                gameWorld = target;
-            }
-        }
-
-        if (target == null) {
-            sendMessage(DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
-            return false;
-        }
-
         if (game == null) {
-            game = new DGame(plugin, this, target);
+            game = new DGame(plugin, dungeon, this);
+        }
 
-        } else {
-            game.setWorld(target);
-            gameWorld = target;
+        GameWorld target = game.ensureWorldIsLoaded(false);
+        if (target == null) {
+            sendMessage(DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+            return false;
         }
 
         for (OfflinePlayer offline : players.getOfflinePlayers()) {
@@ -575,10 +528,10 @@ public class DGroup implements PlayerGroup {
         Game game = getGame();
         DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
         int floorsLeft = getDungeon().getFloors().size() - game.getFloorCount(); //floorCount contains start floor, but dungeon floor list doesn't
-        game.removeUnplayedFloor((DResourceWorld) gameWorld.getResource(), false);
+        game.removeUnplayedFloor(game.getWorld().getResource(), false);
         ResourceWorld newFloor = null;
         GameWorld.Type type = null;
-        if (gameWorld.getType() == GameWorld.Type.END_FLOOR) {
+        if (game.getWorld().getType() == GameWorld.Type.END_FLOOR) {
             finish();
             return;
         } else if (specifiedFloor != null) {
@@ -593,7 +546,7 @@ public class DGroup implements PlayerGroup {
             type = GameWorld.Type.END_FLOOR;
         }
 
-        GroupFinishFloorEvent event = new GroupFinishFloorEvent(this, gameWorld, newFloor);
+        GroupFinishFloorEvent event = new GroupFinishFloorEvent(this, game.getWorld(), newFloor);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -601,7 +554,6 @@ public class DGroup implements PlayerGroup {
 
         GameWorld gameWorld = newFloor.instantiateGameWorld(true);
         gameWorld.setType(type);
-        this.gameWorld = gameWorld;
         game.setWorld(gameWorld);
 
         for (DGamePlayer player : getDGamePlayers()) {

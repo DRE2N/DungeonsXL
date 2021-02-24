@@ -83,7 +83,6 @@ public class EnterCommand extends DCommand {
             return;
         }
 
-        joining.setGameWorld(game.getWorld());
         game.addGroup(joining);
         joining.sendMessage(DMessage.CMD_ENTER_SUCCESS.getMessage(joining.getName(), target.getName()));
 

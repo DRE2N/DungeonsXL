@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.world.GameWorld;
@@ -86,12 +87,12 @@ public class PlayCommand extends DCommand {
             return;
         }
 
-        GameWorld gameWorld = dungeon.getMap().instantiateGameWorld(false);
+        Game game = new DGame(plugin, dungeon, group);
+        GameWorld gameWorld = game.ensureWorldIsLoaded(false);
         if (gameWorld == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
             return;
         }
-        new DGame(plugin, group, gameWorld);
         for (Player groupPlayer : group.getMembers().getOnlinePlayers()) {
             new DGamePlayer(plugin, groupPlayer, group.getGameWorld());
         }

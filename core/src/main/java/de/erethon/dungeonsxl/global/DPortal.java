@@ -257,44 +257,14 @@ public class DPortal extends GlobalProtection {
             return;
         }
 
-        GameWorld target = group.getGameWorld();
         Game game = group.getGame();
-
-        if (target == null && game != null) {
-            target = game.getWorld();
-            if (target == null) {
-                for (PlayerGroup otherTeam : game.getGroups()) {
-                    if (otherTeam.getGameWorld() != null) {
-                        target = otherTeam.getGameWorld();
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (target == null) {
-            ResourceWorld resource = dungeon.getMap();
-            if (resource != null) {
-                target = resource.instantiateGameWorld(false);
-                if (target == null) {
-                    MessageUtil.sendActionBarMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
-                    return;
-                }
-                group.setGameWorld(target);
-            }
-        }
-
-        if (target == null) {
-            MessageUtil.sendActionBarMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
-            return;
-        }
-
         if (game == null) {
-            game = new DGame(plugin, group, target);
-
-        } else {
-            game.setWorld(target);
-            group.setGameWorld(target);
+            game = new DGame(plugin, dungeon, group);
+        }
+        GameWorld target = game.ensureWorldIsLoaded(false);
+        if (target == null) {
+            MessageUtil.sendActionBarMessage(player, DMessage.ERROR_TOO_MANY_INSTANCES.getMessage());
+            return;
         }
 
         new DGamePlayer(plugin, player, target);

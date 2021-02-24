@@ -119,10 +119,23 @@ public interface ResourceWorld {
     /**
      * Returns a new game instance of this resource.
      *
+     * @see de.erethon.dungeonsxl.api.dungeon.Game#ensureWorldIsLoaded(boolean)
      * @param ignoreLimit if the instance limit set in the main config shall be ignored
      * @return a new game instance of this resource
      */
-    GameWorld instantiateGameWorld(boolean ignoreLimit);
+    default GameWorld instantiateGameWorld(boolean ignoreLimit) {
+        return instantiateGameWorld(getSingleFloorDungeon(), ignoreLimit);
+    }
+
+    /**
+     * Returns a new game instance of this resource.
+     *
+     * @see de.erethon.dungeonsxl.api.dungeon.Game#ensureWorldIsLoaded(boolean)
+     * @param dungeon     the dungeon this game world will be part of
+     * @param ignoreLimit if the instance limit set in the main config shall be ignored
+     * @return a new game instance of this resource
+     */
+    GameWorld instantiateGameWorld(Dungeon dungeon, boolean ignoreLimit);
 
     /**
      * Returns the single floor dungeon of this resource.

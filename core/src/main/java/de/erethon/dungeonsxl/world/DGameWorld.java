@@ -98,9 +98,13 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     private boolean readySign;
 
-    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder) {
+    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, Game game) {
         super(plugin, resourceWorld, folder);
         caliburn = plugin.getCaliburn();
+        if (game == null) {
+            throw new IllegalArgumentException("Game must not be null");
+        }
+        this.game = game;
     }
 
     @Override
@@ -115,14 +119,6 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     @Override
     public Game getGame() {
-        if (game == null) {
-            for (Game game : plugin.getGameCache()) {
-                if (game.getWorld() == this) {
-                    this.game = game;
-                }
-            }
-        }
-
         return game;
     }
 

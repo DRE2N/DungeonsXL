@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.world;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.world.EditWorldGenerateEvent;
 import de.erethon.dungeonsxl.api.event.world.ResourceWorldInstantiateEvent;
@@ -25,7 +26,7 @@ import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.util.commons.compatibility.Version;
 import de.erethon.dungeonsxl.util.commons.misc.FileUtil;
@@ -176,12 +177,12 @@ public class DResourceWorld implements ResourceWorld {
         FileUtil.copyDir(folder, target);
     }
 
-    public DInstanceWorld instantiate(boolean game) {
+    public DInstanceWorld instantiate(Game game) {
         plugin.setLoadingWorld(true);
-        String name = DInstanceWorld.generateName(game);
+        String name = DInstanceWorld.generateName(game != null);
         File instanceFolder = new File(Bukkit.getWorldContainer(), name);
 
-        DInstanceWorld instance = game ? new DGameWorld(plugin, this, instanceFolder) : new DEditWorld(plugin, this, instanceFolder);
+        DInstanceWorld instance = game != null ? new DGameWorld(plugin, this, instanceFolder, game) : new DEditWorld(plugin, this, instanceFolder);
         ResourceWorldInstantiateEvent event = new ResourceWorldInstantiateEvent(this, name);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -199,7 +200,7 @@ public class DResourceWorld implements ResourceWorld {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause none");
         }
 
-        if (game) {
+        if (game != null) {
             signData.deserializeSigns((DGameWorld) instance);
             instance.getWorld().setAutoSave(false);
         } else {
@@ -227,19 +228,19 @@ public class DResourceWorld implements ResourceWorld {
             return null;
         }
 
-        editWorld = (EditWorld) instantiate(false);
+        editWorld = (EditWorld) instantiate(null);
         return editWorld;
     }
 
     @Override
-    public GameWorld instantiateGameWorld(boolean ignoreLimit) {
+    public GameWorld instantiateGameWorld(Dungeon dungeon, boolean ignoreLimit) {
         if (plugin.isLoadingWorld()) {
             return null;
         }
         if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= plugin.getInstanceCache().size()) {
             return null;
         }
-        return (DGameWorld) instantiate(true);
+        return (DGameWorld) instantiate(new DGame(plugin, dungeon));
     }
 
     @Override

@@ -187,6 +187,14 @@ public interface Game {
     boolean isEmpty();
 
     /**
+     * Returns and, if necessary, instantiates the game world.
+     *
+     * @param ignoreLimit if the instance limit set in the main config shall be ignored
+     * @return the game world
+     */
+    GameWorld ensureWorldIsLoaded(boolean ignoreLimit);
+
+    /**
      * Starts the game. This is what happens when the ready sign is triggered by everyone.
      *
      * @return if the game has started correctly
