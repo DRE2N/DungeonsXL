@@ -164,9 +164,10 @@ public class ReadySign extends Button {
     }
 
     private void ready(GamePlayer player) {
-        if (player == null || player.isReady()) {
+        if (player == null) {
             return;
         }
+        boolean wasReady = player.isReady();
 
         if (!getGameWorld().areClassesEnabled() || player.getPlayerClass() != null) {
             if (player.ready() && bar != null) {
@@ -174,10 +175,12 @@ public class ReadySign extends Button {
             }
         }
 
-        if (player.isReady()) {
-            player.sendMessage(DMessage.PLAYER_READY.getMessage());
-        } else if (getGameWorld().areClassesEnabled()) {
-            player.sendMessage(DMessage.ERROR_READY.getMessage());
+        if (!wasReady) {
+            if (player.isReady()) {
+                player.sendMessage(DMessage.PLAYER_READY.getMessage());
+            } else if (getGameWorld().areClassesEnabled()) {
+                player.sendMessage(DMessage.ERROR_READY.getMessage());
+            }
         }
     }
 

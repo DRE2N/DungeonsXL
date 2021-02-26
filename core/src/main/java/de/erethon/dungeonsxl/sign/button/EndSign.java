@@ -130,6 +130,7 @@ public class EndSign extends Button {
             return true;
         }
 
+        // TODO: Group with 2 players, player A finishs, player B leaves
         if (dPlayer.isFinished()) {
             return true;
         }
