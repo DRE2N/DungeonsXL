@@ -76,7 +76,7 @@ public class PortalCommand extends DCommand {
             MessageUtil.sendMessage(player, DMessage.PLAYER_PORTAL_INTRODUCTION.getMessage());
 
         } else {
-            if (args.length == 3 && VanillaItem.NETHER_PORTAL.getName().equalsIgnoreCase(args[1])) {
+            if (args.length == 3 && VanillaItem.NETHER_PORTAL.getId().equalsIgnoreCase(args[1])) {
                 if (args[2].equalsIgnoreCase("-rotate")) {
                     dPortal.rotate();
                 }

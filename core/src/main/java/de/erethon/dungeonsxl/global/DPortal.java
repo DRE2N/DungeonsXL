@@ -211,11 +211,11 @@ public class DPortal extends GlobalProtection {
             player.setCreatingPortal(null);
 
         } else {
-            ClickEvent onClickYes = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl portal NETHER_PORTAL -rotate");
+            ClickEvent onClickYes = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl portal " + VanillaItem.NETHER_PORTAL.getId() + " -rotate");
             TextComponent yes = new TextComponent(DMessage.BUTTON_ACCEPT.getMessage());
             yes.setClickEvent(onClickYes);
 
-            ClickEvent onClickNo = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl portal NETHER_PORTAL -norotate");
+            ClickEvent onClickNo = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl portal " + VanillaItem.NETHER_PORTAL.getId() + " -norotate");
             TextComponent no = new TextComponent(DMessage.BUTTON_DENY.getMessage());
             no.setClickEvent(onClickNo);
 

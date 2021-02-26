@@ -212,7 +212,7 @@ public class RewardChest extends GameBlock {
                         }
                     }
                     if (name == null) {
-                        name = VanillaItem.get(itemStack.getType()).getName().replace("_", " ");
+                        name = VanillaItem.get(itemStack.getType()).getName();
                     }
                     msg += ChatColor.RED + " " + itemStack.getAmount() + " " + name + ChatColor.GOLD + ",";
                 }
