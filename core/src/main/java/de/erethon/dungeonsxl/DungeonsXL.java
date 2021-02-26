@@ -136,7 +136,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private Registry<Integer, InstanceWorld> instanceCache = new Registry<>();
     private Registry<String, GameRule> gameRuleRegistry = new GameRuleRegistry();
     private Registry<String, ExternalMobProvider> externalMobProviderRegistry = new Registry<>();
-    private Registry<String, PlayerGroup> playerGroupCache = new Registry<>();
+    private Registry<String, PlayerGroup> playerGroupCache = new PlayerGroupCache();
     private Collection<GroupAdapter> groupAdapters = new ArrayList<>();
 
     @Deprecated
@@ -173,6 +173,24 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
                 }
                 dungeonRegistry.forEach(Dungeon::setupRules);
             }
+        }
+
+    }
+
+    private class PlayerGroupCache extends Registry<String, PlayerGroup> {
+
+        @Override
+        public PlayerGroup get(String key) {
+            PlayerGroup group = elements.get(key);
+            if (group != null) {
+                return group;
+            }
+            for (PlayerGroup value : elements.values()) {
+                if (((DGroup) value).getUntaggedName().equalsIgnoreCase(key)) {
+                    return value;
+                }
+            }
+            return null;
         }
 
     }

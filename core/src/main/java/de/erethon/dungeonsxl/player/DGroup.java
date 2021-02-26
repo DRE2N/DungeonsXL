@@ -68,6 +68,7 @@ public class DGroup implements PlayerGroup {
 
     private int id;
     private String name;
+    private String untaggedName;
     private GroupSign groupSign;
     private Player captain;
     private PlayerCollection players = new PlayerCollection();
@@ -94,9 +95,10 @@ public class DGroup implements PlayerGroup {
         this.plugin = plugin;
         dPlayers = plugin.getPlayerCache();
 
-        plugin.getGroupCache().add(name, this);
         id = counter++;
+        untaggedName = name;
         this.name = name + "#" + id;
+        plugin.getGroupCache().add(this.name, this);
 
         GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(player), true);
         Bukkit.getPluginManager().callEvent(event);
@@ -123,9 +125,10 @@ public class DGroup implements PlayerGroup {
         this.plugin = plugin;
         dPlayers = plugin.getPlayerCache();
 
-        plugin.getGroupCache().add(name, this);
         id = counter++;
+        untaggedName = name;
         this.name = name + "#" + id;
+        plugin.getGroupCache().add(this.name, this);
 
         GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(captain), true);
         Bukkit.getPluginManager().callEvent(event);
@@ -167,6 +170,10 @@ public class DGroup implements PlayerGroup {
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUntaggedName() {
+        return untaggedName;
     }
 
     public GroupSign getGroupSign() {
