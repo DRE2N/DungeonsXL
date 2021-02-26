@@ -374,15 +374,11 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
     @Override
     public void leave(boolean message) {
-        Game game = plugin.getGame(getWorld());
-        if (game == null) {
+        if (getGame() == null) {
             return;
         }
-        DGameWorld gameWorld = (DGameWorld) game.getWorld();
-        if (gameWorld == null) {
-            return;
-        }
-        GameRuleContainer rules = game.getRules();
+        plugin.log("GameWorld must not be null", getGameWorld(), w -> w != null);
+        GameRuleContainer rules = getGame().getRules();
         delete();
 
         if (player.isOnline()) {
@@ -400,7 +396,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             dGroup.removeMember(getPlayer(), message);
         }
 
-        if (game != null && finished && game.hasRewards()) {
+        if (getGame() != null && finished && getGame().hasRewards()) {
             List<Reward> rewards = new ArrayList<>(dGroup.getRewards());
             rewards.addAll(rules.getState(GameRule.REWARDS));
             GlobalPlayerRewardPayOutEvent globalPlayerPayOutRewardEvent = new GlobalPlayerRewardPayOutEvent(this, rewards);
@@ -412,7 +408,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             getData().logTimeLastFinished(getGroup().getDungeonName());
 
             // Tutorial Permissions
-            if (game.isTutorial()) {
+            if (getGame().isTutorial()) {
                 getData().setFinishedTutorial(true);
                 if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
                     String endGroup = plugin.getMainConfig().getTutorialEndGroup();
@@ -445,7 +441,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
                 if (groupPlayer != null) {
                     for (ItemStack itemStack : getPlayer().getInventory()) {
                         if (itemStack != null) {
-                            if (gameWorld.getSecureObjects().contains(itemStack)) {
+                            if (((DGameWorld) getGameWorld()).getSecureObjects().contains(itemStack)) {
                                 groupPlayer.getInventory().addItem(itemStack);
                             }
                         }
@@ -470,8 +466,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             }
         }
 
-        if (gameWorld.getPlayers().isEmpty()) {
-            gameWorld.delete();
+        if (getGameWorld().getPlayers().isEmpty()) {
+            getGameWorld().delete();
         }
     }
 
