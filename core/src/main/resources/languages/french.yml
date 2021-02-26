@@ -206,7 +206,7 @@ player:
   livesRemoved: "&6Vous perdez &4&v1&6 vies."
   lootAdded: "&4&v1&6 a été rajouté à votre inventaire de récompenses."
   newLeader: "&6Vous êtes maintenant le nouveau capitaine du groupe."
-  offline: "&Le joueur &4&v1&6 est passé hors ligne. Dans &4&v2&6 secondes il va être automatiquement éjecté du donjon."
+  offline: "&6Le joueur &4&v1&6 est passé hors ligne. Dans &4&v2&6 secondes il va être automatiquement éjecté du donjon."
   offlineNever: "&6Le joueur &4&v1&6 est passé hors ligne. Il ne va &4pas&6 être éjecté du donjon automatiquement."
   portal:
     abort: "&6Création de portails annulée."

@@ -206,7 +206,7 @@ player:
   livesRemoved: "&6Du hast &4&v1&6 Leben verloren."
   lootAdded: "&4&v1&6 wurden Deinem Belohnungsinventar hinzugefügt."
   newLeader: "&6Du bist jetzt der neue Kapitän Deiner Gruppe."
-  offline: "&Der Spieler &4&v1&6 hat den Server verlassen. In &4&v2&6 Sekunden wird er automatisch aus dem Spiel geworfen."
+  offline: "&6Der Spieler &4&v1&6 hat den Server verlassen. In &4&v2&6 Sekunden wird er automatisch aus dem Spiel geworfen."
   offlineNever: "&6Der Spieler &4&v1&6 hat den Server verlassen. Er wird aber &4nicht&6 automatisch aus dem Spiel geworfen."
   portal:
     abort: "&6Das Erstellen des Portals wurde abgebrochen."
