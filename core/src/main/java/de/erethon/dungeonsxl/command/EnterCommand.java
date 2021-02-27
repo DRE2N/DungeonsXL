@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent.Cause;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -73,9 +74,11 @@ public class EnterCommand extends DCommand {
             MessageUtil.sendMessage(sender, DMessage.ERROR_LEAVE_GAME.getMessage());
             return;
         }
-
         if (joining == null) {
-            joining = new DGroup(plugin, captain, game.getDungeon());
+            joining = DGroup.create(plugin, Cause.COMMAND, captain, null, null, game.getDungeon());
+        }
+        if (joining == null) {
+            return;
         }
 
         if (joining.getLeader() != captain && !DPermission.hasPermission(sender, DPermission.BYPASS)) {

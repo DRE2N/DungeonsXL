@@ -23,6 +23,7 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.group.GroupCollectRewardEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupDisbandEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupFinishDungeonEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupFinishFloorEvent;
@@ -45,7 +46,6 @@ import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.util.commons.player.PlayerCollection;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -83,72 +83,34 @@ public class DGroup implements PlayerGroup {
     private int initialLives = -1;
     private int lives = -1;
 
-    public DGroup(DungeonsXL plugin, Player player) {
-        this(plugin, "Group", player);
+    private DGroup() {
     }
 
-    public DGroup(DungeonsXL plugin, Player player, Color color) {
-        this(plugin, color.toString(), player);
-    }
+    public static DGroup create(DungeonsXL plugin, GroupCreateEvent.Cause cause, Player leader, String name, Color color, Dungeon dungeon) {
+        if (name == null) {
+            name = color != null ? color.toString() : "Group";
+        }
 
-    public DGroup(DungeonsXL plugin, String name, Player player) {
-        this.plugin = plugin;
-        dPlayers = plugin.getPlayerCache();
+        DGroup group = new DGroup();
+        group.plugin = plugin;
+        group.dPlayers = plugin.getPlayerCache();
 
-        id = counter++;
-        untaggedName = name;
-        this.name = name + "#" + id;
-        plugin.getGroupCache().add(this.name, this);
+        group.id = counter++;
+        group.untaggedName = name;
+        group.name = name + "#" + group.id;
+        group.color = color;
+        group.dungeon = dungeon;
+        group.playing = false;
+        group.addMember(leader);
+        group.setLeader(leader);
 
-        GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(player), true);
+        GroupCreateEvent event = new GroupCreateEvent(group, plugin.getPlayerCache().get(leader), cause);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            setLeader(player);
-            addMember(player);
-        } else {
-            plugin.getGroupCache().remove(this);
-            return;
+            plugin.getGroupCache().add(group.name, group);
+            return group;
         }
-
-        playing = false;
-    }
-
-    public DGroup(DungeonsXL plugin, Player player, Dungeon dungeon) {
-        this(plugin, "Group", player, dungeon);
-    }
-
-    public DGroup(DungeonsXL plugin, String name, Player player, Dungeon dungeon) {
-        this(plugin, name, player, new ArrayList<Player>(), dungeon);
-    }
-
-    public DGroup(DungeonsXL plugin, String name, Player captain, Collection<Player> players, Dungeon dungeon) {
-        this.plugin = plugin;
-        dPlayers = plugin.getPlayerCache();
-
-        id = counter++;
-        untaggedName = name;
-        this.name = name + "#" + id;
-        plugin.getGroupCache().add(this.name, this);
-
-        GroupPlayerJoinEvent event = new GroupPlayerJoinEvent(this, dPlayers.get(captain), true);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            this.captain = captain;
-            this.players.add(captain);
-        }
-
-        for (Player player : players) {
-            if (!this.players.contains(player)) {
-                addMember(player);
-            }
-        }
-        if (getMembers().size() == 0) {
-            plugin.getGroupCache().remove(this);
-            return;
-        }
-
-        this.dungeon = dungeon;
-        playing = false;
+        return null;
     }
 
     // Getters and setters

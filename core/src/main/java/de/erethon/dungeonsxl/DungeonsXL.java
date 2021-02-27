@@ -29,6 +29,7 @@ import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.player.GroupAdapter;
@@ -680,27 +681,31 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     /* Object initialization */
     @Override
     public PlayerGroup createGroup(Player leader) {
-        return new DGroup(this, leader);
+        return DGroup.create(this, GroupCreateEvent.Cause.CUSTOM, leader, null, null, null);
     }
 
     @Override
     public PlayerGroup createGroup(Player leader, PlayerGroup.Color color) {
-        return new DGroup(this, leader, color);
+        return DGroup.create(this, GroupCreateEvent.Cause.CUSTOM, leader, null, color, null);
     }
 
     @Override
     public PlayerGroup createGroup(Player leader, String name) {
-        return new DGroup(this, name, leader);
+        return DGroup.create(this, GroupCreateEvent.Cause.CUSTOM, leader, name, null, null);
     }
 
     @Override
     public PlayerGroup createGroup(Player leader, Dungeon dungeon) {
-        return new DGroup(this, leader, dungeon);
+        return DGroup.create(this, GroupCreateEvent.Cause.CUSTOM, leader, null, null, dungeon);
     }
 
     @Override
     public PlayerGroup createGroup(Player leader, Collection<Player> members, String name, Dungeon dungeon) {
-        return new DGroup(this, name, leader, members, dungeon);
+        PlayerGroup group = DGroup.create(this, GroupCreateEvent.Cause.CUSTOM, leader, name, null, dungeon);
+        if (members != null) {
+            members.forEach(group::addMember);
+        }
+        return group;
     }
 
     @Override

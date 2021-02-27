@@ -18,7 +18,7 @@ package de.erethon.dungeonsxl.announcer;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
-import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent.Cause;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGroup;
@@ -33,7 +33,6 @@ import java.util.List;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -368,10 +367,9 @@ public class Announcer {
             }
 
         } else if (dGroup == null && pGroup == null) {
-            GroupCreateEvent event = new GroupCreateEvent(dGroup, plugin.getPlayerCache().get(player), GroupCreateEvent.Cause.ANNOUNCER);
-            Bukkit.getPluginManager().callEvent(event);
-            if (!event.isCancelled()) {
-                dGroups.set(buttons.indexOf(button), new DGroup(plugin, player, color));
+            DGroup group = DGroup.create(plugin, Cause.ANNOUNCER, player, null, color, null);
+            if (group != null) {
+                dGroups.set(buttons.indexOf(button), group);
             }
 
         } else if (dGroup == null && pGroup != null) {

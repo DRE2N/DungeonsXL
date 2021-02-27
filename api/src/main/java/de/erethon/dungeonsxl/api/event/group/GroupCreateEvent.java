@@ -40,6 +40,7 @@ public class GroupCreateEvent extends GroupEvent implements Cancellable {
          */
         GROUP_ADAPTER,
         GROUP_SIGN,
+        TUTORIAL,
         /**
          * When a group is created by an addon.
          */

@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent.Cause;
 import de.erethon.dungeonsxl.api.event.group.GroupDisbandEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupPlayerKickEvent;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -121,15 +121,8 @@ public class GroupCommand extends DCommand {
             return;
         }
 
-        DGroup dGroup = new DGroup(plugin, args[2], player);
-        GroupCreateEvent event = new GroupCreateEvent(dGroup, plugin.getPlayerCache().get(player), GroupCreateEvent.Cause.COMMAND);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            dGroup.delete();
-            dGroup = null;
-
-        } else {
+        DGroup dGroup = DGroup.create(plugin, Cause.COMMAND, player, args[2], null, null);
+        if (dGroup != null) {
             MessageUtil.sendMessage(sender, DMessage.GROUP_CREATED.getMessage(sender.getName(), args[2]));
         }
     }

@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.caliburn.category.Category;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent.Cause;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
@@ -164,13 +165,11 @@ public class GroupSign extends JoinSign {
                 return;
             }
 
-            if (groupName != null) {
-                group = new DGroup(plugin, groupName, player, dungeon);
-                group.setGroupSign(this);
-            } else {
-                group = new DGroup(plugin, player, dungeon);
-                group.setGroupSign(this);
+            group = DGroup.create(plugin, Cause.GROUP_SIGN, player, groupName, null, dungeon);
+            if (group == null) {
+                return;
             }
+            group.setGroupSign(this);
             update();
 
         } else if (topSign.getLine(0).equals(DMessage.SIGN_GLOBAL_JOIN_GROUP.getMessage())) {

@@ -23,7 +23,7 @@ import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
-import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent.Cause;
 import de.erethon.dungeonsxl.api.event.requirement.RequirementCheckEvent;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
@@ -544,12 +544,8 @@ public class DGlobalPlayer implements GlobalPlayer {
             }
         }
 
-        DGroup dGroup = new DGroup(plugin, player, dungeon);
-
-        GroupCreateEvent createEvent = new GroupCreateEvent(dGroup, this, GroupCreateEvent.Cause.GROUP_SIGN);
-        Bukkit.getPluginManager().callEvent(createEvent);
-        if (createEvent.isCancelled()) {
-            dGroup = null;
+        DGroup dGroup = DGroup.create(plugin, Cause.TUTORIAL, player, null, null, dungeon);
+        if (dGroup == null) {
             return;
         }
 

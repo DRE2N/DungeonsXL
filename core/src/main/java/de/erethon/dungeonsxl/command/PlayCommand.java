@@ -29,7 +29,6 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -69,12 +68,9 @@ public class PlayCommand extends DCommand {
             MessageUtil.sendMessage(player, DMessage.ERROR_LEAVE_GROUP.getMessage());
             return;
         } else if (group == null) {
-            group = new DGroup(plugin, player, dungeon);
-            GroupCreateEvent event = new GroupCreateEvent(group, dPlayer, GroupCreateEvent.Cause.COMMAND);
-            Bukkit.getPluginManager().callEvent(event);
-            if (event.isCancelled()) {
-                plugin.getGroupCache().remove(group);
-                group = null;
+            group = DGroup.create(plugin, GroupCreateEvent.Cause.COMMAND, player, null, null, dungeon);
+            if (group == null) {
+                return;
             }
         }
         if (!group.getLeader().equals(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
