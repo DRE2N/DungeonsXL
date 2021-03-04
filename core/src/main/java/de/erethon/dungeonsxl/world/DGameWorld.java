@@ -556,6 +556,10 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             return false;
         }
 
+        if(getRules().getState(GameRule.BREAK_BLOCKS)){
+            return false;
+        }
+
         return true;
     }
 

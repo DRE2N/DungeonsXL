@@ -226,7 +226,7 @@ public class DWorldListener implements Listener {
         }
         GameRuleContainer rules = gameWorld.getDungeon().getRules();
         Set<ExMob> prot = interact ? rules.getState(GameRule.INTERACTION_PROTECTED_ENTITIES) : rules.getState(GameRule.DAMAGE_PROTECTED_ENTITIES);
-        if (prot.contains(caliburn.getExMob(entity))) {
+        if (!rules.getState(GameRule.BREAK_BLOCKS) && prot.contains(caliburn.getExMob(entity))) {
             event.setCancelled(true);
         }
     }
