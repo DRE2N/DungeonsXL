@@ -36,7 +36,7 @@ import org.bukkit.entity.Player;
  */
 public class CommandSign extends Windup {
 
-    private enum Executor {
+    public enum Executor {
         DEFAULT,
         OP,
         CONSOLE
@@ -76,6 +76,10 @@ public class CommandSign extends Windup {
     @Override
     public boolean isSetToAir() {
         return true;
+    }
+
+    public Executor getExecutor() {
+        return executor;
     }
 
     @Override
@@ -159,12 +163,11 @@ public class CommandSign extends Windup {
     public boolean activate(Player player) {
         CommandSender sender = player;
         boolean wasOp = player.isOp();
-        if (executor == Executor.OP) {
-            player.setOp(true);
-        } else if (executor == Executor.CONSOLE) {
+        if (executor == Executor.CONSOLE) {
             sender = Bukkit.getConsoleSender();
         }
         ((CommandTask) getRunnable()).setSender(sender, wasOp);
+        ((CommandTask) getRunnable()).setPlayer(player);
         startTask();
         active = true;
         return true;

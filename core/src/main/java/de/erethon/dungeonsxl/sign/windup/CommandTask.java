@@ -47,6 +47,10 @@ public class CommandTask extends BukkitRunnable {
         this.wasOp = wasOp;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     @Override
     public void run() {
         if (sign.isWorldFinished()) {
@@ -56,22 +60,23 @@ public class CommandTask extends BukkitRunnable {
         if (k >= script.getCommands().size()) {
             sign.deactivate();
             k = 0;
+            return;
         }
 
         String command = script.getCommands().get(k++)
-                .replace("%player%", sender.getName()).replace("%player_name%", sender.getName())
                 .replace("%world%", sign.getGameWorld().getWorld().getName()).replace("%world_name%", sign.getGameWorld().getWorld().getName());
+        if (player != null) {
+            command = command.replace("%player%", player.getName()).replace("%player_name%", player.getName());
+        }
+        if (sign.getExecutor() == CommandSign.Executor.OP) {
+            sender.setOp(true);
+        }
         if (papi) {
             Bukkit.getServer().dispatchCommand(sender, PlaceholderAPI.setPlaceholders(player, command));
         } else {
             Bukkit.getServer().dispatchCommand(sender, command);
         }
-    }
-
-    @Override
-    public void cancel() {
-        super.cancel();
-        if (sender != Bukkit.getConsoleSender()) {
+        if (sign.getExecutor() == CommandSign.Executor.OP) {
             sender.setOp(wasOp);
         }
     }
