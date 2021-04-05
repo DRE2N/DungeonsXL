@@ -99,10 +99,8 @@ public class ReloadCommand extends DCommand {
 
         plugin.onDisable();
         plugin.initFolders();
-        plugin.loadConfig();
-        plugin.createCaches();
         plugin.initCaches();
-        plugin.loadData();
+        plugin.checkState();
 
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());

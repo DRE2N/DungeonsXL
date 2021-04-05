@@ -38,8 +38,6 @@ public class StatusCommand extends DCommand {
     public static final String TRUE = ChatColor.GREEN + "\u2714";
     public static final String FALSE = ChatColor.DARK_RED + "\u2718";
 
-    public static final String LATEST_IXL = "0.6.5";
-
     public StatusCommand(DungeonsXL plugin) {
         super(plugin);
         setCommand("status");
@@ -113,7 +111,7 @@ public class StatusCommand extends DCommand {
         String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.7"));
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
         String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
-        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals(LATEST_IXL));
+        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals(DungeonsXL.LATEST_IXL));
         String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));
         String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
         String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("3."));

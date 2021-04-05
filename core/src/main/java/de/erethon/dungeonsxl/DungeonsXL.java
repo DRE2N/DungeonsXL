@@ -42,7 +42,6 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.command.DCommandCache;
-import de.erethon.dungeonsxl.command.StatusCommand;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
@@ -109,15 +108,24 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
+    /* Plugin & lib instances */
     private static DungeonsXL instance;
     private CaliburnAPI caliburn;
 
+    /* Util instances */
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
 
+    /* Constants */
+    public static final String LATEST_CALIBURN = "1.0-RC-07";
+    public static final String LATEST_IXL = "0.6.7";
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
+
+    /* Folders of internal features */
     public static final File ANNOUNCERS = new File(SCRIPTS, "announcers");
     public static final File SIGNS = new File(SCRIPTS, "signs");
     public static final File COMMANDS = new File(SCRIPTS, "commands");
+
+    /* Legacy */
     public static final Map<String, Class<? extends DungeonSign>> LEGACY_SIGNS = new HashMap<>();
 
     static {
@@ -126,6 +134,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         LEGACY_SIGNS.put("FLOOR", EndSign.class);
     }
 
+    /* Caches & registries */
     private PlayerCache playerCache = new PlayerCache();
     private Collection<Game> gameCache = new ArrayList<>();
     private Registry<String, PlayerClass> classRegistry = new Registry<>();
@@ -196,17 +205,19 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     }
 
+    /* Global state variables */
     private boolean loaded, loadingWorld;
 
     private GlobalData globalData;
     private MainConfig mainConfig;
 
+    /* Caches & registries of internal features */
     private DCommandCache dCommands;
     private TriggerTypeCache triggers;
     private GlobalProtectionCache protections;
     private AnnouncerCache announcers;
-    private Registry<String, SignScript> signScriptRegistry;
-    private Registry<String, CommandScript> commandScriptRegistry;
+    private Registry<String, SignScript> signScriptRegistry = new Registry<>();
+    private Registry<String, CommandScript> commandScriptRegistry = new Registry<>();
 
     public DungeonsXL() {
         settings = DREPluginSettings.builder()
@@ -224,9 +235,9 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public void onEnable() {
         super.onEnable();
         String ixlVersion = manager.isPluginEnabled("ItemsXL") ? manager.getPlugin("ItemsXL").getDescription().getVersion() : "";
-        if (ixlVersion.startsWith("0.[0-5]") || ixlVersion.equals("0.6") || ixlVersion.matches("0.6.[1-3]")) {
-            getLogger().log(Level.SEVERE, "DungeonsXL includes v1.0-RC-03 of the Caliburn custom item library. ItemsXL must implement the same or a newer, "
-                    + "but still compatible version of this library. This build of DungeonsXL is compatible with ItemsXL v" + StatusCommand.LATEST_IXL
+        if (ixlVersion.startsWith("0.[0-5]") || ixlVersion.equals("0.6") || ixlVersion.matches("0.6.[1-6]")) {
+            getLogger().log(Level.SEVERE, "DungeonsXL includes v" + LATEST_CALIBURN + " of the Caliburn custom item library. ItemsXL must implement the same or a newer, "
+                    + "but still compatible version of this library. This build of DungeonsXL is compatible with ItemsXL v" + LATEST_IXL
                     + " and, possibly, higher. The latest DXL and IXL versions available on SpigotMC.org should always be compatible with each other.");
             manager.disablePlugin(this);
             return;
@@ -237,18 +248,10 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
         instance = this;
         initFolders();
-        if (CaliburnAPI.getInstance() == null) {
-            caliburn = new CaliburnAPI(this);
-            caliburn.loadDataFiles();
-            caliburn.finishInitialization();
-        } else {
-            caliburn = CaliburnAPI.getInstance();
-        }
+        loadCaliburn();
         DPermission.register();
-        loadConfig();
-        createCaches();
         initCaches();
-        loadData();
+        checkState();
         if (manager.isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderUtil(this, "dxl").register();
         }
@@ -287,11 +290,23 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         COMMANDS.mkdir();
     }
 
-    public void loadConfig() {
-        mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
+    public void loadCaliburn() {
+        if (CaliburnAPI.getInstance() == null) {
+            caliburn = new CaliburnAPI(this);
+            caliburn.loadDataFiles();
+            caliburn.finishInitialization();
+        } else {
+            caliburn = CaliburnAPI.getInstance();
+        }
     }
 
-    public void createCaches() {
+    public void initCaches() {
+        /* Legacy caches */
+        triggers = new TriggerTypeCache();
+        protections = new GlobalProtectionCache(this);
+        announcers = new AnnouncerCache(this);
+
+        /* Add default values */
         requirementRegistry.add("feeLevel", FeeLevelRequirement.class);
         requirementRegistry.add("feeMoney", FeeMoneyRequirement.class);
         requirementRegistry.add("forbiddenItems", ForbiddenItemsRequirement.class);
@@ -304,20 +319,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         rewardRegistry.add("money", MoneyReward.class);
         rewardRegistry.add("level", LevelReward.class);
 
-        triggers = new TriggerTypeCache();
-        protections = new GlobalProtectionCache(this);
-        announcers = new AnnouncerCache(this);
-        signScriptRegistry = new Registry<>();
-        commandScriptRegistry = new Registry<>();
-        dCommands = new DCommandCache(this);
-    }
-
-    public void initCaches() {
-        // Requirements
-        Bukkit.getPluginManager().registerEvents(new RewardListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new TriggerListener(this), this);
-
-        // Signs
         signRegistry.add("ACTIONBAR", ActionBarSign.class);
         signRegistry.add("BED", BedSign.class);
         signRegistry.add("BLOCK", BlockSign.class);
@@ -351,26 +352,24 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         signRegistry.add("TITLE", TitleSign.class);
         signRegistry.add("TRIGGER", TriggerSign.class);
         signRegistry.add("WAVE", WaveSign.class);
-        Bukkit.getPluginManager().registerEvents(new DSignListener(this), this);
 
         for (GameRule rule : GameRule.VALUES) {
             gameRuleRegistry.add(rule.getKey(), rule);
         }
 
+        mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
+
+        /* Maps & dungeons */
         // Maps
         for (File file : MAPS.listFiles()) {
             if (file.isDirectory() && !file.getName().equals(".raw")) {
                 mapRegistry.add(file.getName(), new DResourceWorld(this, file));
             }
         }
-        if (!DResourceWorld.RAW.exists()) {
-            DResourceWorld.createRaw();
+        // Dungeons - Map dungeons
+        for (ResourceWorld resource : mapRegistry) {
+            dungeonRegistry.add(resource.getName(), new DDungeon(this, resource));
         }
-        Bukkit.getPluginManager().registerEvents(new DWorldListener(this), this);
-        if (LWCUtil.isLWCLoaded()) {
-            new LWCIntegration(this);
-        }
-
         // Dungeons - Linked dungeons
         for (File file : DUNGEONS.listFiles()) {
             Dungeon dungeon = DDungeon.create(this, file);
@@ -382,24 +381,40 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
                         + "&4 is incorrect. See https://github.com/DRE2N/DungeonsXL/wiki/dungeon-configuration for reference.");
             }
         }
-        // Dungeons - Map dungeons
-        for (ResourceWorld resource : mapRegistry) {
-            dungeonRegistry.add(resource.getName(), new DDungeon(this, resource));
+        // Raw map to copy
+        if (!DResourceWorld.RAW.exists()) {
+            DResourceWorld.createRaw();
         }
 
-        // Global
-        Bukkit.getPluginManager().registerEvents(new GlobalProtectionListener(this), this);
+        /* Scripts & global data */
+        announcers.init(ANNOUNCERS);
+        for (File script : FileUtil.getFilesForFolder(CLASSES)) {
+            PlayerClass clss = new PlayerClass(caliburn, script);
+            classRegistry.add(clss.getName(), clss);
+        }
+        for (File script : FileUtil.getFilesForFolder(SIGNS)) {
+            SignScript sign = new SignScript(script);
+            signScriptRegistry.add(sign.getName(), sign);
+        }
+        for (File script : FileUtil.getFilesForFolder(COMMANDS)) {
+            CommandScript cmd = new CommandScript(script);
+            commandScriptRegistry.add(cmd.getName(), cmd);
+        }
         globalData = new GlobalData(this, new File(getDataFolder(), "data.yml"));
         globalData.load();
 
+        /* Integrations */
+        if (LWCUtil.isLWCLoaded()) {
+            new LWCIntegration(this);
+        }
         // Mobs - Supported providers
         for (ExternalMobPlugin externalMobPlugin : ExternalMobPlugin.values()) {
             externalMobProviderRegistry.add(externalMobPlugin.getIdentifier(), externalMobPlugin);
         }
-        if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+        if (manager.getPlugin("Citizens") != null) {
             CitizensMobProvider citizensMobProvider = new CitizensMobProvider();
             externalMobProviderRegistry.add("CI", citizensMobProvider);
-            Bukkit.getPluginManager().registerEvents(citizensMobProvider, this);
+            manager.registerEvents(citizensMobProvider, this);
         } else {
             MessageUtil.log(this, "Could not find compatible Citizens plugin. The mob provider Citizens (\"CI\") will not get enabled...");
         }
@@ -408,7 +423,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             externalMobProviderRegistry.add(customExternalMobProvider.getKey(), new CustomExternalMobProvider(customExternalMobProvider));
         }
 
-        // Players
+        /* Player tasks */
         if (mainConfig.isSecureModeEnabled()) {
             new SecureModeTask(this).runTaskTimer(this, mainConfig.getSecureModeCheckInterval(), mainConfig.getSecureModeCheckInterval());
         }
@@ -425,26 +440,16 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             }
         }.runTaskTimer(this, 20L, 20L);
 
-        Bukkit.getPluginManager().registerEvents(new DPlayerListener(this), this);
-
-        announcers.init(ANNOUNCERS);
-        for (File script : FileUtil.getFilesForFolder(CLASSES)) {
-            PlayerClass clss = new PlayerClass(caliburn, script);
-            classRegistry.add(clss.getName(), clss);
-        }
-        Bukkit.getPluginManager().registerEvents(new DMobListener(this), this);
-
-        for (File script : FileUtil.getFilesForFolder(SIGNS)) {
-            SignScript sign = new SignScript(script);
-            signScriptRegistry.add(sign.getName(), sign);
-        }
-
-        for (File script : FileUtil.getFilesForFolder(COMMANDS)) {
-            CommandScript cmd = new CommandScript(script);
-            commandScriptRegistry.add(cmd.getName(), cmd);
-        }
-
+        /* Initialize commands & listeners */
+        dCommands = new DCommandCache(this);
         dCommands.register(this);
+        manager.registerEvents(new DWorldListener(this), this);
+        manager.registerEvents(new GlobalProtectionListener(this), this);
+        manager.registerEvents(new RewardListener(this), this);
+        manager.registerEvents(new TriggerListener(this), this);
+        manager.registerEvents(new DSignListener(this), this);
+        manager.registerEvents(new DMobListener(this), this);
+        manager.registerEvents(new DPlayerListener(this), this);
     }
 
     public void saveData() {
@@ -452,7 +457,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         instanceCache.getAllIf(i -> i instanceof EditWorld).forEach(i -> ((DEditWorld) i).forceSave());
     }
 
-    public void loadData() {
+    public void checkState() {
         Bukkit.getOnlinePlayers().forEach(p -> new DGlobalPlayer(this, p));
 
         for (File file : Bukkit.getWorldContainer().listFiles()) {
