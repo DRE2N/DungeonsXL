@@ -22,6 +22,8 @@ import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
 import de.erethon.dungeonsxl.announcer.AnnouncerCache;
+import de.erethon.dungeonsxl.announcer.AnnouncerListener;
+import de.erethon.dungeonsxl.api.DungeonModule;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
@@ -45,7 +47,6 @@ import de.erethon.dungeonsxl.command.DCommandCache;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
-import de.erethon.dungeonsxl.global.GlobalData;
 import de.erethon.dungeonsxl.global.GlobalProtectionCache;
 import de.erethon.dungeonsxl.global.GlobalProtectionListener;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
@@ -60,13 +61,13 @@ import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.player.SecureModeTask;
 import de.erethon.dungeonsxl.player.groupadapter.*;
-import de.erethon.dungeonsxl.requirement.*;
-import de.erethon.dungeonsxl.reward.*;
+import de.erethon.dungeonsxl.reward.RewardListener;
 import de.erethon.dungeonsxl.sign.DSignListener;
-import de.erethon.dungeonsxl.sign.button.*;
-import de.erethon.dungeonsxl.sign.passive.*;
-import de.erethon.dungeonsxl.sign.rocker.*;
-import de.erethon.dungeonsxl.sign.windup.*;
+import de.erethon.dungeonsxl.sign.button.EndSign;
+import de.erethon.dungeonsxl.sign.passive.RewardChestSign;
+import de.erethon.dungeonsxl.sign.passive.SignScript;
+import de.erethon.dungeonsxl.sign.windup.CommandScript;
+import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.TriggerListener;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.LWCUtil;
@@ -135,19 +136,20 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     }
 
     /* Caches & registries */
-    private PlayerCache playerCache = new PlayerCache();
-    private Collection<Game> gameCache = new ArrayList<>();
-    private Registry<String, PlayerClass> classRegistry = new Registry<>();
-    private Registry<String, Class<? extends DungeonSign>> signRegistry = new SignRegistry();
-    private Registry<String, Class<? extends Requirement>> requirementRegistry = new Registry<>();
-    private Registry<String, Class<? extends Reward>> rewardRegistry = new Registry<>();
-    private Registry<String, Dungeon> dungeonRegistry = new Registry<>();
-    private Registry<String, ResourceWorld> mapRegistry = new Registry<>();
-    private Registry<Integer, InstanceWorld> instanceCache = new Registry<>();
-    private Registry<String, GameRule> gameRuleRegistry = new GameRuleRegistry();
-    private Registry<String, ExternalMobProvider> externalMobProviderRegistry = new Registry<>();
-    private Registry<String, PlayerGroup> playerGroupCache = new PlayerGroupCache();
-    private Collection<GroupAdapter> groupAdapters = new ArrayList<>();
+    private Set<DungeonModule> modules = new HashSet<>();
+    private Collection<GroupAdapter> groupAdapters = new HashSet<>();
+    private PlayerCache playerCache;
+    private Collection<Game> gameCache;
+    private Registry<String, PlayerClass> classRegistry;
+    private Registry<String, Class<? extends DungeonSign>> signRegistry;
+    private Registry<String, Class<? extends Requirement>> requirementRegistry;
+    private Registry<String, Class<? extends Reward>> rewardRegistry;
+    private Registry<String, Dungeon> dungeonRegistry;
+    private Registry<String, ResourceWorld> mapRegistry;
+    private Registry<Integer, InstanceWorld> instanceCache;
+    private Registry<String, GameRule> gameRuleRegistry;
+    private Registry<String, ExternalMobProvider> externalMobProviderRegistry;
+    private Registry<String, PlayerGroup> playerGroupCache;
 
     @Deprecated
     private class SignRegistry extends Registry<String, Class<? extends DungeonSign>> {
@@ -208,7 +210,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     /* Global state variables */
     private boolean loaded, loadingWorld;
 
-    private GlobalData globalData;
     private MainConfig mainConfig;
 
     /* Caches & registries of internal features */
@@ -216,8 +217,8 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private TriggerTypeCache triggers;
     private GlobalProtectionCache protections;
     private AnnouncerCache announcers;
-    private Registry<String, SignScript> signScriptRegistry = new Registry<>();
-    private Registry<String, CommandScript> commandScriptRegistry = new Registry<>();
+    private Registry<String, SignScript> signScriptRegistry;
+    private Registry<String, CommandScript> commandScriptRegistry;
 
     public DungeonsXL() {
         settings = DREPluginSettings.builder()
@@ -250,6 +251,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         initFolders();
         loadCaliburn();
         DPermission.register();
+        registerModule(new DXLModule());
         initCaches();
         checkState();
         if (manager.isPluginEnabled("PlaceholderAPI")) {
@@ -301,72 +303,34 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     }
 
     public void initCaches() {
-        /* Legacy caches */
-        triggers = new TriggerTypeCache();
-        protections = new GlobalProtectionCache(this);
-        announcers = new AnnouncerCache(this);
-
         /* Add default values */
-        requirementRegistry.add("feeLevel", FeeLevelRequirement.class);
-        requirementRegistry.add("feeMoney", FeeMoneyRequirement.class);
-        requirementRegistry.add("forbiddenItems", ForbiddenItemsRequirement.class);
-        requirementRegistry.add("groupSize", GroupSizeRequirement.class);
-        requirementRegistry.add("keyItems", KeyItemsRequirement.class);
-        requirementRegistry.add("permission", PermissionRequirement.class);
-        requirementRegistry.add("timeframe", TimeframeRequirement.class);
+        requirementRegistry = new Registry<>();
+        modules.forEach(m -> m.initRequirements(requirementRegistry));
 
-        rewardRegistry.add("item", ItemReward.class);
-        rewardRegistry.add("money", MoneyReward.class);
-        rewardRegistry.add("level", LevelReward.class);
+        rewardRegistry = new Registry<>();
+        modules.forEach(m -> m.initRewards(rewardRegistry));
 
-        signRegistry.add("ACTIONBAR", ActionBarSign.class);
-        signRegistry.add("BED", BedSign.class);
-        signRegistry.add("BLOCK", BlockSign.class);
-        signRegistry.add("BOSSSHOP", BossShopSign.class);
-        signRegistry.add("CHECKPOINT", CheckpointSign.class);
-        signRegistry.add("CLASSES", ClassesSign.class);
-        signRegistry.add("CMD", CommandSign.class);
-        signRegistry.add("DROP", DropSign.class);
-        signRegistry.add("DUNGEONCHEST", DungeonChestSign.class);
-        signRegistry.add("END", EndSign.class);
-        signRegistry.add("FLAG", FlagSign.class);
-        signRegistry.add("HOLOGRAM", HologramSign.class);
-        signRegistry.add("INTERACT", InteractSign.class);
-        signRegistry.add("LEAVE", LeaveSign.class);
-        signRegistry.add("LIVES", LivesModifierSign.class);
-        signRegistry.add("LOBBY", LobbySign.class);
-        signRegistry.add("MOB", MobSign.class);
-        signRegistry.add("MSG", ChatMessageSign.class);
-        signRegistry.add("NOTE", NoteSign.class);
-        signRegistry.add("DOOR", OpenDoorSign.class);
-        signRegistry.add("PLACE", PlaceSign.class);
-        signRegistry.add("PROTECTION", ProtectionSign.class);
-        signRegistry.add("READY", ReadySign.class);
-        signRegistry.add("REDSTONE", RedstoneSign.class);
-        signRegistry.add("RESOURCEPACK", ResourcePackSign.class);
-        signRegistry.add("REWARDCHEST", RewardChestSign.class);
-        signRegistry.add("SCRIPT", ScriptSign.class);
-        signRegistry.add("SOUNDMSG", SoundMessageSign.class);
-        signRegistry.add("START", StartSign.class);
-        signRegistry.add("TELEPORT", TeleportSign.class);
-        signRegistry.add("TITLE", TitleSign.class);
-        signRegistry.add("TRIGGER", TriggerSign.class);
-        signRegistry.add("WAVE", WaveSign.class);
+        signRegistry = new SignRegistry();
+        modules.forEach(m -> m.initSigns(signRegistry));
 
-        for (GameRule rule : GameRule.VALUES) {
-            gameRuleRegistry.add(rule.getKey(), rule);
-        }
+        gameRuleRegistry = new GameRuleRegistry();
+        modules.forEach(m -> m.initGameRules(gameRuleRegistry));
+
+        triggers = new TriggerTypeCache();
+        // modules.forEach(m -> m.initTriggers(triggerRegistry));
 
         mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
 
         /* Maps & dungeons */
         // Maps
+        mapRegistry = new Registry<>();
         for (File file : MAPS.listFiles()) {
             if (file.isDirectory() && !file.getName().equals(".raw")) {
                 mapRegistry.add(file.getName(), new DResourceWorld(this, file));
             }
         }
         // Dungeons - Map dungeons
+        dungeonRegistry = new Registry<>();
         for (ResourceWorld resource : mapRegistry) {
             dungeonRegistry.add(resource.getName(), new DDungeon(this, resource));
         }
@@ -387,27 +351,33 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         }
 
         /* Scripts & global data */
+        announcers = new AnnouncerCache(this);
+        manager.registerEvents(new AnnouncerListener(this), this);
         announcers.init(ANNOUNCERS);
+
+        classRegistry = new Registry<>();
         for (File script : FileUtil.getFilesForFolder(CLASSES)) {
             PlayerClass clss = new PlayerClass(caliburn, script);
             classRegistry.add(clss.getName(), clss);
         }
+        signScriptRegistry = new Registry<>();
         for (File script : FileUtil.getFilesForFolder(SIGNS)) {
             SignScript sign = new SignScript(script);
             signScriptRegistry.add(sign.getName(), sign);
         }
+        commandScriptRegistry = new Registry<>();
         for (File script : FileUtil.getFilesForFolder(COMMANDS)) {
             CommandScript cmd = new CommandScript(script);
             commandScriptRegistry.add(cmd.getName(), cmd);
         }
-        globalData = new GlobalData(this, new File(getDataFolder(), "data.yml"));
-        globalData.load();
+        protections = new GlobalProtectionCache(this);
 
         /* Integrations */
         if (LWCUtil.isLWCLoaded()) {
             new LWCIntegration(this);
         }
         // Mobs - Supported providers
+        externalMobProviderRegistry = new Registry<>();
         for (ExternalMobPlugin externalMobPlugin : ExternalMobPlugin.values()) {
             externalMobProviderRegistry.add(externalMobPlugin.getIdentifier(), externalMobPlugin);
         }
@@ -423,26 +393,39 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             externalMobProviderRegistry.add(customExternalMobProvider.getKey(), new CustomExternalMobProvider(customExternalMobProvider));
         }
 
-        /* Player tasks */
+        /* Players */
         if (mainConfig.isSecureModeEnabled()) {
             new SecureModeTask(this).runTaskTimer(this, mainConfig.getSecureModeCheckInterval(), mainConfig.getSecureModeCheckInterval());
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                playerCache.getAllGamePlayers().forEach(p -> ((DGamePlayer) p).update(false));
-            }
-        }.runTaskTimer(this, 2L, 2L);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                playerCache.getAllGamePlayers().forEach(p -> ((DGamePlayer) p).update(true));
-            }
-        }.runTaskTimer(this, 20L, 20L);
+        playerCache = new PlayerCache();
+        playerGroupCache = new PlayerGroupCache();
 
-        /* Initialize commands & listeners */
+        gameCache = new ArrayList<>();
+        instanceCache = new Registry<>();
+
+        /* Initialize commands */
         dCommands = new DCommandCache(this);
         dCommands.register(this);
+
+        /* Following initializations are not to be repeated on reload */
+        if (loaded) {
+            return;
+        }
+
+        new BukkitRunnable() {
+            int i = 0;
+
+            @Override
+            public void run() {
+                boolean update = ++i == 10;
+                if (update) {
+                    i = 0;
+                }
+                playerCache.getAllGamePlayers().forEach(p -> ((DGamePlayer) p).update(update));
+            }
+        }.runTaskTimer(this, 2L, 2L);
+
+        /* Initialize listeners */
         manager.registerEvents(new DWorldListener(this), this);
         manager.registerEvents(new GlobalProtectionListener(this), this);
         manager.registerEvents(new RewardListener(this), this);
@@ -569,6 +552,11 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     }
 
     @Override
+    public void registerModule(DungeonModule module) {
+        modules.add(module);
+    }
+
+    @Override
     public void registerGroupAdapter(GroupAdapter groupAdapter) {
         if (mainConfig.areGroupAdaptersEnabled()) {
             groupAdapters.add(groupAdapter);
@@ -615,13 +603,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
      */
     public void setLoadingWorld(boolean loadingWorld) {
         this.loadingWorld = loadingWorld;
-    }
-
-    /**
-     * @return the loaded instance of GlobalData
-     */
-    public GlobalData getGlobalData() {
-        return globalData;
     }
 
     @Override

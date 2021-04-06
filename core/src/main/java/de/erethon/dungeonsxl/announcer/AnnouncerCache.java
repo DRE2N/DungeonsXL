@@ -20,7 +20,6 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.InventoryView;
 
@@ -49,7 +48,6 @@ public class AnnouncerCache {
         if (!announcers.isEmpty() && plugin.getMainConfig().getAnnouncmentInterval() > 0) {
             new AnnouncerTask(plugin).runTaskTimer(plugin, plugin.getMainConfig().getAnnouncmentInterval(), plugin.getMainConfig().getAnnouncmentInterval());
         }
-        Bukkit.getPluginManager().registerEvents(new AnnouncerListener(plugin), plugin);
     }
 
     /**

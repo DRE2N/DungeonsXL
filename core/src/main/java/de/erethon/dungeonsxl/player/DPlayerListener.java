@@ -26,12 +26,10 @@ import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
-import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.util.ParsingUtil;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
@@ -73,15 +71,11 @@ import org.bukkit.projectiles.ProjectileSource;
 public class DPlayerListener implements Listener {
 
     private DungeonsXL plugin;
-    private MainConfig config;
-    private PlayerCache dPlayers;
 
     public static final String ALL = "@all ";
 
     public DPlayerListener(DungeonsXL plugin) {
         this.plugin = plugin;
-        config = plugin.getMainConfig();
-        dPlayers = plugin.getPlayerCache();
     }
 
     @EventHandler
@@ -206,7 +200,7 @@ public class DPlayerListener implements Listener {
 
         // Check Dogs
         if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
-            for (GamePlayer player : dPlayers.getAllGamePlayersIf(p -> p.getGameWorld() == gameWorld)) {
+            for (GamePlayer player : plugin.getPlayerCache().getAllGamePlayersIf(p -> p.getGameWorld() == gameWorld)) {
                 if (player.getWolf() != null) {
                     if (attackerEntity == player.getWolf() || attackedEntity == player.getWolf()) {
                         event.setCancelled(true);
@@ -216,7 +210,7 @@ public class DPlayerListener implements Listener {
             }
         }
 
-        for (GamePlayer dPlayer : dPlayers.getAllGamePlayersIf(p -> p.getGameWorld() == gameWorld)) {
+        for (GamePlayer dPlayer : plugin.getPlayerCache().getAllGamePlayersIf(p -> p.getGameWorld() == gameWorld)) {
             if (dPlayer.getWolf() != null) {
                 if (attackerEntity instanceof Player || attackedEntity instanceof Player) {
                     if (attackerEntity == dPlayer.getWolf() || attackedEntity == dPlayer.getWolf()) {
@@ -249,7 +243,7 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        GlobalPlayer dPlayer = dPlayers.get(player);
+        GlobalPlayer dPlayer = plugin.getPlayerCache().get(player);
         if (dPlayer == null) {
             return;
         }
@@ -273,7 +267,7 @@ public class DPlayerListener implements Listener {
         if (game) {
             ((DInstancePlayer) dPlayer).chat(event.getMessage().substring(ALL.length()));
         } else {
-            group.sendMessage(ParsingUtil.replaceChatPlaceholders(config.getChatFormatGroup(), dPlayer) + event.getMessage());
+            group.sendMessage(ParsingUtil.replaceChatPlaceholders(plugin.getMainConfig().getChatFormatGroup(), dPlayer) + event.getMessage());
         }
     }
 
@@ -288,10 +282,10 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        if (!(dPlayers.get(player) instanceof DInstancePlayer)) {
+        if (!(plugin.getPlayerCache().get(player) instanceof DInstancePlayer)) {
             return;
         }
-        InstancePlayer dPlayer = dPlayers.getInstancePlayer(player);
+        InstancePlayer dPlayer = plugin.getPlayerCache().getInstancePlayer(player);
 
         String command = event.getMessage().toLowerCase();
         ArrayList<String> commandWhitelist = new ArrayList<>();
@@ -301,7 +295,7 @@ public class DPlayerListener implements Listener {
                 return;
 
             } else {
-                commandWhitelist.addAll(config.getEditCommandWhitelist());
+                commandWhitelist.addAll(plugin.getMainConfig().getEditCommandWhitelist());
             }
 
         } else {
@@ -331,7 +325,7 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        DGamePlayer dPlayer = (DGamePlayer) dPlayers.getGamePlayer(player);
+        DGamePlayer dPlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
         if (dPlayer == null) {
             return;
         }
@@ -345,12 +339,12 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        GlobalPlayer dPlayer = dPlayers.get(player);
+        GlobalPlayer dPlayer = plugin.getPlayerCache().get(player);
         if (dPlayer == null) {
             return;
         }
 
-        if (dPlayer instanceof EditPlayer && !config.getDropItems() && !DPermission.hasPermission(player, DPermission.INSECURE)) {
+        if (dPlayer instanceof EditPlayer && !plugin.getMainConfig().getDropItems() && !DPermission.hasPermission(player, DPermission.INSECURE)) {
             event.setCancelled(true);
         }
 
@@ -397,8 +391,8 @@ public class DPlayerListener implements Listener {
                     dPlayer.getData().getKeepInventoryAfterLogout());
         }
 
-        if (!dPlayer.getData().hasFinishedTutorial() && config.isTutorialActivated()) {
-            if (plugin.getInstanceCache().size() < config.getMaxInstances()) {
+        if (!dPlayer.getData().hasFinishedTutorial() && plugin.getMainConfig().isTutorialActivated()) {
+            if (plugin.getInstanceCache().size() < plugin.getMainConfig().getMaxInstances()) {
                 dPlayer.startTutorial();
             } else {
                 event.getPlayer().kickPlayer(DMessage.ERROR_TOO_MANY_TUTORIALS.getMessage());
@@ -413,7 +407,7 @@ public class DPlayerListener implements Listener {
             return;
         }
         DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(player.getWorld());
-        DGamePlayer gamePlayer = (DGamePlayer) dPlayers.getGamePlayer(player);
+        DGamePlayer gamePlayer = (DGamePlayer) plugin.getPlayerCache().getGamePlayer(player);
         if (gameWorld != null && gamePlayer != null) {
             if (gamePlayer.getDGroupTag() != null) {
                 gamePlayer.getDGroupTag().update();
@@ -432,7 +426,7 @@ public class DPlayerListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        GlobalPlayer dPlayer = dPlayers.get(player);
+        GlobalPlayer dPlayer = plugin.getPlayerCache().get(player);
         PlayerGroup dGroup = dPlayer.getGroup();
 
         if (!(dPlayer instanceof InstancePlayer)) {
@@ -460,7 +454,7 @@ public class DPlayerListener implements Listener {
             ((InstancePlayer) dPlayer).leave();
         }
 
-        dPlayers.remove(dPlayer);
+        plugin.getPlayerCache().remove(dPlayer);
     }
 
     @EventHandler
@@ -470,7 +464,7 @@ public class DPlayerListener implements Listener {
             return;
         }
 
-        InstancePlayer instancePlayer = dPlayers.getInstancePlayer(player);
+        InstancePlayer instancePlayer = plugin.getPlayerCache().getInstancePlayer(player);
         if (instancePlayer == null) {
             return;
         }
@@ -513,7 +507,7 @@ public class DPlayerListener implements Listener {
         if (isCitizensNPC(player)) {
             return;
         }
-        GlobalPlayer dPlayer = dPlayers.get(player);
+        GlobalPlayer dPlayer = plugin.getPlayerCache().get(player);
 
         World toWorld = event.getTo().getWorld();
 
@@ -588,7 +582,7 @@ public class DPlayerListener implements Listener {
             if (plugin.getEditWorld(player.getWorld()) != null) {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     if (VanillaItem.STICK.is(item)) {
-                        DEditPlayer editPlayer = (DEditPlayer) dPlayers.getEditPlayer(player);
+                        DEditPlayer editPlayer = (DEditPlayer) plugin.getPlayerCache().getEditPlayer(player);
                         if (editPlayer != null) {
                             editPlayer.poke(clickedBlock);
                             event.setCancelled(true);

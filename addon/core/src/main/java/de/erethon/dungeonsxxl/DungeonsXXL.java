@@ -6,9 +6,15 @@
 package de.erethon.dungeonsxxl;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonModule;
+import de.erethon.dungeonsxl.api.Requirement;
+import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.util.commons.javaplugin.DREPlugin;
 import de.erethon.dungeonsxl.util.commons.javaplugin.DREPluginSettings;
+import de.erethon.dungeonsxl.util.commons.misc.Registry;
 import de.erethon.dungeonsxxl.requirement.*;
 import de.erethon.dungeonsxxl.sign.*;
 import de.erethon.dungeonsxxl.util.GlowUtil;
@@ -16,7 +22,7 @@ import de.erethon.dungeonsxxl.util.GlowUtil;
 /**
  * @author Daniel Saukel
  */
-public class DungeonsXXL extends DREPlugin {
+public class DungeonsXXL extends DREPlugin implements DungeonModule {
 
     private DungeonsXL dxl;
     private GlowUtil glowUtil;
@@ -33,13 +39,6 @@ public class DungeonsXXL extends DREPlugin {
     public void onEnable() {
         dxl = DungeonsXL.getInstance();
         glowUtil = new GlowUtil(this);
-
-        dxl.getRequirementRegistry().add("feeItems", FeeItemsRequirement.class);
-
-        dxl.getSignRegistry().add("Firework", FireworkSign.class);
-        dxl.getSignRegistry().add("GlowingBlock", GlowingBlockSign.class);
-        dxl.getSignRegistry().add("InteractWall", InteractWallSign.class);
-        dxl.getSignRegistry().add("Particle", ParticleSign.class);
     }
 
     /**
@@ -67,6 +66,27 @@ public class DungeonsXXL extends DREPlugin {
      */
     public GlowUtil getGlowUtil() {
         return glowUtil;
+    }
+
+    @Override
+    public void initRequirements(Registry<String, Class<? extends Requirement>> registry) {
+        registry.add("feeItems", FeeItemsRequirement.class);
+    }
+
+    @Override
+    public void initRewards(Registry<String, Class<? extends Reward>> registry) {
+    }
+
+    @Override
+    public void initSigns(Registry<String, Class<? extends DungeonSign>> registry) {
+        registry.add("FIREWORK", FireworkSign.class);
+        registry.add("GLOWINGBLOCK", GlowingBlockSign.class);
+        registry.add("INTERACTWALL", InteractWallSign.class);
+        registry.add("PARTICLE", ParticleSign.class);
+    }
+
+    @Override
+    public void initGameRules(Registry<String, GameRule> registry) {
     }
 
 }

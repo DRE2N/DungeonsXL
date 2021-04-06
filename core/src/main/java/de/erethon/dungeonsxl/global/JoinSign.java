@@ -27,7 +27,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * @author Daniel Saukel
@@ -175,24 +174,17 @@ public abstract class JoinSign extends GlobalProtection {
         }
     }
 
-    /**
-     * @return the path in the global data file
-     */
-    public abstract String getDataPath();
-
     @Override
-    public void save(FileConfiguration config) {
-        String preString = getDataPath() + "." + getWorld().getName() + "." + getId();
-
-        config.set(preString + ".x", startSign.getX());
-        config.set(preString + ".y", startSign.getY());
-        config.set(preString + ".z", startSign.getZ());
+    public void save(ConfigurationSection config) {
+        config.set("x", startSign.getX());
+        config.set("y", startSign.getY());
+        config.set("z", startSign.getZ());
         if (dungeon != null) {
-            config.set(preString + ".dungeon", dungeon.getName());
+            config.set("dungeon", dungeon.getName());
         }
-        config.set(preString + ".maxElements", maxElements);
+        config.set("maxElements", maxElements);
         if (startIfElementsAtLeast != -1) {
-            config.set(preString + ".startIfElementsAtLeast", startIfElementsAtLeast);
+            config.set("startIfElementsAtLeast", startIfElementsAtLeast);
         }
     }
 

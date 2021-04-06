@@ -18,14 +18,19 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -36,11 +41,24 @@ public class GlobalProtectionCache {
 
     private DungeonsXL plugin;
 
+    private File file;
+    private FileConfiguration config;
+
     private Set<GlobalProtection> protections = new HashSet<>();
     private Map<UnloadedProtection, String> unloaded = new HashMap<>();
 
     public GlobalProtectionCache(DungeonsXL plugin) {
         this.plugin = plugin;
+        file = new File(plugin.getDataFolder(), "data.yml");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        config = YamlConfiguration.loadConfiguration(file);
+        loadAll();
     }
 
     /**
@@ -107,30 +125,97 @@ public class GlobalProtectionCache {
         protections.remove(protection);
     }
 
-    /**
-     * Save all protections to the default file
-     */
-    public void saveAll() {
-        saveAll(plugin.getGlobalData().getConfig());
-    }
-
-    /**
-     * @param file the file to save all protections to
-     */
-    public void saveAll(File file) {
-        saveAll(YamlConfiguration.loadConfiguration(file));
-    }
-
-    /**
-     * @param config the config to save all protections to
-     */
-    public void saveAll(FileConfiguration config) {
-        config.set("protections", null);
-        for (GlobalProtection protection : protections) {
-            protection.save(config);
+    public void loadAll() {
+        ConfigurationSection gameSigns = config.getConfigurationSection("protections.gameSigns");
+        ConfigurationSection groupSigns = config.getConfigurationSection("protections.groupSigns");
+        ConfigurationSection leaveSigns = config.getConfigurationSection("protections.leaveSigns");
+        ConfigurationSection portals = config.getConfigurationSection("protections.portals");
+        if (gameSigns != null) {
+            for (String worldName : gameSigns.getValues(false).keySet()) {
+                ConfigurationSection ws = gameSigns.getConfigurationSection(worldName);
+                if (ws == null) {
+                    continue;
+                }
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        addProtection(new GameSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
+                    } else {
+                        unloaded.put(new UnloadedProtection<>(plugin, GameSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                    }
+                }
+            }
         }
 
-        plugin.getGlobalData().save();
+        if (groupSigns != null) {
+            for (String worldName : groupSigns.getValues(false).keySet()) {
+                ConfigurationSection ws = groupSigns.getConfigurationSection(worldName);
+                if (ws == null) {
+                    continue;
+                }
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        addProtection(new GroupSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
+                    } else {
+                        unloaded.put(new UnloadedProtection<>(plugin, GroupSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                    }
+                }
+            }
+        }
+
+        if (leaveSigns != null) {
+            for (String worldName : leaveSigns.getValues(false).keySet()) {
+                ConfigurationSection ws = leaveSigns.getConfigurationSection(worldName);
+                if (ws == null) {
+                    continue;
+                }
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        addProtection(new LeaveSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
+                    } else {
+                        unloaded.put(new UnloadedProtection<>(plugin, LeaveSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                    }
+                }
+            }
+        }
+
+        if (portals != null) {
+            for (String worldName : portals.getValues(false).keySet()) {
+                ConfigurationSection ws = portals.getConfigurationSection(worldName);
+                if (ws == null) {
+                    continue;
+                }
+                for (Entry<String, Object> entry : ws.getValues(false).entrySet()) {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world != null) {
+                        addProtection(new DPortal(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
+                    } else {
+                        unloaded.put(new UnloadedProtection<>(plugin, DPortal.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                    }
+                }
+            }
+        }
+    }
+
+    public void saveAll() {
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        config.set("protections", null);
+        for (GlobalProtection protection : protections) {
+            protection.save(config.createSection(protection.getDataPath() + "." + protection.getWorld().getName() + "." + protection.getId()));
+        }
+        try {
+            config.save(file);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**

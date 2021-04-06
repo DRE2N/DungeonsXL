@@ -27,7 +27,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
@@ -127,10 +126,9 @@ public class GroupSign extends JoinSign {
     }
 
     @Override
-    public void save(FileConfiguration config) {
+    public void save(ConfigurationSection config) {
         super.save(config);
-        String preString = getDataPath() + "." + getWorld().getName() + "." + getId();
-        config.set(preString + ".groupName", groupName);
+        config.set("groupName", groupName);
     }
 
     public void onPlayerInteract(Block block, Player player) {

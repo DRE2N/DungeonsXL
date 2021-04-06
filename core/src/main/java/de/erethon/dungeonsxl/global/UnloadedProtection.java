@@ -49,7 +49,6 @@ public class UnloadedProtection<T extends GlobalProtection> {
         this.config = config;
 
         cache = plugin.getGlobalProtectionCache();
-        cache.getUnloadedProtections().put(this, worldName);
     }
 
     public T load(World world) {

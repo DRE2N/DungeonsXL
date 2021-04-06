@@ -146,6 +146,13 @@ public interface DungeonsAPI extends Plugin {
     Registry<String, PlayerGroup> getGroupCache();
 
     /**
+     * Registers a DungeonModule.
+     *
+     * @param module the module to register
+     */
+    void registerModule(DungeonModule module);
+
+    /**
      * Makes DungeonsXL track external group and synchronize them with its own groups.
      *
      * @param groupAdapter the group adapter to register

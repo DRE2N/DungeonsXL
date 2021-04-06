@@ -20,13 +20,11 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import java.io.File;
 import java.util.Collection;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * @author Daniel Saukel
@@ -35,7 +33,6 @@ public abstract class GlobalProtection {
 
     protected DungeonsXL plugin;
     protected GlobalProtectionCache protections;
-    private FileConfiguration config;
 
     public static final String SIGN_TAG = "[DXL]";
 
@@ -45,12 +42,9 @@ public abstract class GlobalProtection {
     protected GlobalProtection(DungeonsXL plugin, World world, int id) {
         this.plugin = plugin;
         protections = plugin.getGlobalProtectionCache();
-        config = plugin.getGlobalData().getConfig();
 
         this.world = world.getName();
         this.id = id;
-
-        protections.addProtection(this);
     }
 
     /**
@@ -75,20 +69,6 @@ public abstract class GlobalProtection {
         protections.removeProtection(this);
     }
 
-    /**
-     * Save the data to the default file
-     */
-    public void save() {
-        save(config);
-    }
-
-    /**
-     * @param file the file to save the protection to
-     */
-    public void save(File file) {
-        save(YamlConfiguration.loadConfiguration(file));
-    }
-
     public boolean onBreak(DGlobalPlayer dPlayer) {
         if (dPlayer.isInBreakMode()) {
             delete();
@@ -104,9 +84,11 @@ public abstract class GlobalProtection {
 
     /* Abstracts */
     /**
-     * @param config the config to save the protection to
+     * @return the path in the global data file
      */
-    public abstract void save(FileConfiguration config);
+    public abstract String getDataPath();
+
+    public abstract void save(ConfigurationSection config);
 
     /**
      * @return a collection of all blocks covered by this protection

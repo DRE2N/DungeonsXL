@@ -31,7 +31,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
@@ -106,11 +105,15 @@ public class LeaveSign extends GlobalProtection {
     }
 
     @Override
-    public void save(FileConfiguration config) {
-        String preString = "protections.leaveSigns." + sign.getWorld().getName() + "." + getId();
-        config.set(preString + ".x", sign.getX());
-        config.set(preString + ".y", sign.getY());
-        config.set(preString + ".z", sign.getZ());
+    public String getDataPath() {
+        return "protections.leaveSigns";
+    }
+
+    @Override
+    public void save(ConfigurationSection config) {
+        config.set("x", sign.getX());
+        config.set("y", sign.getY());
+        config.set("z", sign.getZ());
     }
 
     /* Statics */

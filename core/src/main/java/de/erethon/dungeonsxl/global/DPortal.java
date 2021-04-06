@@ -38,7 +38,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 /**
@@ -283,24 +282,27 @@ public class DPortal extends GlobalProtection {
     }
 
     @Override
-    public void save(FileConfiguration configFile) {
+    public String getDataPath() {
+        return "protections.portals";
+    }
+
+    @Override
+    public void save(ConfigurationSection config) {
         if (!active) {
             return;
         }
 
-        String preString = "protections.portals." + getWorld().getName() + "." + getId();
+        config.set("loc1.x", block1.getX());
+        config.set("loc1.y", block1.getY());
+        config.set("loc1.z", block1.getZ());
 
-        configFile.set(preString + ".loc1.x", block1.getX());
-        configFile.set(preString + ".loc1.y", block1.getY());
-        configFile.set(preString + ".loc1.z", block1.getZ());
+        config.set("loc2.x", block2.getX());
+        config.set("loc2.y", block2.getY());
+        config.set("loc2.z", block2.getZ());
 
-        configFile.set(preString + ".loc2.x", block2.getX());
-        configFile.set(preString + ".loc2.y", block2.getY());
-        configFile.set(preString + ".loc2.z", block2.getZ());
-
-        configFile.set(preString + ".material", material.getId());
+        config.set("material", material.getId());
         if (material == VanillaItem.NETHER_PORTAL) {
-            configFile.set(preString + ".axis", zAxis ? "z" : "x");
+            config.set("axis", zAxis ? "z" : "x");
         }
     }
 
