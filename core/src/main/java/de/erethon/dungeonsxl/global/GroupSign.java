@@ -229,6 +229,7 @@ public class GroupSign extends JoinSign {
         onCreation(plugin, startSign, identifier, maxElements, startIfElementsAtLeast);
         GroupSign sign = new GroupSign(plugin, plugin.getGlobalProtectionCache().generateId(GroupSign.class, startSign.getWorld()), startSign, identifier,
                 maxElements, startIfElementsAtLeast, groupName);
+        plugin.getGlobalProtectionCache().addProtection(sign);
         return sign;
     }
 

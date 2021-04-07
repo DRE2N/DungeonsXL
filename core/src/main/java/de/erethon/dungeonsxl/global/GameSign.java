@@ -223,6 +223,7 @@ public class GameSign extends JoinSign {
         onCreation(plugin, startSign, identifier, maxElements, startIfElementsAtLeast);
         GameSign sign = new GameSign(plugin, plugin.getGlobalProtectionCache().generateId(GameSign.class, startSign.getWorld()), startSign, identifier,
                 maxElements, startIfElementsAtLeast);
+        plugin.getGlobalProtectionCache().addProtection(sign);
         return sign;
     }
 

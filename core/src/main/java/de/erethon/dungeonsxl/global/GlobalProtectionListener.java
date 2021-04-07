@@ -290,7 +290,7 @@ public class GlobalProtectionListener implements Listener {
 
             } else if (lines[1].equalsIgnoreCase(LeaveSign.LEAVE_SIGN_TAG)) {
                 Sign sign = (Sign) state;
-                new LeaveSign(plugin, plugin.getGlobalProtectionCache().generateId(LeaveSign.class, sign.getWorld()), sign);
+                plugin.getGlobalProtectionCache().addProtection(new LeaveSign(plugin, plugin.getGlobalProtectionCache().generateId(LeaveSign.class, sign.getWorld()), sign));
                 event.setCancelled(true);
             }
         }

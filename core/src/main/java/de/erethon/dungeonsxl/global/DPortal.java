@@ -54,24 +54,10 @@ public class DPortal extends GlobalProtection {
     private boolean active;
     private Set<Block> blocks;
 
-    public DPortal(DungeonsXL plugin, int id, World world, boolean active) {
-        this(plugin, id, world, VanillaItem.NETHER_PORTAL, active);
-    }
-
     public DPortal(DungeonsXL plugin, int id, World world, ExItem material, boolean active) {
         super(plugin, world, id);
 
         this.material = material;
-        this.active = active;
-    }
-
-    public DPortal(DungeonsXL plugin, int id, Block block1, Block block2, ExItem material, boolean zAxis, boolean active) {
-        super(plugin, block1.getWorld(), id);
-
-        this.block1 = block1;
-        this.block2 = block2;
-        this.material = material;
-        this.zAxis = zAxis;
         this.active = active;
     }
 
