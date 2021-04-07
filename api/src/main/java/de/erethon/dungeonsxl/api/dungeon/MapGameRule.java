@@ -68,6 +68,7 @@ public class MapGameRule<TK, TV, V extends Map<TK, TV>> extends GameRule<V> {
         if (v == null) {
             return null;
         }
+        v.remove(null); // Do not allow null values
         container.setState(this, v);
         return v;
     }

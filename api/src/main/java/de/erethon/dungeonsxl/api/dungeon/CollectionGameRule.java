@@ -72,7 +72,7 @@ public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> 
         Object value = config.get(getKey());
         if (reader != null) {
             V v = reader.read(api, value);
-            container.setState(this, v);
+            setStateWithoutNull(container, v);
             return v;
         }
 
@@ -82,8 +82,15 @@ public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> 
         } catch (ClassCastException exception) {
             return null;
         }
-        container.setState(this, v);
+        setStateWithoutNull(container, v);
         return v;
+    }
+
+    private void setStateWithoutNull(GameRuleContainer container, V v) {
+        while (v != null && v.contains(null)) {
+            v.remove(null);
+        }
+        container.setState(this, v);
     }
 
     @Override
