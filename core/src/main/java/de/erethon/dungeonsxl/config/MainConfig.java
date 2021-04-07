@@ -480,9 +480,11 @@ public class MainConfig extends DREConfig {
             config.set("editPermissions", editPermissions);
         }
 
-        /* Default DDungeon Config */
+        /* Default Dungeon Config */
         if (!config.contains("default")) {
-            config.createSection("default");
+            ConfigurationSection section = config.createSection("default");
+            section.set("damageProtectedEntities", Arrays.asList("ARMOR_STAND", "ITEM_FRAME", "PAINTING"));
+            section.set("interactionProtectedEntities", Arrays.asList("ARMOR_STAND", "ITEM_FRAME"));
         }
 
         save();

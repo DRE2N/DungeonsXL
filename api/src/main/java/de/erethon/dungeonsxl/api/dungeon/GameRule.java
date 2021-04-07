@@ -16,7 +16,6 @@ package de.erethon.dungeonsxl.api.dungeon;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.mob.ExMob;
-import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
 import de.erethon.commons.misc.NumberUtil;
@@ -27,7 +26,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -117,22 +115,13 @@ public class GameRule<V> {
     public static final GameRule<Map<ExItem, HashSet<ExItem>>> INTERACTION_BLACKLIST
             = new MapGameRule<>("interactionBlacklist", null, ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
     /**
-     * A list of all entity types that shall be protected from damage. If this is left out AND if breakBlocks is false, armor stands, paintings and item frames
-     * will be protected by default. If this is left out and if breakBlocks is true, nothing will be protected by default.
+     * A list of all entity types that shall be protected from damage.
      */
-    public static final GameRule<Set<ExMob>> DAMAGE_PROTECTED_ENTITIES = new CollectionGameRule<>("damageProtectedEntities", new HashSet<>(Arrays.asList(
-            VanillaMob.ARMOR_STAND,
-            VanillaMob.ITEM_FRAME,
-            VanillaMob.PAINTING
-    )), ConfigReader.EX_MOB_SET_READER, HashSet::new);
+    public static final GameRule<Set<ExMob>> DAMAGE_PROTECTED_ENTITIES = new CollectionGameRule<>("damageProtectedEntities", null, ConfigReader.EX_MOB_SET_READER, HashSet::new);
     /**
-     * If this is left out AND if breakBlocks is false, armor stands and item frames will be protected by default. If this is left out and if breakBlocks is
-     * true, nothing will be protected by default.
+     * A list of all entity types that shall be protected from interaction.
      */
-    public static final GameRule<Set<ExMob>> INTERACTION_PROTECTED_ENTITIES = new CollectionGameRule<>("interactionProtectedEntities", new HashSet<>(Arrays.asList(
-            VanillaMob.ARMOR_STAND,
-            VanillaMob.ITEM_FRAME
-    )), ConfigReader.EX_MOB_SET_READER, HashSet::new);
+    public static final GameRule<Set<ExMob>> INTERACTION_PROTECTED_ENTITIES = new CollectionGameRule<>("interactionProtectedEntities", null, ConfigReader.EX_MOB_SET_READER, HashSet::new);
     /**
      * If blocks may be placed.
      */

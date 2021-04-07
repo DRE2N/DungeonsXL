@@ -15,7 +15,6 @@
 package de.erethon.dungeonsxl.api.dungeon;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -102,18 +101,6 @@ public class GameRuleContainer {
      */
     public void merge(GameRuleContainer subsidiary) {
         subsidiary.rules.entrySet().forEach(e -> e.getKey().merge(this, subsidiary, this));
-
-        // If we are using the last subsidiary rules (the default rules) and if blocks may be broken...
-        if (subsidiary != DEFAULT_VALUES || !getState(GameRule.BREAK_BLOCKS)) {
-            return;
-        }
-        // ...then it makes no sense to set *ProtectedEntities to default where several block-like entities (like paintings) are protected.
-        if (getState(GameRule.DAMAGE_PROTECTED_ENTITIES) == DEFAULT_VALUES.getState(GameRule.DAMAGE_PROTECTED_ENTITIES)) {
-            setState(GameRule.DAMAGE_PROTECTED_ENTITIES, new HashSet<>());
-        }
-        if (getState(GameRule.INTERACTION_PROTECTED_ENTITIES) == DEFAULT_VALUES.getState(GameRule.INTERACTION_PROTECTED_ENTITIES)) {
-            setState(GameRule.INTERACTION_PROTECTED_ENTITIES, new HashSet<>());
-        }
     }
 
     @Override
