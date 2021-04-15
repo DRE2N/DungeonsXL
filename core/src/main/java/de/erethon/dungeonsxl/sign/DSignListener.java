@@ -80,7 +80,7 @@ public class DSignListener implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
         String[] lines = event.getLines();
-        if (lines.length < 3 || !lines[0].startsWith("[")) {
+        if (lines[0].length() < 3 || !lines[0].startsWith("[")) {
             return;
         }
         Player player = event.getPlayer();
@@ -96,9 +96,6 @@ public class DSignListener implements Listener {
             return;
         }
 
-        if (sign == null) {
-            return;
-        }
         // Override sign plugins color codes etc.
         sign.setLine(0, lines[0]);
         sign.setLine(1, lines[1]);
