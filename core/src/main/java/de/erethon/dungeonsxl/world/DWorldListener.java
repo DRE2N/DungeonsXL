@@ -123,7 +123,7 @@ public class DWorldListener implements Listener {
         }
 
         Map<ExItem, HashSet<ExItem>> blacklist = gameWorld.getDungeon().getRules().getState(GameRule.INTERACTION_BLACKLIST);
-        if (blacklist == null) {
+        if (blacklist.isEmpty()) {
             return;
         }
 
@@ -254,7 +254,7 @@ public class DWorldListener implements Listener {
         }
 
         Set<ExItem> blockFadeDisabled = gameWorld.getGame().getRules().getState(GameRule.BLOCK_FADE_DISABLED);
-        if (blockFadeDisabled == null) {
+        if (blockFadeDisabled.isEmpty()) {
             return;
         }
         if (gameWorld.getGame() != null && blockFadeDisabled.contains(VanillaItem.get(event.getBlock().getType()))) {

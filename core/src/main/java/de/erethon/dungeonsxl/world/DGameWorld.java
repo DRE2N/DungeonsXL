@@ -602,7 +602,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         Set<ExItem> whitelist = getRules().getState(GameRule.PLACE_WHITELIST);
-        if (whitelist == null || whitelist.contains(VanillaItem.get(block.getType()))) {
+        if (whitelist.isEmpty() || whitelist.contains(VanillaItem.get(block.getType()))) {
             placedBlocks.add(block);
             return false;
         }

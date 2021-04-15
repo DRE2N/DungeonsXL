@@ -307,9 +307,9 @@ public class DGlobalPlayer implements GlobalPlayer {
             msgs.forEach(msg -> MessageUtil.sendMessage(player, msg));
         }
 
-        if (rules.getState(GameRule.MUST_FINISH_ALL) != null) {
+        if (!rules.getState(GameRule.MUST_FINISH_ALL).isEmpty()) {
             List<String> finished = new ArrayList<>(rules.getState(GameRule.MUST_FINISH_ALL));
-            if (rules.getState(GameRule.MUST_FINISH_ONE) != null) {
+            if (!rules.getState(GameRule.MUST_FINISH_ONE).isEmpty()) {
                 finished.addAll(rules.getState(GameRule.MUST_FINISH_ONE));
             }
 
@@ -358,7 +358,6 @@ public class DGlobalPlayer implements GlobalPlayer {
                 if (numOfNeeded < rules.getState(GameRule.MUST_FINISH_ALL).size() || !doneTheOne) {
                     fulfilled = false;
                 }
-
             }
         }
 

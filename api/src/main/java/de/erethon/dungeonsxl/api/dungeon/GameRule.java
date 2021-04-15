@@ -108,20 +108,20 @@ public class GameRule<V> {
      * A whitelist of breakable blocks. breakBlocks is supposed to be set to "true" if this should be used.
      */
     public static final GameRule<Map<ExItem, HashSet<ExItem>>> BREAK_WHITELIST
-            = new MapGameRule<>("breakWhitelist", null, ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
+            = new MapGameRule<>("breakWhitelist", new HashMap<>(), ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
     /**
      * A blacklist of block types players cannot interact with.
      */
     public static final GameRule<Map<ExItem, HashSet<ExItem>>> INTERACTION_BLACKLIST
-            = new MapGameRule<>("interactionBlacklist", null, ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
+            = new MapGameRule<>("interactionBlacklist", new HashMap<>(), ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
     /**
      * A list of all entity types that shall be protected from damage.
      */
-    public static final GameRule<Set<ExMob>> DAMAGE_PROTECTED_ENTITIES = new CollectionGameRule<>("damageProtectedEntities", null, ConfigReader.EX_MOB_SET_READER, HashSet::new);
+    public static final GameRule<Set<ExMob>> DAMAGE_PROTECTED_ENTITIES = new CollectionGameRule<>("damageProtectedEntities", new HashSet<>(), ConfigReader.EX_MOB_SET_READER, HashSet::new);
     /**
      * A list of all entity types that shall be protected from interaction.
      */
-    public static final GameRule<Set<ExMob>> INTERACTION_PROTECTED_ENTITIES = new CollectionGameRule<>("interactionProtectedEntities", null, ConfigReader.EX_MOB_SET_READER, HashSet::new);
+    public static final GameRule<Set<ExMob>> INTERACTION_PROTECTED_ENTITIES = new CollectionGameRule<>("interactionProtectedEntities", new HashSet<>(), ConfigReader.EX_MOB_SET_READER, HashSet::new);
     /**
      * If blocks may be placed.
      */
@@ -129,13 +129,13 @@ public class GameRule<V> {
     /**
      * A whitelist of placeable blocks. placeBlocks is supposed to be set to "true" if this should be used.
      */
-    public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", null, ConfigReader.EX_ITEM_SET_READER, HashSet::new);
+    public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", new HashSet<>(), ConfigReader.EX_ITEM_SET_READER, HashSet::new);
     /**
      * A set of blocks that do not fade.
      *
      * @see <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/block/BlockFadeEvent.html">org.bukkit.event.block.BlockFadeEvent</a>
      */
-    public static final GameRule<Set<ExItem>> BLOCK_FADE_DISABLED = new CollectionGameRule<>("blockFadeDisabled", null, ConfigReader.EX_ITEM_SET_READER, HashSet::new);
+    public static final GameRule<Set<ExItem>> BLOCK_FADE_DISABLED = new CollectionGameRule<>("blockFadeDisabled", new HashSet<>(), ConfigReader.EX_ITEM_SET_READER, HashSet::new);
     /**
      * This does what the doFireTick Vanilla game rule does.
      */
@@ -242,11 +242,11 @@ public class GameRule<V> {
     /**
      * One of these Dungeons must be finished ("any" for any dungeon).
      */
-    public static final GameRule<List<String>> MUST_FINISH_ONE = new CollectionGameRule<>("mustFinishOne", null, ArrayList::new);
+    public static final GameRule<List<String>> MUST_FINISH_ONE = new CollectionGameRule<>("mustFinishOne", new ArrayList<>(), ArrayList::new);
     /**
      * All of these Dungeons must be finished. If you do not want any, leave this empty.
      */
-    public static final GameRule<List<String>> MUST_FINISH_ALL = new CollectionGameRule<>("mustFinishAll", null, ArrayList::new);
+    public static final GameRule<List<String>> MUST_FINISH_ALL = new CollectionGameRule<>("mustFinishAll", new ArrayList<>(), ArrayList::new);
     /**
      * This can be used to give rewards. The default implementation does not do this at the moment.
      */

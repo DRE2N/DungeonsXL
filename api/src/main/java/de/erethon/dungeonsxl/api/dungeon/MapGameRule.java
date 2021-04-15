@@ -16,6 +16,7 @@ package de.erethon.dungeonsxl.api.dungeon;
 
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import java.util.Map;
+import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -32,12 +33,13 @@ public class MapGameRule<TK, TV, V extends Map<TK, TV>> extends GameRule<V> {
 
     /**
      * @param key          the configuration key of the game rule
-     * @param defaultValue the default value that is used when nothing is set
+     * @param defaultValue the default value that is used when nothing is set; not null
      * @param reader       a functional interface that loads the value from config
      * @param copier       a method to copy the map
      */
     public MapGameRule(String key, V defaultValue, ConfigReader<V> reader, Copier<V> copier) {
         super(null, key, defaultValue, reader);
+        Validate.notNull(defaultValue, "defaultValue must not be null");
         this.copier = copier;
     }
 

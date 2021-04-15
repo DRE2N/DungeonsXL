@@ -16,6 +16,7 @@ package de.erethon.dungeonsxl.api.dungeon;
 
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import java.util.Collection;
+import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -31,11 +32,12 @@ public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> 
 
     /**
      * @param key          the configuration key of the game rule
-     * @param defaultValue the default value that is used when nothing is set
+     * @param defaultValue the default value that is used when nothing is set; not null
      * @param copier       a method to copy the collection
      */
     public CollectionGameRule(String key, V defaultValue, Copier<V> copier) {
         super(null, key, defaultValue);
+        Validate.notNull(defaultValue, "defaultValue must not be null");
         this.copier = copier;
     }
 
