@@ -4,6 +4,7 @@ version: ${project.parent.version}${buildNo}
 authors: [Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel]
 description: ${project.parent.description}
 website: ${project.parent.url}
+depend: [ItemsXL]
 softdepend: [CommandsXL, ItemsXL, Vault, Citizens, CustomMobs, InsaneMobs, MythicMobs, HolographicDisplays, LWC, PlaceholderAPI, Parties]
 commands:
   dungeonsxl:

@@ -27,7 +27,7 @@
         <dependency>
             <groupId>de.erethon</groupId>
             <artifactId>caliburn</artifactId>
-            <version>1.0-RC-07</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
