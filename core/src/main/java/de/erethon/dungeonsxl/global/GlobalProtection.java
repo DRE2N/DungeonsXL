@@ -32,7 +32,6 @@ import org.bukkit.configuration.ConfigurationSection;
 public abstract class GlobalProtection {
 
     protected DungeonsXL plugin;
-    protected GlobalProtectionCache protections;
 
     public static final String SIGN_TAG = "[DXL]";
 
@@ -41,7 +40,6 @@ public abstract class GlobalProtection {
 
     protected GlobalProtection(DungeonsXL plugin, World world, int id) {
         this.plugin = plugin;
-        protections = plugin.getGlobalProtectionCache();
 
         this.world = world.getName();
         this.id = id;
@@ -66,7 +64,7 @@ public abstract class GlobalProtection {
      * Delete this protection.
      */
     public void delete() {
-        protections.removeProtection(this);
+        plugin.getGlobalProtectionCache().removeProtection(this);
     }
 
     public boolean onBreak(DGlobalPlayer dPlayer) {

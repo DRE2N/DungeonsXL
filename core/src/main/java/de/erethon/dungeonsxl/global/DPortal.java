@@ -294,7 +294,7 @@ public class DPortal extends GlobalProtection {
 
     @Override
     public void delete() {
-        protections.removeProtection(this);
+        plugin.getGlobalProtectionCache().removeProtection(this);
 
         if (block1 == null || block2 == null) {
             return;
