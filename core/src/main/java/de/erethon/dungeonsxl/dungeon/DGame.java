@@ -54,7 +54,7 @@ public class DGame implements Game {
     private int floorCount;
     private List<PlayerGroup> groups = new ArrayList<>();
     private boolean tutorial;
-    private boolean test;
+    private boolean rewards = true;
     private boolean started;
     private int waveCount;
     private Map<String, Integer> gameKills = new HashMap<>();
@@ -70,7 +70,6 @@ public class DGame implements Game {
         }
         tutorial = false;
         started = false;
-
     }
 
     public DGame(DungeonsXL plugin, Dungeon dungeon, PlayerGroup group) {
@@ -211,12 +210,12 @@ public class DGame implements Game {
 
     @Override
     public boolean hasRewards() {
-        return test;
+        return rewards;
     }
 
     @Override
     public void setRewards(boolean enabled) {
-        test = enabled;
+        rewards = enabled;
     }
 
     /**

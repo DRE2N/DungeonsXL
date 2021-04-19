@@ -29,7 +29,7 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import org.bukkit.Bukkit;
+import de.erethon.dungeonsxl.util.commons.config.CommonMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,7 +44,6 @@ public class TestCommand extends DCommand {
         setMinArgs(1);
         setMaxArgs(1);
         setHelp(DMessage.CMD_TEST_HELP.getMessage());
-        setPermission(DPermission.TEST.getNode());
         setPlayerCommand(true);
         setConsoleCommand(false);
     }
@@ -61,6 +60,11 @@ public class TestCommand extends DCommand {
         Dungeon dungeon = plugin.getDungeonRegistry().get(args[1]);
         if (dungeon == null) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NO_SUCH_DUNGEON.getMessage(args[1]));
+            return;
+        }
+
+        if (!dungeon.getMap().isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.TEST)) {
+            MessageUtil.sendMessage(player, CommonMessage.CMD_NO_PERMISSION.getMessage());
             return;
         }
 

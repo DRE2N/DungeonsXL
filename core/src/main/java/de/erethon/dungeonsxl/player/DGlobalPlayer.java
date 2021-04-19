@@ -387,8 +387,8 @@ public class DGlobalPlayer implements GlobalPlayer {
             return;
         }
         rewards.forEach(r -> r.giveTo(player.getPlayer()));
-        if (getGroup() != null && getGroup().getDungeon() != null) {
-            getData().logTimeLastLoot(getGroup().getDungeon().getName());
+        if (dungeon != null) {
+            getData().logTimeLastLoot(dungeon.getName());
         }
     }
 

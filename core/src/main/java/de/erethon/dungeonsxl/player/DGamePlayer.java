@@ -397,31 +397,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         if (getGame() != null && finished && getGame().hasRewards()) {
-            List<Reward> rewards = new ArrayList<>(dGroup.getRewards());
-            rewards.addAll(rules.getState(GameRule.REWARDS));
-            GlobalPlayerRewardPayOutEvent globalPlayerPayOutRewardEvent = new GlobalPlayerRewardPayOutEvent(this, rewards);
-            Bukkit.getPluginManager().callEvent(globalPlayerPayOutRewardEvent);
-            if (!globalPlayerPayOutRewardEvent.isCancelled()) {
-                giveLoot(getGroup().getDungeon(), globalPlayerPayOutRewardEvent.getRewards());
-            }
-
-            getData().logTimeLastFinished(getGroup().getDungeonName());
-
-            // Tutorial Permissions
-            if (getGame().isTutorial()) {
-                getData().setFinishedTutorial(true);
-                if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
-                    String endGroup = plugin.getMainConfig().getTutorialEndGroup();
-                    if (plugin.isGroupEnabled(endGroup)) {
-                        plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
-                    }
-
-                    String startGroup = plugin.getMainConfig().getTutorialStartGroup();
-                    if (plugin.isGroupEnabled(startGroup)) {
-                        plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
-                    }
-                }
-            }
+            plugin.log("Rewarding " + this);
+            reward();
         }
 
         if (getGroup() != null) {
@@ -471,6 +448,35 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
     }
 
+    public void reward() {
+        List<Reward> rewards = new ArrayList<>(dGroup.getRewards());
+        rewards.addAll(getGame().getRules().getState(GameRule.REWARDS));
+        GlobalPlayerRewardPayOutEvent globalPlayerPayOutRewardEvent = new GlobalPlayerRewardPayOutEvent(this, rewards);
+        Bukkit.getPluginManager().callEvent(globalPlayerPayOutRewardEvent);
+        if (!globalPlayerPayOutRewardEvent.isCancelled()) {
+            giveLoot(getGroup().getDungeon(), globalPlayerPayOutRewardEvent.getRewards());
+        }
+
+        getData().logTimeLastFinished(getGroup().getDungeonName());
+
+        // Tutorial Permissions
+        if (!getGame().isTutorial()) {
+            return;
+        }
+        getData().setFinishedTutorial(true);
+        if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
+            String endGroup = plugin.getMainConfig().getTutorialEndGroup();
+            if (plugin.isGroupEnabled(endGroup)) {
+                plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
+            }
+
+            String startGroup = plugin.getMainConfig().getTutorialStartGroup();
+            if (plugin.isGroupEnabled(startGroup)) {
+                plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
+            }
+        }
+    }
+
     @Override
     public void kill() {
         GroupPlayerKickEvent dPlayerKickEvent = new GroupPlayerKickEvent(getGroup(), this, GroupPlayerKickEvent.Cause.DEATH);
@@ -490,10 +496,6 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
     @Override
     public boolean ready() {
-        return ready(true);
-    }
-
-    public boolean ready(boolean rewards) {
         if (dGroup == null) {
             return false;
         }
@@ -502,9 +504,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         if (game == null) {
             game = new DGame(plugin, dGroup.getDungeon(), dGroup);
         }
-        game.setRewards(rewards);
 
-        if (rewards && !checkRequirements(game.getDungeon())) {
+        if (game.hasRewards() && !checkRequirements(game.getDungeon())) {
             return false;
         }
 
