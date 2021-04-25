@@ -75,7 +75,6 @@ public class DGroup implements PlayerGroup {
     private PlayerCollection invitedPlayers = new PlayerCollection();
     private Dungeon dungeon;
     private Game game;
-    private boolean playing;
     private List<Reward> rewards = new ArrayList<>();
     private BukkitTask timeIsRunningTask;
     private Color color;
@@ -100,7 +99,6 @@ public class DGroup implements PlayerGroup {
         group.name = name + "#" + group.id;
         group.color = color;
         group.dungeon = dungeon;
-        group.playing = false;
         group.addMember(leader);
         group.setLeader(leader);
 
@@ -340,11 +338,7 @@ public class DGroup implements PlayerGroup {
 
     @Override
     public boolean isPlaying() {
-        return playing;
-    }
-
-    public void setPlaying(boolean playing) {
-        this.playing = playing;
+        return game != null;
     }
 
     @Override
@@ -589,7 +583,6 @@ public class DGroup implements PlayerGroup {
             return false;
         }
 
-        playing = true;
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
 
         GameRuleContainer rules = getDungeon().getRules();
