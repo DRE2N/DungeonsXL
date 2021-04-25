@@ -33,6 +33,7 @@ import de.erethon.dungeonsxl.world.DResourceWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -135,7 +136,12 @@ public class EndSign extends Button {
             return true;
         }
 
-        dPlayer.finishFloor((DResourceWorld) floor);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                dPlayer.finishFloor((DResourceWorld) floor);
+            }
+        }.runTaskLater(api, 1L);
         return true;
     }
 
