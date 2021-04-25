@@ -44,7 +44,7 @@
         </repository>
         <repository>
             <id>dre-repo</id>
-            <url>http://erethon.de/repo</url>
+            <url>https://erethon.de/repo</url>
         </repository>
     </repositories>
 </project>
