@@ -128,6 +128,7 @@ error:
   dispenser: "&4You cannot access this dispenser."
   drop: "&4You cannot drop safe items"
   enderchest: "&4You cannot use an enderchest while in a dungeon."
+  groupIsPlaying: "&4This group is already in a dungeon."
   inGroup: "&4The player &6&v1&4 is already member of a group."
   joinGroup: "&4You have to join a group first."
   leaveDungeon: "&4You have to leave your current dungeon first."

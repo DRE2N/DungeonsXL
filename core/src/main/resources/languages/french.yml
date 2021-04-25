@@ -128,6 +128,7 @@ error:
   dispenser: "&4Vous ne pouvez accéder à ce distributeur."
   drop: "&4Vous ne pouvez pas lâcher cet objet protégé."
   enderchest: "&4Vous ne pouvez utiliser un coffre de l'ender quand vous êtes dans un donjon."
+  groupIsPlaying: "&4Ce groupe est déjà dans un donjon."
   inGroup: "&4Le joueur &6&v1&4 est déjà membre d'un groupe."
   joinGroup: "&4Vous devez d'abord rejoindre un groupe."
   leaveDungeon: "&4Vous devez d'abord quitter votre donjon actuel."

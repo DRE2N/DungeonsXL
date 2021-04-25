@@ -128,6 +128,7 @@ error:
   dispenser: "&4Du kannst auf diesen Werfer nicht zugreifen."
   drop: "&4Du kannst keine gesicherten Items wegwerfen."
   enderchest: "&4Du kannst im Dungeon keine Endertruhen benutzen."
+  groupIsPlaying: "&4Diese Gruppe ist schon in einem Dungeon."
   inGroup: "&4Der Spieler &6&v1&4 ist schon Mitglied einer Gruppe."
   joinGroup: "&4Du musst zuerst einer Gruppe beitreten."
   leaveDungeon: "&4Du musst zuerst Deinen Dungeon verlassen."

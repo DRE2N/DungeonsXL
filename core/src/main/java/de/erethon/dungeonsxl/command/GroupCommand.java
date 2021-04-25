@@ -200,6 +200,11 @@ public class GroupCommand extends DCommand {
             return;
         }
 
+        if (dGroup.isPlaying()) {
+            MessageUtil.sendMessage(sender, DMessage.ERROR_GROUP_IS_PLAYING.getMessage());
+            return;
+        }
+
         if (!dGroup.getInvitedPlayers().contains(player) && !DPermission.hasPermission(player, DPermission.BYPASS)) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NOT_INVITED.getMessage(args[2]));
             return;

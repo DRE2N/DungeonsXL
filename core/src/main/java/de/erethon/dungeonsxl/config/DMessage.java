@@ -112,6 +112,7 @@ public enum DMessage implements Message {
     ERROR_DISPENSER("error.dispenser"),
     ERROR_DROP("error.drop"),
     ERROR_ENDERCHEST("error.enderchest"),
+    ERROR_GROUP_IS_PLAYING("error.groupIsPlaying"),
     ERROR_IN_GROUP("error.inGroup"),
     ERROR_JOIN_GROUP("error.joinGroup"),
     ERROR_LEAVE_DUNGEON("error.leaveDungeon"),
