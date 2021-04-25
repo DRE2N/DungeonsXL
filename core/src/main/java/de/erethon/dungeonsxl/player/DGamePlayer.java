@@ -510,14 +510,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         ready = true;
-
-        boolean start = true;
-        if (!game.start()) {// TODO: Start for every player???
-            start = false;
-        } else {
-            respawn();
-        }
-        return start;
+        return ready;
     }
 
     @Override

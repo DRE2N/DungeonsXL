@@ -15,6 +15,7 @@
 package de.erethon.dungeonsxl.api.world;
 
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import java.io.File;
 import org.bukkit.OfflinePlayer;
@@ -120,22 +121,11 @@ public interface ResourceWorld {
      * Returns a new game instance of this resource.
      *
      * @see de.erethon.dungeonsxl.api.dungeon.Game#ensureWorldIsLoaded(boolean)
+     * @param game        the game the instance belongs to
      * @param ignoreLimit if the instance limit set in the main config shall be ignored
      * @return a new game instance of this resource
      */
-    default GameWorld instantiateGameWorld(boolean ignoreLimit) {
-        return instantiateGameWorld(getSingleFloorDungeon(), ignoreLimit);
-    }
-
-    /**
-     * Returns a new game instance of this resource.
-     *
-     * @see de.erethon.dungeonsxl.api.dungeon.Game#ensureWorldIsLoaded(boolean)
-     * @param dungeon     the dungeon this game world will be part of
-     * @param ignoreLimit if the instance limit set in the main config shall be ignored
-     * @return a new game instance of this resource
-     */
-    GameWorld instantiateGameWorld(Dungeon dungeon, boolean ignoreLimit);
+    GameWorld instantiateGameWorld(Game game, boolean ignoreLimit);
 
     /**
      * Returns the single floor dungeon of this resource.

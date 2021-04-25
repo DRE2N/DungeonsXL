@@ -233,14 +233,14 @@ public class DResourceWorld implements ResourceWorld {
     }
 
     @Override
-    public GameWorld instantiateGameWorld(Dungeon dungeon, boolean ignoreLimit) {
+    public GameWorld instantiateGameWorld(Game game, boolean ignoreLimit) {
         if (plugin.isLoadingWorld()) {
             return null;
         }
         if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= plugin.getInstanceCache().size()) {
             return null;
         }
-        return (DGameWorld) instantiate(new DGame(plugin, dungeon));
+        return (DGameWorld) instantiate(game);
     }
 
     @Override

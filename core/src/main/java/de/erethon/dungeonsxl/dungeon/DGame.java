@@ -291,7 +291,7 @@ public class DGame implements Game {
         if (world != null) {
             return world;
         }
-        world = dungeon.getMap().instantiateGameWorld(dungeon, ignoreLimit);
+        world = dungeon.getMap().instantiateGameWorld(this, ignoreLimit);
         return world;
     }
 
@@ -305,6 +305,7 @@ public class DGame implements Game {
                 continue;
             }
             if (!((DGroup) group).startGame(this, i++)) {
+                plugin.log("Could not start game for group " + group);
                 return false; // TODO: State of groups that are OK has already been changed
             }
         }

@@ -170,8 +170,11 @@ public class ReadySign extends Button {
         boolean wasReady = player.isReady();
 
         if (!getGameWorld().areClassesEnabled() || player.getPlayerClass() != null) {
-            if (player.ready() && bar != null) {
-                bar.cancel();
+            if (player.ready()) {
+                getGame().start();
+                if (bar != null) {
+                    bar.cancel();
+                }
             }
         }
 

@@ -515,7 +515,7 @@ public class DGroup implements PlayerGroup {
             return;
         }
 
-        GameWorld gameWorld = newFloor.instantiateGameWorld(true);
+        GameWorld gameWorld = newFloor.instantiateGameWorld(getGame(), true);
         gameWorld.setType(type);
         game.setWorld(gameWorld);
 
@@ -561,7 +561,6 @@ public class DGroup implements PlayerGroup {
             color = plugin.getMainConfig().getGroupColorPriority(index);
         }
 
-        boolean ready = true;
         for (Player player : getMembers().getOnlinePlayers()) {
             GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer(player);
             if (gamePlayer == null) {
@@ -569,12 +568,8 @@ public class DGroup implements PlayerGroup {
             }
 
             if (!gamePlayer.isReady()) {
-                ready = false;
+                return false;
             }
-        }
-
-        if (!ready) {
-            return false;
         }
 
         GroupStartFloorEvent event = new GroupStartFloorEvent(this, getGameWorld());
