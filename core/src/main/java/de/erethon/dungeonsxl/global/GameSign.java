@@ -88,7 +88,7 @@ public class GameSign extends JoinSign {
             game.getGroups().forEach(g -> ((DGroup) g).teleport());
         }
 
-        if (game.getGroups().get(0).isPlaying()) {
+        if (game.hasStarted()) {
             sign.setLine(0, DMessage.SIGN_GLOBAL_IS_PLAYING.getMessage());
 
         } else if (game.getGroups().size() >= maxElements) {
