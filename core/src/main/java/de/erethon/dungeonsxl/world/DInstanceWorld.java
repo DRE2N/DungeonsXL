@@ -207,20 +207,15 @@ public abstract class DInstanceWorld implements InstanceWorld {
         String name = "DXL_" + (game ? "Game" : "Edit") + "_" + counter;
         File instanceFolder = new File(Bukkit.getWorldContainer(), name);
         while (instanceFolder.exists()) {
-            World world = Bukkit.getWorld(name);
-            boolean removed = false;
-            if (world != null && world.getPlayers().isEmpty()) {
+            if (Bukkit.getWorld(name) != null) {
                 Bukkit.unloadWorld(name, /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
             }
-            if (world == null || world.getPlayers().isEmpty()) {
-                removed = instanceFolder.delete();
-            }
-            if (!removed) {
+            if (!instanceFolder.delete()) {
                 MessageUtil.log(DungeonsXL.getInstance(), "&6Warning: An unrecognized junk instance (&4" + name + "&6) has been found, but could not be deleted.");
-                counter++;
-                name = "DXL_" + (game ? "Game" : "Edit") + "_" + counter;
-                instanceFolder = new File(Bukkit.getWorldContainer(), name);
             }
+            counter++;
+            name = "DXL_" + (game ? "Game" : "Edit") + "_" + counter;
+            instanceFolder = new File(Bukkit.getWorldContainer(), name);
         }
         return name;
     }

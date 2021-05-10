@@ -20,7 +20,6 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.util.commons.misc.ProgressBar;
 import org.bukkit.Bukkit;
@@ -155,32 +154,20 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
     }
 
     @Override
-    public void update(boolean updateSecond) {
-        boolean locationValid = true;
-        Location teleportLocation = player.getLocation();
-
-        if (!getPlayer().getWorld().equals(getWorld())) {
-            locationValid = false;
-        }
-
-        if (editWorld != null) {
-            if (editWorld.getLobbyLocation() == null) {
-                teleportLocation = editWorld.getWorld().getSpawnLocation();
-            } else {
-                teleportLocation = editWorld.getLobbyLocation();
-            }
-        }
-
-        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, false, false, false, false);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
+    public void update() {
+        if (player.getWorld().equals(getWorld())) {
             return;
         }
-
-        if (!locationValid) {
-            getPlayer().teleport(teleportLocation);
+        plugin.log("Player " + this + " was expected to be in " + getWorld() + " but is in " + player.getWorld());
+        Location teleportLocation;
+        if (editWorld.getLobbyLocation() != null) {
+            teleportLocation = editWorld.getLobbyLocation();
+        } else {
+            teleportLocation = getWorld().getSpawnLocation();
         }
+
+        plugin.log("Teleporting to " + teleportLocation);
+        player.teleport(teleportLocation);
     }
 
 }

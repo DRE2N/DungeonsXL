@@ -133,9 +133,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
     /* Abstracts */
     /**
      * Repeating checks for the player.
-     *
-     * @param updateSecond Not all checks have to be done as often as others; some are just done in "update seconds".
      */
-    public abstract void update(boolean updateSecond);
+    public abstract void update();
 
 }

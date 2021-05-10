@@ -169,24 +169,34 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         String name = getWorld().getName();
         if (save) {
             getResource().getSignData().serializeSigns(signs.values());
-            Bukkit.unloadWorld(getWorld(), true);
+            boolean unloaded = Bukkit.unloadWorld(getWorld(), true);
+            if (!unloaded) {
+                plugin.log("Error: Could not unload world " + getWorld());
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     getResource().clearFolder();
                     FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
                     DResourceWorld.deleteUnusedFiles(getResource().getFolder());
-                    FileUtil.removeDir(getFolder());
+                    if (unloaded) {
+                        FileUtil.removeDir(getFolder());
+                    }
                     Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
                 }
             }.runTaskLater(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
         }
         if (!save) {
-            Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
+            boolean unloaded = Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
+            if (!unloaded) {
+                plugin.log("Error: Could not unload world " + getWorld());
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    FileUtil.removeDir(getFolder());
+                    if (unloaded) {
+                        FileUtil.removeDir(getFolder());
+                    }
                     Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
                 }
             }.runTaskLater(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);

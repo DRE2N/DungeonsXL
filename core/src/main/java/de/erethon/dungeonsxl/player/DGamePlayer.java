@@ -32,14 +32,12 @@ import de.erethon.dungeonsxl.api.event.player.GamePlayerDeathEvent;
 import de.erethon.dungeonsxl.api.event.player.GamePlayerFinishEvent;
 import de.erethon.dungeonsxl.api.event.player.GlobalPlayerRewardPayOutEvent;
 import de.erethon.dungeonsxl.api.event.requirement.RequirementDemandEvent;
-import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.event.dplayer.instance.DInstancePlayerUpdateEvent;
 import de.erethon.dungeonsxl.trigger.DistanceTrigger;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
@@ -769,91 +767,45 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
     }
 
     @Override
-    public void update(boolean updateSecond) {
-        boolean locationValid = true;
-        Location teleportLocation = player.getLocation();
-        boolean teleportWolf = false;
-        boolean offline = false;
-        boolean kick = false;
-        boolean triggerAllInDistance = false;
-
-        if (!updateSecond) {
-            if (!getPlayer().getWorld().equals(getWorld())) {
-                locationValid = false;
-
-                if (getGameWorld() != null) {
-                    teleportLocation = getLastCheckpoint();
-
-                    if (teleportLocation == null) {
-                        teleportLocation = getGameWorld().getStartLocation(getGroup());
-                    }
-
-                    // Don't forget Doge!
-                    if (getWolf() != null) {
-                        teleportWolf = true;
-                    }
+    public void update() {
+        if (player.isOnline()) {
+            if (!player.getWorld().equals(getWorld())) {
+                plugin.log("Player " + this + " was expected to be in " + getWorld() + " but is in " + player.getWorld());
+                Location teleportLocation = getLastCheckpoint();
+                if (teleportLocation == null) {
+                    teleportLocation = getGameWorld().getStartLocation(getGroup());
+                }
+                player.teleport(teleportLocation);
+                if (wolf != null && !wolf.isDead()) {
+                    wolf.teleport(teleportLocation);
                 }
             }
 
-        } else if (getGameWorld() != null) {
-            // Update Wolf
-            if (getWolf() != null) {
-                if (getWolf().isDead()) {
-                    if (getWolfRespawnTime() <= 0) {
-                        setWolf((Wolf) getWorld().spawnEntity(getPlayer().getLocation(), EntityType.WOLF));
-                        getWolf().setTamed(true);
-                        getWolf().setOwner(getPlayer());
-                        setWolfRespawnTime(30);
-                    }
+            if (wolf != null && wolf.isDead()) {
+                if (getWolfRespawnTime() <= 0) {
+                    wolf = (Wolf) getWorld().spawnEntity(player.getLocation(), EntityType.WOLF);
+                    wolf.setTamed(true);
+                    wolf.setOwner(player);
+                    setWolfRespawnTime(30);
+                } else {
                     wolfRespawnTime--;
                 }
-
-                // TODO Is doge even DMob?
-                DungeonMob dMob = plugin.getDungeonMob(getWolf());
-                if (dMob != null) {
-                    getGameWorld().removeMob(dMob);
-                }
             }
-
-            // Kick offline players
-            if (getOfflineTimeMillis() > 0) {
-                offline = true;
-
-                if (getOfflineTimeMillis() < System.currentTimeMillis()) {
-                    kick = true;
-                }
-            }
-
-            triggerAllInDistance = true;
         }
 
-        DInstancePlayerUpdateEvent event = new DInstancePlayerUpdateEvent(this, locationValid, teleportWolf, offline, kick, triggerAllInDistance);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (!locationValid) {
-            getPlayer().teleport(teleportLocation);
-        }
-
-        if (teleportWolf) {
-            getWolf().teleport(teleportLocation);
-        }
-
-        if (kick) {
+        // Kick offline players
+        if (getOfflineTimeMillis() > 0 && getOfflineTimeMillis() < System.currentTimeMillis()) {
             GroupPlayerKickEvent groupPlayerKickEvent = new GroupPlayerKickEvent(getGroup(), this, GroupPlayerKickEvent.Cause.OFFLINE);
             Bukkit.getPluginManager().callEvent(groupPlayerKickEvent);
-
             if (!groupPlayerKickEvent.isCancelled()) {
+                plugin.log(this + " was kicked from their group for being offline for too long.");
                 leave();
+                return;
             }
         }
 
-        if (triggerAllInDistance) {
-            DistanceTrigger.triggerAllInDistance(getPlayer(), (DGameWorld) getGameWorld());
-        }
+        plugin.log("Player " + this + " was expected to be online but is offline.", player, Player::isOnline);
+        DistanceTrigger.triggerAllInDistance(player, (DGameWorld) getGameWorld());
     }
 
 }

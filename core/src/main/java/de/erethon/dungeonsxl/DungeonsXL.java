@@ -57,6 +57,7 @@ import de.erethon.dungeonsxl.mob.ExternalMobPlugin;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
+import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.player.SecureModeTask;
@@ -410,15 +411,9 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         }
 
         new BukkitRunnable() {
-            int i = 0;
-
             @Override
             public void run() {
-                boolean update = ++i == 10;
-                if (update) {
-                    i = 0;
-                }
-                playerCache.getAllGamePlayers().forEach(p -> ((DGamePlayer) p).update(update));
+                playerCache.getAllInstancePlayers().forEach(p -> ((DInstancePlayer) p).update());
             }
         }.runTaskTimer(this, 2L, 2L);
 

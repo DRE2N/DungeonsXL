@@ -476,8 +476,12 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         kickAllPlayers();
 
         String name = getWorld().getName();
-        Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
-        FileUtil.removeDir(getFolder());
+        boolean unloaded = Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
+        if (unloaded) {
+            FileUtil.removeDir(getFolder());
+        } else {
+            plugin.log("Error: World could not be unloaded, players left in world: " + !getWorld().getPlayers().isEmpty());
+        }
         plugin.getInstanceCache().remove(this);
         Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
     }
