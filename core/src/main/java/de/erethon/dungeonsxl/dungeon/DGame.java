@@ -64,7 +64,8 @@ public class DGame implements Game {
         this.plugin = plugin;
         plugin.getGameCache().add(this);
 
-        this.dungeon = dungeon;
+        setDungeon(dungeon);
+
         if (this.dungeon == null) {
             throw new IllegalStateException("Game initialized without dungeon");
         }
