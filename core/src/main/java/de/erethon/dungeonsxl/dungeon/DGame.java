@@ -300,14 +300,19 @@ public class DGame implements Game {
     public boolean start() {
         getWorld().setWeather(getRules());
 
-        int i = 0;
         for (PlayerGroup group : groups) {
             if (group == null) {
                 continue;
             }
-            if (!((DGroup) group).startGame(this, i++)) {
+            if (!((DGroup) group).checkStartGame(this)) {
                 plugin.log("Could not start game for group " + group);
-                return false; // TODO: State of groups that are OK has already been changed
+                return false;
+            }
+        }
+        int i = 0;
+        for (PlayerGroup group : groups) {
+            if (group != null) {
+                ((DGroup) group).startGame(this, i++);
             }
         }
 

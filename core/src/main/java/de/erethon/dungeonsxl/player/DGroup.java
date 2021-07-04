@@ -556,11 +556,7 @@ public class DGroup implements PlayerGroup {
         plugin.getGroupAdapters().forEach(a -> a.deleteCorrespondingGroup(this));
     }
 
-    public boolean startGame(Game game, int index) {
-        if (color == null) {
-            color = plugin.getMainConfig().getGroupColorPriority(index);
-        }
-
+    public boolean checkStartGame(Game game) {
         for (Player player : getMembers().getOnlinePlayers()) {
             GamePlayer gamePlayer = plugin.getPlayerCache().getGamePlayer(player);
             if (gamePlayer == null) {
@@ -574,10 +570,13 @@ public class DGroup implements PlayerGroup {
 
         GroupStartFloorEvent event = new GroupStartFloorEvent(this, getGameWorld());
         Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
+        return !event.isCancelled();
+    }
 
+    public void startGame(Game game, int index) {
+        if (color == null) {
+            color = plugin.getMainConfig().getGroupColorPriority(index);
+        }
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
 
         GameRuleContainer rules = getDungeon().getRules();
@@ -595,8 +594,6 @@ public class DGroup implements PlayerGroup {
             }
             ((DGamePlayer) player).startGame();
         }
-
-        return true;
     }
 
     public void winGame() {
