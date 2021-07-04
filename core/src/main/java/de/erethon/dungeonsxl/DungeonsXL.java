@@ -98,11 +98,16 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -780,6 +785,26 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     @Override
     public boolean isInstance(World world) {
         return world.getName().startsWith("DXL_Game_") || world.getName().startsWith("DXL_Edit_");
+    }
+
+    @Override
+    public boolean isDungeonItem(ItemStack itemStack) {
+        if (!de.erethon.commons.compatibility.Version.isAtLeast(de.erethon.commons.compatibility.Version.MC1_13)) {
+            return false;
+        }
+        if (itemStack == null || !itemStack.hasItemMeta()) {
+            return false;
+        }
+        return itemStack.getItemMeta().getPersistentDataContainer().has(NamespacedKey.fromString("dungeon_item", this), PersistentDataType.BYTE);
+    }
+
+    @Override
+    public ItemStack setDungeonItem(ItemStack itemStack, boolean dungeonItem) {
+        ItemStack dIStack = itemStack.clone();
+        ItemMeta meta = dIStack.getItemMeta();
+        meta.getPersistentDataContainer().set(NamespacedKey.fromString("dungeon_item", this), PersistentDataType.BYTE, (byte) 1);
+        dIStack.setItemMeta(meta);
+        return dIStack;
     }
 
     /**

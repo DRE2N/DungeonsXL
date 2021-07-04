@@ -32,7 +32,6 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.util.LocationString;
-import de.erethon.dungeonsxl.util.NBTUtil;
 import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
 import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
 import java.io.File;
@@ -508,7 +507,7 @@ public class DGlobalPlayer implements GlobalPlayer {
                     if (item == null) {
                         continue;
                     }
-                    if (NBTUtil.isDungeonItem(item)) {
+                    if (plugin.isDungeonItem(item)) {
                         item.setAmount(0);
                     }
                 }

@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.util.commons.command.DRECommand;
 import de.erethon.dungeonsxl.util.commons.command.DRECommandCache;
+import de.erethon.dungeonsxl.util.commons.compatibility.Version;
 
 /**
  * An enumeration of all command instances.
@@ -100,7 +101,9 @@ public class DCommandCache extends DRECommandCache {
         addCommand(breakCmd);
         addCommand(create);
         addCommand(delete);
-        addCommand(dungeonItem);
+        if (Version.isAtLeast(Version.MC1_13)) {
+            addCommand(dungeonItem);
+        }
         addCommand(edit);
         addCommand(enter);
         addCommand(escape);

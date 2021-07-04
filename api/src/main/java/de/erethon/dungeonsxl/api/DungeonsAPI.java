@@ -36,6 +36,7 @@ import java.util.Collection;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -293,5 +294,26 @@ public interface DungeonsAPI extends Plugin {
      * @return if the given world is an instance
      */
     boolean isInstance(World world);
+
+    /**
+     * Returns if the given item stack is a dungeon item.
+     * <p>
+     * Dungeon items are items that are removed from the inventory when the dungeon is finished.
+     *
+     * @param itemStack the item stack
+     * @return if the given item stack is a dungeon item
+     */
+    boolean isDungeonItem(ItemStack itemStack);
+
+    /**
+     * Sets the given item stack to be a dungeon item and returns a copy with the updated state.
+     * <p>
+     * Dungeon items are items that are removed from the inventory when the dungeon is finished.
+     *
+     * @param itemStack   the item stack
+     * @param dungeonItem if the item stack
+     * @return a copy of the item stack that is a dungeon item
+     */
+    ItemStack setDungeonItem(ItemStack itemStack, boolean dungeonItem);
 
 }
