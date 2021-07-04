@@ -118,7 +118,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
 
     /* Constants */
-    public static final String LATEST_IXL = "1.0";
+    public static final String LATEST_IXL = "1.0.1";
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
 
     /* Folders of internal features */
@@ -236,8 +236,8 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public void onEnable() {
         super.onEnable();
         String ixlVersion = manager.isPluginEnabled("ItemsXL") ? manager.getPlugin("ItemsXL").getDescription().getVersion() : "";
-        if (ixlVersion.startsWith("0.")) {
-            getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v" + LATEST_IXL +" or higher to run.");
+        if (ixlVersion.startsWith("0.") || ixlVersion.equals("1.0")) {
+            getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v" + LATEST_IXL + " or higher to run.");
             manager.disablePlugin(this);
             return;
         }
@@ -452,15 +452,14 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
                     File backup = new File(DungeonsXL.BACKUPS, resource.getName() + "-" + System.currentTimeMillis() + "_crashbackup");
                     FileUtil.copyDir(resource, backup);
                     // Remove all files from the backupped resource world but not the config & data that we cannot fetch from the instance.
-                    remove:
-                    for (File remove : FileUtil.getFilesForFolder(resource)) {
-                        for (String nope : DungeonsXL.EXCLUDED_FILES) {
-                            if (remove.getName().equals(nope)) {
-                                continue remove;
+                    remove: for (File remove : FileUtil.getFilesForFolder(resource)) {
+                                for (String nope : DungeonsXL.EXCLUDED_FILES) {
+                                    if (remove.getName().equals(nope)) {
+                                        continue remove;
+                                    }
+                                }
+                                remove.delete();
                             }
-                        }
-                        remove.delete();
-                    }
                     DResourceWorld.deleteUnusedFiles(file);
                     FileUtil.copyDir(file, resource, DungeonsXL.EXCLUDED_FILES);
                 }
