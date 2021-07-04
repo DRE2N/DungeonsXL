@@ -106,7 +106,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -789,7 +788,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     @Override
     public boolean isDungeonItem(ItemStack itemStack) {
-        if (!de.erethon.commons.compatibility.Version.isAtLeast(de.erethon.commons.compatibility.Version.MC1_13)) {
+        if (!Version.isAtLeast(Version.MC1_16_5)) {
             return false;
         }
         if (itemStack == null || !itemStack.hasItemMeta()) {
@@ -800,9 +799,20 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     @Override
     public ItemStack setDungeonItem(ItemStack itemStack, boolean dungeonItem) {
+        if (!Version.isAtLeast(Version.MC1_16_5)) {
+            return null;
+        }
+        if (itemStack == null || !itemStack.hasItemMeta()) {
+            return null;
+        }
         ItemStack dIStack = itemStack.clone();
         ItemMeta meta = dIStack.getItemMeta();
-        meta.getPersistentDataContainer().set(NamespacedKey.fromString("dungeon_item", this), PersistentDataType.BYTE, (byte) 1);
+        NamespacedKey key = NamespacedKey.fromString("dungeon_item", this);
+        if (dungeonItem) {
+            meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+        } else {
+            meta.getPersistentDataContainer().remove(key);
+        }
         dIStack.setItemMeta(meta);
         return dIStack;
     }

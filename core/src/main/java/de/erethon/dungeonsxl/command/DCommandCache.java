@@ -101,7 +101,7 @@ public class DCommandCache extends DRECommandCache {
         addCommand(breakCmd);
         addCommand(create);
         addCommand(delete);
-        if (Version.isAtLeast(Version.MC1_13)) {
+        if (Version.isAtLeast(Version.MC1_16_5)) {
             addCommand(dungeonItem);
         }
         addCommand(edit);
