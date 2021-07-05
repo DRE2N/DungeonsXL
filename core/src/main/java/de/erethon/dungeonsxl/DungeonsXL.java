@@ -122,7 +122,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
 
     /* Constants */
-    public static final String LATEST_IXL = "1.0.1";
+    public static final String LATEST_IXL = "1.0.2";
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
 
     /* Folders of internal features */
@@ -240,7 +240,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public void onEnable() {
         super.onEnable();
         String ixlVersion = manager.isPluginEnabled("ItemsXL") ? manager.getPlugin("ItemsXL").getDescription().getVersion() : "";
-        if (ixlVersion.startsWith("0.") || ixlVersion.equals("1.0")) {
+        if (ixlVersion.startsWith("0.") || ixlVersion.matches("1.0[\\.]?[1]?")) {
             getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v" + LATEST_IXL + " or higher to run.");
             manager.disablePlugin(this);
             return;
