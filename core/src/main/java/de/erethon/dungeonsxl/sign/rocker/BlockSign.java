@@ -22,8 +22,11 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.MagicValueUtil;
+import de.erethon.dungeonsxl.util.commons.compatibility.CompatibilityHandler;
 import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 /**
@@ -104,7 +107,7 @@ public class BlockSign extends Rocker {
 
         getSign().getBlock().setType(offBlock.getMaterial());
         try {
-            MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
+            setBlockData(getSign().getBlock(), offBlockData);
         } catch (IllegalArgumentException exception) {
             markAsErroneous("offBlock data value " + offBlockData + " cannot be applied to given type " + offBlock.getId());
         }
@@ -114,7 +117,7 @@ public class BlockSign extends Rocker {
     public void activate() {
         getSign().getBlock().setType(onBlock.getMaterial());
         try {
-            MagicValueUtil.setBlockData(getSign().getBlock(), onBlockData);
+            setBlockData(getSign().getBlock(), onBlockData);
         } catch (IllegalArgumentException exception) {
             markAsErroneous("onBlock data value " + onBlockData + " cannot be applied to given type " + onBlock.getId());
             return;
@@ -126,12 +129,31 @@ public class BlockSign extends Rocker {
     public void deactivate() {
         getSign().getBlock().setType(offBlock.getMaterial());
         try {
-            MagicValueUtil.setBlockData(getSign().getBlock(), offBlockData);
+            setBlockData(getSign().getBlock(), offBlockData);
         } catch (IllegalArgumentException exception) {
             markAsErroneous("onBlock data value " + offBlockData + " cannot be applied to given type " + onBlock.getId());
             return;
         }
         active = false;
+    }
+
+    private static Method craftBlockSetData;
+
+    private static void setBlockData(Block block, byte data) {
+        if (craftBlockSetData == null) {
+            try {
+                craftBlockSetData = Class.forName(
+                        "org.bukkit.craftbukkit." + CompatibilityHandler.getInstance().getInternals() + ".block.CraftBlock")
+                        .getDeclaredMethod("setData", byte.class);
+            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalArgumentException exception) {
+                exception.printStackTrace();
+            }
+        }
+        try {
+            craftBlockSetData.invoke(block, data);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
+            exception.printStackTrace();
+        }
     }
 
 }
