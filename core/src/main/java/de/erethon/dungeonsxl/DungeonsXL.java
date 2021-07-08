@@ -597,6 +597,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
      * @param loadingWorld if a world is being loaded
      */
     public void setLoadingWorld(boolean loadingWorld) {
+        log("World loading is now " + (loadingWorld ? "LOCKED" : "UNLOCKED"));
         this.loadingWorld = loadingWorld;
     }
 

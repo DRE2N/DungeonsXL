@@ -26,7 +26,6 @@ import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
 import de.erethon.dungeonsxl.util.commons.compatibility.Version;
 import de.erethon.dungeonsxl.util.commons.misc.FileUtil;

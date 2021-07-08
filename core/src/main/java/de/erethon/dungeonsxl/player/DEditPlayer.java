@@ -143,11 +143,13 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
         reset(false);
 
         if (unloadIfEmpty && !plugin.isLoadingWorld() && editWorld != null && editWorld.getPlayers().isEmpty()) {
+            plugin.setLoadingWorld(true);
             editWorld.delete();
             new ProgressBar(player, config.getEditInstanceRemovalDelay()) {
                 @Override
                 public void onFinish() {
                     MessageUtil.sendActionBarMessage(player, DMessage.CMD_SAVE_SUCCESS.getMessage());
+                    plugin.setLoadingWorld(false);
                 }
             }.send(plugin);
         }
