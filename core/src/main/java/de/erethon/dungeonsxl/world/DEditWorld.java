@@ -95,14 +95,14 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         }
 
         plugin.setLoadingWorld(true);
-        Map<Player, Double[]> players = new HashMap<>();
+        Map<Player, double[]> players = new HashMap<>();
         getWorld().getPlayers().forEach(p -> players.put(p,
-                new Double[]{
+                new double[]{
                     p.getLocation().getX(),
                     p.getLocation().getY(),
                     p.getLocation().getZ(),
-                    new Double(p.getLocation().getYaw()),
-                    new Double(p.getLocation().getPitch())
+                    p.getLocation().getYaw(),
+                    p.getLocation().getPitch()
                 }
         ));
         kickAllPlayers();
@@ -124,8 +124,8 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                 players.keySet().forEach(p -> {
                     if (p.isOnline()) {
                         new DEditPlayer(plugin, p, newEditWorld);
-                        Double[] coords = players.get(p);
-                        p.teleport(new Location(newEditWorld.getWorld(), coords[0], coords[1], coords[2], coords[3].floatValue(), coords[4].floatValue()));
+                        double[] coords = players.get(p);
+                        p.teleport(new Location(newEditWorld.getWorld(), coords[0], coords[1], coords[2], (float) coords[3], (float) coords[4]));
                     }
                 });
             }
