@@ -589,8 +589,8 @@ public class DGroup implements PlayerGroup {
         for (UUID playerId : getMembers()) {
             GlobalPlayer player = plugin.getPlayerCache().get(playerId);
             if (!(player instanceof DGamePlayer)) {
-                plugin.log("Player isn't a DGamePlayer");
-                continue;
+                plugin.log("[ERROR] Player isn't a DGamePlayer, registry: " + plugin.getPlayerCache().getAll());
+                return;
             }
             ((DGamePlayer) player).startGame();
         }

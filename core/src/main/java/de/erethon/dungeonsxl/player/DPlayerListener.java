@@ -454,7 +454,7 @@ public class DPlayerListener implements Listener {
             ((InstancePlayer) dPlayer).leave();
         }
 
-        plugin.getPlayerCache().remove(dPlayer);
+        plugin.getPlayerCache().remove(plugin.getPlayerCache().get(player));
     }
 
     @EventHandler
