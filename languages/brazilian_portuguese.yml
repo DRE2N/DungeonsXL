@@ -8,8 +8,8 @@ cmd:
   announce:
     help: "/dxl announce [name] - Executa um script de anúncio"
   break:
-    breakMode: "&6Você pode quebrar um bloqueio protegido por DungeonsXL."
-    help: "/dxl break - Quebre um bloqueio protegido por DungeonsXL"
+    breakMode: "&6Você pode quebrar um bloco protegido por DungeonsXL."
+    help: "/dxl break - Quebre um bloco protegido por DungeonsXL"
     protectedMode: "&6Você não pode mais quebrar blocos protegidos pelo DungeonsXL."
   chat:
     dungeonChat: "&6Você entrou no chat da dungeon"
@@ -51,7 +51,7 @@ cmd:
       invite: "/dxl group invite [player] - Convida alguém para o seu grupo"
       join: "/dxl group join [group]- Junte-se a um grupo"
       kick: "/dxl group kick [player] - Expulse um jogador"
-      main: "/dxl group - Mostra a ajuda dos comando de grupo"
+      main: "/dxl group - Mostra a ajuda dos comandos de grupo"
       show: "/dxl group show [group] - Mostra um grupo"
       uninvite: "/dxl group uninvite [player] - Cancele um convite para o seu grupo"
   help:
@@ -79,7 +79,7 @@ cmd:
   main:
     compatibility: "&eInternos: &o[&v1] &eVault: &o[&v2] &eItemsXL: &o[&v3]"
     help: "/dxl - Informações gerais de status"
-    helpInfo: "&7Escreva no &o/dxl help&r&7 para obter mais informações."
+    helpInfo: "&7Escreva &o/dxl help&r&7 para obter mais informações."
     loaded: "&eMapas: &o[&v1] &eDungeons: &o[&v2] &eCarregados: &o[&v3] &eJogadores: &o[&v4]"
     welcome: "&Seja bem-vindo ao &4Dungeons&fXL"
   msg:
