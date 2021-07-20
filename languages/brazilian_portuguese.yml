@@ -38,10 +38,10 @@ cmd:
   edit:
     help: "/dxl edit [map] - Editar um mapa de dungeon existente"
   enter:
-    help: "/dxl enter ([joining group]) [target group] - Deixe o grupo que se junta entrar no jogo do grupo-alvo"
+    help: "/dxl enter ([grupo que se junta]) [grupo-alvo] - Deixe o grupo que se junta entrar no jogo do grupo-alvo"
     success: "&6O grupo &4&v1&6 entrou com sucesso no jogo do grupo &4&v2&6."
   escape:
-    help: "/dxl escape - Sai do mundo de edição atual sem salvar"
+    help: "/dxl escape - Sai do mapa sendo editado atualmente sem salvar"
   game:
     help: "/dxl game - Mostra informações sobre a sessão de jogo atual"
   group:
@@ -57,8 +57,8 @@ cmd:
   help:
     help: "/dxl help [page] - Mostra a página de ajuda"
   import:
-    help: "/dxl import [world] - Importa um mundo do contêiner mundial como um mapa da dungeon"
-    success: "&6Importou o mundo com sucesso &4&v1&6."
+    help: "/dxl import [world] - Importa um mapa global como um mapa da dungeon"
+    success: "&6Importou o mapa com sucesso &4&v1&6."
   invite:
     help: "/dxl invite [player] [dungeon] - Convide um jogador para editar uma dungeon"
     success: "&6O jogador &4&v1&6 foi convidado com sucesso para editar o mapa &4&v2&6."
@@ -68,7 +68,7 @@ cmd:
     help: "/dxl kick [player] - Expulsa o jogador de seu grupo e dungeon"
     success: "&6Expulso com sucesso o jogador &4&v1&6 para fora do grupo."
   leave:
-    help: "/dxl leave - Sai do grupo atual e da dungeon ou do mundo de edição"
+    help: "/dxl leave - Sai do grupo atual e da dungeon ou do mapa sendo editado"
     success: "&6Você saiu do seu grupo com sucesso."
   list:
     help: "/dxl list ([dungeon|map|loaded]) ([dungeon]) - Lista todas as dungeons"
@@ -144,12 +144,12 @@ error:
   noLeaveInTutorial: "&4Você não pode usar este comando no tutorial."
   noPermissions: "&4Você não tem permissão para fazer isso."
   noProtectedBlock: "&4Este não é um bloco protegido por DungeonsXL."
-  noReadySign: "&4O mundo &6&v1 &4parece não ter um sinal de pronto. Nenhum jogo pode ser iniciado e apenas os sinais da dungeon do lobby serão inicializados."
+  noReadySign: "&4O mapa &6&v1 &4parece não ter um sinal de pronto. Nenhum jogo pode ser iniciado e apenas os sinais da dungeon do lobby serão inicializados."
   noRewardsTime: "&4Você não pode receber recompensas antes de &6&v1&4."
   noSuchAnnouncement: "&4Este anúncio não existe."
   noSuchDungeon: "&4Esta dungeon não existe."
   noSuchGroup: "&4O grupo &6&v1&4 não existe."
-  noSuchMap: "&4O mundo &6&v1&4 não existe."
+  noSuchMap: "&4O mapa &6&v1&4 não existe."
   noSuchPlayer: "&4O jogador &6&v1&4 não existe."
   noSuchResourcePack: "&4O resource pack &6&v1 &4não está registrado no arquivo de configuração principal."
   noSuchShop: "&4Loja &v1 &4não encontrada..."
@@ -218,11 +218,11 @@ player:
   protectedBlockDeleted: "&6A proteção foi removida com sucesso."
   ready: "&6Agora você está pronto para iniciar a dungeon."
   signCopied: "&6Dados da placa copiados."
-  signCreated: "&6Placa de dungeon criado com sucesso."
+  signCreated: "&6Placa de dungeon criada com sucesso."
   timeKick: "O tempo de &2&v1&6 acabou."
   timeLeft: "&v1Você tem &6&v2 &v1segundos restantes para terminar a dungeon."
   treasures: "&1Tesouros"
-  uninvited: "&4&v1&6 retomou o seu convite para o grupo &4&v2&6."
+  uninvited: "&4&v1&6 cancelou o seu convite para o grupo &4&v2&6."
   unlimitedLives: "ilimitado"
   waitForOtherPlayers: "&6Esperando por membros da equipe..."
 requirement:
