@@ -185,14 +185,6 @@ public class GameRule<V> {
      */
     public static final GameRule<Integer> TIME_LAST_PLAYED_REQUIRED_DUNGEONS = new GameRule<>(Integer.class, "timeLastPlayedRequiredDungeons", 0);
     /**
-     * Time in hours when the game may be played again after it has been started.
-     */
-    public static final GameRule<Integer> TIME_TO_NEXT_PLAY_AFTER_START = new GameRule<>(Integer.class, "timeToNextPlayAfterStart", 0);
-    /**
-     * When the game may be played again after it has been finished.
-     */
-    public static final GameRule<Integer> TIME_TO_NEXT_PLAY_AFTER_FINISH = new GameRule<>(Integer.class, "timeToNextPlayAfterFinish", 0);
-    /**
      * When loot may be taken away out of the dungeon again.
      */
     public static final GameRule<Integer> TIME_TO_NEXT_LOOT = new GameRule<>(Integer.class, "timeToNextLoot", 0);

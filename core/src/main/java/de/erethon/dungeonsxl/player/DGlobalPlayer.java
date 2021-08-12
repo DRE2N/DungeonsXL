@@ -267,22 +267,6 @@ public class DGlobalPlayer implements GlobalPlayer {
         boolean fulfilled = true;
         GameRuleContainer rules = dungeon.getRules();
 
-        if (!checkTimeAfterStart(dungeon) && !checkTimeAfterFinish(dungeon)) {
-            int longestTime = rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START) >= rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH)
-                    ? rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START) : rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH);
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(longestTime)));
-            fulfilled = false;
-
-        } else if (!checkTimeAfterStart(dungeon)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START))));
-            fulfilled = false;
-
-        } else if (!checkTimeAfterFinish(dungeon)) {
-            MessageUtil.sendMessage(player, DMessage.ERROR_COOLDOWN.getMessage(String.valueOf(rules.getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH))));
-            fulfilled = false;
-        }
-
-        boolean genericReqs = true;
         List<BaseComponent[]> msgs = new ArrayList<>(rules.getState(GameRule.REQUIREMENTS).size());
         for (Requirement requirement : rules.getState(GameRule.REQUIREMENTS)) {
             if (requirement == null) {
@@ -298,10 +282,9 @@ public class DGlobalPlayer implements GlobalPlayer {
             msgs.add(event.getCheckMessage());
             if (!requirement.check(player)) {
                 fulfilled = false;
-                genericReqs = false;
             }
         }
-        if (!genericReqs) {
+        if (!fulfilled) {
             MessageUtil.sendMessage(player, DMessage.ERROR_REQUIREMENTS.getMessage());
             msgs.forEach(msg -> MessageUtil.sendMessage(player, msg));
         }
@@ -361,24 +344,6 @@ public class DGlobalPlayer implements GlobalPlayer {
         }
 
         return fulfilled || DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS);
-    }
-
-    public boolean checkTimeAfterStart(Dungeon dungeon) {
-        return checkTime(dungeon, dungeon.getRules().getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_START),
-                getData().getTimeLastStarted(dungeon.getName()));
-    }
-
-    public boolean checkTimeAfterFinish(Dungeon dungeon) {
-        return checkTime(dungeon, dungeon.getRules().getState(GameRule.TIME_TO_NEXT_PLAY_AFTER_FINISH),
-                getData().getTimeLastFinished(dungeon.getName()));
-    }
-
-    public boolean checkTime(Dungeon dungeon, int requirement, long dataTime) {
-        if (DPermission.hasPermission(player, DPermission.IGNORE_TIME_LIMIT)) {
-            return true;
-        }
-
-        return dataTime == -1 || dataTime + requirement * 1000 * 60 * 60 <= System.currentTimeMillis();
     }
 
     public void giveLoot(Dungeon dungeon, List<Reward> rewards) {

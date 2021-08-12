@@ -124,7 +124,6 @@ error:
   blockOwnTeam: "&4Ce bloque appartient à votre groupe."
   chestIsOpened: "&4Ce coffre a déjà été ouvert."
   cmd: "&4Les commandes ne sont pas autorisées pendant un donjon."
-  cooldown: "&4Vous ne pouvez entrer dans ce donjon que toutes les &6&v1&4 heures."
   dispenser: "&4Vous ne pouvez accéder à ce distributeur."
   drop: "&4Vous ne pouvez pas lâcher cet objet protégé."
   enderchest: "&4Vous ne pouvez utiliser un coffre de l'ender quand vous êtes dans un donjon."
@@ -234,6 +233,10 @@ requirement:
   groupSize: "Quantité des joueurs"
   keyItems: "Clés"
   permission: "Permissions"
+  timeSince:
+    finish: "Assez de temps passé depuis le dernier jeu terminé (&v1 heures)"
+    start: "Assez de temps passé depuis le dernier jeu commencé (&v1 heures)"
+    never: "Pas de jeux."
   timeframe: "Créneau horaire"
 reward:
   general: "&6Vous avez reçu &4&v1 &6pour avoir fini le donjon."

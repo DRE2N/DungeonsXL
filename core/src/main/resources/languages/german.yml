@@ -124,7 +124,6 @@ error:
   blockOwnTeam: "&4Dieser Block gehört zu Deiner eigenen Gruppe."
   chestIsOpened: "&4Diese Truhe wurde schon geöffnet."
   cmd: "&4Befehle sind im Dungeon nicht erlaubt."
-  cooldown: "&4Du kannst diesen Dungeon nur alle &6&v1&4 Stunden betreten."
   dispenser: "&4Du kannst auf diesen Werfer nicht zugreifen."
   drop: "&4Du kannst keine gesicherten Items wegwerfen."
   enderchest: "&4Du kannst im Dungeon keine Endertruhen benutzen."
@@ -234,6 +233,10 @@ requirement:
   groupSize: "Gruppengröße"
   keyItems: "Schlüssel"
   permission: "Permissions"
+  timeSince:
+    finish: "Ausreichend vergangene Zeit seit dem letzten abgeschlossenen Spiel (&v1 Stunden)"
+    start: "Ausreichend vergangene Zeit seit dem letzten Versuch (&v1 Stunden)"
+    never: "Bisher keine Versuche."
   timeframe: "Zeitfenster"
 reward:
   general: "&6Du hast &4&v1 &6für das Beenden des Dungeons erhalten."

@@ -606,21 +606,6 @@ public class DGroup implements PlayerGroup {
     }
 
     // This is not used.
-    public boolean checkTime() {
-        if (DPermission.hasPermission(getLeader(), DPermission.IGNORE_TIME_LIMIT)) {
-            return true;
-        }
-
-        for (DGamePlayer dPlayer : getDGamePlayers()) {
-            if (!dPlayer.checkTimeAfterStart(dungeon) || !dPlayer.checkTimeAfterFinish(dungeon)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    // This is not used.
     public boolean checkRequirements() {
         if (DPermission.hasPermission(getLeader(), DPermission.IGNORE_REQUIREMENTS)) {
             return true;

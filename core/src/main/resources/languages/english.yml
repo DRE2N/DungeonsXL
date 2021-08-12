@@ -124,7 +124,6 @@ error:
   blockOwnTeam: "&4This block belongs to your own group."
   chestIsOpened: "&4This chest has already been opened."
   cmd: "&4Commands are not allowed while in a dungeon."
-  cooldown: "&4You can only enter this dungeon every &6&v1&4 hours."
   dispenser: "&4You cannot access this dispenser."
   drop: "&4You cannot drop safe items"
   enderchest: "&4You cannot use an enderchest while in a dungeon."
@@ -234,6 +233,10 @@ requirement:
   groupSize: "Group size"
   keyItems: "Keys"
   permission: "Permissions"
+  timeSince:
+    finish: "Enough passed time since last playthrough (&v1 hours)"
+    start: "Enough passed time since last try (&v1 hours)"
+    never: "No playthroughs so far."
   timeframe: "Timeframe"
 reward:
   general: "&6You received &4&v1 &6for finishing the dungeon."

@@ -42,6 +42,8 @@ public class DXLModule implements DungeonModule {
         requirementRegistry.add("groupSize", GroupSizeRequirement.class);
         requirementRegistry.add("keyItems", KeyItemsRequirement.class);
         requirementRegistry.add("permission", PermissionRequirement.class);
+        requirementRegistry.add("timeSinceFinish", TimeSinceFinishRequirement.class);
+        requirementRegistry.add("timeSinceStart", TimeSinceStartRequirement.class);
         requirementRegistry.add("timeframe", TimeframeRequirement.class);
     }
 
