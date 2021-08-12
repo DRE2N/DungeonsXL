@@ -803,7 +803,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         if (!Version.isAtLeast(Version.MC1_16_5)) {
             return null;
         }
-        if (itemStack == null || !itemStack.hasItemMeta()) {
+        if (itemStack == null || itemStack.getItemMeta() == null) {
             return null;
         }
         ItemStack dIStack = itemStack.clone();
