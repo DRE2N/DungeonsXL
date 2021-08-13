@@ -229,6 +229,11 @@ requirement:
   feeItems: "Items"
   feeLevel: "Level"
   feeMoney: "Geld"
+  finishedDungeons:
+    and: "und"
+    name: "Abgeschlossene Dungeons"
+    or: "oder"
+    withinTime: "innerhalb der letzten &v1 Stunden"
   forbiddenItems: "Verbotene Items"
   groupSize: "Gruppengröße"
   keyItems: "Schlüssel"

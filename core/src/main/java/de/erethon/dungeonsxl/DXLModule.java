@@ -38,6 +38,7 @@ public class DXLModule implements DungeonModule {
     public void initRequirements(Registry<String, Class<? extends Requirement>> requirementRegistry) {
         requirementRegistry.add("feeLevel", FeeLevelRequirement.class);
         requirementRegistry.add("feeMoney", FeeMoneyRequirement.class);
+        requirementRegistry.add("finishedDungeons", FinishedDungeonsRequirement.class);
         requirementRegistry.add("forbiddenItems", ForbiddenItemsRequirement.class);
         requirementRegistry.add("groupSize", GroupSizeRequirement.class);
         requirementRegistry.add("keyItems", KeyItemsRequirement.class);

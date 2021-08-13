@@ -51,7 +51,6 @@ public enum DPermission {
     GROUP_ADMIN("group.admin", OP, GROUP),
     HELP("help", TRUE),
     IGNORE_REQUIREMENTS("ignorerequirements", OP),
-    IGNORE_TIME_LIMIT("ignoretimelimit", OP),
     IMPORT("IMPORT", OP),
     INVITE("invite", OP),
     INSECURE("insecure", OP),

@@ -181,10 +181,6 @@ public class GameRule<V> {
      */
     public static final GameRule<Integer> SCORE_GOAL = new GameRule<>(Integer.class, "scoreGoal", -1);
     /**
-     * Maximum time in hours since the dungeons specified by other rules were finished. 0 = ignore.
-     */
-    public static final GameRule<Integer> TIME_LAST_PLAYED_REQUIRED_DUNGEONS = new GameRule<>(Integer.class, "timeLastPlayedRequiredDungeons", 0);
-    /**
      * When loot may be taken away out of the dungeon again.
      */
     public static final GameRule<Integer> TIME_TO_NEXT_LOOT = new GameRule<>(Integer.class, "timeToNextLoot", 0);
@@ -231,14 +227,6 @@ public class GameRule<V> {
         }
         return requirements;
     }, ArrayList::new);
-    /**
-     * One of these Dungeons must be finished ("any" for any dungeon).
-     */
-    public static final GameRule<List<String>> MUST_FINISH_ONE = new CollectionGameRule<>("mustFinishOne", new ArrayList<>(), ArrayList::new);
-    /**
-     * All of these Dungeons must be finished. If you do not want any, leave this empty.
-     */
-    public static final GameRule<List<String>> MUST_FINISH_ALL = new CollectionGameRule<>("mustFinishAll", new ArrayList<>(), ArrayList::new);
     /**
      * This can be used to give rewards. The default implementation does not do this at the moment.
      */

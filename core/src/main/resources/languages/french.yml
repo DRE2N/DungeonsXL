@@ -229,6 +229,11 @@ requirement:
   feeItems: "Items"
   feeLevel: "Niveaux"
   feeMoney: "Argent"
+  finishedDungeons:
+    and: "et"
+    name: "Donjons complétés"
+    or: "ou"
+    withinTime: "au cours des &v1 dernières heurs"
   forbiddenItems: "Objets défendus"
   groupSize: "Quantité des joueurs"
   keyItems: "Clés"

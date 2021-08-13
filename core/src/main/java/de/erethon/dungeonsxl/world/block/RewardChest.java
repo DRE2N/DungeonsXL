@@ -194,7 +194,7 @@ public class RewardChest extends GameBlock {
 
         for (Player player : group.getMembers().getOnlinePlayers()) {
             DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
-            if (dPlayer == null || !dPlayer.canLoot(game.getDungeon())) {
+            if (!dPlayer.canLoot(game.getDungeon())) {
                 MessageUtil.sendMessage(player, DMessage.ERROR_NO_REWARDS_TIME.getMessage(SimpleDateUtil.ddMMyyyyhhmm(dPlayer.getTimeNextLoot(game.getDungeon()))));
                 continue;
             }

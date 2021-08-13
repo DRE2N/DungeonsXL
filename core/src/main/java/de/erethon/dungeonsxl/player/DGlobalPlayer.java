@@ -289,60 +289,6 @@ public class DGlobalPlayer implements GlobalPlayer {
             msgs.forEach(msg -> MessageUtil.sendMessage(player, msg));
         }
 
-        if (!rules.getState(GameRule.MUST_FINISH_ALL).isEmpty()) {
-            List<String> finished = new ArrayList<>(rules.getState(GameRule.MUST_FINISH_ALL));
-            if (!rules.getState(GameRule.MUST_FINISH_ONE).isEmpty()) {
-                finished.addAll(rules.getState(GameRule.MUST_FINISH_ONE));
-            }
-
-            if (!finished.isEmpty()) {
-
-                long bestTime = 0;
-                int numOfNeeded = 0;
-                boolean doneTheOne = false;
-
-                if (finished.size() == rules.getState(GameRule.MUST_FINISH_ALL).size()) {
-                    doneTheOne = true;
-                }
-
-                for (String played : finished) {
-                    for (String dungeonName : DungeonsXL.MAPS.list()) {
-                        if (new File(DungeonsXL.MAPS, dungeonName).isDirectory()) {
-                            if (played.equalsIgnoreCase(dungeonName) || played.equalsIgnoreCase("any")) {
-
-                                Long time = getData().getTimeLastFinished(dungeonName);
-                                if (time != -1) {
-                                    if (rules.getState(GameRule.MUST_FINISH_ALL).contains(played)) {
-                                        numOfNeeded++;
-                                    } else {
-                                        doneTheOne = true;
-                                    }
-                                    if (bestTime < time) {
-                                        bestTime = time;
-                                    }
-                                }
-                                break;
-
-                            }
-                        }
-                    }
-                }
-
-                if (bestTime == 0) {
-                    fulfilled = false;
-
-                } else if (rules.getState(GameRule.TIME_LAST_PLAYED_REQUIRED_DUNGEONS) != 0) {
-                    if (System.currentTimeMillis() - bestTime > rules.getState(GameRule.TIME_LAST_PLAYED_REQUIRED_DUNGEONS) * (long) 3600000) {
-                        fulfilled = false;
-                    }
-                }
-
-                if (numOfNeeded < rules.getState(GameRule.MUST_FINISH_ALL).size() || !doneTheOne) {
-                    fulfilled = false;
-                }
-            }
-        }
-
         return fulfilled || DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS);
     }
 
