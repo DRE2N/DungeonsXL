@@ -20,7 +20,6 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
-import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
@@ -40,7 +39,6 @@ public class FeeLevelRequirement implements Requirement {
     private DungeonsAPI api;
 
     private int fee;
-    private Boolean keepInventory;
 
     public FeeLevelRequirement(DungeonsAPI api) {
         this.api = api;
@@ -93,38 +91,28 @@ public class FeeLevelRequirement implements Requirement {
 
     @Override
     public void demand(Player player) {
+        DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
+        if (dPlayer == null) {
+            return;
+        }
+
+        DPlayerData data = dPlayer.getData();
+        data.setOldLevel(data.getOldLevel() - fee);
+        data.getConfig().set(DPlayerData.PREFIX_STATE_PERSISTENCE + "oldLvl", data.getOldLevel());
+        data.save();
         if (isKeepInventory(player)) {
             player.setLevel(player.getLevel() - fee);
-
-        } else {
-            DGamePlayer dPlayer = (DGamePlayer) api.getPlayerCache().getGamePlayer(player);
-            if (dPlayer == null) {
-                return;
-            }
-            DPlayerData data = dPlayer.getData();
-            data.setOldLevel(data.getOldLevel() - fee);
         }
 
         MessageUtil.sendMessage(player, DMessage.REQUIREMENT_FEE.getMessage(fee + " levels"));
     }
 
     private boolean isKeepInventory(Player player) {
-        if (keepInventory != null) {
-            return keepInventory;
-        }
-
         Game game = api.getGame(player);
-        GameRuleContainer rules = null;
         if (game != null) {
-            rules = game.getRules();
+            return game.getRules().getState(GameRule.KEEP_INVENTORY_ON_ENTER);
         }
-        if (rules != null) {
-            keepInventory = rules.getState(GameRule.KEEP_INVENTORY_ON_ENTER);
-            return keepInventory;
-        }
-
-        keepInventory = GameRuleContainer.DEFAULT_VALUES.getState(GameRule.KEEP_INVENTORY_ON_ENTER);
-        return keepInventory;
+        return true;
     }
 
     @Override
