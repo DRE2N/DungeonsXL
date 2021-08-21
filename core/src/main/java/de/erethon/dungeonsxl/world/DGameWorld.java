@@ -475,6 +475,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         kickAllPlayers();
 
+        getWorld().getEntities().forEach(Entity::remove);
         String name = getWorld().getName();
         boolean unloaded = Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
         if (unloaded) {
