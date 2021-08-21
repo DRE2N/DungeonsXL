@@ -384,7 +384,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             externalMobProviderRegistry.add(externalMobPlugin.getIdentifier(), externalMobPlugin);
         }
         if (manager.getPlugin("Citizens") != null) {
-            CitizensMobProvider citizensMobProvider = new CitizensMobProvider();
+            CitizensMobProvider citizensMobProvider = new CitizensMobProvider(this);
             externalMobProviderRegistry.add("CI", citizensMobProvider);
             manager.registerEvents(citizensMobProvider, this);
         } else {
@@ -696,7 +696,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         if (mob != null) {
             return mob;
         } else {
-            return new DMob(entity, gameWorld, triggerId);
+            return new DMob(entity, gameWorld, caliburn.getExMob(triggerId), triggerId);
         }
     }
 

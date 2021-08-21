@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.mob;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobSpawnEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
@@ -43,10 +44,11 @@ public class DMob implements DungeonMob {
 
     private String trigger;
 
-    private DMob(LivingEntity entity, GameWorld gameWorld) {
+    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type) {
         this.entity = entity;
+        this.type = type;
 
-        if (!isExternalMob()) {
+        if (!getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_ITEM_DROPS))) {
             entity.getEquipment().setHelmetDropChance(0);
             entity.getEquipment().setChestplateDropChance(0);
             entity.getEquipment().setLeggingsDropChance(0);
@@ -62,22 +64,11 @@ public class DMob implements DungeonMob {
 
         DungeonMobSpawnEvent event = new DungeonMobSpawnEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-    }
-
-    public DMob(LivingEntity entity, GameWorld gameWorld, String trigger) {
-        this(entity, gameWorld);
-        this.trigger = trigger;
-    }
-
-    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type) {
-        this(entity, gameWorld);
-        this.type = type;
         this.trigger = type.getId();
     }
 
     public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type, String trigger) {
-        this(entity, gameWorld);
-        this.type = type;
+        this(entity, gameWorld, type);
         this.trigger = trigger;
     }
 
@@ -101,8 +92,6 @@ public class DMob implements DungeonMob {
     public void onDeath(DungeonsXL plugin, EntityDeathEvent event) {
         LivingEntity victim = event.getEntity();
         DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(victim.getWorld());
-        String name = null;
-
         if (gameWorld == null) {
             return;
         }
@@ -113,12 +102,18 @@ public class DMob implements DungeonMob {
             return;
         }
 
+        if (!getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_ITEM_DROPS))) {
+            event.getDrops().clear();
+        }
+        if (!getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_EXP_DROPS))) {
+            event.setDroppedExp(0);
+        }
+
+        String name;
         if (!isExternalMob()) {
             name = type.getId();
-
         } else if (isExternalMob() && trigger != null) {
             name = trigger;
-
         } else {
             name = VanillaMob.get(victim.getType()).getId();
         }
@@ -136,6 +131,19 @@ public class DMob implements DungeonMob {
         }
 
         gameWorld.removeMob(this);
+    }
+
+    private boolean getDrops(Object drops) {
+        if (drops instanceof Boolean) {
+            return (Boolean) drops;
+        } else if (drops instanceof Set) {
+            for (ExMob whitelisted : (Set<ExMob>) drops) {
+                if (type.isSubsumableUnder(whitelisted)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

@@ -328,6 +328,18 @@ public class GameRule<V> {
      * If Citizens NPCs should be copied to the native registry.
      */
     public static final GameRule<Boolean> USE_NATIVE_CITIZENS_REGISTRY = new GameRule<>(Boolean.class, "useNativeCitizensRegistry", false);
+    /**
+     * If mobs shall drop experience or a whitelist of mobs that drop experience, while all others do not.
+     */
+    public static final GameRule<Object> MOB_EXP_DROPS = new GameRule(Object.class, "mobExpDrops", false,
+            (api, value) -> value instanceof Boolean ? value : ConfigReader.EX_MOB_SET_READER.read(api, value)
+    );
+    /**
+     * If mobs shall drop items or a whitelist of mobs that drop items, while all others do not.
+     */
+    public static final GameRule<Object> MOB_ITEM_DROPS = new GameRule(Object.class, "mobItemDrops", false,
+            (api, value) -> value instanceof Boolean ? value : ConfigReader.EX_MOB_SET_READER.read(api, value)
+    );
 
     /**
      * An array of all game rules that exist natively in DungeonsXL.

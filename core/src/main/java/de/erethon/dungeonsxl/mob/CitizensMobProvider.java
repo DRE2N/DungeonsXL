@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.mob;
 
-import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.world.GameWorld;
@@ -40,10 +40,16 @@ import org.bukkit.event.Listener;
  */
 public class CitizensMobProvider implements ExternalMobProvider, Listener {
 
+    private DungeonsAPI api;
+
     private static final String IDENTIFIER = "CI";
 
     private DNPCRegistry registry = new DNPCRegistry();
     private Set<NPC> spawnedNPCs = new HashSet<>();
+
+    public CitizensMobProvider(DungeonsAPI api) {
+        this.api = api;
+    }
 
     /**
      * @return the DungeonsXL NPC registry
@@ -106,7 +112,7 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
             return;
         }
 
-        GameWorld gameWorld = DungeonsXL.getInstance().getGameWorld(location.getWorld());
+        GameWorld gameWorld = api.getGameWorld(location.getWorld());
         if (gameWorld == null) {
             return;
         }
@@ -119,7 +125,7 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
 
         npc.spawn(location);
         spawnedNPCs.add(npc);
-        new DMob((LivingEntity) npc.getEntity(), gameWorld, mob);
+        api.wrapEntity((LivingEntity) npc.getEntity(), gameWorld, mob);
     }
 
     /* Listeners */

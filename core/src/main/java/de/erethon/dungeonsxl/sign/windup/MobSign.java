@@ -120,7 +120,7 @@ public class MobSign extends Windup {
         initialAmount = n;
         provider = attributes.length == 3 ? providers.get(attributes[2]) : null;
 
-        setRunnable(new MobSpawnTask(this, n));
+        setRunnable(new MobSpawnTask(api, this, n));
     }
 
     /**
