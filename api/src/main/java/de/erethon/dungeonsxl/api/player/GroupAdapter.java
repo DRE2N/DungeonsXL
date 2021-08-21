@@ -30,80 +30,14 @@ import org.bukkit.entity.Player;
  */
 public abstract class GroupAdapter<T> {
 
-    /**
-     * How the implementation handles players.
-     */
-    public enum Philosophy {
-        /**
-         * The group persists upon restarts.
-         * <p>
-         * DungeonsXL under no circumstances creates persistent external groups.
-         */
-        PERSISTENT,
-        /**
-         * The group continues to exist as long as the server is running, but does not persist upon restarts.
-         */
-        RUNTIME,
-        /**
-         * Players are kicked from the group when they leave the server.
-         */
-        ONLINE
-    }
-
-    public class ExternalGroupData<T> {
-
-        private T eGroup;
-        private boolean createdByDXL;
-
-        public ExternalGroupData(T eGroup, boolean createdByDXL) {
-            this.eGroup = eGroup;
-            this.createdByDXL = createdByDXL;
-        }
-
-        /**
-         * Returns the wrapped external group object.
-         *
-         * @return the wrapped external group object
-         */
-        public T get() {
-            return eGroup;
-        }
-
-        /**
-         * Returns if the external group was created by DungeonsXL.
-         * <p>
-         * Groups may be created by DungeonsXL, for example through a command, a group sign or automatically if a dungeon is entered.
-         * The integration implementation should give dungeon groups equivalent groups from the external group plugin.
-         * External groups created to mirror dungeon groups should be removed when their dungeon group is deleted, but those created intentionally should not.
-         *
-         * @return if the external group was created by DungeonsXL.
-         */
-        public boolean isCreatedByDXL() {
-            return createdByDXL;
-        }
-
-    }
-
     protected DungeonsAPI dxl;
-    private Philosophy philosophy;
-    protected Map<PlayerGroup, ExternalGroupData<T>> groups = new HashMap<>();
+    protected Map<PlayerGroup, T> groups = new HashMap<>();
 
     /**
-     * @param dxl        the DungeonsAPI instance
-     * @param philosophy the player handling philosophy
+     * @param dxl the DungeonsAPI instance
      */
-    protected GroupAdapter(DungeonsAPI dxl, Philosophy philosophy) {
+    protected GroupAdapter(DungeonsAPI dxl) {
         this.dxl = dxl;
-        this.philosophy = philosophy;
-    }
-
-    /**
-     * Returns the player handling philosophy.
-     *
-     * @return the player handling philosophy
-     */
-    public Philosophy getPhilosophy() {
-        return philosophy;
     }
 
     /**
@@ -115,22 +49,17 @@ public abstract class GroupAdapter<T> {
     public abstract PlayerGroup createDungeonGroup(T eGroup);
 
     /**
-     * Creates an external group {@link #areCorresponding(PlayerGroup, Object) corresponding} with the dungeon group.
-     *
-     * @param dGroup the dungeon group
-     * @return an external group {@link #areCorresponding(PlayerGroup, Object) corresponding} with the dungeon group
-     */
-    public abstract T createExternalGroup(PlayerGroup dGroup);
-
-    /**
      * Returns the dungeon group {@link #areCorresponding(PlayerGroup, Object) corresponding} with the external group or null of none exists.
      *
      * @param eGroup the external group
      * @return the dungeon group {@link #areCorresponding(PlayerGroup, Object) corresponding} with the external group
      */
     public PlayerGroup getDungeonGroup(T eGroup) {
-        for (Entry<PlayerGroup, ExternalGroupData<T>> entry : groups.entrySet()) {
-            if (entry.getValue().get().equals(eGroup)) {
+        if (eGroup == null) {
+            return null;
+        }
+        for (Entry<PlayerGroup, T> entry : groups.entrySet()) {
+            if (entry.getValue().equals(eGroup)) {
                 return entry.getKey();
             }
         }
@@ -144,8 +73,27 @@ public abstract class GroupAdapter<T> {
      * @return the external group {@link #areCorresponding(PlayerGroup, Object) corresponding} with the dungeon group
      */
     public T getExternalGroup(PlayerGroup dGroup) {
-        ExternalGroupData<T> data = groups.get(dGroup);
-        return data != null ? data.get() : null;
+        return groups.get(dGroup);
+    }
+
+    /**
+     * Returns the dungeon group that mirrors the external group.
+     * <p>
+     * Creates a dungeon group if none exists and if the party has no more online members than maxSize.
+     *
+     * @param eGroup  the dungeon group
+     * @param maxSize the maximum size of the group
+     * @return the dungeon group that mirrors the dungeon group
+     */
+    public PlayerGroup getOrCreateDungeonGroup(T eGroup, int maxSize) {
+        if (eGroup == null) {
+            return null;
+        }
+        PlayerGroup dGroup = getDungeonGroup(eGroup);
+        if (dGroup == null && getGroupOnlineSize(eGroup) <= maxSize) {
+            dGroup = createDungeonGroup(eGroup);
+        }
+        return dGroup;
     }
 
     /**
@@ -157,27 +105,14 @@ public abstract class GroupAdapter<T> {
      * @return the dungeon group that mirrors the dungeon group
      */
     public PlayerGroup getOrCreateDungeonGroup(T eGroup) {
+        if (eGroup == null) {
+            return null;
+        }
         PlayerGroup dGroup = getDungeonGroup(eGroup);
         if (dGroup == null) {
             dGroup = createDungeonGroup(eGroup);
         }
         return dGroup;
-    }
-
-    /**
-     * Returns the external group that mirrors the dungeon group.
-     * <p>
-     * Creates an external group if none exists.
-     *
-     * @param dGroup the dungeon group
-     * @return the external group that mirrors the dungeon group
-     */
-    public T getOrCreateExternalGroup(PlayerGroup dGroup) {
-        T eGroup = getExternalGroup(dGroup);
-        if (eGroup == null && getPhilosophy() != Philosophy.PERSISTENT) {
-            eGroup = createExternalGroup(dGroup);
-        }
-        return eGroup;
     }
 
     /**
@@ -187,6 +122,14 @@ public abstract class GroupAdapter<T> {
      * @return the external group of the given group member
      */
     public abstract T getExternalGroup(Player member);
+
+    /**
+     * Returns the amount of members in the external group who are online.
+     *
+     * @param eGroup the external group
+     * @return the amount of members in the external group who are online
+     */
+    public abstract int getGroupOnlineSize(T eGroup);
 
     /**
      * Checks if two groups are corresponding.
@@ -203,94 +146,43 @@ public abstract class GroupAdapter<T> {
         if (dGroup == null || eGroup == null) {
             return false;
         }
-        ExternalGroupData<T> data = groups.get(dGroup);
-        return data != null && eGroup.equals(data.get());
+        T dExternal = groups.get(dGroup);
+        return dExternal != null && eGroup.equals(dExternal);
     }
 
     /**
-     * Deletes the external group corresponding with the given dungeon group.
-     *
-     * @param dGroup the dungeon group corresponding with the external one to delete
-     * @return if the deletion was successful
-     */
-    public abstract boolean deleteCorrespondingGroup(PlayerGroup dGroup);
-
-    /**
-     * Checks if the two groups have the same members.
-     *
-     * @param dGroup the dungeon group
-     * @param eGroup the external group
-     * @return if the two groups have the same members
-     */
-    public abstract boolean areSimilar(PlayerGroup dGroup, T eGroup);
-
-    /**
-     * Ensures that the player is in {@link #areCorresponding(PlayerGroup, Object) corresponding} groups.
-     * <p>
-     * If the player is in an external group but not in a corresponding dungeon group, they are added to the corresponding dungeon group.
-     * If no dungeon group exists, it is created automatically. Switching dungeon groups forces the player to leave their dungeon.
-     * <p>
-     * If the player is in a dungeon group but not in an external group, the player is added to the corresponding external group if it exists.
-     * If no corresponding external group exists, a new one is created.
+     * Returns if the player is a member of any external group.
      *
      * @param player the player
+     * @return if the player is a member of any external group
      */
-    public void syncJoin(Player player) {
-        T eGroup = getExternalGroup(player);
-        PlayerGroup dGroup = dxl.getPlayerGroup(player);
-
-        if (eGroup != null && !areCorresponding(dGroup, eGroup)) {
-            if (areSimilar(dGroup, eGroup)) {
-                // The groups are not yet marked as corresponding because one of them is still being created.
-                return;
-            }
-            if (dGroup != null) {
-                dGroup.removeMember(player, false);
-                return;
-            }
-            dGroup = getDungeonGroup(eGroup);
-            if (dGroup != null && !dGroup.getMembers().contains(player)) {
-                dGroup.addMember(player);
-            } else {
-                dGroup = createDungeonGroup(eGroup);
-            }
-
-        } else if (eGroup == null && dGroup != null) {
-            eGroup = getExternalGroup(dGroup);
-            if (eGroup == null) {
-                eGroup = createExternalGroup(dGroup);
-            }
-            if (!isExternalGroupMember(eGroup, player)) {
-                addExternalGroupMember(eGroup, player);
-            }
-        }
+    public boolean isExternalGroupMember(Player player) {
+        return getExternalGroup(player) != null;
     }
 
     /**
      * Returns if the player is a member of the external group.
      *
      * @param eGroup the external group
-     * @param player player
+     * @param player the player
      * @return if the player is a member of the external group
      */
     public abstract boolean isExternalGroupMember(T eGroup, Player player);
 
     /**
-     * Adds the member to the external group.
-     *
-     * @param eGroup the external group
-     * @param member the member
-     * @return if adding the member was successful
+     * Clears the external / dungeon group references.
      */
-    public abstract boolean addExternalGroupMember(T eGroup, Player member);
+    public void clear() {
+        groups.clear();
+    }
 
     /**
-     * Removes the member from the external group.
+     * Removes the external / dungeon group reference from the cache.
      *
-     * @param eGroup the external group
-     * @param member the member
-     * @return if removing the player was successful
+     * @param dGroup the DXL group that belongs to an external group.
      */
-    public abstract boolean removeExternalGroupMember(T eGroup, Player member);
+    public void removeReference(PlayerGroup dGroup) {
+        groups.remove(dGroup);
+    }
 
 }

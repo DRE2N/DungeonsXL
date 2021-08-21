@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.event.DataReloadEvent;
+import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -100,6 +101,7 @@ public class ReloadCommand extends DCommand {
         plugin.initFolders();
         plugin.initCaches();
         plugin.checkState();
+        plugin.getGroupAdapters().forEach(GroupAdapter::clear);
 
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());

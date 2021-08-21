@@ -192,7 +192,7 @@ public interface PlayerGroup {
      * @param color the color
      */
     default void setName(Color color) {
-        setName(color.toString() + "#" + getId());
+        setName(color.toString());
     }
 
     /**
@@ -243,7 +243,7 @@ public interface PlayerGroup {
      * @param player the player to add
      */
     default void removeMember(Player player) {
-        addMember(player, true);
+        removeMember(player, true);
     }
 
     /**

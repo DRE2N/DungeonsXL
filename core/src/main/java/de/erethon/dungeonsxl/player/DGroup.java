@@ -129,7 +129,10 @@ public class DGroup implements PlayerGroup {
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        plugin.getGroupCache().remove(this);
+        untaggedName = name;
+        this.name = name + "#" + id;
+        plugin.getGroupCache().add(name, this);
     }
 
     public String getUntaggedName() {
@@ -194,12 +197,6 @@ public class DGroup implements PlayerGroup {
             MessageUtil.sendMessage(player, DMessage.PLAYER_JOIN_GROUP.getMessage());
         }
         players.add(player.getUniqueId());
-        plugin.getGroupAdapters().forEach(a -> a.syncJoin(player));
-    }
-
-    @Override
-    public void removeMember(Player player) {
-        removeMember(player, true);
     }
 
     @Override
@@ -219,8 +216,6 @@ public class DGroup implements PlayerGroup {
                 return;
             }
         }
-
-        plugin.getGroupAdapters().forEach(a -> a.removeExternalGroupMember(a.getExternalGroup(player), player));
     }
 
     @Override
@@ -552,8 +547,7 @@ public class DGroup implements PlayerGroup {
         }
 
         plugin.getGlobalProtectionCache().updateGroupSigns(this);
-
-        plugin.getGroupAdapters().forEach(a -> a.deleteCorrespondingGroup(this));
+        plugin.getGroupAdapters().forEach(a -> a.removeReference(this));
     }
 
     public boolean checkStartGame(Game game) {
