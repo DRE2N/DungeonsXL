@@ -47,21 +47,18 @@ public class WorldConfig extends GameRuleContainer {
     private List<String> invitedPlayers = new ArrayList<>();
     private Environment worldEnvironment;
 
-    public WorldConfig(DungeonsXL plugin) {
-        this.plugin = plugin;
-    }
-
     public WorldConfig(DungeonsXL plugin, File file) {
-        this(plugin);
-
+        this.plugin = plugin;
         this.file = file;
         config = YamlConfiguration.loadConfiguration(file);
         load();
     }
 
     public WorldConfig(DungeonsXL plugin, ConfigurationSection config) {
-        this(plugin);
-
+        this.plugin = plugin;
+        if (config == null) {
+            config = new YamlConfiguration();
+        }
         this.config = config;
         load();
     }

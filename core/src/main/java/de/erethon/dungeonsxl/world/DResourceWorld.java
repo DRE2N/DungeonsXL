@@ -133,11 +133,7 @@ public class DResourceWorld implements ResourceWorld {
 
     @Override
     public void addInvitedPlayer(OfflinePlayer player) {
-        if (config == null) {
-            config = new WorldConfig(plugin);
-        }
-
-        config.addInvitedPlayer(player.getUniqueId().toString());
+        getConfig(true).addInvitedPlayer(player.getUniqueId().toString());
         config.save();
     }
 

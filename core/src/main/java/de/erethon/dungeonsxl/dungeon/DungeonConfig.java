@@ -23,7 +23,6 @@ import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Represents a dungeon script. See {@link de.erethon.dungeonsxl.dungeon.DDungeon}.
@@ -128,18 +127,8 @@ public class DungeonConfig extends DREConfig {
         floorCount = config.getInt("floorCount", floors.size() + 2);
         removeWhenPlayed = config.getBoolean("removeWhenPlayed", removeWhenPlayed);
 
-        ConfigurationSection overrideSection = config.getConfigurationSection("overrideValues");
-        if (overrideSection != null) {
-            overrideValues = new WorldConfig(plugin, overrideSection);
-        } else {
-            overrideValues = new WorldConfig(plugin);
-        }
-        ConfigurationSection defaultSection = config.getConfigurationSection("defaultValues");
-        if (defaultValues != null) {
-            defaultValues = new WorldConfig(plugin, defaultSection);
-        } else {
-            defaultValues = new WorldConfig(plugin);
-        }
+        overrideValues = new WorldConfig(plugin, config.getConfigurationSection("overrideValues"));
+        defaultValues = new WorldConfig(plugin, config.getConfigurationSection("defaultValues"));
     }
 
     @Override
