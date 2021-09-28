@@ -56,9 +56,14 @@ public class PlaceholderUtil extends PlaceholderExpansion {
     public String getVersion() {
         return plugin.getDescription().getVersion();
     }
+    
+    @Override
+    public boolean persist() {
+        return true;
+    }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier) {
+    public String onRequest(OfflinePlayer player, String identifier) {
         if (player == null) {
             return "";
         }
