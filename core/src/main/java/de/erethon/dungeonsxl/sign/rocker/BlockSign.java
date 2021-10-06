@@ -36,8 +36,8 @@ public class BlockSign extends Rocker {
 
     private ExItem offBlock = VanillaItem.AIR;
     private ExItem onBlock = VanillaItem.AIR;
-    private byte offBlockData = 0x0;
-    private byte onBlockData = 0x0;
+    private byte offBlockData = Byte.MIN_VALUE;
+    private byte onBlockData = Byte.MIN_VALUE;
 
     public BlockSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
@@ -140,6 +140,9 @@ public class BlockSign extends Rocker {
     private static Method craftBlockSetData;
 
     private static void setBlockData(Block block, byte data) {
+        if (data == Byte.MIN_VALUE) {
+            return;
+        }
         if (craftBlockSetData == null) {
             try {
                 craftBlockSetData = Class.forName(
