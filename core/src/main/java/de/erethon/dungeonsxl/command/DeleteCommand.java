@@ -97,7 +97,7 @@ public class DeleteCommand extends DCommand {
                 toRemove.add(dungeon);
                 ((DDungeon) dungeon).getConfig().getFile().delete();
             } else if (dungeon.isMultiFloor() && dungeon.getFloors().contains(resource)) {
-                dungeon.getFloors().remove(resource);
+                dungeon.removeFloor(resource);
                 DungeonConfig config = ((DDungeon) dungeon).getConfig();
                 List<String> floors = config.getConfig().getStringList("floors");
                 floors.remove(resource.getName());
