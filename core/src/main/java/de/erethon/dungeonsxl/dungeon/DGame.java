@@ -140,7 +140,7 @@ public class DGame implements Game {
     public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
         if (dungeon.isMultiFloor()) {
-            unplayedFloors = new ArrayList<>(dungeon.getFloors());
+            unplayedFloors = dungeon.getFloors();
         }
     }
 

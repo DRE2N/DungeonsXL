@@ -125,7 +125,7 @@ public class DDungeon implements Dungeon {
     @Override
     public List<ResourceWorld> getFloors() {
         if (isMultiFloor()) {
-            return getConfig().getFloors();
+            return new ArrayList<>(getConfig().getFloors());
         } else {
             return new ArrayList<>(Arrays.asList(map));
         }
