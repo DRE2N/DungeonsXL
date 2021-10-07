@@ -21,8 +21,6 @@ import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
-import de.erethon.dungeonsxl.announcer.AnnouncerCache;
-import de.erethon.dungeonsxl.announcer.AnnouncerListener;
 import de.erethon.dungeonsxl.api.DungeonModule;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
@@ -126,7 +124,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
 
     /* Folders of internal features */
-    public static final File ANNOUNCERS = new File(SCRIPTS, "announcers");
     public static final File SIGNS = new File(SCRIPTS, "signs");
     public static final File COMMANDS = new File(SCRIPTS, "commands");
 
@@ -220,7 +217,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private DCommandCache dCommands;
     private TriggerTypeCache triggers;
     private GlobalProtectionCache protections;
-    private AnnouncerCache announcers;
     private Registry<String, SignScript> signScriptRegistry;
     private Registry<String, CommandScript> commandScriptRegistry;
 
@@ -287,7 +283,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         MAPS.mkdir();
         PLAYERS.mkdir();
         SCRIPTS.mkdir();
-        ANNOUNCERS.mkdir();
         CLASSES.mkdir();
         DUNGEONS.mkdir();
         SIGNS.mkdir();
@@ -353,10 +348,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         }
 
         /* Scripts & global data */
-        announcers = new AnnouncerCache(this);
-        manager.registerEvents(new AnnouncerListener(this), this);
-        announcers.init(ANNOUNCERS);
-
         classRegistry = new Registry<>();
         for (File script : FileUtil.getFilesForFolder(CLASSES)) {
             PlayerClass clss = new PlayerClass(caliburn, script);
@@ -625,13 +616,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
      */
     public GlobalProtectionCache getGlobalProtectionCache() {
         return protections;
-    }
-
-    /**
-     * @return the loaded instance of AnnouncerCache
-     */
-    public AnnouncerCache getAnnouncerCache() {
-        return announcers;
     }
 
     /**
