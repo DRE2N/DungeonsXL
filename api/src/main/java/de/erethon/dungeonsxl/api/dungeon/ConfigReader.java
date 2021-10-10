@@ -15,14 +15,19 @@
 package de.erethon.dungeonsxl.api.dungeon;
 
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 /**
  * A functional interface to deserialize a raw value read from a configuration.
@@ -78,6 +83,28 @@ public interface ConfigReader<V> {
             map.put(tool, blocks);
         }
         return map;
+    };
+    static final ConfigReader<BuildMode> BUILD_MODE_READER = (api, value) -> {
+        if (value instanceof Boolean) {
+            return (Boolean) value ? BuildMode.TRUE : BuildMode.FALSE;
+        } else if (value instanceof String) {
+            return BuildMode.Registry.ENTRIES.get(((String) value).toLowerCase());
+        } else if (value instanceof List) {
+            return (Player p, GameWorld w, Block b) -> ((List) value).contains(VanillaItem.get(b.getType()).getId());
+        } else {
+            Map<ExItem, HashSet<ExItem>> whitelist = TOOL_BLOCK_MAP_READER.read(api, value);
+            if (whitelist == null) {
+                return null;
+            }
+            return (Player p, GameWorld w, Block b) -> {
+                ExItem type = VanillaItem.get(b.getType());
+                ExItem breakTool = api.getCaliburn().getExItem(p.getItemInHand());
+                return whitelist.containsKey(type)
+                        && (whitelist.get(type) == null
+                        || whitelist.get(type).isEmpty()
+                        || whitelist.get(type).contains(breakTool));
+            };
+        }
     };
 
     /**

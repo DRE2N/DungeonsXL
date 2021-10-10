@@ -14,7 +14,9 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
+import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
@@ -22,6 +24,7 @@ import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -33,7 +36,9 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 /**
  * Represents a game rule for a {@link Game}.
@@ -99,16 +104,7 @@ public class GameRule<V> {
     /**
      * If players can build and destroy blocks in this world.
      */
-    public static final GameRule<Boolean> BREAK_BLOCKS = new GameRule<>(Boolean.class, "breakBlocks", false);
-    /**
-     * If players may destroy blocks they placed themselves.
-     */
-    public static final GameRule<Boolean> BREAK_PLACED_BLOCKS = new GameRule<>(Boolean.class, "breakPlacedBlocks", false);
-    /**
-     * A whitelist of breakable blocks. breakBlocks is supposed to be set to "true" if this should be used.
-     */
-    public static final GameRule<Map<ExItem, HashSet<ExItem>>> BREAK_WHITELIST
-            = new MapGameRule<>("breakWhitelist", new HashMap<>(), ConfigReader.TOOL_BLOCK_MAP_READER, HashMap::new);
+    public static final GameRule<BuildMode> BREAK_BLOCKS = new GameRule<>(BuildMode.class, "breakBlocks", BuildMode.FALSE, ConfigReader.BUILD_MODE_READER);
     /**
      * A blacklist of block types players cannot interact with.
      */
@@ -125,11 +121,7 @@ public class GameRule<V> {
     /**
      * If blocks may be placed.
      */
-    public static final GameRule<Boolean> PLACE_BLOCKS = new GameRule<>(Boolean.class, "placeBlocks", false);
-    /**
-     * A whitelist of placeable blocks. placeBlocks is supposed to be set to "true" if this should be used.
-     */
-    public static final GameRule<Set<ExItem>> PLACE_WHITELIST = new CollectionGameRule<>("placeWhitelist", new HashSet<>(), ConfigReader.EX_ITEM_SET_READER, HashSet::new);
+    public static final GameRule<BuildMode> PLACE_BLOCKS = new GameRule<>(BuildMode.class, "placeBlocks", BuildMode.FALSE, ConfigReader.BUILD_MODE_READER);
     /**
      * A set of blocks that do not fade.
      *

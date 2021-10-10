@@ -17,8 +17,6 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
@@ -58,7 +56,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -69,6 +66,7 @@ import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import de.erethon.dungeonsxl.api.dungeon.BuildMode;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -200,6 +198,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         return dSign;
+    }
+
+    @Override
+    public Collection<Block> getPlacedBlocks() {
+        return placedBlocks;
     }
 
     /**
@@ -361,22 +364,21 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     public int getMobCount() {
         int mobCount = 0;
 
-        signs:
-        for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
-            if (!(sign instanceof MobSign)) {
-                continue;
-            }
-
-            for (de.erethon.dungeonsxl.api.Trigger trigger : sign.getTriggers()) {
-                if (trigger instanceof ProgressTrigger) {
-                    if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
-                        break signs;
+        signs:  for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
+                    if (!(sign instanceof MobSign)) {
+                        continue;
                     }
-                }
-            }
 
-            mobCount += ((MobSign) sign).getInitialAmount();
-        }
+                    for (de.erethon.dungeonsxl.api.Trigger trigger : sign.getTriggers()) {
+                        if (trigger instanceof ProgressTrigger) {
+                            if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
+                                break signs;
+                            }
+                        }
+                    }
+
+                    mobCount += ((MobSign) sign).getInitialAmount();
+                }
 
         return mobCount;
     }
@@ -529,7 +531,9 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             return true;
         }
 
-        if (!getRules().getState(GameRule.BREAK_BLOCKS) && !getRules().getState(GameRule.BREAK_PLACED_BLOCKS)) {
+        BuildMode mode = getRules().getState(GameRule.BREAK_BLOCKS);
+
+        if (mode == BuildMode.FALSE) {
             return true;
         }
 
@@ -547,21 +551,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             }
         }
 
-        Map<ExItem, HashSet<ExItem>> whitelist = getRules().getState(GameRule.BREAK_WHITELIST);
-        ExItem material = VanillaItem.get(block.getType());
-        ExItem breakTool = caliburn.getExItem(player.getItemInHand());
-
-        if (getRules().getState(GameRule.BREAK_PLACED_BLOCKS) && placedBlocks.contains(block)) {
-            return false;
-        }
-        if (whitelist != null && whitelist.containsKey(material)
-                && (whitelist.get(material) == null
-                || whitelist.get(material).isEmpty()
-                || whitelist.get(material).contains(breakTool))) {
-            return false;
-        }
-
-        return true;
+        return !mode.check(player, this, block);
     }
 
     /**
@@ -579,6 +569,10 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             return true;
         }
 
+        if (getRules().getState(GameRule.PLACE_BLOCKS).check(player, this, block)) {
+            return false;
+        }
+
         PlaceableBlock placeableBlock = null;
         for (PlaceableBlock gamePlaceableBlock : placeableBlocks) {
             if (gamePlaceableBlock.canPlace(block, caliburn.getExItem(hand))) {
@@ -586,7 +580,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
                 break;
             }
         }
-        if (!getRules().getState(GameRule.PLACE_BLOCKS) && placeableBlock == null) {
+        if (placeableBlock == null) {
             // Workaround for a bug that would allow 3-Block-high jumping
             Location loc = player.getLocation();
             if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
@@ -599,20 +593,10 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
                     }
                 }
             }
-
             return true;
         }
-        if (placeableBlock != null) {
-            placeableBlock.onPlace();
-        }
-
-        Set<ExItem> whitelist = getRules().getState(GameRule.PLACE_WHITELIST);
-        if (whitelist.isEmpty() || whitelist.contains(VanillaItem.get(block.getType()))) {
-            placedBlocks.add(block);
-            return false;
-        }
-
-        return true;
+        placeableBlock.onPlace();
+        return false;
     }
 
 }

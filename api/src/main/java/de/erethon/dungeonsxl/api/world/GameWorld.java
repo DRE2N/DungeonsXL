@@ -20,6 +20,7 @@ import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import java.util.Collection;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 /**
  * A playable resource instance. There may be any amount of GameWorlds per {@link ResourceWorld}.
@@ -117,5 +118,12 @@ public interface GameWorld extends InstanceWorld {
      * @param enabled if it is required to choose a class in order to start the game
      */
     void setClassesEnabled(boolean enabled);
+
+    /**
+     * Returns a collection of the blocks that have been placed by players in the current game.
+     *
+     * @return a collection of the blocks that have been placed by players in the current game
+     */
+    Collection<Block> getPlacedBlocks();
 
 }
