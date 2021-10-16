@@ -27,7 +27,6 @@ import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +40,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
 /**
@@ -595,10 +595,19 @@ public class DPlayerData extends DREConfig {
         oldHealth = player.getHealth();
         oldExp = player.getExp();
         oldLvl = player.getLevel();
-        oldArmor = new ArrayList<>(Arrays.asList(player.getInventory().getArmorContents()));
-        oldInventory = new ArrayList<>(Arrays.asList(player.getInventory().getContents()));
+        PlayerInventory inv = player.getInventory();
+        oldArmor = new ArrayList<>(4);
+        for (int i = 0; i < 4; i++) {
+            ItemStack itemStack = inv.getArmorContents()[i];
+            oldArmor.add(itemStack != null ? itemStack.clone() : null);
+        }
+        oldInventory = new ArrayList<>(36);
+        for (int i = 0; i < 36; i++) {
+            ItemStack itemStack = inv.getContents()[i];
+            oldInventory.add(itemStack != null ? itemStack.clone() : null);
+        }
         if (is1_9) {
-            oldOffHand = player.getInventory().getItemInOffHand();
+            oldOffHand = inv.getItemInOffHand().clone();
         }
         oldLocation = player.getLocation();
         oldPotionEffects = player.getActivePotionEffects();
