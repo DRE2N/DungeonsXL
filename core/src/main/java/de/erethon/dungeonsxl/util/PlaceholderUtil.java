@@ -21,7 +21,7 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 /**
  * @author Daniel Saukel
@@ -56,13 +56,18 @@ public class PlaceholderUtil extends PlaceholderExpansion {
     public String getVersion() {
         return plugin.getDescription().getVersion();
     }
+    
+    @Override
+    public boolean persist() {
+        return true;
+    }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier) {
+    public String onRequest(OfflinePlayer player, String identifier) {
         if (player == null) {
             return "";
         }
-        PlayerGroup group = plugin.getPlayerGroup(player);
+        PlayerGroup group = plugin.getPlayerGroup(player.getPlayer());
 
         switch (identifier) {
             case "group_members":
