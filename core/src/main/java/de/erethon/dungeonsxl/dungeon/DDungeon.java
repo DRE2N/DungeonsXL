@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.dungeon;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import java.io.File;
@@ -198,7 +199,7 @@ public class DDungeon implements Dungeon {
             rules = new GameRuleContainer();
         }
         rules.merge(plugin.getMainConfig().getDefaultWorldConfig());
-        rules.merge(GameRuleContainer.DEFAULT_VALUES);
+        rules.merge(GameRule.DEFAULT_VALUES);
     }
 
     @Override

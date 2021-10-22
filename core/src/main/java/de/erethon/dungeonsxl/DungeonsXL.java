@@ -28,7 +28,6 @@ import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
-import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
@@ -172,7 +171,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         public void add(String key, GameRule rule) {
             super.add(key, rule);
             if (loaded) {
-                GameRuleContainer.DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
+                GameRule.DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
                 mainConfig.getDefaultWorldConfig().updateGameRule(rule);
                 for (Dungeon apiDungeon : dungeonRegistry) {
                     DDungeon dungeon = ((DDungeon) apiDungeon);

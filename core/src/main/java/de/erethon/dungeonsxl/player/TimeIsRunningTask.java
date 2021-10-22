@@ -17,8 +17,6 @@
 package de.erethon.dungeonsxl.player;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.dungeon.GameGoal;
-import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.event.group.GroupPlayerKickEvent;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
@@ -39,14 +37,12 @@ public class TimeIsRunningTask extends BukkitRunnable {
     private PlayerGroup group;
     private int time;
     private int timeLeft;
-    private GameGoal goal;
 
     public TimeIsRunningTask(DungeonsXL plugin, PlayerGroup group, int time) {
         this.plugin = plugin;
         this.group = group;
         this.time = time;
         this.timeLeft = time;
-        goal = group.getDungeon().getRules().getState(GameRule.GAME_GOAL);
     }
 
     @Override
@@ -70,10 +66,6 @@ public class TimeIsRunningTask extends BukkitRunnable {
                     continue;
                 }
 
-                // Fire trigger
-                if (goal != GameGoal.TIME_SCORE && goal != GameGoal.TIME_SURVIVAL) {
-                    return;
-                }
                 GroupPlayerKickEvent groupPlayerKickEvent = new GroupPlayerKickEvent(group, dPlayer, GroupPlayerKickEvent.Cause.TIME_EXPIRED);
                 Bukkit.getServer().getPluginManager().callEvent(groupPlayerKickEvent);
 

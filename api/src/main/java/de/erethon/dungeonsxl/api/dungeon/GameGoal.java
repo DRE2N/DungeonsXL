@@ -14,36 +14,126 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
+import de.erethon.commons.misc.EnumUtil;
+import org.bukkit.configuration.ConfigurationSection;
+
 /**
  * A game goal defines what the players have to do in order to finish the game.
  *
  * @author Daniel Saukel
  */
-public enum GameGoal {
+public class GameGoal extends GameRuleContainer {
 
     /**
-     * The default goal. The game ends when the end is reached.
+     * Score used for capture the flag and similar game types.
      */
-    END,
+    public static final GameRule<Integer> INITIAL_SCORE = new GameRule<>(Integer.class, "initialScore", 3);
     /**
-     * The game does not end. Instead, the goal is to survive as long as possible to beat a highscore.
+     * The amount of goals to score before the game ends. -1 = not used.
      */
-    HIGHSCORE,
+    public static final GameRule<Integer> SCORE_GOAL = new GameRule<>(Integer.class, "scoreGoal", -1);
     /**
-     * The game ends when a player dies and only one group is left.
+     * The time left to finish the game; -1 if no timer is used.
      */
-    LAST_MAN_STANDING,
+    public static final GameRule<Integer> TIME_TO_FINISH = new GameRule<>(Integer.class, "timeToFinish", -1);
+
     /**
-     * The game ends when a group reachs a specific score.
+     * The default game goal: {@link Type#END} without TIME_TO_FINISH
      */
-    REACH_SCORE,
+    public static final GameGoal DEFAULT = new GameGoal(Type.END);
+
+    static {
+        DEFAULT.setState(TIME_TO_FINISH, TIME_TO_FINISH.getDefaultValue());
+    }
+
     /**
-     * The game ends after a specific time. The goal is to get the highest score until then.
+     * The reader to deserialize a game goal from a configuration.
      */
-    TIME_SCORE,
+    public static final ConfigReader<GameGoal> READER = (api, value) -> {
+        if (!(value instanceof ConfigurationSection)) {
+            return DEFAULT;
+        }
+        ConfigurationSection config = (ConfigurationSection) value;
+        Type type = EnumUtil.getEnumIgnoreCase(Type.class, config.getString("type", "END"));
+        GameGoal goal = new GameGoal(type);
+        for (GameRule rule : type.getComponents()) {
+            rule.fromConfig(api, goal, config);
+            if (!goal.rules.containsKey(rule)) {
+                goal.setState(rule, rule.getDefaultValue());
+            }
+        }
+        return goal;
+    };
+
+    private Type type;
+
+    public GameGoal(Type type) {
+        this.type = type;
+    }
+
     /**
-     * The game ends after a specific time. The goal is to survive until then.
+     * Returns the type of the game goal.
+     *
+     * @return the type
      */
-    TIME_SURVIVAL;
+    public Type getType() {
+        return type;
+    }
+
+    /**
+     * Determines the behavior of the game goal and which settings apply to it.
+     */
+    public enum Type {
+        /**
+         * The default goal. The game ends when the end is reached.
+         */
+        END(TIME_TO_FINISH),
+        /**
+         * The game ends when a player dies and only one group is left.
+         */
+        LAST_MAN_STANDING,
+        /**
+         * SCORE_GOAL = -1: The game does not end. Instead, the goal is to survive as long as possible to beat a highscore.
+         * <p>
+         * SCORE_GOAL > 0: The game ends when a group reachs a specific score.
+         * <p>
+         * TIME_TO_FINISH != -1: The game ends after a specific time. The goal is to get the highest score until then.
+         */
+        SCORE(INITIAL_SCORE, SCORE_GOAL, TIME_TO_FINISH),
+        /**
+         * The game ends after a specific time. The goal is to survive until then.
+         */
+        TIME_SURVIVAL;
+
+        private GameRule[] components;
+
+        Type(GameRule... components) {
+            this.components = components;
+        }
+
+        /**
+         * Returns an array of the game rules that apply to game goals of this type.
+         *
+         * @return an array of the game rules that apply to game goals of this type
+         */
+        public GameRule[] getComponents() {
+            return components;
+        }
+
+        /**
+         * Returns whether the given game rule applies to game goals of this type.
+         *
+         * @param component the game rule
+         * @return whether the given game rule applies to game goals of this type
+         */
+        public boolean hasComponent(GameRule component) {
+            for (GameRule c : components) {
+                if (c == component) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
 }

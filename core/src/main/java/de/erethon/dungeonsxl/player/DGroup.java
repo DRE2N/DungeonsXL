@@ -20,6 +20,7 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.group.GroupCollectRewardEvent;
@@ -576,8 +577,9 @@ public class DGroup implements PlayerGroup {
         GameRuleContainer rules = getDungeon().getRules();
         initialLives = rules.getState(GameRule.INITIAL_GROUP_LIVES);
         lives = initialLives;
-        if (rules.getState(GameRule.TIME_TO_FINISH) != -1) {
-            timeIsRunningTask = new TimeIsRunningTask(plugin, this, rules.getState(GameRule.TIME_TO_FINISH)).runTaskTimer(plugin, 20, 20);
+        GameGoal goal = rules.getState(GameRule.GAME_GOAL);
+        if (goal.getType().hasComponent(GameGoal.TIME_TO_FINISH) && goal.getState(GameGoal.TIME_TO_FINISH) != -1) {
+            timeIsRunningTask = new TimeIsRunningTask(plugin, this, goal.getState(GameGoal.TIME_TO_FINISH)).runTaskTimer(plugin, 20, 20);
         }
 
         for (UUID playerId : getMembers()) {

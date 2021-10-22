@@ -345,7 +345,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         getGroup().setScore(getGroup().getScore() + 1);
         GameGoal goal = rules.getState(GameRule.GAME_GOAL);
-        if ((goal == GameGoal.REACH_SCORE || goal == GameGoal.TIME_SCORE) && rules.getState(GameRule.SCORE_GOAL) == getGroup().getScore()) {
+        if (goal.getType().hasComponent(GameGoal.SCORE_GOAL) && goal.getState(GameGoal.SCORE_GOAL) == getGroup().getScore()) {
             getGroup().winGame();
         }
 
@@ -759,7 +759,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             }.runTaskLater(plugin, 1L);
         }
 
-        if (rules.getState(GameRule.GAME_GOAL) == GameGoal.LAST_MAN_STANDING) {
+        if (rules.getState(GameRule.GAME_GOAL).getType() == GameGoal.Type.LAST_MAN_STANDING) {
             if (game.getGroups().size() == 1) {
                 ((DGroup) game.getGroups().get(0)).winGame();
             }

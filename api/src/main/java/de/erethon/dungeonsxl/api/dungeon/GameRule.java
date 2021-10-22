@@ -14,9 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
-import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.commons.chat.MessageUtil;
 import de.erethon.commons.misc.EnumUtil;
@@ -24,7 +22,6 @@ import de.erethon.commons.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
-import de.erethon.dungeonsxl.api.world.GameWorld;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,9 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 /**
  * Represents a game rule for a {@link Game}.
@@ -79,7 +74,7 @@ public class GameRule<V> {
     /**
      * The goal of the game that defines what makes it end.
      */
-    public static final GameRule<GameGoal> GAME_GOAL = new GameRule<>(GameGoal.class, "gameGoal", GameGoal.END);
+    public static final GameRule<GameGoal> GAME_GOAL = new GameRule<>(GameGoal.class, "gameGoal", GameGoal.DEFAULT, GameGoal.READER);
     /**
      * The Vanilla game mode.
      */
@@ -165,14 +160,6 @@ public class GameRule<V> {
      */
     public static final GameRule<Integer> INITIAL_GROUP_LIVES = new GameRule<>(Integer.class, "initialGroupLives", -1);
     /**
-     * Score used for capture the flag and similar game types.
-     */
-    public static final GameRule<Integer> INITIAL_SCORE = new GameRule<>(Integer.class, "initialScore", 3);
-    /**
-     * The amount of goals to score before the game ends. -1 = not used.
-     */
-    public static final GameRule<Integer> SCORE_GOAL = new GameRule<>(Integer.class, "scoreGoal", -1);
-    /**
      * When loot may be taken away out of the dungeon again.
      */
     public static final GameRule<Integer> TIME_TO_NEXT_LOOT = new GameRule<>(Integer.class, "timeToNextLoot", 0);
@@ -180,10 +167,6 @@ public class GameRule<V> {
      * The cooldown between two mob waves.
      */
     public static final GameRule<Integer> TIME_TO_NEXT_WAVE = new GameRule<>(Integer.class, "timeToNextWave", 10);
-    /**
-     * The time left to finish the game; -1 if no timer is used.
-     */
-    public static final GameRule<Integer> TIME_TO_FINISH = new GameRule<>(Integer.class, "timeToFinish", -1);
     /**
      * Time until a player is kicked out of a group after he leaves the server.
      */
@@ -337,10 +320,20 @@ public class GameRule<V> {
      * An array of all game rules that exist natively in DungeonsXL.
      */
     public static final GameRule[] VALUES = values();
+    /**
+     * A container of all rules with their default value. This is used internally as the most subsidiary container that fills missing rules if they are not set.
+     */
+    public static final GameRuleContainer DEFAULT_VALUES = new GameRuleContainer();
+
+    static {
+        for (GameRule rule : VALUES) {
+            DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
+        }
+    }
 
     private static GameRule[] values() {
         Field[] fields = GameRule.class.getFields();
-        GameRule[] values = new GameRule[fields.length - 1];
+        GameRule[] values = new GameRule[fields.length - 2];
         int i = 0;
         for (Field field : fields) {
             try {

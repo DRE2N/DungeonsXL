@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.dungeon;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
@@ -105,7 +106,10 @@ public class DGame implements Game {
         ((DGroup) group).setGame(this);
         group.setInitialLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));
         group.setLives(getRules().getState(GameRule.INITIAL_GROUP_LIVES));
-        group.setScore(getRules().getState(GameRule.INITIAL_SCORE));
+        GameGoal goal = getRules().getState(GameRule.GAME_GOAL);
+        if (goal.getType().hasComponent(GameGoal.INITIAL_SCORE)) {
+            group.setScore(goal.getState(GameGoal.INITIAL_SCORE));
+        }
     }
 
     @Override

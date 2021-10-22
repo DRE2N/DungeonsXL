@@ -87,7 +87,7 @@ public class EndSign extends Button {
     @Override
     public void initialize() {
         GameGoal goal = getGame().getRules().getState(GameRule.GAME_GOAL);
-        if (goal != GameGoal.END) {
+        if (goal.getType() != GameGoal.Type.END) {
             setToAir();
             MessageUtil.log(api, "&4An end sign in the dungeon " + getGame().getDungeon().getName() + " is ignored because the game goal is " + goal.toString());
             return;
