@@ -10,7 +10,7 @@
     <parent>
         <groupId>de.erethon.dungeonsxl</groupId>
         <artifactId>dungeonsxl-parent</artifactId>
-        <version>0.18-SNAPSHOT</version>
+        <version>0.18-PRE</version>
     </parent>
     <modules>
         <module>core</module>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>de.erethon.dungeonsxl</groupId>
             <artifactId>dungeonsxl-dist</artifactId>
-            <version>0.18-SNAPSHOT</version>
+            <version>0.18-PRE</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

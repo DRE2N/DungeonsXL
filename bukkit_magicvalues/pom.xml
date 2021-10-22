@@ -2,12 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.erethon.dungeonsxl</groupId>
     <artifactId>dungeonsxl-bukkit_magicvalues</artifactId>
-    <version>0.18-SNAPSHOT</version>
+    <version>0.18-PRE</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>de.erethon.dungeonsxl</groupId>
         <artifactId>dungeonsxl-parent</artifactId>
-        <version>0.18-SNAPSHOT</version>
+        <version>0.18-PRE</version>
     </parent>
     <dependencies>
         <dependency>

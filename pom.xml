@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.erethon.dungeonsxl</groupId>
     <artifactId>dungeonsxl-parent</artifactId>
-    <version>0.18-SNAPSHOT</version>
+    <version>0.18-PRE</version>
     <packaging>pom</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>

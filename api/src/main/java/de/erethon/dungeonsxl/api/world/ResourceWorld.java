@@ -61,7 +61,7 @@ public interface ResourceWorld {
      * <p>
      * Note that these are only the rules that are specific to the map itself. They are not the rules that are actually used in a game instance instantiated
      * from this resource world as these ones may be supplemented or overriden by other rules taken from the main config, dungeon config or the
-     * {@link GameRuleContainer#DEFAULT_VALUES}.
+     * {@link de.erethon.dungeonsxl.api.dungeon.GameRule#DEFAULT_VALUES}.
      *
      * @return the {@link de.erethon.dungeonsxl.api.dungeon.GameRule}s of this world
      */
