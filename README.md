@@ -43,10 +43,10 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with Spigot 1.8 and higher. However, support for 1.13-1.16 has a higher priority than support for 1.8-1.12. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. DungeonsXL only works with Spigot and does not support CraftBukkit builds.
+DungeonsXL works with Spigot 1.8 and higher. However, support for 1.13-1.17 has a higher priority than support for 1.8-1.12. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. DungeonsXL only works with Spigot and does not support CraftBukkit builds.
 
 ### ItemsXL
-DungeonsXL requires [ItemsXL](https://www.spigotmc.org/resources/itemsxl.14472/) 1.0 to run.
+DungeonsXL requires [ItemsXL](https://www.spigotmc.org/resources/itemsxl.14472/) 1.0.2 to run.
 
 ### Building information and dependencies
 Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org/).
