@@ -331,15 +331,19 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             dungeonRegistry.add(resource.getName(), new DDungeon(this, resource));
         }
         // Dungeons - Linked dungeons
-        for (File file : DUNGEONS.listFiles()) {
-            Dungeon dungeon = DDungeon.create(this, file);
+        if (xlDevMode) {
+            for (File file : DUNGEONS.listFiles()) {
+                Dungeon dungeon = DDungeon.create(this, file);
 
-            if (dungeon != null) {
-                dungeonRegistry.add(dungeon.getName(), dungeon);
-            } else {
-                MessageUtil.log(this, "&4The setup of dungeon &6" + file.getName()
-                        + "&4 is incorrect. See https://github.com/DRE2N/DungeonsXL/wiki/dungeon-configuration for reference.");
+                if (dungeon != null) {
+                    dungeonRegistry.add(dungeon.getName(), dungeon);
+                } else {
+                    MessageUtil.log(this, "&4The setup of dungeon &6" + file.getName()
+                            + "&4 is incorrect. See https://github.com/DRE2N/DungeonsXL/wiki/dungeon-configuration for reference.");
+                }
             }
+        } else if (DUNGEONS.listFiles().length != 0) {
+            MessageUtil.log(this, "&4Multi floor dungeons are not part of the range of functions of this build.");
         }
         // Raw map to copy
         if (!DResourceWorld.RAW.exists()) {
