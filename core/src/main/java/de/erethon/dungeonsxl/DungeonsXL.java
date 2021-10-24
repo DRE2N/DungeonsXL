@@ -693,7 +693,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         if (mob != null) {
             return mob;
         } else {
-            return new DMob(entity, gameWorld, type);
+            return new DMob(entity, gameWorld, type, type.getId());
         }
     }
 

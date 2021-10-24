@@ -39,15 +39,6 @@ public interface DungeonMob {
     ExMob getType();
 
     /**
-     * Returns if the mob is spawned by an external plugin.
-     *
-     * @return if the mob is spawned by an external plugin
-     */
-    default boolean isExternalMob() {
-        return getType() == null;
-    }
-
-    /**
      * Returns the String used to identify this mob for example in the context of triggers.
      *
      * @return the String used to identify this mob for example in the context of triggers

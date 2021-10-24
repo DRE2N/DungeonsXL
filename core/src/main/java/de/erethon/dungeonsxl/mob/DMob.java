@@ -17,7 +17,6 @@
 package de.erethon.dungeonsxl.mob;
 
 import de.erethon.caliburn.mob.ExMob;
-import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
@@ -44,7 +43,7 @@ public class DMob implements DungeonMob {
 
     private String trigger;
 
-    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type) {
+    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type, String trigger) {
         this.entity = entity;
         this.type = type;
 
@@ -60,16 +59,11 @@ public class DMob implements DungeonMob {
                 entity.getEquipment().setItemInHandDropChance(0);
             }
         }
-        gameWorld.addMob(this);
 
         DungeonMobSpawnEvent event = new DungeonMobSpawnEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-        this.trigger = type.getId();
-    }
-
-    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type, String trigger) {
-        this(entity, gameWorld, type);
         this.trigger = trigger;
+        gameWorld.addMob(this);
     }
 
     /* Getters */
@@ -109,16 +103,7 @@ public class DMob implements DungeonMob {
             event.setDroppedExp(0);
         }
 
-        String name;
-        if (!isExternalMob()) {
-            name = type.getId();
-        } else if (isExternalMob() && trigger != null) {
-            name = trigger;
-        } else {
-            name = VanillaMob.get(victim.getType()).getId();
-        }
-
-        MobTrigger mobTrigger = MobTrigger.getByName(name, gameWorld);
+        MobTrigger mobTrigger = MobTrigger.getByName(trigger, gameWorld);
         if (mobTrigger != null) {
             mobTrigger.onTrigger();
         }
