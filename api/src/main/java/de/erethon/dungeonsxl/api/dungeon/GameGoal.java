@@ -103,7 +103,7 @@ public class GameGoal extends GameRuleContainer {
         /**
          * The game ends after a specific time. The goal is to survive until then.
          */
-        TIME_SURVIVAL;
+        TIME_SURVIVAL(TIME_TO_FINISH);
 
         private GameRule[] components;
 
