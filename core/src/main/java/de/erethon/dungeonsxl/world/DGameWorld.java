@@ -54,7 +54,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -81,7 +80,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     private boolean isPlaying = false;
     private boolean classes = false;
 
-    private List<Block> placedBlocks = new LinkedList<>();
+    private Set<Block> placedBlocks = new HashSet<>();
 
     private Set<GameBlock> gameBlocks = new HashSet<>();
     private Set<LockedDoor> lockedDoors = new HashSet<>();
@@ -551,7 +550,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             }
         }
 
-        return !mode.check(player, this, block);
+        boolean breakBlock = !mode.check(player, this, block);
+        if (breakBlock) {
+            placedBlocks.remove(block);
+        }
+        return breakBlock;
     }
 
     /**
@@ -570,6 +573,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         if (getRules().getState(GameRule.PLACE_BLOCKS).check(player, this, block)) {
+            placedBlocks.add(block);
             return false;
         }
 
