@@ -24,6 +24,8 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.util.AttributeUtil;
 import de.erethon.dungeonsxl.util.ParsingUtil;
+
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -42,6 +44,9 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
         super(plugin, player, false);
 
         config = plugin.getMainConfig();
+
+        String gameWorld = world.getWorld().getName();
+        this.addMultiversePerm(gameWorld);
 
         instanceWorld = world;
         getData().savePlayerState(player);
@@ -135,5 +140,26 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
      * Repeating checks for the player.
      */
     public abstract void update();
+
+    @Override
+    public void reset(Location tpLoc, boolean keepInventory){
+        String tpWorld = tpLoc.getWorld().getName();
+        addMultiversePerm(tpWorld);
+        super.reset(tpLoc, keepInventory);
+        removeMultiversePerm(tpWorld);
+        removeMultiversePerm(this.getWorld().getName());
+    }
+
+    // Add permission for by passing multiverse inventories when entering or leaving a dungeon
+    private void addMultiversePerm(String world){
+        if (plugin.getPermissionProvider() != null)
+            plugin.getPermissionProvider().playerAddTransient(world, player, "mvinv.bypass.*");
+    }
+
+    // Remove permission for by passing multiverse inventories when entering or leaving a dungeon
+    private void removeMultiversePerm(String world){
+        if (plugin.getPermissionProvider() != null)
+            plugin.getPermissionProvider().playerRemoveTransient(world, player, "mvinv.bypass.*");
+    }
 
 }

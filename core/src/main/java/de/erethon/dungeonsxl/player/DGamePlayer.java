@@ -105,17 +105,12 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             initDGroupTag();
         }
 
-        String originalWorld = player.getWorld().getName();
-        addMultiversePerm(originalWorld);
-
         Location teleport = world.getLobbyLocation();
         if (teleport == null) {
             player.teleport(world.getWorld().getSpawnLocation());
         } else {
             player.teleport(teleport);
         }
-
-        removeMultiversePerm(originalWorld);
 
         if (!((DGameWorld) world).hasReadySign()) {
             MessageUtil.sendMessage(player, DMessage.ERROR_NO_READY_SIGN.getMessage(world.getName()));
@@ -384,12 +379,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         GameRuleContainer rules = getGame().getRules();
         delete();
 
-        if (player.isOnline()) {
-            String gameWorld = getGameWorld().getWorld().getName();
-            addMultiversePerm(gameWorld);
+        if (player.isOnline())
             reset(finished);
-            removeMultiversePerm(gameWorld);
-        }
 
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
@@ -815,18 +806,6 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
 
         plugin.log("Player " + this + " was expected to be online but is offline.", player, Player::isOnline);
         DistanceTrigger.triggerAllInDistance(player, (DGameWorld) getGameWorld());
-    }
-
-    // Add permission for by passing multiverse inventories when entering or leaving a dungeon
-    private void addMultiversePerm(String world){
-        if (plugin.getPermissionProvider() != null)
-            plugin.getPermissionProvider().playerAddTransient(world, player, "mvinv.bypass.*");
-    }
-
-    // Remove permission for by passing multiverse inventories when entering or leaving a dungeon
-    private void removeMultiversePerm(String world){
-        if (plugin.getPermissionProvider() != null)
-            plugin.getPermissionProvider().playerRemoveTransient(world, player, "mvinv.bypass.*");
     }
 
 
