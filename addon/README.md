@@ -1,6 +1,6 @@
 ## DungeonsXL Donors Addon
 
-(C) 2020-2021 Daniel Saukel, All Rights Reserved.
+(C) 2020-2022 Daniel Saukel, All Rights Reserved.
 
 This module is a plugin with additional features made for donors.
 
