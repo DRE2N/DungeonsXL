@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.mob;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.UUID;
 import net.citizensnpcs.Settings.Setting;
@@ -31,6 +29,8 @@ import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.MemoryDataKey;
+import net.citizensnpcs.npc.CitizensNPC;
+import net.citizensnpcs.npc.EntityControllers;
 import net.citizensnpcs.trait.ArmorStandTrait;
 import net.citizensnpcs.trait.LookClose;
 import net.citizensnpcs.trait.MountTrait;
@@ -50,16 +50,7 @@ public class DNPCRegistry implements NPCRegistry {
 
     @Override
     public NPC createNPC(EntityType type, UUID uuid, int id, String name) {
-        NPC npc = null;
-        try {
-            Method method = CitizensAPI.getNPCRegistry().getClass().getDeclaredMethod("getByType", EntityType.class, UUID.class, int.class, String.class);
-            method.setAccessible(true);
-            npc = (NPC) method.invoke(CitizensAPI.getNPCRegistry(), type, uuid, id, name);
-
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            throw new IllegalStateException("Could not create NPC: " + exception.getClass().getSimpleName());
-        }
-
+        NPC npc = new CitizensNPC(uuid, id, name, EntityControllers.createForType(type), this);
         if (npc == null) {
             throw new IllegalStateException("Could not create NPC: npc is null");
         }
