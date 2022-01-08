@@ -21,13 +21,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spigotVersion.latest>1.17.1-R0.1-SNAPSHOT</spigotVersion.latest>
+        <spigotVersion.latest>1.18.1-R0.1-SNAPSHOT</spigotVersion.latest>
     </properties>
     <dependencies>
         <dependency>
             <groupId>de.erethon</groupId>
             <artifactId>caliburn</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
