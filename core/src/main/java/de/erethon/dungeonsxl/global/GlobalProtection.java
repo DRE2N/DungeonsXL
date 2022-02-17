@@ -88,6 +88,17 @@ public abstract class GlobalProtection {
 
     public abstract void save(ConfigurationSection config);
 
+    public UnloadedProtection unload() {
+        String path = getDataPath() + "." + getWorld().getName() + "." + getId();
+        ConfigurationSection config;
+        if (!plugin.getGlobalProtectionCache().getConfig().contains(path)) {
+            config = plugin.getGlobalProtectionCache().getConfig().createSection(path);
+        } else {
+            config = plugin.getGlobalProtectionCache().getConfig().getConfigurationSection(path);
+        }
+        return UnloadedProtection.create(plugin, getClass(), getWorld().getName(), getId(), config);
+    }
+
     /**
      * @return a collection of all blocks covered by this protection
      */

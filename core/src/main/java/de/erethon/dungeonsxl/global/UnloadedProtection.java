@@ -36,19 +36,22 @@ public class UnloadedProtection<T extends GlobalProtection> {
     private int id;
     private ConfigurationSection config;
 
-    public UnloadedProtection(DungeonsXL plugin, Class<T> type, String worldName, int id, ConfigurationSection config) {
-        this.plugin = plugin;
-        try {
-            constructor = type.getConstructor(DungeonsXL.class, World.class, int.class, ConfigurationSection.class);
-        } catch (NoSuchMethodException | SecurityException exception) {
-            // Don't register
-            return;
-        }
-        this.worldName = worldName;
-        this.id = id;
-        this.config = config;
+    private UnloadedProtection() {}
 
-        cache = plugin.getGlobalProtectionCache();
+    public static <T extends GlobalProtection> UnloadedProtection create(DungeonsXL plugin, Class<T> type, String worldName, int id, ConfigurationSection config) {
+        UnloadedProtection protection = new UnloadedProtection();
+        protection.plugin = plugin;
+        try {
+            protection.constructor = type.getConstructor(DungeonsXL.class, World.class, int.class, ConfigurationSection.class);
+        } catch (NoSuchMethodException | SecurityException exception) {
+            return null;
+        }
+        protection.worldName = worldName;
+        protection.id = id;
+        protection.config = config;
+
+        protection.cache = plugin.getGlobalProtectionCache();
+        return protection;
     }
 
     public T load(World world) {

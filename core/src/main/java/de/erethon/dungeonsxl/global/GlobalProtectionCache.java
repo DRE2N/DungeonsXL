@@ -58,7 +58,10 @@ public class GlobalProtectionCache {
             }
         }
         config = YamlConfiguration.loadConfiguration(file);
-        loadAll();
+    }
+
+    public FileConfiguration getConfig() {
+        return config;
     }
 
     /**
@@ -141,7 +144,8 @@ public class GlobalProtectionCache {
                     if (world != null) {
                         addProtection(new GameSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
                     } else {
-                        unloaded.put(new UnloadedProtection<>(plugin, GameSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                        UnloadedProtection protection = UnloadedProtection.create(plugin, GameSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                        unloaded.put(protection, worldName);
                     }
                 }
             }
@@ -158,7 +162,8 @@ public class GlobalProtectionCache {
                     if (world != null) {
                         addProtection(new GroupSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
                     } else {
-                        unloaded.put(new UnloadedProtection<>(plugin, GroupSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                        UnloadedProtection protection = UnloadedProtection.create(plugin, GroupSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                        unloaded.put(protection, worldName);
                     }
                 }
             }
@@ -175,7 +180,8 @@ public class GlobalProtectionCache {
                     if (world != null) {
                         addProtection(new LeaveSign(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
                     } else {
-                        unloaded.put(new UnloadedProtection<>(plugin, LeaveSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                        UnloadedProtection protection = UnloadedProtection.create(plugin, LeaveSign.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                        unloaded.put(protection, worldName);
                     }
                 }
             }
@@ -192,7 +198,8 @@ public class GlobalProtectionCache {
                     if (world != null) {
                         addProtection(new DPortal(plugin, world, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())));
                     } else {
-                        unloaded.put(new UnloadedProtection<>(plugin, DPortal.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey())), worldName);
+                        UnloadedProtection protection = UnloadedProtection.create(plugin, DPortal.class, worldName, NumberUtil.parseInt(entry.getKey()), ws.getConfigurationSection(entry.getKey()));
+                        unloaded.put(protection, worldName);
                     }
                 }
             }
@@ -207,9 +214,11 @@ public class GlobalProtectionCache {
                 exception.printStackTrace();
             }
         }
-        config.set("protections", null);
         for (GlobalProtection protection : protections) {
-            protection.save(config.createSection(protection.getDataPath() + "." + protection.getWorld().getName() + "." + protection.getId()));
+            String path = protection.getDataPath() + "." + protection.getWorld().getName() + "." + protection.getId();
+            if (!config.contains(path)) {
+                protection.save(config.createSection(path));
+            }
         }
         try {
             config.save(file);

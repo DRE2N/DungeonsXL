@@ -367,6 +367,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
             commandScriptRegistry.add(cmd.getName(), cmd);
         }
         protections = new GlobalProtectionCache(this);
+        protections.loadAll();
 
         /* Integrations */
         if (LWCUtil.isLWCLoaded()) {

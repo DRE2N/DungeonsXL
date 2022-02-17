@@ -23,9 +23,11 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerListener;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -46,6 +48,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -299,9 +302,29 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         World world = event.getWorld();
-        for (Entry<UnloadedProtection, String> entry : new HashSet<>(plugin.getGlobalProtectionCache().getUnloadedProtections().entrySet())) {
+        plugin.log("New world detected.");
+        Set<Entry<UnloadedProtection, String>> protections = plugin.getGlobalProtectionCache().getUnloadedProtections().entrySet();
+        for (Entry<UnloadedProtection, String> entry : protections.toArray(new Entry[protections.size()])) {
+            plugin.log("Checking unloaded protection " + entry);
             if (world.getName().equals(entry.getValue())) {
-                entry.getKey().load(world);
+                plugin.log("New world has global DXL data: " + entry);
+                plugin.getGlobalProtectionCache().addProtection(entry.getKey().load(world));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onWorldUnload(WorldUnloadEvent event) {
+        World world = event.getWorld();
+        if (world.getName().startsWith("DXL_")) {
+            return;
+        }
+        plugin.log("Unloaded world detected.");
+        Collection<GlobalProtection> protections = plugin.getGlobalProtectionCache().getProtections();
+        for (GlobalProtection protection : protections.toArray(new GlobalProtection[protections.size()])) {
+            if (protection.getWorld().getName().equals(world.getName())) {
+                protection.delete();
+                plugin.getGlobalProtectionCache().getUnloadedProtections().put(protection.unload(), world.getName());
             }
         }
     }
