@@ -52,6 +52,10 @@ public class ReloadCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
+        if (plugin.isLoadingWorld()) {
+            MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_FAIL.getMessage());
+            return;
+        }
         if (args.length >= 2 && (args[1].equalsIgnoreCase("-caliburn") || args[1].equalsIgnoreCase("-c"))) {
             plugin.getCaliburn().reload();
             MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());

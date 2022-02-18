@@ -93,9 +93,10 @@ cmd:
   reload:
     buttonCaliburn: "&9[ CALIBURN-INHALTE NEU LADEN ]"
     caliburn: "&eBenutzerdefinierte Items:&o[&v1] &eMobs:&o[&v2] &eLoottabellen:&o[&v3]"
+    fail: "&4Du kannst gerade nicht neu laden."
     help: "/dxl reload - Lädt das Plugin neu"
-    players: "&4Warnung:Wenn Du das Plugin neu lädst, werden alle Spieler aus ihrem Spiel geworfen."
-    success: "&7DungeonsXL wurde erfolgreich neugeladen."
+    players: "&4Warnung: Wenn Du das Plugin neu lädst, werden alle Spieler aus ihrem Spiel geworfen."
+    success: "&7DungeonsXL wurde erfolgreich neu geladen."
   rename:
     help: "/dxl rename [old name] [new name] - Ändert den Namen des Dungeons in einen neuen. Dieser Befehl updatet auch Namensreferenzen zu dem Dungeon"
     success: "&4&v1&6 wurde erfolgreich zu &4&v2&6 umbenannt."
