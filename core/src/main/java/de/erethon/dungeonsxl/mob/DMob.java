@@ -48,7 +48,8 @@ public class DMob implements DungeonMob {
         this.entity = entity;
         this.type = type != null ? type : VanillaMob.get(entity.getType());
 
-        if (this.type.getSpecies().isAlive() && this.type != VanillaMob.PLAYER && !getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_ITEM_DROPS))) {
+        if (this.type.getSpecies().isAlive() && this.type != VanillaMob.ARMOR_STAND && this.type != VanillaMob.PLAYER
+                && !getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_ITEM_DROPS))) {
             entity.getEquipment().setHelmetDropChance(0);
             entity.getEquipment().setChestplateDropChance(0);
             entity.getEquipment().setLeggingsDropChance(0);
