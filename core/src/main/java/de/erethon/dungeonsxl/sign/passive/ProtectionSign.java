@@ -20,7 +20,7 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
+import de.erethon.bedrock.misc.BlockUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.ProtectedBlock;
 import org.bukkit.block.Sign;

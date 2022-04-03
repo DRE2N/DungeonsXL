@@ -21,7 +21,7 @@ import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.sign.LocationSign;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 

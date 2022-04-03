@@ -18,7 +18,7 @@ package de.erethon.dungeonsxl.reward;
 
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import org.bukkit.entity.Player;
 
 /**

@@ -16,9 +16,9 @@ package de.erethon.dungeonsxl.api.player;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.compatibility.Version;
-import de.erethon.commons.player.PlayerCollection;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.compatibility.Version;
+import de.erethon.bedrock.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;

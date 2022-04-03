@@ -27,7 +27,7 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.trigger.MobTrigger;
 import de.erethon.dungeonsxl.trigger.WaveTrigger;
-import de.erethon.dungeonsxl.util.commons.compatibility.Version;
+import de.erethon.bedrock.compatibility.Version;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.Set;
 import org.bukkit.Bukkit;

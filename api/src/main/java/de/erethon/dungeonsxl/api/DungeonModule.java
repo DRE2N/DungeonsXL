@@ -14,7 +14,7 @@
  */
 package de.erethon.dungeonsxl.api;
 
-import de.erethon.commons.misc.Registry;
+import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 

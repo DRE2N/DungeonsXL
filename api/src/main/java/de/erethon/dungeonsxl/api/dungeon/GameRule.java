@@ -16,9 +16,9 @@ package de.erethon.dungeonsxl.api.dungeon;
 
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.mob.ExMob;
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.misc.EnumUtil;
-import de.erethon.commons.misc.NumberUtil;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.misc.EnumUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;

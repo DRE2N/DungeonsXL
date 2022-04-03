@@ -32,7 +32,7 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.util.ParsingUtil;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import java.util.ArrayList;

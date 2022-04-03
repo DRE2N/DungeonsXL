@@ -17,16 +17,16 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.util.commons.command.DRECommand;
-import de.erethon.dungeonsxl.util.commons.command.DRECommandCache;
-import de.erethon.dungeonsxl.util.commons.compatibility.Version;
+import de.erethon.bedrock.command.ECommand;
+import de.erethon.bedrock.command.ECommandCache;
+import de.erethon.bedrock.compatibility.Version;
 
 /**
  * An enumeration of all command instances.
  *
  * @author Daniel Saukel
  */
-public class DCommandCache extends DRECommandCache {
+public class DCommandCache extends ECommandCache {
 
     public static final String LABEL = "dungeonsxl";
 
@@ -52,7 +52,7 @@ public class DCommandCache extends DRECommandCache {
     public MsgCommand message;
     public PlayCommand play;
     public PortalCommand portal;
-    public DRECommand reload;
+    public ECommand reload;
     public RenameCommand rename;
     public ResourcePackCommand resourcePack;
     public SaveCommand save;

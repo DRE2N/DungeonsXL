@@ -21,7 +21,7 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

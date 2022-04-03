@@ -20,7 +20,7 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import java.util.HashSet;
 import java.util.Set;
 import net.citizensnpcs.api.CitizensAPI;

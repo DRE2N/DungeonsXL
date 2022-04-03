@@ -14,8 +14,8 @@
  */
 package de.erethon.dungeonsxl.api.player;
 
-import de.erethon.commons.chat.MessageUtil;
-import de.erethon.commons.player.PlayerWrapper;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.player.PlayerWrapper;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import java.util.List;
 import org.bukkit.Location;
@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
  * <p>
  * All players on the server, including the ones in dungeons, have one wrapper object that is an instance of GlobalPlayer.
  * <p>
- * Do not cache this for the whole runtime (or use {@link de.erethon.commons.player.PlayerCollection}). The object may be deleted and replaced with an object of
+ * Do not cache this for the whole runtime (or use {@link de.erethon.bedrock.player.PlayerCollection}). The object may be deleted and replaced with an object of
  * the appropriate type when the player enters or leaves an instance.
  *
  * @author Daniel Saukel

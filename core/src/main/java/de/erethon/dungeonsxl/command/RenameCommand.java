@@ -25,7 +25,7 @@ import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.global.GlobalProtection;
 import de.erethon.dungeonsxl.global.JoinSign;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import java.io.File;
 import java.io.IOException;

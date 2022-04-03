@@ -16,7 +16,7 @@ package de.erethon.dungeonsxl.api;
 
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.mob.ExMob;
-import de.erethon.commons.misc.Registry;
+import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;

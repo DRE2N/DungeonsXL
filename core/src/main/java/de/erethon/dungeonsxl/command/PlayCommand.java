@@ -28,7 +28,7 @@ import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

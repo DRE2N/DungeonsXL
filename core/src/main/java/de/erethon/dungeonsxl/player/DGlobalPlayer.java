@@ -32,8 +32,8 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.util.LocationString;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.compatibility.Version;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ public class DGlobalPlayer implements GlobalPlayer {
 
     protected DungeonsXL plugin;
 
-    protected boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
+    protected boolean is1_9 = Version.isAtLeast(Version.MC1_9);
 
     protected Player player;
 
@@ -286,7 +286,7 @@ public class DGlobalPlayer implements GlobalPlayer {
         }
         if (!fulfilled) {
             MessageUtil.sendMessage(player, DMessage.ERROR_REQUIREMENTS.getMessage());
-            msgs.forEach(msg -> MessageUtil.sendMessage(player, msg));
+            msgs.forEach(msg -> player.spigot().sendMessage(msg));
         }
 
         return fulfilled || DPermission.hasPermission(player, DPermission.IGNORE_REQUIREMENTS);

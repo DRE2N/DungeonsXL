@@ -20,7 +20,7 @@ import de.erethon.caliburn.category.Category;
 import de.erethon.dungeonsxl.api.sign.Deactivatable;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
+import de.erethon.bedrock.misc.BlockUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;

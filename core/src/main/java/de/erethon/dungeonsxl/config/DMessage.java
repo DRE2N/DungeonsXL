@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.config;
 
-import de.erethon.dungeonsxl.util.commons.config.Message;
+import de.erethon.bedrock.config.Message;
 
 /**
  * An enumeration of all messages. The values are fetched from the language file.

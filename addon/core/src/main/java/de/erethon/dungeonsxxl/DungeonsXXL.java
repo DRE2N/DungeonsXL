@@ -11,10 +11,10 @@ import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
-import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
-import de.erethon.dungeonsxl.util.commons.javaplugin.DREPlugin;
-import de.erethon.dungeonsxl.util.commons.javaplugin.DREPluginSettings;
-import de.erethon.dungeonsxl.util.commons.misc.Registry;
+import de.erethon.bedrock.compatibility.Internals;
+import de.erethon.bedrock.plugin.EPlugin;
+import de.erethon.bedrock.plugin.EPluginSettings;
+import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxxl.requirement.*;
 import de.erethon.dungeonsxxl.sign.*;
 import de.erethon.dungeonsxxl.util.GlowUtil;
@@ -22,14 +22,14 @@ import de.erethon.dungeonsxxl.util.GlowUtil;
 /**
  * @author Daniel Saukel
  */
-public class DungeonsXXL extends DREPlugin implements DungeonModule {
+public class DungeonsXXL extends EPlugin implements DungeonModule {
 
     private DungeonsXL dxl;
     private GlowUtil glowUtil;
 
     public DungeonsXXL() {
-        settings = DREPluginSettings.builder()
-                .internals(Internals.v1_15_R1)
+        settings = EPluginSettings.builder()
+                .internals(Internals.v1_16_R3)
                 .metrics(false)
                 .spigotMCResourceId(-1)
                 .build();
@@ -47,7 +47,7 @@ public class DungeonsXXL extends DREPlugin implements DungeonModule {
      * @return the instance of this plugin
      */
     public static DungeonsXXL getInstance() {
-        return (DungeonsXXL) DREPlugin.getInstance();
+        return (DungeonsXXL) EPlugin.getInstance();
     }
 
     /**

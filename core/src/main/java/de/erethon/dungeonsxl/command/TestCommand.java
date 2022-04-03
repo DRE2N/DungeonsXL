@@ -28,8 +28,8 @@ import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DInstancePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.config.CommonMessage;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.config.BedrockMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -64,7 +64,7 @@ public class TestCommand extends DCommand {
         }
 
         if (!dungeon.getMap().isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.TEST)) {
-            MessageUtil.sendMessage(player, CommonMessage.CMD_NO_PERMISSION.getMessage());
+            MessageUtil.sendMessage(player, BedrockMessage.CMD_NO_PERMISSION.getMessage());
             return;
         }
 

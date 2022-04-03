@@ -2,19 +2,19 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.erethon.dungeonsxl</groupId>
     <artifactId>dungeonsxl-api</artifactId>
-    <version>0.18-PRE</version>
+    <version>0.18-SNAPSHOT</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>de.erethon.dungeonsxl</groupId>
         <artifactId>dungeonsxl-parent</artifactId>
-        <version>0.18-PRE</version>
+        <version>0.18-SNAPSHOT</version>
     </parent>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.2</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -26,32 +26,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <artifactSet>
-                                <includes>
-                                    <include>de.erethon.commons:commons-dist</include>
-                                </includes>
-                            </artifactSet>                            
-                            <relocations>	
-                                <relocation>
-                                    <pattern>de.erethon.commons</pattern>	
-                                    <shadedPattern>de.erethon.dungeonsxl.util.commons</shadedPattern>	
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -60,18 +34,6 @@
             <artifactId>spigot-api</artifactId>
             <version>${spigotVersion.latest}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.erethon.commons</groupId>
-            <artifactId>commons-dist</artifactId>
-            <version>6.3.1</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 </project>

@@ -19,9 +19,9 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.command.DRECommand;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.command.ECommand;
+import de.erethon.bedrock.misc.NumberUtil;
 import java.util.ArrayList;
 import java.util.Set;
 import org.bukkit.command.CommandSender;
@@ -44,8 +44,8 @@ public class HelpCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        Set<DRECommand> dCommandList = plugin.getCommandCache().getCommands();
-        ArrayList<DRECommand> toSend = new ArrayList<>();
+        Set<ECommand> dCommandList = plugin.getCommandCache().getCommands();
+        ArrayList<ECommand> toSend = new ArrayList<>();
 
         int page = 1;
         if (args.length == 2) {
@@ -54,7 +54,7 @@ public class HelpCommand extends DCommand {
         int send = 0;
         int max = 0;
         int min = 0;
-        for (DRECommand dCommand : dCommandList) {
+        for (ECommand dCommand : dCommandList) {
             send++;
             if (send >= page * 5 - 4 && send <= page * 5) {
                 min = page * 5 - 4;
@@ -66,7 +66,7 @@ public class HelpCommand extends DCommand {
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, "&4&l[ &6" + min + "-" + max + " &4/&6 " + send + " &4|&6 " + page + " &4&l]");
 
-        for (DRECommand dCommand : toSend) {
+        for (ECommand dCommand : toSend) {
             MessageUtil.sendMessage(sender, "&b" + dCommand.getCommand() + "&7 - " + dCommand.getHelp());
         }
     }

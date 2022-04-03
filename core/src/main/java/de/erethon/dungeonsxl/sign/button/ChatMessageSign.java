@@ -19,7 +19,7 @@ package de.erethon.dungeonsxl.sign.button;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 

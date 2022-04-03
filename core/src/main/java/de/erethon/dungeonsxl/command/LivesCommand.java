@@ -22,8 +22,8 @@ import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.config.CommonMessage;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.config.BedrockMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -57,7 +57,7 @@ public class LivesCommand extends DCommand {
             player = (Player) sender;
 
         } else {
-            MessageUtil.sendMessage(sender, CommonMessage.CMD_NO_CONSOLE_COMMAND.getMessage(getCommand()));
+            MessageUtil.sendMessage(sender, BedrockMessage.CMD_NO_CONSOLE_COMMAND.getMessage(getCommand()));
             return;
         }
 

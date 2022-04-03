@@ -22,11 +22,12 @@ import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.DefaultFontInfo;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.compatibility.CompatibilityHandler;
-import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
+import de.erethon.bedrock.chat.DefaultFontInfo;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.compatibility.CompatibilityHandler;
+import de.erethon.bedrock.compatibility.Internals;
 import java.util.Collection;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -73,7 +74,7 @@ public class ReloadCommand extends DCommand {
             String message = DefaultFontInfo.center(DMessage.BUTTON_OKAY.getMessage());
             TextComponent text = new TextComponent(message);
             text.setClickEvent(onClick);
-            MessageUtil.sendMessage(sender, text);
+            ((Player) sender).spigot().sendMessage(text);
             return;
         }
 
@@ -115,7 +116,11 @@ public class ReloadCommand extends DCommand {
         String message = DefaultFontInfo.center(DMessage.CMD_RELOAD_BUTTON_CALIBURN.getMessage());
         TextComponent text = new TextComponent(message);
         text.setClickEvent(onClick);
-        MessageUtil.sendMessage(sender, text);
+        if (sender instanceof Player) {
+            ((Player) sender).spigot().sendMessage(text);
+        } else {
+            sender.sendMessage(BaseComponent.toPlainText(text));
+        }
     }
 
 }

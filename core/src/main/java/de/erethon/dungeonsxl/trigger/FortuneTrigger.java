@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.trigger;
 
 import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.Random;
 import org.bukkit.Bukkit;

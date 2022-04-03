@@ -26,8 +26,8 @@ import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.config.CommonMessage;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.config.BedrockMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -57,7 +57,7 @@ public class EditCommand extends DCommand {
         }
 
         if (!resource.isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.EDIT)) {
-            MessageUtil.sendMessage(player, CommonMessage.CMD_NO_PERMISSION.getMessage());
+            MessageUtil.sendMessage(player, BedrockMessage.CMD_NO_PERMISSION.getMessage());
             return;
         }
 

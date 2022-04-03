@@ -18,7 +18,7 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

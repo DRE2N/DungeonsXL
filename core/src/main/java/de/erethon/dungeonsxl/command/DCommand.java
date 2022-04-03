@@ -19,12 +19,12 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.config.MainConfig;
-import de.erethon.dungeonsxl.util.commons.command.DRECommand;
+import de.erethon.bedrock.command.ECommand;
 
 /**
  * @author Daniel Saukel
  */
-public abstract class DCommand extends DRECommand {
+public abstract class DCommand extends ECommand {
 
     protected DungeonsXL plugin;
     protected MainConfig config;

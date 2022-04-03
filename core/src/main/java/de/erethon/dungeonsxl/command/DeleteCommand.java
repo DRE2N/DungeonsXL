@@ -23,8 +23,8 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.misc.FileUtil;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.misc.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class DeleteCommand extends DCommand {
             deny.setClickEvent(onClickDeny);
 
             MessageUtil.sendMessage(sender, DMessage.CMD_DELETE_BACKUPS.getMessage());
-            MessageUtil.sendMessage(sender, confirm, new TextComponent(" "), deny);
+            ((Player) sender).spigot().sendMessage(confirm, new TextComponent(" "), deny);
 
             return;
         }

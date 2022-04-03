@@ -21,7 +21,7 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Windup;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;

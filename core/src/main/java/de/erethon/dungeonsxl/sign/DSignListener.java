@@ -25,7 +25,7 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;

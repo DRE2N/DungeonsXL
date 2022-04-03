@@ -15,7 +15,7 @@
 package de.erethon.dungeonsxl.api.sign;
 
 import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Trigger;
 import de.erethon.dungeonsxl.api.world.EditWorld;

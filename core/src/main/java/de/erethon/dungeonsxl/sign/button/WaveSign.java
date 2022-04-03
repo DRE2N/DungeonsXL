@@ -23,7 +23,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;

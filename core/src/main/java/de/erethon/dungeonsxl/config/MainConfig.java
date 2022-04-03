@@ -20,8 +20,8 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import static de.erethon.dungeonsxl.api.player.PlayerGroup.Color.*;
-import de.erethon.dungeonsxl.util.commons.config.DREConfig;
-import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
+import de.erethon.bedrock.config.EConfig;
+import de.erethon.bedrock.misc.EnumUtil;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import org.bukkit.configuration.ConfigurationSection;
  *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public class MainConfig extends DREConfig {
+public class MainConfig extends EConfig {
 
     private DungeonsXL plugin;
 

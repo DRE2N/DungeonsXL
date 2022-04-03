@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.erethon.dungeonsxl</groupId>
     <artifactId>dungeonsxl-parent</artifactId>
-    <version>0.18-PRE</version>
+    <version>0.18-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>DungeonsXL</name>
     <url>https://dre2n.github.io</url>
@@ -21,14 +21,20 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spigotVersion.latest>1.18.1-R0.1-SNAPSHOT</spigotVersion.latest>
+        <spigotVersion.latest>1.18.2-R0.1-SNAPSHOT</spigotVersion.latest>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>de.erethon</groupId>
-            <artifactId>caliburn</artifactId>
-            <version>1.0.3</version>
-            <scope>compile</scope>
+            <groupId>de.erethon.caliburn</groupId>
+            <artifactId>caliburn-api</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.caliburn</groupId>
+            <artifactId>legacy</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.erethon.vignette</groupId>

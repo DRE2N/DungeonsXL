@@ -18,12 +18,13 @@ package de.erethon.dungeonsxl.player;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
-import de.erethon.dungeonsxl.util.commons.config.ConfigUtil;
-import de.erethon.dungeonsxl.util.commons.config.DREConfig;
-import de.erethon.dungeonsxl.util.commons.javaplugin.DREPlugin;
-import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.compatibility.Internals;
+import de.erethon.bedrock.compatibility.Version;
+import de.erethon.bedrock.config.ConfigUtil;
+import de.erethon.bedrock.config.EConfig;
+import de.erethon.bedrock.plugin.EPlugin;
+import de.erethon.bedrock.misc.EnumUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,9 +49,9 @@ import org.bukkit.potion.PotionEffect;
  *
  * @author Daniel Saukel
  */
-public class DPlayerData extends DREConfig {
+public class DPlayerData extends EConfig {
 
-    protected boolean is1_9 = Internals.isAtLeast(Internals.v1_9_R1);
+    protected boolean is1_9 = Version.isAtLeast(Version.MC1_9);
 
     public static final int CONFIG_VERSION = 4;
 
@@ -483,7 +484,7 @@ public class DPlayerData extends DREConfig {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                MessageUtil.log(DREPlugin.getInstance(), "&6A new player data file has been created and saved as " + file.getName());
+                MessageUtil.log(EPlugin.getInstance(), "&6A new player data file has been created and saved as " + file.getName());
             } catch (IOException exception) {
             }
         }

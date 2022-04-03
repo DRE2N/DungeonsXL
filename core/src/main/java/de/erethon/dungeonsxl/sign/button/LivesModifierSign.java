@@ -23,9 +23,9 @@ import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
-import de.erethon.dungeonsxl.util.commons.misc.NumberUtil;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.misc.EnumUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 

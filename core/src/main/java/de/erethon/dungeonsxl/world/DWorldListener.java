@@ -29,7 +29,7 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.util.ContainerAdapter;
-import de.erethon.dungeonsxl.util.commons.compatibility.Version;
+import de.erethon.bedrock.compatibility.Version;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;

@@ -27,7 +27,7 @@ import de.erethon.dungeonsxl.sign.button.*;
 import de.erethon.dungeonsxl.sign.passive.*;
 import de.erethon.dungeonsxl.sign.rocker.*;
 import de.erethon.dungeonsxl.sign.windup.*;
-import de.erethon.dungeonsxl.util.commons.misc.Registry;
+import de.erethon.bedrock.misc.Registry;
 
 /**
  * @author Daniel Saukel

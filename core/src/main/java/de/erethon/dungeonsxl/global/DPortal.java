@@ -27,8 +27,8 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.misc.BlockUtil;
 import java.util.HashSet;
 import java.util.Set;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -204,7 +204,7 @@ public class DPortal extends GlobalProtection {
             no.setClickEvent(onClickNo);
 
             player.sendMessage(DMessage.PLAYER_PORTAL_ROTATE.getMessage());
-            MessageUtil.sendMessage(player.getPlayer(), yes, new TextComponent(" "), no);
+            player.getPlayer().spigot().sendMessage(yes, new TextComponent(" "), no);
         }
     }
 

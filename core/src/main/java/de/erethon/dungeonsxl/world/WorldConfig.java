@@ -19,7 +19,7 @@ package de.erethon.dungeonsxl.world;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
-import de.erethon.dungeonsxl.util.commons.misc.EnumUtil;
+import de.erethon.bedrock.misc.EnumUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

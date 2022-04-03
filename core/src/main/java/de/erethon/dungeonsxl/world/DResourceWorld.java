@@ -26,9 +26,8 @@ import de.erethon.dungeonsxl.api.player.EditPlayer;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
-import de.erethon.dungeonsxl.util.commons.compatibility.Version;
-import de.erethon.dungeonsxl.util.commons.misc.FileUtil;
+import de.erethon.bedrock.compatibility.Version;
+import de.erethon.bedrock.misc.FileUtil;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
@@ -186,7 +185,7 @@ public class DResourceWorld implements ResourceWorld {
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())).getName();
-        if (Internals.isAtLeast(Internals.v1_13_R1)) {
+        if (Version.isAtLeast(Version.MC1_13)) {
             instance.getWorld().setGameRule(GameRule.DO_FIRE_TICK, false);
         }
         if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {

@@ -20,7 +20,7 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
-import de.erethon.dungeonsxl.util.commons.misc.SimpleDateUtil;
+import de.erethon.bedrock.misc.SimpleDateUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;

@@ -39,10 +39,9 @@ import de.erethon.dungeonsxl.trigger.RedstoneTrigger;
 import de.erethon.dungeonsxl.trigger.Trigger;
 import de.erethon.dungeonsxl.trigger.TriggerType;
 import de.erethon.dungeonsxl.trigger.TriggerTypeDefault;
-import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
-import de.erethon.dungeonsxl.util.commons.compatibility.Version;
-import de.erethon.dungeonsxl.util.commons.misc.BlockUtil;
-import de.erethon.dungeonsxl.util.commons.misc.FileUtil;
+import de.erethon.bedrock.compatibility.Version;
+import de.erethon.bedrock.misc.BlockUtil;
+import de.erethon.bedrock.misc.FileUtil;
 import de.erethon.dungeonsxl.world.block.GameBlock;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import de.erethon.dungeonsxl.world.block.MultiBlock;
@@ -416,7 +415,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         getWorld().setDifficulty(getRules().getState(GameRule.DIFFICULTY));
-        if (Internals.isAtLeast(Internals.v1_13_R1)) {
+        if (Version.isAtLeast(Version.MC1_13)) {
             getWorld().setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, getRules().getState(GameRule.FIRE_TICK));
         }
 

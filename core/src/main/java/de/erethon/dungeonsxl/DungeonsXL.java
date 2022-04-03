@@ -70,14 +70,14 @@ import de.erethon.dungeonsxl.trigger.TriggerListener;
 import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
-import de.erethon.dungeonsxl.util.commons.compatibility.Internals;
-import de.erethon.dungeonsxl.util.commons.compatibility.Version;
-import de.erethon.dungeonsxl.util.commons.javaplugin.DREPlugin;
-import de.erethon.dungeonsxl.util.commons.javaplugin.DREPluginSettings;
-import de.erethon.dungeonsxl.util.commons.misc.FileUtil;
-import de.erethon.dungeonsxl.util.commons.misc.Registry;
-import de.erethon.dungeonsxl.util.commons.spiget.comparator.VersionComparator;
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.compatibility.Internals;
+import de.erethon.bedrock.compatibility.Version;
+import de.erethon.bedrock.plugin.EPlugin;
+import de.erethon.bedrock.plugin.EPluginSettings;
+import de.erethon.bedrock.misc.FileUtil;
+import de.erethon.bedrock.misc.Registry;
+import de.erethon.bedrock.spiget.comparator.VersionComparator;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.DWorldListener;
@@ -109,7 +109,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
  */
-public class DungeonsXL extends DREPlugin implements DungeonsAPI {
+public class DungeonsXL extends EPlugin implements DungeonsAPI {
 
     /* Plugin & lib instances */
     private static DungeonsXL instance;
@@ -119,7 +119,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
 
     /* Constants */
-    public static final String LATEST_IXL = "1.0.3";
+    public static final String LATEST_IXL = "1.1";
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
 
     /* Folders of internal features */
@@ -220,8 +220,8 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private Registry<String, CommandScript> commandScriptRegistry;
 
     public DungeonsXL() {
-        settings = DREPluginSettings.builder()
-                .internals(Internals.andHigher(Internals.v1_8_R1))
+        settings = EPluginSettings.builder()
+                .internals(Internals.INDEPENDENT)
                 .economy(true)
                 .permissions(true)
                 .metrics(true)
@@ -235,13 +235,10 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public void onEnable() {
         super.onEnable();
         String ixlVersion = manager.isPluginEnabled("ItemsXL") ? manager.getPlugin("ItemsXL").getDescription().getVersion() : "";
-        if (ixlVersion.startsWith("0.") || ixlVersion.matches("1.0[\\.]?[1-2]?")) {
+        if (ixlVersion.startsWith("0.") || ixlVersion.startsWith("1.0")) {
             getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v" + LATEST_IXL + " or higher to run.");
             manager.disablePlugin(this);
             return;
-        }
-        if (Internals.andHigher(Internals.v1_14_R1).contains(compat.getInternals())) {
-            getLogger().warning("Support for Minecraft 1.14 and higher is experimental. Do not use this in a production environment.");
         }
 
         instance = this;

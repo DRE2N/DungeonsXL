@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
-import de.erethon.dungeonsxl.util.commons.chat.MessageUtil;
+import de.erethon.bedrock.chat.MessageUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
