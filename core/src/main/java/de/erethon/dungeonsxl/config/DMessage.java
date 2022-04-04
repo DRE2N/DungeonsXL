@@ -16,7 +16,10 @@
  */
 package de.erethon.dungeonsxl.config;
 
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.bedrock.config.Message;
+import de.erethon.bedrock.config.MessageHandler;
+import de.erethon.dungeonsxl.DungeonsXL;
 
 /**
  * An enumeration of all messages. The values are fetched from the language file.
@@ -251,6 +254,16 @@ public enum DMessage implements Message {
     @Override
     public String getPath() {
         return path;
+    }
+
+    @Override
+    public MessageHandler getMessageHandler() {
+        return DungeonsXL.getInstance().getMessageHandler();
+    }
+
+    @Override
+    public void debug() {
+        MessageUtil.log(DungeonsXL.getInstance(), getMessage());
     }
 
 }

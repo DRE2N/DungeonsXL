@@ -24,6 +24,7 @@ import de.erethon.dungeonsxxl.util.GlowUtil;
  */
 public class DungeonsXXL extends EPlugin implements DungeonModule {
 
+    private static DungeonsXXL instance;
     private DungeonsXL dxl;
     private GlowUtil glowUtil;
 
@@ -37,6 +38,7 @@ public class DungeonsXXL extends EPlugin implements DungeonModule {
 
     @Override
     public void onEnable() {
+        instance = this;
         dxl = DungeonsXL.getInstance();
         glowUtil = new GlowUtil(this);
     }
@@ -47,7 +49,7 @@ public class DungeonsXXL extends EPlugin implements DungeonModule {
      * @return the instance of this plugin
      */
     public static DungeonsXXL getInstance() {
-        return (DungeonsXXL) EPlugin.getInstance();
+        return instance;
     }
 
     /**
