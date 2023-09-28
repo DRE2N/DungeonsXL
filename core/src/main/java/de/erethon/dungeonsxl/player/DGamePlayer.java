@@ -379,9 +379,8 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         GameRuleContainer rules = getGame().getRules();
         delete();
 
-        if (player.isOnline()) {
+        if (player.isOnline())
             reset(finished);
-        }
 
         // Permission bridge
         if (plugin.getPermissionProvider() != null) {
@@ -589,6 +588,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
                 plugin.getPermissionProvider().playerAddTransient(getGame().getWorld().getWorld().getName(), player, permission);
             }
         }
+
     }
 
     /**
@@ -807,5 +807,6 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         plugin.log("Player " + this + " was expected to be online but is offline.", player, Player::isOnline);
         DistanceTrigger.triggerAllInDistance(player, (DGameWorld) getGameWorld());
     }
+
 
 }
