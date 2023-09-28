@@ -10,8 +10,8 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.sign.passive.InteractSign;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.bedrock.misc.BlockUtil;
 import de.erethon.bedrock.misc.NumberUtil;
+import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.block.Sign;
 
@@ -54,7 +54,7 @@ public class InteractWallSign extends InteractSign {
     @Override
     public void initialize() {
         InteractTrigger trigger = InteractTrigger.getOrCreate(NumberUtil.parseInt(getSign().getLine(1)),
-                BlockUtil.getAttachedBlock(getSign().getBlock()), (DGameWorld) getGameWorld());
+                BlockUtilCompat.getAttachedBlock(getSign().getBlock()), (DGameWorld) getGameWorld());
         if (trigger != null) {
             trigger.addListener(this);
             addTrigger(trigger);

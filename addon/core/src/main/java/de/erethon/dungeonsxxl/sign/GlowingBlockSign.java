@@ -9,8 +9,8 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.misc.BlockUtil;
 import de.erethon.bedrock.misc.EnumUtil;
+import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxxl.DungeonsXXL;
 import de.erethon.dungeonsxxl.world.block.GlowingBlock;
@@ -104,7 +104,7 @@ public class GlowingBlockSign extends Rocker {
         }
 
         ((DGameWorld) getGameWorld()).addGameBlock(
-                glowingBlock = new GlowingBlock(DungeonsXXL.getInstance(), BlockUtil.getAttachedBlock(getSign().getBlock()), color, time));
+                glowingBlock = new GlowingBlock(DungeonsXXL.getInstance(), BlockUtilCompat.getAttachedBlock(getSign().getBlock()), color, time));
         active = true;
     }
 

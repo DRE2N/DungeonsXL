@@ -22,8 +22,8 @@ import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.misc.BlockUtil;
 import de.erethon.bedrock.misc.NumberUtil;
+import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.TeamBed;
 import org.bukkit.block.Block;
@@ -73,7 +73,7 @@ public class BedSign extends Passive {
     @Override
     public void initialize() {
         this.team = NumberUtil.parseInt(getLine(1));
-        Block block = BlockUtil.getAttachedBlock(getSign().getBlock());
+        Block block = BlockUtilCompat.getAttachedBlock(getSign().getBlock());
 
         if (Category.BEDS.containsBlock(block)) {
             if (getGame().getGroups().size() > team) {
