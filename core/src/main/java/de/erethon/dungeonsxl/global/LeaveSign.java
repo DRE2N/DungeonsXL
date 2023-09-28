@@ -22,7 +22,7 @@ import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.misc.BlockUtil;
+import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
@@ -32,6 +32,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * A sign to leave a group.
@@ -49,7 +50,13 @@ public class LeaveSign extends GlobalProtection {
         super(plugin, sign.getWorld(), id);
 
         this.sign = sign.getBlock();
-        setText();
+        // 1.20 doesn't like setting sign text in the same tick as the creation event
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                setText();
+            }
+        }.runTaskLater(plugin, 1L);
 
         LWCUtil.removeProtection(sign.getBlock());
     }
@@ -70,7 +77,7 @@ public class LeaveSign extends GlobalProtection {
             blocks = new HashSet<>();
 
             blocks.add(sign);
-            blocks.add(BlockUtil.getAttachedBlock(sign));
+            blocks.add(BlockUtilCompat.getAttachedBlock(sign));
         }
 
         return blocks;

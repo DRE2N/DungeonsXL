@@ -19,7 +19,7 @@ package de.erethon.dungeonsxl.global;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.util.LWCUtil;
-import de.erethon.bedrock.misc.BlockUtil;
+import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.World;
@@ -27,6 +27,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Daniel Saukel
@@ -53,7 +54,13 @@ public abstract class JoinSign extends GlobalProtection {
             this.startIfElementsAtLeast = startIfElementsAtLeast;
         }
 
-        update();
+        // 1.20 doesn't like setting sign text in the same tick as the creation event
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                update();
+            }
+        }.runTaskLater(plugin, 1L);
     }
 
     protected JoinSign(DungeonsXL plugin, World world, int id, ConfigurationSection config) {
@@ -148,7 +155,7 @@ public abstract class JoinSign extends GlobalProtection {
 
                     Block beneath = block.getLocation().add(0, -1 * i, 0).getBlock();
                     toAdd.add(beneath);
-                    toAdd.add(BlockUtil.getAttachedBlock(beneath));
+                    toAdd.add(BlockUtilCompat.getAttachedBlock(beneath));
 
                 } while (i >= 0);
             }
