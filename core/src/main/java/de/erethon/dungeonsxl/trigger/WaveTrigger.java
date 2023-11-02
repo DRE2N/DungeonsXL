@@ -16,23 +16,28 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import java.util.HashSet;
-import java.util.Set;
-import org.bukkit.Bukkit;
+import de.erethon.bedrock.misc.NumberUtil;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class WaveTrigger extends Trigger {
-
-    private TriggerType type = TriggerTypeDefault.WAVE;
+public class WaveTrigger extends AbstractTrigger {
 
     private double mustKillRate = 1;
 
-    public WaveTrigger(double mustKillRate) {
-        this.mustKillRate = mustKillRate;
+    public WaveTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        super(api, owner, expression, value);
+        mustKillRate = NumberUtil.parseDouble(value, mustKillRate);
+    }
+
+    @Override
+    public char getKey() {
+        return TriggerTypeKey.WAVE;
     }
 
     /**
@@ -49,39 +54,14 @@ public class WaveTrigger extends Trigger {
         this.mustKillRate = mustKillRate;
     }
 
-    public void onTrigger() {
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
+    @Override
+    public void onTrigger(boolean switching) {
         setTriggered(true);
-        updateDSigns();
-        setTriggered(false);
     }
 
     @Override
-    public TriggerType getType() {
-        return type;
-    }
-
-    /* Statics */
-    public static WaveTrigger getOrCreate(double mustKillRate, DGameWorld gameWorld) {
-        return new WaveTrigger(mustKillRate);
-    }
-
-    /**
-     * @param gameWorld the game world to check
-     * @return the WaveTriggers in the DGameWorld
-     */
-    public static Set<WaveTrigger> getByGameWorld(DGameWorld gameWorld) {
-        Set<WaveTrigger> toReturn = new HashSet<>();
-        for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.WAVE)) {
-            toReturn.add((WaveTrigger) trigger);
-        }
-        return toReturn;
+    public void postTrigger() {
+        setTriggered(false);
     }
 
 }

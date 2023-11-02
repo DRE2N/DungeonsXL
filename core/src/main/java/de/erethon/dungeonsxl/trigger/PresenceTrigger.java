@@ -16,41 +16,36 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 
 /**
  * @author Daniel Saukel
  */
 public class PresenceTrigger extends DistanceTrigger {
 
-    public PresenceTrigger(int distance, Location loc) {
-        super(distance, loc);
-    }
-
-    public PresenceTrigger(Location loc) {
-        super(loc);
+    public PresenceTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        super(api, owner, expression, value);
     }
 
     @Override
-    public void onTrigger(Player player) {
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+    public char getKey() {
+        return TriggerTypeKey.PRESENCE;
+    }
 
+    @Override
+    public void onTrigger(boolean switching) {
         setTriggered(true);
-        setPlayer(player);
-        updateDSigns();
-        setTriggered(false);
+        unregisterTrigger();
+        getListeners().clear();
+        getGameWorld().unregisterTrigger(this);
     }
 
     @Override
-    public TriggerType getType() {
-        return TriggerTypeDefault.PRESENCE;
+    public void postTrigger() {
+        setTriggered(false);
     }
 
 }

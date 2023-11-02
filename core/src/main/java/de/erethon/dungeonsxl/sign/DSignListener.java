@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
@@ -25,7 +26,6 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -70,10 +70,11 @@ public class DSignListener implements Listener {
         }
 
         InteractTrigger trigger = InteractTrigger.getByBlock(clickedBlock, gameWorld);
-        if (trigger != null) {
-            if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                trigger.onTrigger(player);
-            }
+        if (trigger == null) {
+            return;
+        }
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            trigger.trigger(true, player);
         }
     }
 

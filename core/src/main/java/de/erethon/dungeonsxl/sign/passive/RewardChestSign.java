@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import java.util.Arrays;
@@ -106,7 +106,7 @@ public class RewardChestSign extends ChestSign {
             return;
         }
 
-        ((DGameWorld) getGameWorld()).addGameBlock(new RewardChest((DungeonsXL) api, chest, moneyReward, levelReward, list.toArray(new ItemStack[list.size()])));
+        ((DGameWorld) getGameWorld()).addGameBlock(new RewardChest((DungeonsXL) api, chest, moneyReward, levelReward, list.toArray(ItemStack[]::new)));
     }
 
 }

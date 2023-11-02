@@ -12,22 +12,29 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api;
-
-import org.bukkit.entity.Player;
+package de.erethon.dungeonsxl.api.trigger;
 
 /**
- * @deprecated stub
+ * Type keys of default triggers.
  *
  * @author Daniel Saukel
  */
-@Deprecated
-public interface Trigger {
+public class TriggerTypeKey {
 
+    public static final char DISTANCE = 'D';
+    public static final char FORTUNE = 'F';
+    public static final char INTERACT = 'I';
+    /**
+     * The terms "generic" and "sign trigger" are used synonymously. Trigger strings without prefix default to generic triggers.
+     */
+    public static final char GENERIC = 'T';
+    public static final char MOB = 'M';
+    public static final char PRESENCE = 'P';
     @Deprecated
-    boolean isTriggered();
-
+    public static final char PROGRESS = 'P';
+    public static final char REDSTONE = 'R';
+    public static final char USE_ITEM = 'U';
     @Deprecated
-    Player getPlayer();
+    public static final char WAVE = 'W';
 
 }

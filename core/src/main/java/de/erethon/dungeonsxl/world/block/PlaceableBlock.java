@@ -16,16 +16,17 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
+import de.erethon.bedrock.misc.BlockUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
-import de.erethon.bedrock.misc.BlockUtil;
-import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
 /**
@@ -68,9 +69,9 @@ public class PlaceableBlock extends GameBlock {
         return false;
     }
 
-    public void onPlace() {
+    public void onPlace(Player player) {
         if (triggerId != -1) {
-            SignTrigger.getById(triggerId, gameWorld).onTrigger(true);
+            SignTrigger.getById(triggerId, gameWorld).trigger(true, player);
         }
         gameWorld.removeGameBlock(this);
     }

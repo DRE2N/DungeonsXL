@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameGoal;
@@ -27,10 +28,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -102,26 +100,20 @@ public class EndSign extends Button {
             return;
         }
 
-        InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), (DGameWorld) getGameWorld());
-        if (trigger != null) {
-            trigger.addListener(this);
-            addTrigger(trigger);
-        }
-
-        getSign().setLine(0, ChatColor.DARK_BLUE + "############");
+        String line1, line2;
         Dungeon dungeon = getGame().getDungeon();
         if (dungeon.isMultiFloor() && !getGame().getUnplayedFloors().isEmpty() && getGameWorld().getResource() != dungeon.getEndFloor()) {
-            getSign().setLine(1, DMessage.SIGN_FLOOR_1.getMessage());
+            line1 = DMessage.SIGN_FLOOR_1.getMessage();
             if (floor == null) {
-                getSign().setLine(2, DMessage.SIGN_FLOOR_2.getMessage());
+                line2 = DMessage.SIGN_FLOOR_2.getMessage();
             } else {
-                getSign().setLine(2, ChatColor.GREEN + floor.getName().replace("_", " "));
+                line2 = floor.getName().replace("_", " ");
             }
         } else {
-            getSign().setLine(1, DMessage.SIGN_END.getMessage());
+            line1 = DMessage.SIGN_END.getMessage();
+            line2 = "";
         }
-        getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-        getSign().update();
+        InteractTrigger.addDefault(api, this, line1, line2);
     }
 
     @Override

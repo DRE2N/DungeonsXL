@@ -16,14 +16,13 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.sign.Passive;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
@@ -67,6 +66,11 @@ public class InteractSign extends Passive {
     }
 
     @Override
+    public boolean isTriggerLineDisabled() {
+        return true;
+    }
+
+    @Override
     public boolean validate() {
         Set<Integer> used = new HashSet<>();
         for (DungeonSign dSign : getEditWorld().getDungeonSigns()) {
@@ -84,11 +88,7 @@ public class InteractSign extends Passive {
 
         } else {
             id = NumberUtil.parseInt(getLine(1));
-            if (id == 0 || used.contains(id)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(id == 0 || used.contains(id));
         }
 
         new BukkitRunnable() {
@@ -103,11 +103,7 @@ public class InteractSign extends Passive {
 
     @Override
     public void initialize() {
-        InteractTrigger trigger = InteractTrigger.getOrCreate(NumberUtil.parseInt(getSign().getLine(1)), getSign().getBlock(), (DGameWorld) getGameWorld());
-        if (trigger != null) {
-            trigger.addListener(this);
-            addTrigger(trigger);
-        }
+        getGameWorld().createTrigger(this, LogicalExpression.parse("I" + id));
 
         getSign().setLine(0, ChatColor.DARK_BLUE + "############");
         getSign().setLine(1, ChatColor.GREEN + getLine(2));

@@ -14,20 +14,16 @@
  */
 package de.erethon.dungeonsxl.api.sign;
 
-import de.erethon.dungeonsxl.api.Trigger;
-import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.world.EditWorld;
-import de.erethon.dungeonsxl.api.world.GameWorld;
-import java.util.Set;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 
 /**
  * Interface for all dungeon signs.
  *
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
  */
-public interface DungeonSign {
+public interface DungeonSign extends TriggerListener {
 
     /**
      * Returns the name to identify the sign.
@@ -56,6 +52,18 @@ public interface DungeonSign {
      * @return if the sign block is breakable after the initialization
      */
     boolean isProtected();
+
+    /**
+     * Returns true if the fourth line of the sign that usually contains the trigger is used differently.
+     *
+     * @deprecated This is overriden by interact signs, but it is strongly advised to stick to the convention to fetch data only from the second and third line.
+     *
+     * @return true if the fourth line of the sign that usually contains the trigger is used differently
+     */
+    @Deprecated
+    default boolean isTriggerLineDisabled() {
+        return false;
+    }
 
     /**
      * Returns if the block type of the sign is set to air after the initialization.
@@ -100,99 +108,6 @@ public interface DungeonSign {
      * @return the edit world this sign is in; null if this is in a game world
      */
     EditWorld getEditWorld();
-
-    /**
-     * Returns the game world this sign is in; null if this is in an edit world.
-     *
-     * @return the game world this sign is in; null if this is in an edit world
-     */
-    GameWorld getGameWorld();
-
-    /**
-     * Returns the game played in the world of this sign.
-     *
-     * @return the game played in the world of this sign
-     */
-    default Game getGame() {
-        return getGameWorld().getGame();
-    }
-
-    /**
-     * Returns a Set of the triggers registered for this sign.
-     *
-     * @return a Set of the triggers registered for this sign
-     */
-    Set<Trigger> getTriggers();
-
-    /**
-     * Returns if the sign has triggers.
-     *
-     * @return if the sign has triggers
-     */
-    default boolean hasTriggers() {
-        return !getTriggers().isEmpty();
-    }
-
-    /**
-     * Adds a trigger to the sign.
-     *
-     * @param trigger the trigger
-     */
-    void addTrigger(Trigger trigger);
-
-    /**
-     * Attempts to remove a trigger from the sign.
-     *
-     * @param trigger the trigger
-     */
-    void removeTrigger(Trigger trigger);
-
-    /**
-     * Makes the sign listen for its triggers if it {@link #hasTriggers()}.
-     * <p>
-     * {@link #trigger(org.bukkit.entity.Player)}s the sign if it does not have any triggers.
-     * (Note that some signs have interaction triggers by default, like ready signs).
-     */
-    void initialize();
-
-    /**
-     * Returns if the sign is {@link #initialize()}d.
-     *
-     * @return if the sign is {@link #initialize()}d
-     */
-    boolean isInitialized();
-
-    /**
-     * Triggers the sign. The effects are defined by the implementation.
-     *
-     * @param player the player who triggered the sign or null if no one in particular triggered it
-     */
-    void trigger(Player player);
-
-    /**
-     * Checks if the triggers of the sign have been triggered. If they all are, the sign itself is triggered.
-     *
-     * @param lastFired the last trigger that has been triggered
-     */
-    default void updateTriggers(Trigger lastFired) {
-        if (isErroneous()) {
-            return;
-        }
-
-        for (Trigger trigger : getTriggers()) {
-            if (!trigger.isTriggered()) {
-                return;
-            }
-        }
-
-        try {
-            trigger(lastFired != null ? lastFired.getPlayer() : null);
-        } catch (Exception exception) {
-            markAsErroneous("An error occurred while triggering a sign of the type " + getName()
-                    + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
-            exception.printStackTrace();
-        }
-    }
 
     /**
      * Sets the sign to air if it is not erroneous and if its type requires this.

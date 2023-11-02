@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.sign.LocationSign;
-import de.erethon.bedrock.misc.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
@@ -30,7 +30,7 @@ import org.bukkit.block.Sign;
  */
 public class StartSign extends Passive implements LocationSign {
 
-    private Location location;
+    private Location targetLocation;
     private int id;
 
     public StartSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
@@ -46,13 +46,13 @@ public class StartSign extends Passive implements LocationSign {
     }
 
     @Override
-    public Location getLocation() {
-        return location;
+    public Location getTargetLocation() {
+        return targetLocation;
     }
 
     @Override
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setTargetLocation(Location location) {
+        this.targetLocation = location;
     }
 
     @Override

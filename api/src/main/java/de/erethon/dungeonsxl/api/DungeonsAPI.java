@@ -14,9 +14,9 @@
  */
 package de.erethon.dungeonsxl.api;
 
+import de.erethon.bedrock.misc.Registry;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.mob.ExMob;
-import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
@@ -27,6 +27,7 @@ import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
@@ -131,6 +132,13 @@ public interface DungeonsAPI extends Plugin {
      * @return a registry of the game rules
      */
     Registry<String, GameRule> getGameRuleRegistry();
+
+    /**
+     * Returns a registry of the triggers.
+     *
+     * @return a registry of the triggers
+     */
+    Registry<Character, Class<? extends Trigger>> getTriggerRegistry();
 
     /**
      * Returns a registry of the external mob providers.

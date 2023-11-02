@@ -15,6 +15,7 @@ import de.erethon.bedrock.compatibility.Internals;
 import de.erethon.bedrock.plugin.EPlugin;
 import de.erethon.bedrock.plugin.EPluginSettings;
 import de.erethon.bedrock.misc.Registry;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxxl.requirement.*;
 import de.erethon.dungeonsxxl.sign.*;
 import de.erethon.dungeonsxxl.util.GlowUtil;
@@ -89,6 +90,10 @@ public class DungeonsXXL extends EPlugin implements DungeonModule {
 
     @Override
     public void initGameRules(Registry<String, GameRule> registry) {
+    }
+
+    @Override
+    public void initTriggers(Registry<Character, Class<? extends Trigger>> triggerRegistry) {
     }
 
 }

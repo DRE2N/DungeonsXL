@@ -16,9 +16,9 @@
  */
 package de.erethon.dungeonsxl.sign;
 
+import de.erethon.bedrock.misc.BlockUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
-import de.erethon.bedrock.misc.BlockUtil;
 import org.bukkit.Location;
 
 /**
@@ -33,11 +33,11 @@ public interface LocationSign extends DungeonSign {
         double z = getSign().getZ() + 0.5;
         float yaw = BlockUtil.blockFaceToYaw(DungeonsXL.BLOCK_ADAPTER.getFacing(getSign().getBlock()).getOppositeFace());
         float pitch = 0;
-        setLocation(new Location(getGameWorld().getWorld(), x, y, z, yaw, pitch));
+        setTargetLocation(new Location(getGameWorld().getWorld(), x, y, z, yaw, pitch));
     }
 
-    Location getLocation();
+    Location getTargetLocation();
 
-    void setLocation(Location location);
+    void setTargetLocation(Location location);
 
 }

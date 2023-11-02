@@ -23,8 +23,6 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -100,17 +98,7 @@ public class ResourcePackSign extends Button {
             return;
         }
 
-        InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), (DGameWorld) getGameWorld());
-        if (trigger != null) {
-            trigger.addListener(this);
-            addTrigger(trigger);
-        }
-
-        getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, DMessage.SIGN_RESOURCE_PACK.getMessage());
-        getSign().setLine(2, ChatColor.GREEN + getLine(1));
-        getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-        getSign().update();
+        InteractTrigger.addDefault(api, this, DMessage.SIGN_RESOURCE_PACK.getMessage(), getLine(1));
     }
 
     @Override

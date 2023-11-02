@@ -16,18 +16,16 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
+import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import org.black_ixx.bossshop.BossShop;
 import org.black_ixx.bossshop.core.BSShop;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -104,17 +102,7 @@ public class BossShopSign extends Button {
             return;
         }
 
-        InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), (DGameWorld) getGameWorld());
-        if (trigger != null) {
-            trigger.addListener(this);
-            addTrigger(trigger);
-        }
-
-        getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.GREEN + getLine(1));
-        getSign().setLine(2, ChatColor.GREEN + getLine(2));
-        getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-        getSign().update();
+        InteractTrigger.addDefault(api, this, getLine(1), getLine(2));
     }
 
     @Override

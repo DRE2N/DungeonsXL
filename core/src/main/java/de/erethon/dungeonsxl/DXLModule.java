@@ -16,18 +16,21 @@
  */
 package de.erethon.dungeonsxl;
 
+import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxl.api.DungeonModule;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
+import static de.erethon.dungeonsxl.api.trigger.TriggerTypeKey.*;
 import de.erethon.dungeonsxl.requirement.*;
 import de.erethon.dungeonsxl.reward.*;
 import de.erethon.dungeonsxl.sign.button.*;
 import de.erethon.dungeonsxl.sign.passive.*;
 import de.erethon.dungeonsxl.sign.rocker.*;
 import de.erethon.dungeonsxl.sign.windup.*;
-import de.erethon.bedrock.misc.Registry;
+import de.erethon.dungeonsxl.trigger.*;
 
 /**
  * @author Daniel Saukel
@@ -97,6 +100,20 @@ public class DXLModule implements DungeonModule {
         for (GameRule rule : GameRule.VALUES) {
             gameRuleRegistry.add(rule.getKey(), rule);
         }
+    }
+
+    @Override
+    public void initTriggers(Registry<Character, Class<? extends Trigger>> triggerRegistry) {
+        triggerRegistry.add(DISTANCE, DistanceTrigger.class);
+        triggerRegistry.add(FORTUNE, FortuneTrigger.class);
+        triggerRegistry.add(INTERACT, InteractTrigger.class);
+        triggerRegistry.add(MOB, MobTrigger.class);
+        triggerRegistry.add(PRESENCE, PresenceTrigger.class);
+        //triggerRegistry.add("P", ProgressTrigger.class);
+        triggerRegistry.add(REDSTONE, RedstoneTrigger.class);
+        triggerRegistry.add(GENERIC, SignTrigger.class);
+        triggerRegistry.add(USE_ITEM, UseItemTrigger.class);
+        triggerRegistry.add(WAVE, WaveTrigger.class);
     }
 
 }

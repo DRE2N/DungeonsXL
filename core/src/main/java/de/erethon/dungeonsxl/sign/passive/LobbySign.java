@@ -29,20 +29,20 @@ import org.bukkit.block.Sign;
  */
 public class LobbySign extends Passive implements LocationSign {
 
-    private Location location;
+    private Location targetLocation;
 
     public LobbySign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
     }
 
     @Override
-    public Location getLocation() {
-        return location;
+    public Location getTargetLocation() {
+        return targetLocation;
     }
 
     @Override
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setTargetLocation(Location location) {
+        this.targetLocation = location;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class LobbySign extends Passive implements LocationSign {
     @Override
     public void initialize() {
         LocationSign.super.initialize();
-        getGameWorld().setLobbyLocation(getLocation());
+        getGameWorld().setLobbyLocation(targetLocation);
     }
 
 }

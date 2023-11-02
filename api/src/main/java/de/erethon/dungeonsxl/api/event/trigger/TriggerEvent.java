@@ -12,41 +12,40 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.sign;
+package de.erethon.dungeonsxl.api.event.trigger;
 
-import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.trigger.Trigger;
-import de.erethon.dungeonsxl.api.world.InstanceWorld;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 /**
- * A sign that does not do anything on its own. Its function is mostly to mark locations or blocks, like lobby or bed signs.
+ * Superclass for events involving triggers.
  *
  * @author Daniel Saukel
  */
-public abstract class Passive extends AbstractDSign {
+public abstract class TriggerEvent extends Event {
 
-    protected Passive(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
-        super(api, sign, lines, instance);
+    protected Trigger trigger;
+
+    protected TriggerEvent(Trigger trigger) {
+        this.trigger = trigger;
     }
 
     /**
-     * Does nothing.
+     * Returns the Trigger involved in this event.
      *
-     * @param lastFired unused
+     * @return the trigger involved in this event
      */
-    @Override
-    public final void updateTriggers(Trigger lastFired) {
+    public Trigger getTrigger() {
+        return trigger;
     }
 
     /**
-     * Does nothing.
+     * Sets the trigger involved in this event to the given value.
      *
-     * @param player unused
+     * @param trigger the trigger to set
      */
-    @Override
-    public final void trigger(Player player) {
+    public void setTrigger(Trigger trigger) {
+        this.trigger = trigger;
     }
 
 }

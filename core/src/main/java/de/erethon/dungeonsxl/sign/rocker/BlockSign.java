@@ -16,14 +16,14 @@
  */
 package de.erethon.dungeonsxl.sign.rocker;
 
+import de.erethon.bedrock.compatibility.CompatibilityHandler;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.caliburn.item.ExItem;
 import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.compatibility.CompatibilityHandler;
-import de.erethon.bedrock.misc.NumberUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.bukkit.block.Block;

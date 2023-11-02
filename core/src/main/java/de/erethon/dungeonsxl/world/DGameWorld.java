@@ -16,18 +16,26 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.bedrock.compatibility.Version;
+import de.erethon.bedrock.misc.FileUtil;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.BuildMode;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.trigger.TriggerRegistrationEvent;
 import de.erethon.dungeonsxl.api.event.world.GameWorldStartGameEvent;
 import de.erethon.dungeonsxl.api.event.world.InstanceWorldPostUnloadEvent;
 import de.erethon.dungeonsxl.api.event.world.InstanceWorldUnloadEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.sign.button.ReadySign;
@@ -36,11 +44,7 @@ import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.FortuneTrigger;
 import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.trigger.RedstoneTrigger;
-import de.erethon.dungeonsxl.trigger.Trigger;
-import de.erethon.dungeonsxl.trigger.TriggerType;
-import de.erethon.dungeonsxl.trigger.TriggerTypeDefault;
-import de.erethon.bedrock.compatibility.Version;
-import de.erethon.bedrock.misc.FileUtil;
+import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.world.block.GameBlock;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import de.erethon.dungeonsxl.world.block.MultiBlock;
@@ -63,8 +67,6 @@ import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import de.erethon.dungeonsxl.api.dungeon.BuildMode;
-import de.erethon.dungeonsxl.util.BlockUtilCompat;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -128,14 +130,14 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             if (sign instanceof StartSign) {
                 anyStartSign = (StartSign) sign;
                 if (anyStartSign.getId() == index) {
-                    return anyStartSign.getLocation();
+                    return anyStartSign.getTargetLocation();
                 }
             }
         }
 
         // Try any start sign
         if (anyStartSign != null) {
-            return anyStartSign.getLocation();
+            return anyStartSign.getTargetLocation();
         }
 
         // Lobby location as fallback
@@ -163,23 +165,17 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             return null;
         }
 
-        String[] triggerTypes = lines[3].replaceAll("\\s", "").split(",");
-        for (String triggerString : triggerTypes) {
-            if (triggerString.isEmpty()) {
-                continue;
+        LogicalExpression expression = null;
+        if (!dSign.isTriggerLineDisabled()) {
+            try {
+                expression = LogicalExpression.parse(lines[3]);
+            } catch (IllegalArgumentException exception) {
+                dSign.markAsErroneous("The trigger string " + lines[3] + " is invalid.");
             }
-
-            String id = triggerString.substring(0, 1);
-            String value = null;
-            if (triggerString.length() > 1) {
-                value = triggerString.substring(1);
-            }
-
-            Trigger trigger = Trigger.getOrCreate(plugin, id, value, dSign);
-            if (trigger != null) {
-                trigger.addListener(dSign);
-                dSign.addTrigger(trigger);
-            }
+        }
+        createTriggers(dSign, expression);
+        for (Trigger trigger : triggers) {
+            trigger.addListener(dSign);
         }
 
         if (dSign.isOnDungeonInit()) {
@@ -196,6 +192,79 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         return dSign;
+    }
+
+    @Override
+    public Trigger createTrigger(TriggerListener owner, LogicalExpression expression) {
+        if (!expression.isAtomic()) {
+            throw new IllegalArgumentException("Expression is not atomic");
+        }
+
+        String text = expression.getText();
+        if (text.isBlank()) {
+            return null;
+        }
+        char key = Character.toUpperCase(text.charAt(0));
+        String value;
+        if (plugin.getTriggerRegistry().containsKey(key)) {
+            value = text.substring(1, text.length() - 1);
+        } else {
+            key = 'T';
+            value = text;
+        }
+
+        Trigger trigger = getTrigger(key, value);
+        if (trigger != null) {
+            return trigger;
+        }
+
+        Class<? extends Trigger> clss = plugin.getTriggerRegistry().get(key);
+        if (clss == null) {
+            return null;
+        }
+
+        // Legacy shit
+        if (key == TriggerTypeKey.PROGRESS && value.matches("[0-99]/[0-999]")) {
+            trigger = ProgressTrigger.getOrCreate(plugin, owner, expression, value);
+        } else {
+            trigger = Trigger.construct(key, plugin, owner, expression, value);
+        }
+        if (trigger == null) {
+            return null;
+        }
+
+        TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
+        Bukkit.getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            triggers.add(trigger);
+        }
+        return trigger;
+    }
+
+    @Override
+    public List<Trigger> createTriggers(TriggerListener owner, LogicalExpression expression) {
+        List<LogicalExpression> atomicExpressions = expression.getContents(true);
+        List<Trigger> created = new ArrayList<>(atomicExpressions.size());
+        for (LogicalExpression atomic : atomicExpressions) {
+            Trigger trigger = atomic.toTrigger(plugin, owner, true);
+            created.add(trigger);
+        }
+        return created;
+    }
+
+    public Trigger getTrigger(char key, String value) {
+        if (!Trigger.IDENTIFIABLE.contains(key)) {
+            return null;
+        }
+        for (Trigger trigger : triggers) {
+            if (trigger.getKey() != key) {
+                continue;
+            }
+            if (trigger.getValue().equalsIgnoreCase(value)) {
+                return trigger;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -321,39 +390,21 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         this.isPlaying = isPlaying;
     }
 
-    /**
-     * @return the triggers
-     */
-    public List<Trigger> getTriggers() {
+    @Override
+    public Collection<Trigger> getTriggers() {
         return triggers;
     }
 
-    /**
-     * @param type the type to filter
-     * @return the triggers with the type
-     */
-    public List<Trigger> getTriggers(TriggerType type) {
-        List<Trigger> triggersOfType = new ArrayList<>();
-        for (Trigger trigger : triggers) {
-            if (trigger.getType() == type) {
-                triggersOfType.add(trigger);
-            }
-        }
-        return triggersOfType;
+    @Override
+    public Collection<Trigger> getTriggersFromKey(char key) {
+        return triggers.stream()
+                .filter(t -> t.getKey() == key)
+                .toList();
     }
 
-    /**
-     * @param trigger the trigger to add
-     */
-    public void addTrigger(Trigger trigger) {
-        triggers.add(trigger);
-    }
-
-    /**
-     * @param trigger the trigger to remove
-     */
-    public void removeTrigger(Trigger trigger) {
-        triggers.remove(trigger);
+    @Override
+    public boolean unregisterTrigger(Trigger trigger) {
+        return triggers.remove(trigger);
     }
 
     /**
@@ -362,12 +413,12 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     public int getMobCount() {
         int mobCount = 0;
 
-        signs:  for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
+        signs:  for (DungeonSign sign : getDungeonSigns().toArray(DungeonSign[]::new)) {
                     if (!(sign instanceof MobSign)) {
                         continue;
                     }
 
-                    for (de.erethon.dungeonsxl.api.Trigger trigger : sign.getTriggers()) {
+                    for (Trigger trigger : sign.getTriggers()) {
                         if (trigger instanceof ProgressTrigger) {
                             if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
                                 break signs;
@@ -449,12 +500,12 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             }
         }
 
-        for (Trigger trigger : getTriggers(TriggerTypeDefault.REDSTONE)) {
-            ((RedstoneTrigger) trigger).onTrigger();
+        for (Trigger trigger : getTriggersFromKey(TriggerTypeKey.REDSTONE)) {
+            ((RedstoneTrigger) trigger).trigger(true, null);
         }
 
-        for (Trigger trigger : getTriggers(TriggerTypeDefault.FORTUNE)) {
-            ((FortuneTrigger) trigger).onTrigger();
+        for (Trigger trigger : getTriggersFromKey(TriggerTypeKey.FORTUNE)) {
+            ((FortuneTrigger) trigger).trigger(true, null);
         }
     }
 
@@ -598,7 +649,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             }
             return true;
         }
-        placeableBlock.onPlace();
+        placeableBlock.onPlace(player);
         return false;
     }
 

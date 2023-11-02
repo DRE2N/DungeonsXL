@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.mob;
 
+import de.erethon.bedrock.compatibility.Version;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.dungeonsxl.DungeonsXL;
@@ -23,12 +24,14 @@ import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobSpawnEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.trigger.MobTrigger;
 import de.erethon.dungeonsxl.trigger.WaveTrigger;
-import de.erethon.bedrock.compatibility.Version;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import java.util.Collection;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -107,13 +110,14 @@ public class DMob implements DungeonMob {
 
         MobTrigger mobTrigger = MobTrigger.getByName(trigger, gameWorld);
         if (mobTrigger != null) {
-            mobTrigger.onTrigger();
+            mobTrigger.trigger(true, null);
         }
 
-        Set<WaveTrigger> waveTriggers = WaveTrigger.getByGameWorld(gameWorld);
-        for (WaveTrigger waveTrigger : waveTriggers) {
+        Collection<Trigger> waveTriggers = gameWorld.getTriggersFromKey(TriggerTypeKey.WAVE);
+        for (Trigger uncasted : waveTriggers) {
+            WaveTrigger waveTrigger = (WaveTrigger) uncasted;
             if (((DGame) gameWorld.getGame()).getWaveKills() >= Math.ceil(gameWorld.getMobCount() * waveTrigger.getMustKillRate())) {
-                waveTrigger.onTrigger();
+                waveTrigger.trigger(true, null);
             }
         }
 

@@ -17,66 +17,55 @@
 package de.erethon.dungeonsxl.trigger;
 
 import de.erethon.caliburn.item.ExItem;
-import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class UseItemTrigger extends Trigger {
-
-    private TriggerType type = TriggerTypeDefault.USE_ITEM;
+public class UseItemTrigger extends AbstractTrigger {
 
     private String name;
     private String matchedName;
 
-    public UseItemTrigger(DungeonsXL plugin, String name) {
-        this.name = name;
-        ExItem item = plugin.getCaliburn().getExItem(name);
+    public UseItemTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        super(api, owner, expression, value);
+        name = value;
+        ExItem item = api.getCaliburn().getExItem(name);
         if (item != null) {
             matchedName = item.toString();
         }
     }
 
-    public void onTrigger(Player player) {
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        setTriggered(true);
-        this.setPlayer(player);
-        updateDSigns();
+    @Override
+    public char getKey() {
+        return TriggerTypeKey.USE_ITEM;
     }
 
     @Override
-    public TriggerType getType() {
-        return type;
+    public void onTrigger(boolean switching) {
+        setTriggered(true);
     }
 
     /* Statics */
-    public static UseItemTrigger getOrCreate(DungeonsXL plugin, String name, DGameWorld gameWorld) {
-        UseItemTrigger trigger = getByName(name, gameWorld);
-        if (trigger != null) {
-            return trigger;
+    public static UseItemTrigger getByName(String name, GameWorld gameWorld) {
+        if (name == null || gameWorld == null) {
+            return null;
         }
-        return new UseItemTrigger(plugin, name);
-    }
-
-    public static UseItemTrigger getByName(String name, DGameWorld gameWorld) {
-        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.USE_ITEM)) {
+        for (Trigger uncasted : gameWorld.getTriggers()) {
+            if (!(uncasted instanceof UseItemTrigger)) {
+                continue;
+            }
             UseItemTrigger trigger = (UseItemTrigger) uncasted;
-            if (trigger.name.equalsIgnoreCase(name)) {
+            if (name.equalsIgnoreCase(trigger.name)) {
                 return trigger;
-            } else if (trigger.matchedName != null) {
-                if (trigger.matchedName.equalsIgnoreCase(name)) {
-                    return trigger;
-                }
+            } else if (name.equalsIgnoreCase(trigger.matchedName)) {
+                return trigger;
             }
         }
         return null;

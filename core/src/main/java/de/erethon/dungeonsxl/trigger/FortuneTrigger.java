@@ -16,23 +16,29 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
 import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import java.util.Random;
-import org.bukkit.Bukkit;
 
 /**
  * @author Daniel Saukel
  */
-public class FortuneTrigger extends Trigger {
-
-    private TriggerType type = TriggerTypeDefault.FORTUNE;
+public class FortuneTrigger extends AbstractTrigger {
 
     private double chance = 0;
 
-    public FortuneTrigger(double chance) {
-        this.chance = chance;
+    public FortuneTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        super(api, owner, expression, value);
+        this.chance = NumberUtil.parseDouble(value, chance);
+    }
+
+    @Override
+    public char getKey() {
+        return TriggerTypeKey.FORTUNE;
     }
 
     /* Getters and setters */
@@ -50,32 +56,13 @@ public class FortuneTrigger extends Trigger {
         this.chance = chance;
     }
 
-    @Override
-    public TriggerType getType() {
-        return type;
-    }
-
     /* Actions */
-    public void onTrigger() {
+    @Override
+    public void onTrigger(boolean switching) {
         int random = new Random().nextInt(100);
-        if (chance * 100 < random) {
-            return;
+        if (chance * 100 >= random) {
+            setTriggered(true);
         }
-
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        setTriggered(true);
-        updateDSigns();
-    }
-
-    /* Statics */
-    public static FortuneTrigger getOrCreate(String chance, DGameWorld gameWorld) {
-        return new FortuneTrigger(NumberUtil.parseDouble(chance));
     }
 
 }

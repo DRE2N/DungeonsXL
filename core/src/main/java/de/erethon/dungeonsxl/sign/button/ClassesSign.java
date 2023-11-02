@@ -23,8 +23,6 @@ import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -81,20 +79,8 @@ public class ClassesSign extends Button {
     @Override
     public void initialize() {
         if (playerClass != null) {
-            InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), (DGameWorld) getGameWorld());
-            if (trigger != null) {
-                trigger.addListener(this);
-                addTrigger(trigger);
-            }
-
-            getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-            getSign().setLine(1, ChatColor.GREEN + playerClass.getName());
-            getSign().setLine(2, "");
-            getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-            getSign().update();
-
+            InteractTrigger.addDefault(api, this, playerClass.getName(), "");
             getGameWorld().setClassesEnabled(true);
-
         } else {
             markAsErroneous("No such class");
         }

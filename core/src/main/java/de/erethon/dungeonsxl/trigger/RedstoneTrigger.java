@@ -17,91 +17,79 @@
 package de.erethon.dungeonsxl.trigger;
 
 import de.erethon.caliburn.category.Category;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Deactivatable;
-import de.erethon.dungeonsxl.api.sign.DungeonSign;
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.bedrock.misc.BlockUtil;
+import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.util.BlockUtilCompat;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class RedstoneTrigger extends Trigger {
-
-    private TriggerType type = TriggerTypeDefault.REDSTONE;
+public class RedstoneTrigger extends AbstractTrigger {
 
     private Block rtBlock;
 
-    public RedstoneTrigger(Block block) {
-        rtBlock = block;
+    public RedstoneTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        super(api, owner, expression, value);
+
+        Location loc = owner.getLocation();
+        if (Category.WALL_SIGNS.containsBlock(loc.getBlock())) {
+            rtBlock = BlockUtilCompat.getAttachedBlock(loc.getBlock());
+        } else {
+            rtBlock = loc.getBlock();
+        }
     }
 
-    public void onTrigger() {
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
+    @Override
+    public char getKey() {
+        return TriggerTypeKey.REDSTONE;
+    }
 
-        if (event.isCancelled()) {
-            return;
-        }
-
+    @Override
+    public void onTrigger(boolean switching) {
         if (rtBlock.isBlockPowered()) {
             if (!isTriggered()) {
                 setTriggered(true);
-                updateDSigns();
             }
 
         } else if (isTriggered()) {
             setTriggered(false);
 
-            for (DungeonSign dSign : getDSigns().toArray(new DungeonSign[getDSigns().size()])) {
-                if (!(dSign instanceof Deactivatable)) {
+            for (TriggerListener listener : getListeners().toArray(TriggerListener[]::new)) {
+                if (!(listener instanceof Deactivatable)) {
                     return;
                 }
-                if (dSign.isErroneous()) {
+                Deactivatable sign = ((Deactivatable) listener);
+                if (sign.isErroneous()) {
                     return;
                 }
-                for (de.erethon.dungeonsxl.api.Trigger trigger : dSign.getTriggers()) {
+                for (Trigger trigger : sign.getTriggers()) {
                     if (trigger.isTriggered()) {
                         return;
                     }
                 }
-                ((Deactivatable) dSign).deactivate();
+                sign.deactivate();
             }
         }
-    }
-
-    @Override
-    public TriggerType getType() {
-        return type;
     }
 
     /* Statics */
-    public static RedstoneTrigger getOrCreate(Sign sign, DGameWorld gameWorld) {
-        Block rtBlock;
-        if (Category.WALL_SIGNS.containsBlock(sign.getBlock())) {
-            rtBlock = BlockUtilCompat.getAttachedBlock(sign.getBlock());
-        } else {
-            rtBlock = sign.getBlock();
+    public static void updateAll(GameWorld gameWorld) {
+        if (gameWorld == null) {
+            return;
         }
-        if (rtBlock == null) {
-            return null;
-        }
-        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
-            RedstoneTrigger trigger = (RedstoneTrigger) uncasted;
-            if (trigger.rtBlock.equals(rtBlock)) {
-                return trigger;
+        for (Trigger uncasted : gameWorld.getTriggers()) {
+            if (!(uncasted instanceof RedstoneTrigger)) {
+                continue;
             }
-        }
-        return new RedstoneTrigger(rtBlock);
-    }
-
-    public static void updateAll(DGameWorld gameWorld) {
-        for (Trigger trigger : gameWorld.getTriggers(TriggerTypeDefault.REDSTONE)) {
-            ((RedstoneTrigger) trigger).onTrigger();
+            ((RedstoneTrigger) uncasted).trigger(true, null);
         }
     }
 

@@ -16,13 +16,13 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
+import de.erethon.bedrock.misc.BlockUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.sign.LocationSign;
-import de.erethon.bedrock.misc.BlockUtil;
-import de.erethon.bedrock.misc.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -32,20 +32,20 @@ import org.bukkit.entity.Player;
  */
 public class TeleportSign extends Button implements LocationSign {
 
-    private Location location;
+    private Location targetLocation;
 
     public TeleportSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
     }
 
     @Override
-    public Location getLocation() {
-        return location;
+    public Location getTargetLocation() {
+        return targetLocation;
     }
 
     @Override
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setTargetLocation(Location location) {
+        this.targetLocation = location;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class TeleportSign extends Button implements LocationSign {
             }
             Integer yaw = BlockUtil.lettersToYaw(getLine(i));
             if (yaw != null) {
-                location.setYaw(yaw);
+                targetLocation.setYaw(yaw);
             } else {
                 String[] loc = getLine(i).split(",");
                 if (loc.length == 3) {
@@ -113,9 +113,9 @@ public class TeleportSign extends Button implements LocationSign {
                         z += 0.5;
                     }
 
-                    location.setX(x);
-                    location.setY(y);
-                    location.setZ(z);
+                    targetLocation.setX(x);
+                    targetLocation.setY(y);
+                    targetLocation.setZ(z);
                 }
             }
         }
@@ -123,8 +123,8 @@ public class TeleportSign extends Button implements LocationSign {
 
     @Override
     public boolean push(Player player) {
-        if (location != null) {
-            player.teleport(location);
+        if (targetLocation != null) {
+            player.teleport(targetLocation);
             return true;
         } else {
             return false;

@@ -16,6 +16,8 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
+import de.erethon.bedrock.misc.NumberUtil;
+import de.erethon.bedrock.misc.ProgressBar;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
@@ -26,12 +28,9 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.bedrock.misc.ProgressBar;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.UUID;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -98,17 +97,7 @@ public class ReadySign extends Button {
             return;
         }
 
-        InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), (DGameWorld) getGameWorld());
-        if (trigger != null) {
-            trigger.addListener(this);
-            addTrigger(trigger);
-        }
-
-        getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, DMessage.SIGN_READY.getMessage());
-        getSign().setLine(2, "");
-        getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-        getSign().update();
+        InteractTrigger.addDefault(api, this, DMessage.SIGN_READY.getMessage(), "");
     }
 
     @Override

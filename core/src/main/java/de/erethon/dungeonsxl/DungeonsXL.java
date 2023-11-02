@@ -16,6 +16,14 @@
  */
 package de.erethon.dungeonsxl;
 
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.compatibility.Internals;
+import de.erethon.bedrock.compatibility.Version;
+import de.erethon.bedrock.misc.FileUtil;
+import de.erethon.bedrock.misc.Registry;
+import de.erethon.bedrock.plugin.EPlugin;
+import de.erethon.bedrock.plugin.EPluginSettings;
+import de.erethon.bedrock.spiget.comparator.VersionComparator;
 import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
@@ -36,6 +44,7 @@ import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
@@ -67,17 +76,8 @@ import de.erethon.dungeonsxl.sign.passive.SignScript;
 import de.erethon.dungeonsxl.sign.windup.CommandScript;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.TriggerListener;
-import de.erethon.dungeonsxl.trigger.TriggerTypeCache;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.compatibility.Internals;
-import de.erethon.bedrock.compatibility.Version;
-import de.erethon.bedrock.plugin.EPlugin;
-import de.erethon.bedrock.plugin.EPluginSettings;
-import de.erethon.bedrock.misc.FileUtil;
-import de.erethon.bedrock.misc.Registry;
-import de.erethon.bedrock.spiget.comparator.VersionComparator;
 import de.erethon.dungeonsxl.world.DEditWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.DWorldListener;
@@ -148,12 +148,12 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
     private Registry<String, ResourceWorld> mapRegistry;
     private Registry<Integer, InstanceWorld> instanceCache;
     private Registry<String, GameRule> gameRuleRegistry;
+    private Registry<Character, Class<? extends Trigger>> triggerRegistry;
     private Registry<String, ExternalMobProvider> externalMobProviderRegistry;
     private Registry<String, PlayerGroup> playerGroupCache;
 
     @Deprecated
     private class SignRegistry extends Registry<String, Class<? extends DungeonSign>> {
-
         @Override
         public Class<? extends DungeonSign> get(String key) {
             Class<? extends DungeonSign> clss = super.get(key);
@@ -162,7 +162,6 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
             }
             return clss;
         }
-
     }
 
     private class GameRuleRegistry extends Registry<String, GameRule> {
@@ -214,7 +213,6 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
 
     /* Caches & registries of internal features */
     private DCommandCache dCommands;
-    private TriggerTypeCache triggers;
     private GlobalProtectionCache protections;
     private Registry<String, SignScript> signScriptRegistry;
     private Registry<String, CommandScript> commandScriptRegistry;
@@ -309,8 +307,8 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
         gameRuleRegistry = new GameRuleRegistry();
         modules.forEach(m -> m.initGameRules(gameRuleRegistry));
 
-        triggers = new TriggerTypeCache();
-        // modules.forEach(m -> m.initTriggers(triggerRegistry));
+        triggerRegistry = new Registry<>();
+        modules.forEach(m -> m.initTriggers(triggerRegistry));
 
         mainConfig = new MainConfig(this, new File(getDataFolder(), "config.yml"));
 
@@ -529,6 +527,11 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
     }
 
     @Override
+    public Registry<Character, Class<? extends Trigger>> getTriggerRegistry() {
+        return triggerRegistry;
+    }
+
+    @Override
     public Registry<String, ExternalMobProvider> getExternalMobProviderRegistry() {
         return externalMobProviderRegistry;
     }
@@ -603,13 +606,6 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
      */
     public MainConfig getMainConfig() {
         return mainConfig;
-    }
-
-    /**
-     * @return the triggers
-     */
-    public TriggerTypeCache getTriggerCache() {
-        return triggers;
     }
 
     /**

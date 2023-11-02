@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
+import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.misc.NumberUtil;
 import java.util.Map;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;

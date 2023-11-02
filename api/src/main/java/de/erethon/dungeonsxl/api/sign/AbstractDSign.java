@@ -14,16 +14,18 @@
  */
 package de.erethon.dungeonsxl.api.sign;
 
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
-import de.erethon.dungeonsxl.api.Trigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
 /**
@@ -43,7 +45,8 @@ public abstract class AbstractDSign implements DungeonSign {
     private String[] lines;
     private InstanceWorld instance;
     String worldName;
-    private Set<Trigger> triggers = new HashSet<>();
+    private LogicalExpression triggerExpression;
+    private List<Trigger> triggers;
     private boolean initialized;
     private boolean erroneous;
 
@@ -66,6 +69,11 @@ public abstract class AbstractDSign implements DungeonSign {
     }
 
     @Override
+    public Location getLocation() {
+        return sign.getLocation();
+    }
+
+    @Override
     public EditWorld getEditWorld() {
         return instance instanceof EditWorld ? (EditWorld) instance : null;
     }
@@ -76,23 +84,43 @@ public abstract class AbstractDSign implements DungeonSign {
     }
 
     @Override
-    public Set<Trigger> getTriggers() {
+    public LogicalExpression getTriggerExpression() {
+        return triggerExpression;
+    }
+
+    @Override
+    public List<Trigger> getTriggers() {
+        if (triggers != null) {
+            return triggers;
+        }
+        List<LogicalExpression> contents = triggerExpression.getContents(true);
+        triggers = new ArrayList<>(contents.size());
+        contents.forEach(e -> triggers.add(e.toTrigger(api, this, false)));
         return triggers;
-    }
-
-    @Override
-    public void addTrigger(Trigger trigger) {
-        triggers.add(trigger);
-    }
-
-    @Override
-    public void removeTrigger(Trigger trigger) {
-        triggers.remove(trigger);
     }
 
     @Override
     public boolean isInitialized() {
         return initialized;
+    }
+
+    @Override
+    public void updateTriggers(Trigger lastFired) {
+        if (isErroneous()) {
+            return;
+        }
+
+        if (!triggerExpression.isSatisfied()) {
+            return;
+        }
+
+        try {
+            trigger(lastFired != null ? lastFired.getTriggeringPlayer() : null);
+        } catch (Exception exception) {
+            markAsErroneous("An error occurred while triggering a sign of the type " + getName()
+                    + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
+            exception.printStackTrace();
+        }
     }
 
     @Override

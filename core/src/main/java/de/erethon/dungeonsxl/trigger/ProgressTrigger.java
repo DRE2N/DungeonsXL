@@ -16,30 +16,37 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.bedrock.misc.NumberUtil;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import de.erethon.dungeonsxl.world.DResourceWorld;
-import java.util.HashSet;
-import java.util.Set;
-import org.bukkit.Bukkit;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class ProgressTrigger extends Trigger {
+public class ProgressTrigger extends AbstractTrigger {
 
     private DResourceWorld floor;
     private int floorCount;
     private int waveCount;
 
-    public ProgressTrigger(int floorCount, int waveCount) {
+    // Unused
+    public ProgressTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        this(api, owner, expression, value, NumberUtil.parseInt(value.split("/")[0]), NumberUtil.parseInt(value.split("/")[1]));
+    }
+
+    public ProgressTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value, int floorCount, int waveCount) {
+        super(api, owner, expression, value);
         this.floorCount = floorCount;
         this.waveCount = waveCount;
     }
 
-    public ProgressTrigger(DResourceWorld floor) {
-        this.floor = floor;
+    @Override
+    public char getKey() {
+        return TriggerTypeKey.PROGRESS;
     }
 
     /* Getters and setters */
@@ -86,50 +93,20 @@ public class ProgressTrigger extends Trigger {
     }
 
     /* Actions */
-    public void onTrigger() {
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        setTriggered(true);
-        updateDSigns();
-    }
-
     @Override
-    public TriggerType getType() {
-        return TriggerTypeDefault.PRESENCE;
+    public void onTrigger(boolean switching) {
+        setTriggered(true);
     }
 
     /* Statics */
-    public static ProgressTrigger getOrCreate(int floorCount, int waveCount, DGameWorld gameWorld) {
+    public static ProgressTrigger getOrCreate(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        String[] values = value.split("/");
+        int floorCount = NumberUtil.parseInt(values[0]);
+        int waveCount = NumberUtil.parseInt(values[1]);
         if (floorCount == 0 & waveCount == 0 || floorCount < 0 || waveCount < 0) {
             return null;
         }
-        return new ProgressTrigger(floorCount, waveCount);
-    }
-
-    public static ProgressTrigger getOrCreate(DungeonsXL plugin, String floor, DGameWorld gameWorld) {
-        DResourceWorld resource = (DResourceWorld) plugin.getMapRegistry().get(floor);
-
-        if (resource != null) {
-            return new ProgressTrigger(resource);
-
-        } else {
-            return null;
-        }
-    }
-
-    public static Set<ProgressTrigger> getByGameWorld(DGameWorld gameWorld) {
-        Set<ProgressTrigger> toReturn = new HashSet<>();
-        for (Trigger trigger : gameWorld.getTriggers()) {
-            if (trigger instanceof ProgressTrigger) {
-                toReturn.add((ProgressTrigger) trigger);
-            }
-        }
-        return toReturn;
+        return new ProgressTrigger(api, owner, expression, value, floorCount, waveCount);
     }
 
 }

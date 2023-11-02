@@ -23,6 +23,7 @@ import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -351,10 +352,14 @@ public class DGame implements Game {
         waveCount++;
         resetWaveKills();
 
-        Set<ProgressTrigger> triggers = ProgressTrigger.getByGameWorld(getWorld());
-        for (ProgressTrigger trigger : triggers) {
-            if (getWaveCount() >= trigger.getWaveCount() & getFloorCount() >= trigger.getFloorCount() - 1 || !getUnplayedFloors().contains(trigger.getFloor()) & trigger.getFloor() != null) {
-                trigger.onTrigger();
+        for (Trigger uncasted : getWorld().getTriggers()) {
+            if (!(uncasted instanceof ProgressTrigger)) {
+                continue;
+            }
+            ProgressTrigger trigger = (ProgressTrigger) uncasted;
+            if (getWaveCount() >= trigger.getWaveCount() & getFloorCount() >= trigger.getFloorCount() - 1
+                    || !getUnplayedFloors().contains(trigger.getFloor()) & trigger.getFloor() != null) {
+                trigger.trigger(true, null);
             }
         }
 

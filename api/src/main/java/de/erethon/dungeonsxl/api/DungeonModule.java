@@ -17,6 +17,7 @@ package de.erethon.dungeonsxl.api;
 import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 
 /**
  * Class that manages initialization of several registries.
@@ -54,5 +55,12 @@ public interface DungeonModule {
      * @param gameRuleRegistry the registry
      */
     void initGameRules(Registry<String, GameRule> gameRuleRegistry);
+
+    /**
+     * Initializes the {@link de.erethon.dungeonsxl.api.trigger.Trigger trigger} registry.
+     *
+     * @param triggerRegistry the registry
+     */
+    void initTriggers(Registry<Character, Class<? extends Trigger>> triggerRegistry);
 
 }

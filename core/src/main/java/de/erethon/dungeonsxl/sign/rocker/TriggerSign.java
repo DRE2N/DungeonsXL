@@ -16,17 +16,17 @@
  */
 package de.erethon.dungeonsxl.sign.rocker;
 
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -83,11 +83,7 @@ public class TriggerSign extends Rocker {
 
         } else {
             id = NumberUtil.parseInt(getLine(1));
-            if (id == 0 || used.contains(id)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(id == 0 || used.contains(id));
         }
 
         new BukkitRunnable() {
@@ -107,18 +103,38 @@ public class TriggerSign extends Rocker {
 
     @Override
     public void activate() {
-        SignTrigger trigger = SignTrigger.getById(id, (DGameWorld) getGameWorld());
+        SignTrigger trigger = SignTrigger.getById(id, getGameWorld());
         if (trigger != null) {
-            trigger.onTrigger(true);
+            trigger.trigger(true, null);
         }
     }
 
     @Override
-    public void deactivate() {
-        SignTrigger trigger = SignTrigger.getById(id, (DGameWorld) getGameWorld());
-        if (trigger != null) {
-            trigger.onTrigger(false);
+    public boolean activate(Player player) {
+        SignTrigger trigger = SignTrigger.getById(id, getGameWorld());
+        if (trigger == null) {
+            return false;
         }
+        trigger.trigger(true, player);
+        return true;
+    }
+
+    @Override
+    public void deactivate() {
+        SignTrigger trigger = SignTrigger.getById(id, getGameWorld());
+        if (trigger != null) {
+            trigger.trigger(false, null);
+        }
+    }
+
+    @Override
+    public boolean deactivate(Player player) {
+        SignTrigger trigger = SignTrigger.getById(id, getGameWorld());
+        if (trigger == null) {
+            return false;
+        }
+        trigger.trigger(false, player);
+        return true;
     }
 
 }

@@ -16,55 +16,52 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Bukkit;
+import de.erethon.bedrock.misc.NumberUtil;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class SignTrigger extends Trigger {
+public class SignTrigger extends AbstractTrigger {
 
-    private TriggerType type = TriggerTypeDefault.SIGN;
+    private int id;
 
-    private int stId;
-
-    public SignTrigger(int stId) {
-        this.stId = stId;
-    }
-
-    public void onTrigger(boolean enable) {
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (enable != isTriggered()) {
-            setTriggered(enable);
-            updateDSigns();
-        }
+    public SignTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        super(api, owner, expression, value);
+        char key = expression.getText().charAt(0);
+        int i = Character.toUpperCase(key) == getKey() ? 1 : 0;
+        id = NumberUtil.parseInt(expression.getText().substring(i));
     }
 
     @Override
-    public TriggerType getType() {
-        return type;
+    public char getKey() {
+        return TriggerTypeKey.GENERIC;
+    }
+
+    @Override
+    public void onTrigger(boolean switching) {
+        if (switching != isTriggered()) {
+            setTriggered(switching);
+        }
     }
 
     /* Statics */
-    public static SignTrigger getOrCreate(int id, DGameWorld gameWorld) {
-        SignTrigger trigger = getById(id, gameWorld);
-        if (trigger != null) {
-            return trigger;
+    public static SignTrigger getById(int id, GameWorld gameWorld) {
+        if (gameWorld == null) {
+            return null;
         }
-        return new SignTrigger(id);
-    }
-
-    public static SignTrigger getById(int id, DGameWorld gameWorld) {
-        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.SIGN)) {
+        for (Trigger uncasted : gameWorld.getTriggers()) {
+            if (!(uncasted instanceof SignTrigger)) {
+                continue;
+            }
             SignTrigger trigger = (SignTrigger) uncasted;
-            if (trigger.stId == id) {
+            if (id == trigger.id) {
                 return trigger;
             }
         }

@@ -20,7 +20,6 @@ import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.player.DPlayerListener;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,7 +48,7 @@ public class TriggerListener implements Listener {
             public void run() {
                 GameWorld gameWorld = plugin.getGameWorld(event.getBlock().getWorld());
                 if (gameWorld != null) {
-                    RedstoneTrigger.updateAll((DGameWorld) gameWorld);
+                    RedstoneTrigger.updateAll(gameWorld);
                 }
             }
         }.runTaskLater(plugin, 1L);
@@ -64,7 +63,7 @@ public class TriggerListener implements Listener {
         if (DPlayerListener.isCitizensNPC(player)) {
             return;
         }
-        DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(player.getWorld());
+        GameWorld gameWorld = plugin.getGameWorld(player.getWorld());
         if (gameWorld == null) {
             return;
         }
@@ -93,7 +92,7 @@ public class TriggerListener implements Listener {
 
         UseItemTrigger trigger = UseItemTrigger.getByName(name, gameWorld);
         if (trigger != null) {
-            trigger.onTrigger(player);
+            trigger.trigger(true, player);
         }
     }
 

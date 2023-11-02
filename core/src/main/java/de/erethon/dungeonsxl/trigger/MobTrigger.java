@@ -16,53 +16,47 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.dungeonsxl.event.trigger.TriggerActionEvent;
-import de.erethon.dungeonsxl.world.DGameWorld;
-import org.bukkit.Bukkit;
+import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
+import de.erethon.dungeonsxl.api.trigger.TriggerListener;
+import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
-public class MobTrigger extends Trigger {
-
-    private TriggerType type = TriggerTypeDefault.MOB;
+public class MobTrigger extends AbstractTrigger {
 
     private String name;
 
-    public MobTrigger(String name) {
-        this.name = name;
-    }
-
-    public void onTrigger() {
-        TriggerActionEvent event = new TriggerActionEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        setTriggered(true);
-        updateDSigns();
+    public MobTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
+        super(api, owner, expression, value);
+        name = value;
     }
 
     @Override
-    public TriggerType getType() {
-        return type;
+    public char getKey() {
+        return TriggerTypeKey.MOB;
+    }
+
+    @Override
+    public void onTrigger(boolean switching) {
+        setTriggered(true);
     }
 
     /* Statics */
-    public static MobTrigger getOrCreate(String name, DGameWorld gameWorld) {
-        MobTrigger trigger = getByName(name, gameWorld);
-        if (trigger != null) {
-            return trigger;
+    public static MobTrigger getByName(String name, GameWorld gameWorld) {
+        if (name == null || gameWorld == null) {
+            return null;
         }
-        return new MobTrigger(name);
-    }
-
-    public static MobTrigger getByName(String name, DGameWorld gameWorld) {
-        for (Trigger uncasted : gameWorld.getTriggers(TriggerTypeDefault.MOB)) {
+        for (Trigger uncasted : gameWorld.getTriggers()) {
+            if (!(uncasted instanceof MobTrigger)) {
+                continue;
+            }
             MobTrigger trigger = (MobTrigger) uncasted;
-            if (trigger.name.equalsIgnoreCase(name)) {
+            if (name.equalsIgnoreCase(trigger.name)) {
                 return trigger;
             }
         }

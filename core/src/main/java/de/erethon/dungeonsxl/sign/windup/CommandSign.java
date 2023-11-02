@@ -16,17 +16,15 @@
  */
 package de.erethon.dungeonsxl.sign.windup;
 
+import de.erethon.bedrock.misc.EnumUtil;
+import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Windup;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.bedrock.misc.EnumUtil;
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -135,17 +133,7 @@ public class CommandSign extends Windup {
             return;
         }
 
-        InteractTrigger trigger = InteractTrigger.getOrCreate(0, getSign().getBlock(), (DGameWorld) getGameWorld());
-        if (trigger != null) {
-            trigger.addListener(this);
-            getTriggers().add(trigger);
-        }
-
-        getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.GREEN + script.getName());
-        getSign().setLine(2, "");
-        getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-        getSign().update();
+        InteractTrigger.addDefault(api, this, script.getName(), "");
     }
 
     @Override
