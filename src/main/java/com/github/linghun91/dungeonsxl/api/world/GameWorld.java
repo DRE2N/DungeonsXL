@@ -1,32 +1,45 @@
 package com.github.linghun91.dungeonsxl.api.world;
 
 import com.github.linghun91.dungeonsxl.api.dungeon.Game;
-import com.github.linghun91.dungeonsxl.api.mob.DungeonMob;
-import com.github.linghun91.dungeonsxl.api.trigger.Trigger;
-import org.bukkit.entity.LivingEntity;
-
-import java.util.Collection;
-import java.util.Optional;
+import org.bukkit.Location;
 
 /**
- * Represents a game world instance
- *
- * @author linghun91
+ * Represents an active game world instance
  */
 public interface GameWorld extends InstanceWorld {
-
+    
+    /**
+     * Get the game associated with this world
+     */
     Game getGame();
-    Collection<DungeonMob> getMobs();
-    Optional<DungeonMob> getMob(LivingEntity entity);
-    void addMob(DungeonMob mob);
-    void removeMob(DungeonMob mob);
-    Collection<Trigger> getTriggers();
-    void addTrigger(Trigger trigger);
-    void removeTrigger(Trigger trigger);
-    boolean isGameStarted();
-    void startGame();
-    int getWaveCount();
-    void nextWave();
-    int getKillCount();
-    void incrementKills();
+    
+    /**
+     * Get the start location for players
+     */
+    Location getStartLocation();
+    
+    /**
+     * Set the start location
+     */
+    void setStartLocation(Location location);
+    
+    /**
+     * Add a protected region
+     */
+    void addProtectedRegion(Location corner1, Location corner2);
+    
+    /**
+     * Set the floor number
+     */
+    void setFloorNumber(int floor);
+    
+    /**
+     * Get the floor number
+     */
+    int getFloorNumber();
+    
+    /**
+     * Check if location is in a protected region
+     */
+    boolean isProtected(Location location);
 }
