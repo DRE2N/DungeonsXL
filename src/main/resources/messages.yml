@@ -1,0 +1,33 @@
+# DungeonsXL 2.0 - Messages
+
+# General messages
+prefix: "&6[DungeonsXL]&r "
+no-permission: "&cYou don't have permission to do that!"
+player-not-found: "&cPlayer not found!"
+invalid-command: "&cInvalid command usage!"
+
+# Dungeon messages
+dungeon:
+  not-found: "&cDungeon not found: %name%"
+  enter: "&aEntering dungeon: &e%name%"
+  leave: "&aLeaving dungeon..."
+  complete: "&aYou have completed the dungeon!"
+  
+# Group messages
+group:
+  created: "&aGroup created!"
+  joined: "&a%player% joined your group!"
+  left: "&c%player% left the group!"
+  disbanded: "&cGroup has been disbanded!"
+
+# World messages
+world:
+  creating: "&aCreating world..."
+  loading: "&aLoading world..."
+  unloading: "&aUnloading world..."
+  
+# Edit messages
+edit:
+  started: "&aEdit mode started!"
+  saved: "&aWorld saved successfully!"
+  cancelled: "&cEdit cancelled!"
