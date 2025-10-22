@@ -116,7 +116,8 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
     private CaliburnAPI caliburn;
 
     /* Util instances */
-    public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
+    // Always use BlockAdapterBlockData for Paper 1.21.8
+    public static final BlockAdapter BLOCK_ADAPTER = new BlockAdapterBlockData();
 
     /* Constants */
     public static final String LATEST_IXL = "1.1";

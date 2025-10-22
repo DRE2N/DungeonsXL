@@ -17,46 +17,64 @@
 package de.erethon.dungeonsxl.adapter.block;
 
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
+import org.bukkit.Axis;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.material.Bed;
-import org.bukkit.material.Directional;
-import org.bukkit.material.MaterialData;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Openable;
+import org.bukkit.block.data.Orientable;
+import org.bukkit.block.data.type.Bed;
 
 /**
+ * Modern Paper API implementation for block adapter.
+ * Updated for Paper 1.21.8 - no longer uses magic values or deprecated MaterialData.
+ *
  * @author Daniel Saukel
  */
 public class BlockAdapterMagicValues implements BlockAdapter {
 
     @Override
     public boolean isBedHead(Block block) {
-        MaterialData data = block.getState().getData();
+        BlockData data = block.getBlockData();
         if (!(data instanceof Bed)) {
             throw new IllegalArgumentException("Block is not Bed");
         }
-        return ((Bed) data).isHeadOfBed();
+        return ((Bed) data).getPart() == Bed.Part.HEAD;
     }
 
     @Override
     public void openDoor(Block block) {
-        block.setData((byte) (block.getData() + 4));
+        BlockData data = block.getBlockData();
+        if (!(data instanceof Openable)) {
+            throw new IllegalArgumentException("Block is not Openable");
+        }
+        ((Openable) data).setOpen(true);
+        block.setBlockData(data);
     }
 
     @Override
     public void closeDoor(Block block) {
-        block.setData((byte) (block.getData() - 4));
+        BlockData data = block.getBlockData();
+        if (!(data instanceof Openable)) {
+            throw new IllegalArgumentException("Block is not Openable");
+        }
+        ((Openable) data).setOpen(false);
+        block.setBlockData(data);
     }
 
     @Override
     public void setBlockWoolColor(Block block, Color color) {
-        block.setTypeIdAndData(Material.WOOL.getId(), color.getDyeColor().getWoolData(), false);
+        DyeColor dyeColor = color.getDyeColor();
+        Material woolMaterial = Material.valueOf(dyeColor.name() + "_WOOL");
+        block.setType(woolMaterial);
     }
 
     @Override
     public BlockFace getFacing(Block block) {
-        MaterialData data = block.getState().getData();
+        BlockData data = block.getBlockData();
         if (!(data instanceof Directional)) {
             throw new IllegalArgumentException("Block is not Directional");
         }
@@ -65,19 +83,21 @@ public class BlockAdapterMagicValues implements BlockAdapter {
 
     @Override
     public void setFacing(Block block, BlockFace facing) {
-        BlockState state = block.getState();
-        MaterialData data = state.getData();
+        BlockData data = block.getBlockData();
         if (!(data instanceof Directional)) {
             throw new IllegalArgumentException("Block is not Directional");
         }
-        ((Directional) data).setFacingDirection(facing);
-        state.setData(data);
-        state.update();
+        ((Directional) data).setFacing(facing);
+        block.setBlockData(data);
     }
 
     @Override
     public void setAxis(Block block, boolean z) {
-        block.setData(z ? (byte) 2 : 1);
+        BlockData data = block.getBlockData();
+        if (!(data instanceof Orientable)) {
+            throw new IllegalArgumentException("Block is not Orientable");
+        }
+        ((Orientable) data).setAxis(z ? Axis.Z : Axis.X);
+        block.setBlockData(data);
     }
-
 }

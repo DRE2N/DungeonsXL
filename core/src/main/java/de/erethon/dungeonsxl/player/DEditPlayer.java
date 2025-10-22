@@ -128,9 +128,14 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
                 MessageUtil.sendMessage(getPlayer(), DMessage.PLAYER_SIGN_COPIED.getMessage());
             }
         } else {
-            String info = "" + block.getType();
-            if (block.getData() != 0) {
-                info = info + "," + block.getData();
+            String info = block.getType().toString();
+            String blockDataString = block.getBlockData().getAsString();
+            // Extract just the data part after the material name
+            if (blockDataString.contains("[")) {
+                String dataOnly = blockDataString.substring(blockDataString.indexOf("[") + 1, blockDataString.indexOf("]"));
+                if (!dataOnly.isEmpty()) {
+                    info = info + "," + dataOnly;
+                }
             }
             MessageUtil.sendMessage(getPlayer(), DMessage.PLAYER_BLOCK_INFO.getMessage(info));
         }
