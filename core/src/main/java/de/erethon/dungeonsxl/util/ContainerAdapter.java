@@ -16,48 +16,32 @@
  */
 package de.erethon.dungeonsxl.util;
 
-import de.erethon.bedrock.compatibility.Version;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 /**
+ * Modern Paper API implementation without version checks.
+ * Updated for Paper 1.21.8
+ *
  * @author Daniel Saukel
  */
 public class ContainerAdapter {
 
     public static boolean isValidContainer(Block block) {
-        if (Version.isAtLeast(Version.MC1_12_1)) {
-            return block.getState() instanceof Container;
-        } else {
-            return block.getState() instanceof Chest;
-        }
+        return block.getState() instanceof Container;
     }
 
     public static boolean isValidContainer(Inventory inventory) {
-        if (Version.isAtLeast(Version.MC1_12_1)) {
-            return inventory.getHolder() instanceof Container;
-        } else {
-            return inventory.getHolder() instanceof Chest;
-        }
+        return inventory.getHolder() instanceof Container;
     }
 
     public static Block getHolderBlock(InventoryHolder holder) {
-        if (Version.isAtLeast(Version.MC1_12_1)) {
-            return ((Container) holder).getBlock();
-        } else {
-            return ((Chest) holder).getBlock();
-        }
+        return ((Container) holder).getBlock();
     }
 
     public static Inventory getBlockInventory(Block block) {
-        if (Version.isAtLeast(Version.MC1_12_1)) {
-            return ((Container) block.getState()).getInventory();
-        } else {
-            return ((Chest) block.getState()).getInventory();
-        }
+        return ((Container) block.getState()).getInventory();
     }
-
 }

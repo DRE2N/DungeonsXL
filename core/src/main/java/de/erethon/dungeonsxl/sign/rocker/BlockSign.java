@@ -22,22 +22,22 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.compatibility.CompatibilityHandler;
-import de.erethon.bedrock.misc.NumberUtil;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 
 /**
+ * Modern Paper API implementation without reflection.
+ * Updated for Paper 1.21.8
+ *
  * @author Milan Albrecht, Daniel Saukel
  */
 public class BlockSign extends Rocker {
 
     private ExItem offBlock = VanillaItem.AIR;
     private ExItem onBlock = VanillaItem.AIR;
-    private byte offBlockData = Byte.MIN_VALUE;
-    private byte onBlockData = Byte.MIN_VALUE;
+    private BlockData offBlockData = null;
+    private BlockData onBlockData = null;
 
     public BlockSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
@@ -77,7 +77,6 @@ public class BlockSign extends Rocker {
     public void initialize() {
         if (getLine(1).isEmpty()) {
             offBlock = VanillaItem.AIR;
-
         } else {
             String[] line1 = getLine(1).split(",");
             offBlock = api.getCaliburn().getExItem(line1[0]);
@@ -86,13 +85,18 @@ public class BlockSign extends Rocker {
                 return;
             }
             if (line1.length > 1) {
-                offBlockData = (byte) NumberUtil.parseInt(line1[1]);
+                // Parse BlockData string for modern API
+                try {
+                    offBlockData = getSign().getServer().createBlockData(offBlock.getMaterial(), "[" + line1[1] + "]");
+                } catch (IllegalArgumentException exception) {
+                    // If parsing fails, use default BlockData
+                    offBlockData = offBlock.getMaterial().createBlockData();
+                }
             }
         }
 
         if (getLine(2).isEmpty()) {
             onBlock = VanillaItem.AIR;
-
         } else {
             String[] line2 = getLine(2).split(",");
             onBlock = api.getCaliburn().getExItem(line2[0]);
@@ -101,62 +105,54 @@ public class BlockSign extends Rocker {
                 return;
             }
             if (line2.length > 1) {
-                onBlockData = (byte) NumberUtil.parseInt(line2[1]);
+                // Parse BlockData string for modern API
+                try {
+                    onBlockData = getSign().getServer().createBlockData(onBlock.getMaterial(), "[" + line2[1] + "]");
+                } catch (IllegalArgumentException exception) {
+                    // If parsing fails, use default BlockData
+                    onBlockData = onBlock.getMaterial().createBlockData();
+                }
             }
         }
 
-        getSign().getBlock().setType(offBlock.getMaterial());
-        try {
-            setBlockData(getSign().getBlock(), offBlockData);
-        } catch (IllegalArgumentException exception) {
-            markAsErroneous("offBlock data value " + offBlockData + " cannot be applied to given type " + offBlock.getId());
+        Block block = getSign().getBlock();
+        block.setType(offBlock.getMaterial());
+        if (offBlockData != null) {
+            try {
+                block.setBlockData(offBlockData);
+            } catch (IllegalArgumentException exception) {
+                markAsErroneous("offBlock data cannot be applied to given type " + offBlock.getId());
+            }
         }
     }
 
     @Override
     public void activate() {
-        getSign().getBlock().setType(onBlock.getMaterial());
-        try {
-            setBlockData(getSign().getBlock(), onBlockData);
-        } catch (IllegalArgumentException exception) {
-            markAsErroneous("onBlock data value " + onBlockData + " cannot be applied to given type " + onBlock.getId());
-            return;
+        Block block = getSign().getBlock();
+        block.setType(onBlock.getMaterial());
+        if (onBlockData != null) {
+            try {
+                block.setBlockData(onBlockData);
+            } catch (IllegalArgumentException exception) {
+                markAsErroneous("onBlock data cannot be applied to given type " + onBlock.getId());
+                return;
+            }
         }
         active = true;
     }
 
     @Override
     public void deactivate() {
-        getSign().getBlock().setType(offBlock.getMaterial());
-        try {
-            setBlockData(getSign().getBlock(), offBlockData);
-        } catch (IllegalArgumentException exception) {
-            markAsErroneous("onBlock data value " + offBlockData + " cannot be applied to given type " + onBlock.getId());
-            return;
+        Block block = getSign().getBlock();
+        block.setType(offBlock.getMaterial());
+        if (offBlockData != null) {
+            try {
+                block.setBlockData(offBlockData);
+            } catch (IllegalArgumentException exception) {
+                markAsErroneous("offBlock data cannot be applied to given type " + offBlock.getId());
+                return;
+            }
         }
         active = false;
     }
-
-    private static Method craftBlockSetData;
-
-    private static void setBlockData(Block block, byte data) {
-        if (data == Byte.MIN_VALUE) {
-            return;
-        }
-        if (craftBlockSetData == null) {
-            try {
-                craftBlockSetData = Class.forName(
-                        "org.bukkit.craftbukkit." + CompatibilityHandler.getInstance().getInternals() + ".block.CraftBlock")
-                        .getDeclaredMethod("setData", byte.class);
-            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalArgumentException exception) {
-                exception.printStackTrace();
-            }
-        }
-        try {
-            craftBlockSetData.invoke(block, data);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) {
-            exception.printStackTrace();
-        }
-    }
-
 }

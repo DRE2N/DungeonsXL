@@ -16,14 +16,14 @@
  */
 package de.erethon.dungeonsxl.util;
 
-import de.erethon.bedrock.compatibility.Version;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
-import org.bukkit.material.Attachable;
-import org.bukkit.material.MaterialData;
 
 /**
+ * Modern Paper API implementation without version checks.
+ * Updated for Paper 1.21.8
+ *
  * @author Daniel Saukel
  */
 public class BlockUtilCompat {
@@ -35,22 +35,12 @@ public class BlockUtilCompat {
      * @return the attached block
      */
     public static Block getAttachedBlock(Block block) {
-        if (Version.isAtLeast(Version.MC1_13)) {
-            if (block.getBlockData() instanceof Directional) {
-                Directional data = (Directional) block.getBlockData();
-                if (data.getFaces().size() == 4) {
-                    return block.getRelative(data.getFacing().getOppositeFace());
-                }
+        if (block.getBlockData() instanceof Directional) {
+            Directional data = (Directional) block.getBlockData();
+            if (data.getFaces().size() == 4) {
+                return block.getRelative(data.getFacing().getOppositeFace());
             }
-            return block.getRelative(BlockFace.DOWN);
-
-        } else {
-            MaterialData meta = block.getState().getData();
-            BlockFace blockFace = BlockFace.DOWN;
-            if (meta instanceof Attachable) {
-                blockFace = ((Attachable) meta).getAttachedFace();
-            }
-            return block.getRelative(blockFace);
         }
+        return block.getRelative(BlockFace.DOWN);
     }
 }

@@ -20,7 +20,6 @@ import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
-import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
 import de.erethon.dungeonsxl.api.DungeonModule;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
@@ -72,7 +71,6 @@ import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
 import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.bedrock.compatibility.Internals;
-import de.erethon.bedrock.compatibility.Version;
 import de.erethon.bedrock.plugin.EPlugin;
 import de.erethon.bedrock.plugin.EPluginSettings;
 import de.erethon.bedrock.misc.FileUtil;
@@ -116,7 +114,8 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
     private CaliburnAPI caliburn;
 
     /* Util instances */
-    public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
+    // Always use BlockAdapterBlockData for Paper 1.21.8
+    public static final BlockAdapter BLOCK_ADAPTER = new BlockAdapterBlockData();
 
     /* Constants */
     public static final String LATEST_IXL = "1.1";
@@ -774,9 +773,6 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
 
     @Override
     public boolean isDungeonItem(ItemStack itemStack) {
-        if (!Version.isAtLeast(Version.MC1_16_5)) {
-            return false;
-        }
         if (itemStack == null || !itemStack.hasItemMeta()) {
             return false;
         }
@@ -785,9 +781,6 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
 
     @Override
     public ItemStack setDungeonItem(ItemStack itemStack, boolean dungeonItem) {
-        if (!Version.isAtLeast(Version.MC1_16_5)) {
-            return null;
-        }
         if (itemStack == null || itemStack.getItemMeta() == null) {
             return null;
         }

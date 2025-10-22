@@ -20,7 +20,6 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.compatibility.Version;
 import de.erethon.bedrock.misc.EnumUtil;
 import de.erethon.bedrock.misc.NumberUtil;
 import org.bukkit.SoundCategory;
@@ -84,7 +83,7 @@ public class SoundMessageSign extends Button {
         }
 
         String[] args = getLine(2).split(",");
-        if (args.length >= 1 && args.length != 2 && Version.isAtLeast(Version.MC1_11)) {
+        if (args.length >= 1 && args.length != 2) {
             category = EnumUtil.getEnumIgnoreCase(SoundCategory.class, args[0]);
             if (category == null) {
                 category = SoundCategory.MASTER;
@@ -114,11 +113,7 @@ public class SoundMessageSign extends Button {
     }
 
     private void playSound(Player player) {
-        if (Version.isAtLeast(Version.MC1_11)) {
-            player.playSound(getSign().getLocation(), sound, category, volume, pitch);
-        } else {
-            player.playSound(getSign().getLocation(), sound, volume, pitch);
-        }
+        player.playSound(getSign().getLocation(), sound, category, volume, pitch);
     }
 
 }
