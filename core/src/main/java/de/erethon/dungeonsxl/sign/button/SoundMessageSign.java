@@ -20,7 +20,6 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.compatibility.Version;
 import de.erethon.bedrock.misc.EnumUtil;
 import de.erethon.bedrock.misc.NumberUtil;
 import org.bukkit.SoundCategory;

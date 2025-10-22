@@ -1,4 +1,61 @@
-licenseheader.txt
+# Gradle
+.gradle/
+build/
+out/
+bin/
+**/build/
+**/out/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+*.code-workspace
+
+# Eclipse
+.metadata
+.recommenders
+
+# Maven (legacy)
+target/
+pom.xml.versionsBackup
 *dependency-reduced-pom.xml
 *nb-configuration.xml
 *target
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*~
+
+# Logs
+logs/
+*.log
+
+# Runtime
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+server.properties
+ops.json
+whitelist.json
+banned-*.json
+usercache.json
+plugins/
+worlds/
+world*/
+*.db
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# License
+licenseheader.txt
