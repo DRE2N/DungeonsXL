@@ -1,0 +1,48 @@
+name: DungeonsXL
+version: '${version}'
+main: com.github.linghun91.dungeonsxl.DungeonsXL
+description: '${description}'
+api-version: '1.21'
+authors:
+  - linghun91
+  - "Based on original by Frank Baumann, Milan Albrecht, Tobias Schmitz, Daniel Saukel"
+website: https://github.com/linghun91/DungeonsXL
+
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Vault:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
+permissions:
+  dungeonsxl.*:
+    description: Access to all DungeonsXL commands
+    default: op
+    children:
+      dungeonsxl.admin: true
+      dungeonsxl.player: true
+
+  dungeonsxl.admin:
+    description: Administrative commands
+    default: op
+    children:
+      dungeonsxl.create: true
+      dungeonsxl.edit: true
+      dungeonsxl.save: true
+      dungeonsxl.delete: true
+      dungeonsxl.reload: true
+      dungeonsxl.import: true
+
+  dungeonsxl.player:
+    description: Player commands
+    default: true
+    children:
+      dungeonsxl.enter: true
+      dungeonsxl.leave: true
+      dungeonsxl.list: true
+      dungeonsxl.group: true

@@ -1,0 +1,31 @@
+# DungeonsXL 2.0 - Main Configuration
+# Modern rewrite using Paper API 1.21.8
+
+# Language file to use
+language: english
+
+# Enable economy integration (requires Vault)
+economy: true
+
+# Maximum number of dungeon instances that can run simultaneously
+max-instances: 10
+
+# Auto-save interval in minutes
+auto-save-interval: 30
+
+# Backup settings
+backup:
+  enabled: true
+  interval: 24 # hours
+  keep: 7 # number of backups to keep
+
+# Chat settings
+chat:
+  enabled: true
+  format-edit: "&2[Edit] &r%player%: "
+  format-game: "&2[Game] %group_color%%player%: &r"
+  
+# Announcements
+announcements:
+  enabled: true
+  interval: 300 # seconds

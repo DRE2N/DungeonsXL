@@ -1,4 +1,27 @@
-licenseheader.txt
-*dependency-reduced-pom.xml
-*nb-configuration.xml
-*target
+# Gradle
+.gradle/
+build/
+out/
+bin/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log

@@ -1,7 +1,0 @@
-name: DungeonsXXL
-main: de.erethon.dungeonsxxl.DungeonsXXL
-version: ${project.version}${buildNo}
-author: Daniel Saukel
-description: ${project.description}
-website: ${project.url}
-depend: [DungeonsXL]

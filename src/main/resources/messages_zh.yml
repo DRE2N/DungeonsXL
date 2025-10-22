@@ -1,0 +1,28 @@
+# DungeonsXL 2.0 - 中文消息
+
+prefix: "&6[DungeonsXL]&r "
+no-permission: "&c你没有权限执行此操作！"
+player-not-found: "&c玩家未找到！"
+invalid-command: "&c无效的命令用法！"
+
+dungeon:
+  not-found: "&c地牢未找到: %name%"
+  enter: "&a正在进入地牢: &e%name%"
+  leave: "&a正在离开地牢..."
+  complete: "&a你已完成这个地牢！"
+  
+group:
+  created: "&a队伍已创建！"
+  joined: "&a%player% 加入了你的队伍！"
+  left: "&c%player% 离开了队伍！"
+  disbanded: "&c队伍已解散！"
+
+world:
+  creating: "&a正在创建世界..."
+  loading: "&a正在加载世界..."
+  unloading: "&a正在卸载世界..."
+  
+edit:
+  started: "&a编辑模式已开启！"
+  saved: "&a世界保存成功！"
+  cancelled: "&c编辑已取消！"
