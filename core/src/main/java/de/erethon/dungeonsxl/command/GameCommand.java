@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2023 Frank Baumann
+ * Copyright (C) 2012-2013 Frank Baumann; 2015-2026 Daniel Saukel
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
