@@ -14,11 +14,11 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
-import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.xlib.item.ExItem;
+import de.erethon.xlib.item.VanillaItem;
+import de.erethon.xlib.mob.ExMob;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;

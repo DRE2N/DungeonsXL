@@ -18,8 +18,8 @@ package de.erethon.dungeonsxl.global;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
-import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.BlockUtilCompat;
+import de.erethon.dungeonsxl.util.LWCUtil;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.World;

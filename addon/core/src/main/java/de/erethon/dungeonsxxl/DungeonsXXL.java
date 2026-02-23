@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 Daniel Saukel
+ * Copyright (C) 2020-2026 Daniel Saukel
  *
  * All rights reserved.
  */
@@ -11,26 +11,26 @@ import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
-import de.erethon.bedrock.compatibility.Internals;
-import de.erethon.bedrock.plugin.EPlugin;
-import de.erethon.bedrock.plugin.EPluginSettings;
-import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxxl.requirement.*;
 import de.erethon.dungeonsxxl.sign.*;
 import de.erethon.dungeonsxxl.util.GlowUtil;
+import de.erethon.xlib.compatibility.Internals;
+import de.erethon.xlib.plugin.DREPlugin;
+import de.erethon.xlib.plugin.DREPluginSettings;
+import de.erethon.xlib.util.Registry;
 
 /**
  * @author Daniel Saukel
  */
-public class DungeonsXXL extends EPlugin implements DungeonModule {
+public class DungeonsXXL extends DREPlugin implements DungeonModule {
 
     private static DungeonsXXL instance;
     private DungeonsXL dxl;
     private GlowUtil glowUtil;
 
     public DungeonsXXL() {
-        settings = EPluginSettings.builder()
+        settings = DREPluginSettings.builder()
                 .internals(Internals.v1_16_R3)
                 .metrics(false)
                 .spigotMCResourceId(-1)

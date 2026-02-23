@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.ContainerAdapter;
+import de.erethon.xlib.item.VanillaItem;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.block.Sign;

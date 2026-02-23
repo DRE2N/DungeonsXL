@@ -16,9 +16,6 @@
  */
 package de.erethon.dungeonsxl.world;
 
-import de.erethon.bedrock.compatibility.Version;
-import de.erethon.bedrock.misc.FileUtil;
-import de.erethon.caliburn.CaliburnAPI;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.BuildMode;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
@@ -52,6 +49,9 @@ import de.erethon.dungeonsxl.world.block.PlaceableBlock;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import de.erethon.dungeonsxl.world.block.TeamBed;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
+import de.erethon.xlib.XLib;
+import de.erethon.xlib.compatibility.Version;
+import de.erethon.xlib.util.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +73,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DGameWorld extends DInstanceWorld implements GameWorld {
 
-    private CaliburnAPI caliburn;
+    private XLib xlib;
     private Game game;
 
     private Type type = Type.DEFAULT;
@@ -98,7 +98,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, Game game) {
         super(plugin, resourceWorld, folder);
-        caliburn = plugin.getCaliburn();
+        xlib = plugin.getCaliburn();
         if (game == null) {
             throw new IllegalArgumentException("Game must not be null");
         }
@@ -593,7 +593,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             }
             if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
                 Hanging hanging = (Hanging) entity;
-                if (getRules().getState(GameRule.DAMAGE_PROTECTED_ENTITIES).contains(caliburn.getExMob(hanging))) {
+                if (getRules().getState(GameRule.DAMAGE_PROTECTED_ENTITIES).contains(xlib.getExMob(hanging))) {
                     event.setCancelled(true);
                     break;
                 }
@@ -629,7 +629,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         PlaceableBlock placeableBlock = null;
         for (PlaceableBlock gamePlaceableBlock : placeableBlocks) {
-            if (gamePlaceableBlock.canPlace(block, caliburn.getExItem(hand))) {
+            if (gamePlaceableBlock.canPlace(block, xlib.getExItem(hand))) {
                 placeableBlock = gamePlaceableBlock;
                 break;
             }

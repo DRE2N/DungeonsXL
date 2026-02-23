@@ -16,7 +16,7 @@
  */
 package de.erethon.dungeonsxl.util;
 
-import de.erethon.bedrock.compatibility.Version;
+import de.erethon.xlib.compatibility.Version;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Container;

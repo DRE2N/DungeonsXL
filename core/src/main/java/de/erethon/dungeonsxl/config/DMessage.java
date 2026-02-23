@@ -16,10 +16,10 @@
  */
 package de.erethon.dungeonsxl.config;
 
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.config.Message;
-import de.erethon.bedrock.config.MessageHandler;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.config.Message;
+import de.erethon.xlib.config.MessageHandler;
 
 /**
  * An enumeration of all messages. The values are fetched from the language file.
@@ -91,7 +91,7 @@ public enum DMessage implements Message {
     CMD_PORTAL_HELP("cmd.portal.help"),
     CMD_PLAY_HELP("cmd.play.help"),
     CMD_RELOAD_BUTTON_CALIBURN("cmd.reload.buttonCaliburn"),
-    CMD_RELOAD_CALIBURN("cmd.reload.caliburn"),
+    CMD_RELOAD_CALIBURN("cmd.reload.xlib"),
     CMD_RELOAD_FAIL("cmd.reload.fail"),
     CMD_RELOAD_HELP("cmd.reload.help"),
     CMD_RELOAD_SUCCESS("cmd.reload.success"),

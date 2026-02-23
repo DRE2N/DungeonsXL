@@ -18,12 +18,12 @@ package de.erethon.dungeonsxl.player;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.compatibility.Version;
-import de.erethon.bedrock.config.ConfigUtil;
-import de.erethon.bedrock.config.EConfig;
-import de.erethon.bedrock.misc.EnumUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.compatibility.Version;
+import de.erethon.xlib.config.ConfigUtil;
+import de.erethon.xlib.config.DREConfig;
+import de.erethon.xlib.util.EnumUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ import org.bukkit.potion.PotionEffect;
  *
  * @author Daniel Saukel
  */
-public class DPlayerData extends EConfig {
+public class DPlayerData extends DREConfig {
 
     protected boolean is1_9 = Version.isAtLeast(Version.MC1_9);
 

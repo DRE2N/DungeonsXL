@@ -21,7 +21,7 @@ import de.erethon.dungeonsxl.api.event.group.GroupPlayerKickEvent;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.xlib.chat.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

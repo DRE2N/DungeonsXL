@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.bedrock.misc.ProgressBar;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
@@ -29,6 +27,8 @@ import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.xlib.util.NumberUtil;
+import de.erethon.xlib.util.ProgressBar;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;

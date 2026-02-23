@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 Daniel Saukel
+ * Copyright (C) 2020-2026 Daniel Saukel
  *
  * All rights reserved.
  */
@@ -9,11 +9,11 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.misc.EnumUtil;
 import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxxl.DungeonsXXL;
 import de.erethon.dungeonsxxl.world.block.GlowingBlock;
+import de.erethon.xlib.util.EnumUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 

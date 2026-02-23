@@ -16,8 +16,6 @@
  */
 package de.erethon.dungeonsxl.player;
 
-import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.caliburn.mob.VanillaMob;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
@@ -39,10 +37,12 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.trigger.DistanceTrigger;
-import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.item.VanillaItem;
+import de.erethon.xlib.mob.VanillaMob;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;

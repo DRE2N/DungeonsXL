@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
-import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameGoal;
@@ -29,6 +28,7 @@ import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.dungeonsxl.world.DResourceWorld;
+import de.erethon.xlib.chat.MessageUtil;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

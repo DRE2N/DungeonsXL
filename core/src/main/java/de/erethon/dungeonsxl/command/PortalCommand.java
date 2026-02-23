@@ -16,16 +16,16 @@
  */
 package de.erethon.dungeonsxl.command;
 
-import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
+import de.erethon.xlib.XLib;
+import de.erethon.xlib.item.ExItem;
+import de.erethon.xlib.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.xlib.chat.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class PortalCommand extends DCommand {
 
-    CaliburnAPI caliburn = plugin.getCaliburn();
+    XLib xlib = plugin.getCaliburn();
 
     public PortalCommand(DungeonsXL plugin) {
         super(plugin);
@@ -59,7 +59,7 @@ public class PortalCommand extends DCommand {
         ExItem material = null;
 
         if (args.length == 2) {
-            material = caliburn.getExItem(args[1]);
+            material = xlib.getExItem(args[1]);
         }
 
         if (material == null) {

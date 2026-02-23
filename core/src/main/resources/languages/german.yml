@@ -92,7 +92,7 @@ cmd:
     help: "/dxl portal ([material=portal]) - Erstellt ein Portal, das in einen Dungeon führt"
   reload:
     buttonCaliburn: "&9[ CALIBURN-INHALTE NEU LADEN ]"
-    caliburn: "&eBenutzerdefinierte Items:&o[&v1] &eMobs:&o[&v2] &eLoottabellen:&o[&v3]"
+    xlib: "&eBenutzerdefinierte Items:&o[&v1] &eMobs:&o[&v2] &eLoottabellen:&o[&v3]"
     fail: "&4Du kannst gerade nicht neu laden."
     help: "/dxl reload - Lädt das Plugin neu"
     players: "&4Warnung: Wenn Du das Plugin neu lädst, werden alle Spieler aus ihrem Spiel geworfen."

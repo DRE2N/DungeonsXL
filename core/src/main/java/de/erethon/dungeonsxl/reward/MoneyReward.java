@@ -18,7 +18,7 @@ package de.erethon.dungeonsxl.reward;
 
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.xlib.chat.MessageUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 

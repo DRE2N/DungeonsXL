@@ -16,10 +16,10 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.player.DPlayerListener;
+import de.erethon.xlib.item.VanillaItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

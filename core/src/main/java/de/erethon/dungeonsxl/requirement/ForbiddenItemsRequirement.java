@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
-import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.xlib.XLib;
+import de.erethon.xlib.item.ExItem;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -38,12 +38,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ForbiddenItemsRequirement implements Requirement {
 
-    private CaliburnAPI caliburn;
+    private XLib xlib;
 
     private Map<ExItem, Boolean> forbiddenItems = new HashMap<>();
 
     public ForbiddenItemsRequirement(DungeonsAPI api) {
-        caliburn = api.getCaliburn();
+        xlib = api.getCaliburn();
     }
 
     /* Getters and setters */
@@ -63,7 +63,7 @@ public class ForbiddenItemsRequirement implements Requirement {
             }
             boolean star = !entry.contains("*");
             entry = entry.replace("*", "");
-            ExItem item = caliburn.getExItem(entry);
+            ExItem item = xlib.getExItem(entry);
             if (item != null) {
                 forbiddenItems.put(item, star);
             }
@@ -76,7 +76,7 @@ public class ForbiddenItemsRequirement implements Requirement {
             if (item == null) {
                 continue;
             }
-            ExItem exItem = caliburn.getExItem(item);
+            ExItem exItem = xlib.getExItem(item);
             for (Entry<ExItem, Boolean> entry : forbiddenItems.entrySet()) {
                 if (entry.getValue()) {
                     if (exItem.isSubsumableUnder(entry.getKey())) {
@@ -99,7 +99,7 @@ public class ForbiddenItemsRequirement implements Requirement {
         Set<ExItem> exInventory = new HashSet<>();
         for (ItemStack item : player.getInventory().getContents()) {
             if (item != null) {
-                exInventory.add(caliburn.getExItem(item));
+                exInventory.add(xlib.getExItem(item));
             }
         }
 

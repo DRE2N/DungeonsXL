@@ -14,7 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.player;
 
-import de.erethon.bedrock.misc.Registry;
+import de.erethon.xlib.util.Registry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;

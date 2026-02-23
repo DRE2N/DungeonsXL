@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.world.block;
 
-import de.erethon.bedrock.misc.BlockUtil;
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.trigger.SignTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.xlib.item.ExItem;
+import de.erethon.xlib.util.BlockUtil;
+import de.erethon.xlib.util.NumberUtil;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.block.Block;

@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl;
 
-import de.erethon.bedrock.misc.Registry;
 import de.erethon.dungeonsxl.api.DungeonModule;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
@@ -31,6 +30,7 @@ import de.erethon.dungeonsxl.sign.passive.*;
 import de.erethon.dungeonsxl.sign.rocker.*;
 import de.erethon.dungeonsxl.sign.windup.*;
 import de.erethon.dungeonsxl.trigger.*;
+import de.erethon.xlib.util.Registry;
 
 /**
  * @author Daniel Saukel

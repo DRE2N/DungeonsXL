@@ -14,7 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.player;
 
-import de.erethon.caliburn.CaliburnAPI;
+import de.erethon.xlib.XLib;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,25 +37,25 @@ public class PlayerClass {
     /**
      * Creates a PlayerClass from a class YAML file. The name is taken from the file name.
      *
-     * @param caliburn the CaliburnAPI instance
+     * @param xlib the XLib instance
      * @param file     the class config file
      */
-    public PlayerClass(CaliburnAPI caliburn, File file) {
-        this(caliburn, file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
+    public PlayerClass(XLib xlib, File file) {
+        this(xlib, file.getName().substring(0, file.getName().length() - 4), YamlConfiguration.loadConfiguration(file));
     }
 
     /**
      * Creates a PlayerClass from the given class config.
      *
-     * @param caliburn the CaliburnAPI instance
+     * @param xlib the XLib instance
      * @param name     the class name
      * @param config   the config
      */
-    public PlayerClass(CaliburnAPI caliburn, String name, FileConfiguration config) {
+    public PlayerClass(XLib xlib, String name, FileConfiguration config) {
         this.name = name;
 
         if (config.contains("items")) {
-            items = caliburn.deserializeStackList(config, "items");
+            items = xlib.deserializeStackList(config, "items");
         }
 
         if (config.contains("dog")) {

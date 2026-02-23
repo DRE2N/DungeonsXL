@@ -16,13 +16,13 @@
  */
 package de.erethon.dungeonsxl.sign.button;
 
-import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
+import de.erethon.xlib.chat.MessageUtil;
 import org.black_ixx.bossshop.BossShop;
 import org.black_ixx.bossshop.core.BSShop;
 import org.bukkit.Bukkit;

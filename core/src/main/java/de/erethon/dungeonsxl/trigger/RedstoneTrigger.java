@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.caliburn.category.Category;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Deactivatable;
 import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
@@ -26,6 +25,7 @@ import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.util.BlockUtilCompat;
+import de.erethon.xlib.category.Category;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 

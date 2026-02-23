@@ -16,16 +16,6 @@
  */
 package de.erethon.dungeonsxl;
 
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.compatibility.Internals;
-import de.erethon.bedrock.compatibility.Version;
-import de.erethon.bedrock.misc.FileUtil;
-import de.erethon.bedrock.misc.Registry;
-import de.erethon.bedrock.plugin.EPlugin;
-import de.erethon.bedrock.plugin.EPluginSettings;
-import de.erethon.bedrock.spiget.comparator.VersionComparator;
-import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
@@ -83,7 +73,15 @@ import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.DWorldListener;
 import de.erethon.dungeonsxl.world.LWCIntegration;
 import de.erethon.dungeonsxl.world.WorldConfig;
-import de.erethon.vignette.api.VignetteAPI;
+import de.erethon.xlib.XLib;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.compatibility.Internals;
+import de.erethon.xlib.compatibility.Version;
+import de.erethon.xlib.mob.ExMob;
+import de.erethon.xlib.plugin.DREPlugin;
+import de.erethon.xlib.plugin.DREPluginSettings;
+import de.erethon.xlib.util.FileUtil;
+import de.erethon.xlib.util.Registry;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -109,11 +107,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
  */
-public class DungeonsXL extends EPlugin implements DungeonsAPI {
+public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     /* Plugin & lib instances */
     private static DungeonsXL instance;
-    private CaliburnAPI caliburn;
+    private XLib xlib;
 
     /* Util instances */
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
@@ -218,7 +216,7 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
     private Registry<String, CommandScript> commandScriptRegistry;
 
     public DungeonsXL() {
-        settings = EPluginSettings.builder()
+        settings = DREPluginSettings.builder()
                 .internals(Internals.INDEPENDENT)
                 .economy(true)
                 .permissions(true)
@@ -284,12 +282,12 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
     }
 
     public void loadCaliburn() {
-        if (CaliburnAPI.getInstance() == null) {
-            caliburn = new CaliburnAPI(this);
-            caliburn.loadDataFiles();
-            caliburn.finishInitialization();
+        if (XLib.getInstance() == null) {
+            xlib = new XLib(this);
+            xlib.loadDataFiles();
+            xlib.finishInitialization();
         } else {
-            caliburn = CaliburnAPI.getInstance();
+            xlib = XLib.getInstance();
         }
     }
 
@@ -348,7 +346,7 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
         /* Scripts & global data */
         classRegistry = new Registry<>();
         for (File script : FileUtil.getFilesForFolder(CLASSES)) {
-            PlayerClass clss = new PlayerClass(caliburn, script);
+            PlayerClass clss = new PlayerClass(xlib, script);
             classRegistry.add(clss.getName(), clss);
         }
         signScriptRegistry = new Registry<>();
@@ -472,8 +470,8 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
     }
 
     @Override
-    public CaliburnAPI getCaliburn() {
-        return caliburn;
+    public XLib getCaliburn() {
+        return xlib;
     }
 
     @Override
@@ -677,7 +675,7 @@ public class DungeonsXL extends EPlugin implements DungeonsAPI {
         if (mob != null) {
             return mob;
         } else {
-            return new DMob(entity, gameWorld, caliburn.getExMob(triggerId), triggerId);
+            return new DMob(entity, gameWorld, xlib.getExMob(triggerId), triggerId);
         }
     }
 

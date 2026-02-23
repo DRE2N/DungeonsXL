@@ -18,8 +18,8 @@ package de.erethon.dungeonsxl.dungeon;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import de.erethon.bedrock.config.EConfig;
 import de.erethon.dungeonsxl.world.WorldConfig;
+import de.erethon.xlib.config.DREConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Daniel Saukel
  */
-public class DungeonConfig extends EConfig {
+public class DungeonConfig extends DREConfig {
 
     private DungeonsXL plugin;
 

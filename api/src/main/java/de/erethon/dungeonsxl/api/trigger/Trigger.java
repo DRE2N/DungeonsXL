@@ -15,11 +15,11 @@
 package de.erethon.dungeonsxl.api.trigger;
 
 import com.google.common.collect.Sets;
-import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.event.trigger.TriggerActionEvent;
 import static de.erethon.dungeonsxl.api.trigger.TriggerTypeKey.*;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.xlib.chat.MessageUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

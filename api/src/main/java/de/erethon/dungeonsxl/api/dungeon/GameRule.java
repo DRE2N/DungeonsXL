@@ -14,14 +14,14 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
-import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.mob.ExMob;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.misc.EnumUtil;
-import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.api.Reward;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.item.ExItem;
+import de.erethon.xlib.mob.ExMob;
+import de.erethon.xlib.util.EnumUtil;
+import de.erethon.xlib.util.NumberUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

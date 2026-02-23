@@ -14,7 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
-import de.erethon.bedrock.misc.EnumUtil;
+import de.erethon.xlib.util.EnumUtil;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**

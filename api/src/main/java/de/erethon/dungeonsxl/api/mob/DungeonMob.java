@@ -14,7 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.mob;
 
-import de.erethon.caliburn.mob.ExMob;
+import de.erethon.xlib.mob.ExMob;
 import org.bukkit.entity.LivingEntity;
 
 /**

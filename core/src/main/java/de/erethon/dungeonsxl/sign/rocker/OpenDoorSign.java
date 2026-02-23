@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.sign.rocker;
 
-import de.erethon.caliburn.category.Category;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
@@ -24,6 +23,7 @@ import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
+import de.erethon.xlib.category.Category;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;

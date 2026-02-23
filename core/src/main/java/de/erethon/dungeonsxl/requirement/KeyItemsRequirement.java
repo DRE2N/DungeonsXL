@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.requirement;
 
-import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
 import de.erethon.dungeonsxl.config.DMessage;
+import de.erethon.xlib.XLib;
+import de.erethon.xlib.item.ExItem;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,12 +37,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public class KeyItemsRequirement implements Requirement {
 
-    private CaliburnAPI caliburn;
+    private XLib xlib;
 
     private List<ExItem> keyItems;
 
     public KeyItemsRequirement(DungeonsAPI api) {
-        caliburn = api.getCaliburn();
+        xlib = api.getCaliburn();
     }
 
     /* Getters and setters */
@@ -56,7 +56,7 @@ public class KeyItemsRequirement implements Requirement {
     /* Actions */
     @Override
     public void setup(ConfigurationSection config) {
-        keyItems = caliburn.deserializeExItemList(config, "keyItems");
+        keyItems = xlib.deserializeExItemList(config, "keyItems");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class KeyItemsRequirement implements Requirement {
             if (item == null) {
                 continue;
             }
-            keyItems.remove(caliburn.getExItem(item));
+            keyItems.remove(xlib.getExItem(item));
         }
         return keyItems.isEmpty();
     }
@@ -78,7 +78,7 @@ public class KeyItemsRequirement implements Requirement {
         Set<ExItem> exInventory = new HashSet<>();
         for (ItemStack item : player.getInventory().getContents()) {
             if (item != null) {
-                exInventory.add(caliburn.getExItem(item));
+                exInventory.add(xlib.getExItem(item));
             }
         }
 

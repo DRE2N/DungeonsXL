@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.reward;
 
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.config.DMessage;
@@ -25,10 +24,11 @@ import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.util.ContainerAdapter;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
-import de.erethon.vignette.api.PaginatedInventoryGUI;
-import de.erethon.vignette.api.component.InventoryButton;
-import de.erethon.vignette.api.layout.PaginatedFlowInventoryLayout;
-import de.erethon.vignette.api.layout.PaginatedInventoryLayout.PaginationButtonPosition;
+import de.erethon.xlib.gui.PaginatedInventoryGUI;
+import de.erethon.xlib.gui.component.InventoryButton;
+import de.erethon.xlib.gui.layout.PaginatedFlowInventoryLayout;
+import de.erethon.xlib.gui.layout.PaginatedInventoryLayout.PaginationButtonPosition;
+import de.erethon.xlib.item.VanillaItem;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;

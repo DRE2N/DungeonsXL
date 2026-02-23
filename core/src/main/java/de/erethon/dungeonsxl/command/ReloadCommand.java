@@ -22,10 +22,10 @@ import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.chat.DefaultFontInfo;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.compatibility.CompatibilityHandler;
-import de.erethon.bedrock.compatibility.Internals;
+import de.erethon.xlib.chat.DefaultFontInfo;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.compatibility.CompatibilityHandler;
+import de.erethon.xlib.compatibility.Internals;
 import java.util.Collection;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -57,7 +57,7 @@ public class ReloadCommand extends DCommand {
             MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_FAIL.getMessage());
             return;
         }
-        if (args.length >= 2 && (args[1].equalsIgnoreCase("-caliburn") || args[1].equalsIgnoreCase("-c"))) {
+        if (args.length >= 2 && (args[1].equalsIgnoreCase("-xlib") || args[1].equalsIgnoreCase("-c"))) {
             plugin.getCaliburn().reload();
             MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
             String ci = String.valueOf(plugin.getCaliburn().getCustomItems().size());
@@ -112,7 +112,7 @@ public class ReloadCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, ixl));
-        ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -caliburn");
+        ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -xlib");
         String message = DefaultFontInfo.center(DMessage.CMD_RELOAD_BUTTON_CALIBURN.getMessage());
         TextComponent text = new TextComponent(message);
         text.setClickEvent(onClick);

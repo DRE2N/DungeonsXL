@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.sign.windup;
 
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.caliburn.item.ExItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Windup;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.xlib.item.ExItem;
+import de.erethon.xlib.util.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;

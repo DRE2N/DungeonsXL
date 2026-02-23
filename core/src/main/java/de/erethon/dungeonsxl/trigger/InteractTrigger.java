@@ -16,7 +16,6 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
@@ -25,6 +24,7 @@ import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.xlib.util.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;

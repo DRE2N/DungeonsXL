@@ -16,14 +16,14 @@
  */
 package de.erethon.dungeonsxl.sign.windup;
 
-import de.erethon.bedrock.misc.EnumUtil;
-import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Windup;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
+import de.erethon.xlib.util.EnumUtil;
+import de.erethon.xlib.util.NumberUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;

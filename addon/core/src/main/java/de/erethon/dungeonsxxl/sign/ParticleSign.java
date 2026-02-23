@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 Daniel Saukel
+ * Copyright (C) 2020-2026 Daniel Saukel
  *
  * All rights reserved.
  */
@@ -9,8 +9,8 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.bedrock.misc.EnumUtil;
-import de.erethon.bedrock.misc.NumberUtil;
+import de.erethon.xlib.util.EnumUtil;
+import de.erethon.xlib.util.NumberUtil;
 import org.bukkit.Particle;
 import org.bukkit.block.Sign;
 

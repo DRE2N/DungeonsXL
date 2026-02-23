@@ -14,14 +14,14 @@
  */
 package de.erethon.dungeonsxl.api.sign;
 
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
 import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.item.VanillaItem;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;

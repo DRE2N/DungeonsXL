@@ -16,9 +16,6 @@
  */
 package de.erethon.dungeonsxl.player;
 
-import de.erethon.caliburn.category.Category;
-import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
@@ -32,9 +29,12 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.util.ParsingUtil;
-import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
+import de.erethon.xlib.category.Category;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.item.ExItem;
+import de.erethon.xlib.item.VanillaItem;
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

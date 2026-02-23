@@ -14,9 +14,6 @@
  */
 package de.erethon.dungeonsxl.api;
 
-import de.erethon.bedrock.misc.Registry;
-import de.erethon.caliburn.CaliburnAPI;
-import de.erethon.caliburn.mob.ExMob;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
@@ -32,6 +29,9 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.xlib.XLib;
+import de.erethon.xlib.mob.ExMob;
+import de.erethon.xlib.util.Registry;
 import java.io.File;
 import java.util.Collection;
 import org.bukkit.World;
@@ -61,7 +61,7 @@ public interface DungeonsAPI extends Plugin {
      *
      * @return the loaded instance of the Caliburn API
      */
-    CaliburnAPI getCaliburn();
+    XLib getCaliburn();
 
     /**
      * Returns a cache of player wrapper objects.

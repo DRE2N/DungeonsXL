@@ -14,15 +14,15 @@
  */
 package de.erethon.dungeonsxl.api.player;
 
-import de.erethon.caliburn.item.ExItem;
-import de.erethon.caliburn.item.VanillaItem;
-import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.compatibility.Version;
-import de.erethon.bedrock.player.PlayerCollection;
 import de.erethon.dungeonsxl.api.Reward;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.compatibility.Version;
+import de.erethon.xlib.item.ExItem;
+import de.erethon.xlib.item.VanillaItem;
+import de.erethon.xlib.player.PlayerCollection;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;

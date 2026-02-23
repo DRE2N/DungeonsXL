@@ -16,14 +16,14 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
-import de.erethon.bedrock.misc.NumberUtil;
-import de.erethon.caliburn.item.VanillaItem;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.dungeonsxl.world.block.RewardChest;
+import de.erethon.xlib.item.VanillaItem;
+import de.erethon.xlib.util.NumberUtil;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.block.Sign;

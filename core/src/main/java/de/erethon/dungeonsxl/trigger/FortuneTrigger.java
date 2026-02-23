@@ -16,12 +16,12 @@
  */
 package de.erethon.dungeonsxl.trigger;
 
-import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
 import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
+import de.erethon.xlib.util.NumberUtil;
 import java.util.Random;
 
 /**

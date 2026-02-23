@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 Daniel Saukel
+ * Copyright (C) 2020-2026 Daniel Saukel
  *
  * All rights reserved.
  */

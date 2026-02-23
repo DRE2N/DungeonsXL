@@ -16,11 +16,11 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
-import de.erethon.caliburn.loottable.LootTable;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.util.ContainerAdapter;
+import de.erethon.xlib.loottable.LootTable;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;

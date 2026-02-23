@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.global;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.bedrock.chat.MessageUtil;
+import de.erethon.xlib.chat.MessageUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import org.bukkit.World;

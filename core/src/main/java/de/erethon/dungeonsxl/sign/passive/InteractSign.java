@@ -16,13 +16,13 @@
  */
 package de.erethon.dungeonsxl.sign.passive;
 
-import de.erethon.bedrock.misc.NumberUtil;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.xlib.util.NumberUtil;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.ChatColor;
