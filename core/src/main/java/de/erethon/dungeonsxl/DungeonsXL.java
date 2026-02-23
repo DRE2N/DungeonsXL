@@ -103,6 +103,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.inventivetalent.update.spiget.comparator.VersionComparator;
 
 /**
  * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
@@ -250,7 +251,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         if (manager.isPluginEnabled("Parties")) {
             registerGroupAdapter(new PartiesAdapter(this));
         }
-        VignetteAPI.init(this);
         loaded = true;
     }
 
