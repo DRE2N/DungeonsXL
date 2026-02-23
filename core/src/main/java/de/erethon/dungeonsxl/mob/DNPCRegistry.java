@@ -39,6 +39,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 /**
+ * This class folllows the implementation in Citizens, see
+ * <a href="https://github.com/CitizensDev/Citizens2/blob/master/main/src/main/java/net/citizensnpcs/npc/CitizensNPCRegistry.java">GitHub</a>
+ *
  * @author Daniel Saukel
  */
 public class DNPCRegistry implements NPCRegistry {
