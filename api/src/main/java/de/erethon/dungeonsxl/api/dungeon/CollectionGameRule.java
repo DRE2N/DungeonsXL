@@ -14,9 +14,9 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
+import com.google.common.base.Verify;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import java.util.Collection;
-import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -37,7 +37,7 @@ public class CollectionGameRule<T, V extends Collection<T>> extends GameRule<V> 
      */
     public CollectionGameRule(String key, V defaultValue, Copier<V> copier) {
         super(null, key, defaultValue);
-        Validate.notNull(defaultValue, "defaultValue must not be null");
+        Verify.verifyNotNull(defaultValue, "defaultValue must not be null");
         this.copier = copier;
     }
 

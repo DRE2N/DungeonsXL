@@ -14,9 +14,9 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
+import com.google.common.base.Verify;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import java.util.Map;
-import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -39,7 +39,7 @@ public class MapGameRule<TK, TV, V extends Map<TK, TV>> extends GameRule<V> {
      */
     public MapGameRule(String key, V defaultValue, ConfigReader<V> reader, Copier<V> copier) {
         super(null, key, defaultValue, reader);
-        Validate.notNull(defaultValue, "defaultValue must not be null");
+        Verify.verifyNotNull(defaultValue, "defaultValue must not be null");
         this.copier = copier;
     }
 
