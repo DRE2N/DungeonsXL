@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 /**
  * Something players are given when they successfully finish a {@link de.erethon.dungeonsxl.api.dungeon.Dungeon}.
- * <p>
+ *
  * @see de.erethon.dungeonsxl.api.player.PlayerGroup#getRewards()
  * @author Daniel Saukel
  */

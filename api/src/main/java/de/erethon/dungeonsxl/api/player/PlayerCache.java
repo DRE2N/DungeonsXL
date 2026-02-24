@@ -22,31 +22,57 @@ import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 
 /**
+ * Stores information on players in and out of dungeons.
+ *
  * @author Daniel Saukel
  */
 public class PlayerCache extends Registry<Player, GlobalPlayer> {
 
+    /**
+     * Returns the {@link GlobalPlayer} that represents the player with the given UUID.
+     *
+     * @param uuid a player's UUID to check
+     * @return the {@link GlobalPlayer} that represents the given player both for players in dungeons or outside; null if they are offline
+     */
     public GlobalPlayer get(UUID uuid) {
         return getFirstIf(p -> p.getUniqueId().equals(uuid));
     }
 
+    /**
+     * Returns the {@link InstancePlayer} that represents the given player.
+     *
+     * @param player the player to check
+     * @return the {@link InstancePlayer} that represents the given player; null if the player is neither editing nor in a game.
+     */
     public InstancePlayer getInstancePlayer(Player player) {
         return getFirstInstancePlayerIf(p -> p.getPlayer() == player);
     }
 
+    /**
+     * Returns the {@link EditPlayer} that represents the given player.
+     *
+     * @param player the player to check
+     * @return the {@link EditPlayer} that represents the given player; null if the player is not editing
+     */
     public EditPlayer getEditPlayer(Player player) {
         return getFirstEditPlayerIf(p -> p.getPlayer() == player);
     }
 
+    /**
+     * Returns the {@link GamePlayer} that represents the given player.
+     *
+     * @param player the player to check
+     * @return the {@link GamePlayer} that represents the given player; null if the player is not in a game
+     */
     public GamePlayer getGamePlayer(Player player) {
         return getFirstGamePlayerIf(p -> p.getPlayer() == player);
     }
 
     /**
-     * Returns the first InstancePlayer that satisfies the given predicate.
+     * Returns the first {@link InstancePlayer} that satisfies the given predicate.
      *
      * @param predicate the predicate to check
-     * @return the first InstancePlayer that satisfies the given predicate
+     * @return the first {@link InstancePlayer} that satisfies the given predicate
      */
     public InstancePlayer getFirstInstancePlayerIf(Predicate<InstancePlayer> predicate) {
         for (GlobalPlayer element : elements.values()) {
@@ -62,10 +88,10 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns the first EditPlayer that satisfies the given predicate.
+     * Returns the first {@link EditPlayer} that satisfies the given predicate.
      *
      * @param predicate the predicate to check
-     * @return the first EditPlayer that satisfies the given predicate
+     * @return the first {@link EditPlayer} that satisfies the given predicate
      */
     public EditPlayer getFirstEditPlayerIf(Predicate<EditPlayer> predicate) {
         for (GlobalPlayer element : elements.values()) {
@@ -81,10 +107,10 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns the first GamePlayer that satisfies the given predicate.
+     * Returns the first {@link GamePlayer} that satisfies the given predicate.
      *
      * @param predicate the predicate to check
-     * @return the first GamePlayer that satisfies the given predicate
+     * @return the first {@link GamePlayer} that satisfies the given predicate
      */
     public GamePlayer getFirstGamePlayerIf(Predicate<GamePlayer> predicate) {
         for (GlobalPlayer element : elements.values()) {
@@ -100,10 +126,10 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns all InstancePlayers that satisfy the given predicate.
+     * Returns all {@link InstancePlayer}s that satisfy the given predicate.
      *
      * @param predicate the predicate to check
-     * @return all InstancePlayers that satisfy the given predicate
+     * @return all {@link InstancePlayer} that satisfy the given predicate
      */
     public Collection<InstancePlayer> getAllInstancePlayersIf(Predicate<InstancePlayer> predicate) {
         Collection<InstancePlayer> checked = new ArrayList<>();
@@ -120,10 +146,10 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns all EditPlayer that satisfy the given predicate.
+     * Returns all {@link EditPlayer}s that satisfy the given predicate.
      *
      * @param predicate the predicate to check
-     * @return all EditPlayer that satisfy the given predicate
+     * @return all {@link EditPlayer}s that satisfy the given predicate
      */
     public Collection<EditPlayer> getAllEditPlayersIf(Predicate<EditPlayer> predicate) {
         Collection<EditPlayer> checked = new ArrayList<>();
@@ -140,10 +166,10 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns all GamePlayer that satisfy the given predicate.
+     * Returns all {@link GamePlayer}s that satisfy the given predicate.
      *
      * @param predicate the predicate to check
-     * @return all GamePlayer that satisfy the given predicate
+     * @return all {@link GamePlayer} that satisfy the given predicate
      */
     public Collection<GamePlayer> getAllGamePlayersIf(Predicate<GamePlayer> predicate) {
         Collection<GamePlayer> checked = new ArrayList<>();
@@ -160,9 +186,9 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns all InstancePlayers.
+     * Returns all {@link InstancePlayer}s.
      *
-     * @return all InstancePlayers
+     * @return all {@link InstancePlayer}s
      */
     public Collection<InstancePlayer> getAllInstancePlayers() {
         Collection<InstancePlayer> checked = new ArrayList<>();
@@ -175,9 +201,9 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns all EditPlayers.
+     * Returns all {@link EditPlayer}s.
      *
-     * @return all EditPlayers
+     * @return all {@link EditPlayer}s
      */
     public Collection<EditPlayer> getAllEditPlayers() {
         Collection<EditPlayer> checked = new ArrayList<>();
@@ -190,9 +216,9 @@ public class PlayerCache extends Registry<Player, GlobalPlayer> {
     }
 
     /**
-     * Returns all GamePlayers.
+     * Returns all {@link GamePlayer}s.
      *
-     * @return all GamePlayers
+     * @return all {@link GamePlayer}s
      */
     public Collection<GamePlayer> getAllGamePlayers() {
         Collection<GamePlayer> checked = new ArrayList<>();

@@ -22,7 +22,7 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Fired when a player gets his {@link Reward}s after finishing a game.
- * <p>
+ *
  * @see GlobalPlayer#setRewardItems(java.util.List)
  * @author Daniel Saukel
  */

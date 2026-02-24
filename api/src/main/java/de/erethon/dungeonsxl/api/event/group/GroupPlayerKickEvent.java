@@ -20,6 +20,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
+ * Fired when a player is kicked out of a group.
+ *
  * @author Daniel Saukel
  */
 public class GroupPlayerKickEvent extends GroupEvent implements Cancellable {

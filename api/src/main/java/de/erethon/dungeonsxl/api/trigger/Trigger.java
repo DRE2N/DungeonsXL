@@ -185,7 +185,7 @@ public interface Trigger {
     boolean unregisterTrigger();
 
     /**
-     * Updates the listeners; to be used when the state of the trigger is updated; by default in {@link #trigger()}.
+     * Updates the listeners; to be used when the state of the trigger is updated; by default in {@link #trigger(boolean, Player)}.
      */
     void updateListeners();
 
@@ -193,10 +193,10 @@ public interface Trigger {
      * Called when the trigger is triggered.
      * <p>
      * This method provides default procedures when the conditions of any trigger are fulfilled, such as calling events and updating listeners. Use
-     * {@link #onTrigger()} to implement specific behavior (such as self-removal for default distance triggers).
+     * {@link #onTrigger(boolean)} to implement specific behavior (such as self-removal for default distance triggers).
      * <p>
      * This method does NOT change {@link #isTriggered()}. Due to the difference in behavior of triggers (working button-like, switch-like etc.), this is to be
-     * handled in {@link #onTrigger()}.
+     * handled in {@link #onTrigger(boolean)}.
      *
      * @param switching        if the action changes the the state of {@link #isTriggered()}
      * @param triggeringPlayer the player who fulfilled the (last) conditions of this trigger
@@ -219,8 +219,8 @@ public interface Trigger {
     /**
      * Called when the trigger is triggered.
      * <p>
-     * This method can be used to implement specific behavior (such as self-removal for default distance triggers). Call {@link #trigger()} instead when the
-     * condition to trigger the trigger is fulfilled.
+     * This method can be used to implement specific behavior (such as self-removal for default distance triggers). Call {@link #trigger(boolean, Player)}
+     * instead when the condition to trigger the trigger is fulfilled.
      *
      * @param switching if the action changes the the state of {@link #isTriggered()}
      */
