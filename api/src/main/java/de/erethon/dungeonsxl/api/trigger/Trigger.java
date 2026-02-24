@@ -102,11 +102,11 @@ public interface Trigger {
     }
 
     /**
-     * Returns a char that that identifies the trigger as of a specific type.
+     * Returns a char that identifies the trigger as one of a specific type.
      * <p>
      * Triggers from the default implementations are stored in {@link TriggerTypeKey}.
      *
-     * @return a char that that identifies the trigger as of a specific type
+     * @return a char that identifies the trigger as one of a specific type
      */
     char getKey();
 
