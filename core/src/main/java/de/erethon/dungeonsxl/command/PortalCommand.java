@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
  */
 public class PortalCommand extends DCommand {
 
-    XLib xlib = plugin.getCaliburn();
+    XLib xlib = plugin.getXLib();
 
     public PortalCommand(DungeonsXL plugin) {
         super(plugin);

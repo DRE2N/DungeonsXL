@@ -32,9 +32,9 @@ public interface DungeonMob {
     LivingEntity getEntity();
 
     /**
-     * Returns the Caliburn representation of the mob or null if it is spawned by an external plugin.
+     * Returns the XLib representation of the mob or null if it is spawned by an external plugin.
      *
-     * @return the Caliburn representation of the mob or null if it is spawned by an external plugin
+     * @return the XLib representation of the mob or null if it is spawned by an external plugin
      */
     ExMob getType();
 

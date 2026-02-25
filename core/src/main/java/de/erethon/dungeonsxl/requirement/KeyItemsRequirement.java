@@ -42,7 +42,7 @@ public class KeyItemsRequirement implements Requirement {
     private List<ExItem> keyItems;
 
     public KeyItemsRequirement(DungeonsAPI api) {
-        xlib = api.getCaliburn();
+        xlib = api.getXLib();
     }
 
     /* Getters and setters */

@@ -80,7 +80,7 @@ public class RewardChestSign extends ChestSign {
         }
 
         if (!getLine(2).isEmpty()) {
-            lootTable = api.getCaliburn().getLootTable(getLine(2));
+            lootTable = api.getXLib().getLootTable(getLine(2));
         }
 
         checkChest();

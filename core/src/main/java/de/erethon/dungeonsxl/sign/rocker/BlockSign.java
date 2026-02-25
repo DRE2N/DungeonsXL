@@ -80,7 +80,7 @@ public class BlockSign extends Rocker {
 
         } else {
             String[] line1 = getLine(1).split(",");
-            offBlock = api.getCaliburn().getExItem(line1[0]);
+            offBlock = api.getXLib().getExItem(line1[0]);
             if (offBlock == null) {
                 markAsErroneous("Could not recognize offBlock, input: " + getLine(1));
                 return;
@@ -95,7 +95,7 @@ public class BlockSign extends Rocker {
 
         } else {
             String[] line2 = getLine(2).split(",");
-            onBlock = api.getCaliburn().getExItem(line2[0]);
+            onBlock = api.getXLib().getExItem(line2[0]);
             if (onBlock == null) {
                 markAsErroneous("Could not recognize onBlock, input: " + getLine(2));
                 return;

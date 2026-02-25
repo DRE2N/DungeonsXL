@@ -57,11 +57,11 @@ public interface DungeonsAPI extends Plugin {
     static final File DUNGEONS = new File(SCRIPTS, "dungeons");
 
     /**
-     * Returns the loaded instance of the Caliburn API.
+     * Returns the loaded instance of XLib.
      *
-     * @return the loaded instance of the Caliburn API
+     * @return the loaded instance of XLib
      */
-    XLib getCaliburn();
+    XLib getXLib();
 
     /**
      * Returns a cache of player wrapper objects.

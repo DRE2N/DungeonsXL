@@ -49,10 +49,10 @@ public class DungeonChestSign extends ChestSign {
     public void initialize() {
         // For consistency with reward chests but also for intuitiveness, both lines should be possible
         if (!getLine(1).isEmpty()) {
-            lootTable = api.getCaliburn().getLootTable(getLine(1));
+            lootTable = api.getXLib().getLootTable(getLine(1));
         }
         if (!getLine(2).isEmpty()) {
-            lootTable = api.getCaliburn().getLootTable(getLine(2));
+            lootTable = api.getXLib().getLootTable(getLine(2));
         }
 
         checkChest();

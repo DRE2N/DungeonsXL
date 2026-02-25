@@ -93,7 +93,7 @@ public class HologramSign extends Passive {
                 String id = line.replace("Item:", "");
                 ItemStack item = null;
 
-                ExItem exItem = api.getCaliburn().getExItem(id);
+                ExItem exItem = api.getXLib().getExItem(id);
                 if (exItem != null) {
                     item = exItem.toItemStack();
                 }

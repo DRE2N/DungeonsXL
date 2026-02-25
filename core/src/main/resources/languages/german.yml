@@ -77,7 +77,7 @@ cmd:
     help: "/dxl lives [player] - Zeigt die Leben, die ein Spieler übrig hat"
     player: "&4&v1 &6hat &4&v2 &6Leben übrig."
   main:
-    compatibility: "&eInternals:&o[&v1] &eVault:&o[&v2] &eItemsXL:&o[&v3]"
+    compatibility: "&eInternals:&o[&v1] &eVault:&o[&v2] &eXLib:&o[&v3]"
     help: "/dxl - Grundlegende Statusinformationen"
     helpInfo: "&7Gib &o/dxl help&r&7 für weitere Informationen ein."
     loaded: "&eWelten:&o[&v1] &eDungeons:&o[&v2] &eGeladen:&o[&v3] &eSpieler:&o[&v4]"
@@ -91,8 +91,6 @@ cmd:
   portal:
     help: "/dxl portal ([material=portal]) - Erstellt ein Portal, das in einen Dungeon führt"
   reload:
-    buttonCaliburn: "&9[ CALIBURN-INHALTE NEU LADEN ]"
-    xlib: "&eBenutzerdefinierte Items:&o[&v1] &eMobs:&o[&v2] &eLoottabellen:&o[&v3]"
     fail: "&4Du kannst gerade nicht neu laden."
     help: "/dxl reload - Lädt das Plugin neu"
     players: "&4Warnung: Wenn Du das Plugin neu lädst, werden alle Spieler aus ihrem Spiel geworfen."

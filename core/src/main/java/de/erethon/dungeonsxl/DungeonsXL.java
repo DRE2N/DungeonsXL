@@ -66,6 +66,7 @@ import de.erethon.dungeonsxl.sign.passive.SignScript;
 import de.erethon.dungeonsxl.sign.windup.CommandScript;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.TriggerListener;
+import de.erethon.dungeonsxl.util.DependencyVersion;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
 import de.erethon.dungeonsxl.world.DEditWorld;
@@ -118,7 +119,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
 
     /* Constants */
-    public static final String LATEST_IXL = "1.1";
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
 
     /* Folders of internal features */
@@ -231,16 +231,16 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     @Override
     public void onEnable() {
         super.onEnable();
-        String ixlVersion = manager.isPluginEnabled("ItemsXL") ? manager.getPlugin("ItemsXL").getDescription().getVersion() : "";
-        if (ixlVersion.startsWith("0.") || ixlVersion.startsWith("1.0")) {
-            getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v" + LATEST_IXL + " or higher to run.");
+        String ixlVersion = manager.isPluginEnabled("XLib-Runtime") ? manager.getPlugin("XLib-Runtime").getDescription().getVersion() : "";
+        if (!ixlVersion.equals(DependencyVersion.XLIB)) {
+            getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v" + DependencyVersion.XLIB + " or higher to run.");
             manager.disablePlugin(this);
             return;
         }
 
         instance = this;
         initFolders();
-        loadCaliburn();
+        xlib = XLib.getInstance();
         DPermission.register();
         registerModule(new DXLModule());
         initCaches();
@@ -279,16 +279,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         DUNGEONS.mkdir();
         SIGNS.mkdir();
         COMMANDS.mkdir();
-    }
-
-    public void loadCaliburn() {
-        if (XLib.getInstance() == null) {
-            xlib = new XLib(this);
-            xlib.loadDataFiles();
-            xlib.finishInitialization();
-        } else {
-            xlib = XLib.getInstance();
-        }
     }
 
     public void initCaches() {
@@ -445,13 +435,13 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
                     FileUtil.copyDir(resource, backup);
                     // Remove all files from the backupped resource world but not the config & data that we cannot fetch from the instance.
                     remove: for (File remove : FileUtil.getFilesForFolder(resource)) {
-                                for (String nope : DungeonsXL.EXCLUDED_FILES) {
-                                    if (remove.getName().equals(nope)) {
-                                        continue remove;
-                                    }
-                                }
-                                remove.delete();
+                        for (String nope : DungeonsXL.EXCLUDED_FILES) {
+                            if (remove.getName().equals(nope)) {
+                                continue remove;
                             }
+                        }
+                        remove.delete();
+                    }
                     DResourceWorld.deleteUnusedFiles(file);
                     FileUtil.copyDir(file, resource, DungeonsXL.EXCLUDED_FILES);
                 }
@@ -470,7 +460,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     }
 
     @Override
-    public XLib getCaliburn() {
+    public XLib getXLib() {
         return xlib;
     }
 

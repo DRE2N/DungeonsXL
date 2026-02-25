@@ -39,7 +39,7 @@ import org.bukkit.entity.Player;
 public interface ConfigReader<V> {
 
     /**
-     * Reads a set of Caliburn items.
+     * Reads a set of XLib items.
      */
     static final ConfigReader<Set<ExItem>> EX_ITEM_SET_READER = (api, value) -> {
         if (!(value instanceof Collection)) {
@@ -47,12 +47,12 @@ public interface ConfigReader<V> {
         }
         Set<ExItem> set = new HashSet<>();
         for (Object entry : (Collection) value) {
-            set.add(api.getCaliburn().getExItem(entry));
+            set.add(api.getXLib().getExItem(entry));
         }
         return set;
     };
     /**
-     * Reads a set of Caliburn mobs.
+     * Reads a set of XLib mobs.
      */
     static final ConfigReader<Set<ExMob>> EX_MOB_SET_READER = (api, value) -> {
         if (!(value instanceof Collection)) {
@@ -60,12 +60,12 @@ public interface ConfigReader<V> {
         }
         Set<ExMob> set = new HashSet<>();
         for (Object entry : (Collection) value) {
-            set.add(api.getCaliburn().getExMob(entry));
+            set.add(api.getXLib().getExMob(entry));
         }
         return set;
     };
     /**
-     * Reads a map of Caliburn items as tool keys and a set of Caliburn items as block values.
+     * Reads a map of XLib items as tool keys and a set of XLib items as block values.
      */
     static final ConfigReader<Map<ExItem, HashSet<ExItem>>> TOOL_BLOCK_MAP_READER = (api, value) -> {
         if (!(value instanceof ConfigurationSection)) {
@@ -74,12 +74,12 @@ public interface ConfigReader<V> {
         ConfigurationSection section = (ConfigurationSection) value;
         Map<ExItem, HashSet<ExItem>> map = new HashMap<>();
         for (Map.Entry<String, Object> entry : section.getValues(false).entrySet()) {
-            ExItem tool = api.getCaliburn().getExItem(entry.getKey());
+            ExItem tool = api.getXLib().getExItem(entry.getKey());
             if (tool == null) {
                 continue;
             }
             HashSet<ExItem> blocks = new HashSet<>();
-            blocks.addAll(api.getCaliburn().deserializeExItemList(section, entry.getKey()));
+            blocks.addAll(api.getXLib().deserializeExItemList(section, entry.getKey()));
             map.put(tool, blocks);
         }
         return map;
@@ -98,7 +98,7 @@ public interface ConfigReader<V> {
             }
             return (Player p, GameWorld w, Block b) -> {
                 ExItem type = VanillaItem.get(b.getType());
-                ExItem breakTool = api.getCaliburn().getExItem(p.getItemInHand());
+                ExItem breakTool = api.getXLib().getExItem(p.getItemInHand());
                 return whitelist.containsKey(type)
                         && (whitelist.get(type) == null
                         || whitelist.get(type).isEmpty()

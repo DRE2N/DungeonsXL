@@ -45,7 +45,7 @@ public class MobSpawnTask extends BukkitRunnable {
 
         LivingEntity entity = sign.spawn();
         if (entity != null) {
-            api.wrapEntity(entity, sign.getGameWorld(), api.getCaliburn().getExMob(entity), sign.getMob());
+            api.wrapEntity(entity, sign.getGameWorld(), api.getXLib().getExMob(entity), sign.getMob());
         }
 
         if (k < n) {

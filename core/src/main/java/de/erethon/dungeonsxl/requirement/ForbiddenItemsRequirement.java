@@ -43,7 +43,7 @@ public class ForbiddenItemsRequirement implements Requirement {
     private Map<ExItem, Boolean> forbiddenItems = new HashMap<>();
 
     public ForbiddenItemsRequirement(DungeonsAPI api) {
-        xlib = api.getCaliburn();
+        xlib = api.getXLib();
     }
 
     /* Getters and setters */

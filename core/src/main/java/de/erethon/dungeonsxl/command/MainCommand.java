@@ -54,10 +54,7 @@ public class MainCommand extends DCommand {
         if (plugins.getPlugin("Vault") != null) {
             vault = plugins.getPlugin("Vault").getDescription().getVersion();
         }
-        String itemsxl = "";
-        if (plugins.getPlugin("ItemsXL") != null) {
-            itemsxl = plugins.getPlugin("ItemsXL").getDescription().getVersion();
-        }
+        String xlib = plugins.getPlugin("XLib-Runtime").getDescription().getVersion();
 
         MessageUtil.sendCenteredMessage(sender, "&4" + D[0] + "&f" + X[0] + L[0]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[1] + "&f" + X[1] + L[1]);
@@ -66,7 +63,7 @@ public class MainCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, "&4" + D[4] + "&f" + X[4] + L[4]);
         MessageUtil.sendCenteredMessage(sender, "&b&l###### " + DMessage.CMD_MAIN_WELCOME.getMessage() + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, itemsxl));
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, xlib));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP_INFO.getMessage());
         MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2013 Frank Baumann; 2015-2026 Daniel Saukel & contributors.");
         MessageUtil.sendCenteredMessage(sender, "Licensed under GPLv3.");

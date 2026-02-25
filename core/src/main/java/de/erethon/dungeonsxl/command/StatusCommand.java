@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.util.DependencyVersion;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.CompatibilityHandler;
 import org.bukkit.Bukkit;
@@ -67,7 +68,7 @@ public class StatusCommand extends DCommand {
         MessageUtil.sendMessage(sender, "= DungeonsXL: " + dungeonsxlVersion + " " + dungeonsxlVersionCorrect);
 
         Plugin vault = manager.getPlugin("Vault");
-        Plugin itemsxl = manager.getPlugin("ItemsXL");
+        Plugin xlib = manager.getPlugin("XLib-Runtime");
         Plugin citizens = manager.getPlugin("Citizens");
         Plugin custommobs = manager.getPlugin("CustomMobs");
         Plugin mythicmobs = manager.getPlugin("MythicMobs");
@@ -76,7 +77,7 @@ public class StatusCommand extends DCommand {
         String vaultVersion = "Not enabled";
         String permissionPlugin = "No plugin found";
         String economyPlugin = "No plugin found";
-        String itemsxlVersion = "Not enabled";
+        String xlibVersion = "Not enabled";
         String citizensVersion = "Not enabled";
         String custommobsVersion = "Not enabled";
         String insanemobsVersion = "Not enabled";
@@ -92,8 +93,8 @@ public class StatusCommand extends DCommand {
                 economyPlugin = plugin.getEconomyProvider().getName();
             }
         }
-        if (itemsxl != null) {
-            itemsxlVersion = itemsxl.getDescription().getVersion();
+        if (xlib != null) {
+            xlibVersion = xlib.getDescription().getVersion();
         }
         if (citizens != null) {
             citizensVersion = citizens.getDescription().getVersion();
@@ -111,7 +112,7 @@ public class StatusCommand extends DCommand {
         String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.7"));
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
         String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
-        String itemsxlVersionCorrect = getSymbol(itemsxlVersion.equals(DungeonsXL.LATEST_IXL));
+        String itemsxlVersionCorrect = getSymbol(xlibVersion.equals(DependencyVersion.XLIB));
         String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));
         String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
         String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("3."));
@@ -122,7 +123,7 @@ public class StatusCommand extends DCommand {
         MessageUtil.sendMessage(sender, "= Vault: " + vaultVersion + " " + vaultVersionCorrect);
         MessageUtil.sendMessage(sender, "  = Permissions: " + permissionPlugin + " " + permissionPluginCorrect);
         MessageUtil.sendMessage(sender, "  = Economy: " + economyPlugin + " " + economyPluginCorrect);
-        MessageUtil.sendMessage(sender, "= ItemsXL: " + itemsxlVersion + " " + itemsxlVersionCorrect);
+        MessageUtil.sendMessage(sender, "= XLib: " + xlib + " " + itemsxlVersionCorrect);
         MessageUtil.sendMessage(sender, "= Citizens: " + citizensVersion + " " + citizensVersionCorrect);
         MessageUtil.sendMessage(sender, "= CustomMobs: " + custommobsVersion + " " + custommobsVersionCorrect);
         MessageUtil.sendMessage(sender, "= InsaneMobs: " + insanemobsVersion + " " + insanemobsVersionCorrect);

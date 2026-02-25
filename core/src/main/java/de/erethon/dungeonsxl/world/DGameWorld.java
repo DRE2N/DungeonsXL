@@ -98,7 +98,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, Game game) {
         super(plugin, resourceWorld, folder);
-        xlib = plugin.getCaliburn();
+        xlib = plugin.getXLib();
         if (game == null) {
             throw new IllegalArgumentException("Game must not be null");
         }

@@ -35,7 +35,7 @@ public class FeeItemsRequirement implements Requirement {
 
     @Override
     public void setup(ConfigurationSection config) {
-        fee = api.getCaliburn().deserializeStackList(config, "feeItems");
+        fee = api.getXLib().deserializeStackList(config, "feeItems");
     }
 
     @Override
@@ -53,7 +53,7 @@ public class FeeItemsRequirement implements Requirement {
         ComponentBuilder builder = new ComponentBuilder(DMessage.REQUIREMENT_FEE_ITEMS + ": ").color(ChatColor.GOLD);
         boolean first = true;
         for (ItemStack stack : fee) {
-            String name = stack.getAmount() > 1 ? stack.getAmount() + " " : "" + api.getCaliburn().getExItem(stack).getName();
+            String name = stack.getAmount() > 1 ? stack.getAmount() + " " : "" + api.getXLib().getExItem(stack).getName();
             ChatColor color = player.getInventory().containsAtLeast(stack, stack.getAmount()) ? ChatColor.GREEN : ChatColor.DARK_RED;
             if (!first) {
                 builder.append(", ").color(ChatColor.WHITE);

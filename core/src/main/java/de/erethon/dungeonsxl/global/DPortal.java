@@ -66,7 +66,7 @@ public class DPortal extends GlobalProtection {
 
         block1 = world.getBlockAt(config.getInt("loc1.x"), config.getInt("loc1.y"), config.getInt("loc1.z"));
         block2 = world.getBlockAt(config.getInt("loc2.x"), config.getInt("loc2.y"), config.getInt("loc2.z"));
-        material = plugin.getCaliburn().getExItem(config.getString("material"));
+        material = plugin.getXLib().getExItem(config.getString("material"));
         if (material == null) {
             material = VanillaItem.NETHER_PORTAL;
         }

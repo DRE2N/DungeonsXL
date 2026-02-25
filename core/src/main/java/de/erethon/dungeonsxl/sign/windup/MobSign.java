@@ -133,7 +133,7 @@ public class MobSign extends Windup {
         LivingEntity spawned = null;
 
         if (provider == null) {
-            ExMob type = api.getCaliburn().getExMob(mob);
+            ExMob type = api.getXLib().getExMob(mob);
             if (type == null || !type.getSpecies().isAlive()) {
                 return null;
             }

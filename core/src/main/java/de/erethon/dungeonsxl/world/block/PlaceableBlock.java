@@ -46,7 +46,7 @@ public class PlaceableBlock extends GameBlock {
         this.gameWorld = gameWorld;
 
         for (String id : ids.split(",")) {
-            ExItem item = api.getCaliburn().getExItem(id);
+            ExItem item = api.getXLib().getExItem(id);
             if (item != null) {
                 materials.add(item);
             }

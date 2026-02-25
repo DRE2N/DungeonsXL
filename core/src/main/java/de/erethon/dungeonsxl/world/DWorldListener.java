@@ -70,7 +70,7 @@ public class DWorldListener implements Listener {
 
     public DWorldListener(DungeonsXL plugin) {
         this.plugin = plugin;
-        xlib = plugin.getCaliburn();
+        xlib = plugin.getXLib();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

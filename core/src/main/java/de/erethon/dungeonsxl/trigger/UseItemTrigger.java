@@ -36,7 +36,7 @@ public class UseItemTrigger extends AbstractTrigger {
     public UseItemTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
         super(api, owner, expression, value);
         name = value;
-        ExItem item = api.getCaliburn().getExItem(name);
+        ExItem item = api.getXLib().getExItem(name);
         if (item != null) {
             matchedName = item.toString();
         }

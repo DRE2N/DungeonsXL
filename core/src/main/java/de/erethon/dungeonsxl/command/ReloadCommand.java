@@ -27,7 +27,6 @@ import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.CompatibilityHandler;
 import de.erethon.xlib.compatibility.Internals;
 import java.util.Collection;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -55,15 +54,6 @@ public class ReloadCommand extends DCommand {
     public void onExecute(String[] args, CommandSender sender) {
         if (plugin.isLoadingWorld()) {
             MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_FAIL.getMessage());
-            return;
-        }
-        if (args.length >= 2 && (args[1].equalsIgnoreCase("-xlib") || args[1].equalsIgnoreCase("-c"))) {
-            plugin.getCaliburn().reload();
-            MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
-            String ci = String.valueOf(plugin.getCaliburn().getCustomItems().size());
-            String cm = String.valueOf(plugin.getCaliburn().getCustomMobs().size());
-            String lt = String.valueOf(plugin.getCaliburn().getLootTables().size());
-            MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_CALIBURN.getMessage(ci, cm, lt));
             return;
         }
 
@@ -97,10 +87,7 @@ public class ReloadCommand extends DCommand {
         if (plugins.getPlugin("Vault") != null) {
             vault = plugins.getPlugin("Vault").getDescription().getVersion();
         }
-        String ixl = "";
-        if (plugins.getPlugin("ItemsXL") != null) {
-            ixl = plugins.getPlugin("ItemsXL").getDescription().getVersion();
-        }
+        String xlib = plugins.getPlugin("XLib-Runtime").getDescription().getVersion();
 
         plugin.saveData();
         plugin.initFolders();
@@ -111,16 +98,7 @@ public class ReloadCommand extends DCommand {
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, ixl));
-        ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -xlib");
-        String message = DefaultFontInfo.center(DMessage.CMD_RELOAD_BUTTON_CALIBURN.getMessage());
-        TextComponent text = new TextComponent(message);
-        text.setClickEvent(onClick);
-        if (sender instanceof Player) {
-            ((Player) sender).spigot().sendMessage(text);
-        } else {
-            sender.sendMessage(BaseComponent.toPlainText(text));
-        }
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, xlib));
     }
 
 }

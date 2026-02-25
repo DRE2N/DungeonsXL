@@ -74,12 +74,12 @@ public class DropSign extends Windup {
 
     @Override
     public boolean validate() {
-        return api.getCaliburn().getExItem(getLine(1)) != null;
+        return api.getXLib().getExItem(getLine(1)) != null;
     }
 
     @Override
     public void initialize() {
-        ExItem item = api.getCaliburn().getExItem(getLine(1));
+        ExItem item = api.getXLib().getExItem(getLine(1));
 
         String[] attributes = getLine(2).split(",");
         if (attributes.length >= 1) {
