@@ -77,7 +77,7 @@ public interface GameWorld extends InstanceWorld {
      * <p>
      * For example, if the expression may wrap the string "D 10", but not "D 10, M ZOMBIE".
      * <p>
-     * Use {@link #initTriggers(TriggerListener, LogicalExpression)} to get an array of all {@link Trigger} objects for a compound expression (such as just "D
+     * Use {@link #createTriggers(TriggerListener, LogicalExpression)} to get an array of all {@link Trigger} objects for a compound expression (such as just "D
      * 10, M ZOMBIE").
      *
      * @param owner      the {@link TriggerListener} that the trigger belongs to

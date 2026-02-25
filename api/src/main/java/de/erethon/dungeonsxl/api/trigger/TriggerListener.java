@@ -21,6 +21,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
+ * Represents things that wait until a trigger is fired and then react to it, such as {@link de.erethon.dungeonsxl.api.sign.DungeonSign}.
+ *
  * @author Daniel Saukel
  */
 public interface TriggerListener {
