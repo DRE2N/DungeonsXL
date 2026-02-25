@@ -22,12 +22,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <spigotVersion.latest>1.21.1-R0.1-SNAPSHOT</spigotVersion.latest>
+        <dependencyVersion.xlib>7.0-SNAPSHOT</dependencyVersion.xlib>
     </properties>
     <dependencies>
         <dependency>
             <groupId>de.erethon.xlib</groupId>
             <artifactId>xlib-api</artifactId>
-            <version>7.0-SNAPSHOT</version>
+            <version>${dependencyVersion.xlib}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

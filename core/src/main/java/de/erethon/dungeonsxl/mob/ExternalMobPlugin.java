@@ -27,7 +27,7 @@ public enum ExternalMobPlugin implements ExternalMobProvider {
 
     CUSTOM_MOBS("CM", "ccmob spawn %mob% %world% %block_x% %block_y% %block_z%"),
     INSANE_MOBS("IM", "insanemobs %mob% %x% %y% %z% %world%"),
-    MYTHIC_MOBS("MM", "mythicmobs mobs spawn %mob% 1 %world%,%x%,%y%,%z%");
+    MYTHIC_MOBS("MM", "mythicmobs mobs spawn -s %mob% 1 %world%,%x%,%y%,%z%");
 
     private String identifier;
     private String command;

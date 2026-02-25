@@ -16,13 +16,71 @@
  */
 package de.erethon.dungeonsxl.util;
 
+import java.util.function.Predicate;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 /**
  * Lists compatible plugin versions.
  *
  * @author Daniel Saukel
  */
-public class DependencyVersion {
+public enum DependencyVersion {
 
-    public static final String XLIB = "7.0-SNAPSHOT";
+    XLIB("XLib-Runtime", "7.0-SNAPSHOT"),
+    BOSSSHOP("BossShop", "${dependencyVersion.bossshop}"),
+    CITIZENS("Citizens", "${dependencyVersion.citizens}"),
+    HOLOGRAPHIC_DISPLAYS("HolographicDisplays", "${dependencyVersion.holographicdisplays}"),
+    MODERN_LWC("LWC", "2.1.5-09ad392"),
+    PARTIES("Parties", "${dependencyVersion.parties}"),
+    PLACEHOLDER_API("PlaceholderAPI", "${dependencyVersion.placeholderapi}"),
+    VAULT("Vault", "1.7.3"),
+    // Two public plugins share this name
+    CUSTOM_MOBS("CustomMobs", "4.17", s -> {
+        try {
+            Class.forName("de.hellfirepvp.CustomMobs");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }),
+    INSANE_MOBS("InsaneMobs2", "3.0.1"),
+    MYTHIC_MOBS("MythicMobs", "5.11.2-6a371d59");
+
+    private String name;
+    private String version;
+    private Plugin plugin;
+
+    DependencyVersion(String name, String version) {
+        this(name, version, null);
+    }
+
+    DependencyVersion(String name, String version, Predicate<String> enabled) {
+        this.name = name;
+        this.version = version;
+        if (enabled == null || enabled.test(name)) {
+            plugin = Bukkit.getPluginManager().getPlugin(name);
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSupportedVersion() {
+        return version;
+    }
+
+    public String getEnabledVersion() {
+        return version;
+    }
+
+    public boolean isEnabled() {
+        return plugin != null;
+    }
+
+    public boolean check() {
+        return isEnabled() && getSupportedVersion().equals(getEnabledVersion());
+    }
 
 }

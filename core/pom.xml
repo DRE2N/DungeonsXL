@@ -9,6 +9,13 @@
         <artifactId>dungeonsxl-parent</artifactId>
         <version>0.19-SNAPSHOT</version>
     </parent>
+    <properties>
+        <dependencyVersion.bossshop>2.7.5</dependencyVersion.bossshop>
+        <dependencyVersion.citizens>2.0.26-SNAPSHOT</dependencyVersion.citizens>
+        <dependencyVersion.holographicdisplays>3.0.4</dependencyVersion.holographicdisplays>
+        <dependencyVersion.parties>3.2.16</dependencyVersion.parties>
+        <dependencyVersion.placeholderapi>2.12.2</dependencyVersion.placeholderapi>
+    </properties>
     <build>
         <resources>
             <resource>
@@ -68,19 +75,19 @@
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens-main</artifactId>
-            <version>2.0.26-SNAPSHOT</version>
+            <version>${dependencyVersion.citizens}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.filoghost.holographicdisplays</groupId>
             <artifactId>holographicdisplays-legacy-api-v2</artifactId>
-            <version>3.0.4</version>
+            <version>${dependencyVersion.holographicdisplays}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.black_ixx</groupId>
             <artifactId>BossShop</artifactId>
-            <version>2.7.5</version>
+            <version>${dependencyVersion.bossshop}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -92,13 +99,14 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.12.2</version>
+            <version>${dependencyVersion.placeholderapi}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.alessiodp.parties</groupId>
             <artifactId>parties-api</artifactId>
-            <version>3.2.16</version>
+            <version>${dependencyVersion.parties}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <repositories>

@@ -20,13 +20,16 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.DependencyVersion;
+import static de.erethon.dungeonsxl.util.DependencyVersion.*;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.CompatibilityHandler;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 /**
  * @author Daniel Saukel
@@ -34,7 +37,6 @@ import org.bukkit.plugin.PluginManager;
 public class StatusCommand extends DCommand {
 
     private CompatibilityHandler compat = CompatibilityHandler.getInstance();
-    private PluginManager manager = Bukkit.getPluginManager();
 
     public static final String TRUE = ChatColor.GREEN + "\u2714";
     public static final String FALSE = ChatColor.DARK_RED + "\u2718";
@@ -67,25 +69,9 @@ public class StatusCommand extends DCommand {
         MessageUtil.sendMessage(sender, "= Internals (package version): " + internalsVersion + " " + internalsVersionCorrect);
         MessageUtil.sendMessage(sender, "= DungeonsXL: " + dungeonsxlVersion + " " + dungeonsxlVersionCorrect);
 
-        Plugin vault = manager.getPlugin("Vault");
-        Plugin xlib = manager.getPlugin("XLib-Runtime");
-        Plugin citizens = manager.getPlugin("Citizens");
-        Plugin custommobs = manager.getPlugin("CustomMobs");
-        Plugin mythicmobs = manager.getPlugin("MythicMobs");
-        Plugin holographicdisplays = manager.getPlugin("HolographicDisplays");
-
-        String vaultVersion = "Not enabled";
         String permissionPlugin = "No plugin found";
         String economyPlugin = "No plugin found";
-        String xlibVersion = "Not enabled";
-        String citizensVersion = "Not enabled";
-        String custommobsVersion = "Not enabled";
-        String insanemobsVersion = "Not enabled";
-        String mythicmobsVersion = "Not enabled";
-        String holographicdisplaysVersion = "Not enabled";
-
-        if (vault != null) {
-            vaultVersion = vault.getDescription().getVersion();
+        if (VAULT.isEnabled()) {
             if (plugin.getPermissionProvider() != null) {
                 permissionPlugin = plugin.getPermissionProvider().getName();
             }
@@ -93,45 +79,39 @@ public class StatusCommand extends DCommand {
                 economyPlugin = plugin.getEconomyProvider().getName();
             }
         }
-        if (xlib != null) {
-            xlibVersion = xlib.getDescription().getVersion();
-        }
-        if (citizens != null) {
-            citizensVersion = citizens.getDescription().getVersion();
-        }
-        if (custommobs != null) {
-            custommobsVersion = custommobs.getDescription().getVersion();
-        }
-        if (mythicmobs != null) {
-            mythicmobsVersion = mythicmobs.getDescription().getVersion();
-        }
-        if (holographicdisplays != null) {
-            holographicdisplaysVersion = holographicdisplays.getDescription().getVersion();
-        }
-
-        String vaultVersionCorrect = getSymbol(vaultVersion.startsWith("1.7"));
         String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
         String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
-        String itemsxlVersionCorrect = getSymbol(xlibVersion.equals(DependencyVersion.XLIB));
-        String citizensVersionCorrect = getSymbol(citizensVersion.startsWith("2.0"));
-        String custommobsVersionCorrect = getSymbol(custommobsVersion.startsWith("4."));
-        String insanemobsVersionCorrect = getSymbol(insanemobsVersion.startsWith("3."));
-        String mythicmobsVersionCorrect = getSymbol(mythicmobsVersion.startsWith("4."));
-        String holographicdisplaysVersionCorrect = getSymbol(holographicdisplaysVersion.startsWith("2.4"));
 
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Dependency info:");
-        MessageUtil.sendMessage(sender, "= Vault: " + vaultVersion + " " + vaultVersionCorrect);
+        MessageUtil.sendMessage(sender, statusMsg(VAULT));
         MessageUtil.sendMessage(sender, "  = Permissions: " + permissionPlugin + " " + permissionPluginCorrect);
         MessageUtil.sendMessage(sender, "  = Economy: " + economyPlugin + " " + economyPluginCorrect);
-        MessageUtil.sendMessage(sender, "= XLib: " + xlib + " " + itemsxlVersionCorrect);
-        MessageUtil.sendMessage(sender, "= Citizens: " + citizensVersion + " " + citizensVersionCorrect);
-        MessageUtil.sendMessage(sender, "= CustomMobs: " + custommobsVersion + " " + custommobsVersionCorrect);
-        MessageUtil.sendMessage(sender, "= InsaneMobs: " + insanemobsVersion + " " + insanemobsVersionCorrect);
-        MessageUtil.sendMessage(sender, "= MythicMobs: " + mythicmobsVersion + " " + mythicmobsVersionCorrect);
-        MessageUtil.sendMessage(sender, "= HolographicDisplays: " + holographicdisplaysVersion + " " + holographicdisplaysVersionCorrect);
+        MessageUtil.sendMessage(sender, statusMsg(XLIB));
+        MessageUtil.sendMessage(sender, statusMsg(BOSSSHOP));
+        MessageUtil.sendMessage(sender, statusMsg(HOLOGRAPHIC_DISPLAYS));
+        MessageUtil.sendMessage(sender, statusMsg(MODERN_LWC));
+        MessageUtil.sendMessage(sender, statusMsg(PARTIES));
+        MessageUtil.sendMessage(sender, statusMsg(PLACEHOLDER_API));
+        MessageUtil.sendMessage(sender, statusMsg(CITIZENS));
+        MessageUtil.sendMessage(sender, statusMsg(CUSTOM_MOBS));
+        MessageUtil.sendMessage(sender, statusMsg(INSANE_MOBS));
+        MessageUtil.sendMessage(sender, statusMsg(MYTHIC_MOBS));
     }
 
-    public static String getSymbol(boolean value) {
+    private static BaseComponent statusMsg(DependencyVersion dependency) {
+        boolean check = dependency.check();
+        TextComponent text = new TextComponent("= " + dependency.getName() + ": " + dependency.getEnabledVersion() + " " + getSymbol(check));
+        if (!check) {
+            HoverEvent event = new HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
+                    new ComponentBuilder("The tested version is: ").color(ChatColor.GRAY)
+                            .append(dependency.getSupportedVersion()).color(ChatColor.GREEN).create());
+            text.setHoverEvent(event);
+        }
+        return text;
+    }
+
+    private static String getSymbol(boolean value) {
         return value ? TRUE : FALSE;
     }
 
