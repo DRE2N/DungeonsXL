@@ -38,7 +38,7 @@ public class FeeMoneyRequirement implements Requirement {
     private double fee;
 
     public FeeMoneyRequirement(DungeonsAPI api) {
-        econ = ((DungeonsXL) api).getEconomyProvider();
+        econ = ((DungeonsXL) api).getXLib().getEconomyProvider();
     }
 
     /* Getters and setters */

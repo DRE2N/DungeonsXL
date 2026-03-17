@@ -52,7 +52,7 @@ public class RewardChest extends GameBlock {
 
     public RewardChest(DungeonsXL plugin, Block container, double moneyReward, int levelReward, ItemStack[] itemReward) {
         super(plugin, container);
-        econ = plugin.getEconomyProvider();
+        econ = plugin.getXLib().getEconomyProvider();
 
         this.moneyReward = moneyReward;
         this.levelReward = levelReward;

@@ -32,6 +32,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.global.DPortal;
 import de.erethon.dungeonsxl.util.LocationString;
+import de.erethon.xlib.XLib;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.Version;
 import java.io.File;
@@ -55,6 +56,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class DGlobalPlayer implements GlobalPlayer {
 
     protected DungeonsXL plugin;
+    protected XLib xlib;
 
     protected boolean is1_9 = Version.isAtLeast(Version.MC1_9);
 
@@ -77,6 +79,7 @@ public class DGlobalPlayer implements GlobalPlayer {
 
     public DGlobalPlayer(DungeonsXL plugin, Player player, boolean reset) {
         this.plugin = plugin;
+        xlib = plugin.getXLib();
 
         this.player = player;
 
@@ -443,13 +446,13 @@ public class DGlobalPlayer implements GlobalPlayer {
             return;
         }
 
-        if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
+        if (xlib.getPermissionProvider() != null && xlib.getPermissionProvider().hasGroupSupport()) {
             String startGroup = plugin.getMainConfig().getTutorialStartGroup();
             if (startGroup == null) {
                 return;
             }
-            if (plugin.isGroupEnabled(startGroup)) {
-                plugin.getPermissionProvider().playerAddGroup(player, startGroup);
+            if (xlib.isGroupEnabled(startGroup)) {
+                xlib.getPermissionProvider().playerAddGroup(player, startGroup);
             }
         }
 

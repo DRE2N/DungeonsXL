@@ -39,7 +39,7 @@ import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import de.erethon.dungeonsxl.command.DCommandCache;
+import de.erethon.dungeonsxl.command.DCommandRegistry;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
@@ -76,11 +76,9 @@ import de.erethon.dungeonsxl.world.LWCIntegration;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import de.erethon.xlib.XLib;
 import de.erethon.xlib.chat.MessageUtil;
-import de.erethon.xlib.compatibility.Internals;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.mob.ExMob;
-import de.erethon.xlib.plugin.DREPlugin;
-import de.erethon.xlib.plugin.DREPluginSettings;
+import de.erethon.xlib.plugin.PluginInit;
 import de.erethon.xlib.util.FileUtil;
 import de.erethon.xlib.util.Registry;
 import java.io.File;
@@ -99,21 +97,21 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.inventivetalent.update.spiget.comparator.VersionComparator;
 
 /**
  * @author Frank Baumann, Tobias Schmitz, Daniel Saukel
  */
-public class DungeonsXL extends DREPlugin implements DungeonsAPI {
+public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
 
     /* Plugin & lib instances */
     private static DungeonsXL instance;
     private XLib xlib;
+    private PluginInit init;
 
     /* Util instances */
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
@@ -153,6 +151,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
     @Deprecated
     private class SignRegistry extends Registry<String, Class<? extends DungeonSign>> {
+
         @Override
         public Class<? extends DungeonSign> get(String key) {
             Class<? extends DungeonSign> clss = super.get(key);
@@ -211,46 +210,33 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
     private MainConfig mainConfig;
 
     /* Caches & registries of internal features */
-    private DCommandCache dCommands;
     private GlobalProtectionCache protections;
     private Registry<String, SignScript> signScriptRegistry;
     private Registry<String, CommandScript> commandScriptRegistry;
 
-    public DungeonsXL() {
-        settings = DREPluginSettings.builder()
-                .internals(Internals.INDEPENDENT)
-                .economy(true)
-                .permissions(true)
-                .metrics(true)
-                .spigotMCResourceId(9488)
-                .bStatsResourceId(1039)
-                .versionComparator(VersionComparator.EQUAL)
-                .build();
-    }
-
     @Override
     public void onEnable() {
-        super.onEnable();
-        String ixlVersion = manager.isPluginEnabled("XLib-Runtime") ? manager.getPlugin("XLib-Runtime").getDescription().getVersion() : "";
-        if (!ixlVersion.equals(DependencyVersion.XLIB)) {
-            getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v" + DependencyVersion.XLIB + " or higher to run.");
-            manager.disablePlugin(this);
+        if (!DependencyVersion.XLIB.check()) {
+            getLogger().log(Level.SEVERE, "DungeonsXL requires ItemsXL v{0} or higher to run.", DependencyVersion.XLIB);
+            getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         instance = this;
-        initFolders();
         xlib = XLib.getInstance();
+        init = new PluginInit(this, xlib, DependencyVersion.META);
+        initFolders();
         DPermission.register();
         registerModule(new DXLModule());
-        initCaches();
+        init();
         checkState();
-        if (manager.isPluginEnabled("PlaceholderAPI")) {
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderUtil(this, "dxl").register();
         }
-        if (manager.isPluginEnabled("Parties")) {
+        if (getServer().getPluginManager().isPluginEnabled("Parties")) {
             registerGroupAdapter(new PartiesAdapter(this));
         }
+        init.init(new DCommandRegistry(this, init), mainConfig.isUpdaterEnabled());
         loaded = true;
     }
 
@@ -281,7 +267,7 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         COMMANDS.mkdir();
     }
 
-    public void initCaches() {
+    public void reload() {
         /* Add default values */
         requirementRegistry = new Registry<>();
         modules.forEach(m -> m.initRequirements(requirementRegistry));
@@ -361,10 +347,10 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         for (ExternalMobPlugin externalMobPlugin : ExternalMobPlugin.values()) {
             externalMobProviderRegistry.add(externalMobPlugin.getIdentifier(), externalMobPlugin);
         }
-        if (manager.getPlugin("Citizens") != null) {
+        if (getServer().getPluginManager().getPlugin("Citizens") != null) {
             CitizensMobProvider citizensMobProvider = new CitizensMobProvider(this);
             externalMobProviderRegistry.add("CI", citizensMobProvider);
-            manager.registerEvents(citizensMobProvider, this);
+            getServer().getPluginManager().registerEvents(citizensMobProvider, this);
         } else {
             MessageUtil.log(this, "Could not find compatible Citizens plugin. The mob provider Citizens (\"CI\") will not get enabled...");
         }
@@ -382,16 +368,10 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
 
         gameCache = new ArrayList<>();
         instanceCache = new Registry<>();
+    }
 
-        /* Initialize commands */
-        dCommands = new DCommandCache(this);
-        dCommands.register(this);
-
-        /* Following initializations are not to be repeated on reload */
-        if (loaded) {
-            return;
-        }
-
+    public void init() {
+        reload();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -400,13 +380,13 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         }.runTaskTimer(this, 2L, 2L);
 
         /* Initialize listeners */
-        manager.registerEvents(new DWorldListener(this), this);
-        manager.registerEvents(new GlobalProtectionListener(this), this);
-        manager.registerEvents(new RewardListener(this), this);
-        manager.registerEvents(new TriggerListener(this), this);
-        manager.registerEvents(new DSignListener(this), this);
-        manager.registerEvents(new DMobListener(this), this);
-        manager.registerEvents(new DPlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new DWorldListener(this), this);
+        getServer().getPluginManager().registerEvents(new GlobalProtectionListener(this), this);
+        getServer().getPluginManager().registerEvents(new RewardListener(this), this);
+        getServer().getPluginManager().registerEvents(new TriggerListener(this), this);
+        getServer().getPluginManager().registerEvents(new DSignListener(this), this);
+        getServer().getPluginManager().registerEvents(new DMobListener(this), this);
+        getServer().getPluginManager().registerEvents(new DPlayerListener(this), this);
     }
 
     public void saveData() {
@@ -434,7 +414,8 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
                     File backup = new File(DungeonsXL.BACKUPS, resource.getName() + "-" + System.currentTimeMillis() + "_crashbackup");
                     FileUtil.copyDir(resource, backup);
                     // Remove all files from the backupped resource world but not the config & data that we cannot fetch from the instance.
-                    remove: for (File remove : FileUtil.getFilesForFolder(resource)) {
+                    remove:
+                    for (File remove : FileUtil.getFilesForFolder(resource)) {
                         for (String nope : DungeonsXL.EXCLUDED_FILES) {
                             if (remove.getName().equals(nope)) {
                                 continue remove;
@@ -457,6 +438,10 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
      */
     public static DungeonsXL getInstance() {
         return instance;
+    }
+
+    public PluginInit getInitializer() {
+        return init;
     }
 
     @Override
@@ -584,9 +569,13 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
         this.loadingWorld = loadingWorld;
     }
 
-    @Override
-    public DCommandCache getCommandCache() {
-        return dCommands;
+    /**
+     * Returns the command registry.
+     *
+     * @return the command registry
+     */
+    public DCommandRegistry getCommandRegistry() {
+        return (DCommandRegistry) init.getCommandRegistry();
     }
 
     /**
@@ -619,14 +608,6 @@ public class DungeonsXL extends DREPlugin implements DungeonsAPI {
      */
     public Registry<String, CommandScript> getCommandScriptRegistry() {
         return commandScriptRegistry;
-    }
-
-    @Deprecated
-    private Set<Inventory> guis = new HashSet<>();
-
-    @Deprecated
-    public Set<Inventory> getGUIs() {
-        return guis;
     }
 
     /* Object initialization */

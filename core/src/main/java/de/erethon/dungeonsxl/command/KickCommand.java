@@ -45,7 +45,7 @@ public class KickCommand extends DCommand {
         Player player = Bukkit.getPlayer(args[1]);
 
         if (player != null) {
-            plugin.getCommandCache().leave.onExecute(new String[]{plugin.getCommandCache().leave.getCommand()}, player);
+            plugin.getCommandRegistry().leave.onExecute(new String[]{plugin.getCommandRegistry().leave.getCommand()}, player);
             MessageUtil.sendMessage(sender, DMessage.CMD_KICK_SUCCESS.getMessage(player.getName()));
 
         } else {

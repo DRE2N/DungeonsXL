@@ -16,6 +16,12 @@
  */
 package de.erethon.dungeonsxl.util;
 
+import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.xlib.compatibility.Version;
+import de.erethon.xlib.plugin.PluginMeta;
+import de.erethon.xlib.spiget.comparator.VersionComparator;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.function.Predicate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -27,14 +33,14 @@ import org.bukkit.plugin.Plugin;
  */
 public enum DependencyVersion {
 
-    XLIB("XLib-Runtime", "7.0-SNAPSHOT"),
-    BOSSSHOP("BossShop", "${dependencyVersion.bossshop}"),
-    CITIZENS("Citizens", "${dependencyVersion.citizens}"),
-    HOLOGRAPHIC_DISPLAYS("HolographicDisplays", "${dependencyVersion.holographicdisplays}"),
+    XLIB("XLib-Runtime", getProperties().getProperty("dependencyVersion.xlib")),
+    BOSSSHOP("BossShop", getProperties().getProperty("dependencyVersion.bossshop")),
+    CITIZENS("Citizens", getProperties().getProperty("dependencyVersion.citizens")),
+    HOLOGRAPHIC_DISPLAYS("HolographicDisplays", getProperties().getProperty("dependencyVersion.holographicdisplays")),
     MODERN_LWC("LWC", "2.1.5-09ad392"),
-    PARTIES("Parties", "${dependencyVersion.parties}"),
-    PLACEHOLDER_API("PlaceholderAPI", "${dependencyVersion.placeholderapi}"),
-    VAULT("Vault", "1.7.3"),
+    PARTIES("Parties", getProperties().getProperty("dependencyVersion.parties")),
+    PLACEHOLDER_API("PlaceholderAPI", getProperties().getProperty("dependencyVersion.placeholderapi")),
+    VAULT("Vault", "1.7.3-b131"),
     // Two public plugins share this name
     CUSTOM_MOBS("CustomMobs", "4.17", s -> {
         try {
@@ -46,6 +52,22 @@ public enum DependencyVersion {
     }),
     INSANE_MOBS("InsaneMobs2", "3.0.1"),
     MYTHIC_MOBS("MythicMobs", "5.11.2-6a371d59");
+
+    /**
+     * Meta information about this project.
+     */
+    public static final PluginMeta META = new PluginMeta.Builder("DungeonsXL")
+            .minVersion(Version.MC1_8)
+            .paperState(PluginMeta.State.NOT_SUPPORTED)
+            .spigotState(PluginMeta.State.SUPPORTED)
+            .economyState(PluginMeta.State.SUPPORTED)
+            .permissionsState(PluginMeta.State.SUPPORTED)
+            .spigotMCResourceId(9488)
+            .bStatsResourceId(1039)
+            .versionComparator(VersionComparator.SEM_VER_SNAPSHOT)
+            .build();
+
+    private static Properties properties;
 
     private String name;
     private String version;
@@ -72,7 +94,7 @@ public enum DependencyVersion {
     }
 
     public String getEnabledVersion() {
-        return version;
+        return plugin.getDescription().getVersion();
     }
 
     public boolean isEnabled() {
@@ -81,6 +103,18 @@ public enum DependencyVersion {
 
     public boolean check() {
         return isEnabled() && getSupportedVersion().equals(getEnabledVersion());
+    }
+
+    public static Properties getProperties() {
+        if (properties == null) {
+            properties = new Properties();
+            try {
+                properties.load(DungeonsXL.class.getClassLoader().getResourceAsStream("dxl.properties"));
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return properties;
     }
 
 }

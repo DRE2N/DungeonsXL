@@ -48,9 +48,10 @@ public class MainConfig extends DREConfig {
         NEVER
     }
 
-    public static final int CONFIG_VERSION = 20;
+    public static final int CONFIG_VERSION = 21;
 
     private String language = "english";
+    private boolean updaterEnabled = true;
     private boolean enableEconomy = false;
     private boolean groupAdaptersEnabled = false;
 
@@ -130,6 +131,14 @@ public class MainConfig extends DREConfig {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public boolean isUpdaterEnabled() {
+        return updaterEnabled;
+    }
+
+    public void setUpdaterEnabled(boolean enabled) {
+        updaterEnabled = enabled;
     }
 
     public boolean isEconomyEnabled() {
@@ -363,6 +372,9 @@ public class MainConfig extends DREConfig {
         if (!config.contains("language")) {
             config.set("language", language);
         }
+        if (!config.contains("updaterEnabled")) {
+            config.set("updaterEnabled", updaterEnabled);
+        }
 
         if (!config.contains("enableEconomy")) {
             config.set("enableEconomy", enableEconomy);
@@ -493,7 +505,8 @@ public class MainConfig extends DREConfig {
     @Override
     public void load() {
         language = config.getString("language", language);
-        plugin.getMessageHandler().setDefaultLanguage(language);
+        plugin.getInitializer().getMessageHandler().setDefaultLanguage(language);
+        updaterEnabled = config.getBoolean("updaterEnabled", updaterEnabled);
         enableEconomy = config.getBoolean("enableEconomy", enableEconomy);
         groupAdaptersEnabled = config.getBoolean("groupAdaptersEnabled", groupAdaptersEnabled);
         chatEnabled = config.getBoolean("chatEnabled", chatEnabled);

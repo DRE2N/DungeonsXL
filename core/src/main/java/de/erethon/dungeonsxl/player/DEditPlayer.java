@@ -61,9 +61,9 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
         }
 
         // Permission bridge
-        if (plugin.getPermissionProvider() != null) {
+        if (xlib.getPermissionProvider() != null) {
             for (String permission : plugin.getMainConfig().getEditPermissions()) {
-                plugin.getPermissionProvider().playerAddTransient(getWorld().getName(), player, permission);
+                xlib.getPermissionProvider().playerAddTransient(getWorld().getName(), player, permission);
             }
         }
     }
@@ -89,9 +89,9 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
     @Override
     public void delete() {
         // Permission bridge
-        if (plugin.getPermissionProvider() != null) {
+        if (xlib.getPermissionProvider() != null) {
             for (String permission : plugin.getMainConfig().getEditPermissions()) {
-                plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
+                xlib.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
             }
         }
 

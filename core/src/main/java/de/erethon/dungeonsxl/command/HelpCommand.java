@@ -44,7 +44,7 @@ public class HelpCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        Set<DRECommand> dCommandList = plugin.getCommandCache().getCommands();
+        Set<DRECommand> dCommandList = plugin.getCommandRegistry().getCommands();
         ArrayList<DRECommand> toSend = new ArrayList<>();
 
         int page = 1;

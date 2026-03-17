@@ -22,7 +22,7 @@ import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.DependencyVersion;
 import static de.erethon.dungeonsxl.util.DependencyVersion.*;
 import de.erethon.xlib.chat.MessageUtil;
-import de.erethon.xlib.compatibility.CompatibilityHandler;
+import de.erethon.xlib.compatibility.Version;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -35,8 +35,6 @@ import org.bukkit.command.CommandSender;
  * @author Daniel Saukel
  */
 public class StatusCommand extends DCommand {
-
-    private CompatibilityHandler compat = CompatibilityHandler.getInstance();
 
     public static final String TRUE = ChatColor.GREEN + "\u2714";
     public static final String FALSE = ChatColor.DARK_RED + "\u2718";
@@ -54,33 +52,36 @@ public class StatusCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        String minecraftVersion = compat.getVersion().toString();
-        String bukkitVersion = Bukkit.getName() + (compat.isSpigot() ? " (Spigot)" : "") + " " + Bukkit.getBukkitVersion();
-        String internalsVersion = compat.getInternals().toString();
+        String minecraftVersion = Version.get().toString();
+        String bukkitVersion = Bukkit.getBukkitVersion();
         String dungeonsxlVersion = plugin.getDescription().getVersion();
 
-        String internalsVersionCorrect = getSymbol(plugin.getSettings().getInternals().contains(compat.getInternals()));
+        boolean atLeastMin = Version.isAtLeast(DependencyVersion.META.getMinVersion());
+        boolean atMostMax = Version.isAtMost(Version.values()[Version.values().length - 2]);
+        String versionCorrect = getSymbol(atLeastMin && atMostMax);
+        if (atLeastMin && !atMostMax) {
+            versionCorrect += "(possibly works through forward compatibility)";
+        }
         String dungeonsxlVersionCorrect = getSymbol(!dungeonsxlVersion.contains("SNAPSHOT"));
 
         MessageUtil.sendCenteredMessage(sender, "&4&l=> &6STATUS &4&l<=");
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Version info:");
-        MessageUtil.sendMessage(sender, "= Minecraft: " + minecraftVersion + " " + internalsVersionCorrect);
-        MessageUtil.sendMessage(sender, "= Bukkit: " + bukkitVersion + " " + internalsVersionCorrect);
-        MessageUtil.sendMessage(sender, "= Internals (package version): " + internalsVersion + " " + internalsVersionCorrect);
+        MessageUtil.sendMessage(sender, "= Minecraft: " + minecraftVersion + " " + versionCorrect);
+        MessageUtil.sendMessage(sender, "= Bukkit: " + bukkitVersion + " " + versionCorrect);
         MessageUtil.sendMessage(sender, "= DungeonsXL: " + dungeonsxlVersion + " " + dungeonsxlVersionCorrect);
 
         String permissionPlugin = "No plugin found";
         String economyPlugin = "No plugin found";
         if (VAULT.isEnabled()) {
-            if (plugin.getPermissionProvider() != null) {
-                permissionPlugin = plugin.getPermissionProvider().getName();
+            if (xlib.getPermissionProvider() != null) {
+                permissionPlugin = xlib.getPermissionProvider().getName();
             }
-            if (plugin.getEconomyProvider() != null) {
-                economyPlugin = plugin.getEconomyProvider().getName();
+            if (xlib.getEconomyProvider() != null) {
+                economyPlugin = xlib.getEconomyProvider().getName();
             }
         }
-        String permissionPluginCorrect = getSymbol(plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport());
-        String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || plugin.getEconomyProvider() != null);
+        String permissionPluginCorrect = getSymbol(xlib.getPermissionProvider() != null && xlib.getPermissionProvider().hasGroupSupport());
+        String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || xlib.getEconomyProvider() != null);
 
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Dependency info:");
         MessageUtil.sendMessage(sender, statusMsg(VAULT));

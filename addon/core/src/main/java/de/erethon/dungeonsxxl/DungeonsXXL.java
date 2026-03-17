@@ -16,14 +16,14 @@ import de.erethon.dungeonsxxl.requirement.*;
 import de.erethon.dungeonsxxl.sign.*;
 import de.erethon.dungeonsxxl.util.GlowUtil;
 import de.erethon.xlib.compatibility.Internals;
-import de.erethon.xlib.plugin.DREPlugin;
+import de.erethon.xlib.plugin.PluginInit;
 import de.erethon.xlib.plugin.DREPluginSettings;
 import de.erethon.xlib.util.Registry;
 
 /**
  * @author Daniel Saukel
  */
-public class DungeonsXXL extends DREPlugin implements DungeonModule {
+public class DungeonsXXL extends PluginInit implements DungeonModule {
 
     private static DungeonsXXL instance;
     private DungeonsXL dxl;

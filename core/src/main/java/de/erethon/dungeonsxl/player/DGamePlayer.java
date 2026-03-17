@@ -384,9 +384,9 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         // Permission bridge
-        if (plugin.getPermissionProvider() != null) {
+        if (xlib.getPermissionProvider() != null) {
             for (String permission : rules.getState(GameRule.GAME_PERMISSIONS)) {
-                plugin.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
+                xlib.getPermissionProvider().playerRemoveTransient(getWorld().getName(), player, permission);
             }
         }
 
@@ -462,15 +462,15 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             return;
         }
         getData().setFinishedTutorial(true);
-        if (plugin.getPermissionProvider() != null && plugin.getPermissionProvider().hasGroupSupport()) {
+        if (xlib.getPermissionProvider() != null && xlib.getPermissionProvider().hasGroupSupport()) {
             String endGroup = plugin.getMainConfig().getTutorialEndGroup();
-            if (plugin.isGroupEnabled(endGroup)) {
-                plugin.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
+            if (xlib.isGroupEnabled(endGroup)) {
+                xlib.getPermissionProvider().playerAddGroup(getPlayer(), endGroup);
             }
 
             String startGroup = plugin.getMainConfig().getTutorialStartGroup();
-            if (plugin.isGroupEnabled(startGroup)) {
-                plugin.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
+            if (xlib.isGroupEnabled(startGroup)) {
+                xlib.getPermissionProvider().playerRemoveGroup(getPlayer(), startGroup);
             }
         }
     }
@@ -584,9 +584,9 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         player.setGameMode(rules.getState(GameRule.GAME_MODE));
 
         // Permission bridge
-        if (plugin.getPermissionProvider() != null) {
+        if (xlib.getPermissionProvider() != null) {
             for (String permission : rules.getState(GameRule.GAME_PERMISSIONS)) {
-                plugin.getPermissionProvider().playerAddTransient(getGame().getWorld().getWorld().getName(), player, permission);
+                xlib.getPermissionProvider().playerAddTransient(getGame().getWorld().getWorld().getName(), player, permission);
             }
         }
     }

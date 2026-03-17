@@ -256,7 +256,7 @@ public enum DMessage implements Message {
 
     @Override
     public MessageHandler getMessageHandler() {
-        return DungeonsXL.getInstance().getMessageHandler();
+        return DungeonsXL.getInstance().getInitializer().getMessageHandler();
     }
 
     @Override

@@ -24,8 +24,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.xlib.chat.DefaultFontInfo;
 import de.erethon.xlib.chat.MessageUtil;
-import de.erethon.xlib.compatibility.CompatibilityHandler;
-import de.erethon.xlib.compatibility.Internals;
+import de.erethon.xlib.compatibility.Version;
 import java.util.Collection;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -82,7 +81,7 @@ public class ReloadCommand extends DCommand {
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
         int loaded = plugin.getInstanceCache().size();
         int players = this.dPlayers.getAllGamePlayers().size();
-        Internals internals = CompatibilityHandler.getInstance().getInternals();
+        String internals = Version.get().getRelocationTarget();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {
             vault = plugins.getPlugin("Vault").getDescription().getVersion();
@@ -91,14 +90,14 @@ public class ReloadCommand extends DCommand {
 
         plugin.saveData();
         plugin.initFolders();
-        plugin.initCaches();
+        plugin.reload();
         plugin.checkState();
         plugin.getGroupAdapters().forEach(GroupAdapter::clear);
 
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, xlib));
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(internals, vault, xlib));
     }
 
 }

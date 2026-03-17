@@ -17,15 +17,16 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.xlib.command.DRECommandCache;
+import de.erethon.xlib.command.DRECommandRegistry;
 import de.erethon.xlib.compatibility.Version;
+import de.erethon.xlib.plugin.PluginInit;
 
 /**
  * An enumeration of all command instances.
  *
  * @author Daniel Saukel
  */
-public class DCommandCache extends DRECommandCache {
+public class DCommandRegistry extends DRECommandRegistry {
 
     public static final String LABEL = "dungeonsxl";
 
@@ -59,8 +60,8 @@ public class DCommandCache extends DRECommandCache {
     public TestCommand test;
     public UninviteCommand uninvite;
 
-    public DCommandCache(DungeonsXL plugin) {
-        super(LABEL, plugin);
+    public DCommandRegistry(DungeonsXL plugin, PluginInit init) {
+        super(LABEL, init);
 
         breakCmd = new BreakCommand(plugin);
         chat = new ChatCommand(plugin);

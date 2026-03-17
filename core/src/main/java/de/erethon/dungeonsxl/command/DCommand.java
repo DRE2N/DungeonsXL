@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.command;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.config.MainConfig;
+import de.erethon.xlib.XLib;
 import de.erethon.xlib.command.DRECommand;
 
 /**
@@ -27,11 +28,13 @@ import de.erethon.xlib.command.DRECommand;
 public abstract class DCommand extends DRECommand {
 
     protected DungeonsXL plugin;
+    protected XLib xlib;
     protected MainConfig config;
     protected PlayerCache dPlayers;
 
     protected DCommand(DungeonsXL plugin) {
         this.plugin = plugin;
+        xlib = plugin.getXLib();
         config = plugin.getMainConfig();
         dPlayers = plugin.getPlayerCache();
     }

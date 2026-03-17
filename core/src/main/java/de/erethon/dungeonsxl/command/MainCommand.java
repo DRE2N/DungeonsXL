@@ -21,8 +21,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import static de.erethon.xlib.chat.FatLetter.*;
 import de.erethon.xlib.chat.MessageUtil;
-import de.erethon.xlib.compatibility.CompatibilityHandler;
-import de.erethon.xlib.compatibility.Internals;
+import de.erethon.xlib.compatibility.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -49,7 +48,7 @@ public class MainCommand extends DCommand {
         int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
         int loaded = plugin.getInstanceCache().size();
         int players = dPlayers.getAllInstancePlayers().size();
-        Internals internals = CompatibilityHandler.getInstance().getInternals();
+        String internals = Version.get().getRelocationTarget();
         String vault = "";
         if (plugins.getPlugin("Vault") != null) {
             vault = plugins.getPlugin("Vault").getDescription().getVersion();
@@ -63,7 +62,7 @@ public class MainCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, "&4" + D[4] + "&f" + X[4] + L[4]);
         MessageUtil.sendCenteredMessage(sender, "&b&l###### " + DMessage.CMD_MAIN_WELCOME.getMessage() + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(String.valueOf(internals), vault, xlib));
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(internals, vault, xlib));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP_INFO.getMessage());
         MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2013 Frank Baumann; 2015-2026 Daniel Saukel & contributors.");
         MessageUtil.sendCenteredMessage(sender, "Licensed under GPLv3.");

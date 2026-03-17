@@ -20,7 +20,9 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Rocker;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.xlib.compatibility.CompatibilityHandler;
+import de.erethon.xlib.compatibility.RuntimeTrait;
+import de.erethon.xlib.compatibility.RuntimeType;
+import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.item.ExItem;
 import de.erethon.xlib.item.VanillaItem;
 import de.erethon.xlib.util.NumberUtil;
@@ -145,8 +147,9 @@ public class BlockSign extends Rocker {
         }
         if (craftBlockSetData == null) {
             try {
+                String relocationTarget = RuntimeType.get().hasTrait(RuntimeTrait.OBC_RELOCATIONS) ? (Version.get().getRelocationTarget() + ".") : "";
                 craftBlockSetData = Class.forName(
-                        "org.bukkit.craftbukkit." + CompatibilityHandler.getInstance().getInternals() + ".block.CraftBlock")
+                        "org.bukkit.craftbukkit." + relocationTarget + "block.CraftBlock")
                         .getDeclaredMethod("setData", byte.class);
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalArgumentException exception) {
                 exception.printStackTrace();
