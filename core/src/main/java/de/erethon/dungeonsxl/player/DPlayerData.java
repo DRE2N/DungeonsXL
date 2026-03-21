@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.player;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.util.AttributeUtil;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.config.ConfigUtil;
@@ -543,7 +544,7 @@ public class DPlayerData extends DREConfig {
                     if (!(entry.getValue() instanceof Double)) {
                         continue;
                     }
-                    Attribute attribute = EnumUtil.getEnum(Attribute.class, entry.getKey());
+                    Attribute attribute = AttributeUtil.get(entry.getKey());
                     Double base = (Double) entry.getValue();
                     oldAttributeBases.put(attribute, base);
                 }
@@ -556,7 +557,7 @@ public class DPlayerData extends DREConfig {
                     if (!(entry.getValue() instanceof Collection)) {
                         continue;
                     }
-                    Attribute attribute = EnumUtil.getEnum(Attribute.class, entry.getKey());
+                    Attribute attribute = AttributeUtil.get(entry.getKey());
                     Collection<AttributeModifier> mods = (Collection<AttributeModifier>) entry.getValue();
                     oldAttributeMods.putAll(attribute, mods);
                 }

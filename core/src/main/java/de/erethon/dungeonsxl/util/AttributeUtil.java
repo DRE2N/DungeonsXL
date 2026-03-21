@@ -17,9 +17,10 @@
 package de.erethon.dungeonsxl.util;
 
 import com.google.common.collect.ImmutableMap;
+import de.erethon.xlib.compatibility.Version;
 import java.util.Map;
+import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
-import static org.bukkit.attribute.Attribute.*;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 
@@ -28,10 +29,38 @@ import org.bukkit.entity.Player;
  */
 public class AttributeUtil {
 
+    public static final Attribute ATTACK_DAMAGE = Attribute.valueOf(Version.isAtLeast(Version.MC1_21_2) ? "ATTACK_DAMAGE" : "GENERIC_ATTACK_DAMAGE");
+    public static final Attribute MAX_HEALTH = Attribute.valueOf(Version.isAtLeast(Version.MC1_21_2) ? "MAX_HEALTH" : "GENERIC_MOVEMENT_SPEED");
+    public static final Attribute MOVEMENT_SPEED = Attribute.valueOf(Version.isAtLeast(Version.MC1_21_2) ? "MOVEMENT_SPEED" : "GENERIC_MOVEMENT_SPEED");
+
     private static final Map<Attribute, Double> DEFAULT_PLAYER_VALUES = ImmutableMap.of(
-            GENERIC_MOVEMENT_SPEED, .1, // .7
-            GENERIC_ATTACK_DAMAGE, 1.0 // 2.0
+            MOVEMENT_SPEED, .1, // .7
+            ATTACK_DAMAGE, 1.0 // 2.0
     );
+
+    /**
+     * Returns the attribute represented by the key.
+     *
+     * @param key the key; not null
+     * @return the attribute represented by the key
+     */
+    public static Attribute get(String key) {
+        Attribute attribute;
+        if (Version.isAtLeast(Version.MC1_21_2)) {
+            attribute = Registry.ATTRIBUTE.match(key);
+            if (attribute == null) {
+                // Compatibility upon Minecraft updates
+                attribute = Registry.ATTRIBUTE.match(key.replace("GENERIC_", key));
+            }
+        } else {
+            try {
+                attribute = Attribute.valueOf(key);
+            } catch (Exception exception) {
+                attribute = null;
+            }
+        }
+        return attribute;
+    }
 
     /**
      * Returns the default value that a player entity has.

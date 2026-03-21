@@ -25,7 +25,6 @@ import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.util.AttributeUtil;
 import de.erethon.dungeonsxl.util.ParsingUtil;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -82,7 +81,7 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
         double maxHealth;
         if (is1_9) {
             AttributeUtil.resetPlayerAttributes(player);
-            maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            maxHealth = player.getAttribute(AttributeUtil.MAX_HEALTH).getValue();
         } else {
             maxHealth = player.getMaxHealth();
         }

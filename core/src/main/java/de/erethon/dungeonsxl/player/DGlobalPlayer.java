@@ -31,6 +31,7 @@ import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.global.DPortal;
+import de.erethon.dungeonsxl.util.AttributeUtil;
 import de.erethon.dungeonsxl.util.LocationString;
 import de.erethon.xlib.XLib;
 import de.erethon.xlib.chat.MessageUtil;
@@ -321,7 +322,7 @@ public class DGlobalPlayer implements GlobalPlayer {
 
     public void heal() {
         if (is1_9) {
-            player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+            player.setHealth(player.getAttribute(AttributeUtil.MAX_HEALTH).getValue());
         } else {
             player.setHealth(player.getMaxHealth());
         }
