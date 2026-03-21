@@ -466,8 +466,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         getWorld().setDifficulty(getRules().getState(GameRule.DIFFICULTY));
-        if (Version.isAtLeast(Version.MC1_13)) {
-            getWorld().setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, getRules().getState(GameRule.FIRE_TICK));
+        Boolean doFireTick = getRules().getState(GameRule.FIRE_TICK);
+        if (Version.isAtLeast(Version.MC1_21_11)) {
+            getWorld().setGameRule(org.bukkit.GameRule.FIRE_SPREAD_RADIUS_AROUND_PLAYER, (doFireTick ? -1 : 0));
+        } else if (Version.isAtLeast(Version.MC1_13)) {
+            getWorld().setGameRule((org.bukkit.GameRule<Boolean>) org.bukkit.GameRule.getByName("DO_FIRE_TICK"), doFireTick);
         }
 
         isPlaying = true;

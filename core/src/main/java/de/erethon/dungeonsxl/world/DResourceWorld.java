@@ -185,8 +185,10 @@ public class DResourceWorld implements ResourceWorld {
 
         FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
         instance.world = Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())).getName();
-        if (Version.isAtLeast(Version.MC1_13)) {
-            instance.getWorld().setGameRule(GameRule.DO_FIRE_TICK, false);
+        if (Version.isAtLeast(Version.MC1_21_11)) {
+            instance.getWorld().setGameRule(GameRule.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0);
+        } else if (Version.isAtLeast(Version.MC1_13)) {
+            instance.getWorld().setGameRule((GameRule<Boolean>) GameRule.getByName("DO_FIRE_TICK"), false);
         }
         if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause all");
