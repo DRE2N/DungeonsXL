@@ -102,12 +102,7 @@ public class MobSign extends Windup {
         }
 
         String[] attributes = getLine(2).split(",");
-        if (attributes.length == 2 || attributes.length == 3) {
-            return true;
-
-        } else {
-            return false;
-        }
+        return attributes.length == 2 || attributes.length == 3;
     }
 
     @Override

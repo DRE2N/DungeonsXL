@@ -205,7 +205,7 @@ public class GameRule<V> {
     /**
      * This can be used to give rewards. The default implementation does not do this at the moment.
      */
-    public static final GameRule<List<Reward>> REWARDS = new CollectionGameRule<Reward, List<Reward>>("rewards", new ArrayList<>(), (api, value) -> {
+    public static final GameRule<List<Reward>> REWARDS = new CollectionGameRule<>("rewards", new ArrayList<>(), (api, value) -> {
         if (!(value instanceof ConfigurationSection)) {
             return null;
         }

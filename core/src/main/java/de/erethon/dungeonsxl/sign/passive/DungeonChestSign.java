@@ -78,7 +78,7 @@ public class DungeonChestSign extends ChestSign {
             return;
         }
 
-        chestContent = Arrays.copyOfRange(list.toArray(new ItemStack[list.size()]), 0, 26);
+        chestContent = Arrays.copyOfRange(list.toArray(ItemStack[]::new), 0, 26);
         ContainerAdapter.getBlockInventory(chest).setContents(chestContent);
     }
 

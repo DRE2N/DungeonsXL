@@ -104,7 +104,7 @@ public class RenameCommand extends DCommand {
         plugin.getMapRegistry().add(args[2], resource);
 
         boolean changed = false;
-        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections().toArray(new GlobalProtection[]{})) {
+        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections().toArray(GlobalProtection[]::new)) {
             if (!(protection instanceof JoinSign)) {
                 continue;
             }
