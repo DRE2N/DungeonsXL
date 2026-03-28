@@ -22,6 +22,7 @@ import de.erethon.dungeonsxl.player.DGlobalPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.xlib.category.Category;
+import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.item.VanillaItem;
 import java.util.Collection;
 import java.util.List;
@@ -301,12 +302,12 @@ public class GlobalProtectionListener implements Listener {
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         World world = event.getWorld();
-        plugin.log("New world detected.");
+        MessageUtil.debug(plugin, "New world detected.");
         Set<Entry<UnloadedProtection, String>> protections = plugin.getGlobalProtectionCache().getUnloadedProtections().entrySet();
         for (Entry<UnloadedProtection, String> entry : protections.toArray(new Entry[protections.size()])) {
-            plugin.log("Checking unloaded protection " + entry);
+            MessageUtil.debug(plugin, "Checking unloaded protection " + entry);
             if (world.getName().equals(entry.getValue())) {
-                plugin.log("New world has global DXL data: " + entry);
+                MessageUtil.debug(plugin, "New world has global DXL data: " + entry);
                 plugin.getGlobalProtectionCache().addProtection(entry.getKey().load(world));
             }
         }
@@ -318,7 +319,7 @@ public class GlobalProtectionListener implements Listener {
         if (world.getName().startsWith("DXL_")) {
             return;
         }
-        plugin.log("Unloaded world detected.");
+        MessageUtil.debug(plugin, "Unloaded world detected.");
         Collection<GlobalProtection> protections = plugin.getGlobalProtectionCache().getProtections();
         for (GlobalProtection protection : protections.toArray(new GlobalProtection[protections.size()])) {
             if (protection.getWorld().getName().equals(world.getName())) {

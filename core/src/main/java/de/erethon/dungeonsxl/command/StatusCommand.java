@@ -30,6 +30,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author Daniel Saukel
@@ -84,25 +85,26 @@ public class StatusCommand extends DCommand {
         String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || xlib.getEconomyProvider() != null);
 
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Dependency info:");
-        MessageUtil.sendMessage(sender, statusMsg(VAULT));
-        MessageUtil.sendMessage(sender, "  = Permissions: " + permissionPlugin + " " + permissionPluginCorrect);
-        MessageUtil.sendMessage(sender, "  = Economy: " + economyPlugin + " " + economyPluginCorrect);
-        MessageUtil.sendMessage(sender, statusMsg(XLIB));
-        MessageUtil.sendMessage(sender, statusMsg(BOSSSHOP));
-        MessageUtil.sendMessage(sender, statusMsg(HOLOGRAPHIC_DISPLAYS));
-        MessageUtil.sendMessage(sender, statusMsg(MODERN_LWC));
-        MessageUtil.sendMessage(sender, statusMsg(PARTIES));
-        MessageUtil.sendMessage(sender, statusMsg(PLACEHOLDER_API));
-        MessageUtil.sendMessage(sender, statusMsg(CITIZENS));
-        MessageUtil.sendMessage(sender, statusMsg(CUSTOM_MOBS));
-        MessageUtil.sendMessage(sender, statusMsg(INSANE_MOBS));
-        MessageUtil.sendMessage(sender, statusMsg(MYTHIC_MOBS));
+        for (DependencyVersion dependency : DependencyVersion.values()) {
+            if (sender instanceof Player) {
+                ((Player) sender).spigot().sendMessage(statusMsg(dependency));
+            } else {
+                MessageUtil.sendMessage(sender, msgText(dependency));
+            }
+            if (dependency == VAULT) {
+                MessageUtil.sendMessage(sender, "  = Permissions: " + permissionPlugin + " " + permissionPluginCorrect);
+                MessageUtil.sendMessage(sender, "  = Economy: " + economyPlugin + " " + economyPluginCorrect);
+            }
+        }
+    }
+
+    private static String msgText(DependencyVersion dependency) {
+        return "= " + dependency.getName() + ": " + dependency.getEnabledVersion() + " " + getSymbol(dependency.check());
     }
 
     private static BaseComponent statusMsg(DependencyVersion dependency) {
-        boolean check = dependency.check();
-        TextComponent text = new TextComponent("= " + dependency.getName() + ": " + dependency.getEnabledVersion() + " " + getSymbol(check));
-        if (!check) {
+        TextComponent text = new TextComponent(msgText(dependency));
+        if (!dependency.check()) {
             HoverEvent event = new HoverEvent(
                     HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder("The tested version is: ").color(ChatColor.GRAY)

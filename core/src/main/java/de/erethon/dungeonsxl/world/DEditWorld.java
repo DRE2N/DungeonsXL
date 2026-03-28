@@ -23,6 +23,7 @@ import de.erethon.dungeonsxl.api.event.world.InstanceWorldPostUnloadEvent;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.player.DEditPlayer;
+import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.util.FileUtil;
 import de.erethon.xlib.util.ProgressBar;
@@ -171,7 +172,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
             getResource().getSignData().serializeSigns(signs.values());
             boolean unloaded = Bukkit.unloadWorld(getWorld(), true);
             if (!unloaded) {
-                plugin.log("Error: Could not unload world " + getWorld());
+                MessageUtil.debug(plugin, "Error: Could not unload world " + getWorld());
             }
             new BukkitRunnable() {
                 @Override
@@ -189,7 +190,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         if (!save) {
             boolean unloaded = Bukkit.unloadWorld(getWorld(), /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
             if (!unloaded) {
-                plugin.log("Error: Could not unload world " + getWorld());
+                MessageUtil.debug(plugin, "Error: Could not unload world " + getWorld());
             }
             new BukkitRunnable() {
                 @Override

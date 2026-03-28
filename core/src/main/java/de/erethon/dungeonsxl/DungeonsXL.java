@@ -89,7 +89,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -300,7 +299,7 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
             dungeonRegistry.add(resource.getName(), new DDungeon(this, resource));
         }
         // Dungeons - Linked dungeons
-        if (xlDevMode) {
+        if (init.isXLDevMode()) {
             for (File file : DUNGEONS.listFiles()) {
                 Dungeon dungeon = DDungeon.create(this, file);
 
@@ -565,7 +564,7 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
      * @param loadingWorld if a world is being loaded
      */
     public void setLoadingWorld(boolean loadingWorld) {
-        log("World loading is now " + (loadingWorld ? "LOCKED" : "UNLOCKED"));
+        MessageUtil.debug(this, "World loading is now " + (loadingWorld ? "LOCKED" : "UNLOCKED"));
         this.loadingWorld = loadingWorld;
     }
 
@@ -799,20 +798,6 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
         playerCache.add(player, dPlayer);
         dPlayer.setOfflineTimeMillis(0);
         return true;
-    }
-
-    private boolean xlDevMode = System.getProperty("XLDevMode") != null;
-
-    public void log(String message) {
-        if (xlDevMode) {
-            MessageUtil.log(this, message);
-        }
-    }
-
-    public <T> void log(String message, T t, Predicate<T> predicate) {
-        if (xlDevMode && !predicate.test(t)) {
-            throw new AssertionError(message);
-        }
     }
 
 }

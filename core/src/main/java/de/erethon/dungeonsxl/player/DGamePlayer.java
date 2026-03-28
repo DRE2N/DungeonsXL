@@ -375,7 +375,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         if (getGame() == null) {
             return;
         }
-        plugin.log("GameWorld must not be null", getGameWorld(), w -> w != null);
+        MessageUtil.assertTrue("GameWorld must not be null", getGameWorld(), w -> w != null);
         GameRuleContainer rules = getGame().getRules();
         delete();
 
@@ -395,7 +395,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         if (getGame() != null && finished && getGame().hasRewards()) {
-            plugin.log("Rewarding " + this);
+            MessageUtil.debug(plugin, "Rewarding " + this);
             reward();
         }
 
@@ -770,7 +770,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
     public void update() {
         if (player.isOnline()) {
             if (!player.getWorld().equals(getWorld())) {
-                plugin.log("Player " + this + " was expected to be in " + getWorld() + " but is in " + player.getWorld());
+                MessageUtil.debug(plugin, "Player " + this + " was expected to be in " + getWorld() + " but is in " + player.getWorld());
                 Location teleportLocation = getLastCheckpoint();
                 if (teleportLocation == null) {
                     teleportLocation = getGameWorld().getStartLocation(getGroup());
@@ -798,13 +798,13 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             GroupPlayerKickEvent groupPlayerKickEvent = new GroupPlayerKickEvent(getGroup(), this, GroupPlayerKickEvent.Cause.OFFLINE);
             Bukkit.getPluginManager().callEvent(groupPlayerKickEvent);
             if (!groupPlayerKickEvent.isCancelled()) {
-                plugin.log(this + " was kicked from their group for being offline for too long.");
+                MessageUtil.debug(plugin, this + " was kicked from their group for being offline for too long.");
                 leave();
                 return;
             }
         }
 
-        plugin.log("Player " + this + " was expected to be online but is offline.", player, Player::isOnline);
+        MessageUtil.assertTrue("Player " + this + " was expected to be online but is offline.", player, Player::isOnline);
         DistanceTrigger.triggerAllInDistance(player, (DGameWorld) getGameWorld());
     }
 

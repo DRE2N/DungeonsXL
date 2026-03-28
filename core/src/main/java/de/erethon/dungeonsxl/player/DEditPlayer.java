@@ -160,7 +160,7 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
         if (player.getWorld().equals(getWorld())) {
             return;
         }
-        plugin.log("Player " + this + " was expected to be in " + getWorld() + " but is in " + player.getWorld());
+        MessageUtil.debug(plugin, "Player " + this + " was expected to be in " + getWorld() + " but is in " + player.getWorld());
         Location teleportLocation;
         if (editWorld.getLobbyLocation() != null) {
             teleportLocation = editWorld.getLobbyLocation();
@@ -168,7 +168,7 @@ public class DEditPlayer extends DInstancePlayer implements EditPlayer {
             teleportLocation = getWorld().getSpawnLocation();
         }
 
-        plugin.log("Teleporting to " + teleportLocation);
+        MessageUtil.debug(plugin, "Teleporting to " + teleportLocation);
         player.teleport(teleportLocation);
     }
 

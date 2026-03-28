@@ -60,7 +60,7 @@ public class ReloadCommand extends DCommand {
         if (!dPlayers.isEmpty() && args.length == 1 && sender instanceof Player) {
             MessageUtil.sendMessage(sender, DMessage.CMD_RELOAD_PLAYERS.getMessage());
             ClickEvent onClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dungeonsxl reload -force");
-            String message = DefaultFontInfo.center(DMessage.BUTTON_OKAY.getMessage());
+            String message = DefaultFontInfo.getCenterSpaces(DMessage.BUTTON_OKAY.getMessage()) + DMessage.BUTTON_OKAY.getMessage();
             TextComponent text = new TextComponent(message);
             text.setClickEvent(onClick);
             ((Player) sender).spigot().sendMessage(text);

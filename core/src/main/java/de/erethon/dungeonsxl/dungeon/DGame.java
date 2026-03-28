@@ -32,6 +32,7 @@ import de.erethon.dungeonsxl.player.DGroup;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.xlib.chat.MessageUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -310,7 +311,7 @@ public class DGame implements Game {
                 continue;
             }
             if (!((DGroup) group).checkStartGame(this)) {
-                plugin.log("Could not start game for group " + group);
+                MessageUtil.debug(plugin, "Could not start game for group " + group);
                 return false;
             }
         }

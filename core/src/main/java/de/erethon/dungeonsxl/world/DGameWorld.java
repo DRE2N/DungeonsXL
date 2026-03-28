@@ -50,6 +50,7 @@ import de.erethon.dungeonsxl.world.block.RewardChest;
 import de.erethon.dungeonsxl.world.block.TeamBed;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
 import de.erethon.xlib.XLib;
+import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.util.FileUtil;
 import java.io.File;
@@ -413,21 +414,22 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     public int getMobCount() {
         int mobCount = 0;
 
-        signs:  for (DungeonSign sign : getDungeonSigns().toArray(DungeonSign[]::new)) {
-                    if (!(sign instanceof MobSign)) {
-                        continue;
-                    }
+        signs:
+        for (DungeonSign sign : getDungeonSigns().toArray(DungeonSign[]::new)) {
+            if (!(sign instanceof MobSign)) {
+                continue;
+            }
 
-                    for (Trigger trigger : sign.getTriggers()) {
-                        if (trigger instanceof ProgressTrigger) {
-                            if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
-                                break signs;
-                            }
-                        }
+            for (Trigger trigger : sign.getTriggers()) {
+                if (trigger instanceof ProgressTrigger) {
+                    if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
+                        break signs;
                     }
-
-                    mobCount += ((MobSign) sign).getInitialAmount();
                 }
+            }
+
+            mobCount += ((MobSign) sign).getInitialAmount();
+        }
 
         return mobCount;
     }
@@ -535,7 +537,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         if (unloaded) {
             FileUtil.removeDir(getFolder());
         } else {
-            plugin.log("Error: World could not be unloaded, players left in world: " + !getWorld().getPlayers().isEmpty());
+            MessageUtil.debug(plugin, "Error: World could not be unloaded, players left in world: " + !getWorld().getPlayers().isEmpty());
         }
         plugin.getInstanceCache().remove(this);
         Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));

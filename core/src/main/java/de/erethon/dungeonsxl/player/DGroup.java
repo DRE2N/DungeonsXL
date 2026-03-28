@@ -214,7 +214,6 @@ public class DGroup implements PlayerGroup {
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 delete();
-                return;
             }
         }
     }
@@ -585,7 +584,7 @@ public class DGroup implements PlayerGroup {
         for (UUID playerId : getMembers()) {
             GlobalPlayer player = plugin.getPlayerCache().get(playerId);
             if (!(player instanceof DGamePlayer)) {
-                plugin.log("[ERROR] Player isn't a DGamePlayer, registry: " + plugin.getPlayerCache().getAll());
+                MessageUtil.debug(plugin, "[ERROR] Player isn't a DGamePlayer, registry: " + plugin.getPlayerCache().getAll());
                 return;
             }
             ((DGamePlayer) player).startGame();
