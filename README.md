@@ -43,29 +43,15 @@ If you want to learn how to use DungeonsXL step by step, please have a look at t
 
 ## Compatibility
 ### Server
-DungeonsXL works with Spigot 1.8 and higher. However, support for 1.13-1.17 has a higher priority than support for 1.8-1.12. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. DungeonsXL only works with Spigot and does not support CraftBukkit builds.
+DungeonsXL works with Spigot 1.8.8 and higher. However, support for new versions has a higher priority than support for 1.8-1.12. Old builds that support older versions are unusable for production environments. See [here](../../wiki/legacy-support) for detailed information. DungeonsXL works with Spigot and Paper-based server softwares. This does not include Bukkit/Forge hybrids (MCPC+, Cauldron, Mohist, Magma, ...).
 
-### ItemsXL
-DungeonsXL requires [ItemsXL](https://www.spigotmc.org/resources/itemsxl.14472/) 1.0.2 to run.
+### XLib
+DungeonsXL requires [XLib](https://github.com/DRE2N/CaliburnAPI) to run.
 
 ### Building information and dependencies
-Building DungeonsXL from source requires [Apache Maven](https://maven.apache.org/).
-Maven automatically fetches all dependencies and builds DungeonsXL; just run _build.bat_ or enter the command _mvn clean install_.
+Building DungeonsXL from source requires [Java Development Kit 8 or higher](https://www.azul.com/downloads/?package=jdk#zulu).
 
-#### DRECommons
-[DRECommons](https://github.com/DRE2N/DRECommons) is a util library for common tasks.
-
-#### Caliburn API
-[Caliburn](https://github.com/DRE2N/CaliburnAPI) is an API to read custom items and mobs from config files.
-
-#### Vignette
-[Vignette](https://github.com/DRE2N/Vignette) is a Bukkit GUI Framework.
-
-### Java
-Make sure that your server uses Java 8 or higher.
-
-### UUIDs
-Supported.
+Both XLib and DXL can be built by running the build script in the respective root directory. Use _build.bat_ if you're on Windows and _build.sh_ on Linux, BSD or Mac. Dependencies are downloaded automatically.
 
 ### Known incompatibilities
 * Corpses

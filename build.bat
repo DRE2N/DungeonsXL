@@ -1,1 +1,2 @@
-mvn clean install
+java -jar mvnbt.jar
+pause
