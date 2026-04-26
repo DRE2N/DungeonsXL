@@ -30,7 +30,8 @@ import org.bukkit.entity.Player;
 public class AttributeUtil {
 
     public static final Attribute ATTACK_DAMAGE = Attribute.valueOf(Version.isAtLeast(Version.MC1_21_2) ? "ATTACK_DAMAGE" : "GENERIC_ATTACK_DAMAGE");
-    public static final Attribute MAX_HEALTH = Attribute.valueOf(Version.isAtLeast(Version.MC1_21_2) ? "MAX_HEALTH" : "GENERIC_MOVEMENT_SPEED");
+    // 1.21 port: fixed copy-paste bug (was "GENERIC_MOVEMENT_SPEED" for MAX_HEALTH fallback)
+    public static final Attribute MAX_HEALTH = Attribute.valueOf(Version.isAtLeast(Version.MC1_21_2) ? "MAX_HEALTH" : "GENERIC_MAX_HEALTH");
     public static final Attribute MOVEMENT_SPEED = Attribute.valueOf(Version.isAtLeast(Version.MC1_21_2) ? "MOVEMENT_SPEED" : "GENERIC_MOVEMENT_SPEED");
 
     private static final Map<Attribute, Double> DEFAULT_PLAYER_VALUES = ImmutableMap.of(
@@ -49,8 +50,10 @@ public class AttributeUtil {
         if (Version.isAtLeast(Version.MC1_21_2)) {
             attribute = Registry.ATTRIBUTE.match(key);
             if (attribute == null) {
-                // Compatibility upon Minecraft updates
-                attribute = Registry.ATTRIBUTE.match(key.replace("GENERIC_", key));
+                // Compatibility upon Minecraft updates: strip legacy GENERIC_ prefix
+                // 1.21 port: replace() called with wrong 2nd arg (was the whole key);
+                // must be the replacement string, i.e. empty to drop the prefix.
+                attribute = Registry.ATTRIBUTE.match(key.replace("GENERIC_", ""));
             }
         } else {
             try {

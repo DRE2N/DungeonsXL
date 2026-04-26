@@ -15,33 +15,42 @@ import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxxl.requirement.*;
 import de.erethon.dungeonsxxl.sign.*;
 import de.erethon.dungeonsxxl.util.GlowUtil;
-import de.erethon.xlib.compatibility.Internals;
+import de.erethon.xlib.XLib;
+import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.plugin.PluginInit;
-import de.erethon.xlib.plugin.DREPluginSettings;
+import de.erethon.xlib.plugin.PluginMeta;
+import de.erethon.xlib.spiget.comparator.VersionComparator;
 import de.erethon.xlib.util.Registry;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author Daniel Saukel
  */
-public class DungeonsXXL extends PluginInit implements DungeonModule {
+public class DungeonsXXL extends JavaPlugin implements DungeonModule {
+
+    // 1.21.11 port: XLib 7.0 replaced DREPluginSettings+Internals with PluginMeta.
+    // PluginInit is now a helper, not a base class — we extend JavaPlugin directly
+    // and hold a PluginInit instance for MessageHandler/resource-save helpers.
+    public static final PluginMeta META = new PluginMeta.Builder("DungeonsXXL")
+            .minVersion(Version.MC1_21_11)
+            .paperState(PluginMeta.State.SUPPORTED)
+            .spigotState(PluginMeta.State.SUPPORTED)
+            .spigotMCResourceId(-1)
+            .versionComparator(VersionComparator.SEM_VER_SNAPSHOT)
+            .build();
 
     private static DungeonsXXL instance;
     private DungeonsXL dxl;
     private GlowUtil glowUtil;
-
-    public DungeonsXXL() {
-        settings = DREPluginSettings.builder()
-                .internals(Internals.v1_16_R3)
-                .metrics(false)
-                .spigotMCResourceId(-1)
-                .build();
-    }
+    private PluginInit init;
 
     @Override
     public void onEnable() {
         instance = this;
         dxl = DungeonsXL.getInstance();
+        init = new PluginInit(this, XLib.getInstance(), META);
         glowUtil = new GlowUtil(this);
+        dxl.registerModule(this);
     }
 
     /**
@@ -69,6 +78,10 @@ public class DungeonsXXL extends PluginInit implements DungeonModule {
      */
     public GlowUtil getGlowUtil() {
         return glowUtil;
+    }
+
+    public PluginInit getInitializer() {
+        return init;
     }
 
     @Override

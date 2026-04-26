@@ -31,7 +31,8 @@ public class FireworkUtil {
      * @return the Firework
      */
     public static Firework spawnRandom(Location location) {
-        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        // 1.21 port: EntityType.FIREWORK -> FIREWORK_ROCKET
+        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK_ROCKET);
         FireworkMeta meta = firework.getFireworkMeta();
         Random r = new Random();
         int rt = r.nextInt(4) + 1;

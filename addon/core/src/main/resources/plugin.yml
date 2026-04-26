@@ -5,3 +5,4 @@ author: Daniel Saukel
 description: ${project.description}
 website: ${project.url}
 depend: [DungeonsXL]
+api-version: "1.21"
