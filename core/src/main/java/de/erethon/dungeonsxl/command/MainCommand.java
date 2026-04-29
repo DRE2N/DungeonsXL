@@ -64,8 +64,8 @@ public class MainCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(internals, vault, xlib));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP_INFO.getMessage());
-        MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-2013 Frank Baumann; 2015-2026 Daniel Saukel & contributors.");
-        MessageUtil.sendCenteredMessage(sender, "Licensed under GPLv3.");
+        MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-'13 Frank Baumann; '15-'26 Daniel Saukel & contributors.");
+        MessageUtil.sendCenteredMessage(sender, "&7Licensed under GPLv3.");
     }
 
 }
