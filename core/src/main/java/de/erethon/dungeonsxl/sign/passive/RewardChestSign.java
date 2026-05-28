@@ -106,7 +106,7 @@ public class RewardChestSign extends ChestSign {
             return;
         }
 
-        ((DGameWorld) getGameWorld()).addGameBlock(new RewardChest((DungeonsXL) api, chest, moneyReward, levelReward, list.toArray(ItemStack[]::new)));
+        ((DGameWorld) getGameWorld()).addGameBlock(new RewardChest((DungeonsXL) api, chest, moneyReward, levelReward, list.toArray(new ItemStack[list.size()])));
     }
 
 }

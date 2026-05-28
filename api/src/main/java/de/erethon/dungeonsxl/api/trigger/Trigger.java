@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -204,7 +205,7 @@ public interface Trigger {
     default void trigger(boolean switching, Player triggeringPlayer) {
         List<TriggerListener> fired = getListeners().stream()
                 .filter(l -> l.getTriggerExpression().isSatisfied())
-                .toList();
+                .collect(Collectors.toList());
         TriggerActionEvent event = new TriggerActionEvent(this, fired);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {

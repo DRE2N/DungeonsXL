@@ -100,7 +100,7 @@ public abstract class AbstractTrigger implements Trigger {
 
     @Override
     public void updateListeners() {
-        for (TriggerListener dSign : listeners.toArray(TriggerListener[]::new)) {
+        for (TriggerListener dSign : listeners.toArray(new TriggerListener[listeners.size()])) {
             dSign.updateTriggers(this);
         }
     }

@@ -59,6 +59,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -202,7 +203,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         String text = expression.getText();
-        if (text.isBlank()) {
+        if (text.trim().isEmpty()) {
             return null;
         }
         char key = Character.toUpperCase(text.charAt(0));
@@ -400,7 +401,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     public Collection<Trigger> getTriggersFromKey(char key) {
         return triggers.stream()
                 .filter(t -> t.getKey() == key)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -415,7 +416,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         int mobCount = 0;
 
         signs:
-        for (DungeonSign sign : getDungeonSigns().toArray(DungeonSign[]::new)) {
+        for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
             if (!(sign instanceof MobSign)) {
                 continue;
             }

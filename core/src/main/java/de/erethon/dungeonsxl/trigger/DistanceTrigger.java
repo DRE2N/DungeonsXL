@@ -64,7 +64,7 @@ public class DistanceTrigger extends AbstractTrigger {
             return;
         }
 
-        for (Trigger trigger : gameWorld.getTriggers().toArray(Trigger[]::new)) {
+        for (Trigger trigger : gameWorld.getTriggers().toArray(new Trigger[gameWorld.getTriggers().size()])) {
             if (!(trigger instanceof DistanceTrigger)) {
                 continue;
             }

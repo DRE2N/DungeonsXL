@@ -30,6 +30,7 @@ import de.erethon.xlib.chat.MessageUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -104,7 +105,8 @@ public class RenameCommand extends DCommand {
         plugin.getMapRegistry().add(args[2], resource);
 
         boolean changed = false;
-        for (GlobalProtection protection : plugin.getGlobalProtectionCache().getProtections().toArray(GlobalProtection[]::new)) {
+        Set<GlobalProtection> protections = plugin.getGlobalProtectionCache().getProtections();
+        for (GlobalProtection protection : protections.toArray(new GlobalProtection[protections.size()])) {
             if (!(protection instanceof JoinSign)) {
                 continue;
             }

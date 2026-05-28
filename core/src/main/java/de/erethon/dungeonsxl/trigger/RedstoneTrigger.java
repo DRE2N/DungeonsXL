@@ -62,7 +62,7 @@ public class RedstoneTrigger extends AbstractTrigger {
         } else if (isTriggered()) {
             setTriggered(false);
 
-            for (TriggerListener listener : getListeners().toArray(TriggerListener[]::new)) {
+            for (TriggerListener listener : getListeners().toArray(new TriggerListener[getListeners().size()])) {
                 if (!(listener instanceof Deactivatable)) {
                     return;
                 }

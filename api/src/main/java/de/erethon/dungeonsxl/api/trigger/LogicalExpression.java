@@ -76,7 +76,7 @@ public class LogicalExpression {
      * @return a expression that represents the given string; null if erroneous
      */
     public static LogicalExpression parse(String string) {
-        if (string == null || string.isBlank()) {
+        if (string == null || string.trim().isEmpty()) {
             return null;
         }
         string = string.replace(" ", "");
