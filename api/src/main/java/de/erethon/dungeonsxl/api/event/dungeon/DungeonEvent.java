@@ -12,31 +12,31 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.event.world;
+package de.erethon.dungeonsxl.api.event.dungeon;
 
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import org.bukkit.event.Event;
 
 /**
- * Superclass for events involving DungeonsXL resource worlds.
+ * Superclass for events involving dungeons.
  *
  * @author Daniel Saukel
  */
-public abstract class ResourceWorldEvent extends Event {
+public abstract class DungeonEvent extends Event {
 
-    protected ResourceWorld resource;
+    protected Dungeon dungeon;
 
-    protected ResourceWorldEvent(ResourceWorld resource) {
-        this.resource = resource;
+    protected DungeonEvent(Dungeon dungeon) {
+        this.dungeon = dungeon;
     }
 
     /**
-     * Returns the resource world involved in this event.
+     * Returns the dungeon involved in this event.
      *
-     * @return the resource world involved in this event.
+     * @return the dungeon involved in this event.
      */
-    public ResourceWorld getResource() {
-        return resource;
+    public Dungeon getDungeon() {
+        return dungeon;
     }
 
 }

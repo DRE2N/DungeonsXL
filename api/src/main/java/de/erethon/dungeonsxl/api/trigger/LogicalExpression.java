@@ -56,6 +56,23 @@ public class LogicalExpression {
         EMPTY.satisfied = true;
     }
 
+    /**
+     * Returns placeholder expression for an erroneous listener. This expression can't be satisfied.
+     *
+     * @param owner the listener to attach the error expression to
+     * @return placeholder expression for an erroneous listener
+     */
+    public static LogicalExpression error(TriggerListener owner) {
+        LogicalExpression expression = new LogicalExpression(ComponentType.FIRST, "FALSE") {
+            @Override
+            public boolean setSatisfied(boolean satisfied) {
+                return false;
+            }
+        };
+        expression.trigger = Trigger.error(owner, expression, expression.text);
+        return expression;
+    }
+
     private ComponentType type;
     private String text;
     private Trigger trigger;
@@ -77,7 +94,7 @@ public class LogicalExpression {
      */
     public static LogicalExpression parse(String string) {
         if (string == null || string.trim().isEmpty()) {
-            return null;
+            return EMPTY;
         }
         string = string.replace(" ", "");
 
@@ -179,9 +196,9 @@ public class LogicalExpression {
     }
 
     /**
-     * Returns if this expression only consists of exactly one component.
+     * Returns if this expression only consists of exactly one component or is empty.
      *
-     * @return if this expression only consists of exactly one component
+     * @return if this expression only consists of exactly one component or is empty
      */
     public boolean isAtomic() {
         return contents.isEmpty();
@@ -197,6 +214,7 @@ public class LogicalExpression {
      * @param api      the {@link DungeonsAPI} reference; not null
      * @param listener the listener that belongs to the trigger; not null
      * @param generic  if a generic trigger should be created if there is no specific trigger identifier (e.g. second line of a trigger sign)
+     * @throws IllegalStateException    if the expression is not atomic
      * @throws IllegalArgumentException if the listener is null or not in a {@link GameWorld}
      * @return the {@link Trigger} the string represents; null if there is none.
      */
@@ -205,24 +223,29 @@ public class LogicalExpression {
             return trigger;
         }
         if (!isAtomic()) {
-            return null;
+            throw new IllegalStateException("Expression must be atomic");
         }
         if (listener == null || listener.getGameWorld() == null) {
             throw new IllegalArgumentException("Listener must not be null and must be in a game world");
         }
-        listener.getGameWorld().createTrigger(listener, this);
+        trigger = listener.getGameWorld().createTrigger(listener, this);
         return trigger;
     }
 
     /**
-     * Returns a List of the contents of this expression.<p>
+     * Returns a List of the contents of this expression.
+     * <p>
      * Changes made to this list do not update the expression.
      *
      * @param deep if true, brackets are resolved to atomic components; if false, brackets are one element in the list
      * @return a List of the contents the contents of this expression
      */
     public List<LogicalExpression> getContents(boolean deep) {
-        if (!deep || isAtomic()) {
+        if (isAtomic()) {
+            List<LogicalExpression> atomic = new ArrayList<>();
+            atomic.add(this);
+            return atomic;
+        } else if (!deep) {
             return new ArrayList<>(contents);
         }
         List<LogicalExpression> atomicContents = new ArrayList<>();

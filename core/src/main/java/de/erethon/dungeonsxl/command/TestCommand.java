@@ -63,7 +63,7 @@ public class TestCommand extends DCommand {
             return;
         }
 
-        if (!dungeon.getMap().isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.TEST)) {
+        if (!dungeon.isInvitedPlayer(player) && !DPermission.hasPermission(player, DPermission.TEST)) {
             MessageUtil.sendMessage(player, CommonMessage.CMD_NO_PERMISSION.getMessage());
             return;
         }

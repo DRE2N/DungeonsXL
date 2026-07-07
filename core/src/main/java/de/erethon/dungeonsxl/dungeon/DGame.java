@@ -22,15 +22,9 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
-import de.erethon.dungeonsxl.api.sign.DungeonSign;
-import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.global.GameSign;
 import de.erethon.dungeonsxl.player.DGroup;
-import de.erethon.dungeonsxl.sign.windup.MobSign;
-import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.xlib.chat.MessageUtil;
 import java.util.ArrayList;
@@ -41,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Daniel Saukel
@@ -52,16 +45,11 @@ public class DGame implements Game {
 
     private Dungeon dungeon;
     private GameWorld world;
-    private List<ResourceWorld> unplayedFloors = new ArrayList<>();
-    private ResourceWorld nextFloor;
-    private int floorCount;
     private List<PlayerGroup> groups = new ArrayList<>();
     private boolean tutorial;
     private boolean rewards = true;
     private boolean started;
-    private int waveCount;
     private Map<String, Integer> gameKills = new HashMap<>();
-    private Map<String, Integer> waveKills = new HashMap<>();
 
     public DGame(DungeonsXL plugin, Dungeon dungeon) {
         this.plugin = plugin;
@@ -138,38 +126,13 @@ public class DGame implements Game {
         return dungeon;
     }
 
-    /**
-     * Sets up all dungeon-related fields.
-     *
-     * @param dungeon the dungeon to set
-     */
     public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
-        if (dungeon.isMultiFloor()) {
-            unplayedFloors = dungeon.getFloors();
-        }
     }
 
-    /**
-     * Sets up all dungeon-related fields.
-     *
-     * @param name the name of the dungeon
-     * @return if the action was successful
-     */
     public boolean setDungeon(String name) {
         dungeon = plugin.getDungeonRegistry().get(name);
-        if (dungeon != null) {
-            unplayedFloors = dungeon.getFloors();
-            return true;
-
-        } else {
-            ResourceWorld resource = plugin.getMapRegistry().get(name);
-            if (resource != null) {
-                dungeon = resource.getSingleFloorDungeon();
-                return true;
-            }
-            return false;
-        }
+        return dungeon != null;
     }
 
     @Override
@@ -177,42 +140,8 @@ public class DGame implements Game {
         return (DGameWorld) world;
     }
 
-    @Override
     public void setWorld(GameWorld gameWorld) {
         world = gameWorld;
-    }
-
-    @Override
-    public List<ResourceWorld> getUnplayedFloors() {
-        return unplayedFloors;
-    }
-
-    @Override
-    public boolean addUnplayedFloor(ResourceWorld unplayedFloor) {
-        return unplayedFloors.add(unplayedFloor);
-    }
-
-    @Override
-    public boolean removeUnplayedFloor(ResourceWorld unplayedFloor, boolean force) {
-        if (getDungeon().getRemoveWhenPlayed() || force) {
-            return unplayedFloors.remove(unplayedFloor);
-        }
-        return false;
-    }
-
-    @Override
-    public ResourceWorld getNextFloor() {
-        return nextFloor;
-    }
-
-    @Override
-    public void setNextFloor(ResourceWorld floor) {
-        nextFloor = floor;
-    }
-
-    @Override
-    public int getFloorCount() {
-        return floorCount;
     }
 
     @Override
@@ -223,20 +152,6 @@ public class DGame implements Game {
     @Override
     public void setRewards(boolean enabled) {
         rewards = enabled;
-    }
-
-    /**
-     * @return the waveCount
-     */
-    public int getWaveCount() {
-        return waveCount;
-    }
-
-    /**
-     * @param waveCount the waveCount to set
-     */
-    public void setWaveCount(int waveCount) {
-        this.waveCount = waveCount;
     }
 
     /**
@@ -251,32 +166,13 @@ public class DGame implements Game {
     }
 
     /**
-     * @return how many mobs have been killed in the last game
-     */
-    public int getWaveKills() {
-        int count = 0;
-        for (String killer : waveKills.keySet()) {
-            count += waveKills.get(killer);
-        }
-        return count;
-    }
-
-    /**
      * @param killer the killer; null if the killer is not a player
      */
     public void addKill(String killer) {
         if (killer == null) {
             killer = "N/A";
         }
-        waveKills.put(killer, waveKills.get(killer) == null ? 1 : waveKills.get(killer) + 1);
-    }
-
-    /**
-     * Adds the values of the wave kills map to the game kills map and resets the wave kills.
-     */
-    public void resetWaveKills() {
-        gameKills.putAll(waveKills);
-        waveKills.clear();
+        gameKills.put(killer, gameKills.get(killer) == null ? 1 : gameKills.get(killer) + 1);
     }
 
     @Override
@@ -298,7 +194,7 @@ public class DGame implements Game {
         if (world != null) {
             return world;
         }
-        world = dungeon.getMap().instantiateGameWorld(this, ignoreLimit);
+        world = dungeon.instantiateGameWorld(this, ignoreLimit);
         return world;
     }
 
@@ -328,8 +224,6 @@ public class DGame implements Game {
             }
         }
 
-        floorCount++;
-        nextFloor = null;
         started = true;
         return true;
     }
@@ -343,50 +237,6 @@ public class DGame implements Game {
         if (gameSign != null) {
             gameSign.update();
         }
-    }
-
-    /**
-     * @param mobCountIncreaseRate the new mob count will be increased by this rate
-     * @param teleport             whether or not to teleport the players to the start location
-     */
-    public void finishWave(final double mobCountIncreaseRate, final boolean teleport) {
-        waveCount++;
-        resetWaveKills();
-
-        for (Trigger uncasted : getWorld().getTriggers()) {
-            if (!(uncasted instanceof ProgressTrigger)) {
-                continue;
-            }
-            ProgressTrigger trigger = (ProgressTrigger) uncasted;
-            if (getWaveCount() >= trigger.getWaveCount() & getFloorCount() >= trigger.getFloorCount() - 1
-                    || !getUnplayedFloors().contains(trigger.getFloor()) & trigger.getFloor() != null) {
-                trigger.trigger(true, null);
-            }
-        }
-
-        int delay = getRules().getState(GameRule.TIME_TO_NEXT_WAVE);
-        sendMessage(DMessage.GROUP_WAVE_FINISHED.getMessage(String.valueOf(waveCount), String.valueOf(delay)));
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (teleport) {
-                    groups.forEach(g -> g.getMembers().getOnlinePlayers().forEach(p -> p.teleport(world.getStartLocation(plugin.getPlayerGroup(p)))));
-                }
-
-                for (DungeonSign dSign : world.getDungeonSigns()) {
-                    if (!(dSign instanceof MobSign)) {
-                        continue;
-                    }
-
-                    MobSign mobSign = (MobSign) dSign;
-                    int newAmount = (int) Math.ceil(mobSign.getInitialAmount() * mobCountIncreaseRate);
-
-                    mobSign.setN(newAmount);
-                    mobSign.startTask();
-                }
-            }
-        }.runTaskLater(plugin, delay * 20);
     }
 
     @Override

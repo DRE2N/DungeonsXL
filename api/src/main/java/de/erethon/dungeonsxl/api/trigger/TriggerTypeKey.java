@@ -30,11 +30,7 @@ public class TriggerTypeKey {
     public static final char GENERIC = 'T';
     public static final char MOB = 'M';
     public static final char PRESENCE = 'P';
-    @Deprecated
-    public static final char PROGRESS = 'P';
     public static final char REDSTONE = 'R';
     public static final char USE_ITEM = 'U';
-    @Deprecated
-    public static final char WAVE = 'W';
 
 }

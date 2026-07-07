@@ -38,7 +38,6 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.trigger.DistanceTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.item.VanillaItem;
@@ -588,42 +587,6 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
             for (String permission : rules.getState(GameRule.GAME_PERMISSIONS)) {
                 xlib.getPermissionProvider().playerAddTransient(getGame().getWorld().getWorld().getName(), player, permission);
             }
-        }
-    }
-
-    /**
-     * The DGamePlayer finishs the current floor.
-     *
-     * @param specifiedFloor the name of the next floor
-     */
-    public void finishFloor(DResourceWorld specifiedFloor) {
-        if (!dGroup.getDungeon().isMultiFloor()) {
-            finish();
-            return;
-        }
-
-        MessageUtil.sendMessage(getPlayer(), DMessage.PLAYER_FINISHED_FLOOR.getMessage());
-        finished = true;
-
-        boolean hasToWait = false;
-        if (getGroup() == null) {
-            return;
-        }
-        if (!dGroup.isPlaying()) {
-            return;
-        }
-        getGame().setNextFloor(specifiedFloor);
-        if (dGroup.isFinished()) {
-            dGroup.finishFloor(specifiedFloor);
-        } else {
-            MessageUtil.sendMessage(player, DMessage.PLAYER_WAIT_FOR_OTHER_PLAYERS.getMessage());
-            hasToWait = true;
-        }
-
-        GamePlayerFinishEvent gamePlayerFinishEvent = new GamePlayerFinishEvent(this, hasToWait);
-        Bukkit.getPluginManager().callEvent(gamePlayerFinishEvent);
-        if (gamePlayerFinishEvent.isCancelled()) {
-            finished = false;
         }
     }
 

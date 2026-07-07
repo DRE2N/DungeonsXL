@@ -80,7 +80,7 @@ cmd:
     compatibility: "&eInternals: &o[&v1] &eVault: &o[&v2] &eXLib: &o[&v3]"
     help: "/dxl - General status information"
     helpInfo: "&7Type in &o/dxl help&r&7 for further information."
-    loaded: "&eMaps: &o[&v1] &eDungeons: &o[&v2] &eLoaded: &o[&v3] &ePlayers: &o[&v4]"
+    loaded: "&eDungeons: &o[&v1] &eLoaded: &o[&v2] &ePlayers: &o[&v3]"
     welcome: "&7Welcome to &4Dungeons&fXL"
   msg:
     added: "&6New Messages (&4&v1&6) added."
@@ -246,9 +246,6 @@ reward:
   general: "&6You received &4&v1 &6for finishing the dungeon."
 sign:
   end: "&aEND"
-  floor:
-    1: "&aENTER"
-    2: "&aNEXT FLOOR"
   global:
     full: "&4FULL"
     isPlaying: "&4IS PLAYING"
@@ -259,6 +256,3 @@ sign:
   leave: "&aLEAVE"
   ready: "&aREADY"
   resourcePack: "&aDOWNLOAD"
-  wave:
-    1: "&aSTART"
-    2: "&aNEXT WAVE"

@@ -17,42 +17,32 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
-import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
 import de.erethon.xlib.chat.MessageUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 /**
- * @author Frank Baumann, Daniel Saukel
+ * @author Daniel Saukel
  */
-public class UninviteCommand extends DCommand {
+public class DebugLECommand extends DCommand {
 
-    public UninviteCommand(DungeonsXL plugin) {
+    public DebugLECommand(DungeonsXL plugin) {
         super(plugin);
-        setCommand("uninvite");
-        setMinArgs(2);
-        setMaxArgs(2);
-        setHelp(DMessage.CMD_UNINVITE_HELP.getMessage());
-        setPermission(DPermission.UNINVITE.getNode());
+        setCommand("dle");
+        setMinArgs(1);
+        setMaxArgs(1);
+        setHelp("Logical expression debug command");
         setPlayerCommand(true);
         setConsoleCommand(true);
     }
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        Dungeon dungeon = plugin.getDungeonRegistry().get(args[2]);
-        if (dungeon == null) {
-            MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[2]));
-            return;
-        }
-
-        OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
-        if (dungeon.removeInvitedPlayer(player)) {
-            MessageUtil.sendMessage(sender, DMessage.CMD_UNINVITE_SUCCESS.getMessage(args[1], args[2]));
-        }
+        LogicalExpression le = LogicalExpression.parse(args[1]);
+        MessageUtil.sendMessage(sender, "toString: " + le.toString());
+        MessageUtil.sendMessage(sender, "Atomic: " + le.isAtomic());
+        MessageUtil.sendMessage(sender, "Contents: " + le.getContents(false));
+        MessageUtil.sendMessage(sender, "Contents deep: " + le.getContents(true));
     }
 
 }

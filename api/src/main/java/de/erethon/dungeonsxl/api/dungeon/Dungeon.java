@@ -14,194 +14,93 @@
  */
 package de.erethon.dungeonsxl.api.dungeon;
 
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
-import java.util.List;
+import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import java.io.File;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World.Environment;
 
 /**
- * A dungeon consists of floors and settings including its game rules.
+ * A stored world that can be instantiated as an {@link EditWorld} or as a {@link GameWorld}.
  * <p>
- * MFD = multiple floor dungeon; SFD = single floor dungeon.
+ * In the default implementation, these are saved under "plugins/DungeonsXL/maps/".
  *
  * @author Daniel Saukel
  */
+// Implementation-specific methods: getSignData, generate
 public interface Dungeon {
 
     /**
-     * Returns the name.
+     * Returns the name of this dungeon.
+     * <p>
+     * Equals {@link #getFolder()}{@link File#getName() #getName()}.
      *
-     * @return the name
+     * @return name of this dungeon
      */
     String getName();
 
     /**
-     * Sets the name to the given value.
+     * Returns the folder where this dungeon is stored.
      *
-     * @param name the name
+     * @return the folder where this dungeon is stored
      */
-    void setName(String name);
+    File getFolder();
 
     /**
-     * Returns if this dungeon has multiple floors.
-     *
-     * @return if this dungeon has multiple floors
-     */
-    boolean isMultiFloor();
-
-    /**
-     * Returns the map to instantiate.
+     * Returns the {@link de.erethon.dungeonsxl.api.dungeon.GameRule}s that apply to this dungeon.
      * <p>
-     * This method is the same as {@link #getStartFloor()} but a bit more intuitive for SFDs.
+     * This is not necessarily represented 1:1 by a config file because it is usually merged together through {@link #setupRules()}. The raw values from the
+     * dungeon's configuration can be retrieved through {@link #getConfig()}.
      *
-     * @return the map to instantiate
-     */
-    default ResourceWorld getMap() {
-        return getStartFloor();
-    }
-
-    /**
-     * Returns the first floor of this dungeon.
-     *
-     * @return the first floor of this dungeon
-     */
-    ResourceWorld getStartFloor();
-
-    /**
-     * Sets the first floor of this dungeon.
-     *
-     * @param startFloor the startFloor to set
-     */
-    void setStartFloor(ResourceWorld startFloor);
-
-    /**
-     * Returns the last floor of this dungeon or null if this is an SFD.
-     *
-     * @return the last floor of this dungeon or null if this is an SFD
-     */
-    ResourceWorld getEndFloor();
-
-    /**
-     * Sets the last floor of this MFD.
-     *
-     * @param endFloor the last floor
-     */
-    void setEndFloor(ResourceWorld endFloor);
-
-    /**
-     * Returns a list of the floors without start and end floor.
-     *
-     * @return a list of the floors without start and end floor
-     */
-    List<ResourceWorld> getFloors();
-
-    /**
-     * Adds the given floor.
-     *
-     * @param resource the resource to add
-     */
-    void addFloor(ResourceWorld resource);
-
-    /**
-     * Removes the given floor.
-     *
-     * @param resource the resource to remove
-     */
-    void removeFloor(ResourceWorld resource);
-
-    /**
-     * Returns the amount of floors in this dungeon including start and end floor.
-     * <p>
-     * This may be less than the size of {@link #getFloors()} + 2 if not all floors from the list are used.
-     *
-     * @return the amount of floors in this dungeon including start and end floor
-     */
-    int getFloorCount();
-
-    /**
-     * Sets the amount of floors that shall be played.
-     *
-     * @param floorCount the amount of floors to set
-     */
-    void setFloorCount(int floorCount);
-
-    /**
-     * Returns if floors cannot be played once if floors are selected randomly from the list.
-     *
-     * @return the removeWhenPlayed if floors cannot be played once if floors are selected randomly from the list
-     */
-    boolean getRemoveWhenPlayed();
-
-    /**
-     * Sets if floors cannot be played once if floors are selected randomly from the list.
-     *
-     * @param removeWhenPlayed if floors cannot be played once if floors are selected randomly from the list
-     */
-    void setRemoveWhenPlayed(boolean removeWhenPlayed);
-
-    /**
-     * The values from this game rule container will override all values of the game rule containers of the dungeon's maps.
-     *
-     * @return the override values
-     */
-    GameRuleContainer getOverrideValues();
-
-    /**
-     * The values from this game rule container will be overriden by values of the game rule containers of the dungeon's maps. They will however still override
-     * the values from the main config.
-     *
-     * @return the default values
-     */
-    GameRuleContainer getDefaultValues();
-
-    /**
-     * Returns true if the floor is either in the floors list or the start / end floor.
-     *
-     * @param resource the ResourceWorld to check
-     * @return true if the floor is either in the floors list or the start / end floor.
-     */
-    default boolean containsFloor(ResourceWorld resource) {
-        if (isMultiFloor()) {
-            return getFloors().contains(resource) || getStartFloor().equals(resource) || getEndFloor().equals(resource);
-        } else {
-            return getMap().equals(resource);
-        }
-    }
-
-    /**
-     * Returns true if the floor is either in the floors list or the start / end floor.
-     *
-     * @param mapName the name of the map to check
-     * @return true if the floor is either in the floors list or the start / end floor.
-     */
-    default boolean containsFloor(String mapName) {
-        for (ResourceWorld world : getFloors()) {
-            if (world.getName().equals(mapName)) {
-                return true;
-            }
-        }
-        return getStartFloor().getName().equals(mapName) || getEndFloor().getName().equals(mapName);
-    }
-
-    /**
-     * Returns the rules of this game.
-     * <p>
-     * This is not necessarily represented 1:1 by a config file because it is usually merged together through {@link #setupRules()}.
-     *
-     * @return the rules of this game
+     * @return the {@link de.erethon.dungeonsxl.api.dungeon.GameRule}s that apply to this dungeon
      */
     GameRuleContainer getRules();
 
     /**
-     * Sets the rules of the game.
+     * Returns the {@link de.erethon.dungeonsxl.api.dungeon.GameRule}s specified in the configuration of this dungeon.
+     * <p>
+     * Note that these are only the raw rules that are specified in the file. They are not the rules that are actually used in a game instance instantiated
+     * from this dungeon as these ones may be supplemented or overriden by other rules taken from the main config or the
+     * {@link de.erethon.dungeonsxl.api.dungeon.GameRule#DEFAULT_VALUES}.
      *
-     * @param rules the rules
+     * @return the {@link de.erethon.dungeonsxl.api.dungeon.GameRule}s specified in the configuration of this world
      */
-    void setRules(GameRuleContainer rules);
+    GameRuleContainer getConfig();
 
     /**
-     * Sets up the rules with the following priority: 1. Game type 2. Dungeon config: Override values 3. Floor config 4. Dungeon config: Default values 5. Main
-     * config: Default values 6. The default values
+     * Sets up the rules with the following priority: 1. World config 2. Main config: Default values 3. Internal default values
      */
     void setupRules();
+
+    /**
+     * Returns the environment of the world as defined in the config or {@link org.bukkit.World.Environment#NORMAL} if nothing is set.
+     *
+     * @return the environment of the world as defined in the config or {@link org.bukkit.World.Environment#NORMAL} if nothing is set
+     */
+    Environment getWorldEnvironment();
+
+    /**
+     * Adds the player to the list of players that are invited to edit the dungeon.
+     *
+     * @param player the player
+     */
+    void addInvitedPlayer(OfflinePlayer player);
+
+    /**
+     * Removes a player from the list of players that are invited to edit the dungeon.
+     *
+     * @param player the player
+     * @return if the action was successful
+     */
+    boolean removeInvitedPlayer(OfflinePlayer player);
+
+    /**
+     * Returns if the player is invited to edit the dungeon.
+     *
+     * @param player the player
+     * @return if the player is invited to edit the dungeon
+     */
+    boolean isInvitedPlayer(OfflinePlayer player);
 
     /**
      * Returns false if there are errors in the setup; true if not.
@@ -209,5 +108,35 @@ public interface Dungeon {
      * @return false if there are errors in the setup; true if not
      */
     boolean isSetupCorrect();
+
+    /**
+     * Creates a backup of the dungeon.
+     */
+    void backup();
+
+    /**
+     * Returns the loaded edit instance of this world or null if none exists.
+     *
+     * @return the loaded edit instance of this world or null if none exists
+     */
+    EditWorld getEditWorld();
+
+    /**
+     * Returns the loaded edit instance of this dungeon or generates a new one if none exists.
+     *
+     * @param ignoreLimit if the instance limit set in the main config shall be ignored
+     * @return the loaded edit instance of this dungeon or generates a new one if none exists
+     */
+    EditWorld getOrInstantiateEditWorld(boolean ignoreLimit);
+
+    /**
+     * Returns a new game instance of this dungeon.
+     *
+     * @see de.erethon.dungeonsxl.api.dungeon.Game#ensureWorldIsLoaded(boolean)
+     * @param game        the game the instance belongs to
+     * @param ignoreLimit if the instance limit set in the main config shall be ignored
+     * @return a new game instance of this dungeon
+     */
+    GameWorld instantiateGameWorld(Game game, boolean ignoreLimit);
 
 }

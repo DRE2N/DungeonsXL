@@ -17,17 +17,17 @@ package de.erethon.dungeonsxl.api.world;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
 import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import java.util.Collection;
-import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 /**
- * A playable resource instance. There may be any amount of GameWorlds per {@link ResourceWorld}.
+ * A playable dungeon instance. There may be any amount of GameWorlds per {@link Dungeon}.
  * <p>
  * A game world is not equal to a {@link de.erethon.dungeonsxl.api.dungeon.Dungeon}.
  *
@@ -35,26 +35,6 @@ import org.bukkit.block.Block;
  */
 // Implementation-specific methods: [gameblock, secure objects, classes signs, mobs, triggers] methods, getMobCount(), setPlaying(), startGame(), listener methods
 public interface GameWorld extends InstanceWorld {
-
-    enum Type {
-        START_FLOOR,
-        END_FLOOR,
-        DEFAULT
-    }
-
-    /**
-     * Returns the {@link Type} of this GameWorld.
-     *
-     * @return the {@link Type} of this GameWorld
-     */
-    Type getType();
-
-    /**
-     * Sets the {@link Type} of this GameWorld.
-     *
-     * @param type the type
-     */
-    void setType(Type type);
 
     /**
      * Returns the game that is played in the game world.
@@ -64,43 +44,17 @@ public interface GameWorld extends InstanceWorld {
     Game getGame();
 
     /**
-     * Returns the dungeon that the game world is part of.
-     * <p>
-     * Note: While a {@link ResourceWorld} may be part of multiple dungeons, an instance is instantiated per game and thus has just one dungeon.
-     *
-     * @return the dungeon that the game world is part of
-     */
-    Dungeon getDungeon();
-
-    /**
      * Creates a trigger represented by the given atomic expression.
      * <p>
      * For example, if the expression may wrap the string "D 10", but not "D 10, M ZOMBIE".
-     * <p>
-     * Use {@link #createTriggers(TriggerListener, LogicalExpression)} to get an array of all {@link Trigger} objects for a compound expression (such as just "D
-     * 10, M ZOMBIE").
      *
      * @param owner      the {@link TriggerListener} that the trigger belongs to
      * @param expression the expression; must be {@link LogicalExpression#isAtomic() atomic}.
      * @throws IllegalArgumentException if the expression is not atomic
      * @throws IllegalStateException    if the owner is not in a game world
-     * @return a trigger represented by the given atomic expression; null if the expression is {@link LogicalExpression#EMPTY}.
+     * @return a trigger represented by the given atomic expression; not null.
      */
     Trigger createTrigger(TriggerListener owner, LogicalExpression expression);
-
-    /**
-     * Creates triggers represented by the given expression.
-     * <p>
-     * For example, if the expression wraps the string "D 10, M ZOMBIE", this returns an array where the 0st entry represents "D 10" and the 1st "M ZOMBIE".
-     * <p>
-     * Use {@link #createTrigger(TriggerListener, LogicalExpression)} to get one {@link Trigger} object for exactly one atomic part (such as just "D 10").
-     *
-     * @param owner      the {@link TriggerListener} that the trigger belongs to
-     * @param expression the expression; must be {@link LogicalExpression#isAtomic() atomic}.
-     * @throws IllegalStateException if the owner is not in a game world
-     * @return a List of triggers represented by the given expression; an empty List if the expression is {@link LogicalExpression#EMPTY}.
-     */
-    List<Trigger> createTriggers(TriggerListener owner, LogicalExpression expression);
 
     /**
      * Returns a Collection of the triggers registered in this world.

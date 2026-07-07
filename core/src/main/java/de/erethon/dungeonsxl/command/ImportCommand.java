@@ -20,10 +20,9 @@ import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.world.WorldConfig;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.util.FileUtil;
-import de.erethon.dungeonsxl.world.DResourceWorld;
-import de.erethon.dungeonsxl.world.WorldConfig;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -71,14 +70,12 @@ public class ImportCommand extends DCommand {
 
         FileUtil.copyDir(source, target, "playerdata", "stats");
 
-        DResourceWorld resource = new DResourceWorld(plugin, args[1]);
-        plugin.getDungeonRegistry().add(args[1], new DDungeon(plugin, resource));
+        DDungeon dungeon = DDungeon.create(plugin, args[1]);
         if (world != null && world.getEnvironment() != Environment.NORMAL) {
-            WorldConfig config = resource.getConfig(true);
+            WorldConfig config = dungeon.getConfig(true);
             config.setWorldEnvironment(world.getEnvironment());
             config.save();
         }
-        plugin.getMapRegistry().add(resource.getName(), resource);
         MessageUtil.sendMessage(sender, DMessage.CMD_IMPORT_SUCCESS.getMessage(args[1]));
     }
 

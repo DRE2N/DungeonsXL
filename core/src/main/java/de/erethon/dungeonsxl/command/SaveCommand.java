@@ -47,7 +47,7 @@ public class SaveCommand extends DCommand {
         if (editWorld != null) {
             BackupMode backupMode = config.getBackupMode();
             if (backupMode == BackupMode.ON_SAVE || backupMode == BackupMode.ON_DISABLE_AND_SAVE) {
-                editWorld.getResource().backup();
+                editWorld.getDungeon().backup();
             }
 
             editWorld.save();

@@ -21,13 +21,8 @@ import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobSpawnEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
-import de.erethon.dungeonsxl.api.trigger.Trigger;
-import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.trigger.MobTrigger;
-import de.erethon.dungeonsxl.trigger.WaveTrigger;
 import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.mob.ExMob;
@@ -44,10 +39,11 @@ import org.bukkit.event.entity.EntityDeathEvent;
  */
 public class DMob implements DungeonMob {
 
+    private GameWorld gameWorld;
+
     private LivingEntity entity;
     private ExMob type;
 
-    private String trigger;
     private MobSet typeSet;
     private Set<MobSet> mobSets;
 
@@ -72,7 +68,6 @@ public class DMob implements DungeonMob {
 
         DungeonMobSpawnEvent event = new DungeonMobSpawnEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-        this.trigger = trigger;
         gameWorld.addMob(this);
         this.typeSet = typeSet;
         this.mobSets = new HashSet<>();
@@ -92,11 +87,6 @@ public class DMob implements DungeonMob {
     @Override
     public ExMob getType() {
         return type;
-    }
-
-    @Override
-    public String getTriggerId() {
-        return trigger;
     }
 
     /* Actions */
@@ -120,18 +110,6 @@ public class DMob implements DungeonMob {
             event.setDroppedExp(0);
         }
 
-        MobTrigger mobTrigger = MobTrigger.getByName(trigger, gameWorld);
-        if (mobTrigger != null) {
-            mobTrigger.trigger(true, null);
-        }
-
-        Collection<Trigger> waveTriggers = gameWorld.getTriggersFromKey(TriggerTypeKey.WAVE);
-        for (Trigger uncasted : waveTriggers) {
-            WaveTrigger waveTrigger = (WaveTrigger) uncasted;
-            if (((DGame) gameWorld.getGame()).getWaveKills() >= Math.ceil(gameWorld.getMobCount() * waveTrigger.getMustKillRate())) {
-                waveTrigger.trigger(true, null);
-            }
-        }
         mobSets.forEach(s -> s.kill(victim));
 
         gameWorld.removeMob(this);

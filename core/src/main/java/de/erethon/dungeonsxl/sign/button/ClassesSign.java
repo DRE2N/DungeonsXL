@@ -20,6 +20,7 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
 import de.erethon.dungeonsxl.api.sign.Button;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
@@ -44,6 +45,11 @@ public class ClassesSign extends Button {
 
     public void setPlayerClass(PlayerClass playerClass) {
         this.playerClass = playerClass;
+    }
+
+    @Override
+    public Trigger getDefaultTrigger() {
+        return new InteractTrigger(api, this);
     }
 
     @Override
@@ -79,7 +85,7 @@ public class ClassesSign extends Button {
     @Override
     public void initialize() {
         if (playerClass != null) {
-            InteractTrigger.addDefault(api, this, playerClass.getName(), "");
+            InteractTrigger.applyDefaultSignLayout(this, playerClass.getName(), "");
             getGameWorld().setClassesEnabled(true);
         } else {
             markAsErroneous("No such class");

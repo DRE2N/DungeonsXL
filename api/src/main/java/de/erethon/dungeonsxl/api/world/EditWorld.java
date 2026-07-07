@@ -17,7 +17,7 @@ package de.erethon.dungeonsxl.api.world;
 import org.bukkit.block.Block;
 
 /**
- * A raw resource world instance to edit the dungeon map. There is never more than one edit world per resource world.
+ * A raw dungeon instance to edit the dungeon map. There is never more than one edit world per dungeon.
  * <p>
  * An edit world is not equal to a {@link de.erethon.dungeonsxl.api.dungeon.Dungeon}.
  *

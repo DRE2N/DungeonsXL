@@ -29,7 +29,6 @@ import net.citizensnpcs.api.npc.AbstractNPC;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -125,7 +124,7 @@ public class CitizensMobProvider implements ExternalMobProvider, Listener {
 
         npc.spawn(location);
         spawnedNPCs.add(npc);
-        api.wrapEntity((LivingEntity) npc.getEntity(), gameWorld, mob);
+        //api.wrapEntity((LivingEntity) npc.getEntity(), gameWorld, mob);
     }
 
     /* Listeners */

@@ -45,7 +45,7 @@ public class InteractTrigger extends AbstractTrigger {
         interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
     }
 
-    private InteractTrigger(DungeonsAPI api, TriggerListener owner) {
+    public InteractTrigger(DungeonsAPI api, TriggerListener owner) {
         super(api, owner, LogicalExpression.parse("I" + unusedId), String.valueOf(unusedId++));
         interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
     }
@@ -101,9 +101,11 @@ public class InteractTrigger extends AbstractTrigger {
         return null;
     }
 
-    public static void addDefault(DungeonsAPI api, DungeonSign dungeonSign, String line1, String line2) {
-        InteractTrigger trigger = new InteractTrigger(api, dungeonSign);
-        trigger.addListener(dungeonSign);
+    public static void applyDefaultSignLayout(DungeonSign dungeonSign, String line1, String line2) {
+        if (!dungeonSign.getTriggerExpression().getContents(false).contains(LogicalExpression.EMPTY)) {
+            dungeonSign.setToAir();
+            return;
+        }
 
         Sign sign = dungeonSign.getSign();
         sign.setLine(0, ChatColor.DARK_BLUE + "############");

@@ -70,8 +70,7 @@ public class GameCommand extends DCommand {
         MessageUtil.sendMessage(sender, "&bGroups: &e" + groups);
         MessageUtil.sendMessage(sender, "&bDungeon: &e" + (dGroup.getDungeon().getName() == null ? "N/A" : dGroup.getDungeon().getName()));
         MessageUtil.sendMessage(sender, "&bMap: &e" + (dGroup.getGameWorld() == null ? "N/A" : dGroup.getGameWorld().getName()));
-        MessageUtil.sendMessage(sender, "&bWaves finished: &e" + game.getWaveCount());
-        MessageUtil.sendMessage(sender, "&bKills: &e" + game.getGameKills() + " / Game; " + game.getWaveKills() + " / Wave");
+        MessageUtil.sendMessage(sender, "&bKills: &e" + game.getGameKills());
     }
 
 }

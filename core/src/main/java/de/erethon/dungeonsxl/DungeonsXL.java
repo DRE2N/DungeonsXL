@@ -29,6 +29,7 @@ import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
+import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
@@ -38,11 +39,9 @@ import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.command.DCommandRegistry;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
-import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.global.GlobalProtectionCache;
 import de.erethon.dungeonsxl.global.GlobalProtectionListener;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
@@ -70,7 +69,7 @@ import de.erethon.dungeonsxl.util.DependencyVersion;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
 import de.erethon.dungeonsxl.world.DEditWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.world.DWorldListener;
 import de.erethon.dungeonsxl.world.LWCIntegration;
 import de.erethon.dungeonsxl.world.WorldConfig;
@@ -141,7 +140,6 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
     private Registry<String, Class<? extends Requirement>> requirementRegistry;
     private Registry<String, Class<? extends Reward>> rewardRegistry;
     private Registry<String, Dungeon> dungeonRegistry;
-    private Registry<String, ResourceWorld> mapRegistry;
     private Registry<Integer, InstanceWorld> instanceCache;
     private Registry<String, GameRule> gameRuleRegistry;
     private Registry<Character, Class<? extends Trigger>> triggerRegistry;
@@ -169,15 +167,9 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
             if (loaded) {
                 GameRule.DEFAULT_VALUES.setState(rule, rule.getDefaultValue());
                 mainConfig.getDefaultWorldConfig().updateGameRule(rule);
-                for (Dungeon apiDungeon : dungeonRegistry) {
-                    DDungeon dungeon = ((DDungeon) apiDungeon);
-                    if (dungeon.isMultiFloor()) {
-                        dungeon.getConfig().getDefaultValues().updateGameRule(rule);
-                        dungeon.getConfig().getOverrideValues().updateGameRule(rule);
-                    } else {
-                        WorldConfig cfg = ((DResourceWorld) dungeon.getMap()).getConfig(false);
-                        cfg.updateGameRule(rule);
-                    }
+                for (Dungeon dungeon : dungeonRegistry) {
+                    WorldConfig cfg = ((DDungeon) dungeon).getConfig(false);
+                    cfg.updateGameRule(rule);
                 }
                 dungeonRegistry.forEach(Dungeon::setupRules);
             }
@@ -261,7 +253,6 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
         PLAYERS.mkdir();
         SCRIPTS.mkdir();
         CLASSES.mkdir();
-        DUNGEONS.mkdir();
         SIGNS.mkdir();
         COMMANDS.mkdir();
     }
@@ -287,35 +278,15 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
 
         /* Maps & dungeons */
         // Maps
-        mapRegistry = new Registry<>();
+        dungeonRegistry = new Registry<>();
         for (File file : MAPS.listFiles()) {
             if (file.isDirectory() && !file.getName().equals(".raw")) {
-                mapRegistry.add(file.getName(), new DResourceWorld(this, file));
+                DDungeon.create(this, file);
             }
-        }
-        // Dungeons - Map dungeons
-        dungeonRegistry = new Registry<>();
-        for (ResourceWorld resource : mapRegistry) {
-            dungeonRegistry.add(resource.getName(), new DDungeon(this, resource));
-        }
-        // Dungeons - Linked dungeons
-        if (init.isXLDevMode()) {
-            for (File file : DUNGEONS.listFiles()) {
-                Dungeon dungeon = DDungeon.create(this, file);
-
-                if (dungeon != null) {
-                    dungeonRegistry.add(dungeon.getName(), dungeon);
-                } else {
-                    MessageUtil.log(this, "&4The setup of dungeon &6" + file.getName()
-                            + "&4 is incorrect. See https://github.com/DRE2N/DungeonsXL/wiki/dungeon-configuration for reference.");
-                }
-            }
-        } else if (DUNGEONS.listFiles().length != 0) {
-            MessageUtil.log(this, "&4Multi floor dungeons are not part of the range of functions of this build.");
         }
         // Raw map to copy
-        if (!DResourceWorld.RAW.exists()) {
-            DResourceWorld.createRaw();
+        if (!DDungeon.RAW.exists()) {
+            DDungeon.createRaw();
         }
 
         /* Scripts & global data */
@@ -422,7 +393,7 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
                         }
                         remove.delete();
                     }
-                    DResourceWorld.deleteUnusedFiles(file);
+                    DDungeon.deleteUnusedFiles(file);
                     FileUtil.copyDir(file, resource, DungeonsXL.EXCLUDED_FILES);
                 }
             }
@@ -481,11 +452,6 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
     @Override
     public Registry<String, Dungeon> getDungeonRegistry() {
         return dungeonRegistry;
-    }
-
-    @Override
-    public Registry<String, ResourceWorld> getMapRegistry() {
-        return mapRegistry;
     }
 
     @Override
@@ -640,32 +606,21 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
     }
 
     @Override
-    public DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, String triggerId) {
-        DungeonMob mob = getDungeonMob(entity);
-        if (mob != null) {
-            return mob;
-        } else {
-            return new DMob(entity, gameWorld, xlib.getExMob(triggerId), triggerId);
+    public DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type, MobSet typeSet, Collection<MobSet> mobSets) {
+        if (entity == null) {
+            throw new IllegalArgumentException("entity cannot be null");
         }
-    }
-
-    @Override
-    public DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type) {
-        DungeonMob mob = getDungeonMob(entity);
-        if (mob != null) {
-            return mob;
-        } else {
-            return new DMob(entity, gameWorld, type, type.getId());
+        if (gameWorld == null) {
+            throw new IllegalArgumentException("gameWorld cannot be null");
         }
-    }
-
-    @Override
-    public DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type, String triggerId) {
+        if (typeSet == null) {
+            throw new IllegalArgumentException("Type MobSet cannot be null");
+        }
         DungeonMob mob = getDungeonMob(entity);
         if (mob != null) {
             return mob;
         } else {
-            return new DMob(entity, gameWorld, type, triggerId);
+            return new DMob(entity, gameWorld, type, typeSet, mobSets);
         }
     }
 
@@ -774,7 +729,7 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
         BackupMode backupMode = mainConfig.getBackupMode();
         for (InstanceWorld instance : instanceCache.getAll()) {
             if (backupMode == BackupMode.ON_DISABLE | backupMode == BackupMode.ON_DISABLE_AND_SAVE && instance instanceof EditWorld) {
-                instance.getResource().backup();
+                instance.getDungeon().backup();
             }
 
             instance.delete();

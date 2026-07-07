@@ -18,12 +18,14 @@ package de.erethon.dungeonsxl.world;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.Version;
 import java.io.File;
@@ -49,17 +51,17 @@ public abstract class DInstanceWorld implements InstanceWorld {
     private static int counter;
 
     protected Map<Block, DungeonSign> signs = new HashMap<>();
-    private DResourceWorld resourceWorld;
+    protected DDungeon dungeon;
     private File folder;
-    String world;
+    private String world;
     private int id;
     private Location lobby;
 
-    DInstanceWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder) {
+    protected DInstanceWorld(DungeonsXL plugin, DDungeon dungeon, File folder) {
         this.plugin = plugin;
         dPlayers = plugin.getPlayerCache();
 
-        this.resourceWorld = resourceWorld;
+        this.dungeon = dungeon;
         this.folder = folder;
         id = counter++;
 
@@ -69,12 +71,12 @@ public abstract class DInstanceWorld implements InstanceWorld {
     /* Getters and setters */
     @Override
     public String getName() {
-        return resourceWorld.getName();
+        return dungeon.getName();
     }
 
     @Override
-    public DResourceWorld getResource() {
-        return resourceWorld;
+    public Dungeon getDungeon() {
+        return dungeon;
     }
 
     @Override
@@ -88,6 +90,10 @@ public abstract class DInstanceWorld implements InstanceWorld {
             return null;
         }
         return Bukkit.getWorld(world);
+    }
+
+    public void setWorld(String worldName) {
+        world = worldName;
     }
 
     /**

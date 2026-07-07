@@ -27,9 +27,8 @@ import de.erethon.dungeonsxl.api.event.group.GroupCollectRewardEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupCreateEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupDisbandEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupFinishDungeonEvent;
-import de.erethon.dungeonsxl.api.event.group.GroupFinishFloorEvent;
 import de.erethon.dungeonsxl.api.event.group.GroupPlayerJoinEvent;
-import de.erethon.dungeonsxl.api.event.group.GroupStartFloorEvent;
+import de.erethon.dungeonsxl.api.event.group.GroupStartGameEvent;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
@@ -37,19 +36,14 @@ import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.player.PlayerGroup.Color;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.dungeon.DGame;
-import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.global.GroupSign;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.player.PlayerCollection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -437,7 +431,7 @@ public class DGroup implements PlayerGroup {
 
     /* Actions */
     public boolean teleport() {
-        if (dungeon == null || dungeon.getMap() == null) {
+        if (dungeon == null) {
             sendMessage(DMessage.ERROR_NO_SUCH_DUNGEON.getMessage());
             return false;
         }
@@ -472,57 +466,7 @@ public class DGroup implements PlayerGroup {
             return;
         }
 
-        ((DGame) getGame()).resetWaveKills();
         getDGamePlayers().forEach(p -> p.leave(false));
-    }
-
-    // TODO: Move code to more appropriate classes
-    /**
-     * The group finishs the current floor.
-     *
-     * @param specifiedFloor the name of the next floor
-     */
-    public void finishFloor(DResourceWorld specifiedFloor) {
-        Game game = getGame();
-        DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
-        int floorsLeft = getDungeon().getFloors().size() - game.getFloorCount(); //floorCount contains start floor, but dungeon floor list doesn't
-        game.removeUnplayedFloor(game.getWorld().getResource(), false);
-        ResourceWorld newFloor = null;
-        GameWorld.Type type = null;
-        if (game.getWorld().getType() == GameWorld.Type.END_FLOOR) {
-            finish();
-            return;
-        } else if (specifiedFloor != null) {
-            newFloor = specifiedFloor;
-            type = GameWorld.Type.DEFAULT;
-        } else if (floorsLeft > 0) {
-            int random = new Random().nextInt(floorsLeft);
-            newFloor = game.getUnplayedFloors().get(random);
-            type = GameWorld.Type.DEFAULT;
-        } else {
-            newFloor = dConfig.getEndFloor();
-            type = GameWorld.Type.END_FLOOR;
-        }
-
-        GroupFinishFloorEvent event = new GroupFinishFloorEvent(this, game.getWorld(), newFloor);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
-
-        GameWorld gameWorld = newFloor.instantiateGameWorld(getGame(), true);
-        gameWorld.setType(type);
-        game.setWorld(gameWorld);
-
-        for (DGamePlayer player : getDGamePlayers()) {
-            player.setInstanceWorld(gameWorld);
-            player.setLastCheckpoint(gameWorld.getStartLocation(this));
-            if (player.getWolf() != null) {
-                player.getWolf().teleport(player.getLastCheckpoint());
-            }
-            player.setFinished(false);
-        }
-        game.start();
     }
 
     @Override
@@ -562,7 +506,7 @@ public class DGroup implements PlayerGroup {
             }
         }
 
-        GroupStartFloorEvent event = new GroupStartFloorEvent(this, getGameWorld());
+        GroupStartGameEvent event = new GroupStartGameEvent(this, game);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
     }

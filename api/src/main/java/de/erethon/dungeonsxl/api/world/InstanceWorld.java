@@ -14,6 +14,7 @@
  */
 package de.erethon.dungeonsxl.api.world;
 
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.player.InstancePlayer;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import java.io.File;
@@ -34,11 +35,11 @@ import org.bukkit.block.Sign;
 public interface InstanceWorld {
 
     /**
-     * Returns the name of the resource world of this instance.
+     * Returns the name of the dungeon this type is an instance of.
      * <p>
      * Use {@link #getWorld()}{@link org.bukkit.World#getName() #getName()} to get the name of the instantiated world (like e.g. DXL_Game_1).
      *
-     * @return the name of the resource world of this instance
+     * @return the name of the dungeon this type is an instance of
      */
     String getName();
 
@@ -47,7 +48,7 @@ public interface InstanceWorld {
      *
      * @return the saved map this instance was loaded from
      */
-    ResourceWorld getResource();
+    Dungeon getDungeon();
 
     /**
      * Returns the world folder.

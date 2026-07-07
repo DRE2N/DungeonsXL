@@ -18,16 +18,11 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.DDungeon;
-import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.util.FileUtil;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -51,8 +46,8 @@ public class DeleteCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        ResourceWorld resource = plugin.getMapRegistry().get(args[1]);
-        if (resource == null) {
+        Dungeon dungeon = plugin.getDungeonRegistry().get(args[1]);
+        if (dungeon == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
         }
@@ -72,40 +67,21 @@ public class DeleteCommand extends DCommand {
             return;
         }
 
-        if (resource.getEditWorld() != null) {
-            resource.getEditWorld().delete(false);
+        if (dungeon.getEditWorld() != null) {
+            dungeon.getEditWorld().delete(false);
         }
-        plugin.getMapRegistry().remove(resource);
-        FileUtil.removeDir(resource.getFolder());
+        plugin.getDungeonRegistry().remove(dungeon);
+        FileUtil.removeDir(dungeon.getFolder());
 
         if (args[2].equalsIgnoreCase("true")) {
             for (File file : DungeonsXL.BACKUPS.listFiles()) {
-                if (file.getName().startsWith(resource.getName() + "-")) {
+                if (file.getName().startsWith(dungeon.getName() + "-")) {
                     FileUtil.removeDir(file);
                 }
             }
         }
 
-        List<Dungeon> toRemove = new ArrayList<>();
-        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
-            if (dungeon.getStartFloor().equals(resource)) {
-                toRemove.add(dungeon);
-                if (dungeon.isMultiFloor()) {
-                    ((DDungeon) dungeon).getConfig().getFile().delete();
-                }
-            } else if (dungeon.isMultiFloor() && dungeon.getEndFloor().equals(resource)) {
-                toRemove.add(dungeon);
-                ((DDungeon) dungeon).getConfig().getFile().delete();
-            } else if (dungeon.isMultiFloor() && dungeon.getFloors().contains(resource)) {
-                dungeon.removeFloor(resource);
-                DungeonConfig config = ((DDungeon) dungeon).getConfig();
-                List<String> floors = config.getConfig().getStringList("floors");
-                floors.remove(resource.getName());
-                config.getConfig().set("floors", floors);
-                config.save();
-            }
-        }
-        toRemove.forEach(plugin.getDungeonRegistry()::remove);
+        plugin.getDungeonRegistry().remove(dungeon);
 
         MessageUtil.sendMessage(sender, DMessage.CMD_DELETE_SUCCESS.getMessage(args[1]));
     }

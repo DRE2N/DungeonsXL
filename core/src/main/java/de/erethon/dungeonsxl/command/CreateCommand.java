@@ -22,7 +22,6 @@ import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.world.DEditWorld;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.xlib.chat.MessageUtil;
 import java.io.File;
 import org.bukkit.command.CommandSender;
@@ -63,9 +62,9 @@ public class CreateCommand extends DCommand {
             MessageUtil.log(plugin, "&6Creating new map.");
             MessageUtil.log(plugin, "&6Generating new world...");
 
-            DResourceWorld resource = new DResourceWorld(plugin, name);
-            plugin.getMapRegistry().add(name, resource);
-            DEditWorld editWorld = resource.generate();
+            DDungeon dungeon = DDungeon.create(plugin, name);
+            plugin.getDungeonRegistry().add(name, dungeon);
+            DEditWorld editWorld = dungeon.generate();
             editWorld.save();
             editWorld.delete();
 
@@ -82,10 +81,9 @@ public class CreateCommand extends DCommand {
             MessageUtil.log(plugin, "&6Creating new map.");
             MessageUtil.log(plugin, "&6Generating new world...");
 
-            DResourceWorld resource = new DResourceWorld(plugin, name);
-            plugin.getMapRegistry().add(name, resource);
-            plugin.getDungeonRegistry().add(name, new DDungeon(plugin, resource));
-            DEditWorld editWorld = resource.generate();
+            DDungeon dungeon = DDungeon.create(plugin, name);
+            plugin.getDungeonRegistry().add(name, dungeon);
+            DEditWorld editWorld = dungeon.generate();
 
             MessageUtil.log(plugin, "&6World generation finished.");
 

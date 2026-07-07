@@ -19,6 +19,7 @@ import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
+import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.player.GroupAdapter;
 import de.erethon.dungeonsxl.api.player.PlayerCache;
 import de.erethon.dungeonsxl.api.player.PlayerClass;
@@ -28,7 +29,6 @@ import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.xlib.XLib;
 import de.erethon.xlib.mob.ExMob;
 import de.erethon.xlib.util.Registry;
@@ -54,7 +54,6 @@ public interface DungeonsAPI extends Plugin {
     static final File PLAYERS = new File(PLUGIN_ROOT, "players");
     static final File SCRIPTS = new File(PLUGIN_ROOT, "scripts");
     static final File CLASSES = new File(SCRIPTS, "classes");
-    static final File DUNGEONS = new File(SCRIPTS, "dungeons");
 
     /**
      * Returns the loaded instance of XLib.
@@ -111,13 +110,6 @@ public interface DungeonsAPI extends Plugin {
      * @return a registry of the dungeons
      */
     Registry<String, Dungeon> getDungeonRegistry();
-
-    /**
-     * Returns a registry of the resources worlds.
-     *
-     * @return a registry of the resources worlds
-     */
-    Registry<String, ResourceWorld> getMapRegistry();
 
     /**
      * Returns a cache of the instance worlds.
@@ -218,33 +210,26 @@ public interface DungeonsAPI extends Plugin {
     /**
      * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
      *
-     * @param entity    the entity
-     * @param gameWorld the game world where the entity is
-     * @param triggerId the identifier used in mob triggers
+     * @param entity    the entity; not null
+     * @param gameWorld the game world where the entity is; not null
+     * @param type      the ExMob type of the entity; not null
      * @return the wrapped DungeonMob
      */
-    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, String triggerId);
+    default DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type) {
+        return wrapEntity(entity, gameWorld, type, gameWorld.getOrCreateMobSet(type.getId()), null);
+    }
 
     /**
      * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
      *
-     * @param entity    the entity
-     * @param gameWorld the game world where the entity is
-     * @param type      the ExMob type of the entity
+     * @param entity    the entity; not null
+     * @param gameWorld the game world where the entity is; not null
+     * @param type      the ExMob type of the entity; null for unknown / spawned by an external plugin
+     * @param typeSet   the {@link MobSet} that represents the mob's type; not null
+     * @param mobSets   the {@link MobSet}s the mob is registered in; null or empty if no additional sets intended
      * @return the wrapped DungeonMob
      */
-    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type);
-
-    /**
-     * Wraps the given {@link LivingEntity} object in a {@link DungeonMob} object.
-     *
-     * @param entity    the entity
-     * @param gameWorld the game world where the entity is
-     * @param type      the ExMob type of the entity
-     * @param triggerId the identifier used in mob triggers
-     * @return the wrapped DungeonMob
-     */
-    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type, String triggerId);
+    DungeonMob wrapEntity(LivingEntity entity, GameWorld gameWorld, ExMob type, MobSet typeSet, Collection<MobSet> mobSets);
 
     /* Getters */
     /**

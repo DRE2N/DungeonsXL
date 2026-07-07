@@ -126,6 +126,8 @@ public class DCommandRegistry extends DRECommandRegistry {
             addCommand(chat);
             addCommand(chatSpy);
         }
+
+        addCommand(new DebugLECommand(plugin));
     }
 
 }

@@ -44,7 +44,45 @@ public interface Trigger {
      *
      * @see GameWorld#createTrigger(TriggerListener, LogicalExpression)
      */
-    static final Set<Character> IDENTIFIABLE = Sets.newHashSet(GENERIC, INTERACT, MOB, PROGRESS, USE_ITEM, WAVE);
+    static final Set<Character> IDENTIFIABLE = Sets.newHashSet(GENERIC, INTERACT, MOB, USE_ITEM);
+
+    // TODO: Javadoc
+    static Trigger empty(TriggerListener owner) {
+        return new AbstractTrigger(null, owner, LogicalExpression.EMPTY, LogicalExpression.EMPTY.getText()) {
+            @Override
+            public char getKey() {
+                return '0';
+            }
+
+            @Override
+            public boolean isTriggered() {
+                return true;
+            }
+
+            @Override
+            public void onTrigger(boolean switching) {
+            }
+        };
+    }
+
+    static Trigger error(TriggerListener owner, LogicalExpression expression, String text) {
+        return new AbstractTrigger(null, owner, expression, text) {
+            @Override
+            public char getKey() {
+                return '0';
+            }
+
+            @Override
+            public boolean isTriggered() {
+                return false;
+            }
+
+            @Override
+            public void onTrigger(boolean switching) {
+                setTriggered(true);
+            }
+        };
+    }
 
     /**
      * Constructs a subtype of Trigger.

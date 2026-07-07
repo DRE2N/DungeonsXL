@@ -17,7 +17,7 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.xlib.chat.MessageUtil;
@@ -43,12 +43,12 @@ public class InviteCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        ResourceWorld resource = plugin.getMapRegistry().get(args[2]);
+        Dungeon dungeon = plugin.getDungeonRegistry().get(args[2]);
         OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
 
-        if (resource != null) {
+        if (dungeon != null) {
             if (player != null) {
-                resource.addInvitedPlayer(player);
+                dungeon.addInvitedPlayer(player);
                 MessageUtil.sendMessage(sender, DMessage.CMD_INVITE_SUCCESS.getMessage(args[1], args[2]));
 
             } else {

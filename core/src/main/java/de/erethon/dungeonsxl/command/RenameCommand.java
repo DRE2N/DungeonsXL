@@ -18,21 +18,14 @@ package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
-import de.erethon.dungeonsxl.dungeon.DDungeon;
-import de.erethon.dungeonsxl.dungeon.DungeonConfig;
 import de.erethon.dungeonsxl.global.GlobalProtection;
 import de.erethon.dungeonsxl.global.JoinSign;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.dungeonsxl.world.DResourceWorld;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.xlib.chat.MessageUtil;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * @author Daniel Saukel
@@ -52,57 +45,22 @@ public class RenameCommand extends DCommand {
 
     @Override
     public void onExecute(String[] args, CommandSender sender) {
-        DResourceWorld resource = (DResourceWorld) plugin.getMapRegistry().get(args[1]);
-        if (resource == null) {
+        DDungeon dungeon = (DDungeon) plugin.getDungeonRegistry().get(args[1]);
+        if (dungeon == null) {
             MessageUtil.sendMessage(sender, DMessage.ERROR_NO_SUCH_MAP.getMessage(args[1]));
             return;
         }
 
-        Dungeon sfd = resource.getSingleFloorDungeon();
-        resource.setName(args[2]);
-        resource.getFolder().renameTo(new File(DungeonsXL.MAPS, args[2]));
-        resource.getSignData().updateFile(resource);
-
-        if (resource.getEditWorld() != null) {
-            resource.getEditWorld().delete(true);
+        if (plugin.getDungeonRegistry().get(args[2]) == null) {
+            MessageUtil.sendMessage(sender, DMessage.ERROR_NAME_IN_USE.getMessage(args[2]));
+            return;
         }
 
-        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
-            if (!dungeon.isMultiFloor()) {
-                continue;
-            }
-            DungeonConfig dConfig = ((DDungeon) dungeon).getConfig();
-            FileConfiguration config = dConfig.getConfig();
-            File file = dConfig.getFile();
-
-            if (dConfig.getStartFloor() == resource) {
-                config.set("startFloor", args[2]);
-            }
-
-            if (dConfig.getEndFloor() == resource) {
-                config.set("endFloor", args[2]);
-            }
-
-            List<String> list = config.getStringList("floors");
-            int i = 0;
-            for (ResourceWorld floor : dConfig.getFloors()) {
-                if (floor == resource) {
-                    list.set(i, args[2]);
-                }
-                i++;
-            }
-            config.set("floors", list);
-
-            try {
-                config.save(file);
-            } catch (IOException ex) {
-            }
+        if (dungeon.getEditWorld() != null) {
+            dungeon.getEditWorld().delete(true);
         }
-        sfd.setName(args[2]);
-        plugin.getDungeonRegistry().removeKey(args[1]);
-        plugin.getDungeonRegistry().add(args[2], sfd);
-        plugin.getMapRegistry().removeKey(args[1]);
-        plugin.getMapRegistry().add(args[2], resource);
+
+        dungeon.setName(args[2]);
 
         boolean changed = false;
         Set<GlobalProtection> protections = plugin.getGlobalProtectionCache().getProtections();
@@ -110,13 +68,14 @@ public class RenameCommand extends DCommand {
             if (!(protection instanceof JoinSign)) {
                 continue;
             }
-            Dungeon dungeon = ((JoinSign) protection).getDungeon();
-            if (dungeon == null) {
+            Dungeon pDungeon = ((JoinSign) protection).getDungeon();
+            if (pDungeon == null) {
                 protection.delete();
                 continue;
             }
-            if (dungeon.getName().equals(args[1])) {
-                dungeon.setName(args[2]);
+            if (pDungeon.getName().equals(args[1])) {
+                // TODO: Why necessary?
+                // pDungeon.setName(args[2]);
                 changed = true;
             }
         }

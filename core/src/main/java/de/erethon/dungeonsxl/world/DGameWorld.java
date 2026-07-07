@@ -17,8 +17,6 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.dungeon.BuildMode;
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
@@ -35,22 +33,19 @@ import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.sign.button.ReadySign;
 import de.erethon.dungeonsxl.sign.passive.StartSign;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
 import de.erethon.dungeonsxl.trigger.FortuneTrigger;
-import de.erethon.dungeonsxl.trigger.ProgressTrigger;
 import de.erethon.dungeonsxl.trigger.RedstoneTrigger;
-import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.world.block.GameBlock;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
-import de.erethon.dungeonsxl.world.block.MultiBlock;
 import de.erethon.dungeonsxl.world.block.PlaceableBlock;
 import de.erethon.dungeonsxl.world.block.RewardChest;
 import de.erethon.dungeonsxl.world.block.TeamBed;
 import de.erethon.dungeonsxl.world.block.TeamFlag;
-import de.erethon.xlib.XLib;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.util.FileUtil;
@@ -68,9 +63,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hanging;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -78,10 +70,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class DGameWorld extends DInstanceWorld implements GameWorld {
 
-    private XLib xlib;
     private Game game;
-
-    private Type type = Type.DEFAULT;
 
     private boolean isPlaying = false;
     private boolean classes = false;
@@ -102,23 +91,13 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     private boolean readySign;
 
-    DGameWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder, Game game) {
-        super(plugin, resourceWorld, folder);
-        xlib = plugin.getXLib();
+    public DGameWorld(DungeonsXL plugin, DDungeon dungeon, File folder, Game game) {
+        super(plugin, dungeon, folder);
         if (game == null) {
             throw new IllegalArgumentException("Game must not be null");
         }
         this.game = game;
-    }
-
-    @Override
-    public Type getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(Type type) {
-        this.type = type;
+        mobSets.put(MobSet.ALL, new MobSet(MobSet.ALL));
     }
 
     @Override
@@ -171,16 +150,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             return null;
         }
 
-        LogicalExpression expression = null;
-        if (!dSign.isTriggerLineDisabled()) {
-            try {
-                expression = LogicalExpression.parse(lines[3]);
-            } catch (IllegalArgumentException exception) {
-                dSign.markAsErroneous("The trigger string " + lines[3] + " is invalid.");
-            }
-        }
-        createTriggers(dSign, expression);
-        for (Trigger trigger : triggers) {
+        for (Trigger trigger : dSign.getTriggers()) {
             trigger.addListener(dSign);
         }
 
@@ -195,6 +165,9 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             if (!dSign.isErroneous() && dSign.isSetToAir()) {
                 dSign.setToAir();
             }
+            if (dSign.getTriggers().isEmpty()) {
+                dSign.trigger(null);
+            }
         }
 
         return dSign;
@@ -207,55 +180,48 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         String text = expression.getText();
+        Trigger trigger;
         if (text.trim().isEmpty()) {
-            return null;
+            trigger = owner.getDefaultTrigger();
+            registerTrigger(trigger);
+            return trigger;
         }
+
         char key = Character.toUpperCase(text.charAt(0));
         String value;
         if (plugin.getTriggerRegistry().containsKey(key)) {
             value = text.substring(1, text.length() - 1);
         } else {
-            key = 'T';
+            key = TriggerTypeKey.GENERIC;
             value = text;
         }
 
-        Trigger trigger = getTrigger(key, value);
+        trigger = getTrigger(key, value);
         if (trigger != null) {
+            registerTrigger(trigger);
             return trigger;
         }
 
         Class<? extends Trigger> clss = plugin.getTriggerRegistry().get(key);
         if (clss == null) {
-            return null;
+            throw new IllegalStateException("Could not find trigger implementation for trigger " + key);
         }
 
-        // Legacy shit
-        if (key == TriggerTypeKey.PROGRESS && value.matches("[0-99]/[0-999]")) {
-            trigger = ProgressTrigger.getOrCreate(plugin, owner, expression, value);
-        } else {
-            trigger = Trigger.construct(key, plugin, owner, expression, value);
-        }
+        trigger = Trigger.construct(key, plugin, owner, expression, value);
         if (trigger == null) {
-            return null;
+            return Trigger.error(owner, expression, text);
         }
 
+        registerTrigger(trigger);
+        return trigger;
+    }
+
+    private void registerTrigger(Trigger trigger) {
         TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             triggers.add(trigger);
         }
-        return trigger;
-    }
-
-    @Override
-    public List<Trigger> createTriggers(TriggerListener owner, LogicalExpression expression) {
-        List<LogicalExpression> atomicExpressions = expression.getContents(true);
-        List<Trigger> created = new ArrayList<>(atomicExpressions.size());
-        for (LogicalExpression atomic : atomicExpressions) {
-            Trigger trigger = atomic.toTrigger(plugin, owner, true);
-            created.add(trigger);
-        }
-        return created;
     }
 
     public Trigger getTrigger(char key, String value) {
@@ -439,39 +405,14 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     public int getMobCount() {
         int mobCount = 0;
 
-        signs:
         for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
             if (!(sign instanceof MobSign)) {
                 continue;
             }
-
-            for (Trigger trigger : sign.getTriggers()) {
-                if (trigger instanceof ProgressTrigger) {
-                    if (((ProgressTrigger) trigger).getFloorCount() > getGame().getFloorCount()) {
-                        break signs;
-                    }
-                }
-            }
-
             mobCount += ((MobSign) sign).getInitialAmount();
         }
 
         return mobCount;
-    }
-
-    @Override
-    public Dungeon getDungeon() {
-        if (getGame() != null) {
-            return getGame().getDungeon();
-        }
-
-        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
-            if (dungeon.containsFloor(getResource())) {
-                return dungeon;
-            }
-        }
-
-        return null;
     }
 
     public boolean hasReadySign() {
@@ -565,122 +506,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             MessageUtil.debug(plugin, "Error: World could not be unloaded, players left in world: " + !getWorld().getPlayers().isEmpty());
         }
         plugin.getInstanceCache().remove(this);
-        Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
+        Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getDungeon(), name));
     }
 
     private GameRuleContainer getRules() {
         return getDungeon().getRules();
-    }
-
-    /**
-     * Handles what happens when a player breaks a block.
-     *
-     * @param event the passed Bukkit event
-     * @return if the event is cancelled
-     */
-    public boolean onBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        Block block = event.getBlock();
-        for (DungeonSign sign : getDungeonSigns()) {
-            if (sign == null) {
-                continue;
-            }
-            if ((block.equals(sign.getSign().getBlock()) || block.equals(BlockUtilCompat.getAttachedBlock(sign.getSign().getBlock()))) && sign.isProtected()) {
-                return true;
-            }
-        }
-
-        for (GameBlock gameBlock : gameBlocks) {
-            if (block.equals(gameBlock.getBlock())) {
-                if (gameBlock.onBreak(event)) {
-                    return true;
-                }
-
-            } else if (gameBlock instanceof MultiBlock) {
-                if (block.equals(((MultiBlock) gameBlock).getAttachedBlock())) {
-                    if (gameBlock.onBreak(event)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        Game game = getGame();
-        if (game == null) {
-            return true;
-        }
-
-        BuildMode mode = getRules().getState(GameRule.BREAK_BLOCKS);
-
-        if (mode == BuildMode.FALSE) {
-            return true;
-        }
-
-        // Cancel if a protected entity is attached
-        for (Entity entity : getWorld().getNearbyEntities(block.getLocation(), 2, 2, 2)) {
-            if (!(entity instanceof Hanging)) {
-                continue;
-            }
-            if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
-                Hanging hanging = (Hanging) entity;
-                if (getRules().getState(GameRule.DAMAGE_PROTECTED_ENTITIES).contains(xlib.getExMob(hanging))) {
-                    event.setCancelled(true);
-                    break;
-                }
-            }
-        }
-
-        boolean breakBlock = !mode.check(player, this, block);
-        if (breakBlock) {
-            placedBlocks.remove(block);
-        }
-        return breakBlock;
-    }
-
-    /**
-     * Handles what happens when a player places a block.
-     *
-     * @param player
-     * @param block
-     * @param against
-     * @param hand    the event parameters.
-     * @return if the event is cancelled
-     */
-    public boolean onPlace(Player player, Block block, Block against, ItemStack hand) {
-        Game game = getGame();
-        if (game == null) {
-            return true;
-        }
-
-        if (getRules().getState(GameRule.PLACE_BLOCKS).check(player, this, block)) {
-            placedBlocks.add(block);
-            return false;
-        }
-
-        PlaceableBlock placeableBlock = null;
-        for (PlaceableBlock gamePlaceableBlock : placeableBlocks) {
-            if (gamePlaceableBlock.canPlace(block, xlib.getExItem(hand))) {
-                placeableBlock = gamePlaceableBlock;
-                break;
-            }
-        }
-        if (placeableBlock == null) {
-            // Workaround for a bug that would allow 3-Block-high jumping
-            Location loc = player.getLocation();
-            if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
-                if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
-                    if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
-                        loc.setX(block.getX() + 0.5);
-                        loc.setY(block.getY());
-                        loc.setZ(block.getZ() + 0.5);
-                        player.teleport(loc);
-                    }
-                }
-            }
-            return true;
-        }
-        placeableBlock.onPlace(player);
-        return false;
     }
 
 }

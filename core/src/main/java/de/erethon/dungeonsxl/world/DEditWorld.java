@@ -21,6 +21,7 @@ import de.erethon.dungeonsxl.api.event.world.EditWorldSaveEvent;
 import de.erethon.dungeonsxl.api.event.world.EditWorldUnloadEvent;
 import de.erethon.dungeonsxl.api.event.world.InstanceWorldPostUnloadEvent;
 import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.player.DEditPlayer;
 import de.erethon.xlib.chat.MessageUtil;
@@ -47,8 +48,8 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
     private File idFile;
 
-    DEditWorld(DungeonsXL plugin, DResourceWorld resourceWorld, File folder) {
-        super(plugin, resourceWorld, folder);
+    public DEditWorld(DungeonsXL plugin, DDungeon dungeon, File folder) {
+        super(plugin, dungeon, folder);
     }
 
     /* Getters and setters */
@@ -108,20 +109,20 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
         ));
         kickAllPlayers();
 
-        getResource().editWorld = null;
+        dungeon.setEditWorld(null);
         plugin.getInstanceCache().remove(this);
-        getResource().getSignData().serializeSigns(signs.values());
+        dungeon.getSignData().serializeSigns(signs.values());
         Bukkit.unloadWorld(getWorld(), true);
         new ProgressBar(players.keySet(), plugin.getMainConfig().getEditInstanceRemovalDelay()) {
             @Override
             public void onFinish() {
-                getResource().clearFolder();
-                FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-                DResourceWorld.deleteUnusedFiles(getResource().getFolder());
+                dungeon.clearFolder();
+                FileUtil.copyDir(getFolder(), getDungeon().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                DDungeon.deleteUnusedFiles(getDungeon().getFolder());
                 FileUtil.removeDir(getFolder());
 
                 plugin.setLoadingWorld(false);
-                EditWorld newEditWorld = getResource().getOrInstantiateEditWorld(true);
+                EditWorld newEditWorld = getDungeon().getOrInstantiateEditWorld(true);
                 players.keySet().forEach(p -> {
                     if (p.isOnline()) {
                         new DEditPlayer(plugin, p, newEditWorld);
@@ -142,10 +143,10 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
         getWorld().save();
 
-        FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-        DResourceWorld.deleteUnusedFiles(getResource().getFolder());
+        FileUtil.copyDir(getFolder(), getDungeon().getFolder(), DungeonsXL.EXCLUDED_FILES);
+        DDungeon.deleteUnusedFiles(getDungeon().getFolder());
 
-        getResource().getSignData().serializeSigns(signs.values());
+        dungeon.getSignData().serializeSigns(signs.values());
     }
 
     @Override
@@ -169,7 +170,7 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
 
         String name = getWorld().getName();
         if (save) {
-            getResource().getSignData().serializeSigns(signs.values());
+            dungeon.getSignData().serializeSigns(signs.values());
             boolean unloaded = Bukkit.unloadWorld(getWorld(), true);
             if (!unloaded) {
                 MessageUtil.debug(plugin, "Error: Could not unload world " + getWorld());
@@ -177,13 +178,13 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    getResource().clearFolder();
-                    FileUtil.copyDir(getFolder(), getResource().getFolder(), DungeonsXL.EXCLUDED_FILES);
-                    DResourceWorld.deleteUnusedFiles(getResource().getFolder());
+                    dungeon.clearFolder();
+                    FileUtil.copyDir(getFolder(), getDungeon().getFolder(), DungeonsXL.EXCLUDED_FILES);
+                    DDungeon.deleteUnusedFiles(getDungeon().getFolder());
                     if (unloaded) {
                         FileUtil.removeDir(getFolder());
                     }
-                    Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
+                    Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getDungeon(), name));
                 }
             }.runTaskLater(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
         }
@@ -198,12 +199,12 @@ public class DEditWorld extends DInstanceWorld implements EditWorld {
                     if (unloaded) {
                         FileUtil.removeDir(getFolder());
                     }
-                    Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getResource(), name));
+                    Bukkit.getPluginManager().callEvent(new InstanceWorldPostUnloadEvent(getDungeon(), name));
                 }
             }.runTaskLater(plugin, plugin.getMainConfig().getEditInstanceRemovalDelay() * 20L);
         }
 
-        getResource().editWorld = null;
+        dungeon.setEditWorld(null);
         plugin.getInstanceCache().remove(this);
     }
 

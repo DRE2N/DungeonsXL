@@ -21,6 +21,7 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.Button;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
@@ -53,6 +54,11 @@ public class ReadySign extends Button {
 
     public void setTimeToAutoStart(double time) {
         autoStart = time;
+    }
+
+    @Override
+    public Trigger getDefaultTrigger() {
+        return new InteractTrigger(api, this);
     }
 
     @Override
@@ -92,12 +98,7 @@ public class ReadySign extends Button {
             autoStart = NumberUtil.parseDouble(getLine(2), -1);
         }
 
-        if (!getTriggers().isEmpty()) {
-            setToAir();
-            return;
-        }
-
-        InteractTrigger.addDefault(api, this, DMessage.SIGN_READY.getMessage(), "");
+        InteractTrigger.applyDefaultSignLayout(this, DMessage.SIGN_READY.getMessage(), "");
     }
 
     @Override

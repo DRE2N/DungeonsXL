@@ -28,9 +28,9 @@ import org.bukkit.entity.Player;
 public interface TriggerListener {
 
     /**
-     * Returns a {@link LogicalExpression} of the triggers registered for this listener.
+     * Returns a {@link LogicalExpression} of the triggers registered for this listener; not null.
      *
-     * @return a a {@link LogicalExpression} of the triggers registered for this listener
+     * @return a a {@link LogicalExpression} of the triggers registered for this listener; not null
      */
     LogicalExpression getTriggerExpression();
 
@@ -49,7 +49,16 @@ public interface TriggerListener {
      * @return if the listener has triggers
      */
     default boolean hasTriggers() {
-        return getTriggerExpression() != null;
+        return getTriggerExpression() != LogicalExpression.EMPTY;
+    }
+
+    /**
+     * The fallback trigger to use when none is specified; by default {@link Trigger#empty(TriggerListener)}
+     *
+     * @return fallback trigger to use when none is specified; by default {@link Trigger#empty(TriggerListener)}
+     */
+    default Trigger getDefaultTrigger() {
+        return Trigger.empty(this);
     }
 
     /**

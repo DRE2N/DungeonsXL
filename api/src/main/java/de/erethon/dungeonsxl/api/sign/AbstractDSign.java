@@ -56,6 +56,16 @@ public abstract class AbstractDSign implements DungeonSign {
         this.lines = lines;
         this.instance = instance;
         worldName = instance.getWorld().getName();
+
+        if (isTriggerLineDisabled()) {
+            return;
+        }
+        try {
+            triggerExpression = LogicalExpression.parse(lines[3]);
+        } catch (IllegalArgumentException exception) {
+            markAsErroneous("The trigger string " + lines[3] + " is invalid.");
+            triggerExpression = LogicalExpression.error(this);
+        }
     }
 
     @Override

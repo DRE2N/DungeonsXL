@@ -92,7 +92,6 @@ public class DXLModule implements DungeonModule {
         signRegistry.add("TELEPORT", TeleportSign.class);
         signRegistry.add("TITLE", TitleSign.class);
         signRegistry.add("TRIGGER", TriggerSign.class);
-        signRegistry.add("WAVE", WaveSign.class);
     }
 
     @Override
@@ -109,11 +108,9 @@ public class DXLModule implements DungeonModule {
         triggerRegistry.add(INTERACT, InteractTrigger.class);
         triggerRegistry.add(MOB, MobTrigger.class);
         triggerRegistry.add(PRESENCE, PresenceTrigger.class);
-        //triggerRegistry.add("P", ProgressTrigger.class);
         triggerRegistry.add(REDSTONE, RedstoneTrigger.class);
         triggerRegistry.add(GENERIC, SignTrigger.class);
         triggerRegistry.add(USE_ITEM, UseItemTrigger.class);
-        triggerRegistry.add(WAVE, WaveTrigger.class);
     }
 
 }

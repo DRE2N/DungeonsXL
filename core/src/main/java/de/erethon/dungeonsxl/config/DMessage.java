@@ -229,8 +229,6 @@ public enum DMessage implements Message {
     REQUIREMENT_TIMEFRAME("requirement.timeframe"),
     REWARD_GENERAL("reward.general"),
     SIGN_END("sign.end"),
-    SIGN_FLOOR_1("sign.floor.1"),
-    SIGN_FLOOR_2("sign.floor.2"),
     SIGN_GLOBAL_FULL("sign.global.full"),
     SIGN_GLOBAL_IS_PLAYING("sign.global.isPlaying"),
     SIGN_GLOBAL_JOIN_GAME("sign.global.joinGame"),
@@ -239,9 +237,7 @@ public enum DMessage implements Message {
     SIGN_GLOBAL_NEW_GROUP("sign.global.newGroup"),
     SIGN_LEAVE("sign.leave"),
     SIGN_READY("sign.ready"),
-    SIGN_RESOURCE_PACK("sign.resourcePack"),
-    SIGN_WAVE_1("sign.wave.1"),
-    SIGN_WAVE_2("sign.wave.2");
+    SIGN_RESOURCE_PACK("sign.resourcePack");
 
     private String path;
 

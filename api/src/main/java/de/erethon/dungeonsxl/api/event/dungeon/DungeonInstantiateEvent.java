@@ -12,60 +12,48 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.event.group;
+package de.erethon.dungeonsxl.api.event.dungeon;
 
-import de.erethon.dungeonsxl.api.player.PlayerGroup;
-import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.event.dungeon.DungeonEvent;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- * Fired when a group finishs a dungeon floor.
+ * Fired when a {@link ResourceWorld} is instantiated.
  *
  * @author Daniel Saukel
  */
-public class GroupFinishFloorEvent extends GroupEvent implements Cancellable {
+public class DungeonInstantiateEvent extends DungeonEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private GameWorld finished;
-    private ResourceWorld next;
+    private String instanceWorldName;
 
-    public GroupFinishFloorEvent(PlayerGroup group, GameWorld finished, ResourceWorld next) {
-        super(group);
-        this.finished = finished;
-        this.next = next;
+    public DungeonInstantiateEvent(Dungeon dungeon, String instanceWorldName) {
+        super(dungeon);
+        this.instanceWorldName = instanceWorldName;
     }
 
     /**
-     * Returns the game world that was just finished.
+     * Returns if the loaded instance will be an edit world.
      *
-     * @return the game world that was just finished
+     * @return if the loaded instance will be an edit world
      */
-    public GameWorld getFinished() {
-        return finished;
+    public boolean isEditInstance() {
+        return instanceWorldName.startsWith("DXL_Edit_");
     }
 
     /**
-     * Returns the resource world of the next floor.
-     *
-     * @return the resource world of the next floor
-     */
-    public ResourceWorld getNext() {
-        return next;
-    }
-
-    /**
-     * Sets the next floor to load.
+     * Returns the name the newly loaded Bukkit world is going to have.
      * <p>
-     * If one has already been loaded because another group finished the floor earlier, this will not do anything.
+     * Note that at this point no Bukkit World object for this world exists.
      *
-     * @param next the next floor to load
+     * @return the name the newly loaded Bukkit world is going to have
      */
-    public void setNext(ResourceWorld next) {
-        this.next = next;
+    public String getInstanceWorldName() {
+        return instanceWorldName;
     }
 
     @Override
@@ -89,7 +77,7 @@ public class GroupFinishFloorEvent extends GroupEvent implements Cancellable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{group=" + group + "; finished=" + finished + "; next=" + next + "}";
+        return getClass().getSimpleName() + "{dungeon=" + dungeon + "; instanceWorldName=" + instanceWorldName + "}";
     }
 
 }

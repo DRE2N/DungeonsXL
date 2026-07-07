@@ -102,7 +102,7 @@ public class BossShopSign extends Button {
             return;
         }
 
-        InteractTrigger.addDefault(api, this, getLine(1), getLine(2));
+        InteractTrigger.applyDefaultSignLayout(this, getLine(1), getLine(2));
     }
 
     @Override

@@ -12,47 +12,37 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erethon.dungeonsxl.api.event.world;
+package de.erethon.dungeonsxl.api.event.group;
 
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.dungeonsxl.api.dungeon.Game;
+import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- * Fired when a {@link ResourceWorld} is instantiated.
+ * Fired when a group starts playing a game.
  *
  * @author Daniel Saukel
  */
-public class ResourceWorldInstantiateEvent extends ResourceWorldEvent implements Cancellable {
+public class GroupStartGameEvent extends GroupEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
 
-    private String instanceWorldName;
+    private Game game;
 
-    public ResourceWorldInstantiateEvent(ResourceWorld resource, String instanceWorldName) {
-        super(resource);
-        this.instanceWorldName = instanceWorldName;
+    public GroupStartGameEvent(PlayerGroup group, Game game) {
+        super(group);
+        this.game = game;
     }
 
     /**
-     * Returns if the loaded instance will be an edit world.
+     * Returns the game instance.
      *
-     * @return if the loaded instance will be an edit world
+     * @return the game instance
      */
-    public boolean isEditInstance() {
-        return instanceWorldName.startsWith("DXL_Edit_");
-    }
-
-    /**
-     * Returns the name the newly loaded Bukkit world is going to have.
-     * <p>
-     * Note that at this point no Bukkit World object for this world exists.
-     *
-     * @return the name the newly loaded Bukkit world is going to have
-     */
-    public String getInstanceWorldName() {
-        return instanceWorldName;
+    public Game getGame() {
+        return game;
     }
 
     @Override
@@ -76,7 +66,7 @@ public class ResourceWorldInstantiateEvent extends ResourceWorldEvent implements
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{resource=" + resource + "; instanceWorldName=" + instanceWorldName + "}";
+        return getClass().getSimpleName() + "{group=" + group + "; game=" + game + "}";
     }
 
 }

@@ -16,19 +16,16 @@ package de.erethon.dungeonsxl.api.dungeon;
 
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import java.util.Collection;
 import java.util.List;
 import org.bukkit.entity.Player;
 
 /**
- * Handles the rules of playing in a dungeon.
- * <p>
- * Tracks the progress of groups in a dungeon and handles their interaction with each other.
+ * Handles the process of players and their groups playing in a dungeon instance.
  *
  * @author Daniel Saukel
  */
-// Implementation-specific methods: wave and kill counter methods
+// Implementation-specific methods: setWorld, wave and kill counter methods
 public interface Game {
 
     /**
@@ -88,13 +85,6 @@ public interface Game {
     GameWorld getWorld();
 
     /**
-     * Sets the game instance in which this game takes place.
-     *
-     * @param gameWorld the game instance in which this game takes place
-     */
-    void setWorld(GameWorld gameWorld);
-
-    /**
      * Returns if the game has rewards.
      *
      * @return if the game has rewards
@@ -118,52 +108,6 @@ public interface Game {
     default GameRuleContainer getRules() {
         return getDungeon().getRules();
     }
-
-    /**
-     * Returns a read-only List of the remaining floors to play.
-     *
-     * @return a read-only List of the remaining floors to play
-     */
-    List<ResourceWorld> getUnplayedFloors();
-
-    /**
-     * Adds a floor to the list of floors to play.
-     *
-     * @param unplayedFloor the resource world of the floor
-     * @return if the addition was successful
-     */
-    boolean addUnplayedFloor(ResourceWorld unplayedFloor);
-
-    /**
-     * Removes a floor from the list of floors to play.
-     *
-     * @param unplayedFloor the resource world of the floor
-     * @param force         if the floor shall be removed even if the {@link #getDungeon() dungeon}'s floors are not to be
-     *                      {@link Dungeon#getRemoveWhenPlayed() removed when played.}
-     * @return if the removal was successful
-     */
-    boolean removeUnplayedFloor(ResourceWorld unplayedFloor, boolean force);
-
-    /**
-     * Returns the resource of the next floor to play.
-     *
-     * @return the resource of the next floor to play
-     */
-    ResourceWorld getNextFloor();
-
-    /**
-     * Sets the next floor to play.
-     *
-     * @param floor the resource world of the floor
-     */
-    void setNextFloor(ResourceWorld floor);
-
-    /**
-     * Returns the amount of played floors in this game.
-     *
-     * @return the amount of played floors in this game
-     */
-    int getFloorCount();
 
     /**
      * Returns the dungeon that "hosts" this game.

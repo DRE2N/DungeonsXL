@@ -45,7 +45,6 @@ public class MainCommand extends DCommand {
         PluginManager plugins = Bukkit.getServer().getPluginManager();
 
         int maps = DungeonsXL.MAPS.listFiles().length - 1;
-        int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
         int loaded = plugin.getInstanceCache().size();
         int players = dPlayers.getAllInstancePlayers().size();
         String internals = Version.get().getRelocationTarget();
@@ -61,7 +60,7 @@ public class MainCommand extends DCommand {
         MessageUtil.sendCenteredMessage(sender, "&4" + D[3] + "&f" + X[3] + L[3]);
         MessageUtil.sendCenteredMessage(sender, "&4" + D[4] + "&f" + X[4] + L[4]);
         MessageUtil.sendCenteredMessage(sender, "&b&l###### " + DMessage.CMD_MAIN_WELCOME.getMessage() + "&7 v" + plugin.getDescription().getVersion() + " &b&l######");
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(internals, vault, xlib));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_HELP_INFO.getMessage());
         MessageUtil.sendCenteredMessage(sender, "&7\u00a92012-'13 Frank Baumann; '15-'26 Daniel Saukel & contributors.");

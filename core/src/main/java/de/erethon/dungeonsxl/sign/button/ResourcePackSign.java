@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.sign.button;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Button;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -43,6 +44,11 @@ public class ResourcePackSign extends Button {
 
     public void setExternalMob(String resourcePack) {
         this.resourcePack = resourcePack;
+    }
+
+    @Override
+    public Trigger getDefaultTrigger() {
+        return new InteractTrigger(api, this);
     }
 
     @Override
@@ -93,12 +99,7 @@ public class ResourcePackSign extends Button {
             return;
         }
 
-        if (!getTriggers().isEmpty()) {
-            setToAir();
-            return;
-        }
-
-        InteractTrigger.addDefault(api, this, DMessage.SIGN_RESOURCE_PACK.getMessage(), getLine(1));
+        InteractTrigger.applyDefaultSignLayout(this, DMessage.SIGN_RESOURCE_PACK.getMessage(), getLine(1));
     }
 
     @Override

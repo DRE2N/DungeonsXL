@@ -80,7 +80,7 @@ cmd:
     compatibility: "&eInternals:&o[&v1] &eVault:&o[&v2] &eXLib:&o[&v3]"
     help: "/dxl - Informations générales"
     helpInfo: "&7Tapez dans &o/dxl help&r&7 pour plus d'information."
-    loaded: "&eCartes:&o[&v1] &eDonjons:&o[&v2] &eChargés:&o[&v3] &eJoueurs:&o[&v4]"
+    loaded: "&eDonjons:&o[&v1] &eChargés:&o[&v2] &eJoueurs:&o[&v3]"
     welcome: "&7Bienvenue sur &4Dungeons&fXL"
   msg:
     added: "&6Nouveaux messages (&4&v1&6) ajoutés."
@@ -246,9 +246,6 @@ reward:
   general: "&6Vous avez reçu &4&v1 &6pour avoir fini le donjon."
 sign:
   end: "&aFINIR"
-  floor:
-    1: "&aENTRER AU PRO-"
-    2: "&aCHAIN ÉTAGE"
   global:
     full: "&4PLEIN"
     isPlaying: "&4EN JEU"
@@ -259,6 +256,3 @@ sign:
   leave: "&aQUITTER"
   ready: "&aPRÊT"
   resourcePack: "&aTÉLÉCHARGER"
-  wave:
-    1: "&aCOMMENCER"
-    2: "&aVAGUE SUIVANTE"

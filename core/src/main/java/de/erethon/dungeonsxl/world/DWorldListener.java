@@ -17,13 +17,20 @@
 package de.erethon.dungeonsxl.world;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.BuildMode;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPlayerListener;
+import de.erethon.dungeonsxl.util.BlockUtilCompat;
 import de.erethon.dungeonsxl.util.ContainerAdapter;
+import de.erethon.dungeonsxl.world.block.GameBlock;
+import de.erethon.dungeonsxl.world.block.MultiBlock;
+import de.erethon.dungeonsxl.world.block.PlaceableBlock;
 import de.erethon.xlib.XLib;
 import de.erethon.xlib.category.Category;
 import de.erethon.xlib.compatibility.Version;
@@ -33,9 +40,11 @@ import de.erethon.xlib.mob.ExMob;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -93,11 +102,71 @@ public class DWorldListener implements Listener {
 
         // Deny GameWorld block breaking
         DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(block.getWorld());
-        if (gameWorld != null) {
-            if (gameWorld.onBreak(event)) {
+        if (gameWorld == null) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        for (DungeonSign sign : gameWorld.getDungeonSigns()) {
+            if (sign == null) {
+                continue;
+            }
+            if ((block.equals(sign.getSign().getBlock()) || block.equals(BlockUtilCompat.getAttachedBlock(sign.getSign().getBlock()))) && sign.isProtected()) {
                 event.setCancelled(true);
+                return;
             }
         }
+
+        for (GameBlock gameBlock : gameWorld.getGameBlocks()) {
+            if (block.equals(gameBlock.getBlock())) {
+                if (gameBlock.onBreak(event)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+            } else if (gameBlock instanceof MultiBlock) {
+                if (block.equals(((MultiBlock) gameBlock).getAttachedBlock())) {
+                    if (gameBlock.onBreak(event)) {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+        }
+
+        Game game = gameWorld.getGame();
+        if (game == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        GameRuleContainer rules = gameWorld.getDungeon().getRules();
+        BuildMode mode = rules.getState(GameRule.BREAK_BLOCKS);
+
+        if (mode == BuildMode.FALSE) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // Cancel if a protected entity is attached
+        for (Entity entity : gameWorld.getWorld().getNearbyEntities(block.getLocation(), 2, 2, 2)) {
+            if (!(entity instanceof Hanging)) {
+                continue;
+            }
+            if (entity.getLocation().getBlock().getRelative(((Hanging) entity).getAttachedFace()).equals(block)) {
+                Hanging hanging = (Hanging) entity;
+                if (rules.getState(GameRule.DAMAGE_PROTECTED_ENTITIES).contains(xlib.getExMob(hanging))) {
+                    event.setCancelled(true);
+                    break;
+                }
+            }
+        }
+
+        boolean breakBlock = !mode.check(player, gameWorld, block);
+        if (breakBlock) {
+            gameWorld.getPlacedBlocks().remove(block);
+        }
+        event.setCancelled(breakBlock);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -155,9 +224,46 @@ public class DWorldListener implements Listener {
             return;
         }
 
-        if (gameWorld.onPlace(event.getPlayer(), block, event.getBlockAgainst(), event.getItemInHand())) {
+        Game game = gameWorld.getGame();
+        if (game == null) {
             event.setCancelled(true);
+            return;
         }
+
+        GameRuleContainer rules = game.getRules();
+        Player player = event.getPlayer();
+        if (rules.getState(GameRule.PLACE_BLOCKS).check(player, gameWorld, block)) {
+            gameWorld.getPlacedBlocks().add(block);
+            event.setCancelled(false);
+            return;
+        }
+
+        PlaceableBlock placeableBlock = null;
+        for (PlaceableBlock gamePlaceableBlock : gameWorld.getPlaceableBlocks()) {
+            if (gamePlaceableBlock.canPlace(block, xlib.getExItem(event.getItemInHand()))) {
+                placeableBlock = gamePlaceableBlock;
+                break;
+            }
+        }
+        if (placeableBlock == null) {
+            // Workaround for a bug that would allow 3-Block-high jumping
+            Location loc = player.getLocation();
+            if (loc.getY() > block.getY() + 1.0 && loc.getY() <= block.getY() + 1.5) {
+                if (loc.getX() >= block.getX() - 0.3 && loc.getX() <= block.getX() + 1.3) {
+                    if (loc.getZ() >= block.getZ() - 0.3 && loc.getZ() <= block.getZ() + 1.3) {
+                        loc.setX(block.getX() + 0.5);
+                        loc.setY(block.getY());
+                        loc.setZ(block.getZ() + 0.5);
+                        player.teleport(loc);
+                    }
+                }
+            }
+            event.setCancelled(true);
+            return;
+        }
+
+        placeableBlock.onPlace(player);
+        event.setCancelled(false);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

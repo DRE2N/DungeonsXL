@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.sign.windup;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.Windup;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
@@ -49,6 +50,11 @@ public class CommandSign extends Windup {
 
     public CommandScript getScript() {
         return script;
+    }
+
+    @Override
+    public Trigger getDefaultTrigger() {
+        return new InteractTrigger(api, this);
     }
 
     @Override
@@ -128,12 +134,7 @@ public class CommandSign extends Windup {
 
         setRunnable(new CommandTask(this, Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")));
 
-        if (!getTriggers().isEmpty()) {
-            setToAir();
-            return;
-        }
-
-        InteractTrigger.addDefault(api, this, script.getName(), "");
+        InteractTrigger.applyDefaultSignLayout(this, script.getName(), "");
     }
 
     @Override

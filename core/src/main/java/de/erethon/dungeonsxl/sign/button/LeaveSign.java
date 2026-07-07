@@ -20,6 +20,7 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.event.group.GroupPlayerLeaveEvent;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.sign.Button;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -35,6 +36,11 @@ public class LeaveSign extends Button {
 
     public LeaveSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
+    }
+
+    @Override
+    public Trigger getDefaultTrigger() {
+        return new InteractTrigger(api, this);
     }
 
     @Override
@@ -69,11 +75,7 @@ public class LeaveSign extends Button {
 
     @Override
     public void initialize() {
-        if (!getTriggers().isEmpty()) {
-            setToAir();
-        } else {
-            InteractTrigger.addDefault(api, this, DMessage.SIGN_LEAVE.getMessage(), "");
-        }
+        InteractTrigger.applyDefaultSignLayout(this, DMessage.SIGN_LEAVE.getMessage(), "");
     }
 
     @Override

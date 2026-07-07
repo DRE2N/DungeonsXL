@@ -17,17 +17,15 @@
 package de.erethon.dungeonsxl.sign.button;
 
 import de.erethon.dungeonsxl.api.DungeonsAPI;
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameGoal;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.sign.Button;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DGamePlayer;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.dungeonsxl.world.DResourceWorld;
 import de.erethon.xlib.chat.MessageUtil;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -38,18 +36,13 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class EndSign extends Button {
 
-    private ResourceWorld floor;
-
     public EndSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
     }
 
-    public ResourceWorld getFloor() {
-        return floor;
-    }
-
-    public void setFloor(ResourceWorld floor) {
-        this.floor = floor;
+    @Override
+    public Trigger getDefaultTrigger() {
+        return new InteractTrigger(api, this);
     }
 
     @Override
@@ -91,29 +84,7 @@ public class EndSign extends Button {
             return;
         }
 
-        if (!getLine(1).isEmpty()) {
-            floor = api.getMapRegistry().get(getLine(1));
-        }
-
-        if (!getTriggers().isEmpty()) {
-            setToAir();
-            return;
-        }
-
-        String line1, line2;
-        Dungeon dungeon = getGame().getDungeon();
-        if (dungeon.isMultiFloor() && !getGame().getUnplayedFloors().isEmpty() && getGameWorld().getResource() != dungeon.getEndFloor()) {
-            line1 = DMessage.SIGN_FLOOR_1.getMessage();
-            if (floor == null) {
-                line2 = DMessage.SIGN_FLOOR_2.getMessage();
-            } else {
-                line2 = floor.getName().replace("_", " ");
-            }
-        } else {
-            line1 = DMessage.SIGN_END.getMessage();
-            line2 = "";
-        }
-        InteractTrigger.addDefault(api, this, line1, line2);
+        InteractTrigger.applyDefaultSignLayout(this, DMessage.SIGN_END.getMessage(), "");
     }
 
     @Override
@@ -131,7 +102,7 @@ public class EndSign extends Button {
         new BukkitRunnable() {
             @Override
             public void run() {
-                dPlayer.finishFloor((DResourceWorld) floor);
+                dPlayer.finish();
             }
         }.runTaskLater(api, 1L);
         return true;

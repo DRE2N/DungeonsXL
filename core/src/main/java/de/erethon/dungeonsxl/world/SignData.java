@@ -16,6 +16,7 @@
  */
 package de.erethon.dungeonsxl.world;
 
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import java.io.File;
@@ -56,8 +57,8 @@ public class SignData {
         return file;
     }
 
-    public void updateFile(DResourceWorld resource) {
-        file = new File(resource.getFolder(), FILE_NAME);
+    public void updateFile(Dungeon dungeon) {
+        file = new File(dungeon.getFolder(), FILE_NAME);
     }
 
     /**

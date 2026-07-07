@@ -18,158 +18,95 @@ package de.erethon.dungeonsxl.dungeon;
 
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
-import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.Game;
 import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.dungeonsxl.api.event.dungeon.DungeonInstantiateEvent;
+import de.erethon.dungeonsxl.api.event.world.EditWorldGenerateEvent;
+import de.erethon.dungeonsxl.api.player.EditPlayer;
+import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.dungeonsxl.world.DEditWorld;
+import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.world.DInstanceWorld;
+import de.erethon.dungeonsxl.world.SignData;
+import de.erethon.dungeonsxl.world.WorldConfig;
+import de.erethon.xlib.compatibility.Version;
+import de.erethon.xlib.util.FileUtil;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 
 /**
  * @author Daniel Saukel
  */
 public class DDungeon implements Dungeon {
 
+    public static final File RAW = new File(DungeonsXL.MAPS, ".raw");
+
     private DungeonsXL plugin;
 
-    private String name;
-    private DungeonConfig config;
-    private ResourceWorld map;
+    private File folder;
     private GameRuleContainer rules;
+    private WorldConfig config;
+    private SignData signData;
+    private EditWorld editWorld;
 
-    /**
-     * Artificial dungeon
-     *
-     * @param plugin   the plugin instance
-     * @param resource the only resource world
-     */
-    public DDungeon(DungeonsXL plugin, ResourceWorld resource) {
+    private DDungeon(DungeonsXL plugin, File folder) {
         this.plugin = plugin;
 
-        name = resource.getName();
-        map = resource;
+        this.folder = folder;
+
+        File configFile = new File(folder, WorldConfig.FILE_NAME);
+        if (configFile.exists()) {
+            config = new WorldConfig(plugin, configFile);
+        }
+
+        signData = new SignData(new File(folder, SignData.FILE_NAME));
+
         setupRules();
     }
 
-    private DDungeon() {
-    }
-
-    /**
-     * Real dungeon
-     *
-     * @param plugin the plugin instance
-     * @param file   the file to load from
-     * @return the dungeon or null if the config is erroneous
-     */
-    public static Dungeon create(DungeonsXL plugin, File file) {
-        DungeonConfig config = new DungeonConfig(plugin, file);
-        if (config.getStartFloor() == null || config.getEndFloor() == null) {
-            return null;
-        }
-
-        DDungeon dungeon = new DDungeon();
-        dungeon.plugin = plugin;
-        dungeon.name = file.getName().replaceAll(".yml", "");
-        dungeon.config = config;
-        dungeon.map = config.getStartFloor();
+    public static DDungeon create(DungeonsXL plugin, File folder) {
+        DDungeon dungeon = new DDungeon(plugin, folder);
         if (dungeon.isSetupCorrect()) {
-            dungeon.setupRules();
+            plugin.getDungeonRegistry().add(folder.getName(), dungeon);
             return dungeon;
         } else {
             return null;
         }
     }
 
-    public DungeonConfig getConfig() {
-        if (!isMultiFloor()) {
-            throw new IllegalStateException("Tried to access the dungeon config of a single floor dungeon");
+    public static DDungeon create(DungeonsXL plugin, String name) {
+        File folder = new File(DungeonsXL.MAPS, name);
+        if (!folder.exists()) {
+            folder.mkdir();
         }
-        return config;
+        return create(plugin, folder);
     }
 
+    /* Getters and setters */
     @Override
     public String getName() {
-        return name;
+        return folder.getName();
     }
 
-    @Override
     public void setName(String name) {
-        this.name = name;
+        plugin.getDungeonRegistry().removeKey(getName());
+        folder.renameTo(new File(folder.getParentFile(), name));
+        folder = new File(folder.getParentFile(), name);
+        signData.updateFile(this);
+        plugin.getDungeonRegistry().add(name, this);
     }
 
     @Override
-    public boolean isMultiFloor() {
-        return config != null;
-    }
-
-    @Override
-    public ResourceWorld getStartFloor() {
-        return map;
-    }
-
-    @Override
-    public void setStartFloor(ResourceWorld startFloor) {
-        getConfig().setStartFloor(startFloor);
-    }
-
-    @Override
-    public ResourceWorld getEndFloor() {
-        return getConfig().getEndFloor();
-    }
-
-    @Override
-    public void setEndFloor(ResourceWorld endFloor) {
-        getConfig().setEndFloor(endFloor);
-    }
-
-    @Override
-    public List<ResourceWorld> getFloors() {
-        if (isMultiFloor()) {
-            return new ArrayList<>(getConfig().getFloors());
-        } else {
-            return new ArrayList<>(Arrays.asList(map));
-        }
-    }
-
-    @Override
-    public void addFloor(ResourceWorld resource) {
-        getConfig().addFloor(resource);
-    }
-
-    @Override
-    public void removeFloor(ResourceWorld resource) {
-        getConfig().removeFloor(resource);
-    }
-
-    @Override
-    public int getFloorCount() {
-        return getConfig().getFloorCount();
-    }
-
-    @Override
-    public void setFloorCount(int floorCount) {
-        getConfig().setFloorCount(floorCount);
-    }
-
-    @Override
-    public boolean getRemoveWhenPlayed() {
-        return getConfig().getRemoveWhenPlayed();
-    }
-
-    @Override
-    public void setRemoveWhenPlayed(boolean removeWhenPlayed) {
-        getConfig().setRemoveWhenPlayed(removeWhenPlayed);
-    }
-
-    @Override
-    public GameRuleContainer getOverrideValues() {
-        return getConfig().getOverrideValues();
-    }
-
-    @Override
-    public GameRuleContainer getDefaultValues() {
-        return getConfig().getDefaultValues();
+    public File getFolder() {
+        return folder;
     }
 
     @Override
@@ -178,8 +115,8 @@ public class DDungeon implements Dungeon {
     }
 
     @Override
-    public void setRules(GameRuleContainer rules) {
-        this.rules = rules;
+    public GameRuleContainer getConfig() {
+        return getConfig(false);
     }
 
     @Override
@@ -187,39 +124,251 @@ public class DDungeon implements Dungeon {
         if (rules != null) {
             return;
         }
-        if (isMultiFloor()) {
-            rules = new GameRuleContainer(getOverrideValues());
-            if (map.getRules() != null) {
-                rules.merge(map.getRules());
-            }
-            rules.merge(getDefaultValues());
-        } else if (map.getRules() != null) {
-            rules = new GameRuleContainer(map.getRules());
+        if (config != null) {
+            rules = new GameRuleContainer(config);
         } else {
             rules = new GameRuleContainer();
         }
         rules.merge(plugin.getMainConfig().getDefaultWorldConfig());
-        rules.merge(GameRule.DEFAULT_VALUES);
+        rules.merge(de.erethon.dungeonsxl.api.dungeon.GameRule.DEFAULT_VALUES);
+    }
+
+    /**
+     * Returns the config of this world.
+     *
+     * @param generate if a config should be generated if none exists
+     * @return the config of this world
+     */
+    public WorldConfig getConfig(boolean generate) {
+        if (config == null) {
+            File file = new File(folder, WorldConfig.FILE_NAME);
+            if (!file.exists()) {
+                if (generate) {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+            }
+            config = new WorldConfig(plugin, file);
+        }
+        return config;
+    }
+
+    @Override
+    public Environment getWorldEnvironment() {
+        return (getConfig(false) != null && getConfig(false).getWorldEnvironment() != null) ? getConfig(false).getWorldEnvironment() : Environment.NORMAL;
+    }
+
+    @Override
+    public void addInvitedPlayer(OfflinePlayer player) {
+        getConfig(true).addInvitedPlayer(player.getUniqueId().toString());
+        config.save();
+    }
+
+    @Override
+    public boolean removeInvitedPlayer(OfflinePlayer player) {
+        if (config == null) {
+            return false;
+        }
+
+        config.removeInvitedPlayers(player.getUniqueId().toString(), player.getName().toLowerCase());
+        config.save();
+
+        EditPlayer editPlayer = plugin.getPlayerCache().getEditPlayer(player.getPlayer());
+        if (editPlayer != null) {
+            if (plugin.getEditWorld(editPlayer.getWorld()).getDungeon() == this) {
+                editPlayer.leave();
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isInvitedPlayer(OfflinePlayer player) {
+        if (config == null) {
+            return false;
+        }
+
+        return config.getInvitedPlayers().contains(player.getName().toLowerCase()) || config.getInvitedPlayers().contains(player.getUniqueId().toString());
+    }
+
+    /* Actions */
+    @Override
+    public void backup() {
+        File target = new File(DungeonsXL.BACKUPS, getName() + "-" + System.currentTimeMillis());
+        FileUtil.copyDir(folder, target);
+    }
+
+    public DInstanceWorld instantiate(Game game) {
+        plugin.setLoadingWorld(true);
+        String name = DInstanceWorld.generateName(game != null);
+        File instanceFolder = new File(Bukkit.getWorldContainer(), name);
+
+        DInstanceWorld instance = game != null ? new DGameWorld(plugin, this, instanceFolder, game) : new DEditWorld(plugin, this, instanceFolder);
+        DungeonInstantiateEvent event = new DungeonInstantiateEvent(this, name);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return null;
+        }
+
+        FileUtil.copyDir(folder, instanceFolder, DungeonsXL.EXCLUDED_FILES);
+        instance.setWorld(Bukkit.createWorld(WorldCreator.name(name).environment(getWorldEnvironment())).getName());
+        if (Version.isAtLeast(Version.MC1_21_11)) {
+            instance.getWorld().setGameRule(GameRule.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0);
+        } else if (Version.isAtLeast(Version.MC1_13)) {
+            instance.getWorld().setGameRule((GameRule<Boolean>) GameRule.getByName("DO_FIRE_TICK"), false);
+        }
+        if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause all");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dmap worldset " + name + " enabled:false");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause none");
+        }
+
+        if (game != null) {
+            signData.deserializeSigns((DGameWorld) instance);
+            instance.getWorld().setAutoSave(false);
+        } else {
+            signData.deserializeSigns((DEditWorld) instance);
+        }
+
+        plugin.setLoadingWorld(false);
+        return instance;
+    }
+
+    @Override
+    public EditWorld getEditWorld() {
+        return editWorld;
+    }
+
+    public void setEditWorld(EditWorld editWorld) {
+        this.editWorld = editWorld;
+    }
+
+    @Override
+    public EditWorld getOrInstantiateEditWorld(boolean ignoreLimit) {
+        if (editWorld != null) {
+            return editWorld;
+        }
+        if (plugin.isLoadingWorld()) {
+            return null;
+        }
+        if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= plugin.getInstanceCache().size()) {
+            return null;
+        }
+
+        editWorld = (EditWorld) instantiate(null);
+        return editWorld;
+    }
+
+    @Override
+    public GameWorld instantiateGameWorld(Game game, boolean ignoreLimit) {
+        if (plugin.isLoadingWorld()) {
+            return null;
+        }
+        if (!ignoreLimit && plugin.getMainConfig().getMaxInstances() <= plugin.getInstanceCache().size()) {
+            return null;
+        }
+        return (DGameWorld) instantiate(game);
+    }
+
+    /**
+     * Returns the DXLData.data file
+     *
+     * @return the DXLData.data file
+     */
+    public SignData getSignData() {
+        return signData;
+    }
+
+    /**
+     * Generate a new DDungeon.
+     *
+     * @return the automatically created DEditWorld instance
+     */
+    public DEditWorld generate() {
+        String name = DInstanceWorld.generateName(false);
+        File folder = new File(Bukkit.getWorldContainer(), name);
+        WorldCreator creator = new WorldCreator(name);
+        creator.type(WorldType.FLAT);
+        creator.generateStructures(false);
+
+        DEditWorld editWorld = new DEditWorld(plugin, this, folder);
+        this.editWorld = editWorld;
+
+        DungeonInstantiateEvent event = new DungeonInstantiateEvent(this, name);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return null;
+        }
+
+        if (!RAW.exists()) {
+            createRaw();
+        }
+        FileUtil.copyDir(RAW, folder, DungeonsXL.EXCLUDED_FILES);
+        editWorld.generateIdFile();
+        editWorld.setWorld(creator.createWorld().getName());
+        editWorld.generateIdFile();
+
+        Bukkit.getPluginManager().callEvent(new EditWorldGenerateEvent(editWorld));
+        return editWorld;
+    }
+
+    public void clearFolder() {
+        for (File file : FileUtil.getFilesForFolder(getFolder())) {
+            if (file.getName().equals(SignData.FILE_NAME) || file.getName().equals(WorldConfig.FILE_NAME)) {
+                continue;
+            }
+            if (file.isDirectory()) {
+                FileUtil.removeDir(file);
+            } else {
+                file.delete();
+            }
+        }
     }
 
     @Override
     public boolean isSetupCorrect() {
-        for (ResourceWorld resource : plugin.getMapRegistry()) {
-            if (resource.getName().equals(name)) {
+        for (Dungeon dungeon : plugin.getDungeonRegistry()) {
+            if (dungeon.getName().equals(getName())) {
                 return false;
             }
         }
-        return getConfig() == null || (getConfig().getStartFloor() != null && getConfig().getEndFloor() != null);
+        return true;
     }
 
-    /* Statics */
-    public static File getFileFromName(String name) {
-        return new File(DungeonsXL.DUNGEONS, name + ".yml");
+    /**
+     * Removes files that are not needed from a world
+     *
+     * @param dir the directory to purge
+     */
+    public static void deleteUnusedFiles(File dir) {
+        for (File file : dir.listFiles()) {
+            if (file.getName().equalsIgnoreCase("uid.dat") || file.getName().contains(".id_")) {
+                file.delete();
+            }
+        }
+    }
+
+    /**
+     * Creates the "raw" world that is copied for new instances.
+     */
+    public static void createRaw() {
+        WorldCreator rawCreator = WorldCreator.name(".raw");
+        rawCreator.type(WorldType.FLAT);
+        rawCreator.generateStructures(false);
+        World world = rawCreator.createWorld();
+        File worldFolder = new File(Bukkit.getWorldContainer(), ".raw");
+        FileUtil.copyDir(worldFolder, RAW, DungeonsXL.EXCLUDED_FILES);
+        Bukkit.unloadWorld(world, /* SPIGOT-5225 */ !Version.isAtLeast(Version.MC1_14_4));
+        FileUtil.removeDir(worldFolder);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{name=" + name + "; multiFloor=" + isMultiFloor() + "}";
+        return "DResourceWorld{name=" + getName() + "}";
     }
 
 }

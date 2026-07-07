@@ -20,10 +20,8 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
-import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
-import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.xlib.util.NumberUtil;
 
 /**
@@ -53,23 +51,6 @@ public class MobTrigger extends AbstractTrigger {
     @Override
     public void onTrigger(boolean switching) {
         setTriggered(true);
-    }
-
-    /* Statics */
-    public static MobTrigger getByName(String name, GameWorld gameWorld) {
-        if (name == null || gameWorld == null) {
-            return null;
-        }
-        for (Trigger uncasted : gameWorld.getTriggers()) {
-            if (!(uncasted instanceof MobTrigger)) {
-                continue;
-            }
-            MobTrigger trigger = (MobTrigger) uncasted;
-            if (name.equalsIgnoreCase(trigger.name)) {
-                return trigger;
-            }
-        }
-        return null;
     }
 
 }

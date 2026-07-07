@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.util;
 
 import de.erethon.dungeonsxl.api.player.GlobalPlayer;
 import de.erethon.dungeonsxl.player.DGroup;
+import org.bukkit.ChatColor;
 
 /**
  * @author Daniel Saukel
@@ -65,6 +66,13 @@ public enum ParsingUtil {
         }
 
         return string;
+    }
+
+    public static final String TRUE = ChatColor.GREEN + "\u2714";
+    public static final String FALSE = ChatColor.DARK_RED + "\u2718";
+
+    public static String getBooleanSymbol(boolean value) {
+        return value ? TRUE : FALSE;
     }
 
 }

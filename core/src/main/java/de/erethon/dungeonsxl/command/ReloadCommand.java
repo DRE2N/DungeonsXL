@@ -78,7 +78,6 @@ public class ReloadCommand extends DCommand {
         dPlayers.forEach(InstancePlayer::leave);
 
         int maps = DungeonsXL.MAPS.listFiles().length - 1;
-        int dungeons = DungeonsXL.DUNGEONS.listFiles().length;
         int loaded = plugin.getInstanceCache().size();
         int players = this.dPlayers.getAllGamePlayers().size();
         String internals = Version.get().getRelocationTarget();
@@ -96,7 +95,7 @@ public class ReloadCommand extends DCommand {
 
         MessageUtil.sendPluginTag(sender, plugin);
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_RELOAD_SUCCESS.getMessage());
-        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(dungeons), String.valueOf(loaded), String.valueOf(players)));
+        MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_LOADED.getMessage(String.valueOf(maps), String.valueOf(loaded), String.valueOf(players)));
         MessageUtil.sendCenteredMessage(sender, DMessage.CMD_MAIN_COMPATIBILITY.getMessage(internals, vault, xlib));
     }
 

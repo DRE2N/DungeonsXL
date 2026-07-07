@@ -88,8 +88,6 @@ public class PlaceholderUtil extends PlaceholderExpansion {
                 return group != null ? group.getDungeon().getName() : "";
             case "global_dungeon_count":
                 return String.valueOf(plugin.getDungeonRegistry().size());
-            case "global_floor_count":
-                return String.valueOf(plugin.getMapRegistry().size());
             case "global_instance_count":
                 return String.valueOf(plugin.getInstanceCache().size());
             default:

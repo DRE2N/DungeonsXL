@@ -17,14 +17,13 @@
 package de.erethon.dungeonsxl.command;
 
 import de.erethon.dungeonsxl.DungeonsXL;
-import de.erethon.dungeonsxl.api.dungeon.Dungeon;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
 import de.erethon.dungeonsxl.api.world.EditWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
-import de.erethon.xlib.chat.MessageUtil;
-import de.erethon.dungeonsxl.world.DResourceWorld;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.world.WorldConfig;
+import de.erethon.xlib.chat.MessageUtil;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
@@ -65,7 +64,8 @@ public class MsgCommand extends DCommand {
         try {
             int id = Integer.parseInt(args[1]);
 
-            WorldConfig config = ((DResourceWorld) editWorld.getResource()).getConfig(true);
+            DDungeon dungeon = (DDungeon) editWorld.getDungeon();
+            WorldConfig config = dungeon.getConfig(true);
             Map<Integer, String> msgs = config.getState(GameRule.MESSAGES);
             if (msgs == null) {
                 config.setState(GameRule.MESSAGES, new HashMap<>());
@@ -106,20 +106,7 @@ public class MsgCommand extends DCommand {
 
                     msgs.put(id, msg);
                     config.save();
-
-                    for (Dungeon dungeon : plugin.getDungeonRegistry()) {
-                        if (!dungeon.getStartFloor().equals(editWorld.getResource())) {
-                            continue;
-                        }
-                        // Only MFD overrideValues can override floor configs
-                        if (dungeon.isMultiFloor()) {
-                            Map<Integer, String> overrideValuesMSG = dungeon.getOverrideValues().getState(GameRule.MESSAGES);
-                            if (overrideValuesMSG != null && overrideValuesMSG.containsKey(id)) {
-                                continue;
-                            }
-                        }
-                        dungeon.getRules().getState(GameRule.MESSAGES).put(id, msg);
-                    }
+                    dungeon.getRules().getState(GameRule.MESSAGES).put(id, msg);
 
                 } else {
                     MessageUtil.sendMessage(player, DMessage.ERROR_MSG_FORMAT.getMessage());

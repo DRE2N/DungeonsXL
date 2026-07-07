@@ -14,7 +14,8 @@
  */
 package de.erethon.dungeonsxl.api.event.world;
 
-import de.erethon.dungeonsxl.api.world.ResourceWorld;
+import de.erethon.dungeonsxl.api.dungeon.Dungeon;
+import de.erethon.dungeonsxl.api.event.dungeon.DungeonEvent;
 import org.bukkit.event.HandlerList;
 
 /**
@@ -22,13 +23,13 @@ import org.bukkit.event.HandlerList;
  *
  * @author Daniel Saukel
  */
-public class InstanceWorldPostUnloadEvent extends ResourceWorldEvent {
+public class InstanceWorldPostUnloadEvent extends DungeonEvent {
 
     private static final HandlerList handlers = new HandlerList();
     private String instanceWorldName;
 
-    public InstanceWorldPostUnloadEvent(ResourceWorld resource, String instanceWorldName) {
-        super(resource);
+    public InstanceWorldPostUnloadEvent(Dungeon dungeon, String instanceWorldName) {
+        super(dungeon);
         this.instanceWorldName = instanceWorldName;
     }
 
@@ -61,7 +62,7 @@ public class InstanceWorldPostUnloadEvent extends ResourceWorldEvent {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{resource=" + resource + "; instanceWorldName=" + instanceWorldName + "}";
+        return getClass().getSimpleName() + "{dungeon=" + dungeon + "; instanceWorldName=" + instanceWorldName + "}";
     }
 
 }

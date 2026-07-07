@@ -21,6 +21,7 @@ import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPermission;
 import de.erethon.dungeonsxl.util.DependencyVersion;
 import static de.erethon.dungeonsxl.util.DependencyVersion.*;
+import de.erethon.dungeonsxl.util.ParsingUtil;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.compatibility.Version;
 import net.md_5.bungee.api.ChatColor;
@@ -36,9 +37,6 @@ import org.bukkit.entity.Player;
  * @author Daniel Saukel
  */
 public class StatusCommand extends DCommand {
-
-    public static final String TRUE = ChatColor.GREEN + "\u2714";
-    public static final String FALSE = ChatColor.DARK_RED + "\u2718";
 
     public StatusCommand(DungeonsXL plugin) {
         super(plugin);
@@ -59,11 +57,11 @@ public class StatusCommand extends DCommand {
 
         boolean atLeastMin = Version.isAtLeast(DependencyVersion.META.getMinVersion());
         boolean atMostMax = Version.isAtMost(Version.values()[Version.values().length - 2]);
-        String versionCorrect = getSymbol(atLeastMin && atMostMax);
+        String versionCorrect = ParsingUtil.getBooleanSymbol(atLeastMin && atMostMax);
         if (atLeastMin && !atMostMax) {
             versionCorrect += "(possibly works through forward compatibility)";
         }
-        String dungeonsxlVersionCorrect = getSymbol(!dungeonsxlVersion.contains("SNAPSHOT"));
+        String dungeonsxlVersionCorrect = ParsingUtil.getBooleanSymbol(!dungeonsxlVersion.contains("SNAPSHOT"));
 
         MessageUtil.sendCenteredMessage(sender, "&4&l=> &6STATUS &4&l<=");
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Version info:");
@@ -81,8 +79,8 @@ public class StatusCommand extends DCommand {
                 economyPlugin = xlib.getEconomyProvider().getName();
             }
         }
-        String permissionPluginCorrect = getSymbol(xlib.getPermissionProvider() != null && xlib.getPermissionProvider().hasGroupSupport());
-        String economyPluginCorrect = getSymbol(!plugin.getMainConfig().isEconomyEnabled() || xlib.getEconomyProvider() != null);
+        String permissionPluginCorrect = ParsingUtil.getBooleanSymbol(xlib.getPermissionProvider() != null && xlib.getPermissionProvider().hasGroupSupport());
+        String economyPluginCorrect = ParsingUtil.getBooleanSymbol(!plugin.getMainConfig().isEconomyEnabled() || xlib.getEconomyProvider() != null);
 
         MessageUtil.sendMessage(sender, ChatColor.GRAY + "Dependency info:");
         for (DependencyVersion dependency : DependencyVersion.values()) {
@@ -99,7 +97,7 @@ public class StatusCommand extends DCommand {
     }
 
     private static String msgText(DependencyVersion dependency) {
-        return "= " + dependency.getName() + ": " + dependency.getEnabledVersion() + " " + getSymbol(dependency.check());
+        return "= " + dependency.getName() + ": " + dependency.getEnabledVersion() + " " + ParsingUtil.getBooleanSymbol(dependency.check());
     }
 
     private static BaseComponent statusMsg(DependencyVersion dependency) {
@@ -112,10 +110,6 @@ public class StatusCommand extends DCommand {
             text.setHoverEvent(event);
         }
         return text;
-    }
-
-    private static String getSymbol(boolean value) {
-        return value ? TRUE : FALSE;
     }
 
 }
