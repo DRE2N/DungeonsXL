@@ -18,6 +18,7 @@ package de.erethon.dungeonsxl.sign.windup;
 
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.mob.ExternalMobProvider;
+import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.sign.Windup;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
@@ -26,6 +27,7 @@ import de.erethon.xlib.util.NumberUtil;
 import de.erethon.xlib.util.Registry;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
@@ -39,7 +41,8 @@ public class MobSign extends Windup {
 
     private Registry<String, ExternalMobProvider> providers;
 
-    private String mob;
+    private MobSet typeSet;
+    private Collection<MobSet> mobSets = new HashSet<>();
     private ExternalMobProvider provider;
     private Collection<LivingEntity> spawnedMobs = new ArrayList<>();
     private int initialAmount;
@@ -49,12 +52,12 @@ public class MobSign extends Windup {
         providers = api.getExternalMobProviderRegistry();
     }
 
-    public String getMob() {
-        return mob;
+    public MobSet getTypeSet() {
+        return typeSet;
     }
 
-    public void setMob(String mob) {
-        this.mob = mob;
+    public Collection<MobSet> getAddedMobSets() {
+        return mobSets;
     }
 
     /**
@@ -107,13 +110,21 @@ public class MobSign extends Windup {
 
     @Override
     public void initialize() {
-        mob = getLine(1);
-        String[] attributes = getLine(2).split(",");
+        typeSet = getGameWorld().getOrCreateMobSet(getLine(1));
+        String[] attrAndSets = getLine(2).split("#");
+        String[] attributes = attrAndSets[0].split(",");
 
         interval = NumberUtil.parseDouble(attributes[0]);
         n = NumberUtil.parseInt(attributes[1]);
         initialAmount = n;
         provider = attributes.length == 3 ? providers.get(attributes[2]) : null;
+
+        if (attrAndSets.length > 1) {
+            String[] sets = attrAndSets[1].split(",");
+            for (String id : sets) {
+                mobSets.add(getGameWorld().getOrCreateMobSet(id));
+            }
+        }
 
         setRunnable(new MobSpawnTask(api, this, n));
     }
@@ -128,14 +139,14 @@ public class MobSign extends Windup {
         LivingEntity spawned = null;
 
         if (provider == null) {
-            ExMob type = api.getXLib().getExMob(mob);
+            ExMob type = api.getXLib().getExMob(typeSet.getId());
             if (type == null || !type.getSpecies().isAlive()) {
                 return null;
             }
             spawned = (LivingEntity) type.toEntity(spawnLoc);
 
         } else {
-            provider.summon(mob, spawnLoc);
+            provider.summon(typeSet.getId(), spawnLoc);
             for (Entity entity : spawnLoc.getChunk().getEntities()) {
                 Location entityLoc = entity.getLocation();
                 if (entityLoc.getX() >= spawnLoc.getX() - 1 && entityLoc.getX() <= spawnLoc.getX() + 1 && entityLoc.getY() >= spawnLoc.getY() - 1

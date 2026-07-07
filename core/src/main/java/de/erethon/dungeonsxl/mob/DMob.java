@@ -23,6 +23,7 @@ import de.erethon.dungeonsxl.api.event.mob.DungeonMobSpawnEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
+import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.dungeon.DGame;
 import de.erethon.dungeonsxl.trigger.MobTrigger;
@@ -32,6 +33,7 @@ import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.mob.ExMob;
 import de.erethon.xlib.mob.VanillaMob;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -46,8 +48,11 @@ public class DMob implements DungeonMob {
     private ExMob type;
 
     private String trigger;
+    private MobSet typeSet;
+    private Set<MobSet> mobSets;
 
-    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type, String trigger) {
+    public DMob(LivingEntity entity, GameWorld gameWorld, ExMob type, MobSet typeSet, Collection<MobSet> mobSets) {
+        this.gameWorld = gameWorld;
         this.entity = entity;
         this.type = type != null ? type : VanillaMob.get(entity.getType());
 
@@ -69,6 +74,13 @@ public class DMob implements DungeonMob {
         Bukkit.getPluginManager().callEvent(event);
         this.trigger = trigger;
         gameWorld.addMob(this);
+        this.typeSet = typeSet;
+        this.mobSets = new HashSet<>();
+        this.mobSets.add(gameWorld.getAllMobSet());
+        this.mobSets.add(typeSet);
+        if (mobSets != null) {
+            this.mobSets.addAll(mobSets);
+        }
     }
 
     /* Getters */
@@ -120,6 +132,7 @@ public class DMob implements DungeonMob {
                 waveTrigger.trigger(true, null);
             }
         }
+        mobSets.forEach(s -> s.kill(victim));
 
         gameWorld.removeMob(this);
     }
@@ -140,6 +153,29 @@ public class DMob implements DungeonMob {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{type=" + type + "}";
+    }
+
+    @Override
+    public MobSet getTypeMobSet() {
+        return typeSet;
+    }
+
+    @Override
+    public Collection<MobSet> getMobSets() {
+        return new HashSet<>(mobSets);
+    }
+
+    @Override
+    public boolean addMobSet(MobSet mobSet) {
+        if (!gameWorld.getMobSets().contains(mobSet)) {
+            throw new IllegalArgumentException("MobSet not registered for GameWorld");
+        }
+        return mobSets.add(mobSet);
+    }
+
+    @Override
+    public boolean removeMobSet(MobSet mobSet) {
+        return mobSets.remove(mobSet);
     }
 
 }

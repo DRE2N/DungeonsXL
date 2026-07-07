@@ -15,6 +15,7 @@
 package de.erethon.dungeonsxl.api.mob;
 
 import de.erethon.xlib.mob.ExMob;
+import java.util.Collection;
 import org.bukkit.entity.LivingEntity;
 
 /**
@@ -39,10 +40,38 @@ public interface DungeonMob {
     ExMob getType();
 
     /**
-     * Returns the String used to identify this mob for example in the context of triggers.
+     * Returns the {@link MobSet} the mob is automatically added to for being of the associated type.
+     * <p>
+     * E.g. for a zombie, this returns a set with the {@link MobSet#getId() ID} "ZOMBIE".
      *
-     * @return the String used to identify this mob for example in the context of triggers
+     * @return the {@link MobSet} the mob is automatically added to for being of the associated typ
      */
-    String getTriggerId();
+    MobSet getTypeMobSet();
+
+    /**
+     * Returns a Collection of the {@link MobSet}s that this mob is a part of.
+     * <p>
+     * This includes the {@link #getTypeMobSet() type set} and the {@link de.erethon.dungeonsxl.api.world.GameWorld#getAllMobSet() generic set}.
+     *
+     * @return a Collection of the {@link MobSet}s that this mob is a part of,
+     */
+    Collection<MobSet> getMobSets();
+
+    /**
+     * Adds a {@link MobSet} to this mob.
+     *
+     * @param mobSet the mob set to add
+     * @throws IllegalArgumentException if the mob set is not registered in the {@link de.erethon.dungeonsxl.api.world.GameWorld}
+     * @return if adding the mob was successful
+     */
+    boolean addMobSet(MobSet mobSet);
+
+    /**
+     * Removes a {@link MobSet} from this mob.
+     *
+     * @param mobSet the mob set to remove
+     * @return if removing the mob was successful
+     */
+    boolean removeMobSet(MobSet mobSet);
 
 }

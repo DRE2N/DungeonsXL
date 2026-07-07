@@ -27,6 +27,7 @@ import de.erethon.dungeonsxl.api.event.world.GameWorldStartGameEvent;
 import de.erethon.dungeonsxl.api.event.world.InstanceWorldPostUnloadEvent;
 import de.erethon.dungeonsxl.api.event.world.InstanceWorldUnloadEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
+import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.player.PlayerGroup;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
@@ -56,8 +57,10 @@ import de.erethon.xlib.util.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -94,6 +97,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
     private List<ItemStack> secureObjects = new ArrayList<>();
     private List<DungeonMob> mobs = new ArrayList<>();
+    private Map<String, MobSet> mobSets = new HashMap<>();
     private List<Trigger> triggers = new ArrayList<>();
 
     private boolean readySign;
@@ -381,6 +385,26 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     @Override
     public void removeMob(DungeonMob mob) {
         mobs.remove(mob);
+    }
+
+    @Override
+    public MobSet getAllMobSet() {
+        return mobSets.get(MobSet.ALL);
+    }
+
+    @Override
+    public Collection<MobSet> getMobSets() {
+        return new ArrayList<>(mobSets.values());
+    }
+
+    @Override
+    public MobSet getOrCreateMobSet(String id) {
+        MobSet mobSet = mobSets.get(id);
+        if (mobSet == null) {
+            mobSet = new MobSet(id);
+            mobSets.put(id, mobSet);
+        }
+        return mobSet;
     }
 
     @Override

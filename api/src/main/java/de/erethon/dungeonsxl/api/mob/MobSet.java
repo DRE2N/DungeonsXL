@@ -25,12 +25,22 @@ import org.bukkit.entity.LivingEntity;
  */
 public class MobSet {
 
+    /**
+     * Identifier of the generic set that includes all mobs in a {@link de.erethon.dungeonsxl.api.world.GameWorld}.
+     */
+    public static final String ALL = "ALL";
+
     private String id;
     private List<LivingEntity> spawned;
     private int size;
     private int reserved;
     private int killed;
 
+    /**
+     * Use {@link de.erethon.dungeonsxl.api.world.GameWorld#getOrCreateMobSet(String)} to instantiate a MobSet.
+     *
+     * @param id the set's identifier.
+     */
     public MobSet(String id) {
         this.id = id;
     }

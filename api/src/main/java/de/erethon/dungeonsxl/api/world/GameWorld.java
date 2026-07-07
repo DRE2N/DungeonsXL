@@ -148,6 +148,30 @@ public interface GameWorld extends InstanceWorld {
     public void removeMob(DungeonMob mob);
 
     /**
+     * Returns the generic {@link MobSet} that includes all mobs in the game world.
+     *
+     * @return the generic {@link MobSet} that includes all mobs in the game world
+     */
+    MobSet getAllMobSet();
+
+    /**
+     * Returns a copied Collection of the {@link MobSet}s in this game world.
+     * <p>
+     * It contains at least the {@link #getAllMobSet() ALL} mob set.
+     *
+     * @return a copied Collection of the {@link MobSet}s in this game world
+     */
+    Collection<MobSet> getMobSets();
+
+    /**
+     * Returns the {@link MobSet} of the given ID. If none exists, it creates one.
+     *
+     * @param id the identifier of the mob set
+     * @return the {@link MobSet} of the given ID. If none exists, it creates one
+     */
+    MobSet getOrCreateMobSet(String id);
+
+    /**
      * Returns if the game has begun in the game world.
      *
      * @return if the game has begun in the game world
