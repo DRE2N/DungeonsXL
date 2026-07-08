@@ -188,6 +188,9 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         char key = Character.toUpperCase(text.charAt(0));
+        if (TriggerTypeKey.hasValue(key) && text.length() < 2) {
+            return Trigger.error(owner, expression, text);
+        }
         String value;
         if (plugin.getTriggerRegistry().containsKey(key)) {
             value = text.substring(1, text.length() - 1);

@@ -33,4 +33,21 @@ public class TriggerTypeKey {
     public static final char REDSTONE = 'R';
     public static final char USE_ITEM = 'U';
 
+    /**
+     * Returns if the trigger this key represents requires a data value.
+     * <p>
+     * For example, the distance trigger requires a distance to be specified, but the redstone trigger does not need to specify anything on top.
+     *
+     * @param key a trigger key
+     * @return if the trigger this key represents requires a data value
+     */
+    public static boolean hasValue(char key) {
+        switch (key) {
+            case REDSTONE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

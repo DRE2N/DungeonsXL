@@ -90,7 +90,7 @@ public class LogicalExpression {
      *
      * @param string the string to parse
      * @throws IllegalArgumentException if the string is not a valid logical expression.
-     * @return a expression that represents the given string; null if erroneous
+     * @return a expression that represents the given string; null if erroneous; not null
      */
     public static LogicalExpression parse(String string) {
         if (string == null || string.trim().isEmpty()) {
