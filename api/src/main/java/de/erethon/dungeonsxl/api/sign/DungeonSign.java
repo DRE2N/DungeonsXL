@@ -54,18 +54,6 @@ public interface DungeonSign extends TriggerListener {
     boolean isProtected();
 
     /**
-     * Returns true if the fourth line of the sign that usually contains the trigger is used differently.
-     *
-     * @deprecated This is overriden by interact signs, but it is strongly advised to stick to the convention to fetch data only from the second and third line.
-     *
-     * @return true if the fourth line of the sign that usually contains the trigger is used differently
-     */
-    @Deprecated
-    default boolean isTriggerLineDisabled() {
-        return false;
-    }
-
-    /**
      * Returns if the block type of the sign is set to air after the initialization.
      *
      * @return if the block type of the sign is set to air after the initialization

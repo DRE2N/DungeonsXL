@@ -58,6 +58,7 @@ public abstract class AbstractDSign implements DungeonSign {
         worldName = instance.getWorld().getName();
 
         if (isTriggerLineDisabled()) {
+            triggerExpression = LogicalExpression.EMPTY;
             return;
         }
         try {
@@ -112,6 +113,18 @@ public abstract class AbstractDSign implements DungeonSign {
     @Override
     public boolean isInitialized() {
         return initialized;
+    }
+
+    /**
+     * Returns true if the fourth line of the sign that usually contains the trigger is used differently.
+     *
+     * @deprecated This is overriden by interact signs, but it is strongly advised to stick to the convention to fetch data only from the second and third line.
+     *
+     * @return true if the fourth line of the sign that usually contains the trigger is used differently
+     */
+    @Deprecated
+    public boolean isTriggerLineDisabled() {
+        return false;
     }
 
     @Override

@@ -20,12 +20,13 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.sign.Passive;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.player.DPermission;
+import de.erethon.dungeonsxl.trigger.InteractTrigger;
 import de.erethon.xlib.util.NumberUtil;
 import java.util.HashSet;
 import java.util.Set;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -38,6 +39,11 @@ public class InteractSign extends Passive {
 
     public InteractSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
+    }
+
+    @Override
+    public Trigger getDefaultTrigger() {
+        return new InteractTrigger(api, this, LogicalExpression.parse("I" + id), id);
     }
 
     @Override
@@ -103,13 +109,7 @@ public class InteractSign extends Passive {
 
     @Override
     public void initialize() {
-        getGameWorld().createTrigger(this, LogicalExpression.parse("I" + id));
-
-        getSign().setLine(0, ChatColor.DARK_BLUE + "############");
-        getSign().setLine(1, ChatColor.GREEN + getLine(2));
-        getSign().setLine(2, ChatColor.GREEN + getLine(3));
-        getSign().setLine(3, ChatColor.DARK_BLUE + "############");
-        getSign().update();
+        InteractTrigger.applyDefaultSignLayout(this, getLine(2), getLine(3));
     }
 
 }

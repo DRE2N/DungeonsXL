@@ -45,6 +45,12 @@ public class InteractTrigger extends AbstractTrigger {
         interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
     }
 
+    public InteractTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, int value) {
+        super(api, owner, expression, String.valueOf(value));
+        id = value;
+        interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
+    }
+
     public InteractTrigger(DungeonsAPI api, TriggerListener owner) {
         super(api, owner, LogicalExpression.parse("I" + unusedId), String.valueOf(unusedId++));
         interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
