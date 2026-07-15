@@ -189,6 +189,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         String text = expression.getText();
         char key = Character.toUpperCase(text.charAt(0));
         if (TriggerTypeKey.hasValue(key) && text.length() < 2) {
+            MessageUtil.debug(plugin, "Erroneous trigger: " + expression + " / of listener: " + owner);
             return Trigger.error(owner, expression, text);
         }
         String value;
@@ -212,6 +213,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         trigger = Trigger.construct(key, plugin, owner, expression, value);
         if (trigger == null) {
+            MessageUtil.debug(plugin, "Erroneous trigger: " + expression + " / of listener:_" + owner);
             return Trigger.error(owner, expression, text);
         }
 
@@ -227,6 +229,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
 
         triggers.add(trigger);
+        MessageUtil.debug(plugin, "Trigger registered: " + trigger);
     }
 
     public Trigger getTrigger(char key, String value) {
