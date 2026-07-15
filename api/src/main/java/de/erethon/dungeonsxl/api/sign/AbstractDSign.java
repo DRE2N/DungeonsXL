@@ -58,7 +58,7 @@ public abstract class AbstractDSign implements DungeonSign {
         worldName = instance.getWorld().getName();
 
         if (isTriggerLineDisabled()) {
-            triggerExpression = LogicalExpression.EMPTY;
+            triggerExpression = LogicalExpression.empty();
             return;
         }
         try {

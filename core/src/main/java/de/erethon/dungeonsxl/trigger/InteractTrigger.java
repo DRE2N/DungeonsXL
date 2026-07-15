@@ -108,7 +108,7 @@ public class InteractTrigger extends AbstractTrigger {
     }
 
     public static void applyDefaultSignLayout(DungeonSign dungeonSign, String line1, String line2) {
-        if (!dungeonSign.getTriggerExpression().getContents(false).contains(LogicalExpression.EMPTY)) {
+        if (!dungeonSign.getTriggerExpression().isEmpty()) {
             dungeonSign.setToAir();
             return;
         }

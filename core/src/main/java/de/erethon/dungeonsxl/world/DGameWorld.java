@@ -179,14 +179,14 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             throw new IllegalArgumentException("Expression is not atomic");
         }
 
-        String text = expression.getText();
         Trigger trigger;
-        if (text.trim().isEmpty()) {
+        if (expression.isEmpty()) {
             trigger = owner.getDefaultTrigger();
             registerTrigger(trigger);
             return trigger;
         }
 
+        String text = expression.getText();
         char key = Character.toUpperCase(text.charAt(0));
         if (TriggerTypeKey.hasValue(key) && text.length() < 2) {
             return Trigger.error(owner, expression, text);
@@ -222,9 +222,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     private void registerTrigger(Trigger trigger) {
         TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
         Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            triggers.add(trigger);
+        if (event.isCancelled()) {
+            return;
         }
+
+        triggers.add(trigger);
     }
 
     public Trigger getTrigger(char key, String value) {

@@ -48,12 +48,14 @@ public class LogicalExpression {
     }
 
     /**
-     * A satisfied, empty expression.
+     * Returns a satisfied, empty expression.
+     *
+     * @return a satisfied, empty expression
      */
-    public static final LogicalExpression EMPTY = new LogicalExpression(ComponentType.FIRST, "");
-
-    static {
-        EMPTY.satisfied = true;
+    public static LogicalExpression empty() {
+        LogicalExpression empty = new LogicalExpression(ComponentType.FIRST, "");
+        empty.satisfied = true;
+        return empty;
     }
 
     /**
@@ -94,7 +96,7 @@ public class LogicalExpression {
      */
     public static LogicalExpression parse(String string) {
         if (string == null || string.trim().isEmpty()) {
-            return EMPTY;
+            return empty();
         }
         string = string.replace(" ", "");
 
@@ -202,6 +204,15 @@ public class LogicalExpression {
      */
     public boolean isAtomic() {
         return contents.isEmpty();
+    }
+
+    /**
+     * Returns if this expression is {@link #empty() empty}.
+     *
+     * @return if this expression is empty
+     */
+    public boolean isEmpty() {
+        return text.isEmpty();
     }
 
     void setTrigger(Trigger trigger) {
@@ -348,6 +359,9 @@ public class LogicalExpression {
 
     @Override
     public String toString() {
+        if (isEmpty()) {
+            return "EMPTY";
+        }
         if (contents.isEmpty()) {
             return type + text + (isSatisfied() ? "(t)" : "(f)");
         }

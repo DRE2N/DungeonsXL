@@ -49,7 +49,7 @@ public interface TriggerListener {
      * @return if the listener has triggers
      */
     default boolean hasTriggers() {
-        return getTriggerExpression() != LogicalExpression.EMPTY;
+        return !getTriggers().isEmpty();
     }
 
     /**

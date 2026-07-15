@@ -48,7 +48,8 @@ public interface Trigger {
 
     // TODO: Javadoc
     static Trigger empty(TriggerListener owner) {
-        return new AbstractTrigger(null, owner, LogicalExpression.EMPTY, LogicalExpression.EMPTY.getText()) {
+        LogicalExpression empty = LogicalExpression.empty();
+        return new AbstractTrigger(null, owner, empty, empty.getText()) {
             @Override
             public char getKey() {
                 return '0';
