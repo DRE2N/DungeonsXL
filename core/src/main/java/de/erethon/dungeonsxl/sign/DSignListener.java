@@ -21,10 +21,10 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.player.GamePlayer;
 import de.erethon.dungeonsxl.api.sign.DungeonSign;
 import de.erethon.dungeonsxl.api.world.EditWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.config.DMessage;
 import de.erethon.dungeonsxl.player.DPlayerListener;
 import de.erethon.dungeonsxl.trigger.InteractTrigger;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.item.VanillaItem;
 import org.bukkit.ChatColor;
@@ -64,7 +64,7 @@ public class DSignListener implements Listener {
             return;
         }
 
-        DGameWorld gameWorld = (DGameWorld) dPlayer.getGameWorld();
+        GameWorld gameWorld = dPlayer.getGameWorld();
         if (gameWorld == null) {
             return;
         }
@@ -104,7 +104,7 @@ public class DSignListener implements Listener {
         sign.setLine(3, lines[3]);
 
         if (DungeonsXL.LEGACY_SIGNS.containsKey(lines[0].substring(1, lines[0].length() - 1).toUpperCase())) {
-            MessageUtil.sendMessage(player, ChatColor.RED + "https://erethon.de/resources/dxl-signs/deprecated.gif");
+            MessageUtil.sendMessage(player, ChatColor.RED + "Error: This sign is deprecated!");
             MessageUtil.sendMessage(player, ChatColor.LIGHT_PURPLE + "https://github.com/DRE2N/DungeonsXL/wiki/Legacy-support#updating");
             event.setCancelled(true);
             event.getBlock().setType(VanillaItem.AIR.getMaterial());

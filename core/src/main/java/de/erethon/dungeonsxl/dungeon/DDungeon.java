@@ -227,11 +227,9 @@ public class DDungeon implements Dungeon {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause none");
         }
 
+        signData.deserializeSigns(instance);
         if (game != null) {
-            signData.deserializeSigns((DGameWorld) instance);
             instance.getWorld().setAutoSave(false);
-        } else {
-            signData.deserializeSigns((DEditWorld) instance);
         }
 
         plugin.setLoadingWorld(false);
