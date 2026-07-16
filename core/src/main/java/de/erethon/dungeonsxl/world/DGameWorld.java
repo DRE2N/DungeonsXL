@@ -194,7 +194,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         }
         String value;
         if (plugin.getTriggerRegistry().containsKey(key)) {
-            value = text.substring(1, text.length() - 1);
+            value = text.substring(1);
         } else {
             key = TriggerTypeKey.GENERIC;
             value = text;
