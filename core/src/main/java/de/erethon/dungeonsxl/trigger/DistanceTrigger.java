@@ -22,7 +22,7 @@ import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
 import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
-import de.erethon.dungeonsxl.world.DGameWorld;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.xlib.util.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -53,13 +53,16 @@ public class DistanceTrigger extends AbstractTrigger {
     @Override
     public void onTrigger(boolean switching) {
         setTriggered(true);
+    }
+
+    @Override
+    public void postTrigger() {
         unregisterTrigger();
         getListeners().clear();
-        getGameWorld().unregisterTrigger(this);
     }
 
     /* Statics */
-    public static void triggerAllInDistance(Player player, DGameWorld gameWorld) {
+    public static void triggerAllInDistance(Player player, GameWorld gameWorld) {
         if (!player.getLocation().getWorld().equals(gameWorld.getWorld())) {
             return;
         }

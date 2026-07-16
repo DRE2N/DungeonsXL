@@ -38,9 +38,6 @@ public class PresenceTrigger extends DistanceTrigger {
     @Override
     public void onTrigger(boolean switching) {
         setTriggered(true);
-        unregisterTrigger();
-        getListeners().clear();
-        getGameWorld().unregisterTrigger(this);
     }
 
     @Override

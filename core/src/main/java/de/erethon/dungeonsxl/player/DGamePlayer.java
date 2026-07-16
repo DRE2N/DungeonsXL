@@ -768,7 +768,7 @@ public class DGamePlayer extends DInstancePlayer implements GamePlayer {
         }
 
         MessageUtil.assertTrue("Player " + this + " was expected to be online but is offline.", player, Player::isOnline);
-        DistanceTrigger.triggerAllInDistance(player, (DGameWorld) getGameWorld());
+        DistanceTrigger.triggerAllInDistance(player, getGameWorld());
     }
 
 }
