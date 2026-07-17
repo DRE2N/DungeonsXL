@@ -31,7 +31,7 @@ public class MobSet {
     public static final String ALL = "ALL";
 
     private String id;
-    private List<LivingEntity> spawned;
+    private List<LivingEntity> spawned = new ArrayList<>();
     private int size;
     private int reserved;
     private int killed;
@@ -60,10 +60,6 @@ public class MobSet {
     public void allocate(int amount) {
         size += amount;
         reserved += amount;
-    }
-
-    public void initialize() {
-        spawned = new ArrayList<>(size);
     }
 
     public int getKilled() {
