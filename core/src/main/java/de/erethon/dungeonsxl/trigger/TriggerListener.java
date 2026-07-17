@@ -19,6 +19,7 @@ package de.erethon.dungeonsxl.trigger;
 import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.player.DPlayerListener;
+import de.erethon.xlib.item.ExItem;
 import de.erethon.xlib.item.VanillaItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,6 +73,8 @@ public class TriggerListener implements Listener {
         if (item == null) {
             return;
         }
+
+        ExItem exItem = plugin.getXLib().getExItem(item);
         String name = null;
         if (item.hasItemMeta()) {
             if (item.getItemMeta().hasDisplayName()) {
@@ -90,7 +93,7 @@ public class TriggerListener implements Listener {
             name = plugin.getXLib().getExItem(item).getName();
         }
 
-        UseItemTrigger trigger = UseItemTrigger.getByName(name, gameWorld);
+        UseItemTrigger trigger = UseItemTrigger.getByItemOrName(exItem, name, gameWorld);
         if (trigger != null) {
             trigger.trigger(true, player);
         }

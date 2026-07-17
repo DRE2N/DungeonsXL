@@ -31,15 +31,12 @@ import de.erethon.xlib.item.ExItem;
 public class UseItemTrigger extends AbstractTrigger {
 
     private String name;
-    private String matchedName;
+    private ExItem item;
 
     public UseItemTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
         super(api, owner, expression, value);
         name = value;
-        ExItem item = api.getXLib().getExItem(name);
-        if (item != null) {
-            matchedName = item.toString();
-        }
+        item = api.getXLib().getExItem(name);
     }
 
     @Override
@@ -58,8 +55,8 @@ public class UseItemTrigger extends AbstractTrigger {
     }
 
     /* Statics */
-    public static UseItemTrigger getByName(String name, GameWorld gameWorld) {
-        if (name == null || gameWorld == null) {
+    public static UseItemTrigger getByItemOrName(ExItem item, String name, GameWorld gameWorld) {
+        if ((item == null && name == null) || gameWorld == null) {
             return null;
         }
         for (Trigger uncasted : gameWorld.getTriggers()) {
@@ -67,9 +64,9 @@ public class UseItemTrigger extends AbstractTrigger {
                 continue;
             }
             UseItemTrigger trigger = (UseItemTrigger) uncasted;
-            if (name.equalsIgnoreCase(trigger.name)) {
+            if (name != null && name.equalsIgnoreCase(trigger.name)) {
                 return trigger;
-            } else if (name.equalsIgnoreCase(trigger.matchedName)) {
+            } else if (item != null && item.equals(trigger.item)) {
                 return trigger;
             }
         }
