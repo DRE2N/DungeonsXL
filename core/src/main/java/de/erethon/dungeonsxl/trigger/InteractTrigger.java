@@ -37,31 +37,19 @@ public class InteractTrigger extends AbstractTrigger {
     private static int unusedId = Integer.MIN_VALUE;
 
     private int id;
-    private Block interactBlock;
 
     public InteractTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
         super(api, owner, expression, value);
         id = NumberUtil.parseInt(value);
-        interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
     }
 
     public InteractTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, int value) {
         super(api, owner, expression, String.valueOf(value));
         id = value;
-        interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
     }
 
     public InteractTrigger(DungeonsAPI api, TriggerListener owner) {
         super(api, owner, LogicalExpression.parse("I" + unusedId), String.valueOf(unusedId++));
-        interactBlock = getGameWorld().getWorld().getBlockAt(owner.getLocation());
-    }
-
-    public Block getInteractBlock() {
-        return interactBlock;
-    }
-
-    public void setInteractBlock(Block block) {
-        interactBlock = block;
     }
 
     @Override
@@ -84,14 +72,16 @@ public class InteractTrigger extends AbstractTrigger {
         if (block == null || gameWorld == null) {
             return null;
         }
-        for (Trigger uncasted : gameWorld.getTriggers()) {
-            if (!(uncasted instanceof InteractTrigger)) {
+        DungeonSign dSign = gameWorld.getDungeonSign(block);
+        if (dSign == null) {
+            return null;
+        }
+
+        for (Trigger trigger : dSign.getTriggers()) {
+            if (!(trigger instanceof InteractTrigger)) {
                 continue;
             }
-            InteractTrigger trigger = (InteractTrigger) uncasted;
-            if (block.equals(trigger.interactBlock)) {
-                return trigger;
-            }
+            return (InteractTrigger) trigger;
         }
         return null;
     }

@@ -39,6 +39,7 @@ public class InteractSign extends Passive {
 
     public InteractSign(DungeonsAPI api, Sign sign, String[] lines, InstanceWorld instance) {
         super(api, sign, lines, instance);
+        id = NumberUtil.parseInt(lines[1]);
     }
 
     @Override
