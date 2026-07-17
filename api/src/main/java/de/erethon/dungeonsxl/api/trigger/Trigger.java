@@ -56,6 +56,11 @@ public interface Trigger {
             }
 
             @Override
+            public boolean isIdentifiableByValue() {
+                return false;
+            }
+
+            @Override
             public boolean isTriggered() {
                 return true;
             }
@@ -71,6 +76,11 @@ public interface Trigger {
             @Override
             public char getKey() {
                 return '0';
+            }
+
+            @Override
+            public boolean isIdentifiableByValue() {
+                return false;
             }
 
             @Override
@@ -156,6 +166,23 @@ public interface Trigger {
      * @return the raw value the trigger was initialized with. May contain an identifier or arguments in any shape or form
      */
     String getValue();
+
+    /**
+     * Returns a {@link LogicalExpression} representation of the trigger.
+     *
+     * @return a {@link LogicalExpression} representation of the trigger
+     */
+    LogicalExpression getExpression();
+
+    /**
+     * Returns true if all occurences of a key-value pair of this trigger type are represented by the same trigger object; false if not.
+     * <p>
+     * For example, all interact triggers with the ID 1 share the same identity. Thus, this method returns true for them. However, multiple distance triggers of
+     * the same distance are triggered independently of each other; therefore, false is returned for them.
+     *
+     * @return true if all occurences of a key-value pair of this trigger type are represented by the same trigger object; false if not
+     */
+    boolean isIdentifiableByValue();
 
     /**
      * The {@link GameWorld} the trigger works in.

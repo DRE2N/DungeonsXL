@@ -88,6 +88,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
     private List<DungeonMob> mobs = new ArrayList<>();
     private Map<String, MobSet> mobSets = new HashMap<>();
     private List<Trigger> triggers = new ArrayList<>();
+    private List<Trigger> identifiableByValueTriggers = new ArrayList<>();
 
     private boolean readySign;
 
@@ -181,8 +182,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         Trigger trigger;
         if (expression.isEmpty()) {
-            trigger = owner.getDefaultTrigger();
-            registerTrigger(trigger);
+            trigger = registerTrigger(owner.getDefaultTrigger());
             return trigger;
         }
 
@@ -202,8 +202,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         trigger = getTrigger(key, value);
         if (trigger != null) {
-            registerTrigger(trigger);
-            return trigger;
+            return registerTrigger(trigger);
         }
 
         Class<? extends Trigger> clss = plugin.getTriggerRegistry().get(key);
@@ -217,19 +216,31 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             return Trigger.error(owner, expression, text);
         }
 
-        registerTrigger(trigger);
-        return trigger;
+        return registerTrigger(trigger);
     }
 
-    private void registerTrigger(Trigger trigger) {
+    private Trigger registerTrigger(Trigger trigger) {
         TriggerRegistrationEvent event = new TriggerRegistrationEvent(trigger);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            return;
+            return trigger;
+        }
+
+        if (trigger.isIdentifiableByValue()) {
+            for (Trigger cached : identifiableByValueTriggers) {
+                if (!cached.getExpression().equals(trigger.getExpression())) {
+                    continue;
+                }
+                MessageUtil.debug(plugin, "Redundant trigger not registered: " + trigger);
+
+                return cached;
+            }
+            identifiableByValueTriggers.add(trigger);
         }
 
         triggers.add(trigger);
         MessageUtil.debug(plugin, "Trigger registered: " + trigger);
+        return trigger;
     }
 
     public Trigger getTrigger(char key, String value) {

@@ -41,6 +41,11 @@ public class FortuneTrigger extends AbstractTrigger {
         return TriggerTypeKey.FORTUNE;
     }
 
+    @Override
+    public boolean isIdentifiableByValue() {
+        return false;
+    }
+
     /* Getters and setters */
     /**
      * @return the chance

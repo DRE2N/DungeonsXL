@@ -17,6 +17,7 @@ package de.erethon.dungeonsxl.api.trigger;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.event.trigger.TriggerUnregistrationEvent;
 import de.erethon.dungeonsxl.api.world.GameWorld;
+import de.erethon.xlib.chat.MessageUtil;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -49,6 +50,11 @@ public abstract class AbstractTrigger implements Trigger {
     }
 
     @Override
+    public LogicalExpression getExpression() {
+        return expression;
+    }
+
+    @Override
     public GameWorld getGameWorld() {
         return gameWorld;
     }
@@ -61,6 +67,7 @@ public abstract class AbstractTrigger implements Trigger {
     @Override
     public void setTriggered(boolean triggered) {
         expression.setSatisfied(triggered);
+        MessageUtil.debug("setTriggered(" + triggered + ") -> expression: " + expression);
     }
 
     @Override

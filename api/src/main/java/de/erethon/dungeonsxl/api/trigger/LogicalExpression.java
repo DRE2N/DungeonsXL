@@ -357,6 +357,35 @@ public class LogicalExpression {
         return true;
     }
 
+    /**
+     * This method makes sure occurrences of the other expression in this expression are of the same identity.
+     *
+     * @param other the expression to harmonize with
+     * @return the other expression if this expression equals the other one; this expression with components replaced with the other expression if there are
+     *         occurrences
+     */
+    public LogicalExpression harmonize(LogicalExpression other) {
+        if (equals(other)) {
+            return other;
+        }
+        if (isAtomic()) {
+            return this;
+        }
+
+        for (int i = 0; contents.size() > i; i++) {
+            contents.set(i, contents.get(i).harmonize(other));
+        }
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof LogicalExpression)) {
+            return false;
+        }
+        return text.equals(((LogicalExpression) object).text);
+    }
+
     @Override
     public String toString() {
         if (isEmpty()) {

@@ -53,6 +53,11 @@ public class RedstoneTrigger extends AbstractTrigger {
     }
 
     @Override
+    public boolean isIdentifiableByValue() {
+        return false;
+    }
+
+    @Override
     public void onTrigger(boolean switching) {
         if (rtBlock.isBlockPowered()) {
             if (!isTriggered()) {

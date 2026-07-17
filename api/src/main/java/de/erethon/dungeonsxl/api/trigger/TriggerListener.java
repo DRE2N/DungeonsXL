@@ -35,6 +35,13 @@ public interface TriggerListener {
     LogicalExpression getTriggerExpression();
 
     /**
+     * {@link LogicalExpression#harmonize(LogicalExpression) harmonizes} {@link #getTriggerExpression() the trigger expression}.
+     *
+     * @param other the expression to harmonize into the listener's expression
+     */
+    void harmonizeExpression(LogicalExpression other);
+
+    /**
      * Returns a deep List of triggers of this listener.
      * <p>
      * WARNING: Do not iterate and check if each is satisfied to get if the sign should fire. Use {@link #getTriggerExpression()} instead.

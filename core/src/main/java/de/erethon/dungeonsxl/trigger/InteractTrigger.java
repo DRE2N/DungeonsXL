@@ -70,6 +70,11 @@ public class InteractTrigger extends AbstractTrigger {
     }
 
     @Override
+    public boolean isIdentifiableByValue() {
+        return true;
+    }
+
+    @Override
     public void onTrigger(boolean switching) {
         setTriggered(true);
     }

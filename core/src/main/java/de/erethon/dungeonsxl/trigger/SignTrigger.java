@@ -45,6 +45,11 @@ public class SignTrigger extends AbstractTrigger {
     }
 
     @Override
+    public boolean isIdentifiableByValue() {
+        return true;
+    }
+
+    @Override
     public void onTrigger(boolean switching) {
         if (switching != isTriggered()) {
             setTriggered(switching);

@@ -107,7 +107,16 @@ public abstract class AbstractDSign implements DungeonSign {
         List<LogicalExpression> contents = triggerExpression.getContents(true);
         triggers = new ArrayList<>(contents.size());
         contents.forEach(e -> triggers.add(e.toTrigger(api, this, false)));
+
+        for (Trigger trigger : triggers) {
+            harmonizeExpression(trigger.getExpression());
+        }
         return triggers;
+    }
+
+    @Override
+    public void harmonizeExpression(LogicalExpression other) {
+        triggerExpression = triggerExpression.harmonize(other);
     }
 
     @Override
@@ -129,15 +138,18 @@ public abstract class AbstractDSign implements DungeonSign {
 
     @Override
     public void updateTriggers(Trigger lastFired) {
+        MessageUtil.debug("updateTriggers " + triggerExpression);
         if (isErroneous()) {
             return;
         }
 
         if (!triggerExpression.isSatisfied()) {
+            MessageUtil.debug("Not satisfied");
             return;
         }
 
         try {
+            MessageUtil.debug("trigger()");
             trigger(lastFired != null ? lastFired.getTriggeringPlayer() : null);
         } catch (Exception exception) {
             markAsErroneous("An error occurred while triggering a sign of the type " + getName()
