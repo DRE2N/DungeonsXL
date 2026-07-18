@@ -38,8 +38,6 @@ import de.erethon.dungeonsxl.mob.CitizensMobProvider;
 import de.erethon.dungeonsxl.sign.button.ReadySign;
 import de.erethon.dungeonsxl.sign.passive.StartSign;
 import de.erethon.dungeonsxl.sign.windup.MobSign;
-import de.erethon.dungeonsxl.trigger.FortuneTrigger;
-import de.erethon.dungeonsxl.trigger.RedstoneTrigger;
 import de.erethon.dungeonsxl.world.block.GameBlock;
 import de.erethon.dungeonsxl.world.block.LockedDoor;
 import de.erethon.dungeonsxl.world.block.PlaceableBlock;
@@ -464,10 +462,10 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
             if (sign == null || sign.isOnDungeonInit()) {
-                MessageUtil.debug("Skipping " + sign + "as it's not to be fired on game init");
+                MessageUtil.debug(plugin, "Skipping " + sign + "as it's not to be fired on game init");
                 continue;
             }
-            MessageUtil.debug("Initializing " + sign + " on game start");
+            MessageUtil.debug(plugin, "Initializing " + sign + " on game start");
             try {
                 sign.setInitialized(true);
             } catch (Exception exception) {
@@ -479,11 +477,12 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
                 continue;
             }
             if (sign.isSetToAir()) {
-                MessageUtil.debug("Setting " + sign + " to air");
+                MessageUtil.debug(plugin, "Setting " + sign + " to air");
                 sign.setToAir();
             }
+            MessageUtil.debug(plugin, "Triggers: " + sign.getTriggers());
             if (!sign.hasTriggers()) {
-                MessageUtil.debug(sign + " has no triggers, firing");
+                MessageUtil.debug(plugin, sign + " has no triggers, firing");
                 try {
                     sign.trigger(null);
                 } catch (Exception exception) {
@@ -494,12 +493,13 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
             }
         }
 
-        for (Trigger trigger : getTriggersFromKey(TriggerTypeKey.REDSTONE)) {
-            ((RedstoneTrigger) trigger).trigger(true, null);
-        }
-
-        for (Trigger trigger : getTriggersFromKey(TriggerTypeKey.FORTUNE)) {
-            ((FortuneTrigger) trigger).trigger(true, null);
+        for (Trigger trigger : triggers) {
+            switch (trigger.getKey()) {
+                case TriggerTypeKey.FORTUNE:
+                case TriggerTypeKey.REDSTONE:
+                case TriggerTypeKey.NONE:
+                    trigger.trigger(true, null);
+            }
         }
     }
 

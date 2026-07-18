@@ -52,7 +52,7 @@ public interface Trigger {
         return new AbstractTrigger(null, owner, empty, empty.getText()) {
             @Override
             public char getKey() {
-                return '0';
+                return TriggerTypeKey.NONE;
             }
 
             @Override
@@ -75,7 +75,7 @@ public interface Trigger {
         return new AbstractTrigger(null, owner, expression, text) {
             @Override
             public char getKey() {
-                return '0';
+                return '?';
             }
 
             @Override

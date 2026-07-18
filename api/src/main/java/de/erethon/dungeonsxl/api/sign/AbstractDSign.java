@@ -146,19 +146,19 @@ public abstract class AbstractDSign implements DungeonSign {
 
     @Override
     public void updateTriggers(Trigger lastFired) {
-        MessageUtil.debug("updateTriggers " + triggerExpression);
+        MessageUtil.debug(api, "updateTriggers " + triggerExpression);
         if (isErroneous()) {
             return;
         }
 
         if (!triggerExpression.isSatisfied()) {
-            MessageUtil.debug("Not satisfied");
+            MessageUtil.debug(api, "Not satisfied");
             return;
         }
 
         if (isInitialized()) {
             try {
-                MessageUtil.debug("trigger()");
+                MessageUtil.debug(api, "trigger()");
                 trigger(lastFired != null ? lastFired.getTriggeringPlayer() : null);
             } catch (Exception exception) {
                 markAsErroneous("An error occurred while triggering a sign of the type " + getName()

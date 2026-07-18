@@ -32,6 +32,7 @@ public class TriggerTypeKey {
     public static final char PRESENCE = 'P';
     public static final char REDSTONE = 'R';
     public static final char USE_ITEM = 'U';
+    public static final char NONE = '0';
 
     /**
      * Returns if the trigger this key represents requires a data value.
