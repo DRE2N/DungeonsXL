@@ -91,7 +91,7 @@ public class ScriptSign extends Passive {
             }
 
             try {
-                dSign.initialize();
+                dSign.setInitialized(true);
             } catch (Exception exception) {
                 dSign.markAsErroneous("An error occurred while initializing a sign of the type " + dSign.getName()
                         + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");

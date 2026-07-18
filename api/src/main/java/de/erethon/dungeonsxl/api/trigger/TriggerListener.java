@@ -99,6 +99,8 @@ public interface TriggerListener {
      * <p>
      * {@link #trigger(org.bukkit.entity.Player)}s the listener if it does not have any triggers. (Note that some signs have interaction triggers by default,
      * like ready signs).
+     * <p>
+     * Signs should be initialized through {@link #setInitialized(boolean)}.
      */
     void initialize();
 
@@ -108,6 +110,18 @@ public interface TriggerListener {
      * @return if the listener is {@link #initialize()}d
      */
     boolean isInitialized();
+
+    /**
+     * Sets the listener initialization state of the sign.
+     * <p>
+     * If it's set to true, the sign is {@link #initialize()}d. This makes the listener listen for its triggers if it {@link #hasTriggers()}. It also
+     * {@link #trigger(org.bukkit.entity.Player)}s the listener if it does not have any triggers. (Note that some signs have default triggers, such as the ready
+     * sign's default interaction trigger).
+     *
+     * @see #getDefaultTrigger()
+     * @param state the initialization state
+     */
+    void setInitialized(boolean state);
 
     /**
      * Triggers the listener. The effects are defined by the implementation.

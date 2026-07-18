@@ -157,7 +157,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         if (dSign.isOnDungeonInit()) {
             try {
-                dSign.initialize();
+                dSign.setInitialized(true);
             } catch (Exception exception) {
                 dSign.markAsErroneous("An error occurred while initializing a sign of the type " + dSign.getName()
                         + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
@@ -464,10 +464,12 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
 
         for (DungeonSign sign : getDungeonSigns().toArray(new DungeonSign[getDungeonSigns().size()])) {
             if (sign == null || sign.isOnDungeonInit()) {
+                MessageUtil.debug("Skipping " + sign + "as it's not to be fired on game init");
                 continue;
             }
+            MessageUtil.debug("Initializing " + sign + " on game start");
             try {
-                sign.initialize();
+                sign.setInitialized(true);
             } catch (Exception exception) {
                 sign.markAsErroneous("An error occurred while initializing a sign of the type " + sign.getName()
                         + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
@@ -477,9 +479,11 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
                 continue;
             }
             if (sign.isSetToAir()) {
+                MessageUtil.debug("Setting " + sign + " to air");
                 sign.setToAir();
             }
             if (!sign.hasTriggers()) {
+                MessageUtil.debug(sign + " has no triggers, firing");
                 try {
                     sign.trigger(null);
                 } catch (Exception exception) {

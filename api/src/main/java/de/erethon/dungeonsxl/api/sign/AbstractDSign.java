@@ -124,6 +124,14 @@ public abstract class AbstractDSign implements DungeonSign {
         return initialized;
     }
 
+    @Override
+    public void setInitialized(boolean state) {
+        initialized = state;
+        if (initialized) {
+            initialize();
+        }
+    }
+
     /**
      * Returns true if the fourth line of the sign that usually contains the trigger is used differently.
      *
@@ -148,13 +156,15 @@ public abstract class AbstractDSign implements DungeonSign {
             return;
         }
 
-        try {
-            MessageUtil.debug("trigger()");
-            trigger(lastFired != null ? lastFired.getTriggeringPlayer() : null);
-        } catch (Exception exception) {
-            markAsErroneous("An error occurred while triggering a sign of the type " + getName()
-                    + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
-            exception.printStackTrace();
+        if (isInitialized()) {
+            try {
+                MessageUtil.debug("trigger()");
+                trigger(lastFired != null ? lastFired.getTriggeringPlayer() : null);
+            } catch (Exception exception) {
+                markAsErroneous("An error occurred while triggering a sign of the type " + getName()
+                        + ". This is not a user error. Please report the following stacktrace to the developer of the plugin:");
+                exception.printStackTrace();
+            }
         }
     }
 
