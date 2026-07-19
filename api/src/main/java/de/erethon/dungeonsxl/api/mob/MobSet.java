@@ -82,4 +82,9 @@ public class MobSet {
         return killed / size >= quota;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{id=" + id + ", size=" + size + "}";
+    }
+
 }

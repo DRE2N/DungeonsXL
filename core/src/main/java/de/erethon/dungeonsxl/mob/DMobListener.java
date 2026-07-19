@@ -17,9 +17,15 @@
 package de.erethon.dungeonsxl.mob;
 
 import de.erethon.dungeonsxl.DungeonsXL;
+import de.erethon.dungeonsxl.api.dungeon.GameRule;
+import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
+import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.mob.ExMob;
 import de.erethon.xlib.mob.VanillaMob;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -70,20 +76,42 @@ public class DMobListener implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        World world = event.getEntity().getWorld();
-
-        if (event.getEntity() instanceof LivingEntity) {
-            LivingEntity entity = event.getEntity();
-            GameWorld gameWorld = plugin.getGameWorld(world);
-            if (gameWorld != null) {
-                if (gameWorld.isPlaying()) {
-                    DMob dMob = (DMob) plugin.getDungeonMob(entity);
-                    if (dMob != null) {
-                        dMob.onDeath(plugin, event);
-                    }
-                }
-            }
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
         }
+
+        LivingEntity entity = event.getEntity();
+        World world = entity.getWorld();
+        GameWorld gameWorld = plugin.getGameWorld(world);
+        if (gameWorld == null) {
+            return;
+        }
+        if (!gameWorld.isPlaying()) {
+            return;
+        }
+
+        DMob dMob = (DMob) plugin.getDungeonMob(entity);
+        if (dMob == null) {
+            return;
+        }
+
+        DungeonMobDeathEvent dMobDeathEvent = new DungeonMobDeathEvent(dMob);
+        Bukkit.getServer().getPluginManager().callEvent(dMobDeathEvent);
+        if (dMobDeathEvent.isCancelled()) {
+            return;
+        }
+
+        ExMob type = dMob.getType();
+        GameRuleContainer rules = gameWorld.getDungeon().getRules();
+        if (!DMob.getDrops(type, rules.getState(GameRule.MOB_ITEM_DROPS))) {
+            event.getDrops().clear();
+        }
+        if (!DMob.getDrops(type, rules.getState(GameRule.MOB_EXP_DROPS))) {
+            event.setDroppedExp(0);
+        }
+
+        MessageUtil.debug(plugin, dMob + " dead, sets: " + dMob.getMobSets());
+        dMob.getMobSets().forEach(s -> s.kill(entity));
     }
 
     // Prevent undead combustion from the sun.

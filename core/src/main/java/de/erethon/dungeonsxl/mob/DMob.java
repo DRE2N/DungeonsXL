@@ -16,14 +16,11 @@
  */
 package de.erethon.dungeonsxl.mob;
 
-import de.erethon.dungeonsxl.DungeonsXL;
 import de.erethon.dungeonsxl.api.dungeon.GameRule;
-import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobSpawnEvent;
 import de.erethon.dungeonsxl.api.mob.DungeonMob;
 import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.world.GameWorld;
-import de.erethon.dungeonsxl.world.DGameWorld;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.mob.ExMob;
 import de.erethon.xlib.mob.VanillaMob;
@@ -32,7 +29,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.EntityDeathEvent;
 
 /**
  * @author Frank Baumann, Milan Albrecht, Daniel Saukel
@@ -53,7 +49,7 @@ public class DMob implements DungeonMob {
         this.type = type != null ? type : VanillaMob.get(entity.getType());
 
         if (this.type.getSpecies().isAlive() && this.type != VanillaMob.ARMOR_STAND && this.type != VanillaMob.PLAYER
-                && !getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_ITEM_DROPS))) {
+                && !getDrops(type, gameWorld.getDungeon().getRules().getState(GameRule.MOB_ITEM_DROPS))) {
             entity.getEquipment().setHelmetDropChance(0);
             entity.getEquipment().setChestplateDropChance(0);
             entity.getEquipment().setLeggingsDropChance(0);
@@ -89,50 +85,6 @@ public class DMob implements DungeonMob {
         return type;
     }
 
-    /* Actions */
-    public void onDeath(DungeonsXL plugin, EntityDeathEvent event) {
-        LivingEntity victim = event.getEntity();
-        DGameWorld gameWorld = (DGameWorld) plugin.getGameWorld(victim.getWorld());
-        if (gameWorld == null) {
-            return;
-        }
-
-        DungeonMobDeathEvent dMobDeathEvent = new DungeonMobDeathEvent(this);
-        Bukkit.getServer().getPluginManager().callEvent(dMobDeathEvent);
-        if (dMobDeathEvent.isCancelled()) {
-            return;
-        }
-
-        if (!getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_ITEM_DROPS))) {
-            event.getDrops().clear();
-        }
-        if (!getDrops(gameWorld.getDungeon().getRules().getState(GameRule.MOB_EXP_DROPS))) {
-            event.setDroppedExp(0);
-        }
-
-        mobSets.forEach(s -> s.kill(victim));
-
-        gameWorld.removeMob(this);
-    }
-
-    private boolean getDrops(Object drops) {
-        if (drops instanceof Boolean) {
-            return (Boolean) drops;
-        } else if (drops instanceof Set) {
-            for (ExMob whitelisted : (Set<ExMob>) drops) {
-                if (type.isSubsumableUnder(whitelisted)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "{type=" + type + "}";
-    }
-
     @Override
     public MobSet getTypeMobSet() {
         return typeSet;
@@ -154,6 +106,25 @@ public class DMob implements DungeonMob {
     @Override
     public boolean removeMobSet(MobSet mobSet) {
         return mobSets.remove(mobSet);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{type=" + type + "}";
+    }
+
+    /* Util */
+    public static boolean getDrops(ExMob type, Object drops) {
+        if (drops instanceof Boolean) {
+            return (Boolean) drops;
+        } else if (drops instanceof Set) {
+            for (ExMob whitelisted : (Set<ExMob>) drops) {
+                if (type.isSubsumableUnder(whitelisted)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
