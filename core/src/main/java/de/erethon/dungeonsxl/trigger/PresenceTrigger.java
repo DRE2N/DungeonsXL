@@ -36,8 +36,9 @@ public class PresenceTrigger extends DistanceTrigger {
     }
 
     @Override
-    public void onTrigger(boolean switching) {
+    public boolean onTrigger(boolean switching) {
         setTriggered(true);
+        return true;
     }
 
     @Override

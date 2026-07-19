@@ -45,9 +45,9 @@ public class TriggerTypeKey {
     public static boolean hasValue(char key) {
         switch (key) {
             case REDSTONE:
-                return true;
-            default:
                 return false;
+            default:
+                return true;
         }
     }
 

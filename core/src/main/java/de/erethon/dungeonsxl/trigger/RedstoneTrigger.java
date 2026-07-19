@@ -58,10 +58,11 @@ public class RedstoneTrigger extends AbstractTrigger {
     }
 
     @Override
-    public void onTrigger(boolean switching) {
+    public boolean onTrigger(boolean switching) {
         if (rtBlock.isBlockPowered()) {
             if (!isTriggered()) {
                 setTriggered(true);
+                return true;
             }
 
         } else if (isTriggered()) {
@@ -69,20 +70,21 @@ public class RedstoneTrigger extends AbstractTrigger {
 
             for (TriggerListener listener : getListeners().toArray(new TriggerListener[getListeners().size()])) {
                 if (!(listener instanceof Deactivatable)) {
-                    return;
+                    return false;
                 }
                 Deactivatable sign = ((Deactivatable) listener);
                 if (sign.isErroneous()) {
-                    return;
+                    return false;
                 }
                 for (Trigger trigger : sign.getTriggers()) {
                     if (trigger.isTriggered()) {
-                        return;
+                        return false;
                     }
                 }
                 sign.deactivate();
             }
         }
+        return false;
     }
 
     /* Statics */

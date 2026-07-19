@@ -63,8 +63,9 @@ public class InteractTrigger extends AbstractTrigger {
     }
 
     @Override
-    public void onTrigger(boolean switching) {
+    public boolean onTrigger(boolean switching) {
         setTriggered(true);
+        return true;
     }
 
     /* Statics */

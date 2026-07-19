@@ -66,7 +66,8 @@ public interface Trigger {
             }
 
             @Override
-            public void onTrigger(boolean switching) {
+            public boolean onTrigger(boolean switching) {
+                return true;
             }
         };
     }
@@ -89,8 +90,8 @@ public interface Trigger {
             }
 
             @Override
-            public void onTrigger(boolean switching) {
-                setTriggered(true);
+            public boolean onTrigger(boolean switching) {
+                return false;
             }
         };
     }
@@ -278,7 +279,9 @@ public interface Trigger {
             return;
         }
         setTriggeringPlayer(triggeringPlayer);
-        onTrigger(switching);
+        if (!onTrigger(switching)) {
+            return;
+        }
         updateListeners();
         postTrigger();
     }
@@ -290,8 +293,9 @@ public interface Trigger {
      * instead when the condition to trigger the trigger is fulfilled.
      *
      * @param switching if the action changes the the state of {@link #isTriggered()}
+     * @return whether to proceed with the trigger process or not
      */
-    void onTrigger(boolean switching);
+    boolean onTrigger(boolean switching);
 
     /**
      * Called after listeners are updated.

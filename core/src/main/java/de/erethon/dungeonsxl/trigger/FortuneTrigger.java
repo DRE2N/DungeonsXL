@@ -63,11 +63,12 @@ public class FortuneTrigger extends AbstractTrigger {
 
     /* Actions */
     @Override
-    public void onTrigger(boolean switching) {
+    public boolean onTrigger(boolean switching) {
         int random = new Random().nextInt(100);
         if (chance * 100 >= random) {
             setTriggered(true);
         }
+        return true;
     }
 
 }

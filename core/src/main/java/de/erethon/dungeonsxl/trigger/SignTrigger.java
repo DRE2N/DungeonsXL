@@ -50,10 +50,11 @@ public class SignTrigger extends AbstractTrigger {
     }
 
     @Override
-    public void onTrigger(boolean switching) {
+    public boolean onTrigger(boolean switching) {
         if (switching != isTriggered()) {
             setTriggered(switching);
         }
+        return isTriggered();
     }
 
     /* Statics */
