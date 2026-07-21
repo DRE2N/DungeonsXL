@@ -32,7 +32,7 @@ import java.util.Collection;
  */
 public class MobTrigger extends AbstractTrigger {
 
-    private double modifier = 1.0;
+    private Double modifier = null;
     private MobSet mobSet;
 
     public MobTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
@@ -41,7 +41,7 @@ public class MobTrigger extends AbstractTrigger {
         int i = 0;
         if (values.length == 2) {
             i++;
-            modifier = NumberUtil.parseDouble(values[0], modifier);
+            modifier = NumberUtil.parseDouble(values[0], 1.0);
         }
         mobSet = getGameWorld().getOrCreateMobSet(values[i]);
     }
@@ -77,7 +77,7 @@ public class MobTrigger extends AbstractTrigger {
                 continue;
             }
 
-            if (trigger.mobSet.checkTrigger(trigger.modifier)) {
+            if (trigger.modifier == null || trigger.mobSet.checkTrigger(trigger.modifier)) {
                 trigger.trigger(true, null);
             }
         }
