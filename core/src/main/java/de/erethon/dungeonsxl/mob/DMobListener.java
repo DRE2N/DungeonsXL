@@ -22,6 +22,7 @@ import de.erethon.dungeonsxl.api.dungeon.GameRuleContainer;
 import de.erethon.dungeonsxl.api.event.mob.DungeonMobDeathEvent;
 import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.dungeonsxl.api.world.InstanceWorld;
+import de.erethon.dungeonsxl.trigger.MobTrigger;
 import de.erethon.xlib.chat.MessageUtil;
 import de.erethon.xlib.mob.ExMob;
 import de.erethon.xlib.mob.VanillaMob;
@@ -112,6 +113,7 @@ public class DMobListener implements Listener {
 
         MessageUtil.debug(plugin, dMob + " dead, sets: " + dMob.getMobSets());
         dMob.getMobSets().forEach(s -> s.kill(entity));
+        MobTrigger.triggerForSets(gameWorld, dMob.getMobSets());
     }
 
     // Prevent undead combustion from the sun.

@@ -32,7 +32,6 @@ public class MobSet {
 
     private String id;
     private List<LivingEntity> spawned = new ArrayList<>();
-    private int size;
     private int reserved;
     private int killed;
 
@@ -45,20 +44,20 @@ public class MobSet {
         this.id = id;
     }
 
+    // TODO: JavaDocs
     public String getId() {
         return id;
     }
 
-    public int getSize() {
-        return size;
+    public int getSizeSpawned() {
+        return spawned.size();
     }
 
-    public int getReserved() {
+    public int getSizeReserved() {
         return reserved;
     }
 
     public void allocate(int amount) {
-        size += amount;
         reserved += amount;
     }
 
@@ -72,19 +71,16 @@ public class MobSet {
 
     public void kill(LivingEntity entity) {
         spawned.remove(entity);
-    }
-
-    public boolean checkTrigger(int amount) {
-        return killed >= amount;
+        killed++;
     }
 
     public boolean checkTrigger(double quota) {
-        return killed / size >= quota;
+        return killed >= reserved * quota;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{id=" + id + ", size=" + size + "}";
+        return getClass().getSimpleName() + "{id=" + id + ", reserved=" + reserved + "}";
     }
 
 }

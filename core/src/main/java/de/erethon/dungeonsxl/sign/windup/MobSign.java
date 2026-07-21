@@ -110,7 +110,6 @@ public class MobSign extends Windup {
 
     @Override
     public void initialize() {
-        typeSet = getGameWorld().getOrCreateMobSet(getLine(1));
         String[] attrAndSets = getLine(2).split("#");
         String[] attributes = attrAndSets[0].split(",");
 
@@ -119,10 +118,17 @@ public class MobSign extends Windup {
         initialAmount = n;
         provider = attributes.length == 3 ? providers.get(attributes[2]) : null;
 
+        getGameWorld().getAllMobSet().allocate(n);
+
+        typeSet = getGameWorld().getOrCreateMobSet(getLine(1));
+        typeSet.allocate(n);
+
         if (attrAndSets.length > 1) {
             String[] sets = attrAndSets[1].split(",");
             for (String id : sets) {
-                mobSets.add(getGameWorld().getOrCreateMobSet(id));
+                MobSet set = getGameWorld().getOrCreateMobSet(id);
+                set.allocate(n);
+                mobSets.add(set);
             }
         }
 

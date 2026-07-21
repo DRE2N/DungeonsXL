@@ -20,16 +20,19 @@ import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.mob.MobSet;
 import de.erethon.dungeonsxl.api.trigger.AbstractTrigger;
 import de.erethon.dungeonsxl.api.trigger.LogicalExpression;
+import de.erethon.dungeonsxl.api.trigger.Trigger;
 import de.erethon.dungeonsxl.api.trigger.TriggerListener;
 import de.erethon.dungeonsxl.api.trigger.TriggerTypeKey;
+import de.erethon.dungeonsxl.api.world.GameWorld;
 import de.erethon.xlib.util.NumberUtil;
+import java.util.Collection;
 
 /**
  * @author Frank Baumann, Daniel Saukel
  */
 public class MobTrigger extends AbstractTrigger {
 
-    private Double modifier;
+    private double modifier = 1.0;
     private MobSet mobSet;
 
     public MobTrigger(DungeonsAPI api, TriggerListener owner, LogicalExpression expression, String value) {
@@ -38,7 +41,7 @@ public class MobTrigger extends AbstractTrigger {
         int i = 0;
         if (values.length == 2) {
             i++;
-            modifier = NumberUtil.parseDouble(values[0], 1.0);
+            modifier = NumberUtil.parseDouble(values[0], modifier);
         }
         mobSet = getGameWorld().getOrCreateMobSet(values[i]);
     }
@@ -55,8 +58,29 @@ public class MobTrigger extends AbstractTrigger {
 
     @Override
     public boolean onTrigger(boolean switching) {
+        if (isTriggered()) {
+            return false;
+        }
         setTriggered(true);
         return true;
+    }
+
+    /* Statics */
+    public static void triggerForSets(GameWorld gameWorld, Collection<MobSet> mobSets) {
+        for (Trigger uncasted : gameWorld.getTriggers()) {
+            if (!(uncasted instanceof MobTrigger)) {
+                continue;
+            }
+
+            MobTrigger trigger = (MobTrigger) uncasted;
+            if (!mobSets.contains(trigger.mobSet)) {
+                continue;
+            }
+
+            if (trigger.mobSet.checkTrigger(trigger.modifier)) {
+                trigger.trigger(true, null);
+            }
+        }
     }
 
 }
