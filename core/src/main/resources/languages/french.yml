@@ -1,12 +1,8 @@
-announcer:
-  click: "&4&l=> &6CLIQUEZ ICI POUR REJOINDRE &4&l<="
 button: 
   accept: "&a[ OUI ]"
   deny: "&4[ NON ]"
   okay: "&a[ OK ]"
 cmd:
-  announce:
-    help: "/dxl announce [name] - Exécuter un script d'annonce"
   break:
     breakMode: "&6Vous pouvez casser un bloc protégé par DungeonsXL."
     help: "/dxl break - Casser un bloc protégé par DungeonsXL"
@@ -144,7 +140,6 @@ error:
   noProtectedBlock: "&4Ce n'est pas un bloc protégé par DungeonsXL."
   noReadySign: "&4La carte &6&v1 &4n'a pas de panneau \"ready\". On ne peut pas commencer des jeus et les panneaux de lobby ne sont que initialisés."
   noRewardsTime: "&4Vous ne pouvez pas recevoir de récompense avant &6&v1&4."
-  noSuchAnnouncement: "&4Cette annonce n'existe pas."
   noSuchDungeon: "&4Le donjon &6&v1&4 n'existe pas."
   noSuchGroup: "&4Le groupe &6&v1&4 n'existe pas."
   noSuchMap: "&4La carte &6&v1&4 n'existe pas."

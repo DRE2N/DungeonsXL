@@ -87,7 +87,6 @@ public class MainConfig extends DREConfig {
             DARK_GRAY,
             PINK
     ));
-    private double announcementInterval = 30;
 
     /* Misc */
     private boolean sendFloorTitle = true;
@@ -242,14 +241,6 @@ public class MainConfig extends DREConfig {
 
     public void setGroupColorPriority(List<Color> colors) {
         groupColorPriority = colors;
-    }
-
-    public long getAnnouncmentInterval() {
-        return (long) (announcementInterval * 20);
-    }
-
-    public void setAnnouncementInterval(double interval) {
-        announcementInterval = interval;
     }
 
     public boolean areGlobalDeathMessagesDisabled() {
@@ -428,10 +419,6 @@ public class MainConfig extends DREConfig {
             config.set("groupColorPriority", strings);
         }
 
-        if (!config.contains("announcementInterval")) {
-            config.set("announcementInterval", announcementInterval);
-        }
-
         if (!config.contains("sendFloorTitle")) {
             config.set("sendFloorTitle", sendFloorTitle);
         }
@@ -541,7 +528,6 @@ public class MainConfig extends DREConfig {
             }
         }
 
-        announcementInterval = config.getDouble("announcementInterval", announcementInterval);
         sendFloorTitle = config.getBoolean("sendFloorTitle", sendFloorTitle);
         globalDeathMessagesDisabled = config.getBoolean("globalDeathMessagesDisabled", globalDeathMessagesDisabled);
 

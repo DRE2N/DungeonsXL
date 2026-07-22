@@ -61,12 +61,6 @@ public abstract class DInstancePlayer extends DGlobalPlayer implements InstanceP
         this.instanceWorld = instanceWorld;
     }
 
-    // Players in dungeons never get announcer messages
-    @Override
-    public boolean isAnnouncerEnabled() {
-        return false;
-    }
-
     /* Actions */
     /**
      * Clear the player's inventory, potion effects etc.

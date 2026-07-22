@@ -42,7 +42,7 @@ public class SignScript {
     }
 
     /**
-     * @param name   the name of the Announcer
+     * @param name   the name of the script
      * @param config the config that stores the information
      */
     public SignScript(String name, FileConfiguration config) {
@@ -62,7 +62,7 @@ public class SignScript {
     }
 
     /**
-     * @return the name of the announcer
+     * @return the name of the script
      */
     public String getName() {
         return name;

@@ -70,7 +70,6 @@ public class DGlobalPlayer implements GlobalPlayer {
     private boolean chatSpyMode = false;
     private DPortal creatingPortal;
     private ItemStack cachedItem;
-    private boolean announcerEnabled = true;
 
     private List<ItemStack> rewardItems;
 
@@ -99,7 +98,6 @@ public class DGlobalPlayer implements GlobalPlayer {
         breakMode = dPlayer.isInBreakMode();
         chatSpyMode = dPlayer.isInChatSpyMode();
         creatingPortal = dPlayer.getPortal();
-        announcerEnabled = dPlayer.isAnnouncerEnabled();
 
         plugin.getPlayerCache().add(player, this);
     }
@@ -222,24 +220,6 @@ public class DGlobalPlayer implements GlobalPlayer {
      */
     public void setCachedItem(ItemStack item) {
         cachedItem = item;
-    }
-
-    /**
-     * Returns if the player has announcers enabled.
-     *
-     * @return if the players receives announcer messages
-     */
-    public boolean isAnnouncerEnabled() {
-        return announcerEnabled;
-    }
-
-    /**
-     * Sets if the player has announcers enabled.
-     *
-     * @param enabled set if the players receives announcer messages
-     */
-    public void setAnnouncerEnabled(boolean enabled) {
-        announcerEnabled = enabled;
     }
 
     @Override

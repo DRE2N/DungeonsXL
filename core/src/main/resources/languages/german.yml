@@ -1,12 +1,8 @@
-announcer:
-  click: "&4&l=> &6KLICKE HIER ZUM BEITRETEN &4&l<="
 button:
   accept: "&a[ JA ]"
   deny: "&4[ NEIN ]"
   okay: "&a[ OK ]"
 cmd:
-  announce:
-    help: "/dxl announce [name] - Startet ein Announcer-Script"
   break:
     breakMode: "&6Du darfst jetzt von DungeonsXL geschützte Blöcke zerstören."
     help: "/dxl break - Zerstöre einen von DungeonsXL geschützten Block"
@@ -144,7 +140,6 @@ error:
   noProtectedBlock: "&4Das ist kein von DungeonsXL geschützter Block."
   noReadySign: "&4Die Welt &6&v1 &4hat kein Ready-Schild. Spiele können nicht begonnen werden und nur Lobby-Schilder werden geladen."
   noRewardsTime: "&4Du kannst vor &6&v1&4 keine Belohnungen bekommen."
-  noSuchAnnouncement: "&4Dieser Announcer existiert nicht."
   noSuchDungeon: "&4Dieser Dungeon existiert nicht."
   noSuchGroup: "&4Die Gruppe &6&v1&4 gibt es nicht."
   noSuchMap: "&4Die Welt &6&v1&4 gibt es nicht."
