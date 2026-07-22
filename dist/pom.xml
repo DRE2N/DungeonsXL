@@ -60,5 +60,15 @@
             <artifactId>dungeonsxl-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-paper</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-spigot</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 </project>

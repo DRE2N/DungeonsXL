@@ -73,6 +73,18 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-paper</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.erethon.dungeonsxl</groupId>
+            <artifactId>dungeonsxl-spigot</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${spigotVersion.latest}</version>

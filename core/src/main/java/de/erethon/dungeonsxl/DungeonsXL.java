@@ -19,6 +19,9 @@ package de.erethon.dungeonsxl;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapter;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterBlockData;
 import de.erethon.dungeonsxl.adapter.block.BlockAdapterMagicValues;
+import de.erethon.dungeonsxl.adapter.server.ServerAdapter;
+import de.erethon.dungeonsxl.adapter.server.ServerAdapterPaper;
+import de.erethon.dungeonsxl.adapter.server.ServerAdapterSpigot;
 import de.erethon.dungeonsxl.api.DungeonModule;
 import de.erethon.dungeonsxl.api.DungeonsAPI;
 import de.erethon.dungeonsxl.api.Requirement;
@@ -42,6 +45,7 @@ import de.erethon.dungeonsxl.api.world.InstanceWorld;
 import de.erethon.dungeonsxl.command.DCommandRegistry;
 import de.erethon.dungeonsxl.config.MainConfig;
 import de.erethon.dungeonsxl.config.MainConfig.BackupMode;
+import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.global.GlobalProtectionCache;
 import de.erethon.dungeonsxl.global.GlobalProtectionListener;
 import de.erethon.dungeonsxl.mob.CitizensMobProvider;
@@ -69,12 +73,12 @@ import de.erethon.dungeonsxl.util.DependencyVersion;
 import de.erethon.dungeonsxl.util.LWCUtil;
 import de.erethon.dungeonsxl.util.PlaceholderUtil;
 import de.erethon.dungeonsxl.world.DEditWorld;
-import de.erethon.dungeonsxl.dungeon.DDungeon;
 import de.erethon.dungeonsxl.world.DWorldListener;
 import de.erethon.dungeonsxl.world.LWCIntegration;
 import de.erethon.dungeonsxl.world.WorldConfig;
 import de.erethon.xlib.XLib;
 import de.erethon.xlib.chat.MessageUtil;
+import de.erethon.xlib.compatibility.RuntimeType;
 import de.erethon.xlib.compatibility.Version;
 import de.erethon.xlib.mob.ExMob;
 import de.erethon.xlib.plugin.PluginInit;
@@ -113,6 +117,7 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
 
     /* Util instances */
     public static final BlockAdapter BLOCK_ADAPTER = Version.isAtLeast(Version.MC1_13) ? new BlockAdapterBlockData() : new BlockAdapterMagicValues();
+    public static final ServerAdapter SERVER_ADAPTER = RuntimeType.get() == RuntimeType.PAPER ? new ServerAdapterPaper() : new ServerAdapterSpigot();
 
     /* Constants */
     public static final String[] EXCLUDED_FILES = {"config.yml", "uid.dat", "DXLData.data", "data"};
