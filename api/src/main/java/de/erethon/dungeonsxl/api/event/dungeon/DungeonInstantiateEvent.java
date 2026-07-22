@@ -15,12 +15,11 @@
 package de.erethon.dungeonsxl.api.event.dungeon;
 
 import de.erethon.dungeonsxl.api.dungeon.Dungeon;
-import de.erethon.dungeonsxl.api.event.dungeon.DungeonEvent;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- * Fired when a {@link ResourceWorld} is instantiated.
+ * Fired when a {@link Dungeon} is instantiated.
  *
  * @author Daniel Saukel
  */
