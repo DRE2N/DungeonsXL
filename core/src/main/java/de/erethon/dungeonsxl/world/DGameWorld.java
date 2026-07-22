@@ -455,7 +455,7 @@ public class DGameWorld extends DInstanceWorld implements GameWorld {
         if (Version.isAtLeast(Version.MC1_21_11)) {
             DungeonsXL.SERVER_ADAPTER.setFireSpreadAroundPlayer(getWorld(), doFireTick ? -1 : 0);
         } else if (Version.isAtLeast(Version.MC1_13)) {
-            getWorld().setGameRule((org.bukkit.GameRule<Boolean>) org.bukkit.GameRule.getByName("DO_FIRE_TICK"), doFireTick);
+            getWorld().setGameRule(org.bukkit.GameRule.DO_FIRE_TICK, doFireTick);
         }
 
         isPlaying = true;

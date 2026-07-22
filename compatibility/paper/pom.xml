@@ -8,6 +8,7 @@
         <groupId>de.erethon.dungeonsxl</groupId>
         <artifactId>dungeonsxl-parent</artifactId>
         <version>0.19-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath> 
     </parent>
     <dependencies>
         <dependency>

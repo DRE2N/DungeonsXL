@@ -8,6 +8,7 @@
         <groupId>de.erethon.dungeonsxl</groupId>
         <artifactId>dungeonsxl-parent</artifactId>
         <version>0.19-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath> 
     </parent>
     <dependencies>
         <dependency>
@@ -25,7 +26,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>${spigotVersion.latest}</version>
+            <version>${spigotVersion.common}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

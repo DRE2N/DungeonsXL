@@ -219,7 +219,7 @@ public class DDungeon implements Dungeon {
         if (Version.isAtLeast(Version.MC1_21_11)) {
             DungeonsXL.SERVER_ADAPTER.setFireSpreadAroundPlayer(instance.getWorld(), 0);
         } else if (Version.isAtLeast(Version.MC1_13)) {
-            instance.getWorld().setGameRule((GameRule<Boolean>) GameRule.getByName("DO_FIRE_TICK"), false);
+            instance.getWorld().setGameRule(GameRule.DO_FIRE_TICK, false);
         }
         if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dynmap pause all");
