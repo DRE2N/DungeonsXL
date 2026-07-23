@@ -98,7 +98,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerSignOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -362,6 +365,19 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
         getServer().getPluginManager().registerEvents(new DSignListener(this), this);
         getServer().getPluginManager().registerEvents(new DMobListener(this), this);
         getServer().getPluginManager().registerEvents(new DPlayerListener(this), this);
+
+        // TODO: Proper fix, don't forbid in edit worlds but handle properly
+        if (!Version.isAtLeast(Version.MC1_20_1)) {
+            return;
+        }
+        getServer().getPluginManager().registerEvents(new Listener() {
+            @EventHandler
+            public void onPlayerSignOpen(PlayerSignOpenEvent event) {
+                if (event.getSign().getWorld().getName().startsWith("DXL_")) {
+                    event.setCancelled(true);
+                }
+            }
+        }, this);
     }
 
     public void saveData() {
