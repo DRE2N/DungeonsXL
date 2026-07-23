@@ -58,6 +58,7 @@ public enum DependencyVersion {
      */
     public static final PluginMeta META = new PluginMeta.Builder("DungeonsXL")
             .minVersion(Version.MC1_8_8)
+            .maxVersion(Version.MC1_21_11)
             .paperState(PluginMeta.State.SUPPORTED)
             .spigotState(PluginMeta.State.SUPPORTED)
             .economyState(PluginMeta.State.SUPPORTED)

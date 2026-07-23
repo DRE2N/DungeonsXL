@@ -25,7 +25,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <spigotVersion.common>1.20.6-R0.1-SNAPSHOT</spigotVersion.common>
         <spigotVersion.latest>26.2-R0.1-SNAPSHOT</spigotVersion.latest>
-        <dependencyVersion.xlib>7.0-SNAPSHOT</dependencyVersion.xlib>
+        <dependencyVersion.xlib>7.0</dependencyVersion.xlib>
     </properties>
     <dependencies>
         <dependency>
