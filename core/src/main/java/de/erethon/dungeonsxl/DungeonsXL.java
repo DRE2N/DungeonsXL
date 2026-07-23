@@ -212,7 +212,7 @@ public class DungeonsXL extends JavaPlugin implements DungeonsAPI {
 
     @Override
     public void onEnable() {
-        if (DependencyVersion.XLIB.getSupportedVersion().startsWith("7.0")) {// To Do: Smarter check?
+        if (!DependencyVersion.XLIB.getSupportedVersion().startsWith("7.0")) {// To Do: Smarter check?
             getLogger().log(Level.SEVERE, "DungeonsXL requires XLib v{0} or higher to run.", DependencyVersion.XLIB.getSupportedVersion());
             getServer().getPluginManager().disablePlugin(this);
             return;
